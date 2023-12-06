@@ -1,0 +1,3 @@
+---
+paymentNotificationText:
+  messageTemplate: 'Вы успешно приобрели «{0}»!'

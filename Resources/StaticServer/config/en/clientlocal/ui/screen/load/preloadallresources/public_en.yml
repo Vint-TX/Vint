@@ -1,0 +1,6 @@
+---
+loadScreenLocalizedText:
+  loadFromDiskText: Resources are loading but you can start playing
+  networkLoadText: Resources are downloading but you can start playing
+  skipLoadingButton: PLAY
+  initializationText: ""

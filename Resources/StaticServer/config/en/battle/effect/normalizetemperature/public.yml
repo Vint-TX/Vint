@@ -1,0 +1,7 @@
+effectIcon:
+  spriteUid: 3ef0d902-dc86-4124-bb9d-e676d33515e4
+normalizeTemperatureEffect:
+  incrTemperaturePerMs: 0.000125
+  decrTemperaturePerMs: 0.000025
+tick:
+  period: 250

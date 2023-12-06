@@ -1,0 +1,15 @@
+---
+descriptionItem:
+  name: День космонавтики
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    railgungreen: Рельса «Зелёная»
+    ricochetcoral: Рикошет «Коралловый»
+    starryskytankpaint: Звёздное небо (Краска)
+    starryskyweaponpaint: Звёздное небо (Покрытие)
+    vostok1tankpaint: Восток-1 (Краска)
+    vostok1weaponpaint: Восток-1 (Покрытие)

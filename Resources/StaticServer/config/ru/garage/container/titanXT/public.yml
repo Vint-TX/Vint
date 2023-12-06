@@ -1,0 +1,66 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 968765463 # atlas graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 891728345 # attack of titan graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 526265313 # glacier paint
+      compensation: 6250
+      nameLocalizationKey: glacierpaint
+
+    - itemBundles:
+        - marketItem: -1705840017 # glacier cover
+      compensation: 6250
+      nameLocalizationKey: glaciercover
+
+    - itemBundles:
+        - marketItem: -1051329156 # glina cover
+      compensation: 6250
+      nameLocalizationKey: glinacover
+
+    - itemBundles:
+        - marketItem: -1055236844 # ceder cover
+      compensation: 6250
+      nameLocalizationKey: cedercover
+
+    - itemBundles:
+        - marketItem: -754659582 # titan gold skin
+      compensation: 6250
+      nameLocalizationKey: titangold
+  rareItems:
+
+    - itemBundles:
+        - marketItem: 1576595770 # titan xt skin
+      nameLocalizationKey: titanXT
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: cd714c64b03237843abb48abfc17b616
+imageItem:
+  spriteUid: f963fe3d-69e2-452f-821e-f96970678545
+order:
+  index: 2
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 7
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    7: 700

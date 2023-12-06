@@ -1,0 +1,16 @@
+priceItem:
+  price: 3000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: db868341-c4bd-4605-b513-a412b90d6340
+imageItem:
+  spriteUid: db868341-c4bd-4605-b513-a412b90d6340
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 6
+itemRarity:
+  rarityType: COMMON

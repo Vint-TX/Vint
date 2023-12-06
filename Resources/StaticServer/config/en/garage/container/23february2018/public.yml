@@ -1,0 +1,74 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 473147977 # 23 feb graffiti serge
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1660396512 # 23 feb military paint
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -8517219 # Taiga Tank Paint
+      compensation: 6250
+      nameLocalizationKey: taigatankpaint
+    - itemBundles:
+        - marketItem: -1039651301 # Taiga Weapon Paint
+      compensation: 6250
+      nameLocalizationKey: taigaweaponpaint
+    - itemBundles:
+        - marketItem: 833674243 # Forester Tank Paint
+      compensation: 6250
+      nameLocalizationKey: forestertankpaint
+    - itemBundles:
+        - marketItem: -75661627 # Forester Weapon Paint
+      compensation: 6250
+      nameLocalizationKey: foresterweaponpaint
+    - itemBundles:
+        - marketItem: 137803904 # Dirt Tank Paint
+      compensation: 6250
+      nameLocalizationKey: dirttankpaint
+    - itemBundles:
+        - marketItem: -172553150 # Dirt Weapon Paint
+      compensation: 6250
+      nameLocalizationKey: dirtweaponpaint
+    - itemBundles:
+        - marketItem: -947470487 # Flamethrower Red
+      compensation: 6250
+      nameLocalizationKey: flamered
+    - itemBundles:
+        - marketItem: -1126924822 # Twins Violet
+      compensation: 6250
+      nameLocalizationKey: twinsviolet
+  rareItems:
+    - itemBundles:
+        - marketItem: -1141123658 # Smoky skin
+    - itemBundles:
+        - marketItem: 247232443 # Hunter skin
+
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 1507c7be2518e584186c0cb75ac29ab0
+imageItem:
+  spriteUid: d013befc-ef3e-43c1-bda4-684912ea5d2f
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

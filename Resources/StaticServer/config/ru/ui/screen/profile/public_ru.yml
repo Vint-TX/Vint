@@ -1,0 +1,21 @@
+---
+profileScreenLocalization:
+  profileHeaderText: ПРОФИЛЬ
+  myProfileHeaderText: МОЙ ПРОФИЛЬ
+  friendsProfileHeaderText: ПРОФИЛЬ ДРУГА
+  offerFriendShipText: Игрок предлагает вам дружбу
+  friendRequestSentText: Предложение дружбы отправлено
+  logoutButtonText: ВЫЙТИ
+  logoutButtonConfirmText: ДА
+  logoutButtonCancelText: НЕТ
+  requestFriendButtonText: ПОДРУЖИТЬСЯ
+  revokeFriendButtonText: ОТОЗВАТЬ
+  acceptFriendButtonText: ПРИНЯТЬ
+  rejectFriendButtonText: ОТКЛОНИТЬ
+  removeFriendButtonText: УДАЛИТЬ
+  removeFriendButtonConfirmText: ДА
+  removeFriendButtonCancelText: НЕТ
+  goToConfirmEmailScreenButtonText: Email
+  goToChangeUIDScreenButtonText: Сменить имя
+  goToPromoCodesScreenButtonText: Промокод
+  enterAsSpectatorButtonText: НАБЛЮДАТЬ

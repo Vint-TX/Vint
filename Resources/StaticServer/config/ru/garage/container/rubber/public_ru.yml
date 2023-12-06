@@ -1,0 +1,34 @@
+---
+descriptionItem:
+  name: Резина
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    armorspeed: "Голдолов"
+    minedd: "Разрушитель"
+    armorrepair: "Выживший"
+    mattebluetankpaint: Матовая голубая (Краска)
+    matteblueweaponpaint: Матовая голубая (Покрытие)
+    mattegraytankpaint: Матовая серая (Краска)
+    mattegrayweaponpaint: Матовая серая (Покрытие)
+    mattegreentankpaint: Матовая зелёная (Краска)
+    mattegreenweaponpaint: Матовая зелёная (Покрытие)
+    mattenavitankpaint: Матовая синяя (Краска)
+    mattenaviweaponpaint: Матовая синяя (Покрытие)
+    matteorangetankpaint: Матовая оранжевая (Краска)
+    matteorangeweaponpaint: Матовая оранжевая (Покрытие)
+    matteredtankpaint: Матовая красная (Краска)
+    matteredweaponpaint: Матовая красная (Покрытие)
+    matterosetankpaint: Матовая розовая (Краска)
+    matteroseweaponpaint: Матовая розовая (Покрытие)
+    matteviolettankpaint: Матовая фиолетовая (Краска)
+    mattevioletweaponpaint: Матовая фиолетовая (Покрытие)
+    matteyellowtankpaint: Матовая жёлтая (Краска)
+    matteyellowweaponpaint: Матовая жёлтая (Покрытие)
+    matteblacktankpaint: Матовая чёрная (Краска)
+    matteblackweaponpaint: Матовая чёрная (Покрытие)
+    mattewhitetankpaint: Матовая белая (Краска)
+    mattewhiteweaponpaint: Матовая белая (Покрытие)

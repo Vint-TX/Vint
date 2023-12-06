@@ -1,0 +1,61 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1333610377 # First of May Graffiti
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1050101618 # Hvoya cover
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -18967536 # Hvoya paint
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -133498961 # Titan steel skin
+      compensation: 6250
+      nameLocalizationKey: steelTitan
+    - itemBundles:
+        - marketItem: 2039676487 # Hammer steel skin
+      compensation: 6250
+      nameLocalizationKey: steelHammer
+    - itemBundles:
+        - marketItem: 2070833571 # May paint 1
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -217437764 # May cover 1
+      compensation: 6250
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 110176853 # Hunter Victory Day skin
+      compensation: 6250
+      nameLocalizationKey: mayHunter
+    - itemBundles:
+        - marketItem: -1398640396 # Smoky Victory Day skin
+      compensation: 6250
+      nameLocalizationKey: maySmoky
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 71d7ecd8ed4f88145bc9d0b02f665bda
+imageItem:
+  spriteUid: 4647b1d5-9832-49c6-bea2-2050bfc0dec8
+order:
+  index: -4
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

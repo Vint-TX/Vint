@@ -1,0 +1,3 @@
+---
+paymentNotificationText:
+  messageTemplate: '{0} X-crystals have been credited to your account'

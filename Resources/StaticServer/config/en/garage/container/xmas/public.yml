@@ -1,0 +1,65 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1760088841 # xmas newyearglow tank paint
+      compensation: 7500
+      nameLocalizationKey: newyearglowtankpaint
+    - itemBundles:
+        - marketItem: 1273539023 # xmas newyearglow weapon paint
+      compensation: 7500
+      nameLocalizationKey: newyearglowweaponpaint
+    - itemBundles:
+        - marketItem: -888059423 # xmas newyearice tank paint
+      compensation: 7500
+      nameLocalizationKey: newyearicetankpaint
+    - itemBundles:
+        - marketItem: -97463799 # xmas newyearice weapon paint
+      compensation: 7500
+      nameLocalizationKey: newyeariceweaponpaint
+    - itemBundles:
+        - marketItem: -25726372 # xmas general frost
+      compensation: 7500
+    - itemBundles:
+        - marketItem: 432765771 # xmas queen of ice
+      compensation: 7500
+    - itemBundles:
+        - marketItem: 1435022351 # xmas supply drop
+      compensation: 7500
+    - itemBundles:
+        - marketItem: -1092514341 # xmas twins shell
+      compensation: 7500
+    - itemBundles:
+        - marketItem: -1073342998 # xmas ricochet shell
+      compensation: 7500
+  rareItems:
+    - itemBundles:
+        - marketItem: 139596834 # xmas freeze
+    - itemBundles:
+        - marketItem: 72041592 # xmas wasp
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: eef5afa6afb2f444082201649d055ff5
+imageItem:
+  spriteUid: da2d6c4e-35b2-4e1f-9780-167e7417c045
+order:
+  index: 2016
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

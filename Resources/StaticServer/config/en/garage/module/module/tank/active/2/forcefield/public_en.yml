@@ -1,0 +1,5 @@
+---
+descriptionItem:
+  name: Force Field
+  description: "Creates a shield in front of the player, that absorbs incoming enemy damage then disappears after a certain duration of time."
+  flavor: "The study of the anomaly under Kungur was the first step towards the development of the force field. Sometimes, investing in dubious projects, can pay off big time! \n- The owner of a private military organization fighting for the Frontier"

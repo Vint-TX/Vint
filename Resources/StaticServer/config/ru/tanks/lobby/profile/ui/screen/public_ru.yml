@@ -1,0 +1,54 @@
+﻿settingsScreen:
+  header: НАСТРОЙКИ
+  gameSettings: ИГРА
+  soundSettings: ЗВУК
+  languageSettings: ЯЗЫК
+  graphicsSettings: ГРАФИКА
+  keyboardSettings: УПРАВЛЕНИЕ
+gameSettingsScreen:
+  header: НАСТРОЙКИ ИГРЫ
+  cameraShakerEnabled: Дрожание камеры
+  damageInfo: Цифры урона
+  targetFocusEnabled: Прицел
+  laserSightEnabled: Лазерный прицел
+  healthFeedback: Низкое здоровье
+  selfTargetHitFeedback: Направление урона
+  disableNotificationsText: Отключить всплывающие уведомления посередине экрана
+soundSettingsScreen:
+  header: НАСТРОЙКИ ЗВУКА
+  sFXVolume: Громкость эффектов
+  musicVolume: Громкость музыки
+  uIVolume: Громкость интерфейса
+keyboardSettingsScreen:
+  header: УПРАВЛЕНИЕ
+  invertBackwardMovingControl: Инвертировать управление при движении задним ходом
+  mouseControlAllowed: Включить управление мышью в битве
+  mouseVerticalInverted: Инвертировать управление мышью по вертикали
+  mouseSensivity: Чувствительность мыши
+  keyboard: Назначение клавиш
+  tip: |
+    Нажмите левой кнопкой мыши на клавишу, которую хотите переназначить.
+    Затем нажмите на своей клавиатуре новую клавишу, которая будет удобна для использования этой функции.
+  modules: Использование активных модулей
+  shot: Выстрел
+  help: Помощь
+  fewActionsError: |
+    Одна клавиша не может быть назначена на несколько действий.
+    Пожалуйста, измените назначение повторной клавиши.
+  changeHud: Переключение боевого интерфейса
+  forward: Вперед
+  backward: Назад
+  left: Влево
+  right: Вправо
+  turretLeft: Поворот башни влево
+  turretRight: Поворот башни вправо
+  centerTurret: Центрирование башни
+  graffiti: Граффити
+  dropFlag: Сбросить флаг
+  cameraUp: Камера вверх
+  cameraDown: Камера вниз
+  scoreBoard: Таблица очков
+  selfDestruction: Самоуничтожение
+  specPrev: Спектатор - следущий игрок
+  specNext: Спектатор - предыдущий игрок
+  pause: Пауза

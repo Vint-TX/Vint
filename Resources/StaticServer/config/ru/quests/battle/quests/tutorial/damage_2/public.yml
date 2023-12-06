@@ -1,0 +1,7 @@
+imageItem:
+  spriteUid: f728a94d-fe3d-4ac1-b77d-7603f0b682e5
+battleQuestTarget:
+  targetValue: 5000
+battleQuestReward:
+  battleQuestReward: CRYSTALS
+  quantity: 400

@@ -1,0 +1,86 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 25000
+    - 24074
+    - 23148
+    - 22222
+    - 21296
+    - 20370
+    - 19444
+    - 18519
+    - 17593
+    - 16667
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+jumpImpactForceMultProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 12.00
+    - 12.56
+    - 13.11
+    - 13.67
+    - 14.22
+    - 14.78
+    - 15.33
+    - 15.89
+    - 16.44
+    - 17.00
+jumpImpactWorkingTemperatureProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.27
+    - 0.29
+    - 0.30
+    - 0.32
+    - 0.33
+    - 0.35
+    - 0.36
+    - 0.38
+    - 0.39
+    - 0.41
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 25
+        - 16.7
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: "Impact"
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 12
+        - 17
+      unit: hp
+      format: 0.0
+      spriteUID: 8bf5d2cc-2f2b-4f2a-8d6e-880bcdbf4844
+    - name: WorkingTemperatureLimit
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 27
+        - 41
+      unit: percent
+      format: 0
+      spriteUID: 3ef0d902-dc86-4124-bb9d-e676d33515e4
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

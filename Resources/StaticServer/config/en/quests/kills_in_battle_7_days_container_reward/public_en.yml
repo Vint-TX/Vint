@@ -1,0 +1,5 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Destroy {0} tanks in a battle daily, for {1} consecutive days'
+    cases: { }

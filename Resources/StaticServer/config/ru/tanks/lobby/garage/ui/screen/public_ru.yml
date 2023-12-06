@@ -1,0 +1,14 @@
+containersScreen:
+  header: Контейнеры
+  containersButtonText: ПОСМОТРЕТЬ
+  openContainerButtonText: ОТКРЫТЬ
+  openAllContainerButtonText: ОТКРЫТЬ ВСЕ
+  emptyListText: Контейнеров в продаже нет
+promoCodesScreen:
+  inputStateTexts:
+    VALID: ""
+    NOT_FOUND: "Промокод недействителен"
+    USED: "Промокод уже активирован"
+    EXPIRED: "Срок действия промокода истёк"
+    INVALID: "Промокод недействителен"
+    OWNED: "Промокод привязан к другому пользователю"

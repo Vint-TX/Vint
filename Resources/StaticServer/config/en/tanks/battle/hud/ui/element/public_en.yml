@@ -1,0 +1,63 @@
+exitBattleWindow:
+  regularHeaderText: 'Attention!'
+  firstLineText: "You've earned in this battle <b><color=#3AC4E9FF>{0}</color></b><sprite=8>."
+  secondLineText: 'Your rewards and progression will <b>be lost</b> by leaving this battle.'
+  thirdLineText: 'Are you sure you want to abandon the game?'
+  customThirdLineText: 'Are you sure you want to leave the battle?'
+  warningText: 'Please note that deserters have disadvantage in matchmaking'
+  customBattleSecondLineText: 'Your progression will <b>be lost</b> by leaving this battle.'
+  yesText: 'Abandon Battle'
+  customYesText: 'Abandon Battle'
+  noText: 'Resume Battle'
+  newbieExitText: 'Leaving the battle'
+  newbieSecondLineText: 'Are you sure you want to leave the battle?'
+  newbieThirdLineText: 'Tip: Leaving battles on higher ranks gives you deserter status'
+dMFinishWindow:
+  timeIsUpText: "TIME IS UP"
+dMHUDMessages:
+  mainMessage: "Destroy everyone"
+  spectatorMessage: "Spectator mode"
+tDMHUDMessages:
+  mainMessage: "Destroy enemy tanks"
+cTFHUDMessages:
+  captureFlagMessage: "Capture the Flag"
+  protectFlagCarrierMessage: "Protect the Flag carrier"
+  deliverFlagMessage: "Deliver the Flag"
+  returnFlagMessage: "Retrieve your Flag"
+  enemyBase: "Enemy base"
+  enemyFlag: "Enemy flag"
+  yourBase: "Your base"
+  yourFlag: "Your flag"
+doubleKill:
+  text: "Double Kill"
+trippleKill:
+  text: "Triple Kill"
+ultraKill:
+  text: "Ultra Kill"
+killStreak:
+  text: "{0} Tank Kill Streak"
+goldBox:
+  text: "Gold Box!"
+helpOverlay:
+  controlsText: "Tank Controls"
+  turretText: "Turret"
+  fireText: "Fire"
+  spaceText: "Space"
+  orText: "or"
+  additionalControlsText: "Additional Controls"
+  modulesText: "Modules"
+  graffitiText: "Graffiti"
+  selfDestructText: "Self-destruction"
+  helpText: "Help"
+  exitText: "Exit"
+battleResultsTemplates:
+  titleTextTemplate: "{0} - {1} - {2}"
+  placeTextTemplate: "You placed {0}{1}"
+  earnedExperienceTextTemplate: "+{0} Experience Points"
+  earnedUpgradeTextTemplate: "+{0} Mastery Points"
+  rewardCountTextTemplate: "+{0}"
+ordinalNumbersSuffix:
+  stSuffix: "st"
+  ndSuffix: "nd"
+  rdSuffix: "rd"
+  thSuffix: "th"

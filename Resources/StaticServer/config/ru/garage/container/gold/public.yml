@@ -1,0 +1,120 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -767847828 # dictator gold
+      compensation: 3250
+      nameLocalizationKey: dictatorgold
+    - itemBundles:
+        - marketItem: 679021958 # hornet gold
+      compensation: 3250
+      nameLocalizationKey: hornetgold
+    - itemBundles:
+        - marketItem: -318345288 # hunter gold
+      compensation: 3250
+      nameLocalizationKey: huntergold
+    - itemBundles:
+        - marketItem: -920939649 # mammoth gold
+      compensation: 3250
+      nameLocalizationKey: mammothgold
+    - itemBundles:
+        - marketItem: -754659582 # titan gold
+      compensation: 3250
+      nameLocalizationKey: titangold
+    - itemBundles:
+        - marketItem: 499257134 # viking gold
+      compensation: 3250
+      nameLocalizationKey: vikinggold
+    - itemBundles:
+        - marketItem: -1774441975 # wasp gold
+      compensation: 3250
+      nameLocalizationKey: waspgold
+
+    - itemBundles:
+        - marketItem: 1491390890 # flamethrower gold
+      compensation: 3250
+      nameLocalizationKey: flamethrowergold
+    - itemBundles:
+        - marketItem: -362162189 # freeze gold
+      compensation: 3250
+      nameLocalizationKey: freezegold
+    - itemBundles:
+        - marketItem: -1427688220 # hammer gold
+      compensation: 3250
+      nameLocalizationKey: hammergold
+    - itemBundles:
+        - marketItem: -1704481322 # isis gold
+      compensation: 3250
+      nameLocalizationKey: isisgold
+    - itemBundles:
+        - marketItem: -1704191570 # railgun gold
+      compensation: 3250
+      nameLocalizationKey: railgungold
+    - itemBundles:
+        - marketItem: -475547245 # ricochet gold
+      compensation: 3250
+      nameLocalizationKey: ricochetgold
+    - itemBundles:
+        - marketItem: 54173794 # shaft gold
+      compensation: 3250
+      nameLocalizationKey: shaftgold
+    - itemBundles:
+        - marketItem: 2004785941 # smoky gold
+      compensation: 3250
+      nameLocalizationKey: smokygold
+    - itemBundles:
+        - marketItem: -398757768 # thunder gold
+      compensation: 3250
+      nameLocalizationKey: thundergold
+    - itemBundles:
+        - marketItem: -1595894991 # twins gold
+      compensation: 3250
+      nameLocalizationKey: twinsgold
+    - itemBundles:
+        - marketItem: 1066986983 # vulcan gold
+      compensation: 3250
+      nameLocalizationKey: vulcangold
+
+    - itemBundles:
+        - marketItem: 887330442 # goldbox graffiti
+      compensation: 3250
+      nameLocalizationKey: goldboxgold
+    - itemBundles:
+        - marketItem: 1737433896 # goldbill graffiti
+      compensation: 3250
+      nameLocalizationKey: goldbillgold
+
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 921024755 # gold tank paint
+      nameLocalizationKey: goldtankpaint
+    - itemBundles:
+        - marketItem: -172458213 # gold weapon paint
+      nameLocalizationKey: goldweaponpaint
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: b7eacb22b34dfc045b0cb9b2550c941d
+imageItem:
+  spriteUid: f0616167-add7-4571-9c42-6adc1cb27db4
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 65
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 65
+    3: 175
+    10: 520

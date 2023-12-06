@@ -1,0 +1,11 @@
+﻿variant:
+  value: 3
+  shadowQuality: 2
+  shadowResolution: 2
+  shadowProjection: 1
+  shadowDistance: 100
+  shadowNearPlaneOffset: 2
+  shadowCascades: 2
+  shadowCascade1: 33.3
+  shadowCascade2: 0
+  shadowCascade3: 0

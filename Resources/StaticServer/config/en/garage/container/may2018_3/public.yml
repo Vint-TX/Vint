@@ -1,0 +1,63 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1555319306 # Partizan tank paint
+      compensation: 6250
+      nameLocalizationKey: partizantankpaint
+    - itemBundles:
+        - marketItem: 645983436 # Partizan weapon paint
+      compensation: 6250
+      nameLocalizationKey: partizanweaponpaint
+    - itemBundles:
+        - marketItem: -691629355 # Isis Steel Skin
+      compensation: 6250
+      nameLocalizationKey: steelIsis
+    - itemBundles:
+        - marketItem: -1555805158 # Wasp Steel Skin
+      compensation: 6250
+      nameLocalizationKey: steelWasp
+    - itemBundles:
+        - marketItem: 2070833572 # May paint 2
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -217437763 # May cover 2
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 1775068809 # May Graffity 2
+      compensation: 6250
+  rareItems:
+    - itemBundles:
+        - marketItem: 963790407 # Hornet Victory Day skin
+      compensation: 6250
+      nameLocalizationKey: mayHornet
+    - itemBundles:
+        - marketItem: 98615071 # Railgun Victory Day skin
+      compensation: 6250
+      nameLocalizationKey: mayRailgun
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 5d658100c3b6ac345bd729f352999ec5
+imageItem:
+  spriteUid: 1b8c5f83-1233-4c7c-871a-75e1d98e692b
+order:
+  index: -2
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

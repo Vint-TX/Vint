@@ -1,0 +1,16 @@
+---
+descriptionItem:
+  name: Новогодний
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    armorspeed: "Голдолов"
+    minedd: "Разрушитель"
+    armorrepair: "Выживший"
+    newyearglowtankpaint: Андромеда (Краска)
+    newyearglowweaponpaint: Андромеда (Покрытие)
+    newyearicetankpaint: Лед (Краска)
+    newyeariceweaponpaint: Лед (Покрытие)

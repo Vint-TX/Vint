@@ -1,0 +1,4 @@
+---
+emailConfirmationNotification:
+  confirmationMessageTemplate: 'Подтверди адрес своей электронной почты, чтобы защитить аккаунт, и получи подарок!'
+  changeEmailMessageTemplate: 'Укажи адрес своей электронной почты и подтверди его, чтобы защитить аккаунт, и получи подарок!'

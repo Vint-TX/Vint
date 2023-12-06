@@ -1,0 +1,13 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/armsRaceWelcomeTutorial/"
+  tutorialId: 419965140
+  forOldPlayer: true
+  steps:
+    1: 1504002856142 # show gifts popup
+    2: 1504002856142 # highlight garage button
+    3: 1504002856142 # highlight mastery icon
+    4: 1504002856142 # highlight mastery icon
+    5: 1504002856142 # show compensasion popup
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

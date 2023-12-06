@@ -1,0 +1,68 @@
+moduleAcceleratedGearsEffectTurretSpeedProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.10
+    - 1.16
+    - 1.22
+    - 1.28
+    - 1.34
+    - 1.41
+    - 1.47
+    - 1.53
+    - 1.59
+    - 1.65
+moduleAcceleratedGearsEffectTurretAccelerationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.50
+    - 1.58
+    - 1.67
+    - 1.75
+    - 1.83
+    - 1.92
+    - 2.00
+    - 2.08
+    - 2.17
+    - 2.25
+moduleAcceleratedGearsEffectHullRotationSpeedProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.05
+    - 1.11
+    - 1.17
+    - 1.23
+    - 1.28
+    - 1.34
+    - 1.40
+    - 1.46
+    - 1.52
+    - 1.58
+moduleCooldownProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 0
+    - 0
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: TurretRotationSpeed
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 65
+      unit: percent
+      format: 0
+      spriteUID: 56b9e5a8-375d-486b-8aa3-fa9a7d5e0ae0
+    - name: "Turning Speed"
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 5
+        - 58
+      unit: percent
+      format: 0
+      spriteUID: 38e2eecf-4b20-4b5f-8866-33ffe369d7aa
+...

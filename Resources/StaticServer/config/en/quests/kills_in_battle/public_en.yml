@@ -1,0 +1,5 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Finish a battle with {0} tanks destroyed'
+    cases: { }

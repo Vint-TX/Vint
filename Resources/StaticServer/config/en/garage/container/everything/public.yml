@@ -1,0 +1,1839 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1636606664 # hornet-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1804747078 # hunter-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1163905852 # titan-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1380618384 # viking-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1838544851 # wasp-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1793185296 # railgun-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 295929829 # smoky-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -688039802 # thunder-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 855411949 # twins-xt zeus skin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -910231604 # avatar/algheria_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 934969104 # avatar/alpha
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6200 # avatar/antheusfighter
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1202231726 # avatar/argentina_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6201 # avatar/armenia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1731159719 # avatar/australia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1174801258 # avatar/azerbaijan_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6202 # avatar/belorussia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1286714921 # avatar/blackwidow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6203 # avatar/bogatyr
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6204 # avatar/boy_valday
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6205 # avatar/brazil_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2123817583 # avatar/canada_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1651733218 # avatar/china_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1632342818 # avatar/crab
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6206 # avatar/cyborg
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -171184634 # avatar/czech_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1473761734 # avatar/darina_liekhtonien
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1479495495 # avatar/dean_cunningham
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -983105950 # avatar/dygest
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 938326966 # avatar/eagle
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1089651106 # avatar/egypt_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6207 # avatar/elite
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2119697962 # avatar/emma_bonney
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1781929660 # avatar/estonia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1130044595 # avatar/evgeny_romanov
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -241092701 # avatar/finland_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 117983554 # avatar/france_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6208 # avatar/frontierfighter
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1569342716 # avatar/gambler
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1953932916 # avatar/garcia_lopez
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6209 # avatar/georgia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6210 # avatar/germany_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6211 # avatar/ghostrider
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6212 # avatar/girl_valday
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6213 # avatar/greatbritain_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1175725104 # avatar/greece_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 941211128 # avatar/heart
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 869046809 # avatar/hellhound
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 232090231 # avatar/hungary_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 941809812 # avatar/hydra
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2048808190 # avatar/india_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 855079933 # avatar/irma_massacre
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1042657987 # avatar/israel_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1887453418 # avatar/italy_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6214 # avatar/jedi
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6215 # avatar/kazakhstan_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1036805170 # avatar/latvia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1820960568 # avatar/legends
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -657725808 # avatar/lithuania_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 706204327 # avatar/magnus_grim
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6216 # avatar/mammoth
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1807734043 # avatar/mary_newell
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 764921404 # avatar/maureen_lawrie
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 224328936 # avatar/mexico_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2083128946 # avatar/michelle_reisner
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6217 # avatar/moldavia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -814801911 # avatar/morocco_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1927964361 # avatar/netherlands_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 948065536 # avatar/order
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -880569858 # avatar/oskar_khrom
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 287575104 # avatar/pakistan_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1455996148 # avatar/pirate_girl
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1472995923 # avatar/poland_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1330873567 # avatar/professor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6218 # avatar/raccoon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6219 # avatar/russia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1602513792 # avatar/saudi_arabia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6220 # avatar/savage
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6221 # avatar/skeletoninspace
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1776630907 # avatar/slovakia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -224755940 # avatar/slovenia_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 399797680 # avatar/spain_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1612159053 # avatar/spy_girl
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6222 # avatar/stormtrooper
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6223 # avatar/swatsoldier
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 394437137 # avatar/sweden_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6224 # avatar/tankist
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6225 # avatar/tankix
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1657247215 # avatar/teresa_amsel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 187162326 # avatar/thailand_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6226 # avatar/troll
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 893099663 # avatar/turkey_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6227 # avatar/ukraine_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6228 # avatar/usa_flag
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1147853194 # avatar/vera_klein
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6229 # avatar/viking
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -480997961 # avatar/vladimir_repin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 6230 # avatar/wasp
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 605003762 # avatar/yamamoto_tsunetomo
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -891349912 # cover/antaeus1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1577640270 # cover/antaeus2018
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172609771 # cover/blue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1644116328 # cover/carbon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1055236844 # cover/ceder
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 888876452 # cover/champion
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172577710 # cover/coal
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -849655395 # cover/corrosion
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1676472336 # cover/desert
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 534589821 # cover/digital
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172553150 # cover/dirt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1687943694 # cover/dragon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1052260392 # cover/flame
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1052246787 # cover/flora
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -75661627 # cover/forester
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 610004612 # cover/frontier1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 640844210 # cover/frontier2018
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -64859568 # cover/galaxy
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1705840017 # cover/glacier
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1051329156 # cover/glina
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172458213 # cover/gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1051154520 # cover/green
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1953107513 # cover/greenskulls
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1128248718 # cover/halloween
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -784118404 # cover/honeycomb
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1050101618 # cover/hvoya
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 819242484 # cover/inferno
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 372065215 # cover/izumrud
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1167717168 # cover/lightblue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1930414525 # cover/marine
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172292714 # cover/mary
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1958622537 # cover/matteblack
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1448655312 # cover/matteblue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1448809433 # cover/mattegray
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1963422797 # cover/mattegreen
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1449002268 # cover/mattenavi
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 965487140 # cover/matteorange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -230348709 # cover/mattered
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1449134789 # cover/matterose
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1157994613 # cover/matteviolet
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1977905523 # cover/mattewhite
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1240098922 # cover/matteyellow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -217437764 # cover/may2018_1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -217437763 # cover/may2018_2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1045986264 # cover/metel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1962388777 # cover/nefrit
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1273539023 # cover/newyearglow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -97463799 # cover/newyearice
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1044774977 # cover/noise
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172249613 # cover/none
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1044766294 # cover/north
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2002870825 # cover/orange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 645983436 # cover/partizan
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2016361556 # cover/patina
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172195791 # cover/pink
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1042925597 # cover/polar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2031727040 # cover/priboy
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1435376695 # cover/prodigy
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -500584127 # cover/radiation
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 410089078 # cover/red
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2081063968 # cover/rivets
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1041086893 # cover/rocks
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172124513 # cover/rust
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2014177414 # cover/sandstone
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 746819053 # cover/savanna
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1040211436 # cover/smoke
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1040121831 # cover/sport
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1779740531 # cover/starrysky
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1408168452 # cover/steamulatorf
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 703549557 # cover/steamulatorsf
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1040012688 # cover/steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1040002806 # cover/stone
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1040002674 # cover/storm
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -26936066 # cover/stvalentine2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1039926907 # cover/swamp
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1039651301 # cover/taiga
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 410090890 # cover/tar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -172076637 # cover/tina
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2097840184 # cover/trianglecamo
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2145802143 # cover/tundra
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 176253763 # cover/universe
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1038228233 # cover/urban
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -487032800 # cover/vostok1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2078438351 # cover/walker
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 454169524 # cover/yellow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -779102498 # graffiti/child/dictator
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1319913646 # graffiti/child/flamethrower
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1530725353 # graffiti/child/freeze
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1590999596 # graffiti/child/hammer
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1585608388 # graffiti/child/hornet
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1591036114 # graffiti/child/hunter
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -758092378 # graffiti/child/isis
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1646325085 # graffiti/child/mammoth
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1785144668 # graffiti/child/railgun
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2140835849 # graffiti/child/ricochet
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2017127704 # graffiti/child/shaft
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2016965135 # graffiti/child/smoky
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -523272750 # graffiti/child/thunder
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2016156294 # graffiti/child/titan
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2015749383 # graffiti/child/twins
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1980662300 # graffiti/child/viking
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1991768181 # graffiti/child/vulcan
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -757692295 # graffiti/child/wasp
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -571325446 # graffiti/independent/23february2017_1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -571325445 # graffiti/independent/23february2017_2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 473147977 # graffiti/independent/23february2018
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1669172271 # graffiti/independent/8marchcat
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2069414001 # graffiti/independent/8marchcrystal
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2022929356 # graffiti/independent/alien
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1628984953 # graffiti/independent/antaeus
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1968456698 # graffiti/independent/armsrace
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 968765463 # graffiti/independent/atlas
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 891728345 # graffiti/independent/attackoftitan
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1278226971 # graffiti/independent/birthday2017graffiti
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -107843627 # graffiti/independent/bulldog
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 315308508 # graffiti/independent/bullterier
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -24677874 # graffiti/independent/caveman
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 678025425 # graffiti/independent/cosmosx
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -343773791 # graffiti/independent/demolisher
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 971090551 # graffiti/independent/demon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -194604214 # graffiti/independent/devilsheart
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 519082359 # graffiti/independent/doberman
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 292147378 # graffiti/independent/fetih
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -781845119 # graffiti/independent/frontier
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1779805396 # graffiti/independent/ghosttrain
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1968456699 # graffiti/independent/giant
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 880222526 # graffiti/independent/godmode
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1737433896 # graffiti/independent/goldbill
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 887330442 # graffiti/independent/goldbox
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1951474656 # graffiti/independent/hellhound
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 113459975 # graffiti/independent/heroorder
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1289970222 # graffiti/independent/hydra
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -303400441 # graffiti/independent/iwojima
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1391443781 # graffiti/independent/letsgo
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1001404575 # graffiti/independent/logo
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -93361699 # graffiti/independent/luck
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 988897323 # graffiti/independent/marshalstar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1775068808 # graffiti/independent/may2018_1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1775068809 # graffiti/independent/may2018_2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 895058022 # graffiti/independent/monster
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2050212779 # graffiti/independent/motherland
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1001470037 # graffiti/independent/nuke
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1611647112 # graffiti/independent/partners
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 674847565 # graffiti/independent/peace
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1384981436 # graffiti/independent/pixelduck
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 457993351 # graffiti/independent/pumpkin
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1786896255 # graffiti/independent/pumpkin2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -247809917 # graffiti/independent/season0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 545710246 # graffiti/independent/season0top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -247809886 # graffiti/independent/season1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 546633767 # graffiti/independent/season1top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1690446069 # graffiti/independent/season5
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1587411008 # graffiti/independent/season5top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1626810943 # graffiti/independent/season6
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -86050122 # graffiti/independent/season6top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1834580363 # graffiti/independent/seasons/season10
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -524637504 # graffiti/independent/seasons/season10top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1834580367 # graffiti/independent/seasons/season11
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -524637507 # graffiti/independent/seasons/season11top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1834580368 # graffiti/independent/seasons/season12
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -524637508 # graffiti/independent/seasons/season12top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 217914652 # graffiti/independent/seasons/season2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2095038791 # graffiti/independent/seasons/season2top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 217914653 # graffiti/independent/seasons/season3
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2095009000 # graffiti/independent/seasons/season3top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1994390162 # graffiti/independent/seasons/season3_ny2018
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1700141693 # graffiti/independent/seasons/season3_ny2018top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 217914654 # graffiti/independent/seasons/season4
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2094979209 # graffiti/independent/seasons/season4top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 345912680 # graffiti/independent/seasons/season7
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1792984208 # graffiti/independent/seasons/season7top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 217914658 # graffiti/independent/seasons/season8
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2094860045 # graffiti/independent/seasons/season8top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 217914659 # graffiti/independent/seasons/season9
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2094830254 # graffiti/independent/seasons/season9top
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 62042919 # graffiti/independent/steampunk
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1808985494 # graffiti/independent/stvalentine2017_1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1808985493 # graffiti/independent/stvalentine2017_2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1086271184 # graffiti/independent/tanki2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1884609450 # graffiti/independent/up
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1285677037 # graffiti/independent/valhalla_drakkar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 619790646 # graffiti/independent/valhalla_valkyrie
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1871711547 # graffiti/independent/valhalla_yggdrasil
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1333610377 # graffiti/independent/vdnhstatue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1374508848 # graffiti/independent/waroftheworlds
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1704628950 # graffiti/independent/widow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -25726372 # graffiti/independent/xmas1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 432765771 # graffiti/independent/xmas2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1435022351 # graffiti/independent/xmas3
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 300183087 # paint/23feb2019
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 685548944 # paint/8march19-1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 685548945 # paint/8march19-2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 685548946 # paint/8march19-3
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 231787227 # paint/anaVatan
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1104561449 # paint/antaeus1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1104561450 # paint/antaeus2018
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 683803510 # paint/antarctida
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -400341658 # paint/arrowsoflove
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -662236117 # paint/autumnleaves
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -574655849 # paint/bananas
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1500327034 # paint/beginning
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 776075330 # paint/birthday2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2008328619 # paint/blackroger
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 137747283 # paint/blue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 436923060 # paint/bluemagma
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 214261055 # paint/canyon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 214261056 # paint/carbon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -24102762 # paint/ceder
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1798212322 # paint/champion
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 920905258 # paint/coal
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1569952799 # paint/corrosion
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -718109490 # paint/desert
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -683002753 # paint/digital
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 137803904 # paint/dirt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -706638132 # paint/dragon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1717585789 # paint/easternstar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -892221448 # paint/epicgold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1514026752 # paint/flame
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -21112705 # paint/flora
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 761115110 # paint/football
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 833674243 # paint/forester
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1347685821 # paint/freedom
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1396691349 # paint/frontier1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1396691350 # paint/frontier2018
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -636128311 # paint/galaxy
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 526265313 # paint/glacier
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -20195074 # paint/glina
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 921024755 # paint/gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -20020438 # paint/green
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 97943767 # paint/greenskulls
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 721518013 # paint/halloween
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1218811098 # paint/halloween2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 137919219 # paint/hero
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1023813172 # paint/honeycomb
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -18967536 # paint/hvoya
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -887676103 # paint/hydra
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -398350090 # paint/inferno
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1185540727 # paint/league_bronze
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1245546371 # paint/league_gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -317558887 # paint/league_master
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1663842282 # paint/league_silver
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -464167301 # paint/marine
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 138064340 # paint/mary
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -646190818 # paint/matteblack
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -436467641 # paint/matteblue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -431689890 # paint/mattegray
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -497382758 # paint/mattegreen
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -425712005 # paint/mattenavi
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 267667571 # paint/matteorange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1260536244 # paint/mattered
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -421603854 # paint/matterose
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1940431938 # paint/matteviolet
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -48418252 # paint/mattewhite
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 190698221 # paint/matteyellow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2070833571 # paint/may2018_1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2070833572 # paint/may2018_2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -14852182 # paint/metel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1660396512 # paint/military
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -451216061 # paint/mosaic
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1878474135 # paint/moscow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 532533505 # paint/nefrit
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1760088841 # paint/newyearglow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -888059423 # paint/newyearice
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1506541337 # paint/noise
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1506532654 # paint/north
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -391711001 # paint/orange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -12628116 # paint/orion
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1555319306 # paint/partizan
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1079898253 # paint/patina
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 921287177 # paint/pink
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1504691957 # paint/polar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -362854786 # paint/priboy
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1641998027 # paint/prodigy
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1223441167 # paint/radiation
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 558647928 # paint/red
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1784687185 # paint/redamber
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 925876519 # paint/rivets
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -9952811 # paint/rocks
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 276536681 # paint/rust
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 138818312 # paint/sandstone
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -470773521 # paint/savanna
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -9077354 # paint/smoke
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -56970637 # paint/spectre
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 355636982 # paint/spiderweb
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1207082244 # paint/sport
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1732490966 # paint/starrysky
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1880146981 # paint/steamulatorf
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1844971488 # paint/steamulatorsf
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1501779048 # paint/steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1756632159 # paint/stone
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -8868592 # paint/storm
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 986557478 # paint/stvalentine2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -274067352 # paint/summer
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -8792825 # paint/swamp
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -8517219 # paint/taiga
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1209537658 # paint/tar
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 138280417 # paint/tina
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1902859834 # paint/trianglecamo
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1546602523 # paint/trollface
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -245416673 # paint/tundra
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 942805628 # paint/universe
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -7094151 # paint/urban
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2023428617 # paint/vostok1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -50932577 # paint/walker
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1816745725 # premium/boost
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -180272377 # premium/quest
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 692677861 # shell/flamethrower/acid
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 357929046 # shell/flamethrower/orange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -947470487 # shell/flamethrower/red
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 224610499 # shell/freeze/indigo
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1408603862 # shell/freeze/skyblue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -395640808 # shell/freeze/white
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 142652989 # shell/hammer/papercracker
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 530945311 # shell/hammer/standard
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1317881529 # shell/hammer/thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2065928272 # shell/isis/emerald
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -132552041 # shell/isis/shine
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 48235025 # shell/isis/standard
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1975536348 # shell/railgun/glitch
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -375403918 # shell/railgun/gloom
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -660457061 # shell/railgun/green
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1229590166 # shell/railgun/orange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 366763244 # shell/railgun/paleblue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1261498404 # shell/railgun/purple
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1195981301 # shell/railgun/smoke
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -492753567 # shell/ricochet/acid
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 139800007 # shell/ricochet/aurulent
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1899861235 # shell/ricochet/cannonball
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 577198848 # shell/ricochet/coral
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -585038633 # shell/ricochet/moon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1073342998 # shell/ricochet/ricsnowball
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1488314890 # shell/shaft/blue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -250346840 # shell/shaft/lighting
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -47995019 # shell/shaft/red
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 70311513 # shell/shaft/standard
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 860375257 # shell/smoky/fumes
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1260549513 # shell/smoky/lightning
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -966935184 # shell/smoky/standard
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1165747871 # shell/smoky/thermite
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1852311024 # shell/thunder/dragon
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 794635633 # shell/thunder/lightning
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1067800943 # shell/thunder/standard
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 807172229 # shell/twins/blue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1319432295 # shell/twins/orange
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1173768746 # shell/twins/turquoise
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1092514341 # shell/twins/twinssnowball
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1126924822 # shell/twins/violet
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -728200866 # shell/twins/white
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 189181410 # shell/vulcan/acid
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 189220223 # shell/vulcan/blue
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -963712308 # shell/vulcan/red
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1322064226 # shell/vulcan/standard
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 732611697 # skin/tank/dictator/dreadnought
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1555682652 # skin/tank/dictator/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1555682651 # skin/tank/dictator/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -767847828 # skin/tank/dictator/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1626035585 # skin/tank/dictator/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 783713997 # skin/tank/dictator/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1994127174 # skin/tank/dictator/m2flame
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1765925144 # skin/tank/hornet/cry
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -955210933 # skin/tank/hornet/crydischarge
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -955210932 # skin/tank/hornet/cryglow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -955210934 # skin/tank/hornet/cryrage
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1194388226 # skin/tank/hornet/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1194388225 # skin/tank/hornet/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 679021958 # skin/tank/hornet/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -378883611 # skin/tank/hornet/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1992749017 # skin/tank/hornet/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 963790407 # skin/tank/hornet/may2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -47777666 # skin/tank/hornet/t0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1475671586 # skin/tank/hornet/t0gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -47777474 # skin/tank/hornet/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1636606664 # skin/tank/hornet/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 247232443 # skin/tank/hunter/23february2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1589207088 # skin/tank/hunter/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1589207089 # skin/tank/hunter/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -318345288 # skin/tank/hunter/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1267544717 # skin/tank/hunter/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1589207091 # skin/tank/hunter/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 110176853 # skin/tank/hunter/may2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 790846704 # skin/tank/hunter/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1804747078 # skin/tank/hunter/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -543026971 # skin/tank/mammoth/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -543026970 # skin/tank/mammoth/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -920939649 # skin/tank/mammoth/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -833500654 # skin/tank/mammoth/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -543026935 # skin/tank/mammoth/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 677046075 # skin/tank/mammoth/steam
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1470436461 # skin/tank/titan/frontierzero
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1584239704 # skin/tank/titan/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1584239703 # skin/tank/titan/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -754659582 # skin/tank/titan/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -133498961 # skin/tank/titan/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1584239766 # skin/tank/titan/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -651639290 # skin/tank/titan/m2tsk
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1576595770 # skin/tank/titan/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1163905852 # skin/tank/titan/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1353746752 # skin/tank/viking/cry
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1363672965 # skin/tank/viking/crydischarge
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -110402718 # skin/tank/viking/cryglow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -110775867 # skin/tank/viking/cryrage
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -353686874 # skin/tank/viking/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -353686873 # skin/tank/viking/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 499257134 # skin/tank/viking/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1656625859 # skin/tank/viking/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 792923471 # skin/tank/viking/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -313951841 # skin/tank/viking/may2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1152047448 # skin/tank/viking/t2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 792923878 # skin/tank/viking/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1380618384 # skin/tank/viking/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1648311780 # skin/tank/wasp/8march2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -2009337684 # skin/tank/wasp/Dreadnought
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1774581975 # skin/tank/wasp/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1774581974 # skin/tank/wasp/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1774441975 # skin/tank/wasp/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1555805158 # skin/tank/wasp/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -10051566 # skin/tank/wasp/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 72041592 # skin/tank/wasp/xmas
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1129770519 # skin/tank/wasp/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1838544851 # skin/tank/wasp/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 602602131 # skin/weapon/flamethrower/Dreadnought
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2078566312 # skin/weapon/flamethrower/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2078566313 # skin/weapon/flamethrower/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1491390890 # skin/weapon/flamethrower/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1000298047 # skin/weapon/flamethrower/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1045726795 # skin/weapon/flamethrower/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -983916600 # skin/weapon/flamethrower/m2flame
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -472765007 # skin/weapon/freeze/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -472765006 # skin/weapon/freeze/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -362162189 # skin/weapon/freeze/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1669098648 # skin/weapon/freeze/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 237598868 # skin/weapon/freeze/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 139596834 # skin/weapon/freeze/xmas
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 283356827 # skin/weapon/hammer/cry
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -350323544 # skin/weapon/hammer/crydischarge
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -350323543 # skin/weapon/hammer/cryglow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -350323545 # skin/weapon/hammer/cryrage
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -635589854 # skin/weapon/hammer/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -635589853 # skin/weapon/hammer/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1427688220 # skin/weapon/hammer/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2039676487 # skin/weapon/hammer/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1076729477 # skin/weapon/hammer/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -305773183 # skin/weapon/isis/8march2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -746649388 # skin/weapon/isis/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -746649387 # skin/weapon/isis/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1704481322 # skin/weapon/isis/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -691629355 # skin/weapon/isis/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 765745271 # skin/weapon/isis/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 599453582 # skin/weapon/railgun/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 599453583 # skin/weapon/railgun/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1704191570 # skin/weapon/railgun/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -59670077 # skin/weapon/railgun/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 599479587 # skin/weapon/railgun/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 254111980 # skin/weapon/railgun/m2tsk
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 98615071 # skin/weapon/railgun/may2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 593679593 # skin/weapon/railgun/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1793185296 # skin/weapon/railgun/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1077283204 # skin/weapon/ricochet/frontierzero
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -909167727 # skin/weapon/ricochet/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -909167726 # skin/weapon/ricochet/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -475547245 # skin/weapon/ricochet/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1849888712 # skin/weapon/ricochet/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -342766924 # skin/weapon/ricochet/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1460259970 # skin/weapon/shaft/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1460259971 # skin/weapon/shaft/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 54173794 # skin/weapon/shaft/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -445855153 # skin/weapon/shaft/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1099854083 # skin/weapon/shaft/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1099854300 # skin/weapon/shaft/t2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1141123658 # skin/weapon/smoky/23february2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2008385753 # skin/weapon/smoky/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2008385754 # skin/weapon/smoky/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2004785941 # skin/weapon/smoky/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -617862056 # skin/weapon/smoky/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1647979866 # skin/weapon/smoky/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1398640396 # skin/weapon/smoky/may2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1647980273 # skin/weapon/smoky/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 295929829 # skin/weapon/smoky/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1770762539 # skin/weapon/thunder/dreadnought
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1552497496 # skin/weapon/thunder/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1552497497 # skin/weapon/thunder/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -398757768 # skin/weapon/thunder/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1754072121 # skin/weapon/thunder/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2097643731 # skin/weapon/thunder/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1912357269 # skin/weapon/thunder/may2017
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2097644138 # skin/weapon/thunder/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -688039802 # skin/weapon/thunder/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1468232592 # skin/weapon/twins/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 274558103 # skin/weapon/twins/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1595894991 # skin/weapon/twins/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -58379936 # skin/weapon/twins/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -788257966 # skin/weapon/twins/m2
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1959015927 # skin/weapon/twins/steam
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -788257559 # skin/weapon/twins/xt
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 855411949 # skin/weapon/twins/xt_thor
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -388976915 # skin/weapon/vulcan/cry
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -785177863 # skin/weapon/vulcan/crydischarge
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1559746012 # skin/weapon/vulcan/cryglow
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1560119161 # skin/weapon/vulcan/cryrage
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -851288667 # skin/weapon/vulcan/m0
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -851288666 # skin/weapon/vulcan/m1
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1066986983 # skin/weapon/vulcan/m1gold
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 2065196452 # skin/weapon/vulcan/m1steel
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -140924792 # skin/weapon/vulcan/m2
+      compensation: 5000
+  rareItems:
+    - itemBundles:
+        - marketItem: 636909271 # gold
+          max: 3
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 02cab827d9d70294d987db146e5a7bb2
+imageItem:
+  spriteUid: cf1a49fd-fa44-47c6-9273-4c364f5c6305
+order:
+  index: -1000
+priceItem:
+  price: 100000
+xPriceItem:
+  price: 42
+itemPacks:
+  forXPrice:
+    - 1
+  forPrice:
+    - 1
+packPrice:
+  packPrice:
+    1: 100000
+  packXPrice:
+    1: 42

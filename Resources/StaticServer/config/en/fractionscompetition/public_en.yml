@@ -1,0 +1,34 @@
+fractionCompetitionInfo:
+  competitionTitle: THE FINAL BATTLE
+  competitionStartMessage:
+    |
+    Last six months the war seemed to abate. Local conflicts away from the hotspots spoke more of the unrestrained individual units than of a complex strategy. Corporations accumulated their power, they hired and trained novices who were testing the new mechanics of modules and weapon. All people understood that long-term opposition once has to come to the end. That the storm is coming.
+    That the Final Battle of Corporations will start very soon.
+    And you will decide in whose hands will be the power over the world.
+  competitionDescription:
+    |
+    1. The event will run between the 07:00 UTC, June 28, 2019, until the July 12, 2019, 07: 00 UTC.
+    2. Each participant of the event, who chose the side, brings points to the offset of his сorporation, depending on the earned battle points. 3% of battle points will be transferred to corporation points after the battle is over. Players who have not chosen a side in the Battle, bring points to the losing corporation.
+    3. At the end of the event, the number of points scored by each of the corporations will be summed up, multiplied by 3, and then turned into a Fund of Crystals, which will be equally split amongst all the mercenaries of the winning corporation.
+    4. All the participating players for one of the corporations will receive rewards upon passing a number of milestones for their respective corporation. Awards will be given to participants who have contributed at least 100 points to the victory of their Corporation.
+    5. The corporation wins by advantaging at least 1 over point by 12.07.2019.
+    6. Prizes according to the scale of awards and the fund to the winner will be awarded after the end of the battle on July 12, 2019.
+
+    In additional:
+    — As a reward for the battles, tankers will receive special containers «Frontier support» or «Antaeus support» depending on the selected corporation. You will only have a chance at getting a container in battle if you’ve earned a minimum of 100 battle points in the battle that you played until the end (without leaving).
+    — Support containers can also be purchased at the in-game store for the price of 199 X-crystals, and each purchased container adds +50 points to the corporation. Containers can be purchased by any player, not even participating in the event (points in this case are also awarded).
+
+    Details about the game lore you can read on the <link="https://en.wiki.tankix.com/History_of_Tanki_X"><color=#3AC4E9FF>Tanki X encyclopedia</color></link>.
+    Fire at will!
+  mainQuestionMessage: Who will YOU fight for?
+  takePartButtonText: Take Part
+  winnerFinishMessage:
+    |
+    The war ended. Antaeus confidently went to victory, but this corporation finally appreciated its opponent. To prevent the loss of good weapon and fighters, Antaeus offered Frontier to sign a peace agreement. Ex-leaders of organisations, Vladimir Repin and Garcia Lopez, together with their best employees joined the Board of Directors, designed to humanely decide the fate of the Earth and the Solar system.
+    All the fighters who fought in the war received generous layoffs, real "X" tanks went to help with restore the regions after cataclysms and battles. And the new generation knew about these combat machines only from the popular simulation Tanki X.
+  loserFinishMessage:
+    |
+    The war ended. Antaeus confidently went to victory, but this corporation finally appreciated its opponent. To prevent the loss of good weapon and fighters, Antaeus offered Frontier to sign a peace agreement. Ex-leaders of organisations, Vladimir Repin and Garcia Lopez, together with their best employees joined the Board of Directors, designed to humanely decide the fate of the Earth and the Solar system.
+    All the fighters who fought in the war received generous layoffs, real "X" tanks went to help with restore the regions after cataclysms and battles. And the new generation knew about these combat machines only from the popular simulation Tanki X.
+  hereYourRewardMessage: "You fought bravely, tanker, here are your rewards:"
+  rewardsButtonText: Receive Reward

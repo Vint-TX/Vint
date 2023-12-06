@@ -1,0 +1,23 @@
+unityAsset:
+  reference:
+    assetGuid: 18ea98769fbeae84c8ba5a6b4cebf870
+conicTargeting:
+  workDistance: 17
+  halfConeAngle: 8
+  halfConeNumRays: 5
+  numSteps: 5
+  fireOriginOffsetCoeff: 1
+streamHitConfig:
+  localCheckPeriod: 0.1
+  sendToServerPeriod: 0.26
+  detectStaticHit: false
+ctfTargetEvaluator:
+  flagCarrierPriorityBonus: 5
+distanceAndAngleTargetEvaluator:
+  distanceWeight: 0.0065
+  angleWeight: 0.0035
+weaponCooldown:
+  cooldownIntervalSec: 0.5
+reticle:
+  template: 636100801360863080
+  configPath: /battle/reticle

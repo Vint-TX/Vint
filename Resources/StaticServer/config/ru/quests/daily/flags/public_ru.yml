@@ -1,0 +1,13 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Доставь {0} {1}'
+    cases:
+      DEFAULT: 'вражеских флагов'
+      ONE: 'вражеский флаг'
+      TWO: 'вражеских флага'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Режим
+    WEAPON: Пушка
+    TANK: Корпус

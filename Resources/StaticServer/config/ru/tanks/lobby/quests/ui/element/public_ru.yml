@@ -1,0 +1,12 @@
+---
+questItemGUI:
+  condition: '{0}: {1}'
+  progress: '/'
+  pickUp: Задание выполнено!
+  nextQuest: 'Новый квест будет доступен через:'
+questExpireTimer:
+  timerText: '{TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'

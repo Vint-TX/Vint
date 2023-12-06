@@ -1,0 +1,4 @@
+variant:
+  value: 3
+  billboardTreesShadowCasting: true
+  billboardTreesShadowReceiving: true

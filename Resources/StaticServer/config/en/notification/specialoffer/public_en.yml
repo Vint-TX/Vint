@@ -1,0 +1,3 @@
+---
+paymentNotificationText:
+  messageTemplate: "You've successfully acquired «{0}»!"

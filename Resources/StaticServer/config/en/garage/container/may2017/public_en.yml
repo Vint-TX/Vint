@@ -1,0 +1,29 @@
+---
+descriptionItem:
+  name: Victory Day
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    GoldIsis: Isida "Gold"
+    GoldShaft: Shaft "Gold"
+    GoldHummer: Hammer "Gold"
+    GoldDictator: Dictator "Gold"
+    GoldTitan: Titan "Gold"
+    GoldWasp: Wasp "Gold"
+    mayHunter: Hunter "Victory Day"
+    mayHornet: Hornet "Victory Day"
+    mayViking: Viking "Victory Day"
+    maySmoky: Smoky "Victory Day"
+    mayThunder: Thunder "Victory Day"
+    mayRailgun: Railgun  "Victory Day"
+    triangletankpaint: Triangle (Paint)
+    triangleweaponpaint: Triangle (Coating)
+    partizantankpaint: Partizan (Paint)
+    partizanweaponpaint: Partizan (Coating)
+    cedertankpaint: Ceder (Paint)
+    cederweaponpaint: Ceder (Coating)
+    urbantankpaint: Urban (Paint)
+    urbanweaponpaint: Urban (Coating)

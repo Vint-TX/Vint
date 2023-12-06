@@ -1,0 +1,4 @@
+---
+descriptionItem:
+  name: Backhit
+  description: Deal {TargetValue} damage to the back of an enemy tank (the back side of the hull)

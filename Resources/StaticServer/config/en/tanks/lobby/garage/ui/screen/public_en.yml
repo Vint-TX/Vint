@@ -1,0 +1,14 @@
+containersScreen:
+  header: Containers
+  containersButtonText: CONTENTS
+  openContainerButtonText: OPEN
+  openAllContainerButtonText: OPEN ALL
+  emptyListText: Containers are out of stock
+promoCodesScreen:
+  inputStateTexts:
+    VALID: ""
+    NOT_FOUND: "Promo code not valid"
+    USED: "Promo code already redeemed"
+    EXPIRED: "Promo code has expired"
+    INVALID: "Promo code not valid"
+    OWNED: "Promo code is owned by other user"

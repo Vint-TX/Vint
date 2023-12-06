@@ -1,0 +1,103 @@
+priceItem:
+  price: 1300
+xPriceItem:
+  price: 260
+userItemTemplate:
+  userItemTemplate: 1435139228955
+itemIcon:
+  spriteUid: 8b29dff2-c412-46d5-a637-22f441a8789a
+order:
+  index: 6
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 8
+damagePerSecondProperty:
+  initialValue: 440.000
+  finalValue: 440.000
+heatDamageProperty:
+  initialValue: 125
+  finalValue: 125
+spinUpTimeProperty:
+  initialValue: 2.000
+  finalValue: 2.000
+temperatureHittingTimeProperty:
+  initialValue: 5.000
+  finalValue: 5.000
+spinDownTimeProperty:
+  initialValue: 1.000
+  finalValue: 1.000
+deltaTemperaturePerSecondProperty:
+  initialValue: 0.150
+  finalValue: 0.150
+temperatureLimitProperty:
+  initialValue: 0.500
+  finalValue: 0.500
+targetHeatMultiplierProperty:
+  initialValue: 0.800
+  finalValue: 0.800
+maxDamageDistanceProperty:
+  initialValue: 68.580
+  finalValue: 68.580
+minDamageDistanceProperty:
+  initialValue: 113.478
+  finalValue: 113.478
+minDamagePercentProperty:
+  initialValue: 55.652
+  finalValue: 55.652
+weaponTurnDecelerationProperty:
+  initialValue: 0.50
+  finalValue: 0.50
+impactProperty:
+  initialValue: 1.600
+  finalValue: 1.600
+kickbackProperty:
+  initialValue: 1.600
+  finalValue: 1.600
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.3
+    - name: Range
+      normalizedValue: 0.65
+    - name: FireRate
+      normalizedValue: 1.00
+  properties:
+    - name: DPM
+      initialValue: 26400
+      finalValue: 26400
+    - name: Damage per Second
+      initialValue: 440
+      finalValue: 440
+    - name: Max Damage Distance
+      initialValue: 68.5
+      finalValue: 68.5
+      format: 0.0
+      unit: m
+    - name: Attack Distance
+      initialValue: 113.5
+      finalValue: 113.5
+      format: 0.0
+      unit: m
+    - name: SpinUpTime
+      initialValue: 2
+      finalValue: 2
+      format: 0.0
+      unit: sec
+    - name: Overheating Time
+      initialValue: 5
+      finalValue: 5
+      unit: sec
+    - name: HeatTemperatureLimit
+      initialValue: 50
+      finalValue: 50
+      unit: percent
+    - name: HeatTemperatureDelta
+      initialValue: 10
+      finalValue: 10
+      unit: percentinsec
+    - name: HeatDamage
+      initialValue: 125
+      finalValue: 125
+    - name: Impact
+      initialValue: 2
+      finalValue: 2
+...

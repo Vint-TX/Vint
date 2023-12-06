@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 90288782-a288-4598-a778-9ec7bcff4608
+imageItem:
+  spriteUid: 90288782-a288-4598-a778-9ec7bcff4608
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: EPIC

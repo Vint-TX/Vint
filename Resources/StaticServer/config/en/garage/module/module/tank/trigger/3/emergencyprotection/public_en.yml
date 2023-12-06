@@ -1,0 +1,5 @@
+---
+descriptionItem:
+  name: Emergency protection
+  description: "The module prevents the tank from being destroyed and regenerate part of its hit points after a 2 seconds delay. During regeneration, the tank goes into a cryogenic state in which it moves very slow until the effect of the module wears off."
+  flavor: "This module has saved my bottom more times than I can count. \n- A Veteran of the Crystal War"

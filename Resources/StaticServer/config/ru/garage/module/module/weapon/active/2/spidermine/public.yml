@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636364878050935974
+  path: garage/module/upgrade/properties/spidermine
+itemIcon:
+  spriteUid: d746f580-d884-4cf9-b4d0-c5b1f8ee86f1
+itemBigIcon:
+  spriteUid: 5b4ed56a-cadb-459a-9dd3-22132a1675a6
+order:
+  index: 2
+moduleEffects:
+  effects:
+    - template: 1485337553359
+      config: battle/effect/spidermine  

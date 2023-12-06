@@ -1,0 +1,11 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 57b0c473-e8fe-4ce1-8446-2704e4122a6d
+  title: 'Premium Account'
+  description: DAYS
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! Offer is time limited
+  description: |
+    It is your chance to become one of the best! The Hell Hounds elite squad is always looking for promising commanders who will honorably resent the squad on the battlefield. Such opportunity comes once in a lifetime.
+receiptText:
+  text: Premium Account for 3 days

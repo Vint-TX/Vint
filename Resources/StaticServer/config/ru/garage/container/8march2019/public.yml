@@ -1,0 +1,69 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 685548945 # Paint 8 march 2019 #2
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 685548946 # Paint 8 march 2019 #3
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1473761734 # Avatar Darina Liekhtonien
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -2119697962 # Avatar Emma Bonney
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 764921404 # Avatar Maureen Lawrie
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -2083128946 # Avatar Michelle Reisner
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 1657247215 # Avatar Teresa Amsel
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1147853194 # Avatar Vera Klein
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 2065928272 # Isis Shell Emerald
+      compensation: 6250
+  rareItems:
+    - itemBundles:
+        - marketItem: -305773183 # Isis Bumblebee
+    - itemBundles:
+        - marketItem: -1648311780 # Wasp Bumblebee
+    - itemBundles:
+        - marketItem: -132552041 # Isis Shell Shine
+    - itemBundles:
+        - marketItem: 685548944 # Glow Paint 8 march 2019 #1
+    - itemBundles:
+        - marketItem: 1807734043 # Avatar Mary Newell
+    - itemBundles:
+        - marketItem: 855079933 # Avatar Irma Massacre
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 5327d132ed5c7a54aa672e12366ef32a
+imageItem:
+  spriteUid: 4c8c110e-bd49-4e76-9975-615049cdd819
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

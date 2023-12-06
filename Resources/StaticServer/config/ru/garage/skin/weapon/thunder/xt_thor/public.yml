@@ -1,0 +1,17 @@
+order:
+  index: 0
+unityAsset:
+  reference:
+    assetGuid: edfd2e2cf841a4a4194c9a8e185d88ca
+imageItem:
+  spriteUid: ed412021-37ef-440a-a2c9-561691c12a6e
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+mountUpgradeLevelRestriction:
+  restrictionValue: 0
+mountUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: EPIC

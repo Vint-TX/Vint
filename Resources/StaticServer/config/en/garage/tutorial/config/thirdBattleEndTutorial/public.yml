@@ -1,0 +1,15 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/thirdBattleEndTutorial/"
+  tutorialId: 216071486
+  forNewPlayer: true
+  forOldPlayer: false
+  steps:
+    1: 1504002856142 # setup endgame screen
+    2: 1504002856142 # add chest
+    3: 1504698500736 # show alert
+    4: 1504698500736 # open chest
+    5: 1504002856142 # open quests
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -719658163

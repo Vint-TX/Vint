@@ -1,0 +1,7 @@
+notificationConfig:
+  showDuration: -1
+  showDelay: 0.2
+  order: 1
+assetReference:
+  reference:
+    assetGuid: e180a0a73fd897f48bd2b284a2f7d5e5

@@ -1,0 +1,18 @@
+order:
+  index: 0
+firstBuySale:
+  salePercent: 47 # 95 - 95 * 47% = 50
+createByRankConfig:
+  userRankListToCreateItem:
+    - 0
+    - 6
+itemsBuyCountLimit:
+  limit: 18
+priceItem:
+  price: 0
+xPriceItem:
+  price: 95
+itemsAutoIncreasePrice:
+  startCount: 4
+  priceIncreaseAmount: 5
+  maxAdditionalPrice: 0

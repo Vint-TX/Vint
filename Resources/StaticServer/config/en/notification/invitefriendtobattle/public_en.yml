@@ -1,0 +1,3 @@
+---
+inviteFriendToBattleNotification:
+  messageTemplate: 'Your friend {0} has invited you to {1} {2}'

@@ -1,0 +1,31 @@
+cameraOffsetConfig:
+  xOffset: 0
+  yOffset: -1
+  zOffset: -1
+tankCameraShakerConfigOnDeath:
+  enabled: true
+  magnitude: 5
+  roughness: 10
+  fadeInTime: 0
+  fadeOutTime: 1.5
+  posInfluenceX: 0.25
+  posInfluenceY: 0.75
+  posInfluenceZ: 0.25
+  rotInfluenceX: 4
+  rotInfluenceY: 1
+  rotInfluenceZ: 1
+tankFallingCameraShakerConfig:
+  enabled: true
+  magnitude: 1.71
+  roughness: 3
+  fadeInTime: 0.29
+  fadeOutTime: 0.57
+  posInfluenceX: 0.18
+  posInfluenceY: 0.88
+  posInfluenceZ: 0.25
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 1
+  minFallingPower: 1
+  maxFallingPower: 25
+  minFallingPowerForHUD: 10

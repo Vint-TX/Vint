@@ -1,0 +1,4 @@
+---
+emailConfirmationNotification:
+  confirmationMessageTemplate: "Confirm you email address to protect your account, and receive a gift!"
+  changeEmailMessageTemplate: "Enter your email address and confirm it to protect your account, and receive a gift!"

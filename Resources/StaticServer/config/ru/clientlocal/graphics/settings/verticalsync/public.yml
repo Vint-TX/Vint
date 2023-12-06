@@ -1,0 +1,5 @@
+configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/verticalsync/off
+    - clientlocal/graphics/settings/verticalsync/everyframe
+    - clientlocal/graphics/settings/verticalsync/everysecondframe

@@ -1,0 +1,19 @@
+---
+descriptionItem:
+  name: Покрытие
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    greenweaponpaint: Зелёный (Покрытие)
+    redweaponpaint: Красный (Покрытие)
+    blueweaponpaint: Голубой (Покрытие)
+    pinkweaponpaint: Розовый (Покрытие)
+    orangeweaponpaint: Оранжевый (Покрытие)
+    yellowweaponpaint: Жёлтый (Покрытие)
+    lightblueweaponpaint: Светло-голубой (Покрытие)
+    izumrudweaponpaint: Изумруд (Покрытие)
+    coalweaponpaint: Уголь (Покрытие)
+    polarweaponpaint: Полярная (Покрытие)

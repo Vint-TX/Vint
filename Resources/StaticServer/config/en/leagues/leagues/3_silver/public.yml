@@ -1,0 +1,5 @@
+leagueIcon:
+  spriteUid: 72c8ddaf-984e-4953-853d-8a03f8807de5
+leagueEnergyConfig:
+  cost: 75
+  capacity: 225

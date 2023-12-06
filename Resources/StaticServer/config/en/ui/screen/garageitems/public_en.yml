@@ -1,0 +1,12 @@
+---
+garageItemsScreenText:
+  mountedText: EQUIPPED
+  userRankRestrictionDescription: 'Rank of %RANK% required'
+  upgradeLevelRestrictionDescription: '%ITEM_upgLEVEL% Upgrades required'
+  weaponUpgradeLevelRestrictionDescription: 'Requires %ITEM_upgLEVEL% "%ITEM_NAME%" weapon upgrades'
+  hullUpgradeLevelRestrictionDescription: 'Requires %ITEM_upgLEVEL% "%ITEM_NAME%" hull upgrades'
+  shellItemsHeaderText: '«{0}» AMMUNITION'
+  weaponSkinItemsHeaderText: '"{0}" TURRET SKINS'
+  hullSkinItemsHeaderText: '"{0}" HULL SKINS'
+  graffitiItemsHeaderText: 'GRAFFITI'
+  onlyInContainerText: 'Available in Containers only'

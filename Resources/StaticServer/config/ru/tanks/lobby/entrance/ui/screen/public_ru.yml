@@ -1,0 +1,44 @@
+---
+entranceScreen:
+  header: ВХОД В ИГРУ
+  enterNameOrEmail: Введите имя или адрес почты
+  enterPassword: Введите пароль
+  enterSymbolsFromCaptcha: Введите белые символы с картинки
+  rememberMeCheckbox: Запомнить меня
+  play: ИГРАТЬ
+  forgetNickOrPassword: Забыли имя или пароль?
+  incorrectPassword: Пароль неверный
+  incorrectCaptcha: Символы введены неверно
+  incorrectLogin: Такого игрока не существует
+  unconfirmedEmail: Введённый адрес электронной почты не подтверждён
+  loginFailed: Ошибка входа, проверьте введённые данные
+  registration: РЕГИСТРАЦИЯ
+inviteScreen:
+  header: ВВЕДИТЕ ИНВАЙТ-КОД
+  inputHint: Введите инвайт-код
+  continue: ПРОДОЛЖИТЬ
+  error: Неверный инвайт-код
+registrationScreen:
+  header: РЕГИСТРАЦИЯ
+  finish: ЗАРЕГИСТРИРОВАТЬСЯ
+  skip: ОТЛОЖИТЬ РЕГИСТРАЦИЮ
+  nickname: Введите имя
+  password: Введите пароль
+  repeatPassword: Повторите пароль
+  loginContainsRestrictedSymbols: Имя содержит запрещённые символы или буквы
+  loginAlreadyInUse: Игрок с таким именем уже зарегистрирован
+  loginIsTooShort: Имя слишком короткое
+  loginIsTooLong: Имя слишком длинное
+  loginContainsSpecialSymbolsInARow: Имя содержит несколько специальных символов подряд
+  loginBeginsWithSpecialSymbol: Имя содержит специальные символы в начале
+  loginEndsWithSpecialSymbol: Имя содержит специальные символы в конце
+  iAcceptTermsPart1: 'Я принимаю '
+  iAcceptTermsPart2EULA: 'Лицензионное соглашение, '
+  iAcceptTermsPart3Confidentiality: ''
+  iAcceptTermsPart4Rules: Правила игры
+  iAcceptTermsPart5PrivacyPolicy: Политику конфиденциальности и cookies
+  licenseAgreementUrl: http://tankix.com/ru/eula/
+  gameRulesUrl: http://tankix.com/ru/rules/
+  privacyPolicyUrl: http://tankix.com/ru/privacy/
+registrationWithReservationCodeScreen:
+  header: РЕГИСТРАЦИЯ

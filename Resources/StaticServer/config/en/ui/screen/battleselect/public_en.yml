@@ -1,0 +1,24 @@
+---
+battleSelectScreenHeaderText:
+  headerText: BATTLE LIST
+  headerTextShowDelaySeconds: 0.5
+scoreTableEmptyRowText:
+  text: Empty
+battleSelectScreenLocalization:
+  playButton: PLAY
+  playRedButton: PLAY FOR FRONTIER
+  playBlueButton: PLAY FOR ANTAEUS
+  watchButton: SPECTATE
+  battleLevelsIndicatorText: 'MASTERY: '
+  levelWarningEquipDowngradedText: Levels of your equipment will be temporarily adjusted to the Mastery range of the battle
+  levelWarningXpReducedText: "The received amount of battle points and experience will be reduced"
+  levelWarningEquipDowngradedAndXpReducedText: The level of the equipment will be downgraded, and the received amount of battle points and experience will be reduced.
+  levelErrorText: "You don't have enough Mastery to participate in this battle"
+  archivedBattleText: BATTLE FINISHED
+  redTeamName: FRONTIER
+  blueTeamName: ANTAEUS
+inviteFriendsPanelLocalization:
+  showInviteFriendsPanelButton: INVITE
+  hideInviteFriendsPanelButton: CANCEL
+  emptyListNotification: Friends List is empty
+  inviteSentNotification: Invitation sent

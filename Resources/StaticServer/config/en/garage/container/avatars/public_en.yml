@@ -1,0 +1,9 @@
+---
+descriptionItem:
+  name: Avatars
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:

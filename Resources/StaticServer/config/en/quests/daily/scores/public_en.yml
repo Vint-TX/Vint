@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Score {0} {1} in battles'
+    cases:
+      DEFAULT: 'points'
+      ONE: 'point'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Mode
+    WEAPON: Turret
+    TANK: Hull

@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Capture {0} {1}'
+    cases:
+      DEFAULT: 'flags'
+      ONE: 'flag'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Mode
+    WEAPON: Turret
+    TANK: Hull

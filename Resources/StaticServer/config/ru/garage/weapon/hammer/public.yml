@@ -1,0 +1,90 @@
+priceItem:
+  price: 1800
+xPriceItem:
+  price: 360
+userItemTemplate:
+  userItemTemplate: 1435138823086
+itemIcon:
+  spriteUid: b22b3948-859e-4c6d-aa54-69de4f1f3119
+order:
+  index: 8
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 10
+damagePerPelletProperty:
+  initialValue: 58.431
+  finalValue: 58.431
+reloadMagazineTimeProperty:
+  initialValue: 4.000
+  finalValue: 4.000
+reloadTimeProperty:
+  initialValue: 1.900
+  finalValue: 1.900
+magazineSizeProperty:
+  initialValue: 3.000
+  finalValue: 3.000
+maxDamageDistanceProperty:
+  initialValue: 32.762
+  finalValue: 32.762
+minDamageDistanceProperty:
+  initialValue: 69.130
+  finalValue: 69.130
+minDamagePercentProperty:
+  initialValue: 66.087
+  finalValue: 66.087
+impactProperty:
+  initialValue: 0.750
+  finalValue: 0.750
+kickbackProperty:
+  initialValue: 3.000
+  finalValue: 3.000
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.6
+    - name: Range
+      normalizedValue: 0.3
+    - name: FireRate
+      normalizedValue: 0.6
+  properties:
+    - name: DPM
+      initialValue: 15180
+      finalValue: 15180
+    - name: Damage
+      initialValue: 817.6
+      finalValue: 817.6
+      format: 0.0
+    - name: Damage per Pellet
+      initialValue: 58.4
+      finalValue: 58.4
+      format: 0.0
+    - name: Pellets per Shot
+      initialValue: 14
+      finalValue: 14
+    - name: Shot Delay Time
+      initialValue: 1.9
+      finalValue: 1.9
+      format: 0.0
+      unit: sec
+    - name: Max Damage Distance
+      initialValue: 32.7
+      finalValue: 32.7
+      format: 0.0
+      unit: m
+    - name: Attack Distance
+      initialValue: 69.1
+      finalValue: 69.1
+      format: 0.0
+      unit: m
+    - name: Magazine Reload Time
+      initialValue: 4.0
+      finalValue: 4.0
+      format: 0.0
+      unit: sec
+    - name: MagazineSize
+      initialValue: 3
+      finalValue: 3
+    - name: Max Impact
+      initialValue: 12.6
+      finalValue: 12.6
+      format: 0.0
+...

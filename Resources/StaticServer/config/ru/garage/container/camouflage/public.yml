@@ -1,0 +1,91 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1569952799 # corrosion tank paint
+      compensation: 3250
+      nameLocalizationKey: corrosiontankpaint
+    - itemBundles:
+        - marketItem: -849655395 # corrosion weapon paint
+      compensation: 3250
+      nameLocalizationKey: corrosionweaponpaint
+    - itemBundles:
+        - marketItem: -245416673 # tundra tank paint
+      compensation: 3250
+      nameLocalizationKey: tundratankpaint
+    - itemBundles:
+        - marketItem: -2145802143 # tundra weapon paint
+      compensation: 3250
+      nameLocalizationKey: tundraweaponpaint
+    - itemBundles:
+        - marketItem: -464167301 # marine tank paint
+      compensation: 3250
+      nameLocalizationKey: marinetankpaint
+    - itemBundles:
+        - marketItem: 1930414525 # marine weapon paint
+      compensation: 3250
+      nameLocalizationKey: marineweaponpaint
+    - itemBundles:
+        - marketItem: 1641998027 # prodigy tank paint
+      compensation: 3250
+      nameLocalizationKey: prodigytankpaint
+    - itemBundles:
+        - marketItem: -1435376695 # prodigy weapon paint
+      compensation: 3250
+      nameLocalizationKey: prodigyweaponpaint
+    - itemBundles:
+        - marketItem: 276536681 # rust tank paint
+      compensation: 3250
+      nameLocalizationKey: rusttankpaint
+    - itemBundles:
+        - marketItem: -172124513 # rust weapon paint
+      compensation: 3250
+      nameLocalizationKey: rustweaponpaint
+    - itemBundles:
+        - marketItem: 138064340 # mary tank paint
+      compensation: 3250
+      nameLocalizationKey: marytankpaint
+    - itemBundles:
+        - marketItem: -172292714 # mary weapon paint
+      compensation: 3250
+      nameLocalizationKey: maryweaponpaint
+    - itemBundles:
+        - marketItem: -9952811 # rocks tank paint
+      compensation: 3250
+      nameLocalizationKey: rockstankpaint
+    - itemBundles:
+        - marketItem: -1041086893 # rocks weapon paint
+      compensation: 3250
+      nameLocalizationKey: rocksweaponpaint
+  rareItems:
+    - itemBundles:
+        - marketItem: -1209537658 # tar tank paint
+      nameLocalizationKey: tartankpaint
+    - itemBundles:
+        - marketItem: 410090890 # tar weapon paint
+      nameLocalizationKey: tarweaponpaint
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 6da80c68cb780084e83ed98886823886
+imageItem:
+  spriteUid: fa28822d-bd5d-4c8e-8a6c-674e784e9dcd
+order:
+  index: 4
+priceItem:
+  price: 0
+xPriceItem:
+  price: 65
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 65
+    3: 175
+    10: 520

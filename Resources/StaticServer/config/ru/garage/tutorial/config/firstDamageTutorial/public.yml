@@ -1,0 +1,12 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/firstDamageTutorial/"
+  tutorialId: -2029962535
+  forNewPlayer: true
+  steps:
+    1: 1504002856142 # show popup
+    2: 1504002856142 # show popup
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -1969453819 # hull control
+    - -325846104 # turret control

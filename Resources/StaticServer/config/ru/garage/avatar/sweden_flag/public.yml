@@ -1,0 +1,16 @@
+priceItem:
+  price: 3000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 1ff91863-06ab-4120-a385-d97b8268e65c
+imageItem:
+  spriteUid: 1ff91863-06ab-4120-a385-d97b8268e65c
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 6
+itemRarity:
+  rarityType: COMMON

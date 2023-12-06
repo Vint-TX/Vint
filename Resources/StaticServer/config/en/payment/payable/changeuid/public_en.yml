@@ -1,0 +1,6 @@
+---
+buttonWithPriceLocalizedText:
+  buyText: CHANGE
+  forText: FOR
+  confirmText: 'YES'
+  cancelText: 'NO'

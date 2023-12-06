@@ -1,0 +1,17 @@
+---
+descriptionItem:
+  name: Танки 2.0
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    greenskullspaint: Роджер (краска)
+    greenskullscover: Роджер (покрытие)
+    florapaint: Флора (краска)
+    swamppaint: Болото (краска)
+    metelpaint: Метель (краска)
+    floracover: Флора (покрытие)
+    swampcover: Болото (покрытие)
+    metelcover: Метель (покрытие)

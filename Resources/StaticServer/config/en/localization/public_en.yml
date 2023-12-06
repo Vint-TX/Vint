@@ -1,0 +1,1616 @@
+d5dab95e-e7fe-4005-86f3-8e766fed3c21:
+  'accessRecovery/confirmButton': 'CONFIRM'
+b1dffc5b-0a9f-4442-9db9-ad97a8cfd532:
+  'accessRecovery/confirmationCodeText': 'Enter the received code'
+2ad0eb41-7d95-4eb1-9dd0-a1084b99652f:
+  'accessRecovery/continue': 'CONTINUE'
+8c83981c-e9c5-4ba9-8006-70c217af065f:
+  'accessRecovery/email': 'Enter your email'
+ec7ff56e-6fba-4947-87d0-a2a753c0974a:
+  'accessRecovery/sendAgainTimer': 'You can repeat a request in %seconds% seconds'
+1331ad70-36ed-4934-a12f-e581558ba692:
+  'accessRecovery/sendCodeAgainText': 'SEND CODE AGAIN'
+0e343d2b-3325-4e7c-8956-9b2ec7c088a8:
+  'accessRecovery/title': 'Access recovery'
+9b73e9c9-d3c6-4802-a0e1-79de8b603f71:
+  'apply': 'APPLY'
+7461551c-654f-46e9-83fd-443482f08e34:
+  'armsrace/CButton': 'Receive Reward'
+589e0dd2-85e0-45a1-b23a-35d195be41f9:
+  'armsrace/CButton2': 'Receive Reward'
+b04b4334-a47f-4dfb-969f-b356bda7fbb5:
+  'armsrace/CHeader': 'New gameplay'
+0459d156-d06b-4fa5-a29c-0c2b0443772f:
+  'armsrace/CRButton': 'to the garage'
+a32d83a4-a8e7-4d79-ad8f-0a22a15ba60b:
+  'armsrace/CRCompensationText': 'Attention! This gift is not a compensation. You will receive the compensation in the garage.'
+5b8b5ef9-4606-4913-b6d0-45e372778be3:
+  'armsrace/CRHeader': 'ARMS RACE'
+8c091ad2-2eec-4656-b8f7-baa6700afb58:
+  'armsrace/CRText': "Greetings, tanker. Our development team would like to thank you for supporting the project and for participating in the ongoing Tanki X Open Beta Testing! We've developed the biggest update in the history of the project. But, before we move to the most interesting part, we want to present you a gift: new containers with modules blueprints and unique graffiti!"
+8c3a6197-c096-4457-b0de-3e9740fd071b:
+  'armsrace/CText': "The battles in Tanki X have become even faster and more furious. The Arms Race will reach every battlefield. To defeat your enemies, you will need all the resources you can get your hands on to improve your tank. We found outdated weaponry and equipment in your garage, which we replaced with modern blueprints and have compensated with crystals, the equipment that didn't fit in the containers with blueprints. All the previously crafted modules are already available in your garage. "
+72d20afd-a564-425d-9feb-ddb2b15b83ed:
+  'armsrace/RHeader': 'ARMS RACE'
+8e6bd683-fa04-42e0-b691-fcce7e80da76:
+  'armsrace/WelcomeButton': 'FIRE AT WILL!'
+05164776-96f4-4d17-a6f0-b84a48fcdbfe:
+  'armsrace/WelcomeHeader': 'WELCOME TO THE ARMS RACE!'
+71f1fc7d-a8b0-4cff-afa4-300707fec22c:
+  'armsrace/WelcomeIntroText1': 'Hello, tanker! After a year of continous fighting, Antaeus and Froniter corporations enter the new phase of competition. Engineers of both corporations develop more and more sophisticated ways to dominate their adversary.'
+5550abb0-edfe-4b57-bbf5-23e5b549aa11:
+  'armsrace/WelcomeIntroText2': 'Best Tank X operators participate in the Arms Race. You are the one of them. Fight for supremacy and be the first among equals. Good luck on the battlefield and get ready to...'
+71ab66bc-7798-4baa-bfc6-565ecf20c723:
+  'avatar/change': 'Change avatar'
+9c6c4cbc-a530-441e-bfb6-b16b14bc139f:
+  'avatar/description': 'You can get avatars from containers, buy it in the avatar selection window or in the game store.'
+52d64934-a7d9-44e4-b005-8e8e25ec938e:
+  'avatar/lockbyrank': 'Available for purchase at rank {0}'
+d81ac72b-397c-4d57-92a8-ee1a5fc1c2d8:
+  'avatar/name': 'avatar {0}'
+793b2f97-041d-4d8a-8e1f-2bd442546bba:
+  'battle/hud/assist/assist': '<alpha=#88>Kill assist<alpha=#FF> {killer} <alpha=#88>{percent}%<alpha=#FF> <color="orange">+{scoreValule}</color>'
+dc85aa38-628f-4141-a4d3-d804b3ca7c78:
+  'battle/hud/assist/flagDelivery': 'Flag delivery <color="orange">+{scoreValule}</color>'
+9c5494c8-7757-47c9-8022-b299d13c4712:
+  'battle/hud/assist/flagReturn': 'Flag return <color="orange">+{scoreValule}</color>'
+9d1907be-4219-40d8-bc5e-d1b365f5250c:
+  'battle/hud/assist/heal': '<alpha=#FF>Healing of an ally<alpha=#FF> <color="orange">+{scoreValule}</color>'
+60ccdf70-63bf-419e-8d52-a4d675ea64b8:
+  'battle/hud/assist/kill': '{killer} <color="orange">+{scoreValule}</color>'
+c4431729-3d44-4776-94dd-589153edfeb7:
+  'battle/hud/assist/streak': 'Kill Streak <color="orange">+{scoreValule}</color>'
+d756044e-0570-4d31-a75e-a9a7eb47c90b:
+  'battle/hud/ctf/enemy_base': 'Enemy base'
+154c5f4c-9c3f-4b00-a639-3f8c94399548:
+  'battle/hud/ctf/enemy_flag': 'Enemy flag'
+6fe7d5ca-aaa0-4d2b-bc38-ae6192aa8c4d:
+  'battle/hud/ctf/pick_up_flag': 'Pick up the Flag!'
+8e182d13-8f13-46bc-b790-42255ae46693:
+  'battle/hud/ctf/return_your_flag': 'Return your flag!'
+3e2adf54-27e8-420a-b3a0-2e9322285e28:
+  'battle/hud/ctf/support_delivery': 'Support delivery!'
+36518e56-842b-45ec-b7bc-60351a9ec40f:
+  'battle/hud/ctf/your_base': 'Your base'
+3970ba63-828d-432e-9bf4-15b7fb6c1e48:
+  'battle/hud/ctf/your_flag': 'Your flag'
+89b64ae9-fe5d-4d31-8426-3eedfad019cc:
+  'battle/hud/defeat': 'DEFEAT'
+413a122f-9368-494c-94a4-274d5186d087:
+  'battle/hud/dominateCTFLooseInfo': 'Capture the Flag to prevent early victory of the enemy'
+6c26ca8b-73a6-42c0-a256-6bb1bfffca5a:
+  'battle/hud/dominateCTFWinInfo': "Don't let enemy capture your flag to win early"
+126944e9-de6d-4478-b673-13a97a6649f6:
+  'battle/hud/dominateEndLoose': 'Keep it up!'
+03100fc5-8710-4af0-a3df-bdd0ec26c2d4:
+  'battle/hud/dominateEndWin': 'No Domination'
+1447c6fd-006d-48e2-a5a8-738ea94153ef:
+  'battle/hud/dominateStartLoose': "Enemy team's dominating"
+f52139ae-64cd-4239-8d3d-8fc4d2851e9f:
+  'battle/hud/dominateStartWin': 'Your team is dominating'
+d4824cc9-45e1-43c1-abd3-feeb5eb80c2d:
+  'battle/hud/dominateTDMLooseInfo': 'Decrease score gap to prevent early victory of the enemy'
+0030d05c-0740-4404-b6e4-17d409f87010:
+  'battle/hud/dominateTDMWinInfo': "Don't let enemy decrease score gap and win anticipatorily"
+0eda61a7-325d-421d-be98-9c68d5bd0030:
+  'battle/hud/tie': 'TIE'
+7331bea2-42b2-48a2-b8c0-cf21d4da18dd:
+  'battle/hud/victory': 'VICTORY!'
+bdfc1b82-e7eb-4ded-b5d9-0f5e3e057c6b:
+  'battle/matchDetails/deathsHader': 'D'
+8fb47d26-58d1-4e4a-ac9a-075b6e4c798b:
+  'battle/matchDetails/hullHader': 'Hull'
+a2128c25-cfb1-44ee-b000-0ff53df9fc78:
+  'battle/matchDetails/killsHader': 'K'
+fa9306d3-7720-456f-896b-b195742dd79e:
+  'battle/matchDetails/pingHader': 'Ping'
+b4e2f9a1-8f92-4d70-a463-fd7d677ebd38:
+  'battle/matchDetails/prizeHader': 'Reward'
+0ea7852e-6194-4019-8d1a-04771a927645:
+  'battle/matchDetails/scoreHader': 'Score'
+ede2cd5c-e047-45cf-accf-0f023dca95d9:
+  'battle/matchDetails/teamHader/dm': 'Death match'
+d80fbad8-f896-4c10-a4bc-131febc1d62d:
+  'battle/matchDetails/teamHader/enemy': 'Enemy team'
+52def15e-d9e5-4508-8476-5d4b7b16730c:
+  'battle/matchDetails/teamHader/team1': 'Team 1'
+af6b25ce-f63f-4390-b1f0-74fa7de60e46:
+  'battle/matchDetails/teamHader/team2': 'Team 2'
+e4dcc848-c8ad-4061-a40f-e673403d1d5b:
+  'battle/matchDetails/teamHader/your': 'Your team'
+04b24348-e83c-41a1-b747-a241d13f8137:
+  'battle/matchDetails/turretHader': 'Turret'
+2ee454d9-5641-4fd6-85ec-028e7c0c0c7f:
+  'battle/results/arcade': 'Arcade battle'
+61a53e50-3093-44ec-9d5b-897a8d60b24b:
+  'battle/results/armor': 'Armor:'
+ccfdd1bc-23d2-44a0-9601-dfc78b8278c2:
+  'battle/results/assists': 'Assists'
+110cc004-7df8-4e83-af9f-548604466c8c:
+  'battle/results/battleSeries/addExp': 'Additional Scores {0}'
+15730f9b-9ecd-4ce5-a640-efc8c1035b70:
+  'battle/results/battleSeries/addScore': 'Additional Container Scores {0}'
+a5078f0e-9bc5-4626-b88b-5a0bef684d65:
+  'battle/results/battleSeries/battlesAmountPlural1': '{0} battles'
+9082e390-75de-4328-ac8f-7df039fe91b0:
+  'battle/results/battleSeries/battlesAmountPlural2': '{0} battles'
+9c93c0e2-6cbe-426d-9346-b13a9b720382:
+  'battle/results/battleSeries/battlesAmountSingular': '{0} battle'
+ef1a0b29-1840-4350-8005-afcb7adb77c8:
+  'battle/results/battleSeries/deserterCount': 'Bonuses will be available after {0}'
+59c17e9a-74af-4e42-8520-cc349eeed10a:
+  'battle/results/battleSeries/deserterNotification': 'Remove deserter status and get battle series bonuses!'
+4e07de5e-d20c-42d4-b24f-4910d0132541:
+  'battle/results/battleSeries/maxSeriesAchieved': 'Maximum Series Achieved!'
+e314fb22-0784-42d2-8b08-e107de33cea6:
+  'battle/results/battleSeries/nextBattleNotification': "Next battle you'll get even more scores!"
+f083aeea-2a66-494f-a165-49849aba3e39:
+  'battle/results/battleSeries/seriesCount': 'Battle Series [{0}]'
+cd7ed5ac-b95f-4b10-8c80-eb7679d089a9:
+  'battle/results/best': 'Best'
+23294a01-e2c1-473d-b1f6-ea3e1a585299:
+  'battle/results/buttons/awards': 'Awards'
+e5e70385-2b2b-4e19-82ce-6ed650bee937:
+  'battle/results/buttons/back': 'BACK'
+1b6efccb-c1cc-4f6b-8a31-516f19cbfa68:
+  'battle/results/buttons/bestPlayer': 'Player of the match'
+43822831-2621-4127-bdab-3b1a3d243505:
+  'battle/results/buttons/continue': 'Continue'
+4c8be1c5-bc0f-4066-beee-d186c3c2aa71:
+  'battle/results/buttons/mainScreen': 'Main menu'
+8a029e6d-9274-46c1-895c-9f59d006a41f:
+  'battle/results/buttons/next': 'NEXT'
+6ddedf8e-40fd-44a7-9afa-b42c1557f864:
+  'battle/results/buttons/playAgain': 'Play again'
+f30764d3-266d-41f8-9057-f2af4f6524b5:
+  'battle/results/buttons/stat': 'Results'
+7d451f03-aad5-4104-b55a-e41f16a4f408:
+  'battle/results/container/bonuses': 'Bonuses:\n - Premium\n - Battle streak\n - Promotions'
+a836313c-774f-4560-ba43-8a8b61c4c06a:
+  'battle/results/container/earnedValueFormat': '+{0}'
+b5540335-8529-4d94-819b-92540bb8cf03:
+  'battle/results/container/getReward': 'OPEN NOW'
+97ae2bfa-d705-4552-ba1a-dfa59c61ccb1:
+  'battle/results/container/title': 'Container'
+1284b7b5-3908-4ff7-a337-315528278b71:
+  'battle/results/container/titleWithValue': 'Container score {0}'
+7535a961-a34c-49b9-8d5d-ff34c612f987:
+  'battle/results/damage': 'Damage Dealt'
+72fa83b9-d79e-41d5-bfcb-d0e9c4dc3dad:
+  'battle/results/damage1': 'DPM:'
+92c0c7d7-3452-41ea-add4-a536aa5e7b26:
+  'battle/results/deaths': 'Deaths'
+a3546d34-c26f-4e90-abb8-66ad1f27f9ed:
+  'battle/results/defeat': 'Defeat'
+948fb5a3-3ffb-47ab-85f2-b3425400958e:
+  'battle/results/draw': 'Draw'
+d139bca4-b302-4541-a700-0f238fd95f68:
+  'battle/results/energy': 'Quick battle'
+c1ecf611-2fb5-4756-8a05-2370531e139a:
+  'battle/results/energy/cashback': 'MVP Bonus!'
+7f09cf03-fad5-4128-a59a-4f786efcd91a:
+  'battle/results/energy/cashbackTooltip': 'Most Valuable Players of both teams fully or partly restore charges they spent on teleportation. Amount of charges depends on victory or defeat.'
+3f0eea05-a80a-437d-85e8-5b66cd2d2785:
+  'battle/results/energy/chargesFull': 'Charges full!'
+ceb8c7c5-3061-4610-b9b9-dcf2aa7a54d9:
+  'battle/results/energy/earnedValue': '+ {0}'
+f9907101-5543-4456-a6cc-cab623dfe7b2:
+  'battle/results/energy/energyCashback': '+ {0} MVP Bonus!'
+21cecdf2-5a45-474a-aaf8-43edc9c87de0:
+  'battle/results/flagsDelivired': 'Flags Delivered'
+0d1a16fd-bba1-4aaa-bbdb-61f361518210:
+  'battle/results/flagsReturned': 'Flags Returned'
+0e8a152d-f14d-4c4a-a66b-1510538d5045:
+  'battle/results/kills': 'Kills'
+5d56f118-ddd1-4183-8105-9eb5b9ddb009:
+  'battle/results/killstreak': 'Killstreak '
+a7586169-24ca-4d4e-a05d-df42913263c1:
+  'battle/results/league/newLeague': 'New League!'
+d4a2de58-d49e-4d75-810e-98e359202e39:
+  'battle/results/league/place': 'Your place'
+3fbab8d4-224c-4865-aca5-dd49b23f8fb1:
+  'battle/results/leagueName': '{0} League'
+7d4c91b5-0915-45c8-b11a-df1efcdb2b99:
+  'battle/results/marinePaint': 'Marine paint'
+1ae422dc-966f-408c-a7e2-b7f6d1b26a5d:
+  'battle/results/matchdetails': 'MATCH DETAILS'
+29edbffa-4c92-47e1-a961-d6b6b293bd0b:
+  'battle/results/moduleLevelShort': 'lvl'
+c6a66784-a263-47c8-a593-21898d0b974a:
+  'battle/results/place': '{0} place'
+ab9e67f1-56f8-44fa-8212-787b1daa777f:
+  'battle/results/progress/experienceTitle': 'RANK'
+541b69f2-dd1d-4326-83f3-f8749adf99bf:
+  'battle/results/progress/masteryTitle': 'WEAPON LEVEL'
+b17e2b01-a9a7-4177-ba78-cebc352e6b89:
+  'battle/results/questsTitle': 'QUESTS'
+f4638ce9-777a-4b3e-a0e6-988f96753b3c:
+  'battle/results/rank/title': 'Rank'
+1bfbae16-ca4b-4e2a-94dc-57ea712667d3:
+  'battle/results/rank/titleWithValue': 'Rank score {0}'
+e5abe2ee-8da1-420a-832e-f6649ab1bf83:
+  'battle/results/rankNameTooltip': 'Rank {0}\n{1} scores to rank {2}'
+c7b4ece2-cb2d-4d9b-955e-c1961be42d7d:
+  'battle/results/rating': 'Rating battle'
+3789ae40-2132-406b-bfd1-36ca0f116e44:
+  'battle/results/reputationPoints': '{0} reputation points to'
+a3002039-c2a3-4c5e-9392-9a482db38f48:
+  'battle/results/reputationPointsTitle': 'Reputation points'
+63d1fa8e-4569-4de8-adc4-a8201bf581ad:
+  'battle/results/resultText/defeat': 'DEFEAT!'
+84293497-5331-44f3-afa9-240d96e3ce64:
+  'battle/results/resultText/draw': 'DRAW!'
+db022f39-f223-4359-90eb-59457654d4f6:
+  'battle/results/resultText/victory': 'VICTORY!'
+81708178-f6d1-4d5b-b7d5-2312b5d09433:
+  'battle/results/suppliesCollected': 'Supplies Collected'
+3e50da64-6a31-453f-9b4f-86286a20b093:
+  'battle/results/teleport charges': 'Teleport charges'
+dc42dca4-8a00-4e42-a80f-381587872107:
+  'battle/results/title/customBattleTitle': 'Custom battle'
+c9e13845-bf3a-4a81-bac6-d6f4b7646ddf:
+  'battle/results/title/titleFormat': ''
+ea6e76d8-ee6b-40a1-869a-f9596279dfa8:
+  'battle/results/title/titleFormat': '{0} - {1}'
+fc02d4dd-f96a-4d78-9a70-f10893669b97:
+  'battle/results/title/titleWithModeFormat': '{0} - {1} - {2}'
+a6ebfd7a-6e97-4082-86e6-767e9ba55266:
+  'battle/results/title/titleWithModeFormat': ''
+232f45ed-68ad-4f67-939d-6d60254965c1:
+  'battle/results/toNextScreen': 'To next screen in {0:0.0} sec'
+8b5e4f5b-773d-4ce0-a5e3-7f2e21c210ca:
+  'battle/results/unfairenerg': "You've entered the match in the heat of a battle, but could not decrease the enemy advantage. The spent charges were compensated."
+9ae5701e-90e4-4466-8c22-7772fd43c53f:
+  'battle/results/unfairrep': "You've entered the match in the heat of a battle, but could not decrease the enemy advantage. It did not diminish your reputation."
+e3d0490c-fedb-432b-8ec5-700dc342adba:
+  'battle/results/win': 'Win'
+92c591e4-4dd3-4f0d-875d-f7ec2f0b9f2b:
+  'battle/results/yourReputationPoints': 'Your reputation points {0}'
+dd320fd6-b350-4f9e-ab73-2ce786cf6304:
+  'cancel': 'CANCEL'
+d002da30-35d1-4169-b209-f412256f17ca:
+  'cases/day': 'DEFAULT:days ONE:day'
+83da2368-d8d8-4327-a792-2ddb42aea930:
+  'chat/copyMessage': 'Copy Message'
+e9277b8c-32d7-405f-aba9-30c54d90565c:
+  'chat/copyMessageWithName': 'Copy With Name'
+4d118dd8-f75d-4e2c-8ec2-19b9dd42552f:
+  'chat/copyName': 'Copy Name'
+a938a1a1-7012-41e3-ba1b-fc5f8caba2b7:
+  'chat/general': '<color=#FFFFFFFF>General</color>'
+ffff163f-d91a-47bb-8ffb-bc7e6ec7d2f9:
+  'chat/group': '<color=#008000FF>Group</color>'
+b0f3e2f6-e125-4ab7-8c00-7fdcc460608c:
+  'chat/input_not_active': 'Input inactive'
+618be5ab-84d8-452c-a2ef-b4394a0aabac:
+  'chat/input_placeholder': 'Write a message...'
+36faf504-cfad-4e92-b3ee-bc1aa348cfd2:
+  'chat/messageCopied': 'Copied'
+215b20f6-85c2-4337-be47-d3c233cbe590:
+  'chat/overall': '<color=#FFFFFFFF>Overall</color>'
+bdf897fd-a396-4441-93fb-5fed6ee5c35c:
+  'chat/personal': '<color=#FF00FFFF>Direct</color>'
+6cee03b6-1349-4e75-a678-ceee64db499b:
+  'chat/squad': '<color=#42AAFFFF>Squad</color>'
+ee469a5a-5894-4a5e-8c59-414e614cfb22:
+  'chat/systemMessageAuthor': 'System message'
+64e835d8-e30f-4336-addd-ec728e72da46:
+  'continue': 'CONTINUE'
+d58ffaf6-7d35-45e5-bfd7-2ac165e874e8:
+  'dailybonus/allitemsfound': 'All items found'
+6a3de9dd-e6ba-45c7-9092-e6a3da1949bd:
+  'dailybonus/back': 'Back'
+5ee4d6b4-8be9-4fc5-825b-6303724d8736:
+  'dailybonus/detail': 'Shard'
+d4165ba0-3002-4757-8038-02080dba774a:
+  'dailybonus/detailxt': 'XT container shard'
+107b2969-f306-457f-bb5c-f4a95c766ab5:
+  'dailybonus/exhaustedteleport': 'The teleport has been worn-out due to excessive use'
+5c8ee2cc-4203-47bf-911a-19242c3398c4:
+  'dailybonus/getnewteleport': 'Get a new device'
+15b5433a-e19c-46e9-93ce-63bf26424eff:
+  'dailybonus/goback': 'Back'
+64627b6e-128c-4df6-8a9e-3a809c6e1bea:
+  'dailybonus/hiddenobject': 'Unknown object'
+1fd6ac72-d58e-4c09-bad2-5bb9dae36d86:
+  'dailybonus/importantinfo': 'Important Information'
+63a35945-ee9a-433a-9142-65c931efb88c:
+  'dailybonus/info/1st_paragraf': 'One of scientists of the Antaeus corporation known as Alexander Kuznetsov has invented a device, that can easily teleport small objects from hard-to-reach places. Every 20 hours, you will be able to pick an item on the map and teleport it to your base.'
+6b61248a-948f-41ec-a62c-565193b19c49:
+  'dailybonus/info/2nd_paragraf': 'Upgrading your teleportation device, will increase its range. But for that, you need to teleport a lot of items.'
+d72f9fe0-036e-433c-b271-0c358927fc95:
+  'dailybonus/info/3rd_paragraf': 'Unfortunately, due to excessive use, the teleport device will eventually worn-out. In such cases, we send your device to the recycling center and provide you with a new one.'
+771d46c2-59b5-4e9a-b6e9-30f01fc202af:
+  'dailybonus/info/confirm_button': 'Understood!'
+9d49c993-4d0d-4bd7-9abb-029e24a8300b:
+  'dailybonus/info/header': 'Important Information'
+4d41c648-960e-402e-ba5f-3cef34abbadb:
+  'dailybonus/intervaldescription': 'Every several hours, you will be able to choose an item on the map and teleport it to your base. Teleport recharge rate: 20 hours for usual account and 6 hours for premium.'
+90d92181-1c21-4d9c-b76b-9dfa16efe07f:
+  'dailybonus/itemsfound': 'Items found'
+9b85edbf-4189-400f-9d8c-27bf35b83714:
+  'dailybonus/localmap': 'Local map'
+6dfab2b2-48dc-4ca9-a24e-700c0b0dd78b:
+  'dailybonus/mainscreenbtndisabled': 'Daily bonus: available soon'
+2615f7d6-6cde-493e-9194-adb3d650a4f1:
+  'dailybonus/mainscreenbtnenabled': 'Daily bonus'
+fab53c78-e70f-4a21-9ed2-d179d4ec2338:
+  'dailybonus/maphint': 'Choosing the item you want to teleport to your base, is simply done by clicking on one of the yellow icons on the map. '
+77cd812b-13c6-4537-9c3b-948e3c315716:
+  'dailybonus/noitemsfound': 'No items found'
+86ea31d2-b22d-407a-acac-07b3591cab0b:
+  'dailybonus/receivecontainer': 'Claim container'
+b10b6720-1ef1-4568-b716-93de28f73ba1:
+  'dailybonus/receivereward': 'Claim the reward'
+bc2e43ad-d537-4dee-be0b-53e0bfa5648c:
+  'dailybonus/return': 'Claim next reward in '
+04521550-7060-4351-ad7c-8080ccf778a0:
+  'dailybonus/scientist': 'Alexander Kuznetsov'
+806ef00d-c14d-4227-b3f6-0ade221e0933:
+  'dailybonus/successteleport': 'Teleportation successful!'
+c722bafe-ecc6-4aed-a7a4-b6c699b7f487:
+  'dailybonus/teleport_lvl_1': 'Teleport lvl. I'
+9eb89395-9d23-4bba-abd5-1aaa95365cd7:
+  'dailybonus/teleport_lvl_2': 'Teleport lvl. II'
+e955260a-8dad-4fe1-a575-6587561d7552:
+  'dailybonus/teleport_lvl_2': 'Teleport lvl. II'
+54d3b2cb-cdf7-4dee-900b-ef918bf9336e:
+  'dailybonus/teleport_lvl_3': 'Teleport lvl. III'
+37ea973a-ab17-4b8e-9461-36f2b0ecff62:
+  'dailybonus/teleport_lvl_3': 'Teleport lvl. III'
+cced3c16-af2f-4771-bcd9-0e801ce0da6d:
+  'dailybonus/teleport_lvl_4': 'Teleport lvl. IV'
+23e44dbe-124c-4523-a01d-be8432d19f56:
+  'dailybonus/teleport_lvl_4': 'Teleport lvl. IV'
+cced3c16-af2f-4771-bcd9-0e801ce0da6d:
+  'dailybonus/teleport_lvl_4': 'Teleport lvl. IV'
+9eb2610c-e692-47e8-ac19-033bac0bd436:
+  'dailybonus/teleport_lvl_5': 'Teleport lvl. V'
+de117602-15e7-47d9-8036-b36238fc86d1:
+  'dailybonus/teleport_lvl_5': 'Teleport lvl. V'
+c1a4560f-b6a3-4c23-be2f-51080d014ff0:
+  'dailybonus/teleportbroken': 'Teleport is worn-out'
+c107dc79-39bd-492a-a10f-060299c7af77:
+  'dailybonus/teleporthint': 'Don’t forget to teleport objects daily. The more you use the teleportation device, the more powerful it becomes and increases the teleportation range.'
+a738f58e-28d6-43fb-bfbe-2fb9f6544bb4:
+  'dailybonus/teleportready': 'Teleport ready!'
+ca328a96-bcae-4d07-b53a-325d73e0f3c3:
+  'dailybonus/teleportupgrade': 'Upgrade'
+874f39d7-5a16-488d-9a17-d65225fad373:
+  'dailybonus/understood': 'Understood!'
+61ae5a5b-44f1-4cc2-8237-e44af6c52021:
+  'dailybonus/upgradeavailable': 'Upgrade available!'
+06511189-19a3-406c-8962-1dcc4a48bcb9:
+  'dailybonus/upgradedescription': 'The more objects you teleport, the more funding to improve the teleport you will receive from us.'
+f1ad18e3-4a82-49d1-852a-4c93a3ea373b:
+  'dialogs/cantUseAllEnergyBonus/attention': 'Attention: The remaining free charges will be lost.'
+183f645f-bb1c-49a7-b04e-9d6d7691d04a:
+  'dialogs/cantUseAllEnergyBonus/question': 'Your teleport is almost fully charged. You can only host {0} charges. Do you accept?'
+5cfa09d5-ea7a-49ba-8982-d5d1e00280ce:
+  'dialogs/cantUseAllEnergyBonus/title': "There's not enough space to host all the teleport charges"
+1e5d5f82-127b-4230-b9a7-71c309d7d8ff:
+  'dialogs/contextEnergyBuy/Buy': 'Buy for {0}<sprite=9>'
+5ecdfa64-8196-48c2-8554-cf0dd58cee55:
+  'dialogs/contextEnergyBuy/Get': 'Get'
+1d1e8e97-6591-415c-8c29-e26cd3af7468:
+  'dialogs/contextEnergyBuy/Message': 'You lack {0} charges for rating battle teleport  '
+8f7f333f-d050-4c59-8010-1346180c40d7:
+  'dialogs/contextEnergyBuy/Title': 'Not enough charges'
+ff820cea-43c2-4b18-aacc-748101a00a3f:
+  'dialogs/contextEnergyBuy/highlightMessage': "Charges can be earned in Quick play. Let's go!"
+3864180a-f9e6-4d63-a856-a2307c20a1c6:
+  'dialogs/energyCompensation/get': 'Claim'
+276aad1d-db25-4a58-8fb2-584c2e60cfb5:
+  'dialogs/energyCompensation/header': 'Teleport charges are no longer in use.\nCharges left on your account are compensated\nwith Crystals.'
+e4783dd2-34e8-4116-ba86-7f83b478a9b8:
+  'dialogs/fullEnergy/hint': "Hint: Use the teleport charges to play ranked battles. After you've used a few, you can come back for more!"
+be6d11e9-b590-4ad7-9cb7-530963d6f456:
+  'dialogs/fullEnergy/message': 'Your teleport is fully charged.'
+7fe32364-9034-4e46-b3ae-1a9e1acc4904:
+  'dialogs/fullEnergy/title': "There's not enough space for additional charges"
+0f4f1c35-040f-4a8a-8614-407024c49cf1:
+  'dialogs/introHeader': 'Welcome to Tanki X!'
+633195bc-a511-4764-a651-e72baae57750:
+  'dialogs/introText': 'The year 2103. The Antaeus and the Frontier corporations are fighting for supremacy throughout the entire solar system. The research of the energy crystals has led the launch of an arms race between the two adversaries. One of the newest development is the teleportation of combat vehicles to the battlefield at any distance. \n\n The Arms Race has gathered the best Tanki X operators in the world... and you are one of them. Fight for supremacy and be the first among your ranks. Good luck on the battlefield and get ready to...!'
+b9d805bc-bc3e-4935-87a9-ecf653201fc0:
+  'entrance/backButton': 'BACK'
+b321c8c0-d46d-4f8b-924a-3a133b25e68a:
+  'entrance/enterSymbolsFromCaptcha': 'Please type the characters you see on the picture'
+332f7759-3beb-476c-87bb-40730e595c69:
+  'entrance/exitButton': 'EXIT'
+c9c4e12d-4924-4cfa-9c94-0556edf83ec3:
+  'entrance/forgetNickOrPassword': 'Forgot nickname or password?'
+d838dc58-fff8-4077-9bfa-f84cac9ec1f0:
+  'entrance/incorrectCaptcha': 'Incorrect. Please try again.'
+6b62f8d9-ab20-4158-b3f7-f4b3c816aa6f:
+  'entrance/incorrectLogin': 'User not found'
+3ec12a93-6e9a-4f0a-ad0a-431fe2a742c5:
+  'entrance/incorrectPassword': 'Password is incorrect'
+02bae075-7f56-4be0-a734-a4c1989c9d37:
+  'entrance/passwordHint': 'Password'
+1fe7456f-5bcc-4aee-a928-12c5edced1ab:
+  'entrance/registrationLabel': 'Dont have an account? Register'
+283850e8-842d-4e05-afe9-5db54dc4f895:
+  'entrance/registrationTitle': 'Registration of new accounts in the game stopped due to the termination of the project. Details on www.tankix.com.'
+cee10f9e-dabe-44c2-b48f-b8320d9310f5:
+  'entrance/rememberMeCheckbox': 'Remember me'
+d2788af7-8f66-4445-8154-d1e9c04af353:
+  'entrance/serverStatus': 'Server status'
+9362bb18-9a12-4bfe-a580-0e84e1b8df66:
+  'eula_accept': 'Accept'
+42afbfa4-a63d-49f4-82dc-24b83ee1b90b:
+  'eula_file_name': 'eula_en'
+0b9cf944-d3b7-415f-b51e-e0e20fef18a8:
+  'eventcontainer/body': 'You are lucky to get a festive container as a reward for a great battle!'
+8bf07c61-5ee7-48a1-b9a9-d737b80f9b3d:
+  'eventcontainer/title': 'Congratulate'
+cbb51e3b-3c3e-4f0d-b921-fb338f6e97ee:
+  'exit': 'Do you want to quit the game?'
+2a957484-4796-4c06-bc92-559bef4ef4f8:
+  'exitTheGame': 'Exit the game'
+681666d7-64c4-4a9c-82e6-1a690627814a:
+  'for': 'for'
+ced86b9e-7fa6-45b8-94c8-d17747baf938:
+  'fractionsCompetition/battleCorp': 'THE BATTLE OF CORPORATIONS'
+b930a5a6-8091-41d9-8bbc-25036e877a7c:
+  'fractionsCompetition/corporations': 'Corporations'
+f85ef28e-bb73-4a9a-9bca-de4c6c26fc50:
+  'fractionsCompetition/mainQuestion': 'Who will YOU fight for?'
+eb525b5d-84f9-465c-b86f-ba48c74af9c6:
+  'fractionsCompetition/noWinner': 'No Winner'
+379738ca-d0a9-4e3c-86cc-e30fced12c91:
+  'fractionsCompetition/notificationButton': 'Take Part'
+ef929e6c-5741-4ab4-b728-59344bd1cd33:
+  'fractionsCompetition/selectionDescription': 'Select the corporation for which you will fight for in this Battle!'
+7d1d6da8-f040-498e-a041-0e035a6cbdb0:
+  'fractionsCompetition/totalCryFund': 'Winner Fund of Crystals'
+9e5d6dee-4565-4d3b-8d5e-11e2969a16e9:
+  'fractionsCompetition/winner': '(Winner)'
+5d0de9d7-b1bf-485f-b35a-293054e219ee:
+  'fractionsCompetition/yourRewards': 'Rewards of Your Corporation'
+fe7e9d75-312a-4b39-8502-340f1ff8fa8a:
+  'fractionsCompetition/yourScores': 'Your Scores'
+178c090a-6738-4420-aab8-66d6dc1c398a:
+  'friends/acceptedHeader': 'Accepted'
+0fd759c1-f7c9-47d1-9c1a-3c8f9b6cf375:
+  'friends/addAllButton': 'Add all'
+cff363b1-f7b2-4b10-ab4c-0d718e9e7bcf:
+  'friends/addFriendPlaceholder': 'Enter nickname...'
+9ab01fc6-4c02-4a10-ad73-797ce6911106:
+  'friends/alreadyInLobby': 'In lobby'
+c9440e92-3213-41a1-af37-069135310899:
+  'friends/cantCreateSquad': 'You can create squad after you reach rank 4.'
+e26976b3-b0e2-4c37-9a84-cde929eb05ba:
+  'friends/cantInviteFriendIntoSquad': 'You can invite {0} to a squad{1}only after he reaches rank 4.'
+53eb1343-717f-4d6a-b10b-8f87e6cf3103:
+  'friends/contextMenu/inviteSend': 'Invite sent!'
+eee90dd8-266e-4b59-b00f-facd6e88fa19:
+  'friends/contextMenu/inviteToSquad': 'Invite to squad'
+853f82bc-b61d-4992-a07f-3fd1ff8a7388:
+  'friends/contextMenu/onlyLeaderCanInvite': 'Only squad leader can invite other players'
+ad49ec7b-f3bf-496a-8023-6c1d9d5a9597:
+  'friends/contextMenu/profile': 'Profile'
+49423899-f54d-41bd-b7d0-1ff3b8c5cab3:
+  'friends/contextMenu/remove': 'Delete'
+8dfbae24-5d47-4c59-ac78-c0c3d0a738f5:
+  'friends/contextMenu/requestSend': 'Request sent'
+0cc4cd0f-93f1-4f57-94ce-947b593a90da:
+  'friends/contextMenu/requestToInviteToSquad': 'Request to invite'
+74fd6ab7-3d23-4149-b283-48548370efd8:
+  'friends/contextMenu/spectate': 'Spectate'
+25017563-cb12-44e0-b172-e581976deb54:
+  'friends/contextMenu/squadIsFull': 'Squad is full'
+5da4c74c-0d1a-4749-affc-f2ba621b2075:
+  'friends/contextMenu/startChat': 'Send message'
+0bd69bc5-8262-4f6f-a6f1-a7d04b21d5ab:
+  'friends/emptyListNotificationText': 'No friends online'
+632bda5e-7bca-42b0-b637-af51e09bf797:
+  'friends/friendSearchingPlaceholder': 'Friend nickname'
+a1248611-9874-417b-8bed-02657dde8583:
+  'friends/friendsAddButton': 'Add'
+a7b3b3f2-3b60-4cc6-81ba-e356d4884dd5:
+  'friends/friendsAddButton1': 'Add friend'
+a8abf652-e97a-417f-979c-f6c225c5b77c:
+  'friends/friendsAddHeader': 'Add friend'
+902b125d-5f47-49b4-a675-3caeb045bb6b:
+  'friends/friendsListHeader': 'Friends'
+5c9397a5-4cad-45b1-a0aa-121b8d8e59f7:
+  'friends/header': 'Friends'
+98a0b96e-7ef4-4ebb-9f42-45b2d7c2a728:
+  'friends/header1': 'Requests'
+52f78492-18fd-44c6-b94a-b1e0334b18a9:
+  'friends/inBattle': 'In battle'
+e69bb3dc-eefd-4474-86d7-dad4771be474:
+  'friends/incomingHeader': 'Incoming'
+7de1dcd0-c851-40ae-97d9-9fffbf9b1121:
+  'friends/inviteButton': 'Invite'
+26291098-a5d4-4642-9ce3-1228e3a066c7:
+  'friends/inviteHeaderLobby': 'Invite to lobby'
+d554ae92-e9d1-42a7-a478-17b7e1f57202:
+  'friends/inviteHeaderSquad': 'Invite to squad'
+5ab1a656-c0e7-4b28-9a1e-970d6fbc9e8b:
+  'friends/invite_to_lobby/for_single_user': 'Player {0} invites you to the battle.\nJoin him?'
+65214139-d1a7-4fdd-bfb9-9b3339f3c857:
+  'friends/invite_to_lobby/for_squad_leader': '{0} invites your squad to a custom battle.\nJoin the battle?'
+14d09e81-490f-45c4-98e5-4cdfda72f6df:
+  'friends/invite_to_lobby/for_squad_member': '{0} invites you to a battle.\nOn agreeing you will leave the squad.'
+2f74c515-d632-400b-a56a-96a3d4beaf5b:
+  'friends/noFriendsLabel/noFriends': 'Your friend list is empty'
+8b92a8d0-4efd-424b-bfed-c7b0b870d5e4:
+  'friends/noFriendsLabel/noFriendsIncoming': 'No incoming requests'
+cf0497db-1d04-4dfe-8d4d-b0feb1f9bc57:
+  'friends/noFriendsLabel/noFriendsOnline': 'No friends online'
+dcf00dfc-47bc-4ef1-8d7d-e6da1305bda0:
+  'friends/outgoingHeader': 'Outgoing'
+cb234975-24f7-44c2-8e6d-61c78298a5d5:
+  'friends/rejectAllButton': 'Reject all'
+ae444480-d67e-4a4f-83ed-fc0873154c14:
+  'friends/squadInvite/accept': 'Accept'
+124bd30c-c7b2-4d9e-99a0-cb3533268fe3:
+  'friends/squadInvite/decline': 'Decline'
+b8912350-8ee8-453e-bbd3-c904420b6a61:
+  'friends/squadInvite/invite': 'Player {0}{1}invites you to join a squad.'
+0cb7936e-f63e-46df-819c-409285351f93:
+  'friends/squadInvite/request': 'Player {0}{1}wants to join your squad.'
+614cf5eb-db85-4f34-9ae7-0ec5415fd6f4:
+  'friends/wrongNicknameError': 'Wrong nickname'
+0f177381-d7cf-44f0-8e32-5158a26d0667:
+  'goldBoxes/boxesButton': 'Boxes'
+cbbd99c2-13dd-4a2a-bd2d-c121c5fc7b8c:
+  'goldBoxes/inGarage': 'In Garage:'
+0f2e5869-675b-49c8-92a0-c20da07c72fe:
+  'goldBoxes/infoDialogAdditional': "<b>How does it work?</b> - The button to drop a <color=#FFFF00FF><b>Gold Box</b></color> is active only if you have a gold box available in your garage (the number of boxes available is shown in the store and on the battle interface). The button will be inactive if there is another gold box or a couple of them, queued to be dropped at that current time in the current battle. - You can not drop more than one gold box per minute. - You can not drop a gold box during the warm-up phase and during the last minute of a battle. - Upon dropping a gold box, the battle log will show which player has dropped the gold box. - The gold box will drop on a random free gold box drop point. If there are no free gold box drop points at the time of dropping, the box will go into a queue, to be dropped as soon as a drop point becomes free. - No more than 16 gold boxes can be dropped during a battle. - Should a battle end earlier or if there are gold boxes still in the drop queue even after a full-length battle, all the boxes in the drop queue will return back to corresponding players' garage."
+08f9c628-7a4c-475d-86a4-6b06c75f9df3:
+  'goldBoxes/infoDialogKey': 'The gold box can be activated in battle with a press of a button, which you can set yourself in the controls settings.'
+3ce60d3c-db6d-43ab-9541-784f6c830d99:
+  'goldBoxes/infoDialogMain': 'The <color=#FFFF00FF><b>Gold Box</b></color> is a supply box that rewards 10 X-Crystals. You can drop it by yourself on the battlefield during a match.'
+771b5301-586d-4489-87fd-79a06d80fb6c:
+  'goldBoxes/infoDialogTitle': 'Gold boxes'
+d187b9eb-dbb3-4ae0-8a54-fc6a7a97c432:
+  'goldBoxes/shopAdditionalInfo': ''
+2b639bc4-014e-45a3-b447-66ab988e6d26:
+  'intro/1': 'Press'
+cdd35737-5be7-46d9-be66-dbe2b6b2aaef:
+  'intro/2': 'to skip'
+058f0572-c00d-4870-a917-3b4e629be7ad:
+  'intro/button': 'Space'
+e98fffc4-2352-41ac-89a8-f3730a6bef31:
+  'loadscreen/initialization': 'Initialization...'
+4f1fe3ea-6a04-4004-906f-3ff95bb176bb:
+  'loadscreen/loadFromDisk': 'Loading'
+8b8401bc-59e0-4356-820e-a7428500513d:
+  'loadscreen/loadFromNetwork': 'Downloading'
+416a8feb-05a1-4943-bfbc-6fa69e964b53:
+  'loadscreen/mb': 'mb'
+2075acb0-0f49-4e67-800f-dbc67cf18610:
+  'loadscreen/preloadText': 'Some of the resources are still downloading, but you can start playing'
+699e3fc5-845b-4bb0-8dbf-f0d49251fa55:
+  'lobby/garage/modules': 'MODULES'
+45ba48b5-f6a1-4635-9445-af9bc04b39b7:
+  'loginHint': 'Nickname or email address'
+d07d184f-bd49-4a9b-8bf0-4a8e62fc4662:
+  'loginReward/day': 'Day'
+ccdd2ee8-5987-4979-aedf-aafa4b542c39:
+  'loginReward/dayShort': 'days'
+589058ff-c7e0-4c8b-a627-c3826831f179:
+  'loginReward/header': 'Daily reward'
+840c78b8-54a9-473d-a7f2-aa6fc2dcec59:
+  'loginReward/text': "During the first 15 days of duty, all tankers will receive a reward for their work as recruits for the Tanki X program. Enter daily and don't miss any of the rewards. They are essential for upgrading your tank."
+fd93c742-1d48-456c-b216-06a5b68dbb0e:
+  'loginReward/tip': 'More rewards'
+9d28ff71-338f-41a3-a65a-c2043ee9aa4b:
+  'main/back': 'BACK'
+8ba33075-d3f7-42c9-8598-4acf99cc1557:
+  'main/backtologin': 'LOGIN TO YOUR ACCOUNT'
+fd960cba-d1c5-48f0-8624-f67773739dfd:
+  'main/battle/create/battle_mode_header': 'GAME OVERVIEW'
+612b6a76-0007-4800-9512-ef007d116b2b:
+  'main/battle/create/battle_properties_header': 'GAME PROPERTIES'
+e2602f8a-d528-4cf6-a686-530092715921:
+  'main/battle/create/create_button': 'CREATE MATCH'
+d6e72a09-7847-4222-9c99-1c410d03615c:
+  'main/battle/create/custom_battle_description': 'As a creator of a Custom Game you can edit battle parameters along with chosing a map and a mode.'
+52105a38-7f6a-45c8-a1a6-a95484b6f037:
+  'main/battle/create/custom_battle_description_down': 'Notice that experience points and crystals can not be obtained in this game mode.'
+00310a9d-7a35-4ec6-b65c-738148437802:
+  'main/battle/create/custom_battle_header': 'CUSTOM GAME'
+f291950a-69c6-4c5d-a842-8c05f7dea0fd:
+  'main/battle/create/edit_params_button': 'EDIT PARAMETERS'
+f1f1a8b5-bca7-4558-b48f-738c55f05826:
+  'main/battle/create/header': 'MATCH SETUP'
+0597f66d-d4fe-4768-bd92-721475c2be95:
+  'main/battle/create/joinTeam': 'Join team'
+5f466cb5-9bd8-469f-aca5-2c3a94ea6838:
+  'main/battle/create/minutes_dropdown_text': 'min.'
+a674b3a6-4916-4216-9bbc-ba6990fb521a:
+  'main/battle/create/modules_in_battle': 'Modules and GB In Battle'
+7368905d-93f7-41ae-b9fe-afc651c144db:
+  'main/battle/create/modules_in_battle_desc': 'Disable the ability to use modules and Gold boxes in a battle'
+2d5baea9-b3ff-4fcf-bb76-18e8aedc1b05:
+  'main/battle/create/no_limit_dropdown_text': 'No limit'
+14041d7b-0ef5-4cfc-baa4-c80a7215e849:
+  'main/battle/create/off_dropdown_text': 'Off'
+ffc42805-aabd-4e47-9596-78e463debf24:
+  'main/battle/create/on_dropdown_text': 'On'
+00900250-b135-48b5-9df6-1f2a91957157:
+  'main/battle/create/property_battle_mode': 'Battle Mode'
+2af56057-bf06-41f8-86c9-4eb972dd73a9:
+  'main/battle/create/property_friendly_fire': 'Friendly Fire'
+7bf06739-9b69-4604-b602-7ab9ead9069a:
+  'main/battle/create/property_gravity': 'Gravity'
+9024b66c-7966-44cc-910d-1df0d0fc4e1c:
+  'main/battle/create/property_kill_zone_enabled': 'Kill zone enabled'
+22096a03-2297-48d7-a945-00d698eb5169:
+  'main/battle/create/property_map': 'Map'
+7e81dbde-a7af-4c9d-81b4-3ce426b9c357:
+  'main/battle/create/property_max_dmplayers': 'Max Players'
+b989cf87-ea91-413e-bb95-6117daf8b386:
+  'main/battle/create/property_max_teamplayers': 'Max Teams'
+e9332844-8276-463d-9567-f041555597fb:
+  'main/battle/create/property_score_limit': 'Score Limit'
+79a6612b-270f-4678-9db3-eaa830495ae1:
+  'main/battle/create/property_time_limit': 'Battle Time'
+f961f0eb-8ecd-4e35-bf30-296f14312751:
+  'main/battle/create/update_params_button': 'UPDATE MATCH'
+9346e826-4bfd-4b14-87b5-6736d1a2f5b6:
+  'main/battle/leave_lobby_button': 'Leave lobby'
+0e11f53d-f642-4e72-abd5-64d5726f5326:
+  'main/battle/mode/create_battle': 'CREATE BATTLE'
+0a7d8a76-f59e-4d08-a3d5-bf8a2a46b5bc:
+  'main/battle/mode/create_battle_description': 'Create a private battle to play with your friends.'
+3cdb55ef-f8f6-4137-966b-96561d0466a6:
+  'main/battle/mode/rank_restriction': 'Required rank'
+f4aec23a-08b8-46f2-91d1-b05481dc7f7b:
+  'main/battle/start_battle_button': 'Start battle'
+68ada576-73ee-4dff-8ebc-ad8a7d36baf9:
+  'main/battleLobby/antaeusTeamTitle': 'Team 1'
+fb2d901e-6314-4ad5-bbc8-872e24277637:
+  'main/battleLobby/chooseHullSkinTitle': 'Hull skin'
+e44c8727-6793-4d98-a97a-854104a4b983:
+  'main/battleLobby/choosePresetTitle': 'Choose preset'
+5119fb0f-e530-4991-afc5-f50792f94897:
+  'main/battleLobby/chooseTurretSkinTitle': 'Turret skin'
+16e720ef-0f90-44e5-ad04-92177b696e8b:
+  'main/battleLobby/enterToBattleError': 'Enter to battle error'
+266b1f20-406b-490f-97cb-9c6b0803c059:
+  'main/battleLobby/exitFromLobby': 'Leave lobby'
+c2a37430-3ca9-43d9-bdd5-5146d463acdf:
+  'main/battleLobby/frontierTeamTitle': 'Team 2'
+16352768-1e51-48c2-8e1d-a04b5a43313c:
+  'main/battleLobby/gamemode': 'Game mode'
+7fcb963b-e712-448b-a4f7-4c2ee5ce34d5:
+  'main/battleLobby/goToLobby': 'Go to lobby'
+0d52c361-008a-40b4-81fb-823668b0950f:
+  'main/battleLobby/map': 'Map'
+62f9e20a-21ff-43bb-a49b-19968734c1d5:
+  'main/battleLobby/matchSearching': 'Searching...'
+67e3bed5-8a3a-456e-988f-deca71762d86:
+  'main/battleLobby/searchCancel': 'Stop searching'
+bb862ff4-b30b-43fc-8a61-1f5d98634d5e:
+  'main/battleLobby/searchTimeNewb': 'Approximate search time... 10 seconds'
+69fa559f-9e52-4fd1-b6dc-d277a5006611:
+  'main/battleLobby/searchTimeRegular': 'Approximate search time... 20 seconds'
+4dade53e-dcee-4bf1-81d8-2d98ca4a3c99:
+  'main/battleLobby/teamList/inbattle': 'In battle'
+9c828983-3e48-4622-b781-60351545d648:
+  'main/battleLobby/teamList/notready': 'Not ready'
+376382f5-d207-4930-b3fd-07e5f5121d11:
+  'main/battleLobby/teamList/playerFound': 'Player found'
+7c4a348f-a398-47d9-9d83-1cbd33571f14:
+  'main/battleLobby/teamList/playerSearching': 'Player search...'
+493dbd46-0f42-4dfb-8434-9737604138bd:
+  'main/battleLobby/teamList/ready': 'Ready'
+cf993e3b-4747-4080-af3b-177a97ff0a58:
+  'main/battleLobby/teamList/title': 'Team'
+d01a5c6e-98fb-4e48-be92-dbe1e62850f6:
+  'main/cantChangeEquipmentDialog': 'You need to cancel searching for a battle or exit a game lobby first if you want to select another weapon'
+35788b2a-f9b4-4d24-b396-c59109ce5ed7:
+  'main/cantChangeEquipmentDialogTitle': 'Weapon selection'
+cd4f424c-bcd7-44bf-afc0-dfcf16dca310:
+  'main/crystals/buy': 'Purchase'
+8c9455ac-721c-40cc-98ba-ed3285260652:
+  'main/crystals/exchange': 'Exchange'
+eb72b7cd-d4bb-4321-975b-9d6487aa5cc6:
+  'main/custombattlesscreen/arcademodes': 'Arcade Modes'
+a22c7648-e93a-4d58-87c3-cef43c66e42d:
+  'main/custombattlesscreen/backtonormalbattles': 'Basic Modes'
+3aa95331-9fe4-450b-8a0f-8ef77245f004:
+  'main/custombattlesscreen/battleIsFull': 'The battle is filled'
+9754a393-0d68-405d-9087-bfe9ae9c08ac:
+  'main/custombattlesscreen/connectButton': 'Connect to battle'
+8dd7167f-42ef-4964-a32d-2771558021c4:
+  'main/custombattlesscreen/connectTooltip': 'The Battle Code allows you to enter a closed battle created by another player, even if he is not on your friends list'
+39d7d126-57b7-4f23-83ab-fae0c802e840:
+  'main/custombattlesscreen/connectWindow': 'Connecting To The Closed Battle'
+1685b202-8022-491f-8b19-3a74f052c6c1:
+  'main/custombattlesscreen/createBattleTooltip': 'Create a battle, open it and invite other tankers to train skills!'
+48f394be-66a0-41c2-8984-54abcf73c421:
+  'main/custombattlesscreen/createbattle': 'Custom Game'
+767d498e-606d-4e0a-9ce8-917f20b3ef57:
+  'main/custombattlesscreen/enterBattle': 'Enter with the Battle Code'
+a657e083-ed4b-4a9d-acea-e73827f3d2a5:
+  'main/custombattlesscreen/notExists': "Battle doesn't exist"
+839e78be-472c-4833-8942-6704a4d21139:
+  'main/custombattlesscreen/openBattle': 'Open the battle'
+930fa86e-2568-4e66-8650-51b92ac803e7:
+  'main/custombattlesscreen/openTooltip': 'Open the battle to get the Battle Сode and share it with other players. Only the creator sees the Battle Code in the lobby.'
+421a910b-9921-4245-8e59-cf5c38cd6889:
+  'main/custombattlesscreen/shareTooltip': 'Share the battle code with other players so they can join this battle'
+b2644625-d799-42f4-a806-810b9e0389a5:
+  'main/deserterAttention': 'Leaving the battle will mark you as a deserter. You will lose reputation points, battle streak bonus points, and the matchmaking search time for your next battle will increase. Intentionally or accidentally closing or crashing the client, will also count as if you left the battle.'
+2f3f6e1b-f070-43c1-b827-c4fc10c25f64:
+  'main/deserterDesc': 'Deserters will be matched with other deserters and will not benefit from the battle streak bonus.\nAdditionally, upon leaving a battle they will be severely penalized in reputation points. You need to play {0} {1}, for the deserter status to be lifted.'
+a61f0181-9c5d-4295-9bd6-a6985cc7e891:
+  'main/garage': 'GARAGE'
+ad503e1b-c229-4e3a-8d10-40125fc986c5:
+  'main/garage/activate_available': 'New research available!'
+3d34372f-e142-4c3b-a6e1-c889654158ef:
+  'main/garage/ammunition': 'AMMUNITION'
+820b930f-a89f-4ad2-9066-2ed85db6be41:
+  'main/garage/buy': 'BUY'
+a3c3187f-085f-4a1c-93e7-2648a44212e8:
+  'main/garage/buy_container': 'OPEN CONTAINER'
+7d9bbe78-1593-4e56-a24d-e1c9bfc3c19c:
+  'main/garage/change_hull': 'CHANGE HULL'
+a15f5ee5-ef87-458e-9385-4de59624ee72:
+  'main/garage/change_hull_modules': 'Hull Modules'
+1bd60142-684a-4d34-99ee-07dd9341e6dd:
+  'main/garage/change_hull_visual': 'CHANGE VISUALS'
+116bb739-8dac-4462-a30d-4980769b9d23:
+  'main/garage/change_turret': 'CHANGE TURRET'
+4197790e-b214-428c-9d2f-cd5bcee920a3:
+  'main/garage/change_turret_modules': 'Turret Modules'
+7ed04e9a-df46-46a5-922c-020d9cc03793:
+  'main/garage/change_turret_visual': 'TURRET VISUALS'
+7ac4443e-bee6-4a6f-a5b4-b20e631330fd:
+  'main/garage/characteristics': 'Characteristics'
+6bca68f5-a9f1-42ae-8fd0-afb6d87688b5:
+  'main/garage/confirmation': 'Are you sure you want to buy {0}?'
+a101ac92-e77f-4b43-838f-e7b385cff398:
+  'main/garage/container_item': 'Available in Containers'
+d9c5f477-95cc-41ca-9f14-90ea5577984b:
+  'main/garage/cover': 'COATINGS'
+5d0c2e82-7f60-452d-a095-5d18777b5183:
+  'main/garage/crystals': 'Crystals'
+472c8c95-a92d-434a-9e72-e234bdf0b9be:
+  'main/garage/crystalsrestriction/match': 'Rank: {0}'
+c18408b4-aebd-46ef-8cf5-bb48eb163cf6:
+  'main/garage/crystalsrestriction/mismatch': 'Available at rank {0}'
+f0a2e6fe-fae8-4f05-a979-d263e9f2c55a:
+  'main/garage/currentSkin': 'Current skin'
+0bc18896-2fa8-4dc4-8911-c70bdb925b0c:
+  'main/garage/equip': 'EQUIP'
+8f021ff3-6345-4fcb-9959-71417f7db798:
+  'main/garage/graffities': 'GRAFFITI'
+22d885e5-2bd2-4720-b414-9ccc86c7bb0c:
+  'main/garage/hull': 'HULL'
+6776d1b5-b171-4e7e-a798-03c9c875cf26:
+  'main/garage/hullcharac': 'Hull Characteristics'
+196c4a9f-dc2b-48e8-9767-c03e905730f7:
+  'main/garage/inviteDialog/title': 'Invitation to Battle'
+c29a528a-ad7a-4c9e-9943-4fd4ff91d346:
+  'main/garage/moduleUpgradeAvailable': 'Module upgrade available!'
+64f5bfe2-99a0-472b-bf02-d4c3f0b5086d:
+  'main/garage/modules': 'Modules'
+dc8a15eb-1dd7-45f2-aa84-9c7bc3f8378e:
+  'main/garage/modules/tier1': 'Tier 1'
+e8709b91-c36b-4c26-93d1-b95cd418e68c:
+  'main/garage/modules/tier2': 'Tier 2'
+588efa00-07c9-42da-a49c-3e2eeaf0a9c3:
+  'main/garage/modules/tier3': 'Tier 3'
+3d9e9565-cbbd-41e2-aa29-429046bc2d96:
+  'main/garage/need_more_crystals': 'You need {0}<sprite=8> more.'
+cc73b388-d768-4a85-b72f-9aef83fa51a7:
+  'main/garage/need_more_crystals_q': 'Synthesize <sprite=8>?'
+1fd32e08-13ac-49a4-bb49-2a8209caf36e:
+  'main/garage/need_more_xcrystals': 'You need {0}<sprite=9> more.'
+f136b385-9249-453e-a09f-a813847715e2:
+  'main/garage/need_more_xcrystals_q': 'Purchase <sprite=9>?'
+537bd458-7e83-4d4d-9b19-7f3f871be9ab:
+  'main/garage/newModuleAvailable': 'New module available!'
+ec7fb1ee-f744-4ce5-9a12-ef19d0ca0bf8:
+  'main/garage/paints': 'PAINTS'
+a9aef4c4-2aeb-46b0-93e9-06c79774cf17:
+  'main/garage/preset_locked_by_rank_hint': 'Available at rank {0}'
+3cf7c171-ed50-4445-9da1-9cd4b8fcaeee:
+  'main/garage/research_available': 'Research available!'
+65b24355-98cf-44cd-9449-df30d8583b73:
+  'main/garage/reward': 'Reward'
+8981210e-b3fc-489c-bdfb-1ae1242bea9b:
+  'main/garage/rewhulllevel': 'Hull Level'
+652cccab-6ce1-4b37-aee0-55fdad6edc4d:
+  'main/garage/rewlevel': 'Level'
+38ee8f83-93a4-4a00-8ca6-9840d229a087:
+  'main/garage/rewmax': 'MAX'
+c4cf6f13-dcbe-4074-a6fd-c1d4261e23cd:
+  'main/garage/rewrecieved': 'Received!'
+40fc08bc-7e97-44c9-ba4a-2169a9870323:
+  'main/garage/rewreward': 'Rewards'
+dbdcf941-f402-48ec-831d-84fbfc3cad8d:
+  'main/garage/rewturretlevel': 'Turret Level'
+7e6f427f-6974-4afa-a985-05239063857f:
+  'main/garage/select': 'SELECT'
+8612afcc-9546-46e7-a302-95f787ea8c78:
+  'main/garage/skins': 'SKINS'
+88107846-4cd5-4c4d-b867-8ea6e56d72a8:
+  'main/garage/starshull': 'Upgrades of equipped modules affects additional hull armor'
+1c45d3d1-5a68-445c-9402-6831c4624847:
+  'main/garage/starsturret': 'Upgrades of equipped modules affects additional turret damage'
+92d82074-8c03-4a58-9ff2-86dfa125c25c:
+  'main/garage/turret': 'TURRET'
+6c1eca7c-1120-44e3-995a-2f751f5872c0:
+  'main/garage/turretcharac': 'Turret Characteristics'
+ea9e0e57-7d1b-47bb-a42f-de6a18a095ab:
+  'main/garage/upgrade_available': 'Upgrade available!'
+78dccc37-44c5-4323-8903-9c9f2e0575e3:
+  'main/garage/upgrades_required': 'Unlocks on {0} Level'
+7d80a1e7-3719-414c-9980-6d682024cdcd:
+  'main/garage/visual': 'VISUALS'
+e634a099-f4bb-46a4-8d25-c32484ac61d1:
+  'main/leagueReward/1': '#1'
+0a3ab43b-7c3a-4988-8dd7-70681112bbdf:
+  'main/leagueReward/11-50': '#11–50'
+0f1ec5f2-7bd9-4b54-b0e1-17294231b77a:
+  'main/leagueReward/2-3': '#2 and 3'
+8dc51348-81ee-4ad0-80ce-fb220a108286:
+  'main/leagueReward/4-10': '#4–10'
+920faf13-9163-43bd-9a8c-9bdb266d8904:
+  'main/leagueReward/50': 'under 50'
+605efaa0-4e1f-4bc6-bbee-08c0d13e7a7e:
+  'main/leagueReward/CurrentLeaguePoints': '{0} reputation points'
+0dc74df3-c480-4135-8195-77a4bd98958e:
+  'main/leagueReward/closeButton': 'Close'
+64ce7f81-8169-4213-9871-a877156bf2a0:
+  'main/leagueReward/currentLeague': 'Current league'
+47a27413-3d3c-47e9-8909-22370cb217f5:
+  'main/leagueReward/leagueAccusative': 'League'
+96b3a0c7-080b-4cc2-a32a-909dbe4acde7:
+  'main/leagueReward/leagueChest': 'League Chest'
+82274b10-f4b7-4596-8eda-69320321daf3:
+  'main/leagueReward/leaguePointsNeeded': '{0}/{1} \n to advance to {2}'
+f131d314-ab49-485e-910a-8a80b427fc12:
+  'main/leagueReward/leaguePointsNeeded1': 'Get {0} reputation points'
+b7ec5e5a-b523-4f3e-ab22-d6ec958703b2:
+  'main/leagueReward/seasonEnd/header': 'Season finished'
+01b88eea-2377-4770-8626-5e082bf10785:
+  'main/leagueReward/seasonEnd/text': 'Congratulations! You fought well during this season and you have earned a reward. Keep up the battle spirit and do not forget that the new season comes with new prizes.'
+78e37c44-3512-4c38-b5b0-8c942ae045ee:
+  'main/leagueReward/seasonReward': 'Season Reward'
+5457896e-13a2-488a-a6fa-81c80df24be1:
+  'main/leagueReward/timeLeft': 'Season Time Left: '
+53c56283-d906-4874-ad22-ee7e2c39537b:
+  'main/leagueReward/timeLeftDays': 'd '
+c24621a6-e901-4956-bb07-afdd3ae5efef:
+  'main/leagueReward/timeLeftHours': 'h '
+d3a8e778-1308-4ebe-8ae2-e39df3cb21d9:
+  'main/leagueReward/timeLeftMinutes': 'm '
+b6781409-64a4-473c-9544-5c903d42a3ec:
+  'main/leagueReward/timeLeftSeconds': 's'
+7ffa5d66-553c-4c6d-9f22-8cd6b808909a:
+  'main/marketItemCategory/avatar': 'Avatar'
+a21ff5e0-c1fb-4651-a4b4-c7b863f0886e:
+  'main/marketItemCategory/coating': 'Coating'
+27a58bc3-d74c-47f5-be76-1570f3908317:
+  'main/marketItemCategory/container': 'Container'
+4a2bfcf1-2ec6-4a48-aa5d-53dad1852050:
+  'main/marketItemCategory/graffity': 'Graffiti'
+ec1bdc18-2761-4c66-8d95-bfbb9b3d5e36:
+  'main/marketItemCategory/paint': 'Paint'
+dfb58367-3da5-416d-92c5-7b4f04d7d9b3:
+  'main/marketItemCategory/shell': 'Shell'
+474831c3-85ca-411f-a96b-df0171d1799a:
+  'main/marketItemCategory/skin': 'Skin'
+b505c71a-26da-40f9-86b4-e336cfeb1941:
+  'main/matchBeginnig': 'Match begins...'
+a064f391-3882-4967-a3cb-f2c8773f781f:
+  'main/matchDef': 'matches'
+5a9c2ce1-3cbc-41b1-a055-fdc914a5562e:
+  'main/matchOne': 'match'
+9caa9800-e935-4b0b-a359-0fb6027b760b:
+  'main/matchTwo': 'matches'
+26fc2fea-76c0-4550-a887-ea2722b2399a:
+  'main/mmLevel': 'Effective level'
+383a62a4-7168-4cbb-a1d8-e8a0fe668883:
+  'main/modules/CRY': 'Synthesize crystals'
+f028158c-def7-4af8-9772-fd4024a6ce42:
+  'main/modules/XCRY': 'Buy  X-crystals'
+fddd95ad-bfa1-493e-af0d-b7e87ff4ac04:
+  'main/modules/activateModule': 'Research'
+a73fc102-7115-4cf0-9f3c-5f531b14ab5f:
+  'main/modules/activeModulesTitle': 'Active modules'
+07200497-8857-45f8-b843-aecac2c507a8:
+  'main/modules/blueprints': 'Blueprints'
+12139b63-53aa-4bad-8f0a-07b738a7f22a:
+  'main/modules/buyBlueprints': 'Get blueprints'
+8a87735a-142f-4343-a4ed-9d8afd932408:
+  'main/modules/containers': 'Containers'
+d72cf321-e937-4cca-9dd1-b6fd6534bd5b:
+  'main/modules/craftFor': 'Research'
+d8cd439d-2988-48b0-956e-a076bb4d1efe:
+  'main/modules/dontEnoughBlueprints': 'Not enough blueprints'
+6dd612dc-9a91-4cb0-8ad0-13873d742a41:
+  'main/modules/dontEnoughBlueprintsForResearch': 'Not enough blueprints to research the module'
+0e4b7cd9-1c50-4bee-91d5-6963661fc21b:
+  'main/modules/dontEnoughBlueprintsNewScreen': 'Not enough blueprints to upgrade the module'
+3c3308e5-84d6-4d44-b099-a2b9ef0969d8:
+  'main/modules/dontEnoughBlueprintsResearch': "You don't have enough blueprints to activate the module. You can get the blueprints from the containers."
+6d3f1f61-8134-4db6-a1ff-f6bd73784867:
+  'main/modules/emptySlot': 'Empty slot'
+2ddcfab6-aa80-472a-b59b-132601cd773d:
+  'main/modules/equipButton': 'Equip slot {0}'
+d0a7214b-14c0-4971-a072-3a7db49b77c8:
+  'main/modules/fullUpgradedModule': 'Full upgraded'
+4d8f3f6b-ffed-4b1f-b771-ac79510bb282:
+  'main/modules/hint': 'Drag the module or double-click on it to install it in a slot'
+d23f433e-2cab-4c43-9a36-5a9c7915d8ad:
+  'main/modules/hullHealth': 'Hull health'
+fe6e585d-0e93-4e62-816b-7827890f1647:
+  'main/modules/lvl': 'lvl.'
+78460842-bd08-4f33-a16f-af23ce1b73c5:
+  'main/modules/module': 'Module'
+2c3f1d19-2742-4d43-9d78-b3e921d91386:
+  'main/modules/moduleActiveShort': 'Active'
+5ac5c229-eb05-4998-9628-1419055fca7d:
+  'main/modules/modulePassiveShort': 'Passive'
+75a789b4-4d7c-468b-aca5-da0b6bc4f5fa:
+  'main/modules/modulesCollection': 'Modules collection'
+92faf58a-7948-43b1-a81f-7ad48c8095a2:
+  'main/modules/passiveModulesTitle': 'Passive modules'
+6ef0ff1d-4759-4c68-95bb-ac3819bde751:
+  'main/modules/slot': 'Slot'
+65b2bb67-0a93-4b09-84b8-84eace6cee51:
+  'main/modules/slotNotAvailable': 'Module slot is not available'
+f9a4842c-faf9-4628-a5f9-ccdd7c7e98da:
+  'main/modules/turretDamage': 'Turret damage'
+3b51284e-2fbf-4b2f-a1ea-329864a60a1e:
+  'main/modules/unequipButton': 'Unequip slot {0}'
+5c9b7ae5-fb18-435a-b808-bb645535c695:
+  'main/modules/upgradeFor': 'Upgrade'
+eb5cf008-166b-4198-add3-1fae5877a37a:
+  'main/modules/upgradeHullToUnlockSlot': 'Upgrade hull to {0} level to unlock this module slot'
+da40f0b2-ed74-4788-b1d8-bb4eb63b04b5:
+  'main/modules/upgradeLevel': 'Level'
+7d287102-803d-4793-8513-a6c7f6b15dbb:
+  'main/modules/upgradeModule': 'Upgrade'
+20cf7fc2-6131-4e43-9f3c-ca43a5782eca:
+  'main/modules/upgradeWeaponToUnlockSlot': 'Upgrade weapon to {0} level to unlock this module slot'
+00d3f48a-4842-4bd2-b961-7fb795ede455:
+  'main/play': 'PLAY'
+8e016095-449b-49ff-8767-c92747598eb8:
+  'main/playButton/customBattle': 'custom battle'
+ab38df86-791b-460d-9069-a7c4e3214932:
+  'main/playButton/matchFinding': 'match searching'
+e47b6e18-f307-479d-9f97-7fb02d6da2a5:
+  'main/playButton/matchStartIn': 'in'
+05dbe9c9-e66b-40b2-add9-0421d14cf107:
+  'main/playButton/matchStartTimer': 'match starts'
+a4430009-25db-46ad-bbfd-1a08b8b40fec:
+  'main/playButton/notEnoughPlayers': 'Not enough players'
+572cc614-a2dc-4652-ada3-6e8088d18cb8:
+  'main/playButton/playersInLobby': 'Players in lobby'
+3ad9a180-542d-496a-a8e4-c1790940e70a:
+  'main/playButton/returnToBattle': 'to battle'
+cc7f3fd1-285d-4891-81a7-525e982790b9:
+  'main/playButton/searchingForPlayers': 'Searching for players...'
+71d1c711-7fc9-48ea-9f9b-a7b2a46429fd:
+  'main/playButton/shareEnergy': 'Teleport charging'
+0642cee4-d8b5-4a20-bb47-ca97bf7f07c7:
+  'main/playButton/startCustomBattle': 'start battle'
+d4815343-1d59-42b3-8c24-1185ca63853f:
+  'main/playscreen/chestprogression': 'Chest progression'
+cd0d420a-e1f6-4f57-9480-bcb9fb45a4cd:
+  'main/playscreen/cost': 'Costs {0} <size=32><sprite=0>'
+66c52b6c-db13-4f67-9b18-0ea9ee91f88a:
+  'main/playscreen/custombattles': 'More Modes'
+4f4a707e-69b8-46f9-99ab-cee5830fb248:
+  'main/playscreen/play2gain': 'Play to get   <size=32><sprite=0>'
+6a6ca8e5-a650-41ac-933e-a37e9dcc4f64:
+  'main/playscreen/quantums': 'Teleports'
+b591af26-393f-4ccc-b080-f08ea16db9be:
+  'main/playscreen/season': 'Season {0}'
+5bac6dc1-83a5-4011-9e15-5b637497c987:
+  'main/playscreen/seasonends': 'Ends in <#0053B4>{0}'
+2cfe07f0-3086-43ed-ae88-7bf1f9fe858a:
+  'main/playscreen/seasonrewards': 'Season Rewards'
+e83d5269-f550-4b10-beec-6dfadb50b6d5:
+  'main/profile/accept': 'Accept'
+2e3f3e33-3d8c-4376-a675-ce2f5bd5b475:
+  'main/profile/account': 'ACCOUNT'
+96714bb6-f225-4dd3-92bc-106312f34bae:
+  'main/profile/account/changeCountryButton': 'country'
+fdf69445-12c7-44af-af11-10789a9b1388:
+  'main/profile/account/changeCountryPlaceholder': 'Search...'
+e5184936-a2cf-404a-a5bd-74c0703481b7:
+  'main/profile/account/changeCountryTitle': 'Select your country'
+1b46842f-0f20-4cb3-8aee-5b17ae8e362d:
+  'main/profile/account/changeEmailButton': 'change e-mail'
+219ee2b5-bb2e-42a7-87fc-aaf58180d647:
+  'main/profile/account/email': 'e-mail'
+bf4ee955-0ace-41a9-9157-4b64e0e54a92:
+  'main/profile/account/forumButton': 'forum'
+9f0f2903-7571-4eb8-bb02-6e31fcc67183:
+  'main/profile/account/logout': 'Logout'
+f9e45e86-73a8-4944-b315-231dbd16a213:
+  'main/profile/account/nickname': 'nickname'
+eda07e0f-9355-47aa-82ce-8bc01648cfca:
+  'main/profile/account/promocodeButton': 'enter promocode'
+dca36499-c974-4a54-957c-ce00be3056ca:
+  'main/profile/account/subscribe': 'Subscribe your email to receive promo-codes, special offers and news'
+cfecbeee-1628-4ba9-a25d-bed1382ccef6:
+  'main/profile/actionsButton': 'Actions'
+d11bb1b7-b0ab-4ec4-b3f3-c1424da9006e:
+  'main/profile/addToFriendTitle': 'Friend request'
+73787731-0163-49e6-ad8b-cbe586efcf13:
+  'main/profile/change': 'change'
+fa69112d-e90a-4141-82d1-dba5085a5763:
+  'main/profile/changeEmail/confirmationHint': 'The mail was sent to the address %EMAIL%. Follow the link in the message to confirm the new address.'
+22e5a287-4cbc-459e-b7bb-6a44aa3620d9:
+  'main/profile/changeEmail/confitmEmailHint': 'Enter your email address and confirm it to protect your account, and receive a gift!'
+00709797-bbaa-4bb7-9381-1566fd211acc:
+  'main/profile/changeEmail/continue': 'Continue'
+147f99da-1ec0-468d-9c88-d007cea80d9c:
+  'main/profile/changeEmail/hint': 'Enter new e-mail'
+60b92b6f-2e91-4c18-b8cc-dd52a5f06d3f:
+  'main/profile/changeEmail/sendAgain': 'Send again'
+ac4c58c4-1040-4622-932c-28a3fb8921d5:
+  'main/profile/changeEmail/title': 'E-mail change'
+ede2e1df-1306-42ef-8d81-c6285e0b46cc:
+  'main/profile/changeNickname/cancel': 'Cancel'
+e00adf1b-fd4d-4acd-a7fb-3a20dce9c7ca:
+  'main/profile/changeNickname/hint': 'Enter new nickname'
+f89d5df8-9730-4443-9752-0d0083ab600b:
+  'main/profile/changeNickname/submit': 'Change'
+625b7b8b-17db-405c-b321-e7aec2dad6a3:
+  'main/profile/changeNickname/title': 'Change nickname'
+5b49a8d4-0243-4eec-bd37-fda1aa74a187:
+  'main/profile/decline': 'Decline'
+c67f8c95-01b5-4989-a8a6-c7b29123cd55:
+  'main/profile/expValue': 'Experience: {0} from {1}'
+b0b7cdc2-d950-426b-b3a2-18606a6bb407:
+  'main/profile/forumURL': 'http://en.forum.tankix.com/'
+db61a6c1-15d7-493a-903d-6056a713a8cc:
+  'main/profile/friendRequest': 'Player sent you a friend request'
+46fd2beb-14ef-4fa1-b0d6-933de48732b2:
+  'main/profile/friendRequestButton': 'Request'
+e1020da7-1398-4376-8b12-4f22c1087ebc:
+  'main/profile/friendRevokeButton': 'Revoke'
+6441ab68-98b1-4381-8cfd-2c4d6b7383d2:
+  'main/profile/info/currentRank': 'Current rank'
+90af9e51-727f-43d4-ab6f-974ffb42107a:
+  'main/profile/info/leaguePoints': 'Reputation Points'
+d2927f2c-1dec-473c-a02b-734da7d0477e:
+  'main/profile/info/mostPlayed': 'Most played'
+5c0ac06a-df09-473c-854e-e259002a27f1:
+  'main/profile/info/place': 'Place'
+0da98898-df1e-4641-8f77-de1acb7afec2:
+  'main/profile/info/rank': 'Rank'
+7c5e6eb7-9114-4110-b8f1-260b24390ffd:
+  'main/profile/info/totalMatches': 'Total matches'
+ad2c7d45-3a8f-44ea-8448-254a2b7d5b4b:
+  'main/profile/info/winLoss': 'win/loss'
+18dac687-343b-4141-a467-a719ced92633:
+  'main/profile/league': 'League'
+a956534a-226a-40de-9ed5-fb0aa23ed086:
+  'main/profile/leagues': 'Leagues'
+2d758c2f-e669-4162-9002-21b42a58276b:
+  'main/profile/logoutWindowText': 'Logout?'
+16d0533a-d3db-40b6-8aa2-f5865501b3d3:
+  'main/profile/promocode/hint': 'Enter promocode'
+e170ea9d-999e-47e7-a80d-b8886248b80c:
+  'main/profile/promocode/submit': 'Activate'
+de4e8193-4274-4d6a-83ff-9bf831185093:
+  'main/profile/promocode/title': 'Promocode activation'
+1ac3a430-a2f9-456a-bbad-c6c892358f88:
+  'main/profile/revokeFriend': 'Revoke'
+5fb4de1f-662d-42ab-9c9e-a0d83112517e:
+  'main/profile/spectator': 'Spectate the game'
+ab0cc96a-990f-499a-84f9-3db017d74eff:
+  'main/profile/spectatorButton': 'Spectate'
+89cdc1e1-24af-4e78-9b8e-d6166d5e1676:
+  'main/profile/stats': 'PROFILE STATS'
+e32f569e-9149-4f26-9aa7-27b4779bff12:
+  'main/profile/subscribe': 'Subscribe'
+cc49e60e-911f-4e37-a1eb-ca90572156ee:
+  'main/profile/summary': 'SUMMARY'
+95aa5761-e5bf-48ac-a0ba-5f799444b2d2:
+  'main/profile/summary/accountLevel': 'ACCOUNT LEVEL'
+796bb4de-4b6c-40e2-8095-86f32f4b41df:
+  'main/profile/summary/previewLeagueRewardButton': 'Preview League Reward'
+264a5ad4-c35b-446b-beac-8b6a4dfa29a9:
+  'main/profile/title': 'PROFILE'
+86bb41dc-93a8-4ca5-8044-a5969bfc27a5:
+  'main/profile/unfriend': 'Unfriend'
+24075b7e-2fd0-4f5a-8525-fe0f7e540da1:
+  'main/profile/unfriendButton': 'Unfriend'
+921ee267-881b-4794-93b2-96dd3092b0fd:
+  'main/registration': 'REGISTER'
+0bf38143-5507-4c92-b1fe-0f1c446b8c3f:
+  'main/shareScreen/charges_amount_plural1': '{0} charges'
+c4103618-c6b3-49a8-a82f-e64e5db0163d:
+  'main/shareScreen/charges_amount_plural2': '{0} charges'
+bb4fdabe-0b2d-46f4-b911-bb34b7ae47aa:
+  'main/shareScreen/charges_amount_singular': '{0} charge'
+c03cdb69-e223-49cd-b31b-8c8a59446556:
+  'main/shop': 'SHOP'
+95afef24-19e9-4425-abdc-1042fbacfde7:
+  'main/shop/adyen/card_holder': 'Cardholder Name'
+15ae79a6-6c91-42e4-845e-1c9af7578d3c:
+  'main/shop/adyen/card_number': 'Card Number'
+bd5a6fd2-7d65-4023-917a-f82b5a0887be:
+  'main/shop/blueprints': 'BLUEPRINTS'
+52504876-c5ad-4258-a9d0-7ffd1240d825:
+  'main/shop/bonusenergy/goback': 'Come back for more in:'
+20cd6133-2dac-4beb-860c-8875ecf106b9:
+  'main/shop/buy_now': 'BUY NOW'
+68058da3-6536-4f7e-a324-bf5038c75b62:
+  'main/shop/charges': 'CHARGES'
+82d472e5-c255-43a5-9fc3-7588856f6503:
+  'main/shop/closeCards': 'Close'
+558402d3-7d6e-49b7-ae8f-a4bf13a92f70:
+  'main/shop/containers': 'CONTAINERS'
+24463cdc-774a-4eed-a988-b314e5232574:
+  'main/shop/containers_amount_plural_1': '{0} Containers'
+dabd97c2-086b-4f53-a213-09336db29139:
+  'main/shop/containers_amount_plural_2': '{0} Containers'
+9e53b20e-44e1-4f6b-8d77-94a6c12d1fce:
+  'main/shop/containers_amount_singular': '{0} Container'
+e9370a37-7e50-4169-b8b8-93c11fa30628:
+  'main/shop/containers_info': '* Opening this box will give you a chance of receiving one common item, and an additional chance of getting a more rare item.\n\n* If you already own the item, you will receive a crystal compensation instead.'
+e2ba792e-6746-4289-9cb2-58cdf80de560:
+  'main/shop/crystalreason': 'Buy x-crystals to perfect your tank: exclusive skins, blueprints for new powerful modules and other opportunities'
+e59b24a8-9912-446b-9c48-8d58dbc30cde:
+  'main/shop/crystals': 'CRYSTALS'
+65f150a5-0f7d-46db-9bbd-39fdf0f70f2f:
+  'main/shop/deals': 'DEALS'
+127217b1-81f5-491c-b721-80c12db57674:
+  'main/shop/deals/noDealsText': "Now you don't have active deals. Don't forget to check tomorrow!"
+6f83d2bf-d9a6-47e4-ac45-b200329dfb04:
+  'main/shop/for_free': 'bonus'
+e0fc13e5-c8bc-4db9-bf20-0599d2f4e64b:
+  'main/shop/hurry_up': 'Limited time offer!'
+17663b9d-b07d-4bb5-b5f1-a469ab0a0c45:
+  'main/shop/legendary_tank_offer/Annihilation': 'Demolishing'
+97779dde-e00f-4f86-a5d3-463b5247f1e2:
+  'main/shop/legendary_tank_offer/Offensive': 'Offensive'
+644013d9-ac6d-4b3d-84a9-09c1402fa9aa:
+  'main/shop/legendary_tank_offer/Support': 'Support '
+1c198b35-086a-4c1a-af2c-09bc084a64f5:
+  'main/shop/legendary_tank_offer/battles_left': 'Battles left:'
+9c0dc353-c399-4d55-b337-2b6709b6d35d:
+  'main/shop/legendary_tank_offer/buy_window/description': 'Includes: <color=#FFFFFF4A> modules, preset in the garage, turret, hull, paint, and a skin</color>'
+31f3e235-43ea-4296-9f31-eb66d7421df5:
+  'main/shop/legendary_tank_offer/buy_window/discount': 'We have a discount only for you!'
+61eea4f6-65b2-48b8-8e71-74179b1c39e0:
+  'main/shop/legendary_tank_offer/buy_window/discount_explanation': 'You already have part of the items from this set in your garage '
+967ec52e-4fb3-4782-b331-73f0efe0f3c1:
+  'main/shop/legendary_tank_offer/buy_window/header': 'Did you like the preset? '
+4938340c-6f11-4003-bc1c-d3d8acd3940d:
+  'main/shop/legendary_tank_offer/buy_window/subheader': 'Full set '
+428ef61d-fdac-45be-a556-ea827a4d9a02:
+  'main/shop/legendary_tank_offer/discower_window/discover_button': 'Scout '
+94b915d2-041e-4d7a-a906-614e6b580c6d:
+  'main/shop/legendary_tank_offer/discower_window/header': 'The legendary base has been found'
+c2cf40db-7eb8-4307-85b0-5d673c7e0193:
+  'main/shop/legendary_tank_offer/discower_window/later_button': 'Later'
+8e75a18b-08b9-461b-9a9c-d5a7fdbaa1fe:
+  'main/shop/legendary_tank_offer/discower_window/main_text': 'The legendary base belonging to the "Horizon" squad has been found. The three were an invincible trinity, that was leaving behind only charred remains of the enemy. One day, they mysteriously disappeared. '
+5515bfc7-6872-47e6-82c3-cf121439e170:
+  'main/shop/legendary_tank_offer/tank_rent_window/annihilation_biography': "Back in the days, if you were developing military weaponry and equipment, and were looking for large orders, there was only one fighter that was able to showcase your product at 200% efficiency - Katarina aka «Death Machine». Thunder turret would've never gotten this popular, if not for her heroic deeds during the battle for Dusseldorf. "
+e7062168-1f8c-402f-bba9-14d7fdf1b125:
+  'main/shop/legendary_tank_offer/tank_rent_window/annihilation_name': 'Katarina «Death Machine»'
+5142a50f-380b-40f4-bdb0-1ff27849b931:
+  'main/shop/legendary_tank_offer/tank_rent_window/annihilation_short': 'Suppressing enemy units on mid and long range  '
+fedf2e76-2538-444c-b27a-256049fd287e:
+  'main/shop/legendary_tank_offer/tank_rent_window/header': 'You have discovered three tanks '
+fbb2e2de-367d-44ea-a585-7cffedd0d5c0:
+  'main/shop/legendary_tank_offer/tank_rent_window/hide_button': 'Hide'
+db4fdc95-8710-4460-ad63-1905be38582c:
+  'main/shop/legendary_tank_offer/tank_rent_window/offensive_biography': 'A natural born leader and a talented mechanic. Tusk had the ability to turn even the most undisciplined warriors into a glued squad, and a pile of random metallic parts into a powerful tank. This is actually how the prototype of the well-known heavy hull made its appearance on the battleground. It later became known as "Mammoth". '
+34833417-63b0-4a68-8e5b-4a9353c6f566:
+  'main/shop/legendary_tank_offer/tank_rent_window/offensive_name': 'Tusk'
+e49acde4-fa74-446a-bca8-ba800ee5266e:
+  'main/shop/legendary_tank_offer/tank_rent_window/offensive_short': 'Offensive moves and assaulting the enemy positions '
+4159a501-b274-403c-b6f8-2be7be55b258:
+  'main/shop/legendary_tank_offer/tank_rent_window/subheader': 'Choose one of them to test on the battlefield '
+ceb970c6-915f-4845-9958-5b6185b48081:
+  'main/shop/legendary_tank_offer/tank_rent_window/support_biography': "Ángel began his military career as an infantryman. It didn't take him too long to realize that saving soldiers is his call. He was always risking his life to save a soul, against any odds. When the X tanks were developed, with the help of his team he finished the construction of the Isida turret and continued pursuing his vocation, protecting the tanks of his comrades. "
+0cb40bf1-bf75-4fae-a020-2973ea003eb4:
+  'main/shop/legendary_tank_offer/tank_rent_window/support_name': 'Field Medic Ángel'
+1751011d-ed25-4955-90f1-7ef80ac1ee47:
+  'main/shop/legendary_tank_offer/tank_rent_window/support_short': 'Healing and aiding ally tanks '
+3f3de15e-a769-45fb-9062-0b4d7a84a696:
+  'main/shop/legendary_tank_offer/tank_rent_window/try_button': 'test'
+f2934ff4-64c5-45ed-971c-d10adf3068dc:
+  'main/shop/mobile/about': 'Mobile payment invoice issued. Instructions on how to proceed with the payment have been sent via SMS.'
+88727532-9bb7-4829-b362-d5be4898d806:
+  'main/shop/mobile/crystals_amount': 'Amount of Crystals:'
+f081c710-7106-45d0-92b3-3719c55f246b:
+  'main/shop/mobile/hint': 'THE PURCHASE WILL BE ADDED TO YOUR ACCOUNT A FEW MINUTES AFTER YOU REPLY TO THE MESSAGE'
+0e273c37-168f-4266-bc36-26e43f1adc66:
+  'main/shop/mobile/method_label': 'Payment method:'
+3e0ffcd6-2787-4081-8514-18b0f4cd146a:
+  'main/shop/mobile/mobile_payment': 'Mobile payment'
+58a738b1-d920-4ea6-a10a-051441e5b192:
+  'main/shop/mobile/payment_amount': 'Payment amount:'
+f22148b8-988f-4ad3-878b-1650f1f378e9:
+  'main/shop/mobile/phone': 'Phone:'
+6b4a88ae-bafa-4b91-8fe9-b71e665217f6:
+  'main/shop/mobile/success': 'Payment invoice has been issued'
+6b9c797d-b15d-4288-8988-b99eb7ea0079:
+  'main/shop/mobile/transaction': 'Transaction:'
+f8e8c1de-c9de-4d51-8eb1-7f775d600f2f:
+  'main/shop/openCards': 'Open all'
+a0137ed3-14fc-491d-ab01-1e971271f855:
+  'main/shop/open_all': 'Open all'
+d8c3b472-8217-4f59-a8bc-2e1dd845ab74:
+  'main/shop/open_container': 'Open'
+c7caa1ac-a9a4-47dc-9b46-9fbf0c8b9b6d:
+  'main/shop/payment_error': 'Failed to process payment'
+d61f81a8-8fc5-4b20-a037-97b6a582c415:
+  'main/shop/phone_number': 'Phone number'
+0b6cd616-0c40-4af2-a847-669671d6b55d:
+  'main/shop/preview_rewards': 'PREVIEW REWARDS'
+c41b23d2-10f8-4c84-9831-357fa0ff98f7:
+  'main/shop/process_payment': 'The payment is being processed'
+c4119b8d-8929-45cf-b884-62e1a1525022:
+  'main/shop/qiwi/enter_account': 'Enter your QIWI Wallet number'
+be1ddbc3-7bb3-4f05-a558-72237393d3fe:
+  'main/shop/qiwi/error': 'Wrong phone number'
+763484c6-ac11-4e41-a4cd-472ab4517932:
+  'main/shop/show': 'SHOW'
+f9cebd2a-519a-4fb6-8223-38d45f992c4c:
+  'main/shop/specialOfferEmptyRewardMessage': 'You already own every hull and turret.'
+2c97759e-6760-48b5-805a-b3d2834240f6:
+  'main/shop/specialOfferOneShotMessage': 'Payment systems support in the game is discontinued due to the termination of the project. Details on www.tankix.com.'
+4b9c742a-cc69-4941-804f-970d64825d3d:
+  'main/shop/synthesis': 'SYNTHESIS'
+c44b7c40-6484-446e-98c2-61e5fa93cb0e:
+  'main/shop/synthesize': 'SYNTHESIZE'
+56c3445d-2d75-4f86-8531-81b138fb97ba:
+  'main/shop/warning': "You're about to buy X-crystals with the first purchase discount. Please be aware, that this is a one-time offer. If you've already purchased X-crystals with the first purchase discount, you can not benefit from this discount again, hence, you will receive {0}."
+c652af52-8bf9-45fe-91cc-7ed245aa06a6:
+  'main/shop/xcrystals': 'X-CRYSTALS'
+1e8a73ff-fd54-44d4-9c23-63420b1cfef5:
+  'main/starterpack/buy': 'BUY FOR'
+35fb8061-fcc2-4150-a7ee-a8935e5ab4b8:
+  'main/starterpack/gift_icon_text': 'Free gift'
+cbb654c2-4a6c-4a00-a920-2597c59c79e5:
+  'main/starterpack/sale': 'sale'
+f99eb05d-a0d0-4ae5-bd24-6a5be37e9761:
+  'main/starterpack/xcrystals_hint': 'This amount of crystals is enough to unlock any turret for your taste'
+ba1a1c3d-fe6e-4fab-b959-b02ee423e421:
+  'main/steamlogin': 'LOGIN WITH STEAM'
+37ad067f-fa28-4422-8096-d1cbf39fd2ca:
+  'multikill/doublekill': 'DOUBLE KILL'
+2cda0b94-aa86-4496-9ffb-3937354bd8a7:
+  'multikill/godlike': 'GODLIKE'
+86687c83-5e2c-476a-85bf-1f3b32f98c00:
+  'multikill/gold': 'GOLD BOX'
+b0a8dc3d-25ca-428e-bf96-02954dd7ae42:
+  'multikill/gold/sender': '{0} dropped'
+058f6557-a700-48ed-8287-c57ac16c4f2f:
+  'multikill/monster': 'MONSTER TANK'
+e69518df-d72e-472e-9942-598eeb4faf1c:
+  'multikill/rampage': 'RAMPAGE'
+18124b6f-f047-4ec5-8b38-97205dd23f84:
+  'multikill/streak': 'KILL STREAK'
+5b7bb7f4-3cd5-4b68-a2f0-6d983b048df6:
+  'multikill/streaktermination': 'STREAK TERMINATION'
+5dd6b568-2975-48bd-b8d6-77821b68f0d3:
+  'multikill/streakterminfo': "Terminated {0}'s kill streak"
+275abb7b-1d49-4bf1-972f-68c97917bdfa:
+  'multikill/streaktext': '{0} tank kill streak'
+ac17d4ff-d815-47de-8688-a07c211ad182:
+  'multikill/tankgrinder': 'TANK GRINDER'
+9b1cf1b2-5a0f-4c7b-8da2-7d8ae4f864ff:
+  'multikill/tripple': 'TRIPLE KILL'
+40b274b6-291d-45b9-b46a-79828d588f3a:
+  'multikill/turretcrasher': 'TURRET CRASHER'
+0a092300-7fb6-41ab-bd0b-a18251d5d29b:
+  'multikill/ultra': 'ULTRA KILL'
+d5859bfd-3f9b-49ee-b2d7-b24106361afd:
+  'multikill/unstoppable': 'UNSTOPPABLE'
+4ad82aac-5d4c-49b8-ac01-82e86e0cb86e:
+  'multikill/violence': 'PREDATOR'
+f558e226-fb6b-408a-bd14-2093d950b33f:
+  'no': 'No'
+81bae7a3-0f27-40aa-b1a3-c44349fd56dc:
+  'notifications/newItemHeader': 'New Item!'
+c21fdd88-768e-466b-959f-6a9c4d278b60:
+  'ok': 'OK'
+58f6c2c6-6410-43ec-97be-710bce6fd9f3:
+  'page': 'Page'
+f713a999-9c27-4080-954b-e70540eea381:
+  'payment/payguru/bankinfo': '{0}\nBranch and account No: {1} - {2}\nIBAN: {3}'
+a9ae9672-696d-43a6-b1d8-823942773672:
+  'payment/payguru/orderid': 'Your order id is: {0}'
+a66f46c8-6f55-4db9-90be-494df6dd50f1:
+  'premium/activated/days': 'premium {0} {1}'
+9bd10686-1f6a-49db-984e-ae9fb0b777e6:
+  'premium/activated/promo/text': "{0}, great news! Take a trial premium account as a free gift and feel all it's advantages on yourself!"
+5eff748c-4337-4fa9-aef5-1a98477be470:
+  'premium/activated/promo/title': 'Free Gift'
+9b838cc1-a5e3-4d65-9b4b-4a995675021d:
+  'premium/activated/title': 'premium account is activated!'
+e8143a72-b87a-4b50-af36-7298f9ee106c:
+  'premium/days': 'DAYS'
+75abbc10-3d10-4056-b60d-8704792c0cce:
+  'premium/extend': 'Extend'
+71810dd8-bd17-419a-a054-d02aa5f15516:
+  'premium/info/bonusexp': 'Bonus to the rank, turret and hull experience gain and the daily chest score'
+3a6181f5-40a5-43ea-92a7-5e5725641156:
+  'premium/info/cry': 'Additional daily crystals'
+cf49ce54-02b7-41d4-a2f1-8a190d20ae3c:
+  'premium/info/dailytask': 'Ability to change one more task each day'
+c3c13dfc-76ba-47b8-bc44-94527797b6e6:
+  'premium/info/reason': 'Purchase a premium account to receive considerable advantage in experience gain as well as other benefits.'
+611a691b-d0fc-4039-af04-bc7fec8b47cb:
+  'premium/info/teleports': 'Additional daily teleports'
+93d36bc8-3096-4d0e-83b8-f230af684bbf:
+  'premium/info/toshop': 'Shop'
+a2efac3e-3320-4c5a-95f0-59b41d5ca12b:
+  'premium/info/xcry': 'X-Crystals for daily premium tasks completion'
+42a578d6-bf25-4427-9fe6-b1ceac3ae2bd:
+  'premium/learnmore': 'Learn more'
+b527cea4-df64-4133-bcc3-b6cb3c46d06d:
+  'premium/over/discountreason': 'Only today you can extend the premium subscription with a 20% discount.'
+afae7b44-6e97-4899-878d-f2240763a276:
+  'premium/over/likedornot': 'The premium account subscription is over. \nDid you like the advantages of the premium account?'
+0514bfc9-9b79-4e45-8a68-ced93a223681:
+  'premium/over/title': 'Premium subscription is over'
+d8c9bcd8-9e6a-48bc-bc38-4471900652ad:
+  'premium/prembutton': 'Premium'
+deddbd66-5fb7-4d79-ac75-d6f6ee8c5681:
+  'premium/premium': 'Premium Account'
+f3708dd4-4b93-4513-9c48-9452ded46a16:
+  'premium/toolbar/active': 'Active'
+e402239f-d329-4a26-af84-81290e38db36:
+  'premium/toolbar/cry': 'Free battle codes and swap 2 quests per day'
+c44baf02-6089-4986-9c5c-2e45284b49a6:
+  'premium/toolbar/dailytask': 'Daily premium task with x-crystal reward'
+c1cc6a0c-292d-4899-960d-885a1abb5241:
+  'premium/toolbar/days': 'ACTIVE <color=#707070FF>({0} D.)</color>'
+f145c4c5-aa41-41c4-b791-8401ccce9dbc:
+  'premium/toolbar/expcharges': 'Stormtrooper is a d*ck'
+3bb3e9a9-3753-4edc-8f8b-3493ad459c9b:
+  'premium/toolbar/expchest': 'Bonus to chest and rank points'
+7fdd50ed-909f-4c44-baad-41a21241d5e7:
+  'premium/toolbar/exphull': 'Bonus crystals per day'
+50c4ecea-2cea-45f1-8fbd-2be8b1eb75bb:
+  'premium/toolbar/exprank': 'Teleport recharge rate'
+e9a744d2-ee45-4d3b-8c02-3c935e03453a:
+  'premium/toolbar/exptaskchange': 'Special avatar frame and graffiti animations in battles'
+e0e30430-3bd0-4ee7-a4b7-f61f5eab479c:
+  'premium/toolbar/expturret': 'Bonus to turret/hull experience'
+86bda032-5965-43a5-b952-d13acf8c6783:
+  'premium/toolbar/hours': 'ACTIVE <color=#707070FF>({0} H.)</color>'
+138bb110-1e37-41b0-b94d-d072232b08e2:
+  'premium/xcrystals': '+ X-Crystals'
+6c31d6e1-d151-4a2b-ba55-6967a5ff08bc:
+  'privacy_policy_file_name': 'pp_en'
+53ef5dfe-3527-4ac4-b1b3-a788b704bef7:
+  'promo/exclusive': 'Exclusive'
+de71d463-ff16-46fa-984e-b570acf830e1:
+  'promo/foolsday': 'Spring holidays'
+0da57209-b363-4d4b-8a29-a8e8865a2e64:
+  'promo/halloween': 'halloween paint'
+ae776b9b-e85b-4444-b609-3233f8a2cf72:
+  'promo/may2018': 'Upon buying X-crystals in our in-game store,\nyou will get the new paint as a gift!'
+e0be04ce-e5b4-45f8-96a4-b96393292089:
+  'promo/newyear2018': 'SPECTRE PAINT'
+ea7c4d64-9c7c-4b5f-b228-890b77d9fd30:
+  'quests/battle/completed': 'Completed!'
+aeb9475d-268d-4d8a-b45b-0151aab3b83b:
+  'quests/battle/progress': 'Progress:'
+f96e9be0-3bff-496d-a2df-a2e5ddb3a7e1:
+  'quests/skip': 'Replace'
+306980f5-3843-4a14-8810-d861713f058c:
+  'quests/skipConfirmQuestion': 'Are you sure you want to replace this quest?'
+e25d7a1e-297f-4fdd-9c56-01f4897a00e2:
+  'rarity/common': 'Common Item'
+2351208f-3bbb-4687-b691-9193753c0c49:
+  'rarity/epic': 'Epic Item'
+dcc0dc37-3e53-4aa2-a5e5-f924ea49af43:
+  'rarity/legendary': 'Legendary Item'
+26ee4ca9-7ffe-4329-90ed-2ba17bb26e24:
+  'rarity/rare': 'Rare Item'
+884ad0e6-3905-4584-a1ad-ae71c1b555f5:
+  'release/body': "Between the 13th and the 18th of March, we will be celebrating a new milestone in the development of Tanki X, with a set of gifts. Visit the game daily so you don't miss on any X-crystals. Get ready, for an awesome celebration!"
+39fc1319-718b-498d-baa5-36f68a031de5:
+  'release/title': 'A set of gifts to celebrate the release of the game'
+884480f9-d236-4d6e-ad22-dc4e6b7f8275:
+  'resultScreen/specialOffer/claimReward': 'CLAIM REWARD'
+3ddf28fe-78ad-4f9c-bf4c-a98429ffee6c:
+  'resultScreen/specialOffer/useDiscount': 'USE DISCOUNT'
+e29edf79-6edd-46c3-aeff-ea5e39ab5e9c:
+  'resultScreen/specialOffer/worthIt': '{0}% EXTRA VALUE'
+b4eafa32-5752-4cd8-b1ae-c9aa9a702bac:
+  'shop/steam_offline': 'Steam is offline'
+9246e784-3d42-49fb-8e1c-f7cc1ad3f28d:
+  'soon': 'Comming soon'
+f9e8b83d-5143-4a12-91d4-6389b94a49e9:
+  'squad/alreadyInSquad': 'In squad'
+acd284c6-0053-4943-b82b-f1070d524143:
+  'squad/cantSelectModeDialogHeader': 'Only party leader can start battle searching'
+bcf990ae-47b3-454e-8331-739cb22b212f:
+  'squad/cantSelectModeDialogHeader1': 'Only party leader can create custom battle'
+6e8a3025-4dc0-4018-8624-9a6226566133:
+  'squad/contextMenu/addFriend': 'Add to friend list'
+f790416d-8146-4fec-bb63-7e506f4ad29f:
+  'squad/contextMenu/giveLeader': 'Promote to leader'
+c74b792f-5aaf-48cc-a114-b9421690fe6b:
+  'squad/contextMenu/leaveSquad': 'Leave squad'
+30053930-5483-4415-af8e-eaf3bff6337a:
+  'squad/contextMenu/profile': 'Profile'
+76989289-db74-4a37-b53a-7dd51422fd78:
+  'squad/contextMenu/removeFromSquad': 'Remove from squad'
+5cf718f9-1b21-4740-bfab-42d1b1d015b3:
+  'squad/createSquad': 'Create squad'
+25b48737-3af3-4c17-90a9-e8b689398fec:
+  'squad/inSquad': ', in squad'
+e6dc6fe6-cf57-4b63-a464-0fcb6461180b:
+  'squad/notAvailableForSquadMode': 'Training battles are unavailable for squads.'
+b8f4ba4e-21da-4292-8e5d-9befb18f45fe:
+  'squad/shareEnergyScreen/allPlayersAreReady': 'All players are ready'
+7695f733-c3cf-4c1b-b499-0859caed1f18:
+  'squad/shareEnergyScreen/buyEnergyButton': 'Buy {0}'
+ac237550-4294-4b5d-b9b7-22c5b434dee4:
+  'squad/shareEnergyScreen/buyEnergyDialogBuyButton': 'Buy\n{0}<sprite=9>'
+fbdef4fa-6189-4b11-a2d2-ad5ae192df41:
+  'squad/shareEnergyScreen/buyEnergyDialogMessage': 'Are you sure you want to buy {0}?'
+68d73260-a21c-4c3b-b79f-29e673dab9d4:
+  'squad/shareEnergyScreen/cancelBattle': 'Cancel'
+83a80902-8a28-4a8b-bff2-ee2f6192490e:
+  'squad/shareEnergyScreen/from': 'from'
+28cba429-9013-436b-b26a-1cc7bdb7c34e:
+  'squad/shareEnergyScreen/header': 'Not enough teleports'
+841e2061-050e-47e2-8769-cb94edcaf95b:
+  'squad/shareEnergyScreen/hideDialog': 'Hide'
+c314c452-2da1-48eb-a17f-ba34d8ab32df:
+  'squad/shareEnergyScreen/message': 'Share charges with your squadmates\nto start a ranking play together'
+13a09aea-2f3d-49dc-a489-ee197f283dc5:
+  'squad/shareEnergyScreen/playersAreReady': '{0}/{1} players are ready'
+619e5c99-e7dc-4627-861c-39e3a7358bee:
+  'squad/shareEnergyScreen/shareEnergyButton': 'Share {0}'
+d34d434a-0bd7-42e0-981f-41720f7fdc1d:
+  'squad/shareEnergyScreen/yourCharges': 'Your teleport charges'
+6dbc08a5-c442-4fe4-9ee4-a22c66deec2c:
+  'test': 'test'
+f6e9d0f4-a4c9-48c3-abcd-3042ac7b2d3b:
+  'tomorow/end': 'in order to receive one of the two following rewards:'
+efe9ceb9-d7b5-4715-ba1d-c78960e18e8e:
+  'tomorow/ready': "Your teleport is charged! Don't forget to retrieve your reward!"
+e192a6dd-b55d-4ec2-b6a9-e8779b5cdeed:
+  'tomorow/return': 'COME BACK TOMORROW'
+40a1e06d-2107-47b3-a6fc-612875122914:
+  'tomorow/start': 'Make sure not to miss the next item teleportation in'
+36225099-1597-403d-9e87-84acedf07b31:
+  'tooltips/custombattlesscreen/custombattles': 'Create custom battle, and play with friends'
+30d8e466-7b60-4f59-923d-418db965f45e:
+  'tooltips/deserterIcon': "Repeatedly leaving a game gives you deserter status.  Complete {0} {1} without leaving to remove this status (custom games aren't taken into account)."
+a56eb1ae-1cfb-4773-985a-ef39a46ae70e:
+  'tooltips/deserterIconHeader': 'Deserter'
+6ecd7985-3a1c-4607-8176-2ae56a21411d:
+  'tooltips/garageScreen/EffectiveLevel': 'Effective level.\nTurret and hull mastery are equalize for optimal matchmaking.'
+04e3f464-cad1-4ca0-95e9-760c92f1b883:
+  'tooltips/garageScreen/hullCharacteristics': 'Hull Modules'
+a7ae8582-2145-4727-8e48-81f034f2a3a1:
+  'tooltips/garageScreen/lockModuleHull': 'Available at Hull Level {0}'
+d80a2e29-ed59-46c1-af77-45ccbb9dbbc1:
+  'tooltips/garageScreen/lockModuleTitle': 'Module Slot unavailable'
+2460dcec-4504-4170-a56e-e6896d5e3bdf:
+  'tooltips/garageScreen/lockModuleTurret': 'Available at Turret Level {0}'
+f209a119-248d-4e12-89ab-e9ebce595974:
+  'tooltips/garageScreen/mastery': 'Level'
+8761d2cc-9f6f-478d-ad7e-b10e287bd40b:
+  'tooltips/garageScreen/modulesButton': 'Customize modules of your hull'
+58e39b33-0dd2-493c-a5cb-99ab90edb2ed:
+  'tooltips/garageScreen/presetNameIcon': 'Change preset name'
+3e3dd2e2-b1f2-47d7-85ce-04fc1b60d907:
+  'tooltips/garageScreen/turretCharacteristics': 'Turret Modules'
+1ee20e57-6703-405b-8141-d7c6a1dabde6:
+  'tooltips/garageScreen/visualButton': 'Change the visual appearance of your tank'
+d4c5df91-c9cc-4462-937f-5d8092f91836:
+  'tooltips/mainScreen/backButton': 'Go to the previous screen'
+f1299b28-bd44-46a6-bfb8-386cd28ea57b:
+  'tooltips/mainScreen/blueCrystal': 'Exchange X-crystals for blue crystals'
+d42f2733-3e37-4a30-a767-48d80927c365:
+  'tooltips/mainScreen/chestProgress': '<b>Container with modules blueprints</b>\nCompete in rating battles to get 1 container per each {0} battle score, which you earn for activity in battle: kills, healing and flags delivery.'
+88c65d7a-3293-4251-9819-0648bca4cb13:
+  'tooltips/mainScreen/chestProgressOptional': '\nAdvance on the leagues to get containers of better quality!'
+17d10b16-a1d8-4086-8193-1a3e8e09e297:
+  'tooltips/mainScreen/exitButton': 'Exit'
+d580e21d-a2b6-489f-a38e-3f292a062e7b:
+  'tooltips/mainScreen/forumButton': 'Become part of our community and help developers with feedback and suggestions'
+2163a3ed-1f51-40fb-8672-271bda54091a:
+  'tooltips/mainScreen/friendsButton': 'Friends List'
+9101c053-627b-4889-bda0-cfc5a76a902c:
+  'tooltips/mainScreen/garageButton': 'Unlock new weapons, level up modules and upgrade your tank for better performance'
+8324e26c-9cd3-44d7-889c-4377f2d086b5:
+  'tooltips/mainScreen/playButtonToSelectModes': 'Compete with other players in battles'
+ab220c8c-8eaf-4cdc-87fe-e2d1e551994c:
+  'tooltips/mainScreen/profileButton': 'View your game stats, enter the promo-codes or log-out'
+d09ed6ec-167b-4577-ae81-53f04eed585e:
+  'tooltips/mainScreen/questButton': 'Complete daily quests to earn crystals and containers'
+82d1e84a-1720-4697-8542-86d679e4eea7:
+  'tooltips/mainScreen/redCrystal': 'Buy X-crystals'
+3a47ae55-1d8d-47b2-a30c-bc77f5cab534:
+  'tooltips/mainScreen/seasonReward': 'Rewards are given out after the season has ended and they are different, depending on your league. Additionally, everyone’s reputation points partially reduced at the end of every season.'
+dd27cf21-515b-4419-a155-a9be192ace55:
+  'tooltips/mainScreen/settingsButton': 'Settings'
+6d285487-23b1-4770-9441-3f4929755332:
+  'tooltips/mainScreen/shopButton': "Don't miss special offers!"
+5006410b-5de8-494f-83a7-19ddc657bbc4:
+  'tooltips/mmLevel': 'The matchmaking system will find battles according to your hull Effective Level'
+3e3d2afb-28e0-41c7-a6dc-b9c8ec8ac870:
+  'tooltips/settings/disableNotifications': 'Attention! Turning this off will disable:\n - the Multi-Kill notifications;\n - the Gold Box drop notifications;\n - the team domination notification.\nWhen disabled, these notifications will only appear in the top right corner of the screen.'
+7ddb404d-3498-45d3-9644-f9b0b7148365:
+  'tutorial/characterName': 'Mary Newell'
+5a72ee9c-2d05-4907-9cd5-c40da17fb1b2:
+  'tutorial/chestDialogDesc': 'Click here to receive the reward.'
+aa86f012-1399-410d-a18e-4a00b7df956a:
+  'tutorial/chestDialogHeader': 'Congratulations!'
+ca6e4a11-5140-490e-a7b3-c9283bf425fb:
+  'tutorial/chestDialogName': 'Bronze league chest'
+8bedf847-402f-46d6-8de4-ce7458f97185:
+  'tutorial/clickToContinue': 'сlick to continue'
+7e62d1a9-3ddf-43f7-91d5-36b07cd9d6b4:
+  'tutorial/firstBattleEnd/claimReward': 'Claim reward'
+e016f79c-8e4c-40b0-bf13-ec484dd8715f:
+  'tutorial/firstBattleEnd/marinePaint': '"Marine" paint'
+3350de9d-8306-4d73-9ce1-8b44a9c6199e:
+  'tutorial/introDialog/confirmText': 'Are you sure you can manage it all out by yourself?'
+550e888d-eb71-4eb0-a925-59280c531c5b:
+  'tutorial/introDialog/introText': 'Greetings, tank operator "X". I am here to guide you through the basics of the game and help you understand how to control your machine. Do you require my assistance?'
+2208f44a-dc88-4155-b1ec-610ea97b65ff:
+  'tutorial/introDialog/introTextWithoutQuestion': 'Greetings, tank operator "X". I am here to guide you through the basics of the game and help you understand how to control your machine.'
+9b88e33a-9189-4a5c-9801-f0b7f0b91206:
+  'tutorial/introDialog/sarcasmButton': 'Sarcasm'
+7089b3e3-3d8b-4647-988e-7bf028fe5ea3:
+  'tutorial/introDialog/sarcasmText': "No, I'm afraid there is nowhere to store your personal things in the garage. But, let's go through the training and I'll tell you what can and what cannot be stored in the garage."
+18eb4ac2-19a4-48d4-804d-c47599f43e66:
+  'tutorial/introDialog/skip': 'Skip\ntutorial'
+369f9be6-fc81-445f-9f1c-12452af892a6:
+  'tutorial/introDialog/start': 'Start\ntutorial'
+dd02b666-321b-462d-8922-484e90edec3b:
+  'tutorial/introDialog/tipText': 'Tip: You will get various rewards during this training. Rewards that will not be compensated if you skip it.'
+3f7a68e4-b94e-445c-94ae-56dcc9a4de6a:
+  'tutorial/skipTutorial': 'Skip tutorial'
+ca5f7c36-b900-410f-a021-78ae64149f31:
+  'upgrade': 'UPGRADE'
+a76cdc5b-914c-4509-963a-a818287b540e:
+  'upgrades': 'UPGRADES'
+07a45420-e1f1-4023-a25a-226a0ebb16bd:
+  'userInteractions/add_to_friends_list ': 'Add to Friends list '
+ceed2404-9c55-437d-941f-6d09a6caf1da:
+  'userInteractions/add_to_friends_list_responce': 'Request was send!'
+f0b2458a-c03e-4c1b-86c4-81372d78f7ea:
+  'userInteractions/block_responce': 'Player blocked'
+d8be7f0c-87ab-4a34-97e7-9cfa98918b4e:
+  'userInteractions/mute': 'Block'
+633fee84-3637-463d-acc2-93e3a6d9c8ee:
+  'userInteractions/report': 'Report'
+31cc279d-6925-4b26-a0bb-bbf46db697f1:
+  'userInteractions/report_responce': 'Report was send!'
+c1b8fe5d-e9f3-4853-ad7e-529a2923fc76:
+  'userInteractions/request_was_send': 'Request send'
+0966d5f4-4a74-4eb7-bcd1-cdd3dc191922:
+  'userInteractions/unblock_responce': 'Player unblocked '
+095ab8d5-81bd-47ea-bf2f-867e9702c1a1:
+  'userInteractions/unmute': 'Unblock'
+bb586049-5156-4568-8e00-e20f295d5f9b:
+  'userState/inBattle': 'In battle'
+3df9e57b-918c-4aec-8302-6b0ca2e02763:
+  'userState/offline': 'Offline'
+aca755a6-f2c3-494b-a12a-a982981aad21:
+  'userState/online': 'Online'
+e07c43ba-1c6c-4984-a5a7-180a7f05bb35:
+  'warmingUp/notification/letsRoll': "let's roll"
+7c271899-f17a-4273-bcf2-e86a20031194:
+  'warmingUp/notification/matchBeginsIn': 'match begins in'
+f4e662b2-9044-4f26-b772-281b19c74dff:
+  'warmingUp/notification/prepare': 'Prepare to Fight'
+3e720f2c-248c-4d50-9731-143ab6aeb9e7:
+  'warmingUp/timer': 'match begins in'
+ff3ca9b8-b895-42d3-b46b-299761612990:
+  'yes': 'Yes'

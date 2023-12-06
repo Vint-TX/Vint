@@ -1,0 +1,8 @@
+configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/cartridgeamount/default
+    - clientlocal/graphics/settings/cartridgeamount/minimum
+    - clientlocal/graphics/settings/cartridgeamount/medium
+    - clientlocal/graphics/settings/cartridgeamount/maximum
+    - clientlocal/graphics/settings/cartridgeamount/ultra
+    - clientlocal/graphics/settings/cartridgeamount/superultra

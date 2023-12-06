@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636354483701179398
+  path: garage/module/upgrade/properties/backhitdefence
+itemIcon:
+  spriteUid: 8ea36073-7532-4a1a-adee-d40184a954c1
+itemBigIcon:
+  spriteUid: 472d7bac-805b-476c-b29a-674d779bc73e
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 636335612872999792
+      config: battle/effect/backhitdefence  

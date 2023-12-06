@@ -1,0 +1,92 @@
+xcrystalsPack:
+  amount: 0
+  bonus: 0
+crystalsPack:
+  amount: 0
+  bonus: 0
+countableItemsPack:
+  pack:
+    -1308563288: 2 # hacker's cards
+    947348559: 1250 # crystals
+    1317350822: 125 # x-crystals
+specialOfferScreen:
+  show: false
+itemsPackFromConfig:
+  pack:
+itemUpgradePackFromConfig:
+  pack:
+goodsPrice:
+  price: 0
+  currency: ""
+steamGoodsPrice:
+  priceRatio: 100
+  round: 1
+  default: false
+  active: true
+  steamOnly: false
+offerConditions:
+  finishedOffer:
+  startDate:
+  battlesCountMin: 1 # 0 == not after battle
+offerDuration: #sec
+  duration: 259200 # 3 days
+  oneShot: true
+packId:
+  id: 219476058
+leagueFirstEntranceSpecialOffer:
+  leagueId: -101377070
+  worthItPercent: 200
+order:
+  index: -5
+specialOfferContent:
+  salePercent: 40
+  highlightTitle: false
+  showItemsList: true
+goodsDescription:
+  description: "Special offer «New League»"
+specialOfferLocalizedName:
+  name:
+    "en": "Special offer «New League»"
+    "ru": "Спецпредложение «Новая лига»"
+    "tr": "Спецпредложение «Новая лига»"
+goodsPrices:
+  prices:
+    "AED": 6.99
+    "ARS": 29.99
+    "AUD": 1.99
+    "BRL": 4.99
+    "CAD": 1.99
+    "CHF": 1.99
+    "CLP": 1200
+    "CNY": 10
+    "COP": 5000
+    "CRC": 999
+    "EUR": 1.99
+    "GBP": 1.99
+    "HKD": 16
+    "IDR": 20000
+    "ILS": 6.99
+    "INR": 115
+    "JPY": 199
+    "KRW": 2000
+    "KWD": 0.59
+    "KZT": 599
+    "MXN": 29
+    "MYR": 5.99
+    "NOK": 13.99
+    "NZD": 1.99
+    "PEN": 5.99
+    "PHP": 75
+    "PLN": 6.99
+    "QAR": 6.99
+    "RUB": 99
+    "SAR": 7.99
+    "SGD": 2.5
+    "THB": 59
+    "TRY": 7.99
+    "TWD": 59.99
+    "UAH": 39
+    "USD": 1.99
+    "UYU": 49
+    "VND": 45000
+    "ZAR": 24

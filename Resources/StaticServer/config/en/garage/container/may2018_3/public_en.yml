@@ -1,0 +1,15 @@
+---
+descriptionItem:
+  name: May III
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    steelIsis: Isida "Steel"
+    steelWasp: Wasp "Steel"
+    partizantankpaint: Partizan (Paint)
+    partizanweaponpaint: Partizan (Coating)
+    mayHornet: Hornet "Victory Day"
+    mayRailgun: Railgun  "Victory Day"

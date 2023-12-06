@@ -1,0 +1,8 @@
+order:
+  index: -6
+specialOfferContent:
+  salePercent: 0
+  highlightTitle: true
+  showItemsList: false
+starterPackVisualConfig:
+  buttonSpriteUid: b08bb25e-00f7-4e9c-b315-31f1d1ffcd7b

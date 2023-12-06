@@ -1,0 +1,9 @@
+matchMakingModeRestrictions:
+  minimalRank: 6
+  minimalShowRank: 6
+imageItem:
+  spriteUid: eb2e5484-c562-4e71-b62b-c6b8ae34af1e
+order:
+  index: 5
+matchMakingModeActivation:
+  active: false

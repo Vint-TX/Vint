@@ -1,0 +1,18 @@
+descriptionItem:
+  name: "Congratulations!"
+  description: "Your skill grows!"
+levelUpUnlock:
+  activeSlotSpriteUid: 7f1d5c21-8797-4cba-9647-5092dfc2ef17
+  passiveSlotSpriteUid: dfe01400-89e5-4530-a75c-ae73872cc521
+  activeSlotWeaponText: |
+    Active slot
+    for turret's module
+  activeSlotHullText: |
+    Active slot
+    for hull's module
+  passiveSlotWeaponText: |
+    Passive slot
+    for turret's module
+  passiveSlotHullText: |
+    Passive slot
+    for hull's module

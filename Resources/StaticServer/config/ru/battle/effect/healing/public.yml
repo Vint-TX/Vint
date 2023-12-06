@@ -1,0 +1,8 @@
+healing:
+  hpPerMs: 0.633
+duration:
+  duration: 3000
+tick:
+  period: 250
+effectIcon:
+  spriteUid: e847e71e-95a8-47e2-91d8-e19474d32d3f

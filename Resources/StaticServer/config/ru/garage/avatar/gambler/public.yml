@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 75d62470-1047-465b-9bfd-df1745f1964d
+imageItem:
+  spriteUid: 75d62470-1047-465b-9bfd-df1745f1964d
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: EPIC

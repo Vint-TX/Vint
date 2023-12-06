@@ -1,0 +1,196 @@
+configPathCollection:
+  collection:
+    - b7cc9b1d4e70d13469da6e1e7edef47a #skin60
+    # bots items
+    - 5cb7ec045e98cbe4eb6e362a50f41d92 #twins
+    - d949c1f274a64a14895eaf5d014efb5b #pink
+    - 9a55f50b29f309c4fbb678abd0c7f37d #hornet
+    - df094c92f4293b04691015607700f6de #black matte paint
+    - dd2853e28d4c36d4aa4dd178bbacbb76 #titan
+    - 75366061c7bf4a843acd0910e0c9adb5 #tina paint
+    - e1440445a06496a4d8af2f530a0a407a #wasp
+    - 264c02b8e26e1ba4f91b6a799f747c1d #viking
+    - d7ea7c13ecbf3ba46a8d673011671cb5 #thunder
+    - 5804a3be41159234f9d5b610ea21b35e #metel paint
+    - 070964ba42be0e94e9de8f321defaaa6 #repin
+    # first maps
+    #  - 491914e5505b9e84aa549211c17bfae3 # area159
+    #  - c871a8243f12171469e118a5aef34416 # sandbox
+    #  - eac2221d96334b84ab3d7cf5398f0ff6 # rio
+    #  - 0d2d3e1c0fb75464d8a325c4bf30da60 # iran
+    # assets for tank rent
+    - 3ae18b22fe118b84b8790a96b13358dc # matte yellow paint
+    - 55ba29b9c70d08e488b209113ed71888 # polar paint
+    - 1faf2764622696b4b8dc67aec51fb274 # rivets paint
+    - 4af90dfbc1493ce4e81ea4176ade2af9 # isis gold
+    - 41ea3cbb195fb0e41b9459a16e99bbca # twins steam
+    - a13337d3c532f2f4693c16d58a4aa04a # thunder xt
+    - 81041224a9c60444bb589e865ecbb92f # gold wasp
+    - 2028a003334358743a63f3a5448f4f5a # mammoth steam
+    - fa5510c224c5bad49b938ae375ae25d8 # viking xt
+    # load map preview
+    - 145b6265ec44d814180505db604f9ad8 # area159
+    - 5a8d8f59d09106e4b8077eea1a223592 # iran
+    - 3c7b00304df492346a0c54cf1a289130 # kungur
+    - c49361c8ea7621d4b8382063de876780 # massacre
+    - 2073ea92e0810ef47a7c909d6e9290c3 # massacreMars
+    - 374f0065ee56e77489b2e9e696f1465e # repin
+    - d5f7d3814ac41e64b9d019cf24d8242d # rio
+    - 6569a16fd21518243a7ca433596d6bea # sandbox
+    - e3bea30cd4a21a640bfe5b6a4e61bedc # silence
+    - 737b3eeaaf89cad4cb6ac296c3eed12c # silenceMoon
+    - fa403493d6da8f149b16b7b06e1aca5a # westprime
+  collection1:
+    - b7cc9b1d4e70d13469da6e1e7edef47a #skin60
+    # bots items
+    - 5cb7ec045e98cbe4eb6e362a50f41d92 #twins
+    - d949c1f274a64a14895eaf5d014efb5b #pink
+    - 9a55f50b29f309c4fbb678abd0c7f37d #hornet
+    - df094c92f4293b04691015607700f6de #black matte paint
+    - dd2853e28d4c36d4aa4dd178bbacbb76 #titan
+    - 75366061c7bf4a843acd0910e0c9adb5 #tina paint
+    - e1440445a06496a4d8af2f530a0a407a #wasp
+    - 264c02b8e26e1ba4f91b6a799f747c1d #viking
+    - d7ea7c13ecbf3ba46a8d673011671cb5 #thunder
+    - 5804a3be41159234f9d5b610ea21b35e #metel paint
+    # first maps
+    - eac2221d96334b84ab3d7cf5398f0ff6 # rio
+    - b8fe36aa0c36c4e13b86b85c40be0132 #westprime
+    # load map preview
+    - 145b6265ec44d814180505db604f9ad8 # area159
+    - 5a8d8f59d09106e4b8077eea1a223592 # iran
+    - 3c7b00304df492346a0c54cf1a289130 # kungur
+    - c49361c8ea7621d4b8382063de876780 # massacre
+    - 2073ea92e0810ef47a7c909d6e9290c3 # massacreMars
+    - 374f0065ee56e77489b2e9e696f1465e # repin
+    - d5f7d3814ac41e64b9d019cf24d8242d # rio
+    - 6569a16fd21518243a7ca433596d6bea # sandbox
+    - e3bea30cd4a21a640bfe5b6a4e61bedc # silence
+    - 737b3eeaaf89cad4cb6ac296c3eed12c # silenceMoon
+    - fa403493d6da8f149b16b7b06e1aca5a # westprime
+
+    # assets for tank rent
+    - 3ae18b22fe118b84b8790a96b13358dc # matte yellow paint
+    - 55ba29b9c70d08e488b209113ed71888 # polar paint
+    - 1faf2764622696b4b8dc67aec51fb274 # rivets paint
+    - 4af90dfbc1493ce4e81ea4176ade2af9 # isis gold
+    - 41ea3cbb195fb0e41b9459a16e99bbca # twins steam
+    - a13337d3c532f2f4693c16d58a4aa04a # thunder xt
+    - 81041224a9c60444bb589e865ecbb92f # gold wasp
+    - 2028a003334358743a63f3a5448f4f5a # mammoth steam
+    - fa5510c224c5bad49b938ae375ae25d8 # viking xt
+  collection2:
+    - b7cc9b1d4e70d13469da6e1e7edef47a #skin60
+    # bots items
+    - 5cb7ec045e98cbe4eb6e362a50f41d92 #twins
+    - d949c1f274a64a14895eaf5d014efb5b #pink
+    - 9a55f50b29f309c4fbb678abd0c7f37d #hornet
+    - df094c92f4293b04691015607700f6de #black matte paint
+    - dd2853e28d4c36d4aa4dd178bbacbb76 #titan
+    - 75366061c7bf4a843acd0910e0c9adb5 #tina paint
+    - e1440445a06496a4d8af2f530a0a407a #wasp
+    - 264c02b8e26e1ba4f91b6a799f747c1d #viking
+    - d7ea7c13ecbf3ba46a8d673011671cb5 #thunder
+    - 5804a3be41159234f9d5b610ea21b35e #metel paint
+    # first maps
+    #  - eac2221d96334b84ab3d7cf5398f0ff6 # rio
+    - c871a8243f12171469e118a5aef34416 # sandbox
+    - 070964ba42be0e94e9de8f321defaaa6 # repin
+    # load map preview
+    - 145b6265ec44d814180505db604f9ad8 # area159
+    - 5a8d8f59d09106e4b8077eea1a223592 # iran
+    - 3c7b00304df492346a0c54cf1a289130 # kungur
+    - c49361c8ea7621d4b8382063de876780 # massacre
+    - 2073ea92e0810ef47a7c909d6e9290c3 # massacreMars
+    - 374f0065ee56e77489b2e9e696f1465e # repin
+    - d5f7d3814ac41e64b9d019cf24d8242d # rio
+    - 6569a16fd21518243a7ca433596d6bea # sandbox
+    - e3bea30cd4a21a640bfe5b6a4e61bedc # silence
+    - 737b3eeaaf89cad4cb6ac296c3eed12c # silenceMoon
+    - fa403493d6da8f149b16b7b06e1aca5a # westprime
+    # assets for tank rent
+    - 3ae18b22fe118b84b8790a96b13358dc # matte yellow paint
+    - 55ba29b9c70d08e488b209113ed71888 # polar paint
+    - 1faf2764622696b4b8dc67aec51fb274 # rivets paint
+    - 4af90dfbc1493ce4e81ea4176ade2af9 # isis gold
+    - 41ea3cbb195fb0e41b9459a16e99bbca # twins steam
+    - a13337d3c532f2f4693c16d58a4aa04a # thunder xt
+    - 81041224a9c60444bb589e865ecbb92f # gold wasp
+    - 2028a003334358743a63f3a5448f4f5a # mammoth steam
+    - fa5510c224c5bad49b938ae375ae25d8 # viking xt
+  collection3:
+    - b7cc9b1d4e70d13469da6e1e7edef47a #skin60
+    # bots items
+    - 5cb7ec045e98cbe4eb6e362a50f41d92 #twins
+    - d949c1f274a64a14895eaf5d014efb5b #pink
+    - 9a55f50b29f309c4fbb678abd0c7f37d #hornet
+    - df094c92f4293b04691015607700f6de #black matte paint
+    - dd2853e28d4c36d4aa4dd178bbacbb76 #titan
+    - 75366061c7bf4a843acd0910e0c9adb5 #tina paint
+    - e1440445a06496a4d8af2f530a0a407a #wasp
+    - 264c02b8e26e1ba4f91b6a799f747c1d #viking
+    - d7ea7c13ecbf3ba46a8d673011671cb5 #thunder
+    - 5804a3be41159234f9d5b610ea21b35e #metel paint
+    # first maps
+    - 491914e5505b9e84aa549211c17bfae3 # area159
+    - b8fe36aa0c36c4e13b86b85c40be0132 #westprime
+    # load map preview
+    - 145b6265ec44d814180505db604f9ad8 # area159
+    - 5a8d8f59d09106e4b8077eea1a223592 # iran
+    - 3c7b00304df492346a0c54cf1a289130 # kungur
+    - c49361c8ea7621d4b8382063de876780 # massacre
+    - 2073ea92e0810ef47a7c909d6e9290c3 # massacreMars
+    - 374f0065ee56e77489b2e9e696f1465e # repin
+    - d5f7d3814ac41e64b9d019cf24d8242d # rio
+    - 6569a16fd21518243a7ca433596d6bea # sandbox
+    - e3bea30cd4a21a640bfe5b6a4e61bedc # silence
+    - 737b3eeaaf89cad4cb6ac296c3eed12c # silenceMoon
+    - fa403493d6da8f149b16b7b06e1aca5a # westprime
+    # assets for tank rent
+    - 3ae18b22fe118b84b8790a96b13358dc # matte yellow paint
+    - 55ba29b9c70d08e488b209113ed71888 # polar paint
+    - 1faf2764622696b4b8dc67aec51fb274 # rivets paint
+    - 4af90dfbc1493ce4e81ea4176ade2af9 # isis gold
+    - 41ea3cbb195fb0e41b9459a16e99bbca # twins steam
+    - a13337d3c532f2f4693c16d58a4aa04a # thunder xt
+    - 81041224a9c60444bb589e865ecbb92f # gold wasp
+    - 2028a003334358743a63f3a5448f4f5a # mammoth steam
+    - fa5510c224c5bad49b938ae375ae25d8 # viking xt
+  collection4:
+    - b7cc9b1d4e70d13469da6e1e7edef47a #skin60
+    # bots items
+    - 5cb7ec045e98cbe4eb6e362a50f41d92 #twins
+    - d949c1f274a64a14895eaf5d014efb5b #pink
+    - 9a55f50b29f309c4fbb678abd0c7f37d #hornet
+    - df094c92f4293b04691015607700f6de #black matte paint
+    - dd2853e28d4c36d4aa4dd178bbacbb76 #titan
+    - 75366061c7bf4a843acd0910e0c9adb5 #tina paint
+    - e1440445a06496a4d8af2f530a0a407a #wasp
+    - 264c02b8e26e1ba4f91b6a799f747c1d #viking
+    - d7ea7c13ecbf3ba46a8d673011671cb5 #thunder
+    - 5804a3be41159234f9d5b610ea21b35e #metel paint
+    # first maps
+    - 491914e5505b9e84aa549211c17bfae3 # area159
+    - e4f4bb06a86d9b84ba373b815481481c # silence moon
+    # load map preview
+    - 145b6265ec44d814180505db604f9ad8 # area159
+    - 5a8d8f59d09106e4b8077eea1a223592 # iran
+    - 3c7b00304df492346a0c54cf1a289130 # kungur
+    - c49361c8ea7621d4b8382063de876780 # massacre
+    - 2073ea92e0810ef47a7c909d6e9290c3 # massacreMars
+    - 374f0065ee56e77489b2e9e696f1465e # repin
+    - d5f7d3814ac41e64b9d019cf24d8242d # rio
+    - 6569a16fd21518243a7ca433596d6bea # sandbox
+    - e3bea30cd4a21a640bfe5b6a4e61bedc # silence
+    - 737b3eeaaf89cad4cb6ac296c3eed12c # silenceMoon
+    - fa403493d6da8f149b16b7b06e1aca5a # westprime
+    # assets for tank rent
+    - 3ae18b22fe118b84b8790a96b13358dc # matte yellow paint
+    - 55ba29b9c70d08e488b209113ed71888 # polar paint
+    - 1faf2764622696b4b8dc67aec51fb274 # rivets paint
+    - 4af90dfbc1493ce4e81ea4176ade2af9 # isis gold
+    - 41ea3cbb195fb0e41b9459a16e99bbca # twins steam
+    - a13337d3c532f2f4693c16d58a4aa04a # thunder xt
+    - 81041224a9c60444bb589e865ecbb92f # gold wasp
+    - 2028a003334358743a63f3a5448f4f5a # mammoth steam
+    - fa5510c224c5bad49b938ae375ae25d8 # viking xt

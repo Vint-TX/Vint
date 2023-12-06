@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636365877967485486
+  path: garage/module/upgrade/properties/adrenaline
+itemIcon:
+  spriteUid: 28a135e0-3c4d-4c76-9fb0-ae550c2dd288
+itemBigIcon:
+  spriteUid: 97fd000f-e388-4335-be3b-5370bc873a94
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 636365892282334249
+      config: battle/effect/adrenaline

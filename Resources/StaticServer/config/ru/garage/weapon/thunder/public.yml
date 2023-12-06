@@ -1,0 +1,80 @@
+priceItem:
+  price: 1300
+xPriceItem:
+  price: 260
+userItemTemplate:
+  userItemTemplate: 1435139182866
+itemIcon:
+  spriteUid: 1097e153-0264-4902-80cf-323e68de7b2a
+order:
+  index: 5
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 6
+minDamageProperty:
+  initialValue: 593.009
+  finalValue: 593.009
+maxDamageProperty:
+  initialValue: 606.991
+  finalValue: 606.991
+reloadTimeProperty:
+  initialValue: 3.000
+  finalValue: 3.000
+maxDamageDistanceProperty:
+  initialValue: 98.887
+  finalValue: 98.887
+minDamageDistanceProperty:
+  initialValue: 143.043
+  finalValue: 143.043
+minDamagePercentProperty:
+  initialValue: 48.696
+  finalValue: 48.696
+impactProperty:
+  initialValue: 3.500
+  finalValue: 3.500
+splashImpactProperty:
+  initialValue: 4.000
+  finalValue: 4.000
+kickbackProperty:
+  initialValue: 3.500
+  finalValue: 3.500
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.65
+    - name: Range
+      normalizedValue: 0.691
+    - name: FireRate
+      normalizedValue: 0.30
+  properties:
+    - name: DPM
+      initialValue: 12000
+      finalValue: 12000
+    - name: Damage
+      initialValue: 600
+      finalValue: 600
+    - name: Reload Time
+      initialValue: 3
+      finalValue: 3
+      format: 0.0
+      unit: sec
+    - name: Max Damage Distance
+      initialValue: 98.9
+      finalValue: 98.9
+      format: 0.0
+      unit: m
+    - name: Attack Distance
+      initialValue: 143
+      finalValue: 143
+      format: 0
+      unit: m
+    - name: SplashRadius
+      initialValue: 15
+      finalValue: 15
+      unit: m
+    - name: Impact
+      initialValue: 4.5
+      finalValue: 4.5
+    - name: Splash Impact
+      initialValue: 5.00
+      finalValue: 5.00
+...

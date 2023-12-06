@@ -1,0 +1,18 @@
+effectIcon:
+  spriteUid: d746f580-d884-4cf9-b4d0-c5b1f8ee86f1
+preloadingMineKey:
+  key: spider
+damageType:
+  damageType: MINE
+impactCameraShakerConfig:
+  enabled: true
+  magnitude: 4
+  roughness: 5
+  fadeInTime: 0
+  fadeOutTime: 1.5
+  posInfluenceX: 0.75
+  posInfluenceY: 0.75
+  posInfluenceZ: 1.25
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 1

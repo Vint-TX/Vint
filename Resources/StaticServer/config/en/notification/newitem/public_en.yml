@@ -1,0 +1,8 @@
+---
+newItemNotificationText:
+  headerText: New Content!
+  itemText: "{0} x{1}"
+  singleItemText: "{0}"
+newPaintItemNotificationText:
+  coverText: Coating
+  paintText: Paint

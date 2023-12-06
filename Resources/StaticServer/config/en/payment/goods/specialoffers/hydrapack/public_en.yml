@@ -1,0 +1,19 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 42c6bf13-81e0-4fc3-b5f6-894f127b5cf4
+  title: 'The Hydra Squad'
+  description: |
+    Exclusive graffiti
+    + free gifts: exclusive paint, avatar,
+    2000 blue crystals and 300 x-crystals
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! Offer is time limited
+  description: |
+    The legend says that if you cut the head of a hydra, two more will grow in its place.\n Join the Hydra squad and show everybody what you are made of, and who knows, maybe some day you will become a legend.
+receiptText:
+  text: Special offer «The Hydra Squad»
+starterPackMainElement:
+  itemId: 1289970222 # Hydra Graffiti
+  count: 0
+  description: Equip only exclusive items. The best players must stand out on the battlefield.
+  title: Hydra Graffiti

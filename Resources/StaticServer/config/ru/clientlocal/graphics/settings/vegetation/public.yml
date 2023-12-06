@@ -1,0 +1,7 @@
+﻿configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/vegetation/minimum
+    - clientlocal/graphics/settings/vegetation/medium
+    - clientlocal/graphics/settings/vegetation/high
+    - clientlocal/graphics/settings/vegetation/maximum
+    - clientlocal/graphics/settings/vegetation/ultra

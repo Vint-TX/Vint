@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 749421ff-bc6b-4bdd-8662-72780e3dfb0c
+imageItem:
+  spriteUid: 749421ff-bc6b-4bdd-8662-72780e3dfb0c
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

@@ -1,0 +1,7 @@
+tick:
+  period: 1000
+burningEffect:
+  minFlameDamagePerSecond: 50
+  maxFlameDamagePerSecond: 250
+effectIcon:
+  uid: 'ac69fd87-5afc-4ce6-b6a7-bb4a9b9ee208'

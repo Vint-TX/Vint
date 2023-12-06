@@ -1,0 +1,19 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 1071f87f-07e9-4bf0-b91f-13b12561ac31
+  title: 'The Alpha Squad'
+  description: |
+    4000 сrystals
+    + free gift: rare paint, awesome graffiti,
+    exclusive avatar and x-crystals
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! Offer is time limited
+  description: |
+    Faster, more precise, more powerful! The members of the Alpha suqad are always first and they will accept only the most worthy tankers into their ranks. Are you ready to become one of them?
+starterPackMainElement:
+  itemId: 947348559 # Crystals
+  count: 4000
+  description: Crystals are used to buy new turrets and hulls, unlock paints and upgrade modules.
+  title: Crystals
+receiptText:
+  text: Special offer The Alpha Squad

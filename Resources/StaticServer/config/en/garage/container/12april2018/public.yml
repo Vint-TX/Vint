@@ -1,0 +1,63 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 678025425 # Cosmos X
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 942805628 # Universe Paint
+      compensation: 6250
+      nameLocalizationKey: universepaint
+    - itemBundles:
+        - marketItem: 176253763 # Universe Cover
+      compensation: 6250
+      nameLocalizationKey: universecover
+    - itemBundles:
+        - marketItem: 224610499 # Indigo Freeze Shell
+      compensation: 6250
+      nameLocalizationKey: freezeindigo
+    - itemBundles:
+        - marketItem: -1173768746 # Twins Turquoise Shell
+      compensation: 6250
+      nameLocalizationKey: twinsturquoise
+    - itemBundles:
+        - marketItem: -133498961 # Steel Titan
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -691629355 # Steel Isida
+      compensation: 6250
+
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 1770762539 # Thunder Dreadnought
+    - itemBundles:
+        - marketItem: 732611697 # Dictator Dreadnought
+
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: e919ac9257491414eaf61e5b9f1aba5e
+imageItem:
+  spriteUid: 6c4b1f42-2b9f-4405-9fed-4763e5403873
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

@@ -1,0 +1,66 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1669172271 # 8 march graffiti 1
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 2069414001 # 8 march graffiti 1
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -362854786 # Priboy Tank Paint
+      compensation: 6250
+      nameLocalizationKey: priboytankpaint
+    - itemBundles:
+        - marketItem: 2031727040 # Priboy Weapon Paint
+      compensation: 6250
+      nameLocalizationKey: priboyweaponpaint
+    - itemBundles:
+        - marketItem: -1126924822 # Twins Violet
+      compensation: 6250
+      nameLocalizationKey: twinsviolet
+    - itemBundles:
+        - marketItem: -1173768746 # Twins Turqoise
+      compensation: 6250
+      nameLocalizationKey: twinsblue
+    - itemBundles:
+        - marketItem: -1774441975 # Wasp Gold
+      compensation: 6250
+      nameLocalizationKey: waspgold
+    - itemBundles:
+        - marketItem: -1704481322 # Isis Gold
+      compensation: 6250
+      nameLocalizationKey: isisgold
+  rareItems:
+    - itemBundles:
+        - marketItem: -305773183 # Isis Bumblebee
+    - itemBundles:
+        - marketItem: -1648311780 # Wasp Bumblebee
+
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 5327d132ed5c7a54aa672e12366ef32a
+imageItem:
+  spriteUid: 4c8c110e-bd49-4e76-9975-615049cdd819
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

@@ -1,0 +1,58 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 678025425 # Cosmos X
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1391443781 # Let's Go Graffiti
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1884609450 # Up Graffiti
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6214 # Jedi Avatar
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6221 # Space Skeleton Avatar
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -636128311 # Galaxy Paint
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -64859568 # Galaxy Cover
+      compensation: 10000
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 1770762539 # Thunder Dreadnought
+    - itemBundles:
+        - marketItem: 732611697 # Dictator Dreadnought
+    - itemBundles:
+        - marketItem: 1317881529 # Hammer Thor
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 2f957bc0c78260e449f602a91a54dc4b
+imageItem:
+  spriteUid: 2c50633b-d36e-45c9-9256-b2f89ac7192d
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

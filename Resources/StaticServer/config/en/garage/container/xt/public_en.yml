@@ -1,0 +1,18 @@
+---
+descriptionItem:
+  name: XT
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    hunterXT: "Hunter XT"
+    smokyXT: "Smoky XT"
+    railXT: "Railgun XT"
+    thunderXT: "Thunder XT"
+    hornetXT: "Hornet XT"
+    vikingXT: "Viking XT"
+    titanXT: "Titan XT"
+    twinsXT: "Twins XT"
+    waspXT: "Wasp XT"

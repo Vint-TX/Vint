@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 1542275711926
+  path: garage/module/upgrade/properties/externalimpact
+itemIcon:
+  spriteUid: 27c4fc4a-392b-4823-8b59-3d9c11231448
+itemBigIcon:
+  spriteUid: afd04706-a66a-47ec-844e-f0717d029b7e
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 1542270967570
+      config: battle/effect/externalimpact

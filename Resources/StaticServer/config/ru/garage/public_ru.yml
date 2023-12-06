@@ -1,0 +1,101 @@
+---
+slotsTexts:
+  slot2modules:
+    ACTIVE: Слот «Активный»
+    PASSIVE: Слот «Пассивный»
+localizedVisualProperties:
+  names:
+    FireRate: Скорострельность
+    Range: Дальность
+    Damage: Урон
+    DPM: Урон в минуту
+    Armor: Броня
+    Speed: Скорость
+    Mobility: Мобильность
+    Weight: Масса
+    Acceleration: Ускорение
+    "Turning Speed": Скорость поворота
+    "Damage per Second": Урон в секунду
+    "Charge Time": Время разрядки
+    "Reload Time": Время перезарядки
+    "Attack Distance": Дальность поражения
+    "Max Damage Distance": Дальность макс.урона
+    "Attack Cone Angle": Угол конуса атаки
+    "Damage per Pellet": Урон дробинки
+    "Pellets per Shot": Дробинок за выстрел
+    "Max Damage per Shot": Максимальный урон за выстрел
+    "Shot Delay Time": Время задержки между выстрелами
+    "Magazine Reload Time": Время перезарядки барабана
+    "Healing per Second": Лечение в секунду
+    "Piercing Damage Percent": Процент пробивающего урона
+    "Damage per Projectile": Урон от снаряда
+    "Projectiles Limit": Количество выстрелов до разрядки
+    "Projectile Speed": Скорость полёта снаряда
+    "Aiming Damage": Урон в прицельном режиме
+    "Loading Time": Время зарядки
+    "Aiming Speed": Скорость прицеливания
+    "Aiming Impact": Сила удара при прицеливании
+    "Critical Damage": Критический урон
+    "Critical Chance": Шанс критического урона
+    "Splash Impact": Сила удара взрыва
+    "Overheating Time": Время до нагрева
+    "Impact": Сила импульса
+    "Max Impact": Максимальная сила импульса
+    Cooldown: Перезарядка
+    CooldownSpeed: Время перезарядки
+    Duration: Время действия
+    IncomingDamageToHealth: Урон в здоровье
+    TurretRotationSpeed: Скорость поворота башни
+    TurretRotationAcceleration: Ускорение вращения башни
+    IncomingBackhitDamage: Полученый урон в корму
+    BackhitDamage: Урон в корму
+    ReducingCooldownsOn: Уменьшение кулдаунов на
+    HealingAmount: Количество HP
+    HealingAmountPercent: Количество HP от макс.
+    WaveRange: Радиус волны
+    MagazineReload: Восстановление магазина
+    MinDamage: Минимальный урон
+    MaxDamage: Максимальный урон
+    InstantHealing: Немедленное исцеление
+    TargetingRange: Радиус действия
+    ExplosionRange: Радиус взрыва
+    AdditionalDuration: Доп. время действия
+    TemperatureIncrease: Нагрев
+    TemperatureDecrease: Охлаждение
+    VisibilityArea: Дистанция видимости
+    HullAccelerationSpeed: Ускорение корпуса
+    Reserve: Запас
+    ReloadingCapacity: Количество заряда
+    CooldownReduction: Сокращение кулдаунов
+    PercentToTrigger: Уровень здоровья для срабатывания
+    AdditionalHealing: Доп. лечение
+    AddHealingDuration: Длительность доп. лечения
+    DamageReduction: Сокращение урона
+    ModuleBlock: Длительность блокировки
+    SplashRadius: Радиус взрыва
+    ActivationTime: Время активации
+    CryoStateDuration: Длительность криогенного состояния
+    TriggerRadius: Радиус срабатывания
+    TriggerDelay: Задержка срабатывания
+    TemperatureDuration: Длительность воздействия
+    SpinUpTime: Время раскрутки
+    HeatDamage: Урон от нагрева
+    HeatTemperatureLimit: Максимальный нагрев
+    HeatTemperatureDelta: Скорость нагрева
+    FreezeTemperatureLimit: Максимальная заморозка
+    FreezeTemperatureDelta: Скорость заморозки
+    WorkingTemperatureLimit: Рабочая температура
+    MagazineSize: Размер барабана
+    SelfHealingAmount: Самолечение
+    MineResistancePercent: Защита от мин
+  units:
+    sec: 'сек'
+    degrees_per_sec: "°/сек"
+    m: 'м'
+    t: 'т'
+    meters_per_sec: "м/сек"
+    degree: "°"
+    percent: "%"
+    hp: ''
+    hps: 'hp/сек'
+    percentinsec: '%/сек'

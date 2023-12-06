@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 12869047-52b4-447d-b66f-8685c24edafb
+imageItem:
+  spriteUid: 12869047-52b4-447d-b66f-8685c24edafb
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

@@ -1,0 +1,24 @@
+---
+battleSelectScreenHeaderText:
+  headerText: СПИСОК БИТВ
+  headerTextShowDelaySeconds: 0.5
+scoreTableEmptyRowText:
+  text: Пусто
+battleSelectScreenLocalization:
+  playButton: ИГРАТЬ
+  playRedButton: ИГРАТЬ ЗА ФРОНТИР
+  playBlueButton: ИГРАТЬ ЗА АНТЕЙ
+  watchButton: НАБЛЮДАТЬ
+  battleLevelsIndicatorText: "МАСТЕРСТВО: "
+  levelWarningEquipDowngradedText: "Уровни твоего вооружения будут приравнены к уровню Мастерства битвы"
+  levelWarningXpReducedText: "Получаемые очки битвы и опыт уменьшатся"
+  levelWarningEquipDowngradedAndXpReducedText: "Уровень вооружения будет понижен, а получаемые очки битвы и опыт уменьшатся"
+  levelErrorText: "Тебе не хватает Мастерства, чтобы участвовать в этой битве"
+  archivedBattleText: "БИТВА ЗАВЕРШЕНА"
+  redTeamName: ФРОНТИР
+  blueTeamName: АНТЕЙ
+inviteFriendsPanelLocalization:
+  showInviteFriendsPanelButton: ПРИГЛАСИТЬ
+  hideInviteFriendsPanelButton: ЗАКРЫТЬ
+  emptyListNotification: Список друзей пуст
+  inviteSentNotification: Приглашение отправлено

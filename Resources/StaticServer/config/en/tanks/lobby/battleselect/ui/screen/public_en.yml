@@ -1,0 +1,8 @@
+dMBattleResultsScreen:
+  header: "BATTLE RESULTS"
+teamBattleResultsScreen:
+  header: "BATTLE RESULTS"
+personalBattleResultsScreen:
+  header: "BATTLE RESULTS"
+  goOutButton: "CONTINUE"
+  xPText: "Experience points"

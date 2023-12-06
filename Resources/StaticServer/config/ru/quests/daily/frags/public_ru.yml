@@ -1,0 +1,13 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Уничтожь {0} {1}'
+    cases:
+      DEFAULT: 'вражеских танков'
+      ONE: 'вражеский танк'
+      TWO: 'вражеских танка'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Режим
+    WEAPON: Пушка
+    TANK: Корпус

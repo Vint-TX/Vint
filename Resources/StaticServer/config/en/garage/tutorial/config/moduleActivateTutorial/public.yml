@@ -1,0 +1,19 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/moduleActivateTutorial/"
+  tutorialId: -719658162
+  forNewPlayer: true
+  steps:
+    1: 1504002856142 # go to garage
+    2: 1504002856142 # go to module screen
+    3: 1504698500736 # select mine, select item template
+    4: 1504002856142 # highlight mine, highlight craft
+    #5 : 1504002856142 # handle confirm popup
+    6: 1504698500736 # highlight equip
+    7: 1504002856142 # highlight modules
+    8: 1504002856142 # highlight modules
+    9: 1504002856142 # highlight play
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -719658163
+    - -1423861367

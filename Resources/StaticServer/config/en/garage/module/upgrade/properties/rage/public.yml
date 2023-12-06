@@ -1,0 +1,50 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 4000
+    - 3852
+    - 3704
+    - 3556
+    - 3407
+    - 3259
+    - 3111
+    - 2963
+    - 2815
+    - 2667
+moduleRageEffectReduceCooldownTimePerKillProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2000
+    - 2111
+    - 2222
+    - 2333
+    - 2444
+    - 2556
+    - 2667
+    - 2778
+    - 2889
+    - 3000
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 4
+        - 2.7
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: ReducingCooldownsOn
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2
+        - 3
+      unit: sec
+      format: 0.00
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+...

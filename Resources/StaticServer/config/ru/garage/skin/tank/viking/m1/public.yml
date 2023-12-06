@@ -1,0 +1,21 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+order:
+  index: 301
+unityAsset:
+  reference:
+    assetGuid: 00be178c534015645bc0aa567169188f
+imageItem:
+  spriteUid: d4fda5ed-e901-4ed0-bead-dc1cabcd34b0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+mountUpgradeLevelRestriction:
+  restrictionValue: 6
+mountUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: COMMON

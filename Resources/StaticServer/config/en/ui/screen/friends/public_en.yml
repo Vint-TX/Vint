@@ -1,0 +1,18 @@
+---
+screenHeaderText:
+  headerText: FRIENDS
+friendsScreenLocalization:
+  emptyListNotificationText: Your friend list is empty
+  acceptedFriendHeader: Friends
+  possibleFriendHeader: Suggestions
+  searchUserHint: Enter nickname
+  searchUserError: User not found
+  searchButtonText: SEARCH
+  profileButtonText: PROFILE
+  spectateButtonText: SPECTATE
+  acceptButtonText: ACCEPT
+  rejectButtonText: DECLINE
+  revokeButtonText: CANCEL
+  removeButtonText: UNFRIEND
+  removeButtonConfirmText: 'YES'
+  removeButtonCancelText: 'NO'

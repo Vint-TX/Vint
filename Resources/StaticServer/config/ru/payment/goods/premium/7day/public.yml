@@ -1,0 +1,9 @@
+premiumOffer:
+  minRank: 999999
+  maxRank: 999999
+order:
+  index: 2
+specialOfferContent:
+  salePercent: 0
+  highlightTitle: true
+  showItemsList: false

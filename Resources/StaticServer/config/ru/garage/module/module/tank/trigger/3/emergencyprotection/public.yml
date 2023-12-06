@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636362277898499977
+  path: garage/module/upgrade/properties/emergencyprotection
+itemIcon:
+  spriteUid: e29a6ee0-3c9c-4a4f-ad1f-79c3a96dbe9d
+itemBigIcon:
+  spriteUid: be6d8360-4f0c-4364-ab08-082052b5fe54
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 636301946304873717
+      config: battle/effect/emergencyprotection  

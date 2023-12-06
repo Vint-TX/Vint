@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Collect {0} supply {1}'
+    cases:
+      DEFAULT: 'boxes'
+      ONE: 'box'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Mode
+    WEAPON: Turret
+    TANK: Hull

@@ -1,0 +1,78 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -475547245 # gold ricochet skin
+      compensation: 6250
+      nameLocalizationKey: goldric
+
+    - itemBundles:
+        - marketItem: -754659582 # gold titan skin
+      compensation: 6250
+      nameLocalizationKey: goldtit
+
+    - itemBundles:
+        - marketItem: 674847565 # peace graffit
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 880222526 # godmode graffit
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -1514026752 # flame tank paint
+      compensation: 6250
+      nameLocalizationKey: flametankpaint
+
+    - itemBundles:
+        - marketItem: -1052260392 # flame weapon paint
+      compensation: 6250
+      nameLocalizationKey: flameweaponpaint
+
+    - itemBundles:
+        - marketItem: -1506541337 # noise tank paint
+      compensation: 6250
+      nameLocalizationKey: noisetankpaint
+
+    - itemBundles:
+        - marketItem: -1044774977 # noise weapon paint
+      compensation: 6250
+      nameLocalizationKey: noiseweaponpaint
+
+    - itemBundles:
+        - marketItem: -492753567 # acid shell
+      compensation: 6250
+      nameLocalizationKey: acid
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 1077283204 # frontier zero ricochet
+
+    - itemBundles:
+        - marketItem: 1470436461 # frontier zero titan
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: f8d9b112ca6a04940a477666ca08973e
+imageItem:
+  spriteUid: 8ef03b29-13aa-4051-8fda-82a2784ac910
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

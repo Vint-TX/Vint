@@ -1,0 +1,65 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 50000
+    - 48148
+    - 46296
+    - 44444
+    - 42593
+    - 40741
+    - 38889
+    - 37037
+    - 35185
+    - 33333
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEnergyInjectionEffectReloadPercentProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.50
+    - 0.53
+    - 0.56
+    - 0.58
+    - 0.61
+    - 0.64
+    - 0.67
+    - 0.69
+    - 0.72
+    - 0.75
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 50
+        - 33.3
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: ReloadingCapacity
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 50
+        - 75
+      unit: percent
+      format: 0.0
+      spriteUID: b2d624d0-047c-47af-8c9d-eaa13be07002
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

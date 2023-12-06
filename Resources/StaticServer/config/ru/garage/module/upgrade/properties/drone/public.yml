@@ -1,0 +1,166 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 60000
+    - 57778
+    - 55556
+    - 53333
+    - 51111
+    - 48889
+    - 46667
+    - 44444
+    - 42222
+    - 40000
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+moduleEffectDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 12000
+    - 12667
+    - 13333
+    - 14000
+    - 14667
+    - 15333
+    - 16000
+    - 16667
+    - 17333
+    - 18000
+moduleEffectMinDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 50.00
+    - 52.78
+    - 55.56
+    - 58.33
+    - 61.11
+    - 63.89
+    - 66.67
+    - 69.44
+    - 72.22
+    - 75.00
+moduleEffectMaxDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 50.00
+    - 52.78
+    - 55.56
+    - 58.33
+    - 61.11
+    - 63.89
+    - 66.67
+    - 69.44
+    - 72.22
+    - 75.00
+moduleEffectActivationTimeProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3000
+    - 2889
+    - 2778
+    - 2667
+    - 2556
+    - 2444
+    - 2333
+    - 2222
+    - 2111
+    - 2000
+moduleLimitBundleEffectCountProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+moduleEffectTargetingDistanceProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 20.00
+    - 21.11
+    - 22.22
+    - 23.33
+    - 24.44
+    - 25.56
+    - 26.67
+    - 27.78
+    - 28.89
+    - 30.00
+moduleEffectTargetingPeriodProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+    - 0.50
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 60
+        - 40
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: "Damage per Second"
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 50
+        - 75
+      format: 0.0
+      spriteUID: 5538887f-b208-4fb4-ac4a-12223cb09fd3
+    - name: Duration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 12
+        - 18
+      unit: sec
+      format: 0.0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: TargetingRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 20
+        - 30
+      unit: m
+      format: 0.0
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: ActivationTime
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 3
+        - 2
+      unit: sec
+      format: 0.00
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2
+        - 2
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

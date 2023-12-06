@@ -1,0 +1,16 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/gameModesTutorial/"
+  tutorialId: 1726997240
+  forNewPlayer: true
+  forOldPlayer: true
+  steps:
+    1: 1504002856142 # highlight rating mode
+    #2 : 1504002856142 # highlight rating and energy bar
+    3: 1504002856142 # highlight rating and chest
+    4: 1504002856142 # add selectable
+    5: 1504002856142 # highlight rating interactable
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -719658163
+    - -719658162

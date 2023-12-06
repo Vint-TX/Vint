@@ -1,0 +1,60 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -2022929356 # Graffiti Alien
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 1374508848 # Graffiti War of the World
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 1223441167 # Radiation Paint
+      compensation: 6250
+      nameLocalizationKey: radiationPaint
+    - itemBundles:
+        - marketItem: -500584127 # Radiation Cover
+      compensation: 6250
+      nameLocalizationKey: radiationCover
+    - itemBundles:
+        - marketItem: -1774441975 # Gold Waps
+      compensation: 6250
+      nameLocalizationKey: waspGold
+    - itemBundles:
+        - marketItem: 1491390890 # Gold flamethrower
+      compensation: 6250
+      nameLocalizationKey: flamethrowerGold
+
+
+  rareItems:
+    - itemBundles:
+        - marketItem: -2009337684 # Wasp Dreadnought
+    - itemBundles:
+        - marketItem: 602602131 # Flamethrower Dreadnought
+
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: dceb4aa905e909a4faa160ee04f19bbd
+imageItem:
+  spriteUid: 09e19523-eb5d-4714-899a-ab0a5ab5154d
+order:
+  index: 1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

@@ -1,0 +1,250 @@
+---
+countries:
+  names:
+    AS: American Samoa
+    DZ: Algeria
+    AX: Aland Islands
+    BM: Bermuda
+    AF: Afghanistan
+    AL: Albania
+    BS: Bahamas
+    BB: Barbados
+    BJ: Benin
+    BW: Botswana
+    BD: Bangladesh
+    AT: Austria
+    AM: Armenia
+    AU: Australia
+    BR: Brazil
+    BO: Bolivia
+    AO: Angola
+    AZ: Azerbaijan
+    BY: Belarus
+    CA: Canada
+    BF: Burkina Faso
+    CM: Cameroon
+    BI: Burundi
+    AD: Andorra
+    BG: Bulgaria
+    AR: Argentina
+    AW: Aruba
+    DE: Germany
+    CX: Christmas Island
+    CK: Cook Islands
+    PF: French Polynesia
+    KM: Comoros
+    DJ: Djibouti
+    GW: Guinea-Bissau
+    BN: Brunei
+    GE: Georgia
+    FJ: Fiji
+    GU: Guam
+    TD: Chad
+    ER: Eritrea
+    GH: Ghana
+    GN: Guinea
+    GI: Gibraltar
+    GG: Guernsey
+    CL: Chile
+    CO: Colombia
+    CR: Costa Rica
+    CU: Cuba
+    DM: Dominica
+    EC: Ecuador
+    SV: El Salvador
+    GT: Guatemala
+    GY: Guyana
+    HN: Honduras
+    EE: Estonia
+    CN: China
+    HK: Hong Kong
+    KZ: Kazakhstan
+    KG: Kyrgyzstan
+    MP: Northern Mariana Islands
+    KE: Kenya
+    LS: Lesotho
+    ML: Mali
+    LI: Liechtenstein
+    MD: Moldavia
+    KI: Kiribati
+    FM: Micronesia
+    LR: Liberia
+    MG: Madagascar
+    MW: Malawi
+    MR: Mauritania
+    YT: Mayotte
+    MZ: Mozambique
+    CD: Congo
+    IL: Israel
+    JE: Jersey
+    MK: Macedonia
+    MT: Malta
+    ME: Montenegro
+    JM: Jamaica
+    MS: Montserrat
+    ID: Indonesia
+    KW: Kuwait
+    MO: Macao
+    MN: Mongolia
+    RW: Rwanda
+    SL: Sierra Leone
+    PW: Palau
+    NR: Nauru
+    PN: Pitcairn
+    WS: Samoa
+    TK: Tokelau
+    CH: Switzerland
+    TJ: Tajikistan
+    PG: Papua New Guinea
+    SS: South Sudan
+    SD: Sudan
+    SZ: Swaziland
+    NC: New Caledonia
+    NA: Namibia
+    NI: Nicaragua
+    SN: Senegal
+    SO: Somalia
+    NZ: New Zealand
+    SM: San Marino
+    PE: Peru
+    RS: Serbia
+    PY: Paraguay
+    SX: Sint Maarten
+    NP: Nepal
+    LK: Sri Lanka
+    TL: Timor-Leste
+    TO: Tonga
+    TV: Tuvalu
+    VU: Vanuatu
+    SC: Seychelles
+    UG: Uganda
+    ZM: Zambia
+    ZA: South Africa
+    UA: Ukraine
+    US: USA
+    TM: Turkmenistan
+    UY: Uruguay
+    UZ: Uzbekistan
+    SB: Solomon Islands
+    WF: Wallis and Futuna
+    ST: São Tomé and Príncipe
+    TN: Tunisia
+    ZW: Zimbabwe
+    VE: Venezuela
+    GB: United Kingdom
+    VN: Vietnam
+    YE: Yemen
+    VA: Vatican City
+    PM: Saint Pierre and Miquelon
+    RU: Russia
+    HM: Heard Island and McDonald Islands
+    MH: Marshall Islands
+    NF: Norfolk Island
+    PL: Poland
+    CV: Cape Verde
+    CF: Central African Republic
+    EG: Egypt
+    GQ: Equatorial Guinea
+    ET: Ethiopia
+    GA: Gabon
+    CI: "Côte d'Ivoire"
+    LY: Libya
+    MU: Mauritius
+    MA: Morocco
+    NE: Niger
+    RE: Réunion
+    SH: Saint Helena
+    EH: Western Sahara
+    BE: Belgium
+    BA: Bosnia and Herzegovina
+    BV: Bouvet Island
+    HR: Croatia
+    CY: Cyprus
+    CZ: Czech Republic
+    DK: Denmark
+    FO: Faroe Islands
+    FI: Finland
+    FR: France
+    GL: Greenland
+    HU: Hungary
+    IS: Iceland
+    IE: Ireland
+    IM: Isle Of Man
+    IT: Italy
+    LU: Luxembourg
+    MC: Monaco
+    NL: Netherlands
+    "NO": Norway
+    RO: Romania
+    SK: Slovakia
+    SI: Slovenia
+    ES: Spain
+    SJ: Svalbard and Jan Mayen Islands
+    SE: Sweden
+    AI: Anguilla
+    AG: Antigua and Barbuda
+    BZ: Belize
+    VG: British Virgin Islands
+    KY: Cayman Islands
+    CC: Cocos Islands
+    CW: Curaçao
+    DO: Dominican Republic
+    FK: Falkland Islands
+    GF: French Guiana
+    GD: Grenada
+    GP: Guadeloupe
+    HT: Haiti
+    MQ: Martinique
+    MX: Mexico
+    PA: Panama
+    BL: Saint Barthélemy
+    KN: Saint Kitts and Nevis
+    LC: Saint Lucia
+    MF: Saint Martin
+    VC: Saint Vincent and the Grenadines
+    GS: South Georgia and the South Sandwich Islands
+    SR: Suriname
+    TT: Trinidad and Tobago
+    UM: United States Minor Outlying Islands
+    VI: United States Virgin Islands
+    LV: Latvia
+    LT: Lithuania
+    BH: Bahrain
+    BQ: BES islands
+    BT: Bhutan
+    IO: British Indian Ocean Territory
+    KH: Cambodia
+    TF: French Southern and Antarctic Lands
+    IN: India
+    IR: Iran
+    IQ: Iraq
+    JP: Japan
+    JO: Jordan
+    LA: Lao PDR
+    LB: Lebanon
+    MY: Malaysia
+    MV: Maldives
+    MM: Myanmar (Burma)
+    KP: North Korea
+    OM: Oman
+    PK: Pakistan
+    PS: Palestinian territories
+    PH: Philippines
+    SA: Saudi Arabia
+    SG: Singapore
+    KR: South Korea
+    SY: Syria
+    TW: Taiwan
+    TH: Thailand
+    TR: Turkey
+    TC: Turks and Caicos Islands
+    AE: United Arab Emirates
+    GR: Greece
+    NU: Niue
+    NG: Nigeria
+    TZ: Tanzania
+    GM: Gambia
+    TG: Togo
+    PT: Portugal
+    PR: Puerto Rico
+    QA: Qatar

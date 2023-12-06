@@ -1,0 +1,13 @@
+---
+descriptionItem:
+  name: Halloween 2018
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    railgunorange: Railgun "Orange"
+    twinsorange: Twins "Orange"
+    dictatorinferno: Dictator "Inferno"
+    flamethrowerinferno: Firebird "Inferno"

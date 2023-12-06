@@ -1,0 +1,86 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 45000
+    - 43333
+    - 41667
+    - 40000
+    - 38333
+    - 36667
+    - 35000
+    - 33333
+    - 31667
+    - 30000
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEffectDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 13000
+    - 13722
+    - 14444
+    - 15167
+    - 15889
+    - 16611
+    - 17333
+    - 18056
+    - 18778
+    - 19500
+moduleTurbospeedEffectProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.20
+    - 1.24
+    - 1.29
+    - 1.33
+    - 1.38
+    - 1.42
+    - 1.47
+    - 1.51
+    - 1.56
+    - 1.60
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 45
+        - 30
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Duration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 13
+        - 19.5
+      unit: sec
+      format: 0.0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: HullAccelerationSpeed
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 20
+        - 60
+      format: 0
+      unit: percent
+      spriteUID: 88babefa-ef53-4242-bfab-e5a7c7c7fb21
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

@@ -1,0 +1,21 @@
+priceItem:
+  price: 5250
+xPriceItem:
+  price: 249
+order:
+  index: 200
+unityAsset:
+  reference:
+    assetGuid: a9a1351d479f570459c2c0c52872f9d9
+imageItem:
+  spriteUid: 9b987e59-7f5f-446b-ada9-3fb808a3d875
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+mountUpgradeLevelRestriction:
+  restrictionValue: 0
+mountUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: COMMON

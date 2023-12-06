@@ -1,0 +1,7 @@
+imageItem:
+  spriteUid: adb8ad8e-88b2-4cc1-9780-d0f8385bc054
+battleQuestTarget:
+  targetValue: 1
+battleQuestReward:
+  battleQuestReward: RANK_EXP
+  quantity: 150

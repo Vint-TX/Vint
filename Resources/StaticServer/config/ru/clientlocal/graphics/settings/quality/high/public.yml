@@ -1,0 +1,24 @@
+materialsSettings:
+  globalShadersMaximumLOD: 500
+decalSettings:
+  maxCount: 500
+  lifeTimeMultipler: 1.0
+  maxDistanceToCamera: 50
+  enableDecals: true
+  maxDecalsForHammer: 3
+waterSettings:
+  hasReflection: false
+  edgeBlend: true
+streamWeaponSettings:
+  lightIsEnabled: false
+  flamethrowerMuzzleMaxParticles: 8
+  flamethrowerFlameMaxParticles: 35
+  flamethrowerSmokeMaxParticles: 10
+  freezeMuzzleMaxParticles: 5
+  freezeMistMaxParticles: 35
+  freezeSnowMaxParticles: 5
+supplyEffectSettings:
+  lightIsEnabled: false
+feedbackGraphicsRestrictions:
+  healthFeedbackAllowed: true
+  selfTargetHitFeedbackAllowed: true

@@ -1,0 +1,17 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+imageItem:
+  spriteUid: c578801e-fda1-4fbd-a6fb-d27414a07302
+order:
+  index: 209
+unityAsset:
+  reference:
+    assetGuid: a43014cf9f20c5d479c4692f8f1bd11a
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

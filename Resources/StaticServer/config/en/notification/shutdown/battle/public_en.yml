@@ -1,0 +1,5 @@
+---
+battleShutdownText:
+  text: |
+    Attention!
+    The battle will be forced to end in {0}.

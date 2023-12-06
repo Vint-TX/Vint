@@ -1,0 +1,18 @@
+effectIcon:
+  spriteUid: 96ca8fda-5a11-4b2b-89e2-c57de01d6c59
+preloadingMineKey:
+  key: mine
+damageType:
+  damageType: MINE
+impactCameraShakerConfig:
+  enabled: true
+  magnitude: 3
+  roughness: 5
+  fadeInTime: 0
+  fadeOutTime: 1.5
+  posInfluenceX: 0.5
+  posInfluenceY: 1
+  posInfluenceZ: 0.5
+  rotInfluenceX: 0.5
+  rotInfluenceY: 0.5
+  rotInfluenceZ: 0.5

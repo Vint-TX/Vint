@@ -1,0 +1,48 @@
+tutorialConfiguration:
+  tutorials:
+
+    # New players
+
+    # 1
+    - "garage/tutorial/config/firstEntranceTutorial"
+
+    # 2
+    - "garage/tutorial/config/hullControlsTutorial"
+    - "garage/tutorial/config/turretControlsTutorial"
+    - "garage/tutorial/config/firstDamageTutorial"
+    - "garage/tutorial/config/backHitDamageTutorial"
+    - "garage/tutorial/config/firstBattleEndTutorial"
+
+    #3
+    - "garage/tutorial/config/turretChangeTutorial"
+
+    #4
+    - "garage/tutorial/config/turretTutorial"
+    - "garage/tutorial/config/secondBattleEndTutorial"
+
+    #5
+    - "garage/tutorial/config/moduleActivateTutorial"
+
+    #6
+    - "garage/tutorial/config/gameModesTutorial"
+    - "garage/tutorial/config/thirdBattleEndTutorial"
+
+    #7
+    - "garage/tutorial/config/moduleUpgradeTutorial"
+
+    #8
+    # - "garage/tutorial/config/quickGameStartTutorial"
+    - "garage/tutorial/config/quickGameCompleteTutorial"
+    # - "garage/tutorial/config/freeEnergyTutorial"
+
+
+    # Old players
+
+    #1
+    - "garage/tutorial/config/armsRaceWelcomeTutorial"
+    - "garage/tutorial/config/armsRaceModuleTutorial"
+
+    #- "garage/tutorial/config/quickGameStartTutorial"
+    #- "garage/tutorial/config/quickGameCompleteTutorial"
+    #- "garage/tutorial/config/freeEnergyTutorial"
+

@@ -1,0 +1,80 @@
+priceItem:
+  price: 2900
+xPriceItem:
+  price: 580
+order:
+  index: 7
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 15
+hullType:
+  hullType: MEDIUM
+health:
+  initialValue: 2800.000
+  finalValue: 2800.000
+weight:
+  initialValue: 3333.333
+  finalValue: 3333.333
+damping:
+  initialValue: 1700.000
+  finalValue: 1700.000
+speed:
+  initialValue: 8.833
+  finalValue: 8.833
+acceleration:
+  initialValue: 13.718
+  finalValue: 13.718
+reverseAcceleration:
+  initialValue: 9.370
+  finalValue: 9.370
+sideAcceleration:
+  initialValue: 20.600
+  finalValue: 20.600
+turnSpeed:
+  initialValue: 90.000
+  finalValue: 90.000
+turnAcceleration:
+  initialValue: 102.832
+  finalValue: 102.832
+reverseTurnAcceleration:
+  initialValue: 201.667
+  finalValue: 201.667
+turretTurnSpeedProperty:
+  initialValue: 106.667
+  finalValue: 106.667
+turretTurnAccelerationProperty:
+  initialValue: 98.333
+  finalValue: 98.333
+visualProperties:
+  mainProperties:
+    - name: Armor
+      normalizedValue: 0.837
+    - name: Mobility
+      normalizedValue: 0.661
+  properties:
+    - name: Armor
+      initialValue: 2800
+      finalValue: 2800
+    - name: Weight
+      initialValue: 33
+      finalValue: 33
+      unit: t
+    - name: Speed
+      initialValue: 8.83
+      finalValue: 8.83
+      format: 0.00
+      unit: meters_per_sec
+    - name: Acceleration
+      initialValue: 13.7
+      finalValue: 13.7
+      format: 0.0
+      unit: meters_per_sec
+    - name: Turning Speed
+      initialValue: 90
+      finalValue: 90
+      unit: degrees_per_sec
+    - name: TurretRotationSpeed
+      initialValue: 106.7
+      finalValue: 106.7
+      format: 0.0
+      unit: degrees_per_sec
+...

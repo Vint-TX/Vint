@@ -1,0 +1,18 @@
+---
+descriptionItem:
+  name: ХТ
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка.
+    • Если предмет уже есть у тебя в гараже, то вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    hunterXT: "Хантер XT"
+    smokyXT: "Смоки XT"
+    railXT: "Рельса XT"
+    thunderXT: "Гром XT"
+    hornetXT: "Хорнет XT"
+    vikingXT: "Викинг XT"
+    titanXT: "Титан ХТ"
+    twinsXT: "Твинс ХТ"
+    waspXT: "Васп XT"

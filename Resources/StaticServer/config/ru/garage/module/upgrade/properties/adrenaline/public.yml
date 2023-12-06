@@ -1,0 +1,76 @@
+moduleCooldownProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 0
+    - 0
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleAdrenalineEffectMaxHPPercentWorkingProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.25
+    - 0.26
+    - 0.28
+    - 0.29
+    - 0.31
+    - 0.32
+    - 0.33
+    - 0.35
+    - 0.36
+    - 0.38
+moduleAdrenalineEffectCooldownSpeedCoeffProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.10
+    - 1.14
+    - 1.19
+    - 1.23
+    - 1.28
+    - 1.32
+    - 1.37
+    - 1.41
+    - 1.46
+    - 1.50
+moduleDamageEffectMaxFactorProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.10
+    - 1.12
+    - 1.14
+    - 1.17
+    - 1.19
+    - 1.21
+    - 1.23
+    - 1.26
+    - 1.28
+    - 1.30
+moduleVisualProperties:
+  properties:
+    - name: CooldownReduction
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 50
+      unit: percent
+      format: 0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Damage
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 30
+      unit: percent
+      format: 0
+      spriteUID: 5538887f-b208-4fb4-ac4a-12223cb09fd3
+    - name: PercentToTrigger
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 25
+        - 38
+      unit: percent
+      format: 0
+      spriteUID: f8a309d3-44b3-4844-b2a1-a77fadcc36d1
+...

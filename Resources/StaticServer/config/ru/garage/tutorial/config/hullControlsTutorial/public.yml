@@ -1,0 +1,9 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/hullControlsTutorial/"
+  tutorialId: -1969453819
+  forNewPlayer: true
+  steps:
+    1: 1504002856142
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

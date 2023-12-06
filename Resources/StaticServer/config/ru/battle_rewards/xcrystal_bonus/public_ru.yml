@@ -1,0 +1,20 @@
+descriptionItem:
+  name: "X-Crystals bonus reward"
+  description: "X-Crystals bonus reward description"
+xCrystalRewardTextConfig:
+  title:
+    winning_streak: Серия побед!
+    mvp: Ты — лучший игрок
+    score: Упорный боец
+  description:
+    winning_streak: |
+      Ты совершил серию оглушительных побед, чем привлёк к себе внимание.
+      Держи заслуженную награду!
+    mvp: Отпразднуй достижение! Лучший игрок должен выделяться на поле боя.
+    score: Битва за битвой, фраг за фрагом! Своим упорством ты привлёк к себе внимание и заработал заслуженную награду.
+  purchaseText: Спасибо за покупку!
+itemsConfig:
+  spriteUid: 6935a30f-5ae5-4a26-b816-35e7bc16527a
+  title: |
+    Увеличенный бонус
+    при покупке X-кристаллов

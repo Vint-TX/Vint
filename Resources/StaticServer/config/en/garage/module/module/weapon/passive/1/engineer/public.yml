@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636353723186437756
+  path: garage/module/upgrade/properties/engineer
+itemIcon:
+  spriteUid: 51386049-49b4-45e3-a14e-bfd636afc77c
+itemBigIcon:
+  spriteUid: adb8ad8e-88b2-4cc1-9780-d0f8385bc054
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 636334642664388463
+      config: battle/effect/engineer

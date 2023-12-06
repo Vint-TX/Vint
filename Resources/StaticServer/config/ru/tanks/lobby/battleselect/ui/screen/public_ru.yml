@@ -1,0 +1,8 @@
+dMBattleResultsScreen:
+  header: "РЕЗУЛЬТАТЫ БИТВЫ"
+teamBattleResultsScreen:
+  header: "РЕЗУЛЬТАТЫ БИТВЫ"
+personalBattleResultsScreen:
+  header: "РЕЗУЛЬТАТЫ БИТВЫ"
+  goOutButton: "ПРОДОЛЖИТЬ"
+  xPText: "Очки опыта"

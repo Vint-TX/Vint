@@ -1,0 +1,6 @@
+headerText: Error
+errorText: An error occurred while updating the game
+exitButtonLabel: QUIT
+reportButtonLabel: REPORT
+reportUrl: https://help.tankix.com/en/tanki-x
+reConnectTime: 999999 # hack: hides restart button

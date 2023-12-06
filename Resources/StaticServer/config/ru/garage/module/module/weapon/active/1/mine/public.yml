@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636372750516278436
+  path: garage/module/upgrade/properties/mine
+itemIcon:
+  spriteUid: 96ca8fda-5a11-4b2b-89e2-c57de01d6c59
+itemBigIcon:
+  spriteUid: 71bfa26c-ceb6-4aa2-8375-ab8ccf0b020a
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1486709084156
+      config: battle/effect/mine

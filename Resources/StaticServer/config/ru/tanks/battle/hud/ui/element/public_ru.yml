@@ -1,0 +1,63 @@
+exitBattleWindow:
+  regularHeaderText: 'Внимание!'
+  firstLineText: "Вы заработали в этой битве <b><color=#3AC4E9FF>{0}</color></b><sprite=8>."
+  secondLineText: 'Если вы покинете битву, ваша награда и прогресс <b>будут потеряны.</b>'
+  thirdLineText: 'Вы уверены, что хотите дезертировать?'
+  customThirdLineText: 'Вы уверены, что хотите выйти из битвы?'
+  customBattleSecondLineText: 'Если вы покинете битву, ваш прогресс <b>будет потерян.</b>'
+  warningText: 'Внимание: дезертирство накладывает штраф при поиске игры!'
+  yesText: 'Дезертировать'
+  customYesText: 'Покинуть бой'
+  noText: 'Продолжить бой'
+  newbieExitText: 'Выход из битвы'
+  newbieSecondLineText: 'Вы уверены, что хотите выйти?'
+  newbieThirdLineText: 'Подсказка: выход из битв на более старших рангах является дезертирством.'
+dMFinishWindow:
+  timeIsUpText: "ВРЕМЯ ВЫШЛО"
+dMHUDMessages:
+  mainMessage: "Уничтожай всех"
+  spectatorMessage: "Режим наблюдателя"
+tDMHUDMessages:
+  mainMessage: "Уничтожай врагов"
+cTFHUDMessages:
+  captureFlagMessage: "Захвати флаг"
+  protectFlagCarrierMessage: "Защищай флагоносца"
+  deliverFlagMessage: "Доставь флаг"
+  returnFlagMessage: "Верни свой флаг"
+  enemyBase: "База врага"
+  enemyFlag: "Флаг врага"
+  yourBase: "Ваша база"
+  yourFlag: "Ваш флаг"
+doubleKill:
+  text: "Двойное убийство"
+trippleKill:
+  text: "Тройное убийство"
+ultraKill:
+  text: "Ультракилл"
+killStreak:
+  text: "Серия из {0} танков"
+goldBox:
+  text: "Золотой ящик!"
+helpOverlay:
+  controlsText: "Управление танком"
+  turretText: "Башня"
+  fireText: "Огонь"
+  spaceText: "Пробел"
+  orText: "или"
+  additionalControlsText: "Дополнительные кнопки управления"
+  modulesText: "Модули"
+  graffitiText: "Граффити"
+  selfDestructText: "Самоуничтожение"
+  helpText: "Помощь"
+  exitText: "Выход"
+battleResultsTemplates:
+  titleTextTemplate: "{0} - {1} - {2}"
+  placeTextTemplate: "Ты занял {0} место"
+  earnedExperienceTextTemplate: "+{0} очков опыта"
+  earnedUpgradeTextTemplate: "+{0} очков мастерства"
+  rewardCountTextTemplate: "+{0}"
+ordinalNumbersSuffix:
+  stSuffix: ""
+  ndSuffix: ""
+  rdSuffix: ""
+  thSuffix: ""

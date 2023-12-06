@@ -1,0 +1,9 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/turretTutorial/"
+  tutorialId: -673178926
+  forNewPlayer: true
+  steps:
+    1: 1504002856142 # show popup
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

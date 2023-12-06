@@ -1,0 +1,133 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 81000
+    - 78000
+    - 75000
+    - 72000
+    - 69000
+    - 66000
+    - 63000
+    - 60000
+    - 57000
+    - 54000
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEffectDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 4000
+    - 4222
+    - 4444
+    - 4667
+    - 4889
+    - 5111
+    - 5333
+    - 5556
+    - 5778
+    - 6000
+moduleHealingEffectHPPerMSProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.08
+    - 0.08
+    - 0.09
+    - 0.09
+    - 0.10
+    - 0.10
+    - 0.11
+    - 0.11
+    - 0.12
+    - 0.12
+moduleHealingEffectInstantHPProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 500.00
+    - 527.78
+    - 555.56
+    - 583.33
+    - 611.11
+    - 638.89
+    - 666.67
+    - 694.44
+    - 722.22
+    - 750.00
+moduleHealingEffectFirstTickMsProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1000
+    - 1000
+moduleHealingEffectPeriodicTickProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 250
+    - 250
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 81
+        - 54
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: InstantHealing
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 500
+        - 750
+      unit: hp
+      format: 0
+      spriteUID: cfd2830e-ab56-4774-bba3-9465a37a1478
+    - name: AdditionalHealing
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 8
+        - 12
+      unit: hps
+      format: 0
+      spriteUID: 6ef8761b-39e2-4c79-9f43-e82a8891b054
+    - name: AddHealingDuration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 4
+        - 6
+      unit: sec
+      format: 0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: HealingAmount
+      linearInterpolation: false
+      upgradeLevel2Values:
+        - 820
+        - 884
+        - 950
+        - 1019
+        - 1089
+        - 1161
+        - 1236
+        - 1311
+        - 1390
+        - 1479
+      unit: hp
+      format: 0
+      spriteUID: cfd2830e-ab56-4774-bba3-9465a37a1478
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

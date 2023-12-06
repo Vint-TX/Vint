@@ -1,0 +1,9 @@
+emailInputField:
+  hint: Адрес электронной почты
+  emailIsInvalid: Введён неверный адрес электронной почты
+  emailIsOccupied: Введённый адрес уже зарегистрирован
+  emailIsNotConfirmed: Введённый адрес электронной почты не подтверждён
+changeEmailButton:
+  text: Изменить email
+helpButton:
+  url: 'https://help.tankix.com/ru/tanki-x/forms/free-request'

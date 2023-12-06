@@ -1,0 +1,21 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/turretChangeTutorial/"
+  tutorialId: -2063696990
+  forNewPlayer: true
+  steps:
+    1: 1504002856142
+    2: 1504257079301 # tank highlight template
+    3: 1504257079301 # tank highlight template
+    4: 1504002856142
+    5: 1504698500736 # select item template
+    6: 1504257079301 # tank highlight template
+    7: 1504698500736 # highlight cry
+    8: 1504002856142 # add cry
+    9: 1504002856142 # highlight buy button
+    10: 1504002856142 # highlight confirm button
+    11: 1504002856142 # highlight play button
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -719658163
+    - -1969453819

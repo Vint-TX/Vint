@@ -1,0 +1,49 @@
+unityAsset:
+  reference:
+    assetGuid: a1075892035a5ed4c96d4c2713a312a5
+streamHitConfig:
+  localCheckPeriod: 0
+  sendToServerPeriod: 0.1
+  detectStaticHit: true
+verticalSectorsTargeting:
+  workDistance: 1.0e6
+  vAngleUp: 13
+  vAngleDown: 16
+  hAngle: 0
+  raysPerDegree: 0.4
+ctfTargetEvaluator:
+  flagCarrierPriorityBonus: 5
+distanceAndAngleTargetEvaluator:
+  distanceWeight: 0.65
+  angleWeight: 0.35
+weaponCooldown:
+  cooldownIntervalSec: 0.1
+weaponGyroscope:
+  forceMult: 0
+reticle:
+  template: 636100801360863080
+  configPath: /battle/reticle
+kickbackCameraShakerConfig:
+  enabled: true
+  magnitude: 0.29
+  roughness: 7.57
+  fadeInTime: 1
+  fadeOutTime: 1
+  posInfluenceX: 0.15
+  posInfluenceY: 0.15
+  posInfluenceZ: 0
+  rotInfluenceX: 0.5
+  rotInfluenceY: 1
+  rotInfluenceZ: 0
+impactCameraShakerConfig:
+  enabled: true
+  magnitude: 0.2
+  roughness: 7.57
+  fadeInTime: 1
+  fadeOutTime: 1
+  posInfluenceX: 0.75
+  posInfluenceY: 0.75
+  posInfluenceZ: 1.25
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 1

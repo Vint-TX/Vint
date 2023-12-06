@@ -1,0 +1,13 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/freeEnergyTutorial/"
+  tutorialId: 1858414582
+  forNewPlayer: true
+  forOldPlayer: true
+  steps:
+    1: 1504002856142 # resetTimer
+    2: 1504002856142 # highlight shop button
+    3: 1504002856142 # highlight free button
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -1607969678

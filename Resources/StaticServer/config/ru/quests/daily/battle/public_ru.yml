@@ -1,0 +1,13 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Проведи {0} {1}'
+    cases:
+      DEFAULT: 'сражений'
+      ONE: 'сражение'
+      TWO: 'сражения'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Режим
+    WEAPON: Пушка
+    TANK: Корпус

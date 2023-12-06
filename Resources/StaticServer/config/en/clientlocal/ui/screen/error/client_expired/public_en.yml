@@ -1,0 +1,6 @@
+errorText: |
+  The game is missing an update.
+  If the update wasn't downloaded and installed automatically, please restart Steam.
+reConnectTime: 999999 # hack: hides restart button
+reportButtonLabel: DETAILS
+reportUrl: https://help.tankix.com/en/tanki-x/TODO

@@ -1,0 +1,19 @@
+specialOfferContentLocalization:
+  spriteUid: 1071f87f-07e9-4bf0-b91f-13b12561ac31
+  title: 'Отряд «Альфа»'
+  description: |
+    4000 Кристаллов
+    + в подарок редкая краска, граффити,
+    аватар и Х-кристаллы
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Торопись! Предложение ограничено по времени
+  description: |
+    Быстрее, точнее, мощнее! Всегда первые во всём, члены отряда «Альфа» готовы принять в свои ряды достойных танкистов. Ты готов стать одним из них?
+starterPackMainElement:
+  itemId: 947348559 # Crystals
+  count: 4000
+  description: За кристаллы ты можешь покупать новые пушки и корпуса, открывать краски и улучшать модули
+  title: Кристаллы
+receiptText:
+  text: Специальное предложение «Отряд «Альфа»»

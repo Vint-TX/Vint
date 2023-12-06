@@ -1,0 +1,14 @@
+bonusConfig:
+  fallSpeed: 1.5
+  angularSpeed: 5.729578
+  swingFreq: 1
+  swingAngle: 6
+  alignmentToGroundAngularSpeed: 40
+  appearingOnGroundTime: 1
+  spawnDuration: 1
+bonusBoxPrefab:
+  assetGuid: bf2c4c663c8e25e4db429cdcea9a09a4
+bonusParachutePrefab:
+  assetGuid: a77efd85e32a8074182acd4f3c734788
+brokenBonusBoxPrefab:
+  assetGuid: ba0cb80b7ca76a149860285cc1337a94

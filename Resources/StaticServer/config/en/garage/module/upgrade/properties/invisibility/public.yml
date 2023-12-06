@@ -1,0 +1,65 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 35000
+    - 33704
+    - 32407
+    - 31111
+    - 29815
+    - 28519
+    - 27222
+    - 25926
+    - 24630
+    - 23333
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEffectDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 6000
+    - 6333
+    - 6667
+    - 7000
+    - 7333
+    - 7667
+    - 8000
+    - 8333
+    - 8667
+    - 9000
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 35
+        - 23.3
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Duration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 6
+        - 9
+      unit: sec
+      format: 0.0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

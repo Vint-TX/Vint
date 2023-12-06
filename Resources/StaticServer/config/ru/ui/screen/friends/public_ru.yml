@@ -1,0 +1,18 @@
+---
+screenHeaderText:
+  headerText: ДРУЗЬЯ
+friendsScreenLocalization:
+  emptyListNotificationText: Вы ещё никого не добавили в друзья
+  acceptedFriendHeader: Друзья
+  possibleFriendHeader: Потенциальные друзья
+  searchUserHint: Введите имя игрока
+  searchUserError: Профиль игрока с таким именем не найден
+  searchButtonText: ИСКАТЬ
+  profileButtonText: ПРОФИЛЬ
+  spectateButtonText: НАБЛЮДАТЬ
+  acceptButtonText: ПРИНЯТЬ
+  rejectButtonText: ОТКЛОНИТЬ
+  revokeButtonText: ОТОЗВАТЬ
+  removeButtonText: УДАЛИТЬ
+  removeButtonConfirmText: ДА
+  removeButtonCancelText: НЕТ

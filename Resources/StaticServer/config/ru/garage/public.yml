@@ -1,0 +1,18 @@
+upgradeLevels:
+  levelsExperiences:
+    - 600
+    - 1800
+    - 3600
+    - 6600
+    - 10800
+    - 16800
+    - 25200
+    - 36000
+    - 51000
+moduleTypesImages:
+  moduleType2image:
+    ACTIVE: 35a93e63-04bb-43aa-b362-ab398cd42523
+    PASSIVE: a89d0d70-d0af-4de9-92d1-c8aee7348413
+  moduleType2color:
+    ACTIVE: "#F5DF59"
+    PASSIVE: "#6EE0F7"

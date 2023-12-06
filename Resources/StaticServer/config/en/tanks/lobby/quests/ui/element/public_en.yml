@@ -1,0 +1,12 @@
+---
+questItemGUI:
+  condition: '{0}: {1}'
+  progress: '/'
+  pickUp: Quest complete!
+  nextQuest: 'New quest available in:'
+questExpireTimer:
+  timerText: '{TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'

@@ -1,0 +1,11 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/turretControlsTutorial/"
+  tutorialId: -325846104
+  forNewPlayer: true
+  steps:
+    1: 1504002856142
+    2: 1504002856142
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -1969453819

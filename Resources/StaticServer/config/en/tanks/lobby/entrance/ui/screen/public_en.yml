@@ -1,0 +1,44 @@
+---
+entranceScreen:
+  header: LOG IN
+  enterNameOrEmail: Nickname or email address
+  enterPassword: Password
+  enterSymbolsFromCaptcha: Please type the characters you see on the picture
+  rememberMeCheckbox: Remember me
+  play: PLAY
+  forgetNickOrPassword: Forgot nickname or password?
+  incorrectPassword: Password is incorrect
+  incorrectCaptcha: Incorrect. Please try again.
+  incorrectLogin: User not found
+  unconfirmedEmail: Email is not registered
+  loginFailed: Login failed. Please try again.
+  registration: SIGN UP
+inviteScreen:
+  header: ENTER INVITE CODE
+  inputHint: Enter your invite code
+  continue: CONTINUE
+  error: Incorrect invite code
+registrationScreen:
+  header: SIGN UP
+  finish: REGISTER
+  skip: REGISTER LATER
+  nickname: Nickname
+  password: Password
+  repeatPassword: Repeat password
+  loginContainsRestrictedSymbols: "Nickname contains characters that aren't allowed"
+  loginAlreadyInUse: This nickname has already been registered by another player
+  loginIsTooShort: Nickname is too short
+  loginIsTooLong: Nickname is too long
+  loginContainsSpecialSymbolsInARow: Nickname contains several special symbols in a row
+  loginBeginsWithSpecialSymbol: Nickname starts with special symbols
+  loginEndsWithSpecialSymbol: Nickname ends with special symbols
+  iAcceptTermsPart1: 'I accept the '
+  iAcceptTermsPart2EULA: 'End User License Agreement,'
+  iAcceptTermsPart3Confidentiality: (including the non-disclosure clause),
+  iAcceptTermsPart4Rules: Game Rules
+  iAcceptTermsPart5PrivacyPolicy: Privacy and Cookies Policy
+  licenseAgreementUrl: http://tankix.com/en/eula/
+  gameRulesUrl: http://tankix.com/en/rules/
+  privacyPolicyUrl: http://tankix.com/en/privacy/
+registrationWithReservationCodeScreen:
+  header: SIGN UP

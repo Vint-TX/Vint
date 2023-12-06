@@ -1,0 +1,167 @@
+dailyBonusCommonConfig:
+  receivingBonusIntervalInSeconds: 72000
+  # receivingBonusIntervalInSeconds: 2
+  battleCountToUnlockDailyBonuses: 2
+  premiumTimeSpeedUp: 3
+dailyBonusFirstCycle:
+  zones:
+    - 2
+    - 9
+    - 16
+    - 23
+    - 30
+  dailyBonuses:
+    - cryAmount: 96
+      code: 1
+    - cryAmount: 106
+      code: 2
+    - code: 3
+      containerReward:
+        marketItemId: 255419373
+        amount: 1
+    - cryAmount: 98
+      code: 4
+    - cryAmount: 104
+      code: 5
+    - cryAmount: 202
+      code: 6
+    - code: 7
+      detailReward:
+        marketItemId: -53406574
+        amount: 1
+    - cryAmount: 148
+      code: 8
+    - cryAmount: 144
+      code: 9
+    - code: 10
+      containerReward:
+        marketItemId: -370755132
+        amount: 1
+    - cryAmount: 210
+      code: 11
+    - cryAmount: 220
+      code: 12
+    - xcryAmount: 50
+      code: 13
+    - code: 14
+      detailReward:
+        marketItemId: -53406574
+        amount: 1
+    - cryAmount: 192
+      code: 15
+    - cryAmount: 260
+      code: 16
+    - code: 17
+      containerReward:
+        marketItemId: 655960513
+        amount: 1
+    - cryAmount: 266
+      code: 18
+    - cryAmount: 308
+      code: 19
+    - cryAmount: 1000
+      code: 20
+    - code: 21
+      detailReward:
+        marketItemId: -53406574
+        amount: 1
+    - cryAmount: 198
+      code: 22
+    - cryAmount: 220
+      code: 23
+    - cryAmount: 1050
+      code: 24
+    - cryAmount: 280
+      code: 25
+    - cryAmount: 326
+      code: 26
+    - xcryAmount: 50
+      code: 27
+    - code: 28
+      detailReward:
+        marketItemId: -53406574
+        amount: 1
+    - cryAmount: 300
+      code: 29
+    - cryAmount: 310
+      code: 30
+    - cryAmount: 278
+      code: 31
+dailyBonusEndlessCycle:
+  zones:
+    - 2
+    - 9
+    - 16
+    - 23
+    - 30
+  dailyBonuses:
+    - cryAmount: 194
+      code: 1
+    - cryAmount: 218
+      code: 2
+    - cryAmount: 1200
+      code: 3
+    - cryAmount: 268
+      code: 4
+    - cryAmount: 320
+      code: 5
+    - cryAmount: 712
+      code: 6
+    - code: 7
+      detailReward:
+        marketItemId: 1143965766
+        amount: 1
+    - cryAmount: 198
+      code: 8
+    - cryAmount: 342
+      code: 9
+    - cryAmount: 1100
+      code: 10
+    - cryAmount: 310
+      code: 11
+    - cryAmount: 260
+      code: 12
+    - cryAmount: 1000
+      code: 13
+    - code: 14
+      detailReward:
+        marketItemId: 1143965766
+        amount: 1
+    - cryAmount: 196
+      code: 15
+    - cryAmount: 322
+      code: 16
+    - cryAmount: 1220
+      code: 17
+    - cryAmount: 360
+      code: 18
+    - cryAmount: 422
+      code: 19
+    - cryAmount: 1010
+      code: 20
+    - code: 21
+      detailReward:
+        marketItemId: 215382134
+        amount: 1
+    - cryAmount: 224
+      code: 22
+    - cryAmount: 376
+      code: 23
+    - cryAmount: 1200
+      code: 24
+    - cryAmount: 360
+      code: 25
+    - cryAmount: 430
+      code: 26
+    - xcryAmount: 20
+      code: 27
+    - code: 28
+      detailReward:
+        marketItemId: 215382134
+        amount: 1
+    - cryAmount: 390
+      code: 29
+    - cryAmount: 512
+      code: 30
+    - cryAmount: 460
+      code: 31

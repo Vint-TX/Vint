@@ -1,0 +1,5 @@
+---
+battleModeLocalization:
+  DM: Deathmatch
+  CTF: Capture the flag
+  TDM: Team deathmatch

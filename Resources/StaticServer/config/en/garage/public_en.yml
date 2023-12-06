@@ -1,0 +1,102 @@
+---
+slotsTexts:
+  slot2modules:
+    ACTIVE: Slot "Active"
+    PASSIVE: Slot "Passive"
+localizedVisualProperties:
+  names:
+    FireRate: Firing Rate
+    Range: Range
+    Damage: Damage
+    DPM: Damage per Minute (DPM)
+    Armor: Armor
+    Speed: Speed
+    Mobility: Mobility
+    Weight: Weight
+    Acceleration: Acceleration
+    "Turning Speed": Turning Speed
+    "Damage per Second": Damage per Second
+    "Charge Time": Charge Time
+    "Reload Time": Reload Time
+    "Attack Distance": Attack Distance
+    "Max Damage Distance": Max Damage Distance
+    "Attack Cone Angle": Attack Cone Angle
+    "Damage per Pellet": Damage per Pellet
+    "Pellets per Shot": Pellets per Shot
+    "Max Damage per Shot": Max Damage per Shot
+    "Shot Delay Time": Shot Delay Time
+    "Magazine Reload Time": Clip Reload Time
+    "Healing per Second": Healing per Second
+    "Piercing Damage Percent": Piercing Damage Percent
+    "Damage per Projectile": Damage per Projectile
+    "Projectiles Limit": Projectiles Limit
+    "Projectile Speed": Projectile Speed
+    "Aiming Damage": Aiming Damage
+    "Loading Time": Loading Time
+    "Aiming Speed": Aiming Speed
+    "Aiming Impact": Aiming Impact
+    "Critical Damage": Critical Damage
+    "Critical Chance": Critical Chance
+    "Splash Impact": Splash Impact
+    "Overheating Time": Overheating Time
+    "Impact": Impact Force
+    "Max Impact": Max Impact
+    Cooldown: Cooldown
+    CooldownSpeed: Cooldown Speed
+    Duration: Duration
+    IncomingDamageToHealth: Damage to Health
+    TurretRotationSpeed: Turret Rotation Speed
+    TurretRotationAcceleration: Turret Rotation Acceleration
+    IncomingBackhitDamage: Incoming Backhit Damage
+    BackhitDamage: Backhit Damage
+    ReducingCooldownsOn: Reducing Cooldowns on
+    HealingAmount: Healing Amount
+    HealingAmountPercent: Healing Amount
+    WaveRange: Wave Range
+    MagazineReload: Magazine Reload for
+    MinDamage: Min Damage
+    MaxDamage: Max Damage
+    InstantHealing: Instant Healing
+    TargetingRange: Targeting Range
+    ExplosionRange: Explosion Range
+    AdditionalDuration: Additional Duration
+    TemperatureIncrease: Temperature Increase
+    TemperatureDecrease: Temperature Decrease
+    VisibilityArea: Visibility Area
+    Reserve: Reserve
+    ReloadingCapacity: Reloading Capacity
+    HullAccelerationSpeed: Hull Acceleration Speed
+    CooldownReduction: Cooldown Reduction
+    PercentToTrigger: Health Percent to Function
+    AdditionalHealing: Additional Healing
+    AddHealingDuration: Healing Duration
+    DamageReduction: Damage Reduction
+    ModuleBlock: Blocking Duration
+    SplashRadius: Splash Radius
+    ActivationTime: Activation Time
+    CryoStateDuration: Duration of CryoState
+    TriggerRadius: Trigger Radius
+    TriggerDelay: Trigger Delay
+    TemperatureDuration: Temperature Duration
+    SpinUpTime: Spin Up Time
+    HeatDamage: Max Heat Damage
+    HeatTemperatureLimit: Heat Temperature Limit
+    HeatTemperatureDelta: Heat Temperature Delta
+    FreezeTemperatureLimit: Freeze Temperature Limit
+    FreezeTemperatureDelta: Freeze Temperature Delta
+    WorkingTemperatureLimit: Working Temeperature
+    MagazineSize: Clip Size
+    SelfHealingAmount: Self Healing Amount
+    MineResistancePercent: Mine Resistance
+  units:
+    sec: 'sec'
+    degrees_per_sec: '°/sec'
+    m: 'm'
+    t: 't'
+    meters_per_sec: 'm/sec'
+    degree: '°'
+    percent: '%'
+    hp: ''
+    hps: 'hp/sec'
+    percentinsec: '%/sec'
+    x: 'x'

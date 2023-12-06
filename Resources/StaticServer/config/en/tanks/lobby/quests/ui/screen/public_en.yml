@@ -1,0 +1,4 @@
+questsScreen:
+  header: Quests
+questWindow:
+  closeButton: CLOSE

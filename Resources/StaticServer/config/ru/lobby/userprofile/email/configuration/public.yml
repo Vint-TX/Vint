@@ -1,0 +1,5 @@
+emailConfirmationCodeConfig:
+  # Минимальное время, в секундах, между отправкой двух писем одного пользорвателя
+  emailSendThresholdInSeconds: 60
+  # Максимальная длина строки в поле ввода кода подтверждения
+  confirmationCodeInputMaxLength: 36

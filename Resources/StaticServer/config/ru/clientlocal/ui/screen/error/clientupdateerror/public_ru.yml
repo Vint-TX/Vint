@@ -1,0 +1,6 @@
+headerText: Ошибка
+errorText: При обновлении игры произошёл сбой
+exitButtonLabel: ВЫХОД
+reportButtonLabel: СООБЩИТЬ
+reportUrl: https://help.tankix.com/ru/tanki-x
+reConnectTime: 999999 # hack: hides restart button

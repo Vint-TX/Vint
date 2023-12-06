@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 635453745672535457
+  path: garage/module/upgrade/properties/drone
+itemIcon:
+  spriteUid: ca73b09c-807a-4ba5-aaf0-715d08b7f052
+itemBigIcon:
+  spriteUid: f495d2d2-d090-4559-8157-da68c1cbd42e
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 1485335642293
+      config: battle/effect/drone  

@@ -1,0 +1,6 @@
+applyButton:
+  text: Применить
+cancelButton:
+  text: Отмена
+defaultButton:
+  text: По умолчанию

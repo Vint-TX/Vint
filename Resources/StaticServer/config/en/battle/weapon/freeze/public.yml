@@ -1,0 +1,11 @@
+unityAsset:
+  reference:
+    assetGuid: be0b14bd81856a74c90dbbb19d37ff5c
+conicTargeting:
+  workDistance: 16
+  halfConeAngle: 10
+  halfConeNumRays: 5
+  numSteps: 5
+  fireOriginOffsetCoeff: 0.3
+weaponCooldown:
+  cooldownIntervalSec: 0.5

@@ -1,0 +1,4 @@
+﻿configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/texture/normal
+    - clientlocal/graphics/settings/texture/hight

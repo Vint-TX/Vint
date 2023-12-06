@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Win {0} team {1}'
+    cases:
+      DEFAULT: 'battles'
+      ONE: 'battle'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Mode
+    WEAPON: Turret
+    TANK: Hull

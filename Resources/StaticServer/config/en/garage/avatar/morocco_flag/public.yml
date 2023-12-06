@@ -1,0 +1,16 @@
+priceItem:
+  price: 3000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: ce4faab6-c441-49f7-9106-8d31c5dcd148
+imageItem:
+  spriteUid: ce4faab6-c441-49f7-9106-8d31c5dcd148
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 6
+itemRarity:
+  rarityType: COMMON

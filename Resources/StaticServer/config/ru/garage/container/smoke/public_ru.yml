@@ -1,0 +1,15 @@
+---
+descriptionItem:
+  name: Дым
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    smokylightning: "Смоки Молния"
+    smokyfumes: "Смоки Гарь"
+    smoketankpaint: Дым (Краска)
+    smokeweaponpaint: Дым (Покрытие)
+    infernotankpaint: Инферно (Краска)
+    infernoweaponpaint: Инферно (Покрытие)

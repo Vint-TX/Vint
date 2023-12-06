@@ -1,0 +1,50 @@
+damageResistanceEffectProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.70
+    - 0.67
+    - 0.65
+    - 0.62
+    - 0.60
+    - 0.57
+    - 0.54
+    - 0.52
+    - 0.49
+    - 0.47
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3000
+    - 2722
+    - 2444
+    - 2167
+    - 1889
+    - 1611
+    - 1333
+    - 1056
+    - 778
+    - 500
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 3
+        - 0.5
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: MineResistancePercent
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 30
+        - 53
+      unit: percent
+      format: 0
+      spriteUID: 18d7bcae-14ad-4401-a9cf-b030f433205b
+...

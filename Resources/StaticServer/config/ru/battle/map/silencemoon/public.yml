@@ -1,0 +1,12 @@
+assetReference:
+  reference:
+    assetGuid: e4f4bb06a86d9b84ba373b815481481c
+mapPreview:
+  assetGuid: 737b3eeaaf89cad4cb6ac296c3eed12c
+mapLoadPreview:
+  assetGuid: 737b3eeaaf89cad4cb6ac296c3eed12c
+mapModeRestriction:
+  availableModes:
+    - TDM
+    - DM
+    - CTF

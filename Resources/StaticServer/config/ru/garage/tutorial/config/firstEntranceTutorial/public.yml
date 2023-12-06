@@ -1,0 +1,13 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/firstEntranceTutorial/"
+  tutorialId: -719658163
+  forNewPlayer: true
+  steps:
+    1: 1504002856142 # show intro window
+    2: 1504002856142 # show intro dialog
+    3: 1504257079301 # highlight tank
+    4: 1504002856142 # setup module
+    5: 1504002856142 # highlight play button
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

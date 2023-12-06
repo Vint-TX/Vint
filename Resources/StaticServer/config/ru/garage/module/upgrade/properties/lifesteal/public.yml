@@ -1,0 +1,71 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 12000
+    - 11556
+    - 11111
+    - 10667
+    - 10222
+    - 9778
+    - 9333
+    - 8889
+    - 8444
+    - 8000
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleLifestealEffectFixedHPProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 200.00
+    - 211.11
+    - 222.22
+    - 233.33
+    - 244.44
+    - 255.56
+    - 266.67
+    - 277.78
+    - 288.89
+    - 300.00
+moduleLifestealEffectAdditiveHPFactorProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.10
+    - 0.11
+    - 0.11
+    - 0.12
+    - 0.12
+    - 0.13
+    - 0.13
+    - 0.14
+    - 0.14
+    - 0.15
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 12
+        - 8
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: HealingAmount
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 15
+      unit: percent
+      format: 0.0
+      spriteUID: cfd2830e-ab56-4774-bba3-9465a37a1478
+    - name: AdditionalHealing
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 200
+        - 300
+      unit: hp
+      format: 0
+      spriteUID: 6ef8761b-39e2-4c79-9f43-e82a8891b054
+...

@@ -1,0 +1,8 @@
+﻿configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/particle/fastest
+    - clientlocal/graphics/settings/particle/minimum
+    - clientlocal/graphics/settings/particle/medium
+    - clientlocal/graphics/settings/particle/hight
+    - clientlocal/graphics/settings/particle/maximum
+    - clientlocal/graphics/settings/particle/ultra

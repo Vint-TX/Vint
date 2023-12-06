@@ -1,0 +1,16 @@
+priceItem:
+  price: 23000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: a50f6d7e-c78f-4c2c-ba8c-aa77ac01c44b
+imageItem:
+  spriteUid: a50f6d7e-c78f-4c2c-ba8c-aa77ac01c44b
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

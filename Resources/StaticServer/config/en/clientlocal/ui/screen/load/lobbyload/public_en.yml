@@ -1,0 +1,6 @@
+---
+loadScreenLocalizedText:
+  loadFromDiskText: Loading
+  networkLoadText: Downloading
+  skipLoadingButton: PLAY
+  initializationText: Initialization...

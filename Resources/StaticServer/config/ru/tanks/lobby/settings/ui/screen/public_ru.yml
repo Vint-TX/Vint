@@ -1,0 +1,29 @@
+selectLocaleScreen:
+  header: НАСТРОЙКИ ЯЗЫКА
+  hint: После смены языка игра будет перезагружена
+  currentLanguage: Текущий язык
+graphicsSettingsScreen:
+  header: НАСТРОЙКИ ГРАФИКИ
+  reloadText: После применения текущих настроек игра будет перезагружена
+  perfomanceChangeText: Применение выбранных настроек может негативно повлиять на производительность игры
+  currentPerfomanceText: Текущие настройки могут негативно влиять на производительность игры
+  windowModeText: Режим экрана
+  screenResolutionText: Разрешение экрана
+  qualityLevelText: Уровень качества
+  saturationLevelText: Уровень насыщенности
+  renderResolutionQualityText: Пониженное разрешение
+  antialiasingQualityText: Сглаживание
+  anisotropicQualityText: Качество aнизотропной фильтрации
+  shadowQualityText: Качество теней
+  particleQualityText: Качество частиц
+  textureQualityText: Качество текстур
+  customSettingsModeText: Расширенные настройки
+  ambientOccluisonModeText: Затенение
+  bloomModeText: Блум
+  chromaticAberrationModeText: Хроматические аберрации
+  grainModeText: Зернистость
+  vignetteModeText: Виньетирование
+  vegetationQualityText: Качество деревьев
+  grassQualityText: Качество травы
+  cartridgeCaseAmountText: Количество гильз
+  vSyncQualityText: Вертикальная синхронизация

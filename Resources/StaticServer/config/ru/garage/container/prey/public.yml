@@ -1,0 +1,76 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1207082244 # sport tank paint
+      compensation: 6250
+      nameLocalizationKey: sporttankpaint
+
+    - itemBundles:
+        - marketItem: -1040121831 # sport weapon paint
+      compensation: 6250
+      nameLocalizationKey: sportweaponpaint
+
+    - itemBundles:
+        - marketItem: -24677874 # cave man graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 1384981436 # pixel duck graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -470773521 # savanna tank paint
+      compensation: 6250
+      nameLocalizationKey: savannatankpaint
+
+    - itemBundles:
+        - marketItem: 746819053 # savanna weapon paint
+      compensation: 6250
+      nameLocalizationKey: savannaweaponpaint
+
+    - itemBundles:
+        - marketItem: -245416673 # tundra tank paint
+      compensation: 6250
+      nameLocalizationKey: tundratankpaint
+
+    - itemBundles:
+        - marketItem: -2145802143 # tundra weapon paint
+      compensation: 6250
+      nameLocalizationKey: tundraweaponpaint
+
+    - itemBundles:
+        - marketItem: -318345288 # hunter  gold
+      compensation: 6250
+      nameLocalizationKey: hunterGold
+
+  rareItems:
+
+    - itemBundles:
+        - marketItem: 790846704 # xt hunter skin
+      nameLocalizationKey: hunterXT
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: cbcd1af250d97c44b80c7cf46c60ba93
+imageItem:
+  spriteUid: e6c3a69b-bab5-44ae-ae91-0650ad2bfb45
+order:
+  index: 2
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

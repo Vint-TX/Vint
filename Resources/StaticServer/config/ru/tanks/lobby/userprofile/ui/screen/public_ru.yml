@@ -1,0 +1,32 @@
+﻿changeUserEmailScreen:
+  header: ЭЛЕКТРОННАЯ ПОЧТА
+  sendButton: ПРОДОЛЖИТЬ
+  rightPanelHint: Укажи адрес своей электронной почты и подтверди его, чтобы защитить аккаунт, и получи подарок!
+confirmUserEmailScreen:
+  header: ЭЛЕКТРОННАЯ ПОЧТА
+  confirmationHint: 'На адрес электронной почты %EMAIL% отправлено письмо. Перейди по ссылке в этом письме, чтобы подтвердить новый адрес.'
+  sendAgainText: Выслать повторно
+  rightPanelHint: Подтверди адрес своей электронной почты, чтобы защитить аккаунт, и получи подарок!
+viewUserEmailScreen:
+  header: ЭЛЕКТРОННАЯ ПОЧТА
+  yourEmail: 'Твой адрес электронной почты: %EMAIL%'
+enterUserEmailScreen:
+  header: ВОССТАНОВЛЕНИЕ ДОСТУПА
+  continueButton: ПРОДОЛЖИТЬ
+  rightPanelHint: Если ты забыл свой электронный адрес, напиши в техподдержку с любой почты на help@tankix.com
+enterConfirmationCodeScreen:
+  header: ВОССТАНОВЛЕНИЕ ДОСТУПА
+  continueButton: ПОДТВЕРДИТЬ
+  sendAgainText: ВЫСЛАТЬ КОД
+  confirmationCodeText: Введи полученный код
+  confirmationHint: 'На адрес %EMAIL% отправлено письмо с кодом подтверждения для восстановления доступа к аккаунту.'
+  invalidCodeMessage: Введён неверный код
+enterNewPasswordScreen:
+  header: ВОССТАНОВЛЕНИЕ ДОСТУПА
+  newPassword: Введите новый пароль
+  repeatNewPassword: Повторите новый пароль
+  continueButton: ПРИМЕНИТЬ
+changeUIDScreen:
+  header: СМЕНИТЬ ИМЯ
+  inputHint: Введите новое имя
+  existUIDHint: Игрок с таким именем уже зарегистрирован

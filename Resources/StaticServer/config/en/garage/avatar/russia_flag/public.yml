@@ -1,0 +1,16 @@
+priceItem:
+  price: 3000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 888131ee-e3cc-4bc3-8e7f-1bee55833f75
+imageItem:
+  spriteUid: 888131ee-e3cc-4bc3-8e7f-1bee55833f75
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 6
+itemRarity:
+  rarityType: COMMON

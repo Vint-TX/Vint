@@ -1,0 +1,24 @@
+modulesScreenText:
+  craftableLabelText: Можно собрать
+  notCraftableLabelText: Не хватает ресурсов
+  assembleDialogConfirmButtonText: СОБРАТЬ
+  assembleDialogHeaderText: "Собрать модуль «{0}»?"
+  slotNameText: "СЛОТ {0}"
+  mountLabelText: Экипировано
+  exceptionalLabelText: Исключительный
+  epicLabelText: Редкий
+  additionalEffectLabelText: "Доп. эффект: +{0}% {1} «{2}»."
+  resistLongLabelText: сопротивления урону от пушки
+  damageLongLabelText: урона к пушке
+  additionalEffectDefaultText: "При создании модуля он получит +3-7% (в редких случаях +10%) случайного эффекта (защита от пушки или дополнительный урон) для случайной пушки."
+  slotLockedText: "Для открытия слота корпус должен быть улучшен до Уровня {0}."
+  pleaseChooseModuleText: "Пожалуйста, выбери модуль из списка справа."
+  pleaseChooseSlotText: "Пожалуйста, выберите слот."
+  resistShortLabel: "СУ"
+  damageShortLabel: "УРН"
+  okText: "OK"
+  moduleTypeDescriptions:
+    - "Слот предназначен для модулей, которые помогут полноценно отыграть роль Разведки в битве." #RECONNAISSANCE
+    - "Слот предназначен для модулей, которые помогут полноценно отыграть роль Поддержки в битве." #SUPPORT
+    - "Слот предназначен для модулей, которые помогут полноценно отыграть роль Обороны в битве." #DEFENCE
+    - "Слот предназначен для модулей, которые будут полезны любому танку на поле битвы." #SPECIAL

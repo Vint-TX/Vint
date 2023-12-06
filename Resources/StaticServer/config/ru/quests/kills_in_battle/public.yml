@@ -1,0 +1,85 @@
+imageItem:
+  spriteUid: 647b40d0-7c6c-4ac2-b4e4-d1672f99519b
+order:
+  index: 1
+questVariations:
+  quests:
+    - range: 0-9
+      targetValue: 10
+      questReward:
+        947348559: 100
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 10-19
+      targetValue: 15
+      questReward:
+        947348559: 200
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 20-29
+      targetValue: 20
+      questReward:
+        947348559: 200
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 30-39
+      targetValue: 25
+      questReward:
+        947348559: 300
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 40-49
+      targetValue: 30
+      questReward:
+        947348559: 300
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 50-59
+      targetValue: 35
+      questReward:
+        947348559: 400
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 60-69
+      targetValue: 35
+      questReward:
+        947348559: 500
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 70-79
+      targetValue: 35
+      questReward:
+        947348559: 500
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 80-89
+      targetValue: 35
+      questReward:
+        947348559: 500
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 90-100
+      targetValue: 35
+      questReward:
+        947348559: 500
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1

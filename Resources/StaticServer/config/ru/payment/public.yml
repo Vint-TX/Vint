@@ -1,0 +1,40 @@
+exchangeRate:
+  rate: 50
+packsImages:
+  amountToImages:
+    # 1
+    125:
+      - b8047a33-5ca3-4fda-b771-2cbd6f6f1732
+      - c5ad68f1-1cde-4f5c-a188-4cd66e8e557f
+      - 10dbb6e7-63d7-435f-9063-f12974ce1b9e
+      - a706f100-a96d-48b2-8147-907d4aa2a7fe
+    # 2
+    250:
+      - ea08ada7-2223-40c7-a72b-1dd90d4556e4
+      - 36a94718-b4b8-4226-8a10-ca6ba20bb908
+      - 4529400f-c0d8-4c98-a4e2-ebe6f2bbd310
+      - 4a7cba68-4112-489f-b2a1-478c57fd5e7c
+    # 3
+    750:
+      - f542d81c-f017-4a82-96bd-ae6295ca8c3e
+      - 12587e44-61f7-4bea-aa0e-e24009050399
+      - ed6a4472-14dd-419e-a0aa-45deec3352b3
+      - a390dc7b-540d-4a6f-9e2a-e5002b8b9040
+    # 4
+    1500:
+      - 6935a30f-5ae5-4a26-b816-35e7bc16527a
+      - 21c93287-d826-4393-b6d2-0401f2b67005
+      - 476fb374-e931-4109-995f-df88d7518df7
+      - 00d3404b-bad1-48bb-b4d9-354e9e785658
+    # 5
+    3750:
+      - 37ede6f8-fb33-4611-94d5-5e07cded4848
+      - 42732c00-9a54-4cc6-83ee-d8a80d2395e1
+      - f7546878-e644-418f-b3b3-d92bb46a8d91
+      - efc52ea4-e904-4b42-a426-d32cbb2bfe15
+    # 6
+    6250:
+      - 32c90ce8-52bd-46fb-a103-f4e3702fd1f7
+      - a75d510b-4c98-46e4-92ce-c56d06b86755
+      - e809aca3-1aaa-4ff8-9e7e-485277706a3b
+      - 1b0e2990-c28f-4a1a-bda6-e4c214bd33b8

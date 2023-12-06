@@ -1,0 +1,4 @@
+effectIcon:
+  spriteUid: ed8c6d84-6e20-4984-a39c-0fcd2311f4ad
+forceFieldEffect:
+  ownerTeamCanShootThrough: true

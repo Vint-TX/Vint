@@ -1,0 +1,10 @@
+tutorialStepData:
+  stepId: 723559090
+  visualStep: true
+  stepDesc: "Затемнение
+             - Выделен корпус, UI блока корпуса
+             - Текст рядом"
+
+tutorialHighlightTankStepData:
+  highlightHull: true
+  highlightWeapon: false

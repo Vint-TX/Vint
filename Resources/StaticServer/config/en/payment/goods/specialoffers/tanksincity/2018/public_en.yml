@@ -1,0 +1,19 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 93d011d4-e294-44b9-86fd-8ce07c4cc7a3
+  title: 'Tanks in the City'
+  description: |
+    Legendary paint "Summer"
+    500 X-crystals
+    10 Gold Boxes
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! The offer is valid only until the 9th of September
+  description: |
+    The pack contains a unique paint and cool in-game bonuses: the new gold boxes and X-crystals, that you can use to buy containers or improve your modules
+receiptText:
+  text: Special offer «Tanks in the City 2018»
+starterPackMainElement:
+  itemId: -274067352 # Summer paint
+  count: 0
+  title: Paint "Summer"
+  description: A new legendary paint called "Summer" which is designed as a reminder of Summer 2018

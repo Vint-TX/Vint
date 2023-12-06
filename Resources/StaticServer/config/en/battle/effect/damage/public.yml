@@ -1,0 +1,6 @@
+duration:
+  duration: 30000
+damageEffect:
+  factor: 1.5
+effectIcon:
+  spriteUid: f728a94d-fe3d-4ac1-b77d-7603f0b682e5

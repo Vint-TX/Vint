@@ -1,0 +1,17 @@
+---
+descriptionItem:
+  name: Майский II
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    steelShaft: Шафт «Сталь»
+    steelMammoth: Мамонт «Сталь»
+    mayViking: Викинг "День Победы"
+    mayThunder: Гром "День Победы"
+    triangletankpaint: Треугольник (Краска)
+    triangleweaponpaint: Треугольник (Покрытие)
+    digitaltankpaint: Диджитал (Краска)
+    digitalweaponpaint: Диджитал (Покрытие)

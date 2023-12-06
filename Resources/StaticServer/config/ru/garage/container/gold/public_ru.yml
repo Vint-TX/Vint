@@ -1,0 +1,31 @@
+---
+descriptionItem:
+  name: Золото
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    dictatorgold: Диктатор «Золото»
+    hornetgold: Хорнет «Золото»
+    huntergold: Хантер «Золото»
+    mammothgold: Мамонт «Золото»
+    titangold: Титан «Золото»
+    vikinggold: Викинг «Золото»
+    waspgold: Васп «Золото»
+    flamethrowergold: Огнемёт «Золото»
+    freezegold: Фриз «Золото»
+    hammergold: Молот «Золото»
+    isisgold: Изида «Золото»
+    railgungold: Рельса «Золото»
+    ricochetgold: Рикошет «Золото»
+    shaftgold: Шафт «Золото»
+    smokygold: Смоки «Золото»
+    thundergold: Гром «Золото»
+    twinsgold: Твинс «Золото»
+    vulcangold: Вулкан «Золото»
+    goldboxgold: Золотой ящик
+    goldbillgold: Золотой Билл
+    goldtankpaint: Золотой (Краска)
+    goldweaponpaint: Золотой (Покрытие)

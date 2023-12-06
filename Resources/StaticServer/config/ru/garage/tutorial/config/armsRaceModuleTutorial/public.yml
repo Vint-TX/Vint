@@ -1,0 +1,31 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/armsRaceModuleTutorial/"
+  tutorialId: -756813
+  forOldPlayer: true
+  steps:
+    1: 1504002856142 # remove mine
+    2: 1504002856142 # add cards
+    3: 1504002856142 # add repair kit
+    4: 1504002856142 # highlight slots
+    5: 1504002856142 # highlight slots
+    6: 1504002856142 # highlight weapon slots button
+    7: 1504698500736 # select mine, select item template
+    8: 1504002856142 # highlight mine, highlight craft
+    9: 1504002856142 # handle confirm popup
+    10: 1504002856142 # highlight equip
+    11: 1504002856142 # highlight modules
+
+    12: 1504698500736 # select mine
+    13: 1504002856142 # highlight mine
+    14: 1504698500736 # highlight mine and crys
+    15: 1504002856142 # add crys
+    16: 1504002856142 # highlight upgrade
+    17: 1504002856142 # handle confirm popup
+    #18 : 1504002856142 # upgrade info dialog
+    19: 1504002856142 # select stat
+    20: 1504002856142 # highlight stat
+    21: 1504002856142 # highlight modules
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - 419965140

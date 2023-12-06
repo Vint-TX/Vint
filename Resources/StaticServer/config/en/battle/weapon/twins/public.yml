@@ -1,0 +1,41 @@
+unityAsset:
+  reference:
+    assetGuid: 1dc2b559cff507c4c906d84dba713b52
+verticalTargeting:
+  workDistance: 85
+  angleUp: 11
+  numRaysUp: 6
+  angleDown: 14
+  numRaysDown: 7
+ctfTargetEvaluator:
+  flagCarrierPriorityBonus: 5
+distanceAndAngleTargetEvaluator:
+  distanceWeight: 0.65
+  angleWeight: 0.35
+reticle:
+  template: 636100801360863080
+  configPath: /battle/reticle
+kickbackCameraShakerConfig:
+  enabled: true
+  magnitude: 0.3
+  roughness: 2.43
+  fadeInTime: 0.14
+  fadeOutTime: 0.5
+  posInfluenceX: 0.25
+  posInfluenceY: 0.25
+  posInfluenceZ: 0.25
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 0
+impactCameraShakerConfig:
+  enabled: true
+  magnitude: 0.2
+  roughness: 2.43
+  fadeInTime: 0.14
+  fadeOutTime: 0.5
+  posInfluenceX: 0.75
+  posInfluenceY: 0.75
+  posInfluenceZ: 1.25
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 1

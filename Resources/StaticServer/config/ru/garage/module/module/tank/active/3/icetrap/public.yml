@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636384699493258494
+  path: garage/module/upgrade/properties/icetrap
+itemIcon:
+  spriteUid: 9d4236c0-ed3b-4d0a-8f0c-79fbe96dbb52
+itemBigIcon:
+  spriteUid: 12e1042b-8def-45fa-8d18-7e99ca4520e1
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 636384697009346423
+      config: battle/effect/icetrap  

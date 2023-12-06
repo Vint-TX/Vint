@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Destroy {0} enemy {1}'
+    cases:
+      DEFAULT: 'tanks'
+      ONE: 'tank'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Mode
+    WEAPON: Turret
+    TANK: Hull

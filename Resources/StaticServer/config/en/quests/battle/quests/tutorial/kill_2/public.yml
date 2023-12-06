@@ -1,0 +1,7 @@
+imageItem:
+  spriteUid: 330261ae-b6c5-44ea-9da2-5623a40cd86d1
+battleQuestTarget:
+  targetValue: 2
+battleQuestReward:
+  battleQuestReward: HULL_EXP
+  quantity: 150

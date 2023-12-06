@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 1505729969303
+  path: garage/module/upgrade/properties/forcefield
+itemIcon:
+  spriteUid: ed8c6d84-6e20-4984-a39c-0fcd2311f4ad
+itemBigIcon:
+  spriteUid: e28595d5-472d-4c55-a4a3-2f2a33042ee8
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 1503314606668
+      config: battle/effect/forcefield

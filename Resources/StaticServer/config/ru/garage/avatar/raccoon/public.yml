@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 3d323f75-0386-4873-a9dc-37bbd1bf9847
+imageItem:
+  spriteUid: 3d323f75-0386-4873-a9dc-37bbd1bf9847
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

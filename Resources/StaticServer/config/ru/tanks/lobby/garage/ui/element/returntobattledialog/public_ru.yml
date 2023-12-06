@@ -1,0 +1,7 @@
+modalConfirmWindow:
+  headerText: Вернуться в битву?
+  mainText: |
+    Ты хочешь вернуться в битву {0} {1}?
+    Ты покинешь битву через [LeftTime] в связи с неактивностью.
+  confirmText: Да
+  cancelText: Нет

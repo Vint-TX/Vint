@@ -1,0 +1,7 @@
+shardByModule:
+  entity: 8
+  cluster: 1
+  system: 1
+  delete-manager-region: 1
+  battle: 1
+

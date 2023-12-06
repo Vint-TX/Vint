@@ -1,0 +1,91 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 150000
+    - 144444
+    - 138889
+    - 133333
+    - 127778
+    - 122222
+    - 116667
+    - 111111
+    - 105556
+    - 100000
+moduleEmergencyProtectionEffectHolyshieldDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2700
+    - 2600
+    - 2500
+    - 2400
+    - 2300
+    - 2200
+    - 2100
+    - 2000
+    - 1900
+    - 1800
+moduleEmergencyProtectionEffectFixedHPProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 400.00
+    - 422.22
+    - 444.44
+    - 466.67
+    - 488.89
+    - 511.11
+    - 533.33
+    - 555.56
+    - 577.78
+    - 600.00
+moduleEmergencyProtectionEffectAdditiveHPFactorProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.10
+    - 0.11
+    - 0.11
+    - 0.12
+    - 0.12
+    - 0.13
+    - 0.13
+    - 0.14
+    - 0.14
+    - 0.15
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 150
+        - 100
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: AdditionalHealing
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 400
+        - 600
+      unit: hp
+      format: 0.0
+      spriteUID: 6ef8761b-39e2-4c79-9f43-e82a8891b054
+    - name: HealingAmount
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 15
+      unit: percent
+      spriteUID: cfd2830e-ab56-4774-bba3-9465a37a1478
+    - name: CryoStateDuration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2.7
+        - 1.8
+      unit: sec
+      format: 0.0
+      spriteUID: af08ec8b-605b-4617-9ba1-e371abdf885b
+...

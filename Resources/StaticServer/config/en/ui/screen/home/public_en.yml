@@ -1,0 +1,9 @@
+---
+homeScreenLocalizedStrings:
+  playButtonLabel: PLAY
+  battlesButtonLabel: BATTLES
+  garageButtonLabel: GARAGE
+  questsButtonLabel: QUESTS
+  containersButtonLabel: CONTAINERS
+screenHeaderText:
+  headerText: HOME

@@ -1,0 +1,13 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Собери {0} {1} с припасами'
+    cases:
+      DEFAULT: 'ящиков'
+      ONE: 'ящик'
+      TWO: 'ящика'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Режим
+    WEAPON: Пушка
+    TANK: Корпус

@@ -1,0 +1,17 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+imageItem:
+  spriteUid: c1c82687-414e-4a6d-993b-1edb4e795b9e
+order:
+  index: 0
+unityAsset:
+  reference:
+    assetGuid: dafede21fab90c442a37877ce9388248
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: LEGENDARY

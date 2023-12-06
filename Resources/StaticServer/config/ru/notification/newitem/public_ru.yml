@@ -1,0 +1,8 @@
+---
+newItemNotificationText:
+  headerText: Новый предмет!
+  itemText: "{0} x{1}"
+  singleItemText: "{0}"
+newPaintItemNotificationText:
+  coverText: Покрытие
+  paintText: Краска

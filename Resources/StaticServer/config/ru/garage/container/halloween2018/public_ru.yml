@@ -1,0 +1,13 @@
+---
+descriptionItem:
+  name: Хэллоуин 2018
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    railgunorange: Рельса "Оранжевый" Railgun
+    twinsorange: Твинс "Оранжевый" Twins
+    dictatorinferno: Диктатор "Инферно" Dictator
+    flamethrowerinferno: Огнемёт "Инферно" Firebird

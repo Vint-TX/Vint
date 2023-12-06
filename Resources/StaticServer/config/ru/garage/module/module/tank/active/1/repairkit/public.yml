@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636352947010929322
+  path: garage/module/upgrade/properties/recharging
+itemIcon:
+  spriteUid: e847e71e-95a8-47e2-91d8-e19474d32d3f
+itemBigIcon:
+  spriteUid: 0ef75fa0-ae18-445d-b0bb-26b10a69991f
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 636353594759166730
+      config: battle/effect/healing

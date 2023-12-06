@@ -1,0 +1,17 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+imageItem:
+  spriteUid: 2e7e46df-4a78-4d30-9087-adfcbf37c39d
+order:
+  index: 0
+unityAsset:
+  reference:
+    assetGuid: 80f55543767ac214c8a7897dbda38882
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: COMMON

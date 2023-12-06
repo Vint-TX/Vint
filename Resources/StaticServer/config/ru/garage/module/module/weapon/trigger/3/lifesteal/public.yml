@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636353777079800280
+  path: garage/module/upgrade/properties/lifesteal
+itemIcon:
+  spriteUid: ff8ff1a5-480a-4db9-ae92-6629956063ef
+itemBigIcon:
+  spriteUid: 895a63e3-bac7-4bf1-848a-c302723e4514
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 636341525184122918
+      config: battle/effect/lifesteal

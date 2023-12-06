@@ -1,0 +1,9 @@
+---
+homeScreenLocalizedStrings:
+  playButtonLabel: ИГРАТЬ
+  battlesButtonLabel: БИТВЫ
+  garageButtonLabel: ГАРАЖ
+  questsButtonLabel: ЗАДАНИЯ
+  containersButtonLabel: КОНТЕЙНЕРЫ
+screenHeaderText:
+  headerText: ДОМАШНИЙ ЭКРАН

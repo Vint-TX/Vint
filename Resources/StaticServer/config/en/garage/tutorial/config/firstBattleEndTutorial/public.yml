@@ -1,0 +1,12 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/firstBattleEndTutorial/"
+  tutorialId: -106771691
+  forNewPlayer: true
+  steps:
+    1: 1504002856142 # setup endgame screen (DefaultTemplate)
+    2: 1504002856142 # give rewards (DefaultTemplate)
+    3: 1509340416220 # show rewards (TutorialRewardsDataTemplate)
+    4: 1504002856142 # show message (DefaultTemplate)
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

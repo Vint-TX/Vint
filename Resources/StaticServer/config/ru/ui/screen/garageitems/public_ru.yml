@@ -1,0 +1,12 @@
+---
+garageItemsScreenText:
+  mountedText: УСТАНОВЛЕНО
+  userRankRestrictionDescription: 'Необходимо звание «%RANK%»'
+  upgradeLevelRestrictionDescription: 'Необходимо улучшений: %ITEM_upgLEVEL%'
+  weaponUpgradeLevelRestrictionDescription: 'Необходимо улучшений пушки "%ITEM_NAME%": %ITEM_upgLEVEL%'
+  hullUpgradeLevelRestrictionDescription: 'Необходимо улучшений корпуса "%ITEM_NAME%": %ITEM_upgLEVEL%'
+  shellItemsHeaderText: 'СНАРЯДЫ «{0}»'
+  weaponSkinItemsHeaderText: 'СКИНЫ ПУШКИ «{0}»'
+  hullSkinItemsHeaderText: 'СКИНЫ КОРПУСА «{0}»'
+  graffitiItemsHeaderText: 'ГРАФФИТИ'
+  onlyInContainerText: 'Доступно только в контейнере'

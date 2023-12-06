@@ -1,0 +1,32 @@
+changeUserEmailScreen:
+  header: EMAIL
+  sendButton: CONTINUE
+  rightPanelHint: Enter your email address and confirm it to protect your account, and receive a gift!
+confirmUserEmailScreen:
+  header: EMAIL
+  confirmationHint: 'The mail was sent to the address %EMAIL%. Follow the link in the message to confirm the new address.'
+  sendAgainText: Send again
+  rightPanelHint: Confirm you email address to protect your account, and receive a gift!
+viewUserEmailScreen:
+  header: EMAIL
+  yourEmail: 'Your e-mail address: %EMAIL%'
+enterUserEmailScreen:
+  header: RESTORE ACCESS
+  continueButton: CONTINUE
+  rightPanelHint: If you don't remember the email address you used to register this account, you can contact our customer support at help@tankix.com
+enterConfirmationCodeScreen:
+  header: RESTORE ACCESS
+  continueButton: CONFIRM
+  sendAgainText: SEND CODE
+  confirmationCodeText: Enter the received code
+  confirmationHint: "We've sent an email with a confirmation code to %EMAIL%. Use it to restore access to your account."
+  invalidCodeMessage: Code is incorrect
+enterNewPasswordScreen:
+  header: RESTORE ACCESS
+  newPassword: Enter a new password
+  repeatNewPassword: Repeat the new password
+  continueButton: APPLY
+changeUIDScreen:
+  header: CHANGE NICKNAME
+  inputHint: Enter new nickname
+  existUIDHint: This nickname has already been registered by another player

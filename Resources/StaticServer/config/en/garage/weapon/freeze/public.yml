@@ -1,0 +1,81 @@
+priceItem:
+  price: 2000
+xPriceItem:
+  price: 400
+userItemTemplate:
+  userItemTemplate: 1433406804439
+itemIcon:
+  spriteUid: 732ebe95-b187-48be-9b99-1af03fb0537e
+order:
+  index: 9
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 11
+damagePerSecondProperty:
+  initialValue: 506.000
+  finalValue: 506.000
+energyChargeSpeedProperty:
+  initialValue: 0.143
+  finalValue: 0.143
+energyRechargeSpeedProperty:
+  initialValue: 0.143
+  finalValue: 0.143
+maxDamageDistanceProperty:
+  initialValue: 5.680
+  finalValue: 5.680
+minDamageDistanceProperty:
+  initialValue: 16.000
+  finalValue: 16.000
+minDamagePercentProperty:
+  initialValue: 80.000
+  finalValue: 80.000
+deltaTemperaturePerSecondProperty:
+  initialValue: -0.400
+  finalValue: -0.400
+temperatureLimitProperty:
+  initialValue: -1.000
+  finalValue: -1.000
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.4
+    - name: Range
+      normalizedValue: 0.1
+    - name: FireRate
+      normalizedValue: 1.0
+  properties:
+    - name: DPM
+      initialValue: 15180
+      finalValue: 15180
+    - name: Damage per Second
+      initialValue: 506
+      finalValue: 506
+      format: 0
+    - name: Charge Time
+      initialValue: 7
+      finalValue: 7
+      format: 0
+      unit: sec
+    - name: Reload Time
+      initialValue: 7
+      finalValue: 7
+      format: 0
+      unit: sec
+    - name: Max Damage Distance
+      initialValue: 6
+      finalValue: 6
+      format: 0
+      unit: m
+    - name: Attack Distance
+      initialValue: 16
+      finalValue: 16
+      format: 0
+      unit: m
+    - name: FreezeTemperatureLimit
+      initialValue: 100
+      finalValue: 100
+      unit: percent
+    - name: FreezeTemperatureDelta
+      initialValue: 40
+      finalValue: 40
+      unit: percentinsec
+...

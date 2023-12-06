@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 1543484139511
+  path: garage/module/upgrade/properties/explosivemass
+itemIcon:
+  spriteUid: 3fc6884c-5d20-445f-8d94-b045df06f19f
+itemBigIcon:
+  spriteUid: 59467d49-26c4-49b6-940d-ee72065f9293
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1543482696222
+      config: battle/effect/explosivemass

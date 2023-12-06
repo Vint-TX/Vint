@@ -1,0 +1,73 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 988897323 # marshal graffiti
+      compensation: 7500
+    - itemBundles:
+        - marketItem: 1086271184 # tanki 2.0 graffiti
+      compensation: 7500
+    - itemBundles:
+        - marketItem: 97943767 # greenskulls paint
+      compensation: 7500
+      nameLocalizationKey: greenskullspaint
+    - itemBundles:
+        - marketItem: 1953107513 # greenskulls cover
+      compensation: 7500
+      nameLocalizationKey: greenskullscover
+    - itemBundles:
+        - marketItem: -21112705 # flora paint
+      compensation: 7500
+      nameLocalizationKey: florapaint
+    - itemBundles:
+        - marketItem: -1052246787 # flora cover
+      compensation: 7500
+      nameLocalizationKey: floracover
+    - itemBundles:
+        - marketItem: -8792825 # swamp paint
+      compensation: 7500
+      nameLocalizationKey: swamppaint
+    - itemBundles:
+        - marketItem: -1039926907 # swamp cover
+      compensation: 7500
+      nameLocalizationKey: swampcover
+    - itemBundles:
+        - marketItem: -14852182 # metel paint
+      compensation: 7500
+      nameLocalizationKey: metelpaint
+    - itemBundles:
+        - marketItem: -1045986264 # metel cover
+      compensation: 7500
+      nameLocalizationKey: metelcover
+  rareItems:
+
+    - itemBundles:
+        - marketItem: 1099854300 # t2 shaft skin
+    - itemBundles:
+        - marketItem: -1152047448 # t2 viking skin
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 342793891f26b2240aedc503817ef452
+imageItem:
+  spriteUid: 51275e18-979f-424b-966a-1fc983e66485
+order:
+  index: 1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 150
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 150
+    3: 400
+    10: 1200

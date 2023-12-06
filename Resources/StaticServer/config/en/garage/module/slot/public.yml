@@ -1,0 +1,18 @@
+slotsTypes:
+  slots:
+    SLOT1: ACTIVE
+    SLOT2: ACTIVE
+    SLOT3: PASSIVE
+    SLOT4: ACTIVE
+    SLOT5: ACTIVE
+    SLOT6: PASSIVE
+    SLOT7: ACTIVE
+slot2TankPart:
+  slots2TankPart:
+    SLOT1: WEAPON
+    SLOT2: WEAPON
+    SLOT3: WEAPON
+    SLOT4: TANK
+    SLOT5: TANK
+    SLOT6: TANK
+    SLOT7: COMMON

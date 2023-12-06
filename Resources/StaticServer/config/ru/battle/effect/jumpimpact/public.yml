@@ -1,0 +1,8 @@
+jumpEffect:
+  flyComponentDelayInMs: 150
+  baseImpact: 70000
+  gravityPenalty: 0.7
+  scaleByMass: false
+  alwaysUp: false
+effectIcon:
+  spriteUid: 8bf5d2cc-2f2b-4f2a-8d6e-880bcdbf4844

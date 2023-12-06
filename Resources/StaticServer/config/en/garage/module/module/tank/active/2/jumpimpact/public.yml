@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 1538452035606
+  path: garage/module/upgrade/properties/jumpimpact
+itemIcon:
+  spriteUid: 8bf5d2cc-2f2b-4f2a-8d6e-880bcdbf4844
+itemBigIcon:
+  spriteUid: 02cc7fe9-0d28-40a2-ae2f-db76b8569622
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1538451741218
+      config: battle/effect/jumpimpact

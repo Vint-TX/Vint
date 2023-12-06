@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 1553765506058
+  path: garage/module/upgrade/properties/sapper
+itemIcon:
+  spriteUid: 18d7bcae-14ad-4401-a9cf-b030f433205b
+itemBigIcon:
+  spriteUid: cc488135-5cb0-4768-80dd-c26d9d5bf7cb
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1553764196292
+      config: battle/effect/sapper

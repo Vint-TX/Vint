@@ -1,0 +1,52 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1636606664 # hornet-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: 1804747078 # hunter-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: 1163905852 # titan-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: 1380618384 # viking-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: -1838544851 # wasp-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: 1793185296 # railgun-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: 295929829 # smoky-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: -688039802 # thunder-xt zeus skin
+      compensation: 60000
+    - itemBundles:
+        - marketItem: 855411949 # twins-xt zeus skin
+      compensation: 60000
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: bdc7c0c34ce2edb4ea2365e314700ad7
+imageItem:
+  spriteUid: 050df0d6-2b57-4b4c-afdb-06db29ff2b5e
+order:
+  index: 1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 1499
+itemPacks:
+  forXPrice:
+    - 1
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 1499

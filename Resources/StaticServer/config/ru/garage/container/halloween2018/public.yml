@@ -1,0 +1,86 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1229590166 # railgun orange
+      compensation: 10000
+      nameLocalizationKey: railgunorange
+    - itemBundles:
+        - marketItem: -1319432295 # twins orange
+      compensation: 10000
+      nameLocalizationKey: twinsorange
+
+    #   - itemBundles:
+    #     - marketItem: 721518013 # halloween
+    #     compensation: 10000
+    #     nameLocalizationKey: halloween
+    #   - itemBundles:
+    #     - marketItem: 1218811098 # halloween 2017
+    #     compensation: 10000
+    #     nameLocalizationKey: halloween2017
+
+    - itemBundles:
+        - marketItem: 457993351 # pumpkin
+      compensation: 10000
+      nameLocalizationKey: pumpkin
+    - itemBundles:
+        - marketItem: -1786896255 # pumpkin 2017
+      compensation: 10000
+      nameLocalizationKey: pumpkin2017
+
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 1994127174 # dictator inferno
+      compensation: 10000
+      nameLocalizationKey: dictatorinferno
+    - itemBundles:
+        - marketItem: -983916600 # flamethrower inferno
+      compensation: 10000
+      nameLocalizationKey: flamethrowerinferno
+
+    - itemBundles:
+        - marketItem: 895058022 # graffiti monster
+      compensation: 10000
+      nameLocalizationKey: monstergraffiti
+
+    - itemBundles:
+        - marketItem: -662236117 # paint Autumn Leaves
+      compensation: 10000
+      nameLocalizationKey: autumnleavespaint
+    - itemBundles:
+        - marketItem: 355636982 # paint Spider Web
+      compensation: 10000
+      nameLocalizationKey: spiderwebpaint
+
+    - itemBundles:
+        - marketItem: 436923060 # paint depth
+      compensation: 10000
+      nameLocalizationKey: depthpaint
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 62c8e07fff52be34e93ca8bc10f96c57
+imageItem:
+  spriteUid: 7697544f-85a9-45cc-b0f2-1177a7152df6
+order:
+  index: 1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 199
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 199
+    3: 529
+    10: 1499

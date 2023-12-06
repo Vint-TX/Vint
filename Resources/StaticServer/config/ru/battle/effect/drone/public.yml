@@ -1,0 +1,16 @@
+effectIcon:
+  spriteUid: ca73b09c-807a-4ba5-aaf0-715d08b7f052
+ctfTargetEvaluator:
+  flagCarrierPriorityBonus: 5
+droneMoveConfig:
+  spawnPosition:
+    x: 0
+    y: 4
+    z: 0
+  flyPosition:
+    x: 0
+    y: 5
+    z: 0
+  rotationSpeed: 5
+  moveSpeed: 100
+  acceleration: 20

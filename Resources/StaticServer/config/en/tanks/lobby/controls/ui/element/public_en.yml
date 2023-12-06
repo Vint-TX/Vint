@@ -1,0 +1,7 @@
+---
+applyButton:
+  text: Apply
+cancelButton:
+  text: Cancel
+defaultButton:
+  text: Default

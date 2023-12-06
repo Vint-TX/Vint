@@ -1,0 +1,6 @@
+duration:
+  duration: 30000
+turboSpeedEffect:
+  speedCoeff: 1.5
+effectIcon:
+  spriteUid: 321ba474-4dd2-4737-a3ca-c51af5952081

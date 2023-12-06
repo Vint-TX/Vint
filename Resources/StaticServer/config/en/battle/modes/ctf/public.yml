@@ -1,0 +1,16 @@
+unityAsset:
+  reference:
+    assetGuid: 19e6e5e78de5f364f9d93216ac397f85
+bonusClientConfigPrefab:
+  assetGuid: f33096fa6343f4cb8b2a5f90f70e656a
+ctfConfig:
+  minDistanceFromMineToBase: 5
+  enemyFlagActionMinIntervalSec: 2.1
+  flagScaleOnGround: 0.04
+  flagScaleOnTank: 0.023
+  flagOriginPositionOnTank: 0.4
+  upsideDownMarkScale: 0.5
+  distanceForRotateFlag: 0.07
+  upsideDownMarkSpeed: 0.0
+  upsideDownMarkTimer: 2.0
+  upsideDownMarkOrigin: 5

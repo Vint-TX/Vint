@@ -1,0 +1,8 @@
+﻿host: *ip*
+acceptorPort: 5050
+configVersion: master-48606
+bundleDbVersion: master-48606
+resourcesUrl: http://*ip*:8080/resources
+configsUrl: http://*ip*:8080/config
+updateConfigUrl: http://*ip*:8080/update/{BuildTarget}.yml
+stateFileUrl: http://*ip*:8080/state/_state.yml

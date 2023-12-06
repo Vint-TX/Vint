@@ -1,0 +1,29 @@
+---
+descriptionItem:
+  name: День победы
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    GoldIsis: Изида «Золото»
+    GoldShaft: Шафт «Золото»
+    GoldHummer: Молот «Золото»
+    GoldDictator: Диктатор «Золото»
+    GoldTitan: Титан «Золото»
+    GoldWasp: Васп «Золото»
+    mayHunter: Хантер "День Победы"
+    mayHornet: Хорнет "День Победы"
+    mayViking: Викинг "День Победы"
+    maySmoky: Смоки "День Победы"
+    mayThunder: Гром "День Победы"
+    mayRailgun: Рельса  "День Победы"
+    triangletankpaint: Треугольник (Краска)
+    triangleweaponpaint: Треугольник (Покрытие)
+    partizantankpaint: Партизан (Краска)
+    partizanweaponpaint: Партизан (Покрытие)
+    cedertankpaint: Кедр (Краска)
+    cederweaponpaint: Кедр (Покрытие)
+    urbantankpaint: Урбан (Краска)
+    urbanweaponpaint: Урбан (Покрытие)

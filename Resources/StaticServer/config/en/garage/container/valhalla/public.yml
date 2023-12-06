@@ -1,0 +1,69 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 499257134 # gold viking skin
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -398757768 # gold thunder skin
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -1506532654 # north tank paint
+      compensation: 6250
+      nameLocalizationKey: northtankpaint
+
+    - itemBundles:
+        - marketItem: -1044766294 # north weapon paint
+      compensation: 6250
+      nameLocalizationKey: northweaponpaint
+
+    - itemBundles:
+        - marketItem: 794635633 # lightning thunder shell
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 619790646 # valkyrie graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 1285677037 # drakkar graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -1871711547 # yggdrasil graffiti
+      compensation: 6250
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 792923878 # xt viking skin
+
+    - itemBundles:
+        - marketItem: 2097644138 # xt thunder skin
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: ec016266902dcae47a3741e44efa924c
+imageItem:
+  spriteUid: 00a2ee3b-9595-4145-a781-a9d302f94d56
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

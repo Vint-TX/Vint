@@ -1,0 +1,18 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 8b74e6a3-849d-4a8d-a20e-be3c142fd5e8
+imageItem:
+  spriteUid: 8b74e6a3-849d-4a8d-a20e-be3c142fd5e8
+order:
+  index: 0
+default:
+  default: true
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: COMMON

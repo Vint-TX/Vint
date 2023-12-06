@@ -1,0 +1,30 @@
+---
+selectLocaleScreen:
+  header: LANGUAGE
+  hint: The game will automatically restart after you apply the language change
+  currentLanguage: Current language
+graphicsSettingsScreen:
+  header: GRAPHICS SETTINGS
+  reloadText: The game will be restarted after applying settings
+  perfomanceChangeText: The applying of chosen settings can negatively affect perfomance
+  currentPerfomanceText: Current settings can negatively affect perfomance
+  windowModeText: Window Mode
+  screenResolutionText: Screen Resolution
+  qualityLevelText: Quality Level
+  saturationLevelText: Saturation Level
+  renderResolutionQualityText: Half Resolution
+  antialiasingQualityText: Antialiasing
+  anisotropicQualityText: Anisotropic Quality
+  shadowQualityText: Shadow Quality
+  particleQualityText: Particles Quality
+  textureQualityText: Texture Quality
+  customSettingsModeText: Advanced Settings
+  ambientOccluisonModeText: Ambient Occlusion
+  bloomModeText: Bloom
+  chromaticAberrationModeText: Chromatic Aberration
+  grainModeText: Grain
+  vignetteModeText: Vignette
+  vegetationQualityText: Vegetation Quality
+  grassQualityText: Grass Quality
+  cartridgeCaseAmountText: Amount of Shells
+  vSyncQualityText: Vertical Synchronization

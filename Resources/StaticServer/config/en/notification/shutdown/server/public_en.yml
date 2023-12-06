@@ -1,0 +1,5 @@
+---
+serverShutdownText:
+  text: |
+    Attention!
+    The server will be shut down for maintenance in {0}!

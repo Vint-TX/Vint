@@ -1,0 +1,29 @@
+---
+descriptionItem:
+  name: Steel
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    dictatorsteel: Dictator "Steel"
+    hornetsteel: Hornet "Steel"
+    huntersteel: Hunter "Steel"
+    mammothsteel: Mammoth "Steel"
+    titansteel: Titan "Steel"
+    vikingsteel: Viking "Steel"
+    waspsteel: Wasp "Steel"
+    flamethrowersteel: Firebird "Steel"
+    freezesteel: Freeze "Steel"
+    hammersteel: Hammer "Steel"
+    isissteel: Isida "Steel"
+    railgunsteel: Railgun "Steel"
+    ricochetsteel: Ricochet "Steel"
+    shaftsteel: Shaft "Steel"
+    smokysteel: Smoky "Steel"
+    thundersteel: Thunder "Steel"
+    twinssteel: Twins "Steel"
+    vulcansteel: Vulcan "Steel"
+    steeltankpaint: Steel (Paint)
+    steelweaponpaint: Steel (Coating)

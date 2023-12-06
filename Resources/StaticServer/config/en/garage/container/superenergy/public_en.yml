@@ -1,0 +1,25 @@
+---
+descriptionItem:
+  name: Crystal
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    hornetcry: Hornet "Crystal"
+    hornetcryrage: Hornet "Crystal Rage"
+    hornetcrydischarge: Hornet "Crystal Discharge"
+    hornetcryglow: Hornet "Crystal Glow"
+    vikingcry: Viking "Crystal"
+    vikingcryrage: Viking "Crystal Rage"
+    vikingcrydischarge: Viking "Crystal Discharge"
+    vikingcryglow: Viking "Crystal Glow"
+    hammercry: Hammer "Crystal"
+    hammercryrage: Hammer "Crystal Rage"
+    hammercrydischarge: Hammer "Crystal Discharge"
+    hammercryglow: Hammer "Crystal Glow"
+    vulcancry: Vulcan "Crystal"
+    vulcancryrage: Vulcan "Crystal Rage"
+    vulcancrydischarge: Vulcan "Crystal Discharge"
+    vulcancryglow: Vulcan "Crystal Glow"

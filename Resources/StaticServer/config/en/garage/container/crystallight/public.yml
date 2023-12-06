@@ -1,0 +1,148 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1765925144 # hornet cry
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1353746752 # viking cry
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 283356827 # hammer cry
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -388976915 # vulcan cry
+      compensation: 10000
+
+    - itemBundles:
+        - marketItem: -400341658 # arrows of love
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1902859834 # triangle
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -451216061 # mosaic
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1660396512 # military
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 2070833572 # red banner
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 942805628 # universe
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1732490966 # starry sky
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 2070833571 # spring colors
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -574655849 # bananas
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -2023428617 # vostok-1
+      compensation: 10000
+
+    - itemBundles:
+        - marketItem: -1760088841 # andromeda
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 683803510 # antarctica
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 986557478 # spark
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -888059423 # ice
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -12628116 # orion
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1223441167 # radiation
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 214261055 # Canyon
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -56970637 # spectre
+      compensation: 10000
+
+    - itemBundles:
+        - marketItem: -132552041 # isis shine
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1317881529 # hammer thor
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1092514341 # twins snowball
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1319432295 # twins orange
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -585038633 # ric moon
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1899861235 # ric cannonball
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1165747871 # smoky thermite
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1852311024 # thunder dragon
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -250346840 # shaft lighting
+      compensation: 10000
+
+  rareItems:
+    - itemBundles:
+        - marketItem: -955210934 # hornet cry rage
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -955210932 # hornet cry glow
+      compensation: 10000
+
+    - itemBundles:
+        - marketItem: -110775867 # viking cry rage
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -110402718 # viking cry glow
+      compensation: 10000
+
+    - itemBundles:
+        - marketItem: -350323545 # hammer cry rage
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -350323543 # hammer cry glow
+      compensation: 10000
+
+    - itemBundles:
+        - marketItem: -1560119161 # vulcan cry rage
+      compensation: 10000
+    - itemBundles:
+        - marketItem: -1559746012 # vulcan cry glow
+      compensation: 10000
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 02399a05c425ac94d9595b83f3c9cd86
+imageItem:
+  spriteUid: cf1a49fd-fa44-47c6-9273-4c364f5c6305
+order:
+  index: 4
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+itemPacks:
+  forXPrice:
+  forPrice:
+packPrice:
+  packPrice:
+  packXPrice:

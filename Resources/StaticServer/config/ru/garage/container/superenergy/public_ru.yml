@@ -1,0 +1,25 @@
+---
+descriptionItem:
+  name: Кристальный
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    hornetcry: Хорнет "Кристальный"
+    hornetcryrage: Хорнет "Кристальный Вихрь"
+    hornetcrydischarge: Хорнет "Кристальный Разряд"
+    hornetcryglow: Хорнет "Кристальный Накал"
+    vikingcry: Викинг "Кристальный"
+    vikingcryrage: Викинг "Кристальный Вихрь"
+    vikingcrydischarge: Викинг "Кристальный Разряд"
+    vikingcryglow: Викинг "Кристальный Накал"
+    hammercry: Молот "Кристальный"
+    hammercryrage: Молот "Кристальный Вихрь"
+    hammercrydischarge: Молот "Кристальный Разряд"
+    hammercryglow: Молот "Кристальный Накал"
+    vulcancry: Вулкан "Кристальный"
+    vulcancryrage: Вулкан "Кристальный Вихрь"
+    vulcancrydischarge: Вулкан "Кристальный Разряд"
+    vulcancryglow: Вулкан "Кристальный Накал"

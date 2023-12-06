@@ -1,0 +1,21 @@
+---
+profileScreenLocalization:
+  profileHeaderText: PROFILE
+  myProfileHeaderText: MY PROFILE
+  friendsProfileHeaderText: "FRIEND'S PROFILE"
+  offerFriendShipText: This player wants to be friends with you
+  friendRequestSentText: Friend request sent
+  logoutButtonText: LOG OUT
+  logoutButtonConfirmText: 'YES'
+  logoutButtonCancelText: 'NO'
+  requestFriendButtonText: ADD TO FRIENDS
+  revokeFriendButtonText: CANCEL
+  acceptFriendButtonText: ACCEPT
+  rejectFriendButtonText: DECLINE
+  removeFriendButtonText: UNFRIEND
+  removeFriendButtonConfirmText: 'YES'
+  removeFriendButtonCancelText: 'NO'
+  goToConfirmEmailScreenButtonText: Email settings
+  goToChangeUIDScreenButtonText: Change nickname
+  goToPromoCodesScreenButtonText: Promo code
+  enterAsSpectatorButtonText: SPECTATE

@@ -1,0 +1,10 @@
+tutorialStepData:
+  stepId: 1331311972
+  visualStep: true
+  stepDesc: "Затемнение
+             - Выделен танк
+             - Текст по центру"
+
+tutorialHighlightTankStepData:
+  highlightHull: true
+  highlightWeapon: true

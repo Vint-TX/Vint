@@ -1,0 +1,62 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1396691349 # frontier paint
+      compensation: 10000
+      nameLocalizationKey: frontierpaint
+    - itemBundles:
+        - marketItem: -1396691350 # frontier2 paint
+      compensation: 10000
+      nameLocalizationKey: frontier2paint
+    - itemBundles:
+        - marketItem: -1760088841 # andromeda paint = newyearglow
+      compensation: 10000
+      nameLocalizationKey: andromedapaint
+    - itemBundles:
+        - marketItem: -571325446 # poster graffiti
+      compensation: 10000
+      nameLocalizationKey: postergraffiti
+    - itemBundles:
+        - marketItem: -781845119 # frontier graffiti
+      compensation: 10000
+      nameLocalizationKey: frontiergraffiti
+
+  rareItems:
+    - itemBundles:
+        - marketItem: -1816745725 # boost
+          max: 3
+      compensation: 10000
+      nameLocalizationKey: premiumboost
+    - itemBundles:
+        - marketItem: -180272377 # quest
+          max: 3
+      compensation: 10000
+      nameLocalizationKey: premiumquest
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: b13977a277496744ea3004173ecf5618
+imageItem:
+  spriteUid: 683d2c31-bb24-4636-8213-782b8db5fa9c
+order:
+  index: -2
+xPriceItem:
+  price: 199
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 199
+    3: 529
+    10: 1499
+restrictionByUserFraction:
+  fractionId: -372139284

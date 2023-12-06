@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: f2ae2723-1044-4fe9-9bfd-50e89c853461
+imageItem:
+  spriteUid: f2ae2723-1044-4fe9-9bfd-50e89c853461
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

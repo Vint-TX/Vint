@@ -1,0 +1,87 @@
+priceItem:
+  price: 500
+xPriceItem:
+  price: 100
+userItemTemplate:
+  userItemTemplate: 1435139307697
+itemIcon:
+  spriteUid: 3f9d3882-8a0f-4ac8-87d2-7a6598174828
+order:
+  index: 3
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 3
+damagePerSecondProperty:
+  initialValue: 517.500
+  finalValue: 517.500
+heatDamageProperty:
+  initialValue: 250
+  finalValue: 250
+energyChargeSpeedProperty:
+  initialValue: 0.250
+  finalValue: 0.250
+energyRechargeSpeedProperty:
+  initialValue: 0.167
+  finalValue: 0.167
+temperatureLimitProperty:
+  initialValue: 1.000
+  finalValue: 1.000
+deltaTemperaturePerSecondProperty:
+  initialValue: 0.200
+  finalValue: 0.200
+maxDamageDistanceProperty:
+  initialValue: 5.680
+  finalValue: 5.680
+minDamageDistanceProperty:
+  initialValue: 16.000
+  finalValue: 16.000
+minDamagePercentProperty:
+  initialValue: 76.522
+  finalValue: 76.522
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.45
+    - name: Range
+      normalizedValue: 0.1
+    - name: FireRate
+      normalizedValue: 1.0
+  properties:
+    - name: DPM
+      initialValue: 12420
+      finalValue: 12420
+      format: 0
+    - name: Damage per Second
+      initialValue: 517
+      finalValue: 517
+      format: 0
+    - name: Charge Time
+      initialValue: 4
+      finalValue: 4
+      format: 0.0
+      unit: sec
+    - name: Reload Time
+      initialValue: 6
+      finalValue: 6
+      unit: sec
+    - name: Max Damage Distance
+      initialValue: 6
+      finalValue: 6
+      format: 0
+      unit: m
+    - name: Attack Distance
+      initialValue: 16
+      finalValue: 16
+      format: 0
+      unit: m
+    - name: HeatTemperatureLimit
+      initialValue: 100
+      finalValue: 100
+      unit: percent
+    - name: HeatTemperatureDelta
+      initialValue: 25
+      finalValue: 25
+      unit: percentinsec
+    - name: HeatDamage
+      initialValue: 250
+      finalValue: 250
+...

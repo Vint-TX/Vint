@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: dcdc2722-bbac-4b43-b691-4e4e52953840
+imageItem:
+  spriteUid: dcdc2722-bbac-4b43-b691-4e4e52953840
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: EPIC

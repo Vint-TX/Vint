@@ -1,0 +1,65 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1647980273 # smoky-xt skin
+      compensation: 42500
+      nameLocalizationKey: smokyXT
+    - itemBundles:
+        - marketItem: 2097644138 # thunder-xt skin
+      compensation: 42500
+      nameLocalizationKey: thunderXT
+    - itemBundles:
+        - marketItem: 593679593 # railgun-xt skin
+      compensation: 42500
+      nameLocalizationKey: railXT
+    - itemBundles:
+        - marketItem: -788257559 # twins-xt skin
+      compensation: 42500
+      nameLocalizationKey: twinsXT
+    - itemBundles:
+        - marketItem: 790846704 # hunter-xt skin
+      compensation: 42500
+      nameLocalizationKey: hunterXT
+    - itemBundles:
+        - marketItem: 792923878 # viking-xt skin
+      compensation: 42500
+      nameLocalizationKey: vikingXT
+    - itemBundles:
+        - marketItem: -47777474 # hornet-xt skin
+      compensation: 42500
+      nameLocalizationKey: hornetXT
+    - itemBundles:
+        - marketItem: 1576595770 # titan-xt skin
+      compensation: 42500
+      nameLocalizationKey: titanXT
+    - itemBundles:
+        - marketItem: -1129770519 # wasp xt skin
+      compensation: 42500
+      nameLocalizationKey: waspXT
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 1b081e3a648299945a82464bbbe08695
+imageItem:
+  spriteUid: 050df0d6-2b57-4b4c-afdb-06db29ff2b5e
+order:
+  index: 2
+priceItem:
+  price: 0
+xPriceItem:
+  price: 850
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 850
+    3: 2299
+    10: 6800

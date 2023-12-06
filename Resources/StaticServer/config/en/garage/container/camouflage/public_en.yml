@@ -1,0 +1,28 @@
+---
+descriptionItem:
+  name: Camouflage
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    armorspeed: "Gold Catcher"
+    minedd: "Destroyer"
+    armorrepair: "Survivor"
+    corrosiontankpaint: Corrosion (Paint)
+    corrosionweaponpaint: Corrosion (Coating)
+    tundratankpaint: Tundra (Paint)
+    tundraweaponpaint: Tundra (Coating)
+    marinetankpaint: Marine (Paint)
+    marineweaponpaint: Marine (Coating)
+    prodigytankpaint: Prodigy (Paint)
+    prodigyweaponpaint: Prodigy (Coating)
+    rusttankpaint: Rust (Paint)
+    rustweaponpaint: Rust (Coating)
+    marytankpaint: Mary (Paint)
+    maryweaponpaint: Mary (Coating)
+    rockstankpaint: Rock (Paint)
+    rocksweaponpaint: Rock (Coating)
+    tartankpaint: Tar (Paint)
+    tarweaponpaint: Tar (Coating)

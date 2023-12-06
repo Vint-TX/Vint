@@ -1,0 +1,4 @@
+variant:
+  value: 0
+  billboardTreesShadowCasting: false
+  billboardTreesShadowReceiving: false

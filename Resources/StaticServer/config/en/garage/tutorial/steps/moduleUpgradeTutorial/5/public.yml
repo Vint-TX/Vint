@@ -1,0 +1,10 @@
+tutorialStepData:
+  stepId: 1525362179
+  visualStep: true
+  stepDesc: "Затемнение
+             - Выделена плашка с миной
+             - Выделена плашка с синими кристаллами
+             - Текст"
+
+tutorialSelectItemData:
+  itemMarketId: 1133911248

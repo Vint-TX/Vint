@@ -1,0 +1,20 @@
+---
+descriptionItem:
+  name: "День рождения: краски"
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    armorspeed: "Голдолов"
+    minedd: "Разрушитель"
+    armorrepair: "Выживший"
+    coaltankpaint: Уголь (Краска)
+    coalweaponpaint: Уголь (Покрытие)
+    taigatankpaint: Тайга (Краска)
+    taigaweaponpaint: Тайга (Покрытие)
+    infernotankpaint: Инферно (Краска)
+    infernoweaponpaint: Инферно (Покрытие)
+    stonetankpaint: Камень (Краска)
+    stoneweaponpaint: Камень (Покрытие)

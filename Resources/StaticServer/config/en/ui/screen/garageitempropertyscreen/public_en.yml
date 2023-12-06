@@ -1,0 +1,10 @@
+---
+itemPropertyScreenText:
+  propertyWeaponText: 'CHARACTERISTICS OF %ITEM_NAME%'
+  propertyTankText: 'CHARACTERISTICS OF %ITEM_NAME%'
+  propertySupplyText: 'CHARACTERISTICS OF %ITEM_NAME%'
+itemUpgradeScreenText:
+  upgradeText: UPGRADE
+upgradeInfoText:
+  upgradeLevelText: Upgrades
+  experienceToLevelUpText: Experience Points

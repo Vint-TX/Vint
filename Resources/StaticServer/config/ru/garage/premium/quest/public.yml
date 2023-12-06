@@ -1,0 +1,14 @@
+userItemTemplate:
+  userItemTemplate: 1513582138852
+unityAsset:
+  reference:
+    assetGuid: 30e0ed7d4e277d349beceef9a2daedd3
+imageItem:
+  spriteUid: 376a6004-98ef-443d-82fe-e0b99bd9bf16
+cardImageItem:
+  spriteUid: 4c61d0da-c921-43bf-985d-7eac64249328
+order:
+  index: 1
+
+durationItem:
+  duration: 86400000

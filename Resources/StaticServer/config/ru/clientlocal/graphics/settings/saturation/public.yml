@@ -1,0 +1,5 @@
+﻿configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/saturation/verylow
+    - clientlocal/graphics/settings/saturation/low
+    - clientlocal/graphics/settings/saturation/normal

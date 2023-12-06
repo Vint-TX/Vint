@@ -1,0 +1,66 @@
+notEnoughCrystalsWindow:
+  yesText: YES
+  noText: NO
+  needMoreText: 'You need '
+  needMoreAfterText: ' more.'
+  offerCryText: 'Synthesize '
+  offerXCryText: 'Purchase '
+exchangeConfirmationWindow:
+  confirmText: Confirm
+  cancelText: Cancel
+  questionText: Confirm the synthesis of
+  forText: into
+crystalPackageContent:
+  bonusHint: for free!
+  priceText: '{PRICE} {CURRENCY}'
+receipt:
+  priceLabel: 'Payment amount:'
+  totalLabel: 'Total X-Crystals:'
+  lines:
+    amount: 'Amount of X-Crystals:'
+xCrystalsSaleEndTimer:
+  timerText: 'This offer ends in {TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'
+specialOfferEndTimer:
+  timerText: 'The offer ends in {TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'
+leagueSpecialOfferEndTimer:
+  timerText: '{TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'
+xCrystalsMethodSaleLabel:
+  text: 'Get 25% more X-Crystals at the regular price! We have an ongoing offer on payments via PayPal. The offer is valid only until June 26 04:00 AM UTC.'
+specialOfferContent:
+  price: '{PRICE} {CURRENCY}'
+marketItemSaleContent:
+  price: '{PRICE} {CURRENCY}'
+energyBonusContent:
+  title: 'Charges x{0}'
+  price: 'FREE'
+quantumShopContent:
+  title: 'Charges x{0}'
+  description: 'Teleport'
+  price: '{0} {1}'
+personalDiscountUI:
+  description: 'There is an active discount on your first X-crystals purchase. You get 50% off the price of any X-crystal package. One-time offer!'
+  timerText: 'There is an active discount on your first X-crystals purchase. You get 50% off the price of any X-crystal package. One-time offer! This offer will expire in {TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'
+firstPurchaseDiscountContent:
+  header: 'discount'
+  descriptionFirstLine: 'off crystal'
+  descriptionSecondLine: 'purchase'
+  footer: 'show'
+personalXCrystalBonusUI:
+  description: 'You have stood out on the battlefield! Get bonus crystals upon any x-crystals package purchase.'
+

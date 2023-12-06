@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636352879148177794
+  path: garage/module/upgrade/properties/increaseddamage
+itemIcon:
+  spriteUid: f728a94d-fe3d-4ac1-b77d-7603f0b682e5
+itemBigIcon:
+  spriteUid: 096a1d11-ab99-46d5-83ee-07d00bb06784
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1486018791920
+      config: battle/effect/damage  

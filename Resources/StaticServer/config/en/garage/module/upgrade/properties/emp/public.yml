@@ -1,0 +1,86 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 90000
+    - 86667
+    - 83333
+    - 80000
+    - 76667
+    - 73333
+    - 70000
+    - 66667
+    - 63333
+    - 60000
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEffectDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3000
+    - 3167
+    - 3333
+    - 3500
+    - 3667
+    - 3833
+    - 4000
+    - 4167
+    - 4333
+    - 4500
+moduleEMPEffectRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 15.00
+    - 15.83
+    - 16.67
+    - 17.50
+    - 18.33
+    - 19.17
+    - 20.00
+    - 20.83
+    - 21.67
+    - 22.50
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 90
+        - 60
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: WaveRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 15
+        - 22.5
+      unit: m
+      format: 0.0
+      spriteUID: c9a7ecd8-5e74-4278-929a-86f87b0e1332
+    - name: ModuleBlock
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 3
+        - 4.5
+      unit: sec
+      format: 0.0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

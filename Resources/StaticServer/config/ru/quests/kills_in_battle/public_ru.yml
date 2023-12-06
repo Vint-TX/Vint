@@ -1,0 +1,5 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Сыграй битву и уничтожь в ней {0} танков'
+    cases: { }

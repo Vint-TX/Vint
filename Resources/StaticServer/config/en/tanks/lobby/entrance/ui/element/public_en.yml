@@ -1,0 +1,19 @@
+---
+passwordErrors:
+  passwordContainsRestrictedSymbols: This password contains invalid characters
+  passwordIsTooSimple: This password is too simple
+  passwordIsTooShort: This password is too short
+  passwordIsTooLong: This password is too long
+  passwordsDoNotMatch: "Passwords don't match"
+  passwordEqualsLogin: Your password and your nickname cannot be the same
+uidInputValidation:
+  loginContainsRestrictedSymbols: "Nickname contains characters that aren't allowed"
+  loginAlreadyInUse: This nickname has already been registered by another player
+  loginIsTooShort: Nickname is too short
+  loginIsTooLong: Nickname is too long
+  loginContainsSpecialSymbolsInARow: Nickname contains several special symbols in a row
+  loginBeginsWithSpecialSymbol: Nickname starts with special symbols
+  loginEndsWithSpecialSymbol: Nickname ends with special symbols
+subscribeCheckbox:
+  subscribeLine1Text: Subscribe to our newsletter to receive news about
+  subscribeLine2Text: the game, special offers, and promocodes.

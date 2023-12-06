@@ -1,0 +1,21 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/moduleUpgradeTutorial/"
+  tutorialId: -1229949270
+  forNewPlayer: true
+  steps:
+    3: 1504698500736 # select mine
+    4: 1504698500736 # highlight mine
+    5: 1504698500736 # highlight mine and crys
+    6: 1504002856142 # add crys
+    7: 1504698500736 # highlight upgrade
+    #8 : 1504002856142 # handle confirm popup
+    #9 : 1504002856142 # upgrade info dialog
+    10: 1504002856142 # select stat
+    11: 1504002856142 # highlight stat
+    12: 1504002856142 # show message
+    13: 1504002856142 # play
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:
+    - -719658163
+    - -1423861367

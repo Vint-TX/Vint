@@ -1,0 +1,95 @@
+priceItem:
+  price: 1600
+xPriceItem:
+  price: 320
+userItemTemplate:
+  userItemTemplate: 1435138415322
+itemIcon:
+  spriteUid: 032a47c1-d656-40b3-98e4-0e744d0aa52d
+order:
+  index: 7
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 9
+aimingMinDamageProperty:
+  initialValue: 480.000
+  finalValue: 480.000
+aimingMaxDamageProperty:
+  initialValue: 1200.000
+  finalValue: 1200.000
+energyChargePerShotProperty:
+  initialValue: 0.400
+  finalValue: 0.400
+energyChargeSpeedProperty:
+  initialValue: 0.200
+  finalValue: 0.200
+energyRechargeSpeedProperty:
+  initialValue: 0.143
+  finalValue: 0.143
+reloadTimeProperty:
+  initialValue: 2.000
+  finalValue: 2.000
+aimingVerticalAccelerationProperty:
+  initialValue: 30.000
+  finalValue: 30.000
+aimingHorizontalAccelerationProperty:
+  initialValue: 30.000
+  finalValue: 30.000
+aimingVerticalSpeedProperty:
+  initialValue: 30.000
+  finalValue: 30.000
+aimingHorizontalSpeedProperty:
+  initialValue: 30.000
+  finalValue: 30.000
+impactProperty:
+  initialValue: 1.000
+  finalValue: 1.000
+aimingImpactProperty:
+  initialValue: 6.000
+  finalValue: 6.000
+kickbackProperty:
+  initialValue: 2.000
+  finalValue: 2.000
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.98
+    - name: Range
+      normalizedValue: 1.00
+    - name: FireRate
+      normalizedValue: 0.10
+  properties:
+    - name: DPM
+      initialValue: 14400
+      finalValue: 14400
+    - name: Damage
+      initialValue: 480
+      finalValue: 480
+      format: 0
+    - name: Aiming Damage
+      initialValue: 1200
+      finalValue: 1200
+      format: 0
+    - name: Loading Time
+      initialValue: 5
+      finalValue: 5
+      format: 0
+      unit: sec
+    - name: Reload Time
+      initialValue: 7
+      finalValue: 7
+      format: 0
+      unit: sec
+    - name: Aiming Speed
+      initialValue: 30
+      finalValue: 30
+      format: 0
+      unit: degrees_per_sec
+    - name: Impact
+      initialValue: 1
+      finalValue: 1
+      format: 0
+    - name: Aiming Impact
+      initialValue: 8
+      finalValue: 8
+      format: 0
+...

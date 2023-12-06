@@ -1,0 +1,17 @@
+order:
+  index: 302
+unityAsset:
+  reference:
+    assetGuid: 3af862e4ea1748940afc33e8d3faff82
+imageItem:
+  spriteUid: 0b2d1ca5-b393-4ee9-b4fc-fe0dfc128e0f
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+mountUpgradeLevelRestriction:
+  restrictionValue: 10
+mountUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: COMMON

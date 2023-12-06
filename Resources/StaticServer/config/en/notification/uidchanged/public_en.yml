@@ -1,0 +1,3 @@
+---
+uIDChangedNotificationText:
+  messageTemplate: "You've successfully changed your nickname to {0}!"

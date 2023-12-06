@@ -1,0 +1,5 @@
+---
+descriptionItem:
+  name: Kamikaze
+  description: "When the player's tank is destroyed, the module deals damage to surrounding enemies."
+  flavor: ""

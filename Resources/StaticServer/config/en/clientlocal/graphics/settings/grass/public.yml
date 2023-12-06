@@ -1,0 +1,7 @@
+﻿configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/grass/minimum
+    - clientlocal/graphics/settings/grass/medium
+    - clientlocal/graphics/settings/grass/high
+    - clientlocal/graphics/settings/grass/maximum
+    - clientlocal/graphics/settings/grass/ultra

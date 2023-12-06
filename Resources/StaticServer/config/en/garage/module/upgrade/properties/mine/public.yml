@@ -1,0 +1,275 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 50000
+    - 48148
+    - 46296
+    - 44444
+    - 42593
+    - 40741
+    - 38889
+    - 37037
+    - 35185
+    - 33333
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+moduleEffectMinDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 500.00
+    - 527.78
+    - 555.56
+    - 583.33
+    - 611.11
+    - 638.89
+    - 666.67
+    - 694.44
+    - 722.22
+    - 750.00
+moduleEffectMaxDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1000.00
+    - 1055.56
+    - 1111.11
+    - 1166.67
+    - 1222.22
+    - 1277.78
+    - 1333.33
+    - 1388.89
+    - 1444.44
+    - 1500.00
+moduleMineEffectImpactProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3.00
+    - 3.17
+    - 3.33
+    - 3.50
+    - 3.67
+    - 3.83
+    - 4.00
+    - 4.17
+    - 4.33
+    - 4.50
+moduleMineEffectHideRangeProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 10.00
+    - 9.00
+    - 8.00
+    - 7.00
+    - 6.00
+    - 5.00
+    - 4.00
+    - 3.00
+    - 2.00
+    - 1.00
+moduleMineEffectBeginHideDistanceProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 10.00
+    - 9.00
+    - 8.00
+    - 7.00
+    - 6.00
+    - 5.00
+    - 4.00
+    - 3.00
+    - 2.00
+    - 1.00
+moduleEffectActivationTimeProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2000
+    - 1926
+    - 1852
+    - 1778
+    - 1704
+    - 1630
+    - 1556
+    - 1481
+    - 1407
+    - 1333
+moduleMineEffectSplashDamageMaxRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2.00
+    - 2.11
+    - 2.22
+    - 2.33
+    - 2.44
+    - 2.56
+    - 2.67
+    - 2.78
+    - 2.89
+    - 3.00
+moduleMineEffectSplashDamageMinRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 5.00
+    - 5.28
+    - 5.56
+    - 5.83
+    - 6.11
+    - 6.39
+    - 6.67
+    - 6.94
+    - 7.22
+    - 7.50
+moduleMineEffectSplashDamageMinPercentProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.50
+    - 0.53
+    - 0.56
+    - 0.58
+    - 0.61
+    - 0.64
+    - 0.67
+    - 0.69
+    - 0.72
+    - 0.75
+moduleMineEffectTriggeringAreaProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.00
+    - 1.06
+    - 1.11
+    - 1.17
+    - 1.22
+    - 1.28
+    - 1.33
+    - 1.39
+    - 1.44
+    - 1.50
+moduleMineEffectExplosionDelayMSProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2000
+    - 1926
+    - 1852
+    - 1778
+    - 1704
+    - 1630
+    - 1556
+    - 1481
+    - 1407
+    - 1333
+moduleLimitBundleEffectCountProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 50
+        - 33.3
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Damage
+      linearInterpolation: false
+      upgradeLevel2Values:
+        - 500
+        - 528
+        - 556
+        - 583
+        - 611
+        - 639
+        - 667
+        - 694
+        - 722
+        - 750
+      maxAndMinString:
+        - 500-1000
+        - 528-1056
+        - 556-1111
+        - 583-1167
+        - 611-1222
+        - 639-1278
+        - 667-1333
+        - 694-1388
+        - 722-1444
+        - 750-1500
+      unit: hp
+      maxAndMin: true
+      format: 0
+      spriteUID: 5538887f-b208-4fb4-ac4a-12223cb09fd3
+    - name: TriggerRadius
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1.5
+      unit: m
+      format: 0.00
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: VisibilityArea
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 1
+      unit: m
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: TriggerDelay
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2
+        - 1.33
+      unit: sec
+      format: 0.00
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: ActivationTime
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2
+        - 1.33
+      unit: sec
+      format: 0.00
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: ExplosionRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 5
+        - 7.5
+      unit: m
+      format: 0.0
+      spriteUID: c1a7c983-c17f-4f35-8514-8a6bc28fb93b
+    - name: "Impact"
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 3
+        - 4.5
+      unit: hp
+      format: 0.0
+      spriteUID: 8bf5d2cc-2f2b-4f2a-8d6e-880bcdbf4844
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2
+        - 2
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

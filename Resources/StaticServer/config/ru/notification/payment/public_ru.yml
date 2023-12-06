@@ -1,0 +1,3 @@
+---
+paymentNotificationText:
+  messageTemplate: 'На твой счёт начислено {0} X-кристаллов'

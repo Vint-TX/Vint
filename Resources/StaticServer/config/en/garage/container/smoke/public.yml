@@ -1,0 +1,73 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -9077354 # smoke tank paint
+      compensation: 6250
+      nameLocalizationKey: smoketankpaint
+
+    - itemBundles:
+        - marketItem: -1040211436 # smoke weapon paint
+      compensation: 6250
+      nameLocalizationKey: smokeweaponpaint
+
+    - itemBundles:
+        - marketItem: 860375257 # fumes smoky shell
+      compensation: 6250
+      nameLocalizationKey: smokyfumes
+    - itemBundles:
+        - marketItem: -1260549513 # lightning smoky shell
+      compensation: 6250
+      nameLocalizationKey: smokylightning
+    - itemBundles:
+        - marketItem: 971090551 # demon graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 1001470037 # nuke graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -398350090 # inferno tank paint
+      compensation: 6250
+      nameLocalizationKey: infernotankpaint
+
+    - itemBundles:
+        - marketItem: 819242484 # inferno weapon paint
+      compensation: 6250
+      nameLocalizationKey: infernoweaponpaint
+
+    - itemBundles:
+        - marketItem: 2004785941 # Smoky Gold
+      compensation: 6250
+
+  rareItems:
+
+    - itemBundles:
+        - marketItem: 1647980273 # xt smoke skin
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: afcb3955d6be5d24780bb05123b29d35
+imageItem:
+  spriteUid: 4635c926-5b7a-4166-8f2d-390cdded4451
+order:
+  index: 2
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

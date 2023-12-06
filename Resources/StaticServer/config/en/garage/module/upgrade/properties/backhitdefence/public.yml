@@ -1,0 +1,34 @@
+moduleCooldownProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 0
+    - 0
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleBackhitModificatorEffectProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.95
+    - 0.93
+    - 0.91
+    - 0.88
+    - 0.86
+    - 0.84
+    - 0.82
+    - 0.79
+    - 0.77
+    - 0.75
+moduleVisualProperties:
+  properties:
+    - name: IncomingBackhitDamage
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - -5
+        - -25
+      unit: percent
+      format: 0
+      spriteUID: f995d247-be37-4464-8321-c9019019faad
+...

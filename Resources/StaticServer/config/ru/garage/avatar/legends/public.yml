@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: df32a82f-79ea-4935-9614-8b694fe9e3d1
+imageItem:
+  spriteUid: df32a82f-79ea-4935-9614-8b694fe9e3d1
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: LEGENDARY

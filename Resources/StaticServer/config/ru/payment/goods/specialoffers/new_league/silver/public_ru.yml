@@ -1,0 +1,11 @@
+specialOfferScreenLocalization:
+  spriteUid:
+  footer:
+specialOfferContentLocalization:
+  spriteUid: f937a10f-ce09-427f-ab8c-21693f537656
+  title: "Повышение"
+  description: |
+    Отпразднуй достижение Серебряной лиги!
+    Такое предложение доступно лишь раз.
+receiptText:
+  text: Спецпредложение «Новая лига»

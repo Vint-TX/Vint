@@ -1,0 +1,28 @@
+---
+descriptionItem:
+  name: Камуфляж
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    armorspeed: "Голдолов"
+    minedd: "Разрушитель"
+    armorrepair: "Выживший"
+    corrosiontankpaint: Коррозия (Краска)
+    corrosionweaponpaint: Коррозия (Покрытие)
+    tundratankpaint: Тундра (Краска)
+    tundraweaponpaint: Тундра (Покрытие)
+    marinetankpaint: Морпех (Краска)
+    marineweaponpaint: Морпех (Покрытие)
+    prodigytankpaint: Продиджи (Краска)
+    prodigyweaponpaint: Продиджи (Покрытие)
+    rusttankpaint: Ржавчина (Краска)
+    rustweaponpaint: Ржавчина (Покрытие)
+    marytankpaint: Мэри (Краска)
+    maryweaponpaint: Мэри (Покрытие)
+    rockstankpaint: Скала (Краска)
+    rocksweaponpaint: Скала (Покрытие)
+    tartankpaint: Смола (Краска)
+    tarweaponpaint: Смола (Покрытие)

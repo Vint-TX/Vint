@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: ac239240-538a-447b-b0dd-2fa830e73c66
+imageItem:
+  spriteUid: ac239240-538a-447b-b0dd-2fa830e73c66
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

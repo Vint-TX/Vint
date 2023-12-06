@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 8474dc30-442a-4096-9ced-0db360f8ecd9
+imageItem:
+  spriteUid: 8474dc30-442a-4096-9ced-0db360f8ecd9
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

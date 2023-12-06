@@ -1,0 +1,172 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 80000
+    - 77037
+    - 74074
+    - 71111
+    - 68148
+    - 65185
+    - 62222
+    - 59259
+    - 56296
+    - 53333
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEffectImpactProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+moduleEffectSplashRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 10.00
+    - 10.56
+    - 11.11
+    - 11.67
+    - 12.22
+    - 12.78
+    - 13.33
+    - 13.89
+    - 14.44
+    - 15.00
+moduleEffectSplashDamageMinPercentProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.50
+    - 0.53
+    - 0.56
+    - 0.58
+    - 0.61
+    - 0.64
+    - 0.67
+    - 0.69
+    - 0.72
+    - 0.75
+moduleEffectMinDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+moduleEffectMaxDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+moduleIcetrapEffectTemperatureDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 100
+    - 106
+    - 111
+    - 117
+    - 122
+    - 128
+    - 133
+    - 139
+    - 144
+    - 150
+moduleIcetrapEffectTemperatureDeltaProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+    - 6.00
+moduleIcetrapEffectTemperatureLimitProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.60
+    - 0.63
+    - 0.67
+    - 0.70
+    - 0.73
+    - 0.77
+    - 0.80
+    - 0.83
+    - 0.87
+    - 0.90
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 80
+        - 53.3
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: TargetingRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 15
+      unit: m
+      format: 0.0
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: HeatTemperatureLimit
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 60
+        - 90
+      format: 0
+      unit: percent
+      spriteUID: 80bffee2-17be-4764-8c1d-8d45cede10ff
+    - name: HeatDamage
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 150
+        - 225
+      format: 0
+      unit: hp
+      spriteUID: 80bffee2-17be-4764-8c1d-8d45cede10ff
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

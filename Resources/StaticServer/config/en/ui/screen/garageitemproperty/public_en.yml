@@ -1,0 +1,63 @@
+---
+accelerationGarageItemProperty:
+  propertyName: Acceleration
+healthGarageItemProperty:
+  propertyName: HP
+speedGarageItemProperty:
+  propertyName: Max Speed
+turnSpeedGarageItemProperty:
+  propertyName: Turning Speed
+weightGarageItemProperty:
+  propertyName: Weight
+bulletSpeedGarageItemProperty:
+  propertyName: Projectile Speed
+damageDistanceGarageItemProperty:
+  propertyName: Range
+damageGarageItemProperty:
+  propertyName: Damage
+damageWeakeningByTargetGarageItemProperty:
+  propertyName: Piercing
+energyChargeSpeedGarageItemProperty:
+  propertyName: Energy Consumption
+energyRechargeSpeedGarageItemProperty:
+  propertyName: Load Time
+fireDamageGarageItemProperty:
+  propertyName: Burning Damage per second
+impactGarageItemProperty:
+  propertyName: Impact Force
+reloadTimeGarageItemProperty:
+  propertyName: Reload Time
+turretTurnSpeedGarageItemProperty:
+  propertyName: Turret Rotation Speed
+criticalDamageGarageItemProperty:
+  propertyName: Critical Damage
+criticalProbabilityGarageItemProperty:
+  propertyName: Critical Chance
+magazineSizeGarageItemProperty:
+  propertyName: Shots per Magazine
+reloadMagazineTimeGarageItemProperty:
+  propertyName: Magazine Reload
+healingGarageItemProperty:
+  propertyName: Healing per second
+selfHealingGarageItemProperty:
+  propertyName: Self-healing
+aimingDamageGarageItemProperty:
+  propertyName: Sniping Damage
+shaftDamageGarageItemProperty:
+  propertyName: Damage
+spinUpTimeGarageItemProperty:
+  propertyName: Barrel Rotation Time
+temperatureHittingTimeGarageItemProperty:
+  propertyName: Time before Overheating
+accelerationUnitItemProperty:
+  propertyName: m/s²
+angularVelocityUnitItemProperty:
+  propertyName: °/s
+percentUnitItemProperty:
+  propertyName: '%'
+secondUnitItemProperty:
+  propertyName: s
+velocityUnitItemProperty:
+  propertyName: m/s
+distanceUnitItemProperty:
+  propertyName: m

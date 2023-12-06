@@ -1,0 +1,25 @@
+userItemTemplate:
+  userItemTemplate: 1486562494879
+unityAsset:
+  reference:
+    assetGuid: ac88da6c7feed2744a4a467a0dd51865
+imageItem:
+  spriteUid: 33836bb9-e852-4509-b53e-a7f8e5b20ff5
+order:
+  index: 0
+xPriceItem:
+  price: 140
+itemPacks:
+  forXPrice:
+    - 1
+    - 5
+    - 30
+# Если указаны эти цены - игнорируется priceItem и xPriceItem
+packPrice:
+  packXPrice:
+    1: 140
+    5: 650
+    30: 3500
+targetTier:
+  targetTier: 1
+  maxExistTier: 2

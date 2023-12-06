@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 1542699020893
+  path: garage/module/upgrade/properties/firering
+itemIcon:
+  spriteUid: 5348819e-917f-4c20-bbc8-7c33262e6b2a
+itemBigIcon:
+  spriteUid: a1997ec9-5d3b-44b8-a2d7-f40c6502e0b4
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 1542694831168
+      config: battle/effect/firering

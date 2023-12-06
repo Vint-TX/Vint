@@ -1,0 +1,29 @@
+---
+combatLogCommonMessages:
+  killMessage: '{killer} <sprite name="{killItem}"> {victim}'
+  userJoinBattleMessage: '{user} joined the battle'
+  userLeaveBattleMessage: '{user} left the battle'
+  goldTakenMessage: '{user} caught the Gold Box'
+  goldScheduledMessage: The Gold Box will be dropped soon!
+  userGoldScheduledMessage: '{0} has dropped a gold box!'
+  userChangedTankMessage: '{user} changed equipment'
+  suicideMessage: '{user} self-destructed'
+  killStreakMessage: '{killNum} kill streak by {user}'
+combatLogDMMessages:
+  battleStartMessage: Destroy them all!
+combatLogTDMMessages:
+  battleStartMessage: Destroy your opponents!
+combatLogCtfMessages:
+  battleStartMessage: Deliver the enemy flag to your base and protect yours!
+  took: '{user} captured {own} flag'
+  lost: '{user} lost {own} flag'
+  dropped: '{user} dropped {own} flag'
+  delivered: '{user} delivered {own} flag'
+  deliveryNotCounted: 'The flag not scored'
+  returned: '{user} returned {own} flag'
+  pickedUp: '{user} picked up {own} flag'
+  autoReturned: '{own} flag returned to base'
+  blueFlag: blue
+  redFlag: red
+  ourFlag: our
+  enemyFlag: the enemy

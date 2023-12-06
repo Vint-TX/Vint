@@ -1,0 +1,31 @@
+garageListItemContent:
+  rareText: Очень редкий
+staticBonusUI:
+  bonusText: "+{0}%"
+  damageText: УРН
+  armorText: СУ
+summaryBonus:
+  totalBonusText: ОБЩИЙ БОНУС
+moduleButtons:
+  mountText: ЭКИПИРОВАТЬ
+  unmountText: СНЯТЬ
+  assembleText: СОБРАТЬ
+  addResourcesText: ДОБАВИТЬ РЕСУРСЫ
+  disassembleText: РАЗОБРАТЬ
+moduleInfoPanel:
+  supportText: Поддержка
+  scoutingText: Разведка
+  defenceText: Оборона
+  specialText: Специальный
+timer:
+  timerText: '{TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'
+playScreenSeasonGUI:
+  timerText: 'Осталось <#FFFFFFFF>{TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'

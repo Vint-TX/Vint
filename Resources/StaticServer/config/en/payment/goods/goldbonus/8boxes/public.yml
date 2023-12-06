@@ -1,0 +1,12 @@
+goldBonusOffer:
+  count: 8
+order:
+  index: 1
+specialOfferScreenLocalization:
+  spriteUid: 10ea9a31-d95a-4f6b-9e1e-4291745c5aa5
+  footer:
+  description:
+specialOfferContent:
+  salePercent: 0
+  highlightTitle: false
+  showItemsList: false

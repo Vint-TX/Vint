@@ -1,0 +1,5 @@
+configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/anisotropic/off
+    - clientlocal/graphics/settings/anisotropic/normal
+    - clientlocal/graphics/settings/anisotropic/hight

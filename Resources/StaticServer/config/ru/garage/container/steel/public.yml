@@ -1,0 +1,111 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1626035585 # dictator steel
+      compensation: 5000
+      nameLocalizationKey: dictatorsteel
+    - itemBundles:
+        - marketItem: -378883611 # hornet steel
+      compensation: 5000
+      nameLocalizationKey: hornetsteel
+    - itemBundles:
+        - marketItem: -1267544717 # hunter steel
+      compensation: 5000
+      nameLocalizationKey: huntersteel
+    - itemBundles:
+        - marketItem: -833500654 # mammoth steel
+      compensation: 5000
+      nameLocalizationKey: mammothsteel
+    - itemBundles:
+        - marketItem: -133498961 # titan steel
+      compensation: 5000
+      nameLocalizationKey: titansteel
+    - itemBundles:
+        - marketItem: -1656625859 # viking steel
+      compensation: 5000
+      nameLocalizationKey: vikingsteel
+    - itemBundles:
+        - marketItem: -1555805158 # wasp steel
+      compensation: 5000
+      nameLocalizationKey: waspsteel
+
+    - itemBundles:
+        - marketItem: -1000298047 # flamethrower steel
+      compensation: 5000
+      nameLocalizationKey: flamethrowersteel
+    - itemBundles:
+        - marketItem: 1669098648 # freeze steel
+      compensation: 5000
+      nameLocalizationKey: freezesteel
+    - itemBundles:
+        - marketItem: 2039676487 # hammer steel
+      compensation: 5000
+      nameLocalizationKey: hammersteel
+    - itemBundles:
+        - marketItem: -691629355 # isis steel
+      compensation: 5000
+      nameLocalizationKey: isissteel
+    - itemBundles:
+        - marketItem: -59670077 # railgun steel
+      compensation: 5000
+      nameLocalizationKey: railgunsteel
+    - itemBundles:
+        - marketItem: -1849888712 # ricochet steel
+      compensation: 5000
+      nameLocalizationKey: ricochetsteel
+    - itemBundles:
+        - marketItem: -445855153 # shaft steel
+      compensation: 5000
+      nameLocalizationKey: shaftsteel
+    - itemBundles:
+        - marketItem: -617862056 # smoky steel
+      compensation: 5000
+      nameLocalizationKey: smokysteel
+    - itemBundles:
+        - marketItem: 1754072121 # thunder steel
+      compensation: 5000
+      nameLocalizationKey: thundersteel
+    - itemBundles:
+        - marketItem: -58379936 # twins steel
+      compensation: 5000
+      nameLocalizationKey: twinssteel
+    - itemBundles:
+        - marketItem: 2065196452 # vulcan steel
+      compensation: 5000
+      nameLocalizationKey: vulcansteel
+
+
+  rareItems:
+    - itemBundles:
+        - marketItem: -1501779048 # steel tank paint
+      nameLocalizationKey: steeltankpaint
+    - itemBundles:
+        - marketItem: -1040012688 # steel weapon paint
+      nameLocalizationKey: steelweaponpaint
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 2c2f984354fd574489f100787ad35222
+imageItem:
+  spriteUid: 830dee58-6bb5-47fe-a69c-3e788e28b9e0
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 100
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 100
+    3: 270
+    10: 800

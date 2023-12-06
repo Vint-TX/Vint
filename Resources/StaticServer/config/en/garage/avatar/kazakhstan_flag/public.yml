@@ -1,0 +1,16 @@
+priceItem:
+  price: 3000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 8813f44f-5768-43d8-92ef-cc8a42db551b
+imageItem:
+  spriteUid: 8813f44f-5768-43d8-92ef-cc8a42db551b
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 6
+itemRarity:
+  rarityType: COMMON

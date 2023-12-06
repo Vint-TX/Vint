@@ -1,0 +1,63 @@
+---
+accelerationGarageItemProperty:
+  propertyName: Ускорение
+healthGarageItemProperty:
+  propertyName: Защита
+speedGarageItemProperty:
+  propertyName: Максимальная скорость
+turnSpeedGarageItemProperty:
+  propertyName: Скорость поворота корпуса
+weightGarageItemProperty:
+  propertyName: Масса
+bulletSpeedGarageItemProperty:
+  propertyName: Скорость полёта снаряда
+damageDistanceGarageItemProperty:
+  propertyName: Дальность поражения
+damageGarageItemProperty:
+  propertyName: Урон
+damageWeakeningByTargetGarageItemProperty:
+  propertyName: Пробитие
+energyChargeSpeedGarageItemProperty:
+  propertyName: Расход энергии
+energyRechargeSpeedGarageItemProperty:
+  propertyName: Зарядка
+fireDamageGarageItemProperty:
+  propertyName: Урон в секунду от горения
+impactGarageItemProperty:
+  propertyName: Сила удара снаряда
+reloadTimeGarageItemProperty:
+  propertyName: Перезарядка
+turretTurnSpeedGarageItemProperty:
+  propertyName: Скорость поворота башни
+criticalDamageGarageItemProperty:
+  propertyName: Критический урон
+criticalProbabilityGarageItemProperty:
+  propertyName: Вероятность критического урона
+magazineSizeGarageItemProperty:
+  propertyName: Выстрелов в обойме
+reloadMagazineTimeGarageItemProperty:
+  propertyName: Перезарядка обоймы
+healingGarageItemProperty:
+  propertyName: Лечение
+selfHealingGarageItemProperty:
+  propertyName: Самолечение
+aimingDamageGarageItemProperty:
+  propertyName: Снайперский урон
+shaftDamageGarageItemProperty:
+  propertyName: Урон
+spinUpTimeGarageItemProperty:
+  propertyName: Время раскручивания стволов
+temperatureHittingTimeGarageItemProperty:
+  propertyName: Время до перегрева
+accelerationUnitItemProperty:
+  propertyName: м/с²
+angularVelocityUnitItemProperty:
+  propertyName: °/с
+percentUnitItemProperty:
+  propertyName: '%'
+secondUnitItemProperty:
+  propertyName: с
+velocityUnitItemProperty:
+  propertyName: м/с
+distanceUnitItemProperty:
+  propertyName: м

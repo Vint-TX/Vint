@@ -1,0 +1,86 @@
+unityAsset:
+  reference:
+    assetGuid: 7838beca6ab29bb47aa7f63d8c6f5919
+priceItem:
+  price: 200
+xPriceItem:
+  price: 40
+imageItem:
+  spriteUid: f416447c-fc39-4128-b7fc-9309975afe59
+userItemTemplate:
+  userItemTemplate: 1435138683277
+itemIcon:
+  spriteUid: 5b3a8d51-98bd-47d7-b5ca-97ff04fc894d
+order:
+  index: 2
+crystalsPurchaseUserRankRestriction:
+  restrictionValue: 1
+minDamageProperty:
+  initialValue: 91.303
+  finalValue: 91.303
+maxDamageProperty:
+  initialValue: 96.697
+  finalValue: 96.697
+reloadTimeProperty:
+  initialValue: 0.250
+  finalValue: 0.250
+bulletSpeedProperty:
+  initialValue: 150.000
+  finalValue: 150.000
+bulletRadiusProperty:
+  initialValue: 0.500
+  finalValue: 0.500
+maxDamageDistanceProperty:
+  initialValue: 43.416
+  finalValue: 43.416
+minDamageDistanceProperty:
+  initialValue: 83.913
+  finalValue: 83.913
+minDamagePercentProperty:
+  initialValue: 62.609
+  finalValue: 62.609
+impactProperty:
+  initialValue: 1.200
+  finalValue: 1.200
+kickbackProperty:
+  initialValue: 0.400
+  finalValue: 0.400
+visualProperties:
+  mainProperties:
+    - name: Damage
+      normalizedValue: 0.2
+    - name: Range
+      normalizedValue: 0.5
+    - name: FireRate
+      normalizedValue: 0.95
+  properties:
+    - name: DPM
+      initialValue: 22560
+      finalValue: 22560
+    - name: Damage per Projectile
+      initialValue: 94
+      finalValue: 94
+    - name: Reload Time
+      initialValue: 0.25
+      finalValue: 0.25
+      format: 0.0
+      unit: sec
+    - name: Projectile Speed
+      initialValue: 150
+      finalValue: 150
+      unit: meters_per_sec
+    - name: Max Damage Distance
+      initialValue: 43.4
+      finalValue: 43.4
+      format: 0.0
+      unit: m
+    - name: Attack Distance
+      initialValue: 83.9
+      finalValue: 83.9
+      format: 0.0
+      unit: m
+    - name: Impact
+      initialValue: 1.5
+      finalValue: 1.5
+      format: 0.0
+...

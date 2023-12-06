@@ -1,0 +1,55 @@
+moduleCooldownProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 0
+    - 0
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleTempblockIncrementProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.00025
+    - 0.00026
+    - 0.00028
+    - 0.00029
+    - 0.00031
+    - 0.00032
+    - 0.00033
+    - 0.00035
+    - 0.00036
+    - 0.00038
+moduleTempblockDecrementProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.00005
+    - 0.00006
+    - 0.00006
+    - 0.00007
+    - 0.00007
+    - 0.00008
+    - 0.00008
+    - 0.00009
+    - 0.00009
+    - 0.00010
+moduleVisualProperties:
+  properties:
+    - name: TemperatureIncrease
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 25
+        - 38
+      unit: percentinsec
+      format: 0
+      spriteUID: 80bffee2-17be-4764-8c1d-8d45cede10ff
+    - name: TemperatureDecrease
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 5
+        - 10
+      unit: percentinsec
+      format: 0
+      spriteUID: af08ec8b-605b-4617-9ba1-e371abdf885b
+...

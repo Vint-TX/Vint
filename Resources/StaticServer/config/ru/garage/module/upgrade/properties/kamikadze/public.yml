@@ -1,0 +1,138 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 45000
+    - 43333
+    - 41667
+    - 40000
+    - 38333
+    - 36667
+    - 35000
+    - 33333
+    - 31667
+    - 30000
+moduleEffectImpactProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 4.00
+    - 4.22
+    - 4.44
+    - 4.67
+    - 4.89
+    - 5.11
+    - 5.33
+    - 5.56
+    - 5.78
+    - 6.00
+moduleEffectSplashRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 10.00
+    - 10.56
+    - 11.11
+    - 11.67
+    - 12.22
+    - 12.78
+    - 13.33
+    - 13.89
+    - 14.44
+    - 15.00
+moduleEffectSplashDamageMinPercentProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.20
+    - 0.21
+    - 0.22
+    - 0.23
+    - 0.24
+    - 0.26
+    - 0.27
+    - 0.28
+    - 0.29
+    - 0.30
+moduleEffectMinDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 500.00
+    - 527.78
+    - 555.56
+    - 583.33
+    - 611.11
+    - 638.89
+    - 666.67
+    - 694.44
+    - 722.22
+    - 750.00
+moduleEffectMaxDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1000.00
+    - 1055.56
+    - 1111.11
+    - 1166.67
+    - 1222.22
+    - 1277.78
+    - 1333.33
+    - 1388.89
+    - 1444.44
+    - 1500.00
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 45
+        - 30
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Damage
+      linearInterpolation: false
+      upgradeLevel2Values:
+        - 500.00
+        - 527.78
+        - 555.56
+        - 583.33
+        - 611.11
+        - 638.89
+        - 666.67
+        - 694.44
+        - 722.22
+        - 750.00
+      maxAndMinString:
+        - 500-1000
+        - 527-1055
+        - 555-1111
+        - 583-1166
+        - 611-1222
+        - 638-1277
+        - 666-1333
+        - 694-1388
+        - 722-1444
+        - 750-1500
+      unit: hp
+      format: 0.0
+      maxAndMin: true
+      spriteUID: bdaa35da-f24c-4dc5-a4e2-050c31e328f9
+    - name: TargetingRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 15
+      unit: m
+      format: 0.0
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: "Impact"
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 4
+        - 6
+      unit: hp
+      format: 0.0
+      spriteUID: 8bf5d2cc-2f2b-4f2a-8d6e-880bcdbf4844
+...

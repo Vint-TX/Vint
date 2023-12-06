@@ -1,0 +1,34 @@
+---
+descriptionItem:
+  name: Rubber
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    armorspeed: "Gold Catcher"
+    minedd: "Destroyer"
+    armorrepair: "Survivor"
+    mattebluetankpaint: Matte Blue (Paint)
+    matteblueweaponpaint: Matte Blue (Coating)
+    mattegraytankpaint: Matte Gray (Paint)
+    mattegrayweaponpaint: Matte Gray (Coating)
+    mattegreentankpaint: Matte Green (Paint)
+    mattegreenweaponpaint: Matte Green (Coating)
+    mattenavitankpaint: Matte Navy (Paint)
+    mattenaviweaponpaint: Matte Navy (Coating)
+    matteorangetankpaint: Matte Orange (Paint)
+    matteorangeweaponpaint: Matte Orange (Coating)
+    matteredtankpaint: Matte Red (Paint)
+    matteredweaponpaint: Matte Red (Coating)
+    matterosetankpaint: Matte Rose (Paint)
+    matteroseweaponpaint: Matte Rose (Coating)
+    matteviolettankpaint: Matte Violet (Paint)
+    mattevioletweaponpaint: Matte Violet (Coating)
+    matteyellowtankpaint: Matte Yellow (Paint)
+    matteyellowweaponpaint: Matte Yellow (Coating)
+    matteblacktankpaint: Matte Black (Paint)
+    matteblackweaponpaint: Matte Black (Coating)
+    mattewhitetankpaint: Matte White (Paint)
+    mattewhiteweaponpaint: Matte White (Coating)

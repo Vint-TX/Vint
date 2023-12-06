@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 324db50c-65eb-469e-bb7d-3fd013cb5342
+imageItem:
+  spriteUid: 324db50c-65eb-469e-bb7d-3fd013cb5342
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: RARE

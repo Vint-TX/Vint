@@ -1,0 +1,49 @@
+unityAsset:
+  reference:
+    assetGuid: 099afd48dc1281d4ca5a74f0fa1518c5
+verticalSectorsTargeting:
+  workDistance: 76.1
+  vAngleUp: 9
+  vAngleDown: 11
+  hAngle: 10
+  raysPerDegree: 0.4
+hammerPelletCone:
+  horizontalConeHalfAngle: 5.5
+  verticalConeHalfAngle: 5.5
+  pelletCount: 14
+ctfTargetEvaluator:
+  flagCarrierPriorityBonus: 1000
+distanceAndAngleTargetEvaluator:
+  distanceWeight: 0.65
+  angleWeight: 0.35
+reticle:
+  template: 636100801360863080
+  configPath: /battle/reticle
+kickbackCameraShakerConfig:
+  enabled: true
+  magnitude: 1.14
+  roughness: 5.86
+  fadeInTime: 0.14
+  fadeOutTime: 0.29
+  posInfluenceX: 0.12
+  posInfluenceY: 0.48
+  posInfluenceZ: 1.08
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 0
+impactCameraShakerConfig:
+  enabled: true
+  magnitude: 1
+  roughness: 5.86
+  fadeInTime: 0.14
+  fadeOutTime: 0.29
+  posInfluenceX: 0.75
+  posInfluenceY: 0.75
+  posInfluenceZ: 1.25
+  rotInfluenceX: 1
+  rotInfluenceY: 1
+  rotInfluenceZ: 1
+hitFeedbackSoundsPlayingSettings:
+  delay: 0.1
+  volume: 1
+  removeOnKillSound: true

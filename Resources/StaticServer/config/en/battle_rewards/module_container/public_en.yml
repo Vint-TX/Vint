@@ -1,0 +1,7 @@
+descriptionItem:
+  name: "Raise Your Power!"
+  description: "Raise Your Power!"
+moduleContainerRewardTextConfig:
+  openText: "Open"
+  winText: "Keep it up! Buy blueprints to upgrade modules and make your tank more powerful!"
+  looseText: "Buy blueprints to upgrade modules: that will make your tank more powerful and give you an advantage to win."

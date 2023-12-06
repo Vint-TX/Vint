@@ -1,0 +1,7 @@
+modalConfirmWindow:
+  headerText: Reconnect to the battle?
+  mainText: |
+    Do you want to reconnect to {0} {1}?
+    You will be kicked from the battle in [LeftTime], due to innactivity.
+  confirmText: Yes
+  cancelText: No

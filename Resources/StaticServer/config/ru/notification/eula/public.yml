@@ -1,0 +1,8 @@
+notificationConfig:
+  showDuration: -1
+  showDelay: 0
+  order: -10
+  isFullScreen: true
+assetReference:
+  reference:
+    assetGuid: d3990b19208c94618a45df8e7d893c64

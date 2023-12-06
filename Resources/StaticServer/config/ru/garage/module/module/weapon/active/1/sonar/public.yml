@@ -1,0 +1,14 @@
+moduleUpgradePropertiesInfo:
+  template: 636350381077302417
+  path: garage/module/upgrade/properties/sonar
+itemIcon:
+  spriteUid: f5739388-2b41-476e-b5c4-c3e8dc84440d
+itemBigIcon:
+  spriteUid: 5b9a419d-99a9-462a-a222-f08631a12023
+order:
+  index: 2
+moduleEffects:
+  effects:
+    - template: 636222333880646188
+      config: battle/effect/sonar  
+  

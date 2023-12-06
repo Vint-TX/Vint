@@ -1,0 +1,17 @@
+---
+descriptionItem:
+  name: Охотник
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    hunterXT: "Хантер-ХТ"
+    hunterGold: "Хантер Золото"
+    sporttankpaint: Спорт (Краска)
+    sportweaponpaint: Спорт (Покрытие)
+    savannatankpaint: Саванна (Краска)
+    savannaweaponpaint: Саванна (Покрытие)
+    tundratankpaint: Тундра (Краска)
+    tundraweaponpaint: Тундра (Покрытие)

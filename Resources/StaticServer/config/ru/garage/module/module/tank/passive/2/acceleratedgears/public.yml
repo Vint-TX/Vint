@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636353692770418059
+  path: garage/module/upgrade/properties/acceleratedgears
+itemIcon:
+  spriteUid: d56cc25e-96f1-4ab2-b84c-43ddffa5086f
+itemBigIcon:
+  spriteUid: 2b4f336a-2fd6-4cbf-9a7f-03fbb8257082
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1486978694968
+      config: battle/effect/acceleratedgears

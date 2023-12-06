@@ -1,0 +1,74 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1391443781 # Graffiti Let's Go!
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 1884609450 # Graffiti Up!
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1732490966 # Starry Sky Tank Paint
+      compensation: 6250
+      nameLocalizationKey: starryskytankpaint
+    - itemBundles:
+        - marketItem: -1779740531 # Starry Sky Weapon Paint
+      compensation: 6250
+      nameLocalizationKey: starryskyweaponpaint
+    - itemBundles:
+        - marketItem: -2023428617 # Vostok 1 Tank Paint
+      compensation: 6250
+      nameLocalizationKey: vostok1tankpaint
+    - itemBundles:
+        - marketItem: -487032800 # Vostok 1 Weapon Paint
+      compensation: 6250
+      nameLocalizationKey: vostok1weaponpaint
+    - itemBundles:
+        - marketItem: -767847828 # Gold Dictator
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -398757768 # Gold Thunder
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -660457061 # Railgun Green Shell
+      compensation: 6250
+      nameLocalizationKey: railgungreen
+    - itemBundles:
+        - marketItem: 577198848 # Ricochet Coral Shell
+      compensation: 6250
+      nameLocalizationKey: ricochetcoral
+
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 1770762539 # Thunder Dreadnought
+    - itemBundles:
+        - marketItem: 732611697 # Dictator Dreadnought
+
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: e919ac9257491414eaf61e5b9f1aba5e
+imageItem:
+  spriteUid: 6c4b1f42-2b9f-4405-9fed-4763e5403873
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

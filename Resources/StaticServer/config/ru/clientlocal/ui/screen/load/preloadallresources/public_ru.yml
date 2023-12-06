@@ -1,0 +1,6 @@
+---
+loadScreenLocalizedText:
+  loadFromDiskText: Идёт загрузка, но уже можно начать играть
+  networkLoadText: Идёт загрузка из сети, но уже можно начать играть
+  skipLoadingButton: ИГРАТЬ
+  initializationText: ""

@@ -1,0 +1,11 @@
+specialOfferScreenLocalization:
+  spriteUid:
+  footer:
+specialOfferContentLocalization:
+  spriteUid: 2b61adfe-f702-4708-b43d-920efe4c5bdd
+  title: 'ПОЛНЫЙ ГАРАЖ!'
+  description: |
+    Все пушки и корпуса*
+    Уникальная краска «Карбон»
+receiptText:
+  text: Специальное предложение «ПОЛНЫЙ ГАРАЖ!»

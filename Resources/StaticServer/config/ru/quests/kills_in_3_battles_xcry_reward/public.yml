@@ -1,0 +1,87 @@
+imageItem:
+  spriteUid: fb150aae-404d-4412-9785-46b34e03ca9a
+order:
+  index: 2
+questVariations:
+  quests:
+    - range: 0-9
+      targetValue: 10
+      questReward:
+        1317350822: 5
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 10-19
+      targetValue: 15
+      questReward:
+        1317350822: 6
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 20-29
+      targetValue: 20
+      questReward:
+        1317350822: 7
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 30-39
+      targetValue: 25
+      questReward:
+        1317350822: 8
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 40-49
+      targetValue: 30
+      questReward:
+        1317350822: 9
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 50-59
+      targetValue: 35
+      questReward:
+        1317350822: 10
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 60-69
+      targetValue: 35
+      questReward:
+        1317350822: 11
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 70-79
+      targetValue: 35
+      questReward:
+        1317350822: 12
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 80-89
+      targetValue: 35
+      questReward:
+        1317350822: 13
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 90-100
+      targetValue: 35
+      questReward:
+        1317350822: 15
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+killsInManyBattlesQuest:
+  battles: 3

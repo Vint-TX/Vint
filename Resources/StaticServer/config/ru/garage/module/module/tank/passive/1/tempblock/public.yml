@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636353660984440005
+  path: garage/module/upgrade/properties/tempblock
+itemIcon:
+  spriteUid: 3ef0d902-dc86-4124-bb9d-e676d33515e4
+itemBigIcon:
+  spriteUid: 700279c8-1114-4423-bd0e-3c137aa54d1a
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 1487227012386
+      config: battle/effect/normalizetemperature

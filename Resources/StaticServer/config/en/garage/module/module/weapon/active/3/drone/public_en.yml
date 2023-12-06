@@ -1,0 +1,5 @@
+---
+descriptionItem:
+  name: Turret Drone
+  description: "Deploys a turret drone, that is locked to the tank and deals damage to any enemy tank in its attack range."
+  flavor: "Back when it was in development, the drone's codename was 'The Flying Killer'. Antaeus thought that we're bluffing. \n- Frontier's intelligence operator "

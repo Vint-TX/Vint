@@ -1,0 +1,69 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1051154520 # green weapon paint
+      compensation: 5000
+      nameLocalizationKey: greenweaponpaint
+    - itemBundles:
+        - marketItem: 410089078 # red weapon paint
+      compensation: 5000
+      nameLocalizationKey: redweaponpaint
+    - itemBundles:
+        - marketItem: -172609771 # blue weapon paint
+      compensation: 5000
+      nameLocalizationKey: blueweaponpaint
+    - itemBundles:
+        - marketItem: -172195791 # pink weapon paint
+      compensation: 5000
+      nameLocalizationKey: pinkweaponpaint
+    - itemBundles:
+        - marketItem: 2002870825 # orange weapon paint
+      compensation: 5000
+      nameLocalizationKey: orangeweaponpaint
+    - itemBundles:
+        - marketItem: 454169524 # yellow weapon paint
+      compensation: 5000
+      nameLocalizationKey: yellowweaponpaint
+    - itemBundles:
+        - marketItem: 1167717168 # light blue weapon paint
+      compensation: 5000
+      nameLocalizationKey: lightblueweaponpaint
+    - itemBundles:
+        - marketItem: 372065215 # izumrud weapon paint
+      compensation: 5000
+      nameLocalizationKey: izumrudweaponpaint
+  rareItems:
+    - itemBundles:
+        - marketItem: -172577710 # coal weapon black
+      nameLocalizationKey: coalweaponpaint
+    - itemBundles:
+        - marketItem: -1042925597 # polar weapon white
+      nameLocalizationKey: polarweaponpaint
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 6f590e6bcc5d2b245b48a517c4c0dc31
+imageItem:
+  spriteUid: 79a7a66c-403f-4982-83b4-883e48ac45df
+order:
+  index: 2
+priceItem:
+  price: 0
+xPriceItem:
+  price: 100
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 100
+    3: 270
+    10: 800

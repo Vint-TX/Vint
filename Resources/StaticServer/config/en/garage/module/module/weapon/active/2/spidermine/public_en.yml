@@ -1,0 +1,5 @@
+---
+descriptionItem:
+  name: Spider Mine
+  description: "Deploys a mine that will start chasing tanks that drive in its vicinity. Upon reaching its target, the mine will explode and deal area of effect damage."
+  flavor: "As a child, I was afraid of spiders. My therapist was telling me that I need to overcome this fear. That's why I decided to design this mine and test it on him... for therapeutic purposes. \n- Magnus Grim, Chief Engineer at Antaeus"

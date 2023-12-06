@@ -1,0 +1,4 @@
+performanceStatisticsSettings:
+  delayInSecBeforeMeasuringStarted: 30
+  hugeFrameDurationInMs: 50
+  measuringIntervalInSec: 5

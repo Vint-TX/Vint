@@ -1,0 +1,16 @@
+---
+descriptionItem:
+  name: "Support Antaeus"
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    antaeuspaint: "Antaeus (Paint)"
+    antaeus2paint: "Termite (Paint)"
+    orionpaint: "Orion (Paint)"
+    antaeusgraffiti: Antaeus (Graffiti)
+    antaeus2graffiti: Giant (Graffiti)
+    premiumboost: Premium boost 1-3 days
+    premiumquest: Premium quest 1-3 days

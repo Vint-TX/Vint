@@ -1,0 +1,33 @@
+userItemTemplate:
+  userItemTemplate: 1543968970810
+unityAsset:
+  reference:
+    assetGuid: de96f8c30579fb047abed96c7fa4bf8c
+imageItem:
+  spriteUid: a00104b1-5b9c-470a-b445-9199cdf6cc52
+order:
+  index: -1
+xPriceItem:
+  price: 199
+itemPacks:
+  forXPrice:
+    - 1
+    - 5
+    - 30
+# Если указаны эти цены - игнорируется priceItem и xPriceItem
+packPrice:
+  packXPrice:
+    1: 199
+    5: 939
+    30: 5499
+targetTier:
+  targetTier: 2
+  maxExistTier: 3
+  containsAllTierItem: false
+  itemList:
+    - 1032613237 #e impact
+    - -1596570946 #jump impact
+    - -206369995 #e mass
+    - -627265270 #fire ring
+    - -887306593 #sapper
+    - 489948195 #kamikadze

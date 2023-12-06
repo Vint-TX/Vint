@@ -1,0 +1,18 @@
+effectIcon:
+  spriteUid: 9d4236c0-ed3b-4d0a-8f0c-79fbe96dbb52
+preloadingMineKey:
+  key: icetrap
+damageType:
+  damageType: MINE
+impactCameraShakerConfig:
+  enabled: true
+  magnitude: 3
+  roughness: 5
+  fadeInTime: 0
+  fadeOutTime: 1.5
+  posInfluenceX: 0.5
+  posInfluenceY: 1
+  posInfluenceZ: 0.5
+  rotInfluenceX: 0.5
+  rotInfluenceY: 0.5
+  rotInfluenceZ: 0.5

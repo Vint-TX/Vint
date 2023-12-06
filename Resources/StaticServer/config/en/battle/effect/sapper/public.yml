@@ -1,0 +1,6 @@
+damageResistanceEffect:
+  damageTypeSet:
+    - MINE
+  damageResistMult: 1
+effectIcon:
+  spriteUid: 18d7bcae-14ad-4401-a9cf-b030f433205b

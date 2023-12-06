@@ -1,0 +1,17 @@
+---
+descriptionItem:
+  name: Стим
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    twinsviolet: "Твинс «Фиолетовый»"
+    armorspeed: "Голдолов"
+    minedd: "Разрушитель"
+    armorrepair: "Выживший"
+    patinatankpaint: Патина (Краска)
+    patinaweaponpaint: Патина (Покрытие)
+    rivetstankpaint: Заклёпки (Краска)
+    rivetsweaponpaint: Заклёпки (Покрытие)

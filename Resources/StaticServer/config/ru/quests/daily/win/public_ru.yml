@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Победи в {0} {1}'
+    cases:
+      DEFAULT: 'командных сражениях'
+      ONE: 'командном сражении'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Режим
+    WEAPON: Пушка
+    TANK: Корпус

@@ -1,0 +1,12 @@
+specialOfferContentLocalization:
+  spriteUid: 57b0c473-e8fe-4ce1-8446-2704e4122a6d
+  title: 'Легендарный танк «Наступление»'
+  description: |
+    Легендарный танк «Наступление»
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Торопись! Предложение ограничено по времени.
+  description: |
+    Легендарный танк «Наступление»
+receiptText:
+  text: Легендарный танк «Наступление»

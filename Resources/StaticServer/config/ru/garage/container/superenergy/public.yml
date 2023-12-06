@@ -1,0 +1,181 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1765925144 # hornet cry
+      compensation: 10000
+      nameLocalizationKey: hornetcry
+    - itemBundles:
+        - marketItem: -1353746752 # viking cry
+      compensation: 10000
+      nameLocalizationKey: vikingcry
+    - itemBundles:
+        - marketItem: 283356827 # hammer cry
+      compensation: 10000
+      nameLocalizationKey: hammercry
+    - itemBundles:
+        - marketItem: -388976915 # vulcan cry
+      compensation: 10000
+      nameLocalizationKey: vulcancry
+
+    - itemBundles:
+        - marketItem: -400341658 # arrows of love
+      compensation: 10000
+      nameLocalizationKey: arrowsoflove
+    - itemBundles:
+        - marketItem: -1902859834 # triangle
+      compensation: 10000
+      nameLocalizationKey: triangle
+    - itemBundles:
+        - marketItem: -451216061 # mosaic
+      compensation: 10000
+      nameLocalizationKey: mosaic
+    - itemBundles:
+        - marketItem: -1660396512 # military
+      compensation: 10000
+      nameLocalizationKey: military
+    - itemBundles:
+        - marketItem: 2070833572 # red banner
+      compensation: 10000
+      nameLocalizationKey: redbanner
+    - itemBundles:
+        - marketItem: 942805628 # universe
+      compensation: 10000
+      nameLocalizationKey: universe
+    - itemBundles:
+        - marketItem: -1732490966 # starry sky
+      compensation: 10000
+      nameLocalizationKey: starrysky
+    - itemBundles:
+        - marketItem: 2070833571 # spring colors
+      compensation: 10000
+      nameLocalizationKey: springcolors
+    - itemBundles:
+        - marketItem: -574655849 # bananas
+      compensation: 10000
+      nameLocalizationKey: bananas
+    - itemBundles:
+        - marketItem: -2023428617 # vostok-1
+      compensation: 10000
+      nameLocalizationKey: vostok-1
+    - itemBundles:
+        - marketItem: 721518013 # halloween
+      compensation: 10000
+      nameLocalizationKey: halloween
+
+    - itemBundles:
+        - marketItem: -1760088841 # andromeda
+      compensation: 10000
+      nameLocalizationKey: andromeda
+    - itemBundles:
+        - marketItem: 683803510 # antarctica
+      compensation: 10000
+      nameLocalizationKey: antarctica
+    - itemBundles:
+        - marketItem: 986557478 # spark
+      compensation: 10000
+      nameLocalizationKey: spark
+    - itemBundles:
+        - marketItem: -888059423 # ice
+      compensation: 10000
+      nameLocalizationKey: ice
+    - itemBundles:
+        - marketItem: -12628116 # orion
+      compensation: 10000
+      nameLocalizationKey: orion
+    - itemBundles:
+        - marketItem: 1223441167 # radiation
+      compensation: 10000
+      nameLocalizationKey: radiation
+    - itemBundles:
+        - marketItem: 1218811098 # halloween 2017
+      compensation: 10000
+      nameLocalizationKey: halloween2017
+    - itemBundles:
+        - marketItem: 214261055 # Canyon
+      compensation: 10000
+      nameLocalizationKey: vulcancryglow
+    - itemBundles:
+        - marketItem: -56970637 # spectre
+      compensation: 10000
+      nameLocalizationKey: spectre
+
+  rareItems:
+    - itemBundles:
+        - marketItem: -955210934 # hornet cry rage
+      compensation: 10000
+      nameLocalizationKey: hornetcryrage
+    - itemBundles:
+        - marketItem: -955210933 # hornet cry discharge
+      compensation: 10000
+      nameLocalizationKey: hornetcrydischarge
+    - itemBundles:
+        - marketItem: -955210932 # hornet cry glow
+      compensation: 10000
+      nameLocalizationKey: hornetcryglow
+
+    - itemBundles:
+        - marketItem: -110775867 # viking cry rage
+      compensation: 10000
+      nameLocalizationKey: vikingcryrage
+    - itemBundles:
+        - marketItem: -1363672965 # viking cry discharge
+      compensation: 10000
+      nameLocalizationKey: vikingcrydischarge
+    - itemBundles:
+        - marketItem: -110402718 # viking cry glow
+      compensation: 10000
+      nameLocalizationKey: vikingcryglow
+
+    - itemBundles:
+        - marketItem: -350323545 # hammer cry rage
+      compensation: 10000
+      nameLocalizationKey: hammercryrage
+    - itemBundles:
+        - marketItem: -350323544 # hammer cry discharge
+      compensation: 10000
+      nameLocalizationKey: hammercrydischarge
+    - itemBundles:
+        - marketItem: -350323543 # hammer cry glow
+      compensation: 10000
+      nameLocalizationKey: hammercryglow
+
+    - itemBundles:
+        - marketItem: -1560119161 # vulcan cry rage
+      compensation: 10000
+      nameLocalizationKey: vulcancryrage
+    - itemBundles:
+        - marketItem: -785177863 # vulcan cry discharge
+      compensation: 10000
+      nameLocalizationKey: vulcancrydischarge
+    - itemBundles:
+        - marketItem: -1559746012 # vulcan cry glow
+      compensation: 10000
+      nameLocalizationKey: vulcancryglow
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 02399a05c425ac94d9595b83f3c9cd86
+imageItem:
+  spriteUid: cf1a49fd-fa44-47c6-9273-4c364f5c6305
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 199
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 199
+    3: 529
+    10: 1499

@@ -1,0 +1,21 @@
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+mountUpgradeLevelRestriction:
+  restrictionValue: 0
+mountUserRankRestriction:
+  restrictionValue: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 349
+order:
+  index: 300
+unityAsset:
+  reference:
+    assetGuid: cc75b6f228df1874d9381809bc32187d
+imageItem:
+  spriteUid: 07c1066a-d985-44e0-9f4f-683b3e720b24
+itemRarity:
+  rarityType: RARE

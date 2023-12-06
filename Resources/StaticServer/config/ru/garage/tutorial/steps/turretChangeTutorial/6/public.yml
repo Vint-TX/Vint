@@ -1,0 +1,9 @@
+tutorialStepData:
+  stepId: 723559094
+  visualStep: true
+  stepDesc: "Затемнение.
+             - Выделен Твинс и UI с покупкой"
+
+tutorialHighlightTankStepData:
+  highlightHull: false
+  highlightWeapon: true

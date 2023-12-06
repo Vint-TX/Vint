@@ -1,0 +1,115 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1902859834 # Triangle Camo tank paint
+      compensation: 8600
+      nameLocalizationKey: triangletankpaint
+    - itemBundles:
+        - marketItem: -2097840184 # Triangle Camo weapon paint
+      compensation: 8600
+      nameLocalizationKey: triangleweaponpaint
+    - itemBundles:
+        - marketItem: 1555319306 # Partizan tank paint
+      compensation: 8600
+      nameLocalizationKey: partizantankpaint
+    - itemBundles:
+        - marketItem: 645983436 # Partizan weapon paint
+      compensation: 8600
+      nameLocalizationKey: partizanweaponpaint
+    - itemBundles:
+        - marketItem: -24102762 # Ceder tank paint
+      compensation: 8600
+      nameLocalizationKey: cedertankpaint
+    - itemBundles:
+        - marketItem: -1055236844 # Ceder weapon paint
+      compensation: 8600
+      nameLocalizationKey: cederweaponpaint
+    - itemBundles:
+        - marketItem: -7094151 # Urban tank paint
+      compensation: 8600
+      nameLocalizationKey: urbantankpaint
+    - itemBundles:
+        - marketItem: -1038228233 # Urban weapon paint
+      compensation: 8600
+      nameLocalizationKey: urbanweaponpaint
+    - itemBundles:
+        - marketItem: -1333610377 # First of May Graffiti
+      compensation: 8600
+    - itemBundles:
+        - marketItem: -2050212779 # Motherland Graffiti
+      compensation: 8600
+    - itemBundles:
+        - marketItem: -303400441 # Iwo Jima Graffiti
+      compensation: 8600
+    - itemBundles:
+        - marketItem: 113459975 # Hero Graffiti
+      compensation: 8600
+    - itemBundles:
+        - marketItem: -1704481322 # Isis Gold Skin
+      compensation: 8600
+      nameLocalizationKey: GoldIsis
+    - itemBundles:
+        - marketItem: 54173794 # Shaft Gold Skin
+      compensation: 8600
+      nameLocalizationKey: GoldShaft
+    - itemBundles:
+        - marketItem: -1427688220 # Hammer Gold Skin
+      compensation: 8600
+      nameLocalizationKey: GoldHummer
+    - itemBundles:
+        - marketItem: -767847828 # Dictator Gold Skin
+      compensation: 8600
+      nameLocalizationKey: GoldDictator
+    - itemBundles:
+        - marketItem: -754659582 # Titan Gold Skin
+      compensation: 8600
+      nameLocalizationKey: GoldTitan
+    - itemBundles:
+        - marketItem: -1774441975 # Wasp Gold Skin
+      compensation: 8600
+      nameLocalizationKey: GoldWasp
+  rareItems:
+    - itemBundles:
+        - marketItem: 110176853 # Hunter Victory Day skin
+      nameLocalizationKey: mayHunter
+    - itemBundles:
+        - marketItem: 963790407 # Hornet Victory Day skin
+      nameLocalizationKey: mayHornet
+    - itemBundles:
+        - marketItem: -313951841 # Viking Victory Day skin
+      nameLocalizationKey: mayViking
+    - itemBundles:
+        - marketItem: 1912357269 # Thunder Victory Day skin
+      nameLocalizationKey: mayThunder
+    - itemBundles:
+        - marketItem: -1398640396 # Smoky Victory Day skin
+      nameLocalizationKey: maySmoky
+    - itemBundles:
+        - marketItem: 98615071 # Railgun Victory Day skin
+      nameLocalizationKey: mayRailgun
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 5d658100c3b6ac345bd729f352999ec5
+imageItem:
+  spriteUid: d9f95fc7-576a-43e0-aa5b-9c372120b7f6
+order:
+  index: 1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 172
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

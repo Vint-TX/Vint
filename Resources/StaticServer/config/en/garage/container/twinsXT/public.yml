@@ -1,0 +1,70 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -343773791 # demolisher graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -1611647112 # partners graffiti
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 1023813172 # honeycomb paint
+      compensation: 6250
+      nameLocalizationKey: honeycombpaint
+
+    - itemBundles:
+        - marketItem: -784118404 # honeycomb cover
+      compensation: 6250
+      nameLocalizationKey: honeycombcover
+
+    - itemBundles:
+        - marketItem: -172076637 # clay cover
+      compensation: 6250
+      nameLocalizationKey: claycover
+
+    - itemBundles:
+        - marketItem: 1962388777 # jade cover
+      compensation: 6250
+      nameLocalizationKey: jadecover
+
+    - itemBundles:
+        - marketItem: -1595894991 # twins gold skin
+      compensation: 6250
+      nameLocalizationKey: twinsgold
+
+    - itemBundles:
+        - marketItem: -728200866 # white twins shell
+      compensation: 6250
+  rareItems:
+
+    - itemBundles:
+        - marketItem: -788257559 # twins xt skin
+      nameLocalizationKey: twinsXT
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 4016cec93218fb04786a7577ded1a74d
+imageItem:
+  spriteUid: 49ff49ed-f2f5-4f8f-972b-56ce459a063e
+order:
+  index: 1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 7
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    7: 700

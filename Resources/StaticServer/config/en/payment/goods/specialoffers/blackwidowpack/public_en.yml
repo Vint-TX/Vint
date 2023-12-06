@@ -1,0 +1,21 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 68ba6df4-d17c-4ded-93f5-c8e27e11b2b2
+  title: 'The Black Widow Squad'
+  description: |
+    Spider mine skin
+    + free gift: unique paint, graffiti,
+    avatar, 2000 blue and 300 x-crystals
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! Offer is time limited
+  description: |
+    Black widow knows everything, thanks to its well-spread nets. There are some rumors about you as well. Good rumors. You better use this chance to join the mighty organizations and get the unique privileges it offers.
+receiptText:
+  text: Special offer «The Black Widow Squad»
+starterPackMainElement:
+  itemId: 1704628950 # Spider graffiti
+  count: 0
+  title: Spider Mine Skin / Arachnid Graffiti
+  description: |
+    This unique spider-mine skin will make your enemies squeal with awe and delight!
+    <b>Simply equip the graffiti to activate this skin</b>

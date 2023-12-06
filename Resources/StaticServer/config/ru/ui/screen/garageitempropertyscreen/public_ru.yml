@@ -1,0 +1,10 @@
+---
+itemPropertyScreenText:
+  propertyWeaponText: 'ХАРАКТЕРИСТИКИ ПУШКИ «%ITEM_NAME%»'
+  propertyTankText: 'ХАРАКТЕРИСТИКИ КОРПУСА «%ITEM_NAME%»'
+  propertySupplyText: 'ХАРАКТЕРИСТИКИ ПРИПАСА «%ITEM_NAME%»'
+itemUpgradeScreenText:
+  upgradeText: УЛУЧШЕНИЯ
+upgradeInfoText:
+  upgradeLevelText: 'Улучшения'
+  experienceToLevelUpText: 'Очки опыта'

@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636362459608393188
+  path: garage/module/upgrade/properties/rage
+itemIcon:
+  spriteUid: 08227776-938b-481d-a173-d3d0c67cf669
+itemBigIcon:
+  spriteUid: 9bf614e4-f741-4e93-9566-e2b3ca737ce9
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 636364997672415488
+      config: battle/effect/rage

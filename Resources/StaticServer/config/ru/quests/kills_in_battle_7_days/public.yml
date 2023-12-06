@@ -1,0 +1,87 @@
+imageItem:
+  spriteUid: 1caa0023-446f-4e2c-9f16-33cbbf96dd01
+order:
+  index: 3
+questVariations:
+  quests:
+    - range: 0-9
+      targetValue: 10
+      questReward:
+        1317350822: 50
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 10-19
+      targetValue: 15
+      questReward:
+        1317350822: 55
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 20-29
+      targetValue: 20
+      questReward:
+        1317350822: 60
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 30-39
+      targetValue: 25
+      questReward:
+        1317350822: 65
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 40-49
+      targetValue: 30
+      questReward:
+        1317350822: 70
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 50-59
+      targetValue: 35
+      questReward:
+        1317350822: 75
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 60-69
+      targetValue: 35
+      questReward:
+        1317350822: 80
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 70-79
+      targetValue: 35
+      questReward:
+        1317350822: 85
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 80-89
+      targetValue: 35
+      questReward:
+        1317350822: 90
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+
+    - range: 90-100
+      targetValue: 35
+      questReward:
+        1317350822: 100
+      questRarity: COMMON
+      questConditions:
+      questWeight: 1
+killsInOneBattleEveryDayQuest:
+  days: 7

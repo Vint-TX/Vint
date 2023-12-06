@@ -1,0 +1,19 @@
+damageType:
+  damageType: PET
+verticalTargeting:
+  workDistance: 30
+  angleUp: 11
+  numRaysUp: 4
+  angleDown: 14
+  numRaysDown: 4
+streamHitConfig:
+  localCheckPeriod: 0
+  sendToServerPeriod: 0.2
+  detectStaticHit: true
+ctfTargetEvaluator:
+  flagCarrierPriorityBonus: 5
+normalBaseDamage:
+  minBaseDamage: 100
+  maxBaseDamage: 100
+weaponCooldown:
+  cooldownIntervalSec: 0.5

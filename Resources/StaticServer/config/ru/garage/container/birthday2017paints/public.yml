@@ -1,0 +1,57 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 721518013 # halloween
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1760088841 # andromeda
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -888059423 # ice
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 986557478 # st.valentine
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -2023428617 # vostok1
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1732490966 # starrysky
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1902859834 # triangle camo paint (may 2017)
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 1223441167 # radiation
+      compensation: 6250
+  rareItems:
+    - itemBundles:
+        - marketItem: 776075330 # birthday 2017 skin
+
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: b13977a277496744ea3004173ecf5618
+imageItem:
+  spriteUid: 683d2c31-bb24-4636-8213-782b8db5fa9c
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

@@ -1,0 +1,10 @@
+tutorialStepData:
+  stepId: 723559091
+  visualStep: true
+  stepDesc: "Затемнение
+             - Выделена пушка, UI блок пушки
+             - Текст рядом"
+
+tutorialHighlightTankStepData:
+  highlightHull: false
+  highlightWeapon: true

@@ -1,0 +1,68 @@
+exchangeCrystalsScreen:
+  header: СИНТЕЗ КРИСТАЛЛОВ
+goodsSelectionScreen:
+  header: ПОКУПКА X-КРИСТАЛЛОВ
+  specialOfferOneShotMessage: Поддержка платежных систем в игре прекращена в связи с прекращением разработки проекта. Подробности на www.tankix.com.
+  specialOfferEmptyRewardMessage: В вашем гараже уже есть все пушки и корпуса.
+selectCountryScreen:
+  header: МЕСТОПОЛОЖЕНИЕ
+  rightPanelHint: Если местоположение определено неверно, необходимо выбрать верное из списка.
+  searchHint: Введите страну
+paymentProcessingScreen:
+  header: ОПЛАТА
+  info: Пожалуйста, подождите. Платёж обрабатывается.
+methodSelectionScreen:
+  header: МЕТОД ОПЛАТЫ
+paymentSuccessScreen:
+  header: ОПЛАТА
+  message: Счёт успешно оплачен!
+paymentFailScreen:
+  header: ОПЛАТА
+  message: Не удалось произвести оплату.
+paymentTimeoutScreen:
+  header: ОПЛАТА
+  message: Пожалуйста, подождите. Платёж обрабатывается.
+paymentInvalidDataScreen:
+  header: БАНКОВСКАЯ КАРТА
+  message: Введены неверные реквизиты карты
+bankCardPaymentScreen:
+  header: БАНКОВСКАЯ КАРТА
+  cardRequisitesLabel: Реквизиты банковской карты
+  cardNumberLabel: Номер карты
+  cardExpirationDateLabel: 'Срок действия (Месяц / Год)'
+  cardHolderLabel: 'Имя на карте'
+  cardCVVLabel: 'CVV/CVC'
+  cardCVVHint: Последние три цифры на обороте
+  payButtonLabel: ОПЛАТИТЬ
+mobilePaymentScreen:
+  header: МОБИЛЬНЫЙ ПЛАТЁЖ
+  mobilePhoneLabel: Номер телефона
+  payButtonLabel: ОПЛАТИТЬ
+qiwiWalletScreen:
+  header: QIWI КОШЕЛЁК
+  accountText: 'Введите номер QIWI-кошелька'
+  errorText: 'Неверный номер телефона'
+  continueButton: ПРОДОЛЖИТЬ
+mobilePaymentCheckoutScreen:
+  header: СЧЁТ
+  paymentMethodLabel: 'Метод оплаты:'
+  paymentMethodValue: 'Мобильный платеж'
+  successLabel: 'Счёт выставлен успешно'
+  transactionNumberLabel: 'Транзакция:'
+  priceLabel: 'Сумма платежа:'
+  crystalsAmountLabel: 'Количество X-кристаллов:'
+  phoneNumberLabel: 'Телефон:'
+  aboutLabel: 'Счёт Мобильного платежа выставлен успешно. На указанный номер телефона будет выслана смс с инструкцией по подтверждению платежа.'
+  rightPanelHint: 'ПОКУПКА ПОЯВИТСЯ НА ВАШЕМ АККАУНТЕ В ТЕЧЕНИЕ НЕСКОЛЬКИХ МИНУТ ПОСЛЕ ОТВЕТА НА СООБЩЕНИЕ'
+forceEnterEmailScreen:
+  header: ЭЛЕКТРОННАЯ ПОЧТА
+  rightPanelHint: 'Спасибо за платёж в Tanki X. Введите адрес электронной почты для получения чека об оплате.'
+  logoutButton: Выход из игры
+  logoutButtonYes: Да
+  logoutButtonNo: Нет
+  confirmButton: Подтвердить
+  placeholder: Ваш e-mail
+firstPurchaseConfirmScreen:
+  header: 'Первая покупка кристаллов'
+  confirmationText: 'Вы собираетесь приобрести Х-кристаллы со скидкой на первую покупку. Обратите внимание, что предложение действует только один раз. Если вы уже покупали Х-кристаллы до этого, то получите {0} Х-кристаллов.'
+  confirmButton: 'Продолжить'

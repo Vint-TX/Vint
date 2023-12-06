@@ -1,0 +1,5 @@
+---
+loadScreenLocalizedText:
+  loadInfoText: Идёт загрузка
+  preloadInfoText: Идёт обновление, но уже можно начать играть
+  skipLoadingButton: Играть

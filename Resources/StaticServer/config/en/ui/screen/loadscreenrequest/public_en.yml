@@ -1,0 +1,5 @@
+---
+loadScreenLocalizedText:
+  loadInfoText: Loading
+  preloadInfoText: The game is loading, but you can start playing
+  skipLoadingButton: Play

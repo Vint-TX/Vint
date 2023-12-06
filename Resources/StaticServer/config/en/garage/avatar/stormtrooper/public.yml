@@ -1,0 +1,16 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 457e8f5f-953a-424c-bd97-67d9e116ab7a
+imageItem:
+  spriteUid: 457e8f5f-953a-424c-bd97-67d9e116ab7a
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: LEGENDARY

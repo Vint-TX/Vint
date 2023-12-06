@@ -1,0 +1,4 @@
+caching: true
+maximumAvailableDiskSpace: 2671771648
+expirationDelay: 5184000
+compressionEnabled: false

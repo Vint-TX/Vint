@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636352813665042373
+  path: garage/module/upgrade/properties/absorbingarmor
+itemIcon:
+  spriteUid: 5f69e5e3-f074-4040-bb16-cb44dc4514b0
+itemBigIcon:
+  spriteUid: 3d954745-560e-49e4-aded-0549c47344f2
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 1486018775542
+      config: battle/effect/armor  

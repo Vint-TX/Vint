@@ -1,0 +1,19 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 57b0c473-e8fe-4ce1-8446-2704e4122a6d
+  title: 'The Hell Hounds Squad'
+  description: |
+    500 x-crystals
+    + free gift: rare paint, graffiti,
+    avatar and blue crystals
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! Offer is time limited
+  description: |
+    It is your chance to become one of the best! The Hell Hounds elite squad is always looking for promising commanders who will honorably represent the squad on the battlefield. Such opportunity comes once in a lifetime.
+receiptText:
+  text: Special offer «The Hell Hounds Squad»
+starterPackMainElement:
+  itemId: 1317350822 # X Crystals
+  count: 500
+  title: X-Crystals
+  description: Crystals are used to buy new turrets and hulls, unlock paints and upgrade modules.

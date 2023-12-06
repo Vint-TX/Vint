@@ -1,0 +1,12 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/quickGameStartTutorial/"
+  tutorialId: -646600955
+  forNewPlayer: true
+  forOldPlayer: true
+  steps:
+    1: 1504002856142 # highlight empty battery
+    2: 1504002856142 # add selectable
+    3: 1504002856142 # highlight empty battery and quick game button
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

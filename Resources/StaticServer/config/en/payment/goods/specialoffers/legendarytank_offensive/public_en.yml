@@ -1,0 +1,11 @@
+﻿specialOfferContentLocalization:
+  spriteUid: 57b0c473-e8fe-4ce1-8446-2704e4122a6d
+  title: 'Legendary Tank: Offensive'
+  description: 'Legendary Tank: Offensive'
+specialOfferScreenLocalization:
+  spriteUid: e6cea687-1043-45f4-bb6d-a395be541973
+  footer: Hurry up! Offer is time limited
+  description: |
+    It is your chance to become one of the best!
+receiptText:
+  text: 'Legendary Tank: Offensive'

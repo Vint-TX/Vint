@@ -1,0 +1,68 @@
+exchangeCrystalsScreen:
+  header: SYNTHESIZE CRYSTALS
+goodsSelectionScreen:
+  header: ADD X-CRYSTALS
+  specialOfferOneShotMessage: Payment systems support in the game is discontinued due to the termination of the project. Details on www.tankix.com.
+  specialOfferEmptyRewardMessage: You already own every hull and turret.
+selectCountryScreen:
+  header: LOCATION
+  rightPanelHint: "If the system hasn't detected your location properly, please choose the correct one from the list"
+  searchHint: Country
+paymentProcessingScreen:
+  header: PAYMENT
+  info: The payment is being processed
+methodSelectionScreen:
+  header: PAYMENT METHOD
+paymentSuccessScreen:
+  header: PAYMENT
+  message: The payment has been processed successfully
+paymentFailScreen:
+  header: PAYMENT
+  message: Failed to process payment
+paymentTimeoutScreen:
+  header: PAYMENT
+  message: The payment is being processed
+paymentInvalidDataScreen:
+  header: CREDIT CARD
+  message: Invalid card details
+bankCardPaymentScreen:
+  header: CREDIT CARD
+  cardRequisitesLabel: Card details
+  cardNumberLabel: Card Number
+  cardExpirationDateLabel: Expiry Date (MM/YY)
+  cardHolderLabel: Cardholder Name
+  cardCVVLabel: CVV/CVC
+  cardCVVHint: Last three numbers on the back
+  payButtonLabel: BUY NOW
+mobilePaymentScreen:
+  header: MOBILE PAYMENT
+  mobilePhoneLabel: Phone number
+  payButtonLabel: BUY NOW
+qiwiWalletScreen:
+  header: QIWI WALLET
+  accountText: Enter your QIWI Wallet number
+  errorText: 'Wrong phone number'
+  continueButton: CONTINUE
+mobilePaymentCheckoutScreen:
+  header: PAYMENT DETAILS
+  paymentMethodLabel: 'Payment method:'
+  paymentMethodValue: Mobile payment
+  successLabel: Payment invoice has been issued
+  transactionNumberLabel: 'Transaction:'
+  priceLabel: 'Payment amount:'
+  crystalsAmountLabel: 'Amount of Crystals:'
+  phoneNumberLabel: 'Phone:'
+  aboutLabel: Mobile payment invoice issued. Instructions on how to proceed with the payment have been sent via SMS.
+  rightPanelHint: THE PURCHASE WILL BE ADDED TO YOUR ACCOUNT A FEW MINUTES AFTER YOU REPLY TO THE MESSAGE
+forceEnterEmailScreen:
+  header: EMAIL
+  rightPanelHint: 'Thank you for making a purchase in Tanki X. Please specify the email address where we can send your receipt to.'
+  logoutButton: Quit Game
+  logoutButtonYes: Yes
+  logoutButtonNo: No
+  confirmButton: Verify
+  placeholder: Your e-mail
+firstPurchaseConfirmScreen:
+  header: 'First crystals purchase'
+  confirmationText: "You're about to buy X-crystals with the first purchase discount. Please be aware, that this is a one-time offer. If you've already purchased X-crystals with the first purchase discount, you can not benefit from this discount again, hence, you will receive {0} X-crystals."
+  confirmButton: 'Continue'

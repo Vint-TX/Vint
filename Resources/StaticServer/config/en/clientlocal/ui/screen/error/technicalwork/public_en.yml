@@ -1,0 +1,8 @@
+---
+errorText: |
+  The server is currently undergoing maintenance.
+  Please try logging in later, or wait until the server starts so that the game can reconnect automatically.
+headerText: MAINTENANCE
+reportButtonLabel: FORUM
+reportUrl: http://en.forum.tankix.com/
+reConnectTime: 30

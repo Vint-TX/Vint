@@ -1,0 +1,87 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1704191570 # gold railgun skin
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 679021958 # gold hornet skin
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: -375403918 # gloom railgun shell
+      compensation: 6250
+
+    - itemBundles:
+        - marketItem: 920905258 # coal tank paint
+      compensation: 6250
+      nameLocalizationKey: coaltankpaint
+
+    - itemBundles:
+        - marketItem: -172577710 # coal weapon paint
+      compensation: 6250
+      nameLocalizationKey: coalweaponpaint
+
+    - itemBundles:
+        - marketItem: -8517219 # taiga tank paint
+      compensation: 6250
+      nameLocalizationKey: taigatankpaint
+
+    - itemBundles:
+        - marketItem: -1039651301 # taiga weapon paint
+      compensation: 6250
+      nameLocalizationKey: taigaweaponpaint
+
+    - itemBundles:
+        - marketItem: -398350090 # inferno tank paint
+      compensation: 6250
+      nameLocalizationKey: infernotankpaint
+
+    - itemBundles:
+        - marketItem: 819242484 # inferno weapon paint
+      compensation: 6250
+      nameLocalizationKey: infernoweaponpaint
+
+    - itemBundles:
+        - marketItem: -1756632159 # stone tank paint
+      compensation: 6250
+      nameLocalizationKey: stonetankpaint
+
+    - itemBundles:
+        - marketItem: -1040002806 # stone weapon paint
+      compensation: 6250
+      nameLocalizationKey: stoneweaponpaint
+
+  rareItems:
+    - itemBundles:
+        - marketItem: 593679593 # xt railgun skin
+
+    - itemBundles:
+        - marketItem: -47777474 # xt hornet skin
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: db04adc9d783b5046a1d3c3b150dc11a
+imageItem:
+  spriteUid: fe8f1c86-2466-4864-984e-9b08e40cb43f
+order:
+  index: 5
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

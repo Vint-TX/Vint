@@ -1,0 +1,17 @@
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+imageItem:
+  spriteUid: 32679f13-ca3a-419f-8a47-757b9797420b
+order:
+  index: 2
+unityAsset:
+  reference:
+    assetGuid: eeed32c5ddc513d4685c307e20302c0b
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: EPIC

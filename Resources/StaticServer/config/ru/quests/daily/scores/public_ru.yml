@@ -1,0 +1,13 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Набери {0} {1} в сражениях'
+    cases:
+      DEFAULT: 'очков'
+      ONE: 'очко'
+      TWO: 'очка'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Режим
+    WEAPON: Пушка
+    TANK: Корпус

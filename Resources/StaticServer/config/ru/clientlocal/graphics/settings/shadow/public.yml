@@ -1,0 +1,7 @@
+﻿configPathCollection:
+  collection:
+    - clientlocal/graphics/settings/shadow/off
+    - clientlocal/graphics/settings/shadow/minimum
+    - clientlocal/graphics/settings/shadow/normal
+    - clientlocal/graphics/settings/shadow/hight
+    - clientlocal/graphics/settings/shadow/ultra

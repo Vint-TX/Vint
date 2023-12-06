@@ -1,0 +1,20 @@
+descriptionItem:
+  name: "X-Crystals bonus reward"
+  description: "X-Crystals bonus reward description"
+xCrystalRewardTextConfig:
+  title:
+    winning_streak: Winning Streak
+    mvp: Most Valuable Player
+    score: Persistent Fighter
+  description:
+    winning_streak: |
+      You've made an impressive winning streak and draw attention.
+      Get the reward you've deserved!
+    mvp: Celebrate your achievement! Best player must stand out on the battlefield.
+    score: Battle after battle, frag after frag! You draw attention with your persistence and earned a well-deserved reward.
+  purchaseText: Thank you for purchase!
+itemsConfig:
+  spriteUid: 6935a30f-5ae5-4a26-b816-35e7bc16527a
+  title: |
+    Increased bonus
+    on X-crystals purchase

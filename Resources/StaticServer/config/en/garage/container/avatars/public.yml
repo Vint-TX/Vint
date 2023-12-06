@@ -1,0 +1,71 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 6216 # Mammoth
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6230 # Wasp
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6218 # Raccoon
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6203 # Bogatyr
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6229 # Viking
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6226 # Troll
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6206 # Cyborg
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6220 # Savage
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 6211 # Ghost rider
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 938326966 # Eagle
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1569342716 # Gambler
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 941211128 # Diablo Heart
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1455996148 # Pirate Girl
+      compensation: 10000
+    - itemBundles:
+        - marketItem: 1612159053 # Spy Girl
+      compensation: 10000
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: e919ac9257491414eaf61e5b9f1aba5e
+imageItem:
+  spriteUid: 6c4b1f42-2b9f-4405-9fed-4763e5403873
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 199
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 199
+    3: 529
+    10: 1499

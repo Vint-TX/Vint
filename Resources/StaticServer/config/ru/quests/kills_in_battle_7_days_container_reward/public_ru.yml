@@ -1,0 +1,5 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Уничтожай {0} танков в одной битве каждый день в течение {1} дней'
+    cases: { }

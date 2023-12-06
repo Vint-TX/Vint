@@ -1,0 +1,9 @@
+tutorialStepData:
+  stepId: 1525362181
+  visualStep: true
+  stepDesc: "Затемнение
+             - Выделена плашка с миной
+             - Выделена кнопка Улучшить, на неё показывает стрелка
+             - Текст"
+tutorialSelectItemData:
+  itemMarketId: 1133911248

@@ -1,0 +1,7 @@
+variant:
+  value: 2
+  grassFarDrawDistance: 80
+  grassNearDrawDistance: 65
+  grassFadeRange: 15
+  grassDensityMultiplier: 0.3
+  grassCastsShadow: false

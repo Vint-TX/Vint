@@ -1,0 +1,66 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -1779805396 # ghost train graffiti
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 62042919 # steampunk graffiti
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1079898253 # patina tank paint
+      compensation: 6250
+      nameLocalizationKey: patinatankpaint
+    - itemBundles:
+        - marketItem: 2016361556 # patina weapon paint
+      compensation: 6250
+      nameLocalizationKey: patinaweaponpaint
+    - itemBundles:
+        - marketItem: 925876519 # rivets tank paint
+      compensation: 6250
+      nameLocalizationKey: rivetstankpaint
+    - itemBundles:
+        - marketItem: 2081063968 # rivets weapon paint
+      compensation: 6250
+      nameLocalizationKey: rivetsweaponpaint
+    - itemBundles:
+        - marketItem: -1595894991 # gold twins
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -920939649 # gold mammoth
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1126924822 # violet twins shell
+      compensation: 6250
+      nameLocalizationKey: twinsviolet
+  rareItems:
+    - itemBundles:
+        - marketItem: -1959015927 # steam twins
+    - itemBundles:
+        - marketItem: 677046075 # steam mammoth
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 3f87e87c4e376974caee571dc76568cf
+imageItem:
+  spriteUid: 9fb6f8dd-33ee-4221-9a4c-c614e061d12d
+order:
+  index: 3
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

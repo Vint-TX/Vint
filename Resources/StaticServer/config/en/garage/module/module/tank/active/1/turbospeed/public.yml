@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636352855525976682
+  path: garage/module/upgrade/properties/turbospeed
+itemIcon:
+  spriteUid: 321ba474-4dd2-4737-a3ca-c51af5952081
+itemBigIcon:
+  spriteUid: 3d45b847-04a3-4bd6-a0af-41210ff5add4
+order:
+  index: 2
+moduleEffects:
+  effects:
+    - template: 1486970297039
+      config: battle/effect/turbospeed  

@@ -1,0 +1,68 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: 1104561449 # antaeus paint
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1104561450 # antaeus2 paint
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -891349912 # antaeus cover
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 1577640270 # antaeus2 cover
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1628984953 # antaeus graffiti
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1968456699 # antaeus2 giant graffiti
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -395640808 # freeze white shell
+      compensation: 5000
+    - itemBundles:
+        - marketItem: 189220223 # vulcan blue shell
+      compensation: 5000
+    - itemBundles:
+        - marketItem: -1488314890 # shaft blue shell
+      compensation: 5000
+
+  rareItems:
+    - itemBundles:
+        - marketItem: -1816745725 # boost
+          max: 3
+      compensation: 5000
+      nameLocalizationKey: premiumboost
+    - itemBundles:
+        - marketItem: -180272377 # quest
+          max: 3
+      compensation: 5000
+      nameLocalizationKey: premiumquest
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: 79d87c318b4f8394bbede939bcc2cb1c
+imageItem:
+  spriteUid: 13ddb55b-4f4a-4603-8e76-f191d58b5dd1
+order:
+  index: -2
+xPriceItem:
+  price: 199
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 199
+    3: 529
+    10: 1499
+restrictionByUserFraction:
+  fractionId: -1650120701

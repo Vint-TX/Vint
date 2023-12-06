@@ -1,0 +1,4 @@
+---
+descriptionItem:
+  name: Damage
+  description: Deal {TargetValue} damage to enemy tanks

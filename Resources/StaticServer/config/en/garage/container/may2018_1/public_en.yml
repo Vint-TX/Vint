@@ -1,0 +1,13 @@
+---
+descriptionItem:
+  name: May I
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    steelHummer: Hammer "Steel"
+    steelTitan: Titan "Steel"
+    mayHunter: Hunter "Victory Day"
+    maySmoky: Smoky "Victory Day"

@@ -1,0 +1,65 @@
+﻿notEnoughCrystalsWindow:
+  yesText: ДА
+  noText: НЕТ
+  needMoreText: 'Вам не хватает '
+  needMoreAfterText: '.'
+  offerCryText: 'Хотите синтезировать '
+  offerXCryText: 'Хотите приобрести '
+exchangeConfirmationWindow:
+  confirmText: Подтвердить
+  cancelText: Отмена
+  questionText: Подтвердите синтез
+  forText: в
+crystalPackageContent:
+  bonusHint: в подарок!
+  priceText: '{PRICE} {CURRENCY}'
+receipt:
+  priceLabel: 'Сумма платежа:'
+  totalLabel: 'Всего будет начислено X-кристаллов:'
+  lines:
+    amount: 'Будет начислено X-кристаллов:'
+xCrystalsSaleEndTimer:
+  timerText: 'Акция закончится через {TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'
+xCrystalsMethodSaleLabel:
+  text: 'Получи бонус 25% при каждой покупке любого кристального пакета через PayPal. Акция действует только до 26 июня 07:00 МСК.'
+specialOfferEndTimer:
+  timerText: 'Предложение завершится через {TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'
+leagueSpecialOfferEndTimer:
+  timerText: '{TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'
+specialOfferContent:
+  price: '{PRICE} {CURRENCY}'
+marketItemSaleContent:
+  price: '{PRICE} {CURRENCY}'
+energyBonusContent:
+  title: 'Заряды x{0}'
+  price: 'БЕСПЛАТНО'
+quantumShopContent:
+  title: 'Заряды x{0}'
+  description: 'Телепорт'
+  price: '{0} {1}'
+personalDiscountUI:
+  description: 'Действует скидка на первую покупку кристаллов. Покупка любого пакета кристаллов обойдётся вам в полцены, но только один раз!'
+  timerText: 'Действует скидка на первую покупку кристаллов. Покупка любого пакета кристаллов обойдётся вам в полцены, но только один раз! Предложение завершится через {TIME}'
+  day: 'д'
+  hour: 'ч'
+  minute: 'м'
+  second: 'с'
+firstPurchaseDiscountContent:
+  header: 'скидка'
+  descriptionFirstLine: 'на покупку'
+  descriptionSecondLine: 'кристаллов'
+  footer: 'посмотреть'
+personalXCrystalBonusUI:
+  description: 'Ты отличился на поле боя! Получи бонусные кристаллы при покупке любого пакета x-кристаллов.'

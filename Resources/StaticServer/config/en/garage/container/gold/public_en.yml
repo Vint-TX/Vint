@@ -1,0 +1,31 @@
+---
+descriptionItem:
+  name: Gold
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    dictatorgold: Dictator "Gold"
+    hornetgold: Hornet "Gold"
+    huntergold: Hunter "Gold"
+    mammothgold: Mammoth "Gold"
+    titangold: Titan "Gold"
+    vikinggold: Viking "Gold"
+    waspgold: Wasp "Gold"
+    flamethrowergold: Firebird "Gold"
+    freezegold: Freeze "Gold"
+    hammergold: Hammer "Gold"
+    isisgold: Isida "Gold"
+    railgungold: Railgun "Gold"
+    ricochetgold: Ricochet "Gold"
+    shaftgold: Shaft "Gold"
+    smokygold: Smoky "Gold"
+    thundergold: Thunder "Gold"
+    twinsgold: Twins "Gold"
+    vulcangold: Vulcan "Gold"
+    goldboxgold: Gold Box
+    goldbillgold: Gold Bill
+    goldtankpaint: Gold (Paint)
+    goldweaponpaint: Gold (Coating)

@@ -1,0 +1,57 @@
+itemsContainerItem:
+  items:
+    - itemBundles:
+        - marketItem: -12628116 # orion tank paint
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 683803510 # antarctida tank paint
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1092514341 # xmas twins shell
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -1073342998 # xmas ricochet shell
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 519082359 # doberman
+      compensation: 6250
+    - itemBundles:
+        - marketItem: 315308508 # bull terier
+      compensation: 6250
+    - itemBundles:
+        - marketItem: -107843627 # bulldog
+      compensation: 6250
+
+  rareItems:
+
+    - itemBundles:
+        - marketItem: 72041592 # wasp frost skin
+    - itemBundles:
+        - marketItem: 139596834 # freeze frost skin
+
+userItemTemplate:
+  userItemTemplate: 1479807574456
+unityAsset:
+  reference:
+    assetGuid: eef5afa6afb2f444082201649d055ff5
+imageItem:
+  spriteUid: da2d6c4e-35b2-4e1f-9780-167e7417c045
+order:
+  index: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 125
+itemPacks:
+  forXPrice:
+    - 1
+    - 3
+    - 10
+  forPrice:
+packPrice:
+  packPrice:
+    0: 0
+  packXPrice:
+    1: 125
+    3: 335
+    10: 1000

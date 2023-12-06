@@ -1,0 +1,34 @@
+moduleEngineerEffectDurationFactorProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1.10
+    - 1.16
+    - 1.22
+    - 1.28
+    - 1.34
+    - 1.41
+    - 1.47
+    - 1.53
+    - 1.59
+    - 1.65
+moduleCooldownProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 0
+    - 0
+moduleAmmunitionProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: AdditionalDuration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 65
+      format: 0
+      unit: percent
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+...

@@ -1,0 +1,18 @@
+passwordErrors:
+  passwordContainsRestrictedSymbols: Пароль содержит запрещённые символы или буквы
+  passwordIsTooSimple: Пароль слишком простой
+  passwordIsTooShort: Пароль слишком короткий
+  passwordIsTooLong: Пароль слишком длинный
+  passwordsDoNotMatch: Пароли не совпадают
+  passwordEqualsLogin: Пароль совпадает с логином
+uidInputValidation:
+  loginContainsRestrictedSymbols: Имя содержит запрещённые символы или буквы
+  loginAlreadyInUse: Игрок с таким именем уже зарегистрирован
+  loginIsTooShort: Имя слишком короткое
+  loginIsTooLong: Имя слишком длинное
+  loginContainsSpecialSymbolsInARow: Имя содержит несколько специальных символов подряд
+  loginBeginsWithSpecialSymbol: Имя содержит специальные символы в начале
+  loginEndsWithSpecialSymbol: Имя содержит специальные символы в конце
+subscribeCheckbox:
+  subscribeLine1Text: Подписаться на рассылку писем c новостями игры,
+  subscribeLine2Text: специальными предложениями и промокодами.

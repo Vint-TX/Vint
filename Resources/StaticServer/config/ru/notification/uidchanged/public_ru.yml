@@ -1,0 +1,3 @@
+---
+uIDChangedNotificationText:
+  messageTemplate: 'Вы успешно сменили имя на {0}!'

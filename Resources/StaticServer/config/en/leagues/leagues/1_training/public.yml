@@ -1,0 +1,6 @@
+leagueIcon:
+  spriteUid: c32029dc-5b0b-403e-8974-0d694c8836ed
+# менять совместно с конфигом дефолтных вещей (количество стартовой энергии)
+leagueEnergyConfig:
+  cost: 5
+  capacity: 15

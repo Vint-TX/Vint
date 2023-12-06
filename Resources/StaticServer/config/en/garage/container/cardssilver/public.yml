@@ -1,0 +1,16 @@
+userItemTemplate:
+  userItemTemplate: 1486562494879
+unityAsset:
+  reference:
+    assetGuid: 2fd908cddec3c6a42b2f38a7be564e56
+imageItem:
+  spriteUid: 6799401a-5ea2-477e-8fc6-b96dc9c8f3b4
+order:
+  index: -1
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
+targetTier:
+  targetTier: 0
+  maxExistTier: 1

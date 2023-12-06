@@ -1,0 +1,11 @@
+specialOfferScreenLocalization:
+  spriteUid:
+  footer:
+specialOfferContentLocalization:
+  spriteUid: f937a10f-ce09-427f-ab8c-21693f537656
+  title: "Promotion"
+  description: |
+    Celebrate your progress to the Gold League!
+    This offer is available only once.
+receiptText:
+  text: Special offer «New League»

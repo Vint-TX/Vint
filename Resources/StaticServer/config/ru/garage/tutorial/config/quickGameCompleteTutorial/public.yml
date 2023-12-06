@@ -1,0 +1,12 @@
+tutorialData:
+  stepsPath: "garage/tutorial/steps/quickGameCompleteTutorial/"
+  tutorialId: -1607969678
+  forNewPlayer: true
+  forOldPlayer: true
+  steps:
+    # 1 : 1504002856142 # highlight energy block
+    2: 1504698500736 # add chests
+    3: 1504698500736 # go to shop
+
+tutorialRequiredCompletedTutorials:
+  tutorialsIds:

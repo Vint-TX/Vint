@@ -1,0 +1,331 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 60000
+    - 57778
+    - 55556
+    - 53333
+    - 51111
+    - 48889
+    - 46667
+    - 44444
+    - 42222
+    - 40000
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+moduleEffectMinDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 300.00
+    - 316.67
+    - 333.33
+    - 350.00
+    - 366.67
+    - 383.33
+    - 400.00
+    - 416.67
+    - 433.33
+    - 450.00
+moduleEffectMaxDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 600.00
+    - 633.33
+    - 666.67
+    - 700.00
+    - 733.33
+    - 766.67
+    - 800.00
+    - 833.33
+    - 866.67
+    - 900.00
+moduleMineEffectImpactProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+    - 0.00
+moduleMineEffectHideRangeProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 10.00
+    - 9.44
+    - 8.89
+    - 8.33
+    - 7.78
+    - 7.22
+    - 6.67
+    - 6.11
+    - 5.56
+    - 5.00
+moduleMineEffectBeginHideDistanceProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 10.00
+    - 9.44
+    - 8.89
+    - 8.33
+    - 7.78
+    - 7.22
+    - 6.67
+    - 6.11
+    - 5.56
+    - 5.00
+moduleEffectActivationTimeProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1000
+    - 963
+    - 926
+    - 889
+    - 852
+    - 815
+    - 778
+    - 741
+    - 704
+    - 667
+moduleMineEffectSplashDamageMaxRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 2.00
+    - 2.11
+    - 2.22
+    - 2.33
+    - 2.44
+    - 2.56
+    - 2.67
+    - 2.78
+    - 2.89
+    - 3.00
+moduleMineEffectSplashDamageMinRadiusProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 8.00
+    - 8.44
+    - 8.89
+    - 9.33
+    - 9.78
+    - 10.22
+    - 10.67
+    - 11.11
+    - 11.56
+    - 12.00
+moduleMineEffectSplashDamageMinPercentProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 0.50
+    - 0.53
+    - 0.56
+    - 0.58
+    - 0.61
+    - 0.64
+    - 0.67
+    - 0.69
+    - 0.72
+    - 0.75
+moduleMineEffectTriggeringAreaProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3.00
+    - 3.17
+    - 3.33
+    - 3.50
+    - 3.67
+    - 3.83
+    - 4.00
+    - 4.17
+    - 4.33
+    - 4.50
+moduleMineEffectExplosionDelayMSProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1000
+    - 963
+    - 926
+    - 889
+    - 852
+    - 815
+    - 778
+    - 741
+    - 704
+    - 667
+moduleLimitBundleEffectCountProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3
+    - 3
+    - 3
+    - 3
+    - 3
+    - 3
+    - 3
+    - 3
+    - 3
+    - 3
+moduleIcetrapEffectTemperatureDurationProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 6000
+    - 6333
+    - 6667
+    - 7000
+    - 7333
+    - 7667
+    - 8000
+    - 8333
+    - 8667
+    - 9000
+moduleIcetrapEffectTemperatureDeltaProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - -0.30
+    - -0.32
+    - -0.33
+    - -0.35
+    - -0.37
+    - -0.38
+    - -0.40
+    - -0.42
+    - -0.43
+    - -0.45
+moduleIcetrapEffectTemperatureLimitProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - -0.70
+    - -0.73
+    - -0.77
+    - -0.80
+    - -0.83
+    - -0.87
+    - -0.90
+    - -0.93
+    - -0.97
+    - -1.00
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 60
+        - 40
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Damage
+      linearInterpolation: false
+      upgradeLevel2Values:
+        - 300.00
+        - 316.67
+        - 333.33
+        - 350.00
+        - 366.67
+        - 383.33
+        - 400.00
+        - 416.67
+        - 433.33
+        - 450.00
+      maxAndMinString:
+        - 300-600
+        - 316-633
+        - 333-666
+        - 350-700
+        - 366-733
+        - 383-766
+        - 400-800
+        - 416-833
+        - 433-866
+        - 450-900
+      unit: hp
+      format: 0.0
+      maxAndMin: true
+      spriteUID: bdaa35da-f24c-4dc5-a4e2-050c31e328f9
+    - name: TriggerRadius
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 3
+        - 4.5
+      unit: m
+      format: 0.0
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: VisibilityArea
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 10
+        - 5
+      unit: m
+      format: 0.0
+      spriteUID: 41de9e99-f59b-446b-a2df-5be14c0c80d3
+    - name: TriggerDelay
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 0.67
+      unit: sec
+      format: 0.00
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: ActivationTime
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 0.67
+      unit: sec
+      format: 0.00
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: ExplosionRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 8
+        - 12
+      unit: m
+      format: 0.0
+      spriteUID: c1a7c983-c17f-4f35-8514-8a6bc28fb93b
+    - name: TemperatureDuration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 6
+        - 9
+      unit: sec
+      format: 0.0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: FreezeTemperatureLimit
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 70
+        - 100
+      format: 0
+      unit: percent
+      spriteUID: af08ec8b-605b-4617-9ba1-e371abdf885b
+    - name: FreezeTemperatureDelta
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 30
+        - 45
+      format: 0
+      unit: percentinsec
+      spriteUID: af08ec8b-605b-4617-9ba1-e371abdf885b
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 2
+        - 2
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

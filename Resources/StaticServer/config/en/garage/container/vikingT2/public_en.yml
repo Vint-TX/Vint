@@ -1,0 +1,17 @@
+---
+descriptionItem:
+  name: Tanki 2.0
+  description:
+    |
+    • Opening this box will give you a chance of receiving an item from list, and an additional chance of getting a very rare item.
+    • If you already own the item, you will receive a crystal compensation instead.
+descriptionBundleItem:
+  names:
+    greenskullspaint: Roger (paint)
+    greenskullscover: Roger (cover)
+    florapaint: Flora (paint)
+    swamppaint: Swamp (paint)
+    metelpaint: Winter (paint)
+    floracover: Floara (cover)
+    swampcover: Swamp (cover)
+    metelcover: Winter (cover)

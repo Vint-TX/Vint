@@ -1,0 +1,55 @@
+---
+settingsScreen:
+  header: SETTINGS
+  gameSettings: GAME
+  soundSettings: SOUND
+  languageSettings: LANGUAGE
+  graphicsSettings: GRAPHICS
+  keyboardSettings: CONTROLS
+gameSettingsScreen:
+  header: GAME SETTINGS
+  cameraShakerEnabled: Camera shake
+  damageInfo: Damage Numbers
+  targetFocusEnabled: Reticle
+  laserSightEnabled: Laser sight
+  healthFeedback: Low Health
+  selfTargetHitFeedback: Damage direction
+  disableNotificationsText: Turn off battle notifications that pop in the middle of the screen
+soundSettingsScreen:
+  header: SFX SETTINGS
+  sFXVolume: Sound Effects
+  musicVolume: Music
+  uIVolume: Interface Sounds
+keyboardSettingsScreen:
+  header: KEYBOARD
+  invertBackwardMovingControl: Invert controls when reversing
+  mouseControlAllowed: Enable mouse controls in battles
+  mouseVerticalInverted: Invert vertical mouse controls
+  mouseSensivity: Mouse sensitivity
+  keyboard: Keys assignment
+  tip: |
+    Left-click on the control key you want to reassign.
+    Then, press the button that you want to assign that control to, on your keyboard.
+  modules: Active modules control keys
+  shot: Shot
+  help: Help
+  fewActionsError: |
+    You can not assign the same key to control more than one action.
+    Please assign a different key.
+  changeHud: Battle interface switch key
+  forward: Forward
+  backward: Backward
+  left: Turn Left
+  right: Turn Right
+  turretLeft: Turn Turret Left
+  turretRight: Turn Turret Right
+  centerTurret: Center Turret
+  graffiti: Graffiti
+  dropFlag: Drop Flag
+  cameraUp: Camera Up
+  cameraDown: Camera Down
+  scoreBoard: Score Board
+  selfDestruction: Self Destruction
+  specPrev: Spectator Mode - Previous Player
+  specNext: Spectator Mode - Next Player
+  pause: Pause

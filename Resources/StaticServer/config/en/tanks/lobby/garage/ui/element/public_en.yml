@@ -1,0 +1,31 @@
+garageListItemContent:
+  rareText: Rare
+staticBonusUI:
+  bonusText: "+{0}%"
+  damageText: DMG
+  armorText: RST
+summaryBonus:
+  totalBonusText: TOTAL BONUS
+moduleButtons:
+  mountText: EQUIP
+  unmountText: UNEQUIP
+  assembleText: CRAFT
+  addResourcesText: ADD RESOURCES
+  disassembleText: DISASSEMBLE
+moduleInfoPanel:
+  supportText: Support
+  scoutingText: Scouting
+  defenceText: Defence
+  specialText: Special
+timer:
+  timerText: '{TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'
+playScreenSeasonGUI:
+  timerText: 'Ends in <#FFFFFFFF>{TIME}'
+  day: 'd'
+  hour: 'h'
+  minute: 'm'
+  second: 's'

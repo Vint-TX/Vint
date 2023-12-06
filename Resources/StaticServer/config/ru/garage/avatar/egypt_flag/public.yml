@@ -1,0 +1,16 @@
+priceItem:
+  price: 3000
+xPriceItem:
+  price: 0
+avatarItem:
+  id: 6ee70d1e-0633-4449-b6d0-6e6e381e411c
+imageItem:
+  spriteUid: 6ee70d1e-0633-4449-b6d0-6e6e381e411c
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 6
+itemRarity:
+  rarityType: COMMON

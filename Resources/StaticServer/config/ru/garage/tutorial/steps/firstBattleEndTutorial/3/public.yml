@@ -1,0 +1,12 @@
+tutorialStepData:
+  stepId: 1565862438
+  stepDesc: "Отображение наград на клиенте"
+
+tutorialRewardData:
+  crysCount: 200
+  rewards:
+    - itemId: -464167301
+      count: 1
+
+
+

@@ -1,0 +1,6 @@
+---
+headerText: "THE SERVER IS OVERCROWDED"
+errorText: "We are experiencing a high amount of players joining our server, which is why there are no available space at the moment.
+
+As soon as a spot becomes available, the game will automatically connect you to our server."
+reConnectTime: 30

@@ -1,0 +1,12 @@
+idleKickConfig:
+  idleKickTimeSec: 120
+  idleWarningTimeSec: 60
+  checkPeriodicTimeSec: 10
+upsideDownConfig:
+  upsideDownAngleToNormal: 110
+  detectionPauseSec: 6
+  maxRankForMessage: 6
+selfDestructionConfig:
+  suicideDurationTime: 5
+userDowngradeConfig:
+  downgradeXPRatio: 0.33

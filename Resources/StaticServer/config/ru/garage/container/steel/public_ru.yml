@@ -1,0 +1,29 @@
+---
+descriptionItem:
+  name: Сталь
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    dictatorsteel: Диктатор «Сталь»
+    hornetsteel: Хорнет «Сталь»
+    huntersteel: Хантер «Сталь»
+    mammothsteel: Мамонт «Сталь»
+    titansteel: Титан «Сталь»
+    vikingsteel: Викинг «Сталь»
+    waspsteel: Васп «Сталь»
+    flamethrowersteel: Огнемёт «Сталь»
+    freezesteel: Фриз «Сталь»
+    hammersteel: Молот «Сталь»
+    isissteel: Изида «Сталь»
+    railgunsteel: Рельса «Сталь»
+    ricochetsteel: Рикошет «Сталь»
+    shaftsteel: Шафт «Сталь»
+    smokysteel: Смоки «Сталь»
+    thundersteel: Гром «Сталь»
+    twinssteel: Твинс «Сталь»
+    vulcansteel: Вулкан «Сталь»
+    steeltankpaint: Сталь (Краска)
+    steelweaponpaint: Сталь (Покрытие)

@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636367449583276768
+  path: garage/module/upgrade/properties/energyinjection
+itemIcon:
+  spriteUid: f9163f7a-4ad7-4ff0-af56-e8ca33140afe
+itemBigIcon:
+  spriteUid: 61fc89a5-2993-47d9-ac0d-b1026716c3b0
+order:
+  index: 0
+moduleEffects:
+  effects:
+    - template: 636367475101866348
+      config: battle/effect/energyinjection

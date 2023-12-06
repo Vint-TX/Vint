@@ -1,0 +1,17 @@
+---
+descriptionItem:
+  name: День воинской славы
+  description:
+    |
+    • При открытии контейнера можно получить 1 предмет из списка. Дополнительно есть шанс получить очень редкий предмет.
+    • Если предмет уже получен, вместо него будет выдана компенсация в виде кристаллов.
+descriptionBundleItem:
+  names:
+    twinsviolet: Твинс «Фиолетовый»
+    flamered: Огнемет «Красный»
+    taigatankpaint: Тайга (Краска)
+    taigaweaponpaint: Тайга (Покрытие)
+    forestertankpaint: Лесник (Краска)
+    foresterweaponpaint: Лесник (Покрытие)
+    dirttankpaint: Грязь (Краска)
+    dirtweaponpaint: Грязь (Покрытие)

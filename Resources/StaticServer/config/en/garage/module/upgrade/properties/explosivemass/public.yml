@@ -1,0 +1,119 @@
+moduleCooldownProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 240000
+    - 231111
+    - 222222
+    - 213333
+    - 204444
+    - 195556
+    - 186667
+    - 177778
+    - 168889
+    - 160000
+moduleEffectMinDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1800.00
+    - 1900.00
+    - 2000.00
+    - 2100.00
+    - 2200.00
+    - 2300.00
+    - 2400.00
+    - 2500.00
+    - 2600.00
+    - 2700.00
+moduleEffectMaxDamageProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1800.00
+    - 1900.00
+    - 2000.00
+    - 2100.00
+    - 2200.00
+    - 2300.00
+    - 2400.00
+    - 2500.00
+    - 2600.00
+    - 2700.00
+moduleEffectTargetingDistanceProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 20.00
+    - 21.11
+    - 22.22
+    - 23.33
+    - 24.44
+    - 25.56
+    - 26.67
+    - 27.78
+    - 28.89
+    - 30.00
+moduleAmmunitionProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+moduleEffectActivationTimeProperty:
+  linearInterpolation: false
+  upgradeLevel2Values:
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+    - 3000
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 240
+        - 160
+      unit: sec
+      format: 0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: Damage
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1900
+        - 2700
+      format: 0
+      spriteUID: 5538887f-b208-4fb4-ac4a-12223cb09fd3
+    - name: ExplosionRange
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 20
+        - 30
+      unit: m
+      format: 0.0
+      spriteUID: c1a7c983-c17f-4f35-8514-8a6bc28fb93b
+    - name: ActivationTime
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 3
+        - 3
+      format: 0
+      unit: sec
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
+...

@@ -1,0 +1,12 @@
+---
+questConditionDescription:
+  condition:
+    format: 'Complete {0} {1}'
+    cases:
+      DEFAULT: 'battles'
+      ONE: 'battle'
+  restrictionFormat: '{0}: {1}'
+  restrictions:
+    MODE: Mode
+    WEAPON: Turret
+    TANK: Hull

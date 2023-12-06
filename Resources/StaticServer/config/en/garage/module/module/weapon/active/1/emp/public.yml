@@ -1,0 +1,13 @@
+moduleUpgradePropertiesInfo:
+  template: 636371764988084032
+  path: garage/module/upgrade/properties/emp
+itemIcon:
+  spriteUid: 38396c56-d5ba-4b8c-9ce9-b4e2fac74e33
+itemBigIcon:
+  spriteUid: 8375bc85-de07-41b0-91cd-9fef16c90ff9
+order:
+  index: 1
+moduleEffects:
+  effects:
+    - template: 636250001674528714
+      config: battle/effect/emp  

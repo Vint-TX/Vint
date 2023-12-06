@@ -1,0 +1,17 @@
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+mountUpgradeLevelRestriction:
+  restrictionValue: 0
+mountUserRankRestriction:
+  restrictionValue: 0
+order:
+  index: 100
+unityAsset:
+  reference:
+    assetGuid: e8a38b886a55b89488e6bb6c67e855d0
+imageItem:
+  spriteUid: 8305496d-005b-481a-9cff-7334b3eaa8f0
+itemRarity:
+  rarityType: RARE

@@ -1,0 +1,29 @@
+---
+combatLogCommonMessages:
+  killMessage: '{killer} <sprite name="{killItem}"> {victim}'
+  userJoinBattleMessage: '{user} вошёл в битву'
+  userLeaveBattleMessage: '{user} вышел из битвы'
+  goldTakenMessage: '{user} взял золотой ящик'
+  goldScheduledMessage: Скоро будет сброшен золотой ящик!
+  userGoldScheduledMessage: '{0} сбросил золотой ящик!'
+  userChangedTankMessage: '{user} изменил вооружение'
+  suicideMessage: '{user} самоуничтожился'
+  killStreakMessage: '{user} совершил серию убийств из {killNum} танков'
+combatLogDMMessages:
+  battleStartMessage: Уничтожь их всех!
+combatLogTDMMessages:
+  battleStartMessage: Уничтожай танки вражеской команды!
+combatLogCtfMessages:
+  battleStartMessage: Захватывай вражеский флаг и защищай свой!
+  took: '{user} взял {own} флаг'
+  lost: '{user} потерял {own} флаг'
+  dropped: '{user} сбросил {own} флаг'
+  delivered: '{user} доставил {own} флаг'
+  deliveryNotCounted: 'Флаг не засчитан'
+  returned: '{user} вернул {own} флаг'
+  pickedUp: '{user} подобрал {own} флаг'
+  autoReturned: '{own} флаг возвращён на базу'
+  blueFlag: синий
+  redFlag: красный
+  ourFlag: наш
+  enemyFlag: вражеский

@@ -1,0 +1,24 @@
+modulesScreenText:
+  craftableLabelText: Craftable
+  notCraftableLabelText: Not enough resources
+  assembleDialogConfirmButtonText: CRAFT
+  assembleDialogHeaderText: "Craft {0} module?"
+  slotNameText: "SLOT {0}"
+  mountLabelText: Equipped
+  exceptionalLabelText: Exceptional
+  epicLabelText: Rare
+  additionalEffectLabelText: "Bonus effect: +{0}% {1} {2}."
+  resistLongLabelText: Damage resistance against
+  damageLongLabelText: Damage bonus to
+  additionalEffectDefaultText: "After the module has been crafted, it will receive a 3-7% (rarely +10%) random bonus effect (Damage Bonus or Damage Resist) to a random turret."
+  slotLockedText: "This slot will be unlocked upon reaching hull Upgrade Level {0}."
+  pleaseChooseModuleText: "Please, choose a module from the list on the right side of the screen."
+  pleaseChooseSlotText: "Please, choose a slot."
+  resistShortLabel: "RST"
+  damageShortLabel: "DMG"
+  okText: "OK"
+  moduleTypeDescriptions:
+    - "This slot is designed for modules that will assist players in a scouting role." #RECONNAISSANCE / SCOUTING
+    - "This slot is designed for modules that will assist players in a supporting role. " #SUPPORT
+    - "This slot is designed for modules that will assist players in a defensive role." #DEFENCE
+    - "This slot is designed for modules that any tank should have." #SPECIAL
