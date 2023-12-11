@@ -15,11 +15,13 @@ public class ComponentChangeCommand(
 ) : EntityCommand(entity) {
     [ProtocolVaried] [ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
-    public override void Execute(PlayerConnection connection) {
+    public override void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         (Entity as IInternalEntity)!.ChangeComponent(Component, connection);
 
-        logger.Warning("{Connection} changed {Component} in {Entity}", connection, Component, Entity);
+        logger.Warning("{Connection} changed {Component} in {Entity}", connection, Component.GetType().Name, Entity);
     }
+
+    public override string ToString() => $"ComponentChange command {{ Entity: {Entity}, Component: {Component.GetType().Name} }}";
 }

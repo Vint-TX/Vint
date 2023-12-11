@@ -2,6 +2,7 @@
 using NetCoreServer;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 using Serilog.Templates;
 using Serilog.Templates.Themes;
 
@@ -29,13 +30,13 @@ public static class LoggerUtils {
         [TemplateThemeStyle.LevelFatal] = "\u001B[31;1m"
     });
 
-    public static void Initialize() {
+    public static void Initialize(LogEventLevel logEventLevel) {
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Console(new ExpressionTemplate(
                 "[{@t:HH:mm:ss.fff}] [{@l}] {#if SourceContext is not null}[{SourceContext}] {#end}{#if SessionEndpoint is not null}[{SessionEndpoint}] {#end}{@m:lj}\n{@x}",
                 theme: Theme))
-            .MinimumLevel.Debug()
+            .MinimumLevel.Is(logEventLevel)
             .CreateLogger();
 
         Logger = Log.Logger.ForType(typeof(LoggerUtils));

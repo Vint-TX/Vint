@@ -9,10 +9,8 @@ public static class EntityRegistry {
 
     public static void Add(IEntity entity) {
         lock (Entities) {
-            if (Entities.ContainsKey(entity.Id))
+            if (!Entities.TryAdd(entity.Id, entity))
                 throw new ArgumentException($"Entity with id {entity.Id} already registered");
-
-            Entities[entity.Id] = entity;
         }
     }
 

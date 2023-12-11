@@ -9,5 +9,5 @@ namespace Vint.Core.Protocol.Commands;
 public abstract class EntityCommand(IEntity entity) : ICommand {
     [ProtocolPosition(0)] public IEntity Entity { get; protected set; } = entity;
 
-    public virtual void Execute(PlayerConnection connection) => throw new NotImplementedException();
+    public virtual void Execute(IPlayerConnection connection) => throw new NotImplementedException();
 }

@@ -16,7 +16,7 @@ public class SendEventCommand(
     [ProtocolVaried] [ProtocolPosition(0)] public IEvent Event { get; private set; } = @event;
     [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
 
-    public void Execute(PlayerConnection connection) {
+    public void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         if (Event is not IServerEvent serverEvent) {
@@ -24,8 +24,12 @@ public class SendEventCommand(
             return;
         }
 
-        logger.Information("Executing event {Event} for {Count} entities", serverEvent, Entities.Length);
+        logger.Information("Executing event {Name} for {Count} entities", serverEvent.GetType().Name, Entities.Length);
 
         serverEvent.Execute(connection, Entities);
     }
+
+    public override string ToString() => $"SendEvent command {{ " +
+                                         $"Event: {Event.GetType().Name}, " +
+                                         $"Entities: {{ {Entities.ToString(true)} }} }}";
 }

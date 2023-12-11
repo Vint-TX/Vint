@@ -2,6 +2,7 @@
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
+using Vint.Utils;
 
 namespace Vint.Core.Protocol.Commands;
 
@@ -15,5 +16,10 @@ public class EntityShareCommand(
     [ProtocolPosition(2)] [ProtocolCollection(varied: true)]
     public IComponent[] Components => components;
 
-    public void Execute(PlayerConnection connection) => throw new NotImplementedException();
+    public void Execute(IPlayerConnection connection) => throw new NotImplementedException();
+
+    public override string ToString() => $"EntityShare command {{ " +
+                                         $"EntityId: {EntityId}, " +
+                                         $"TemplateAccessor: {TemplateAccessor}, " +
+                                         $"Components: {{ {Components.ToString(false)} }} }}";
 }

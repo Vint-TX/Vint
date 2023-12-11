@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.Config;
 using Vint.Core.Server;
 using Vint.Utils;
@@ -10,7 +11,7 @@ abstract class Program {
     static ILogger Logger { get; set; } = null!;
 
     static async Task Main() {
-        LoggerUtils.Initialize();
+        LoggerUtils.Initialize(LogEventLevel.Information);
 
         Logger = Log.Logger.ForType(typeof(Program));
 

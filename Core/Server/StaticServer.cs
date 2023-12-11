@@ -26,7 +26,7 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
         Logger = Logger.WithPlayer(this);
 
     protected override void OnReceivedRequest(HttpRequest request) {
-        Logger.Debug("{Method} {Url}", request.Method, request.Url);
+        Logger.Information("{Method} {Url}", request.Method, request.Url);
 
         if (request.Method != "GET") {
             SendResponseAsync(Response.MakeErrorResponse(400));

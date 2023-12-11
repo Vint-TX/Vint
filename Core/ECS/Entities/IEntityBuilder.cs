@@ -10,7 +10,9 @@ public interface IEntityBuilder {
 
     public IEntityBuilder WithTemplateAccessor(TemplateAccessor templateAccessor);
 
-    public IEntityBuilder WithTemplateAccessor(IEntityTemplate template, string? configPath);
+    public IEntityBuilder WithTemplateAccessor(EntityTemplate template, string? configPath);
 
     public IEntityBuilder AddComponent(IComponent component);
+
+    public IEntity Build();
 }

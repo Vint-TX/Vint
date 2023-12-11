@@ -3,8 +3,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
+using Vint.Core.ECS;
+using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
+using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.ECS.Templates.Entrance;
+using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Codecs.Buffer;
 using Vint.Core.Protocol.Codecs.Impl;
 using Vint.Core.Protocol.Commands;
@@ -12,8 +17,43 @@ using Vint.Utils;
 
 namespace Vint.Core.Server;
 
-public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : TcpSession(server) {
+public interface IPlayerConnection {
+    public ILogger Logger { get; }
+
+    public Player Player { get; set; }
+    public IEntity User { get; }
+    public IEntity ClientSession { get; }
+
+    public void Register(
+        string username,
+        string encryptedPasswordDigest,
+        string email,
+        string hardwareFingerprint,
+        bool subscribed,
+        bool steam,
+        bool quickRegistration);
+
+    public void Login(
+        bool rememberMe,
+        string passwordEncipher,
+        string hardwareFingerprint);
+
+    public void Send(ICommand command);
+
+    public void Send(IEvent @event);
+
+    public void Share(IEntity entity);
+
+    public void Share(params IEntity[] entities);
+
+    public void Share(IEnumerable<IEntity> entities);
+}
+
+public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
+
+    public Player Player { get; set; } = null!;
+    public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
 
     BlockingCollection<byte[]> ReceivedPackets { get; } = new();
@@ -52,10 +92,46 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         ReceivedPackets.Add(bytes);
     }
 
+    public void Register(
+        string username,
+        string encryptedPasswordDigest,
+        string email,
+        string hardwareFingerprint,
+        bool subscribed,
+        bool steam,
+        bool quickRegistration) {
+        Player.RegistrationTime = DateTimeOffset.UtcNow;
+
+        Login(true, encryptedPasswordDigest, hardwareFingerprint);
+    }
+
+    public void Login(
+        bool rememberMe,
+        string passwordEncipher,
+        string hardwareFingerprint) {
+        Player.LastLoginTime = DateTimeOffset.UtcNow;
+
+        User = new UserTemplate().Create(Player);
+        Share(User);
+
+        ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
+
+        Logger.Warning("'{Username}' logged in", Player.Username);
+    }
+
     public void Send(ICommand command) {
-        Logger.Debug("Enqueuing {Command} for sending", command);
+        Logger.Debug("Enqueuing {Command}", command);
+
         SendingCommands.Add(command);
     }
+
+    public void Send(IEvent @event) => ClientSession.Send(@event);
+
+    public void Share(IEntity entity) => entity.Share(this);
+
+    public void Share(params IEntity[] entities) => entities.ToList().ForEach(Share);
+
+    public void Share(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Share);
 
     void ReceiveLoop() {
         try {
@@ -88,6 +164,9 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
             }
         } catch (Exception e) {
             Logger.Error(e, "Socket caught an exception in the receive loop");
+        } finally {
+            Logger.Warning("Received loop ended");
+
             Disconnect();
         }
     }
@@ -114,11 +193,16 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
             }
         } catch (Exception e) {
             Logger.Error(e, "Socket caught an exception in the send loop");
+        } finally {
+            Logger.Warning("Send loop ended");
+
+            Disconnect();
         }
     }
 
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
     public override string ToString() => $"PlayerConnection {{ " +
-                                         $"Id: {ClientSession?.Id}; " +
-                                         //$"Username: {Player.Username}; " + //todo: username
-                                         $"Endpoint: {Socket.RemoteEndPoint /*as IPEndPoint*/} }}";
+                                         $"ClientSession Id: '{ClientSession?.Id}'; " +
+                                         $"Username: '{Player?.Username}'; " +
+                                         $"Endpoint: {Socket.RemoteEndPoint} }}";
 }

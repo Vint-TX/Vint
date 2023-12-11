@@ -19,7 +19,7 @@ public static class ClientConfigGenerator {
         foreach (string configDir in Directory.EnumerateDirectories(ConfigsPath)) {
             string locale = new DirectoryInfo(configDir).Name;
 
-            Logger.Debug("Generating archive for the '{Locale}' locale", locale);
+            Logger.Information("Generating archive for the '{Locale}' locale", locale);
 
             using MemoryStream outStream = new();
 

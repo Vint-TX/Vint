@@ -2,8 +2,8 @@
 
 namespace Vint.Core.ECS.Templates;
 
-public interface IEntityTemplate {
-    public sealed IEntity Entity(string? configPath, Action<IEntityBuilder> builder) {
+public abstract class EntityTemplate {
+    protected IEntity Entity(string? configPath, Action<IEntityBuilder> builder) {
         EntityBuilder entityBuilder = new();
 
         entityBuilder.WithTemplateAccessor(this, configPath);

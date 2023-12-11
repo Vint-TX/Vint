@@ -17,7 +17,7 @@ public class EntityBuilder(
         return this;
     }
 
-    public IEntityBuilder WithTemplateAccessor(IEntityTemplate template, string? configPath) {
+    public IEntityBuilder WithTemplateAccessor(EntityTemplate template, string? configPath) {
         TemplateAccessor = new TemplateAccessor(template, configPath);
         return this;
     }

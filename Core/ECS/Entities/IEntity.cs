@@ -15,9 +15,9 @@ public interface IEntity {
 
     protected EntityUnshareCommand ToUnshareCommand();
 
-    public void Share(PlayerConnection connection);
+    public void Share(IPlayerConnection connection);
 
-    public void Unshare(PlayerConnection connection);
+    public void Unshare(IPlayerConnection connection);
 
     public void AddComponent(IComponent component);
 
@@ -35,9 +35,9 @@ public interface IEntity {
 }
 
 public interface IInternalEntity {
-    public void AddComponent(IComponent component, PlayerConnection? excluded = null);
+    public void AddComponent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void ChangeComponent(IComponent component, PlayerConnection? excluded = null);
+    public void ChangeComponent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void RemoveComponent<T>(PlayerConnection? excluded = null) where T : IComponent;
+    public void RemoveComponent<T>(IPlayerConnection? excluded = null) where T : IComponent;
 }

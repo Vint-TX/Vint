@@ -7,5 +7,7 @@ public class CloseCommand(
 ) : ICommand {
     public string Reason => reason;
 
-    public void Execute(PlayerConnection connection) => throw new NotImplementedException();
+    public void Execute(IPlayerConnection connection) => throw new NotImplementedException();
+
+    public override string ToString() => $"Close command {{ Reason: '{Reason}' }}";
 }

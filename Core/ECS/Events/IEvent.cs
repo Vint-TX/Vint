@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Events;
 public interface IEvent;
 
 public interface IServerEvent : IEvent {
-    public void Execute(PlayerConnection connection, IEnumerable<IEntity> entities);
+    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities);
 }

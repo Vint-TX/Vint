@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Utils;
@@ -47,4 +48,10 @@ public static class Extensions {
     public static bool IsHashSet(this Type type) => type.IsGenericType &&
                                                     type.GetGenericTypeDefinition()
                                                         .IsAssignableFrom(typeof(HashSet<>));
+
+    public static string ToString<T>(this IEnumerable<T> enumerable, bool extended) {
+        List<T> list = enumerable.ToList();
+
+        return list.Count == 0 ? "Empty" : string.Join(", ", list.Select(obj => extended ? $"{obj}" : obj!.GetType().Name));
+    }
 }

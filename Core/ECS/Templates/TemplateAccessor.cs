@@ -1,6 +1,8 @@
 ﻿namespace Vint.Core.ECS.Templates;
 
 public readonly record struct TemplateAccessor(
-    IEntityTemplate Template,
+    EntityTemplate Template,
     string? ConfigPath
-);
+) {
+    public override string ToString() => $"TemplateAccessor {{ Template: {Template.GetType().Name}, ConfigPath: '{ConfigPath ?? "null"}' }}";
+}

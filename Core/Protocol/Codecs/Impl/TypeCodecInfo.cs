@@ -1,4 +1,6 @@
-﻿namespace Vint.Core.Protocol.Codecs.Impl;
+﻿using Vint.Utils;
+
+namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class TypeCodecInfo(
     Type type,
@@ -65,6 +67,6 @@ public class TypeCodecInfo(
                $"Type: {typeName}; " +
                $"Nullable: {Nullable}; " +
                $"Varied: {Varied}; " +
-               $"Attributes {{ {(Attributes.Count != 0 ? string.Join(", ", Attributes.Select(a => $"{a}")) : "Empty")} }}";
+               $"Attributes {{ {Attributes.ToString(false)} }} }}";
     }
 }

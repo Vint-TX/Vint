@@ -3,5 +3,5 @@
 namespace Vint.Core.Protocol.Commands;
 
 public interface ICommand {
-    public void Execute(PlayerConnection connection);
+    public void Execute(IPlayerConnection connection);
 }
