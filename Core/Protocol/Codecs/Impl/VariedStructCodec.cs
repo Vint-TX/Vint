@@ -1,5 +1,5 @@
 ﻿using Vint.Core.Protocol.Codecs.Buffer;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 

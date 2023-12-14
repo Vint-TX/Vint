@@ -8,6 +8,5 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 public class CheckGiftsEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         // TODO
-
     }
 }

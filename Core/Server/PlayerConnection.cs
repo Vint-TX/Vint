@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
@@ -8,12 +9,13 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Entrance.Login;
+using Vint.Core.ECS.Events.Entrance.Registration;
 using Vint.Core.ECS.Templates.Entrance;
 using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Codecs.Buffer;
 using Vint.Core.Protocol.Codecs.Impl;
 using Vint.Core.Protocol.Commands;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
 
@@ -50,14 +52,82 @@ public interface IPlayerConnection {
 }
 
 public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
+    BlockingCollection<byte[]> ReceivedPackets { get; } = new();
+    BlockingCollection<ICommand> SendingCommands { get; } = new();
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
 
     public Player Player { get; set; } = null!;
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
 
-    BlockingCollection<byte[]> ReceivedPackets { get; } = new();
-    BlockingCollection<ICommand> SendingCommands { get; } = new();
+    public void Register(
+        string username,
+        string encryptedPasswordDigest,
+        string email,
+        string hardwareFingerprint,
+        bool subscribed,
+        bool steam,
+        bool quickRegistration) {
+        Logger.Information("Registering player '{Username}'", username);
+
+        if (username == "fail") {
+            Send(new RegistrationFailedEvent());
+            return;
+        }
+
+        Player = new Player(Logger, username, email) {
+            CountryCode = IpUtils.GetCountryCode((Socket.RemoteEndPoint as IPEndPoint)!.Address) ?? "US",
+            HardwareFingerprint = hardwareFingerprint,
+            Subscribed = subscribed,
+            RegistrationTime = DateTimeOffset.UtcNow
+        };
+
+        Login(true, encryptedPasswordDigest, hardwareFingerprint);
+    }
+
+    public void Login(
+        bool rememberMe,
+        string passwordEncipher,
+        string hardwareFingerprint) {
+        Player.LastLoginTime = DateTimeOffset.UtcNow;
+
+        Encryption encryption = new();
+
+        byte[] passwordHash = encryption.RsaDecrypt(Convert.FromBase64String(passwordEncipher));
+        Player.PasswordHash = passwordHash;
+
+        if (rememberMe) {
+            byte[] autoLoginToken = new byte[32];
+            new Random().NextBytes(autoLoginToken);
+
+            byte[] encryptedAutoLoginToken = encryption.EncryptAutoLoginToken(autoLoginToken, passwordHash);
+
+            Player.AutoLoginToken = autoLoginToken;
+
+            Send(new SaveAutoLoginTokenEvent(Player.Username, encryptedAutoLoginToken));
+        }
+
+        User = new UserTemplate().Create(Player);
+        Share(User);
+
+        ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
+
+        Logger.Warning("'{Username}' logged in", Player.Username);
+    }
+
+    public void Send(ICommand command) {
+        Logger.Debug("Enqueuing {Command}", command);
+
+        SendingCommands.Add(command);
+    }
+
+    public void Send(IEvent @event) => ClientSession.Send(@event);
+
+    public void Share(IEntity entity) => entity.Share(this);
+
+    public void Share(params IEntity[] entities) => entities.ToList().ForEach(Share);
+
+    public void Share(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Share);
 
     protected override void OnConnecting() =>
         Logger = Logger.WithPlayer(this);
@@ -92,47 +162,6 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         ReceivedPackets.Add(bytes);
     }
 
-    public void Register(
-        string username,
-        string encryptedPasswordDigest,
-        string email,
-        string hardwareFingerprint,
-        bool subscribed,
-        bool steam,
-        bool quickRegistration) {
-        Player.RegistrationTime = DateTimeOffset.UtcNow;
-
-        Login(true, encryptedPasswordDigest, hardwareFingerprint);
-    }
-
-    public void Login(
-        bool rememberMe,
-        string passwordEncipher,
-        string hardwareFingerprint) {
-        Player.LastLoginTime = DateTimeOffset.UtcNow;
-
-        User = new UserTemplate().Create(Player);
-        Share(User);
-
-        ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
-
-        Logger.Warning("'{Username}' logged in", Player.Username);
-    }
-
-    public void Send(ICommand command) {
-        Logger.Debug("Enqueuing {Command}", command);
-
-        SendingCommands.Add(command);
-    }
-
-    public void Send(IEvent @event) => ClientSession.Send(@event);
-
-    public void Share(IEntity entity) => entity.Share(this);
-
-    public void Share(params IEntity[] entities) => entities.ToList().ForEach(Share);
-
-    public void Share(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Share);
-
     void ReceiveLoop() {
         try {
             while (true) {
@@ -165,7 +194,7 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         } catch (Exception e) {
             Logger.Error(e, "Socket caught an exception in the receive loop");
         } finally {
-            Logger.Warning("Received loop ended");
+            Logger.Warning("Receive loop ended");
 
             Disconnect();
         }

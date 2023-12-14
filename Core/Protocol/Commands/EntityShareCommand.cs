@@ -2,7 +2,7 @@
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Commands;
 

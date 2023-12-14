@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
 using Vint.Core.Protocol.Attributes;
 
-namespace Vint.Utils;
+namespace Vint.Core.Utils;
 
 public static class Extensions {
     public static ProtocolIdAttribute GetProtocolId(this Type type) => type.GetCustomAttribute<ProtocolIdAttribute>()!;

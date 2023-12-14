@@ -10,8 +10,7 @@ public class AutoLoginUserEvent : IServerEvent {
     public byte[] EncryptedToken { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) =>
         // TODO
         connection.Send(new AutoLoginFailedEvent());
-    }
 }

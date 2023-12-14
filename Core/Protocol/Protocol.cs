@@ -8,7 +8,7 @@ using Vint.Core.Protocol.Codecs;
 using Vint.Core.Protocol.Codecs.Factories;
 using Vint.Core.Protocol.Codecs.Impl;
 using Vint.Core.Protocol.Commands;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol;
 

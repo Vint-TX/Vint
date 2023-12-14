@@ -6,7 +6,7 @@ using Serilog.Events;
 using Serilog.Templates;
 using Serilog.Templates.Themes;
 
-namespace Vint.Utils;
+namespace Vint.Core.Utils;
 
 public static class LoggerUtils {
     static ILogger Logger { get; set; } = null!;

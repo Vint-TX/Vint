@@ -2,7 +2,7 @@
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Screen;
 
@@ -16,6 +16,9 @@ public class ChangeScreenEvent : IServerEvent {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Information("{Connection} changing screen {Current} to {Next} in {Duration}",
-            connection, CurrentScreen, NextScreen, Duration);
+            connection,
+            CurrentScreen,
+            NextScreen,
+            Duration);
     }
 }

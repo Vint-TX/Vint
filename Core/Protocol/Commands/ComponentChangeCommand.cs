@@ -4,7 +4,7 @@ using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Commands;
 
@@ -23,5 +23,6 @@ public class ComponentChangeCommand(
         logger.Warning("{Connection} changed {Component} in {Entity}", connection, Component.GetType().Name, Entity);
     }
 
-    public override string ToString() => $"ComponentChange command {{ Entity: {Entity}, Component: {Component.GetType().Name} }}";
+    public override string ToString() =>
+        $"ComponentChange command {{ Entity: {Entity}, Component: {Component.GetType().Name} }}";
 }

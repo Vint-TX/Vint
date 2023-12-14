@@ -17,6 +17,7 @@ public class UserOnlineEvent : IServerEvent {
         //todo
 
         connection.ClientSession.Send(new PaymentSectionLoadedEvent());
+
         connection.ClientSession.Send(
             new FriendsLoadedEvent(
                 connection.Player.AcceptedFriendIds,

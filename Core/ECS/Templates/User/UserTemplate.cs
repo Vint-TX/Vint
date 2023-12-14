@@ -9,7 +9,8 @@ namespace Vint.Core.ECS.Templates.User;
 [ProtocolId(1433752208915)]
 public class UserTemplate : EntityTemplate {
     public IEntity Create(Player player) {
-        IEntity user = Entity(null, builder => {
+        IEntity user = Entity(null,
+            builder => {
                 builder
                     .AddComponent(new UserComponent())
                     .AddComponent(new UserOnlineComponent())
@@ -22,7 +23,7 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new PersonalChatOwnerComponent())
                     .AddComponent(new BlackListComponent())
                     .AddComponent(new UserExperienceComponent(player.Experience))
-                    .AddComponent(new UserRankComponent(69)) // todo get from config
+                    .AddComponent(new UserRankComponent(player.Rank))
                     .AddComponent(new UserMoneyComponent(player.Crystals))
                     .AddComponent(new UserXCrystalsComponent(player.XCrystals))
                     .AddComponent(new QuestReadyComponent());
@@ -32,7 +33,7 @@ public class UserTemplate : EntityTemplate {
 
                 if (player.IsTester)
                     builder.AddComponent(new ClosedBetaQuestAchievementComponent());
-        });
+            });
 
         user.AddComponent(new UserGroupComponent(user));
 

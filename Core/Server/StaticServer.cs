@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
 using Vint.Core.Config;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
 
@@ -50,7 +50,7 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
                 } else if (requestedEntry.EndsWith("config.tar.gz")) {
                     string locale = urlParts[^2];
 
-                    SendResponseAsync(ClientConfigGenerator.TryGetConfig(locale, out byte[]? config)
+                    SendResponseAsync(ConfigManager.TryGetConfig(locale, out byte[]? config)
                                           ? Response.MakeGetResponse(config)
                                           : Response.MakeErrorResponse(404));
                 }

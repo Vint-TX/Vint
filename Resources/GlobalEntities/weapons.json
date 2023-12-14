@@ -1,0 +1,178 @@
+﻿[
+  {
+    "name": "flamethrower",
+    "id": 1021054379,
+    "template": [
+      "FlamethrowerMarketItemTemplate",
+      "garage/weapon/flamethrower"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 1021054379
+      }
+    }
+  },
+  {
+    "name": "freeze",
+    "id": 1878479106,
+    "template": [
+      "FreezeMarketItemTemplate",
+      "garage/weapon/freeze"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": 1878479106
+      }
+    }
+  },
+  {
+    "name": "hammer",
+    "id": 1920282929,
+    "template": [
+      "HammerMarketItemTemplate",
+      "garage/weapon/hammer"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 1920282929
+      }
+    }
+  },
+  {
+    "name": "isis",
+    "id": 1874668799,
+    "template": [
+      "IsisMarketItemTemplate",
+      "garage/weapon/isis"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": 1874668799
+      }
+    }
+  },
+  {
+    "name": "railgun",
+    "id": -319390877,
+    "template": [
+      "RailgunMarketItemTemplate",
+      "garage/weapon/railgun"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -319390877
+      }
+    }
+  },
+  {
+    "name": "ricochet",
+    "id": 1324743394,
+    "template": [
+      "RicochetMarketItemTemplate",
+      "garage/weapon/ricochet"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": 1324743394
+      }
+    }
+  },
+  {
+    "name": "shaft",
+    "id": -2005909841,
+    "template": [
+      "ShaftMarketItemTemplate",
+      "garage/weapon/shaft"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": -2005909841
+      }
+    }
+  },
+  {
+    "name": "smoky",
+    "id": -2005747272,
+    "template": [
+      "SmokyMarketItemTemplate",
+      "garage/weapon/smoky"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -2005747272
+      }
+    }
+  },
+  {
+    "name": "thunder",
+    "id": 1667159001,
+    "template": [
+      "ThunderMarketItemTemplate",
+      "garage/weapon/thunder"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1667159001
+      }
+    }
+  },
+  {
+    "name": "twins",
+    "id": -2004531520,
+    "template": [
+      "TwinsMarketItemTemplate",
+      "garage/weapon/twins"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -2004531520
+      }
+    }
+  },
+  {
+    "name": "vulcan",
+    "id": -1955445362,
+    "template": [
+      "VulcanMarketItemTemplate",
+      "garage/weapon/vulcan"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -1955445362
+      }
+    }
+  }
+]

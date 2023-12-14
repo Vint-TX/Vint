@@ -4,7 +4,7 @@ using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Commands;
 using Vint.Core.Server;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Entities;
 

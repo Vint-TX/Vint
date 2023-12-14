@@ -1,9 +1,9 @@
 ﻿using Serilog;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS;
 
-public class Player{
+public class Player {
     public Player(ILogger connectionLogger, string username, string email) {
         List<string> admins = ["C6OI"];
 
@@ -22,9 +22,9 @@ public class Player{
 
     public bool RememberMe { get; set; }
 
-    public byte[] AutoLoginToken { get; set; }
-    public byte[] PasswordHash { get; set; }
-    public string HardwareFingerprint { get; set; } = null!;
+    public byte[] AutoLoginToken { get; set; } = [];
+    public byte[] PasswordHash { get; set; } = [];
+    public string HardwareFingerprint { get; set; } = "";
 
     public PlayerGroups Groups { get; set; }
     public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
@@ -34,7 +34,7 @@ public class Player{
     public bool IsBanned => (Groups & PlayerGroups.Banned) == PlayerGroups.Banned;
 
     public bool Subscribed { get; set; }
-    public string CountryCode { get; set; } = "XD";
+    public string CountryCode { get; set; } = "RU";
 
     public long Crystals { get; set; }
     public long XCrystals { get; set; }
@@ -42,8 +42,9 @@ public class Player{
     public int GoldBoxItems { get; set; }
 
     public long Experience { get; set; }
+    public int Rank => Leveling.GetRank(Experience);
 
-    public DateTimeOffset RegistrationTime { get; set; }
+    public DateTimeOffset RegistrationTime { get; init; }
     public DateTimeOffset LastLoginTime { get; set; }
 
     public HashSet<long> AcceptedFriendIds { get; set; } = [];

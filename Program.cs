@@ -3,26 +3,28 @@ using Serilog;
 using Serilog.Events;
 using Vint.Core.Config;
 using Vint.Core.Server;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint;
 
 abstract class Program {
     static ILogger Logger { get; set; } = null!;
 
-    static async Task Main() {
-        LoggerUtils.Initialize(LogEventLevel.Information);
+    static Task Main() {
+        LoggerUtils.Initialize(LogEventLevel.Verbose);
 
         Logger = Log.Logger.ForType(typeof(Program));
 
         StaticServer staticServer = new(IPAddress.Any, 8080);
         GameServer gameServer = new(IPAddress.Any, 5050);
 
-        ClientConfigGenerator.InitializeCache();
+        ConfigManager.InitializeCache();
+        ConfigManager.InitializeNodes();
+        ConfigManager.InitializeGlobalEntities();
 
         new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
         new Thread(() => gameServer.Start()) { Name = "Game Server" }.Start();
 
-        await Task.Delay(-1);
+        return Task.Delay(-1);
     }
 }

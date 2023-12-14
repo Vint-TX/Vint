@@ -1,6 +1,6 @@
 ﻿using Vint.Core.Protocol.Attributes;
 using Vint.Core.Protocol.Codecs.Impl;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Codecs.Factories;
 

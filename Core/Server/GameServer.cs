@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
-using Vint.Utils;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
 
