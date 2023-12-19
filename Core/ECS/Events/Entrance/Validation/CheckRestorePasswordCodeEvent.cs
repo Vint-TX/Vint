@@ -8,6 +8,7 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class CheckRestorePasswordCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
 
+    //todo
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (Code == "valid") connection.Send(new RestorePasswordCodeValidEvent(Code));
         else connection.Send(new RestorePasswordCodeInvalidEvent(Code));

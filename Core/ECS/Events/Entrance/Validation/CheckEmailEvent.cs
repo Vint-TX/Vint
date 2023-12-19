@@ -1,4 +1,6 @@
-﻿using Vint.Core.ECS.Entities;
+﻿using System.Net.Mail;
+using Vint.Core.Database;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 
@@ -7,21 +9,19 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 [ProtocolId(635906273125139964)]
 public class CheckEmailEvent : IServerEvent {
     public string Email { get; private set; } = null!;
-    public bool IncludeUnconfirmed { get; private set; }
+    public bool IncludeUnconfirmed { get; private set; } //todo
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        switch (Email[..Email.IndexOf('@')]) {
-            case "taken":
+        try {
+            MailAddress email = new(Email);
+
+            using DatabaseContext database = new();
+
+            if (database.Players.Any(player => player.Email == email.Address))
                 connection.Send(new EmailOccupiedEvent(Email));
-                break;
-
-            case "invalid":
-                connection.Send(new EmailInvalidEvent(Email));
-                break;
-
-            default:
-                connection.Send(new EmailVacantEvent(Email));
-                break;
+            else connection.Send(new EmailVacantEvent(Email));
+        } catch {
+            connection.Send(new EmailInvalidEvent(Email));
         }
     }
 }
