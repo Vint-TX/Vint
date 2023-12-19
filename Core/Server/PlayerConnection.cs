@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
+using Vint.Core.Database;
 using Vint.Core.ECS;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
@@ -37,8 +38,9 @@ public interface IPlayerConnection {
 
     public void Login(
         bool rememberMe,
-        string passwordEncipher,
         string hardwareFingerprint);
+
+    public void ChangePassword(string passwordDigest);
 
     public void Send(ICommand command);
 
@@ -54,9 +56,17 @@ public interface IPlayerConnection {
 public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
     BlockingCollection<byte[]> ReceivedPackets { get; } = new();
     BlockingCollection<ICommand> SendingCommands { get; } = new();
+    DatabaseContext Database { get; } = new();
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
 
-    public Player Player { get; set; } = null!;
+    public Player Player {
+        get => _player;
+        set {
+            _player = value;
+            Database.Players.Attach(_player);
+        }
+    }
+
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
 
@@ -82,25 +92,27 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
             RegistrationTime = DateTimeOffset.UtcNow
         };
 
-        Login(true, encryptedPasswordDigest, hardwareFingerprint);
+        ChangePassword(encryptedPasswordDigest);
+
+        Database.Players.Add(Player);
+        Database.Save();
+
+        Login(true, hardwareFingerprint);
     }
 
     public void Login(
         bool rememberMe,
-        string passwordEncipher,
         string hardwareFingerprint) {
         Player.LastLoginTime = DateTimeOffset.UtcNow;
-
-        Encryption encryption = new();
-
-        byte[] passwordHash = encryption.RsaDecrypt(Convert.FromBase64String(passwordEncipher));
-        Player.PasswordHash = passwordHash;
+        Player.HardwareFingerprint = hardwareFingerprint;
 
         if (rememberMe) {
+            Encryption encryption = new();
+
             byte[] autoLoginToken = new byte[32];
             new Random().NextBytes(autoLoginToken);
 
-            byte[] encryptedAutoLoginToken = encryption.EncryptAutoLoginToken(autoLoginToken, passwordHash);
+            byte[] encryptedAutoLoginToken = encryption.EncryptAutoLoginToken(autoLoginToken, Player.PasswordHash);
 
             Player.AutoLoginToken = autoLoginToken;
 
@@ -113,6 +125,17 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
 
         Logger.Warning("'{Username}' logged in", Player.Username);
+
+        Database.Save();
+    }
+
+    public void ChangePassword(string passwordDigest) {
+        Encryption encryption = new();
+
+        byte[] passwordHash = encryption.RsaDecrypt(Convert.FromBase64String(passwordDigest));
+        Player.PasswordHash = passwordHash;
+
+        Database.Save();
     }
 
     public void Send(ICommand command) {
@@ -234,4 +257,6 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
                                          $"ClientSession Id: '{ClientSession?.Id}'; " +
                                          $"Username: '{Player?.Username}'; " +
                                          $"Endpoint: {Socket.RemoteEndPoint} }}";
+
+    Player _player = null!;
 }

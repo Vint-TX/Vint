@@ -73,7 +73,7 @@ public static class ConfigManager {
 
             if (string.IsNullOrEmpty(fileName)) continue;
 
-            //Logger.Verbose("Parsing {File}", relativePath);
+            Logger.Verbose("Parsing {File}", relativePath);
 
             switch (fileName) {
                 case "id.yml": {

@@ -1,5 +1,7 @@
 ﻿using Serilog;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Entrance.Validation;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -15,7 +17,16 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
 
         logger.Information("Login by email '{Email}'", Email);
 
-        connection.Player = new Player(logger, Email[..Email.IndexOf('@')], Email);
+        using DatabaseContext database = new();
+        Player? player = database.Players.SingleOrDefault(player => player.Email == Email);
+
+        if (player == null) {
+            connection.Send(new EmailInvalidEvent(Email));
+            connection.Send(new LoginFailedEvent());
+            return;
+        }
+
+        connection.Player = player;
         connection.Send(new PersonalPasscodeEvent());
     }
 }

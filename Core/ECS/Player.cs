@@ -1,13 +1,17 @@
-﻿using Serilog;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Serilog;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS;
 
 public class Player {
-    public Player(ILogger connectionLogger, string username, string email) {
+    public Player(ILogger connectionLogger, string username, string email) : this(username, email) =>
+        Logger = connectionLogger.ForType(typeof(Player));
+
+    Player(string username, string email) {
         List<string> admins = ["C6OI"];
 
-        Logger = connectionLogger.ForType(typeof(Player));
+        Logger = Log.Logger.ForType(typeof(Player));
         Username = username;
         Email = email;
 
@@ -16,6 +20,8 @@ public class Player {
     }
 
     public ILogger Logger { get; }
+
+    public uint Id { get; private init; }
 
     public string Username { get; set; }
     public string Email { get; set; }
@@ -47,12 +53,12 @@ public class Player {
     public DateTimeOffset RegistrationTime { get; init; }
     public DateTimeOffset LastLoginTime { get; set; }
 
-    public HashSet<long> AcceptedFriendIds { get; set; } = [];
-    public HashSet<long> IncomingFriendIds { get; set; } = [];
-    public HashSet<long> OutgoingFriendIds { get; set; } = [];
+    public List<long> AcceptedFriendIds { get; set; } = [];
+    public List<long> IncomingFriendIds { get; set; } = [];
+    public List<long> OutgoingFriendIds { get; set; } = [];
 
-    public HashSet<long> BlockedPlayerIds { get; set; } = [];
-    public HashSet<long> ReportedPlayerIds { get; set; } = [];
+    public List<long> BlockedPlayerIds { get; set; } = [];
+    public List<long> ReportedPlayerIds { get; set; } = [];
 }
 
 [Flags]

@@ -20,8 +20,8 @@ public class UserOnlineEvent : IServerEvent {
 
         connection.ClientSession.Send(
             new FriendsLoadedEvent(
-                connection.Player.AcceptedFriendIds,
-                connection.Player.IncomingFriendIds,
-                connection.Player.OutgoingFriendIds));
+                connection.Player.AcceptedFriendIds.ToHashSet(),
+                connection.Player.IncomingFriendIds.ToHashSet(),
+                connection.Player.OutgoingFriendIds.ToHashSet()));
     }
 }

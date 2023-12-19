@@ -1,5 +1,7 @@
 ﻿using Serilog;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Entrance.Validation;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -15,7 +17,16 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
 
         logger.Information("Login by username '{Username}'", Username);
 
-        connection.Player = new Player(logger, Username, $"{Username}@placeholder.com");
+        using DatabaseContext database = new();
+        Player? player = database.Players.SingleOrDefault(player => player.Username == Username);
+
+        if (player == null) {
+            connection.Send(new UidInvalidEvent());
+            connection.Send(new LoginFailedEvent());
+            return;
+        }
+
+        connection.Player = player;
         connection.Send(new PersonalPasscodeEvent());
     }
 }
