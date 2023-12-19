@@ -1,0 +1,1172 @@
+﻿[
+  {
+    "name": "AlgheriaFlag",
+    "id": -910231604,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/algheria_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -910231604
+      }
+    }
+  },
+  {
+    "name": "Alpha",
+    "id": 934969104,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/alpha"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 934969104
+      }
+    }
+  },
+  {
+    "name": "Antheusfighter",
+    "id": 6200,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/antheusfighter"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6200
+      }
+    }
+  },
+  {
+    "name": "ArgentinaFlag",
+    "id": -1202231726,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/argentina_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1202231726
+      }
+    }
+  },
+  {
+    "name": "ArmeniaFlag",
+    "id": 6201,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/armenia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6201
+      }
+    }
+  },
+  {
+    "name": "AustraliaFlag",
+    "id": -1731159719,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/australia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1731159719
+      }
+    }
+  },
+  {
+    "name": "AzerbaijanFlag",
+    "id": 1174801258,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/azerbaijan_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1174801258
+      }
+    }
+  },
+  {
+    "name": "BelorussiaFlag",
+    "id": 6202,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/belorussia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6202
+      }
+    }
+  },
+  {
+    "name": "Blackwidow",
+    "id": 1286714921,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/blackwidow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1286714921
+      }
+    }
+  },
+  {
+    "name": "Bogatyr",
+    "id": 6203,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/bogatyr"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6203
+      }
+    }
+  },
+  {
+    "name": "BoyValday",
+    "id": 6204,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/boy_valday"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6204
+      }
+    }
+  },
+  {
+    "name": "BrazilFlag",
+    "id": 6205,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/brazil_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6205
+      }
+    }
+  },
+  {
+    "name": "CanadaFlag",
+    "id": 2123817583,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/canada_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2123817583
+      }
+    }
+  },
+  {
+    "name": "ChinaFlag",
+    "id": 1651733218,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/china_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1651733218
+      }
+    }
+  },
+  {
+    "name": "Crab",
+    "id": -1632342818,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/crab"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1632342818
+      }
+    }
+  },
+  {
+    "name": "Cyborg",
+    "id": 6206,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/cyborg"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6206
+      }
+    }
+  },
+  {
+    "name": "CzechFlag",
+    "id": -171184634,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/czech_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -171184634
+      }
+    }
+  },
+  {
+    "name": "DarinaLiekhtonien",
+    "id": -1473761734,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/darina_liekhtonien"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1473761734
+      }
+    }
+  },
+  {
+    "name": "DeanCunningham",
+    "id": 1479495495,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/dean_cunningham"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1479495495
+      }
+    }
+  },
+  {
+    "name": "Dygest",
+    "id": -983105950,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/dygest"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -983105950
+      }
+    }
+  },
+  {
+    "name": "Eagle",
+    "id": 938326966,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/eagle"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 938326966
+      }
+    }
+  },
+  {
+    "name": "EgyptFlag",
+    "id": -1089651106,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/egypt_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1089651106
+      }
+    }
+  },
+  {
+    "name": "Elite",
+    "id": 6207,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/elite"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6207
+      }
+    }
+  },
+  {
+    "name": "EmmaBonney",
+    "id": -2119697962,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/emma_bonney"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2119697962
+      }
+    }
+  },
+  {
+    "name": "EstoniaFlag",
+    "id": 1781929660,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/estonia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1781929660
+      }
+    }
+  },
+  {
+    "name": "EvgenyRomanov",
+    "id": -1130044595,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/evgeny_romanov"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1130044595
+      }
+    }
+  },
+  {
+    "name": "FinlandFlag",
+    "id": -241092701,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/finland_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -241092701
+      }
+    }
+  },
+  {
+    "name": "FranceFlag",
+    "id": 117983554,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/france_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 117983554
+      }
+    }
+  },
+  {
+    "name": "Frontierfighter",
+    "id": 6208,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/frontierfighter"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6208
+      }
+    }
+  },
+  {
+    "name": "Gambler",
+    "id": 1569342716,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/gambler"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1569342716
+      }
+    }
+  },
+  {
+    "name": "GarciaLopez",
+    "id": 1953932916,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/garcia_lopez"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1953932916
+      }
+    }
+  },
+  {
+    "name": "GeorgiaFlag",
+    "id": 6209,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/georgia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6209
+      }
+    }
+  },
+  {
+    "name": "GermanyFlag",
+    "id": 6210,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/germany_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6210
+      }
+    }
+  },
+  {
+    "name": "Ghostrider",
+    "id": 6211,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/ghostrider"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6211
+      }
+    }
+  },
+  {
+    "name": "GirlValday",
+    "id": 6212,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/girl_valday"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6212
+      }
+    }
+  },
+  {
+    "name": "GreatbritainFlag",
+    "id": 6213,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/greatbritain_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6213
+      }
+    }
+  },
+  {
+    "name": "GreeceFlag",
+    "id": 1175725104,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/greece_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1175725104
+      }
+    }
+  },
+  {
+    "name": "Heart",
+    "id": 941211128,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/heart"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 941211128
+      }
+    }
+  },
+  {
+    "name": "Hellhound",
+    "id": 869046809,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/hellhound"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 869046809
+      }
+    }
+  },
+  {
+    "name": "HungaryFlag",
+    "id": 232090231,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/hungary_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 232090231
+      }
+    }
+  },
+  {
+    "name": "Hydra",
+    "id": 941809812,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/hydra"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 941809812
+      }
+    }
+  },
+  {
+    "name": "IndiaFlag",
+    "id": -2048808190,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/india_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2048808190
+      }
+    }
+  },
+  {
+    "name": "IrmaMassacre",
+    "id": 855079933,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/irma_massacre"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 855079933
+      }
+    }
+  },
+  {
+    "name": "IsraelFlag",
+    "id": -1042657987,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/israel_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1042657987
+      }
+    }
+  },
+  {
+    "name": "ItalyFlag",
+    "id": -1887453418,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/italy_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1887453418
+      }
+    }
+  },
+  {
+    "name": "Jedi",
+    "id": 6214,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/jedi"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6214
+      }
+    }
+  },
+  {
+    "name": "KazakhstanFlag",
+    "id": 6215,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/kazakhstan_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6215
+      }
+    }
+  },
+  {
+    "name": "LatviaFlag",
+    "id": -1036805170,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/latvia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1036805170
+      }
+    }
+  },
+  {
+    "name": "Legends",
+    "id": 1820960568,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/legends"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1820960568
+      }
+    }
+  },
+  {
+    "name": "LithuaniaFlag",
+    "id": -657725808,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/lithuania_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -657725808
+      }
+    }
+  },
+  {
+    "name": "MagnusGrim",
+    "id": 706204327,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/magnus_grim"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 706204327
+      }
+    }
+  },
+  {
+    "name": "Mammoth",
+    "id": 6216,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/mammoth"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6216
+      }
+    }
+  },
+  {
+    "name": "MaryNewell",
+    "id": 1807734043,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/mary_newell"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1807734043
+      }
+    }
+  },
+  {
+    "name": "MaureenLawrie",
+    "id": 764921404,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/maureen_lawrie"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 764921404
+      }
+    }
+  },
+  {
+    "name": "MexicoFlag",
+    "id": 224328936,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/mexico_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 224328936
+      }
+    }
+  },
+  {
+    "name": "MichelleReisner",
+    "id": -2083128946,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/michelle_reisner"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2083128946
+      }
+    }
+  },
+  {
+    "name": "MoldaviaFlag",
+    "id": 6217,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/moldavia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6217
+      }
+    }
+  },
+  {
+    "name": "MoroccoFlag",
+    "id": -814801911,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/morocco_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -814801911
+      }
+    }
+  },
+  {
+    "name": "NetherlandsFlag",
+    "id": 1927964361,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/netherlands_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1927964361
+      }
+    }
+  },
+  {
+    "name": "Order",
+    "id": 948065536,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/order"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 948065536
+      }
+    }
+  },
+  {
+    "name": "OskarKhrom",
+    "id": -880569858,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/oskar_khrom"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -880569858
+      }
+    }
+  },
+  {
+    "name": "PakistanFlag",
+    "id": 287575104,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/pakistan_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 287575104
+      }
+    }
+  },
+  {
+    "name": "PirateGirl",
+    "id": 1455996148,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/pirate_girl"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1455996148
+      }
+    }
+  },
+  {
+    "name": "PolandFlag",
+    "id": 1472995923,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/poland_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1472995923
+      }
+    }
+  },
+  {
+    "name": "Professor",
+    "id": -1330873567,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/professor"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1330873567
+      }
+    }
+  },
+  {
+    "name": "Raccoon",
+    "id": 6218,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/raccoon"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6218
+      }
+    }
+  },
+  {
+    "name": "RussiaFlag",
+    "id": 6219,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/russia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6219
+      }
+    }
+  },
+  {
+    "name": "SaudiArabia",
+    "id": 1602513792,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/saudi_arabia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1602513792
+      }
+    }
+  },
+  {
+    "name": "Savage",
+    "id": 6220,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/savage"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6220
+      }
+    }
+  },
+  {
+    "name": "Skeletoninspace",
+    "id": 6221,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/skeletoninspace"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6221
+      }
+    }
+  },
+  {
+    "name": "SlovakiaFlag",
+    "id": 1776630907,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/slovakia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1776630907
+      }
+    }
+  },
+  {
+    "name": "SloveniaFlag",
+    "id": -224755940,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/slovenia_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -224755940
+      }
+    }
+  },
+  {
+    "name": "SpainFlag",
+    "id": 399797680,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/spain_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 399797680
+      }
+    }
+  },
+  {
+    "name": "SpyGirl",
+    "id": 1612159053,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/spy_girl"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1612159053
+      }
+    }
+  },
+  {
+    "name": "Stormtrooper",
+    "id": 6222,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/stormtrooper"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6222
+      }
+    }
+  },
+  {
+    "name": "Swatsoldier",
+    "id": 6223,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/swatsoldier"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6223
+      }
+    }
+  },
+  {
+    "name": "SwedenFlag",
+    "id": 394437137,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/sweden_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 394437137
+      }
+    }
+  },
+  {
+    "name": "Tankist",
+    "id": 6224,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/tankist"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6224
+      }
+    }
+  },
+  {
+    "name": "Tankix",
+    "id": 6225,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/tankix"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6225
+      }
+    }
+  },
+  {
+    "name": "TeresaAmsel",
+    "id": 1657247215,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/teresa_amsel"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1657247215
+      }
+    }
+  },
+  {
+    "name": "ThailandFlag",
+    "id": 187162326,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/thailand_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 187162326
+      }
+    }
+  },
+  {
+    "name": "Troll",
+    "id": 6226,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/troll"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6226
+      }
+    }
+  },
+  {
+    "name": "TurkeyFlag",
+    "id": 893099663,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/turkey_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 893099663
+      }
+    }
+  },
+  {
+    "name": "UkraineFlag",
+    "id": 6227,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/ukraine_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6227
+      }
+    }
+  },
+  {
+    "name": "UsaFlag",
+    "id": 6228,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/usa_flag"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6228
+      }
+    }
+  },
+  {
+    "name": "VeraKlein",
+    "id": -1147853194,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/vera_klein"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1147853194
+      }
+    }
+  },
+  {
+    "name": "Viking",
+    "id": 6229,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/viking"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6229
+      }
+    }
+  },
+  {
+    "name": "VladimirRepin",
+    "id": -480997961,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/vladimir_repin"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -480997961
+      }
+    }
+  },
+  {
+    "name": "Wasp",
+    "id": 6230,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/wasp"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 6230
+      }
+    }
+  },
+  {
+    "name": "YamamotoTsunetomo",
+    "id": 605003762,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/yamamoto_tsunetomo"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 605003762
+      }
+    }
+  }
+]

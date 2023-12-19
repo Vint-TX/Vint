@@ -1,0 +1,1107 @@
+﻿[
+  {
+    "name": "Antaeus1",
+    "id": -891349912,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/antaeus1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -891349912
+      }
+    }
+  },
+  {
+    "name": "Antaeus2018",
+    "id": 1577640270,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/antaeus2018"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1577640270
+      }
+    }
+  },
+  {
+    "name": "Blue",
+    "id": -172609771,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/blue"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172609771
+      }
+    }
+  },
+  {
+    "name": "Carbon",
+    "id": 1644116328,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/carbon"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1644116328
+      }
+    }
+  },
+  {
+    "name": "Ceder",
+    "id": -1055236844,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/ceder"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1055236844
+      }
+    }
+  },
+  {
+    "name": "Champion",
+    "id": 888876452,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/champion"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 888876452
+      }
+    }
+  },
+  {
+    "name": "Coal",
+    "id": -172577710,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/coal"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172577710
+      }
+    }
+  },
+  {
+    "name": "Corrosion",
+    "id": -849655395,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/corrosion"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -849655395
+      }
+    }
+  },
+  {
+    "name": "Desert",
+    "id": 1676472336,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/desert"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1676472336
+      }
+    }
+  },
+  {
+    "name": "Digital",
+    "id": 534589821,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/digital"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 534589821
+      }
+    }
+  },
+  {
+    "name": "Dirt",
+    "id": -172553150,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/dirt"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172553150
+      }
+    }
+  },
+  {
+    "name": "Dragon",
+    "id": 1687943694,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/dragon"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1687943694
+      }
+    }
+  },
+  {
+    "name": "Flame",
+    "id": -1052260392,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/flame"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1052260392
+      }
+    }
+  },
+  {
+    "name": "Flora",
+    "id": -1052246787,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/flora"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1052246787
+      }
+    }
+  },
+  {
+    "name": "Forester",
+    "id": -75661627,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/forester"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -75661627
+      }
+    }
+  },
+  {
+    "name": "Frontier1",
+    "id": 610004612,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/frontier1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 610004612
+      }
+    }
+  },
+  {
+    "name": "Frontier2018",
+    "id": 640844210,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/frontier2018"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 640844210
+      }
+    }
+  },
+  {
+    "name": "Galaxy",
+    "id": -64859568,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/galaxy"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -64859568
+      }
+    }
+  },
+  {
+    "name": "Glacier",
+    "id": -1705840017,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/glacier"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1705840017
+      }
+    }
+  },
+  {
+    "name": "Glina",
+    "id": -1051329156,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/glina"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1051329156
+      }
+    }
+  },
+  {
+    "name": "Gold",
+    "id": -172458213,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/gold"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172458213
+      }
+    }
+  },
+  {
+    "name": "Green",
+    "id": -1051154520,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/green"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1051154520
+      }
+    }
+  },
+  {
+    "name": "Greenskulls",
+    "id": 1953107513,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/greenskulls"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1953107513
+      }
+    }
+  },
+  {
+    "name": "Halloween",
+    "id": -1128248718,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/halloween"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1128248718
+      }
+    }
+  },
+  {
+    "name": "Honeycomb",
+    "id": -784118404,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/honeycomb"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -784118404
+      }
+    }
+  },
+  {
+    "name": "Hvoya",
+    "id": -1050101618,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/hvoya"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1050101618
+      }
+    }
+  },
+  {
+    "name": "Inferno",
+    "id": 819242484,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/inferno"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 819242484
+      }
+    }
+  },
+  {
+    "name": "Izumrud",
+    "id": 372065215,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/izumrud"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 372065215
+      }
+    }
+  },
+  {
+    "name": "Lightblue",
+    "id": 1167717168,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/lightblue"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1167717168
+      }
+    }
+  },
+  {
+    "name": "Marine",
+    "id": 1930414525,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/marine"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1930414525
+      }
+    }
+  },
+  {
+    "name": "Mary",
+    "id": -172292714,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/mary"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172292714
+      }
+    }
+  },
+  {
+    "name": "Matteblack",
+    "id": 1958622537,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/matteblack"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1958622537
+      }
+    }
+  },
+  {
+    "name": "Matteblue",
+    "id": 1448655312,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/matteblue"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1448655312
+      }
+    }
+  },
+  {
+    "name": "Mattegray",
+    "id": 1448809433,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/mattegray"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1448809433
+      }
+    }
+  },
+  {
+    "name": "Mattegreen",
+    "id": 1963422797,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/mattegreen"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1963422797
+      }
+    }
+  },
+  {
+    "name": "Mattenavi",
+    "id": 1449002268,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/mattenavi"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1449002268
+      }
+    }
+  },
+  {
+    "name": "Matteorange",
+    "id": 965487140,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/matteorange"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 965487140
+      }
+    }
+  },
+  {
+    "name": "Mattered",
+    "id": -230348709,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/mattered"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -230348709
+      }
+    }
+  },
+  {
+    "name": "Matterose",
+    "id": 1449134789,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/matterose"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1449134789
+      }
+    }
+  },
+  {
+    "name": "Matteviolet",
+    "id": 1157994613,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/matteviolet"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1157994613
+      }
+    }
+  },
+  {
+    "name": "Mattewhite",
+    "id": 1977905523,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/mattewhite"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1977905523
+      }
+    }
+  },
+  {
+    "name": "Matteyellow",
+    "id": 1240098922,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/matteyellow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1240098922
+      }
+    }
+  },
+  {
+    "name": "May2018_1",
+    "id": -217437764,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/may2018_1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -217437764
+      }
+    }
+  },
+  {
+    "name": "May2018_2",
+    "id": -217437763,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/may2018_2"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -217437763
+      }
+    }
+  },
+  {
+    "name": "Metel",
+    "id": -1045986264,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/metel"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1045986264
+      }
+    }
+  },
+  {
+    "name": "Nefrit",
+    "id": 1962388777,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/nefrit"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1962388777
+      }
+    }
+  },
+  {
+    "name": "Newyearglow",
+    "id": 1273539023,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/newyearglow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1273539023
+      }
+    }
+  },
+  {
+    "name": "Newyearice",
+    "id": -97463799,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/newyearice"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -97463799
+      }
+    }
+  },
+  {
+    "name": "Noise",
+    "id": -1044774977,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/noise"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1044774977
+      }
+    }
+  },
+  {
+    "name": "None",
+    "id": -172249613,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/none"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172249613
+      }
+    }
+  },
+  {
+    "name": "North",
+    "id": -1044766294,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/north"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1044766294
+      }
+    }
+  },
+  {
+    "name": "Orange",
+    "id": 2002870825,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/orange"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2002870825
+      }
+    }
+  },
+  {
+    "name": "Partizan",
+    "id": 645983436,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/partizan"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 645983436
+      }
+    }
+  },
+  {
+    "name": "Patina",
+    "id": 2016361556,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/patina"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2016361556
+      }
+    }
+  },
+  {
+    "name": "Pink",
+    "id": -172195791,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/pink"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172195791
+      }
+    }
+  },
+  {
+    "name": "Polar",
+    "id": -1042925597,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/polar"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1042925597
+      }
+    }
+  },
+  {
+    "name": "Priboy",
+    "id": 2031727040,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/priboy"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2031727040
+      }
+    }
+  },
+  {
+    "name": "Prodigy",
+    "id": -1435376695,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/prodigy"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1435376695
+      }
+    }
+  },
+  {
+    "name": "Radiation",
+    "id": -500584127,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/radiation"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -500584127
+      }
+    }
+  },
+  {
+    "name": "Red",
+    "id": 410089078,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/red"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 410089078
+      }
+    }
+  },
+  {
+    "name": "Rivets",
+    "id": 2081063968,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/rivets"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2081063968
+      }
+    }
+  },
+  {
+    "name": "Rocks",
+    "id": -1041086893,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/rocks"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1041086893
+      }
+    }
+  },
+  {
+    "name": "Rust",
+    "id": -172124513,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/rust"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172124513
+      }
+    }
+  },
+  {
+    "name": "Sandstone",
+    "id": 2014177414,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/sandstone"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2014177414
+      }
+    }
+  },
+  {
+    "name": "Savanna",
+    "id": 746819053,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/savanna"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 746819053
+      }
+    }
+  },
+  {
+    "name": "Smoke",
+    "id": -1040211436,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/smoke"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1040211436
+      }
+    }
+  },
+  {
+    "name": "Sport",
+    "id": -1040121831,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/sport"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1040121831
+      }
+    }
+  },
+  {
+    "name": "Starrysky",
+    "id": -1779740531,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/starrysky"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1779740531
+      }
+    }
+  },
+  {
+    "name": "Steamulatorf",
+    "id": 1408168452,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/steamulatorf"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1408168452
+      }
+    }
+  },
+  {
+    "name": "Steamulatorsf",
+    "id": 703549557,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/steamulatorsf"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 703549557
+      }
+    }
+  },
+  {
+    "name": "Steel",
+    "id": -1040012688,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/steel"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1040012688
+      }
+    }
+  },
+  {
+    "name": "Stone",
+    "id": -1040002806,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/stone"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1040002806
+      }
+    }
+  },
+  {
+    "name": "Storm",
+    "id": -1040002674,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/storm"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1040002674
+      }
+    }
+  },
+  {
+    "name": "Stvalentine2017",
+    "id": -26936066,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/stvalentine2017"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -26936066
+      }
+    }
+  },
+  {
+    "name": "Swamp",
+    "id": -1039926907,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/swamp"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1039926907
+      }
+    }
+  },
+  {
+    "name": "Taiga",
+    "id": -1039651301,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/taiga"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1039651301
+      }
+    }
+  },
+  {
+    "name": "Tar",
+    "id": 410090890,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/tar"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 410090890
+      }
+    }
+  },
+  {
+    "name": "Tina",
+    "id": -172076637,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/tina"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -172076637
+      }
+    }
+  },
+  {
+    "name": "Trianglecamo",
+    "id": -2097840184,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/trianglecamo"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2097840184
+      }
+    }
+  },
+  {
+    "name": "Tundra",
+    "id": -2145802143,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/tundra"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2145802143
+      }
+    }
+  },
+  {
+    "name": "Universe",
+    "id": 176253763,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/universe"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 176253763
+      }
+    }
+  },
+  {
+    "name": "Urban",
+    "id": -1038228233,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/urban"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1038228233
+      }
+    }
+  },
+  {
+    "name": "Vostok1",
+    "id": -487032800,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/vostok1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -487032800
+      }
+    }
+  },
+  {
+    "name": "Walker",
+    "id": -2078438351,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/walker"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2078438351
+      }
+    }
+  },
+  {
+    "name": "Yellow",
+    "id": 454169524,
+    "template": [
+      "WeaponPaintMarketItemTemplate",
+      "garage/cover/yellow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 454169524
+      }
+    }
+  }
+]

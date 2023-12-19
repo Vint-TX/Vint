@@ -1,0 +1,1497 @@
+﻿[
+  {
+    "name": "_23feb2019",
+    "id": 300183087,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/23feb2019"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183087
+      }
+    }
+  },
+  {
+    "name": "_8march19_1",
+    "id": 685548944,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/8march19-1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 685548944
+      }
+    }
+  },
+  {
+    "name": "_8march19_2",
+    "id": 685548945,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/8march19-2"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 685548945
+      }
+    }
+  },
+  {
+    "name": "_8march19_3",
+    "id": 685548946,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/8march19-3"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 685548946
+      }
+    }
+  },
+  {
+    "name": "Anavatan",
+    "id": 231787227,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/anaVatan"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 231787227
+      }
+    }
+  },
+  {
+    "name": "Antaeus1",
+    "id": 1104561449,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/antaeus1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1104561449
+      }
+    }
+  },
+  {
+    "name": "Antaeus2018",
+    "id": 1104561450,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/antaeus2018"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1104561450
+      }
+    }
+  },
+  {
+    "name": "Antarctida",
+    "id": 683803510,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/antarctida"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 683803510
+      }
+    }
+  },
+  {
+    "name": "Arrowsoflove",
+    "id": -400341658,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/arrowsoflove"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -400341658
+      }
+    }
+  },
+  {
+    "name": "Autumnleaves",
+    "id": -662236117,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/autumnleaves"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -662236117
+      }
+    }
+  },
+  {
+    "name": "Bananas",
+    "id": -574655849,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/bananas"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -574655849
+      }
+    }
+  },
+  {
+    "name": "Beginning",
+    "id": -1500327034,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/beginning"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1500327034
+      }
+    }
+  },
+  {
+    "name": "Birthday2017",
+    "id": 776075330,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/birthday2017"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 776075330
+      }
+    }
+  },
+  {
+    "name": "Blackroger",
+    "id": 2008328619,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/blackroger"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2008328619
+      }
+    }
+  },
+  {
+    "name": "Blue",
+    "id": 137747283,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/blue"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 137747283
+      }
+    }
+  },
+  {
+    "name": "Bluemagma",
+    "id": 436923060,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/bluemagma"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 436923060
+      }
+    }
+  },
+  {
+    "name": "Canyon",
+    "id": 214261055,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/canyon"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 214261055
+      }
+    }
+  },
+  {
+    "name": "Carbon",
+    "id": 214261056,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/carbon"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 214261056
+      }
+    }
+  },
+  {
+    "name": "Ceder",
+    "id": -24102762,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/ceder"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -24102762
+      }
+    }
+  },
+  {
+    "name": "Champion",
+    "id": 1798212322,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/champion"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1798212322
+      }
+    }
+  },
+  {
+    "name": "Coal",
+    "id": 920905258,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/coal"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 920905258
+      }
+    }
+  },
+  {
+    "name": "Corrosion",
+    "id": 1569952799,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/corrosion"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1569952799
+      }
+    }
+  },
+  {
+    "name": "Desert",
+    "id": -718109490,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/desert"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -718109490
+      }
+    }
+  },
+  {
+    "name": "Digital",
+    "id": -683002753,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/digital"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -683002753
+      }
+    }
+  },
+  {
+    "name": "Dirt",
+    "id": 137803904,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/dirt"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 137803904
+      }
+    }
+  },
+  {
+    "name": "Dragon",
+    "id": -706638132,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/dragon"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -706638132
+      }
+    }
+  },
+  {
+    "name": "Easternstar",
+    "id": 1717585789,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/easternstar"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1717585789
+      }
+    }
+  },
+  {
+    "name": "Epicgold",
+    "id": -892221448,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/epicgold"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -892221448
+      }
+    }
+  },
+  {
+    "name": "Flame",
+    "id": -1514026752,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/flame"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1514026752
+      }
+    }
+  },
+  {
+    "name": "Flora",
+    "id": -21112705,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/flora"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -21112705
+      }
+    }
+  },
+  {
+    "name": "Football",
+    "id": 761115110,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/football"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 761115110
+      }
+    }
+  },
+  {
+    "name": "Forester",
+    "id": 833674243,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/forester"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 833674243
+      }
+    }
+  },
+  {
+    "name": "Freedom",
+    "id": 1347685821,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/freedom"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1347685821
+      }
+    }
+  },
+  {
+    "name": "Frontier1",
+    "id": -1396691349,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/frontier1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1396691349
+      }
+    }
+  },
+  {
+    "name": "Frontier2018",
+    "id": -1396691350,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/frontier2018"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1396691350
+      }
+    }
+  },
+  {
+    "name": "Galaxy",
+    "id": -636128311,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/galaxy"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -636128311
+      }
+    }
+  },
+  {
+    "name": "Glacier",
+    "id": 526265313,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/glacier"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 526265313
+      }
+    }
+  },
+  {
+    "name": "Glina",
+    "id": -20195074,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/glina"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -20195074
+      }
+    }
+  },
+  {
+    "name": "Gold",
+    "id": 921024755,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/gold"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 921024755
+      }
+    }
+  },
+  {
+    "name": "Green",
+    "id": -20020438,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/green"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -20020438
+      }
+    }
+  },
+  {
+    "name": "Greenskulls",
+    "id": 97943767,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/greenskulls"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 97943767
+      }
+    }
+  },
+  {
+    "name": "Halloween",
+    "id": 721518013,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/halloween"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 721518013
+      }
+    }
+  },
+  {
+    "name": "Halloween2017",
+    "id": 1218811098,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/halloween2017"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1218811098
+      }
+    }
+  },
+  {
+    "name": "Hero",
+    "id": 137919219,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/hero"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 137919219
+      }
+    }
+  },
+  {
+    "name": "Honeycomb",
+    "id": 1023813172,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/honeycomb"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1023813172
+      }
+    }
+  },
+  {
+    "name": "Hvoya",
+    "id": -18967536,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/hvoya"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -18967536
+      }
+    }
+  },
+  {
+    "name": "Hydra",
+    "id": -887676103,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/hydra"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -887676103
+      }
+    }
+  },
+  {
+    "name": "Inferno",
+    "id": -398350090,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/inferno"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -398350090
+      }
+    }
+  },
+  {
+    "name": "League_bronze",
+    "id": 1185540727,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/league_bronze"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1185540727
+      }
+    }
+  },
+  {
+    "name": "League_gold",
+    "id": -1245546371,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/league_gold"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1245546371
+      }
+    }
+  },
+  {
+    "name": "League_master",
+    "id": -317558887,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/league_master"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -317558887
+      }
+    }
+  },
+  {
+    "name": "League_silver",
+    "id": 1663842282,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/league_silver"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1663842282
+      }
+    }
+  },
+  {
+    "name": "Marine",
+    "id": -464167301,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/marine"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -464167301
+      }
+    }
+  },
+  {
+    "name": "Mary",
+    "id": 138064340,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mary"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 138064340
+      }
+    }
+  },
+  {
+    "name": "Matteblack",
+    "id": -646190818,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/matteblack"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -646190818
+      }
+    }
+  },
+  {
+    "name": "Matteblue",
+    "id": -436467641,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/matteblue"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -436467641
+      }
+    }
+  },
+  {
+    "name": "Mattegray",
+    "id": -431689890,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mattegray"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -431689890
+      }
+    }
+  },
+  {
+    "name": "Mattegreen",
+    "id": -497382758,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mattegreen"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -497382758
+      }
+    }
+  },
+  {
+    "name": "Mattenavi",
+    "id": -425712005,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mattenavi"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -425712005
+      }
+    }
+  },
+  {
+    "name": "Matteorange",
+    "id": 267667571,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/matteorange"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 267667571
+      }
+    }
+  },
+  {
+    "name": "Mattered",
+    "id": -1260536244,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mattered"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1260536244
+      }
+    }
+  },
+  {
+    "name": "Matterose",
+    "id": -421603854,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/matterose"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -421603854
+      }
+    }
+  },
+  {
+    "name": "Matteviolet",
+    "id": 1940431938,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/matteviolet"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1940431938
+      }
+    }
+  },
+  {
+    "name": "Mattewhite",
+    "id": -48418252,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mattewhite"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -48418252
+      }
+    }
+  },
+  {
+    "name": "Matteyellow",
+    "id": 190698221,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/matteyellow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 190698221
+      }
+    }
+  },
+  {
+    "name": "May2018_1",
+    "id": 2070833571,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/may2018_1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2070833571
+      }
+    }
+  },
+  {
+    "name": "May2018_2",
+    "id": 2070833572,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/may2018_2"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 2070833572
+      }
+    }
+  },
+  {
+    "name": "Metel",
+    "id": -14852182,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/metel"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -14852182
+      }
+    }
+  },
+  {
+    "name": "Military",
+    "id": -1660396512,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/military"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1660396512
+      }
+    }
+  },
+  {
+    "name": "Mosaic",
+    "id": -451216061,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/mosaic"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -451216061
+      }
+    }
+  },
+  {
+    "name": "Moscow",
+    "id": -1878474135,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/moscow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1878474135
+      }
+    }
+  },
+  {
+    "name": "Nefrit",
+    "id": 532533505,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/nefrit"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 532533505
+      }
+    }
+  },
+  {
+    "name": "Newyearglow",
+    "id": -1760088841,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/newyearglow"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1760088841
+      }
+    }
+  },
+  {
+    "name": "Newyearice",
+    "id": -888059423,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/newyearice"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -888059423
+      }
+    }
+  },
+  {
+    "name": "Noise",
+    "id": -1506541337,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/noise"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1506541337
+      }
+    }
+  },
+  {
+    "name": "North",
+    "id": -1506532654,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/north"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1506532654
+      }
+    }
+  },
+  {
+    "name": "Orange",
+    "id": -391711001,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/orange"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -391711001
+      }
+    }
+  },
+  {
+    "name": "Orion",
+    "id": -12628116,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/orion"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -12628116
+      }
+    }
+  },
+  {
+    "name": "Partizan",
+    "id": 1555319306,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/partizan"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1555319306
+      }
+    }
+  },
+  {
+    "name": "Patina",
+    "id": -1079898253,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/patina"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1079898253
+      }
+    }
+  },
+  {
+    "name": "Pink",
+    "id": 921287177,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/pink"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 921287177
+      }
+    }
+  },
+  {
+    "name": "Polar",
+    "id": -1504691957,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/polar"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1504691957
+      }
+    }
+  },
+  {
+    "name": "Priboy",
+    "id": -362854786,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/priboy"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -362854786
+      }
+    }
+  },
+  {
+    "name": "Prodigy",
+    "id": 1641998027,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/prodigy"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1641998027
+      }
+    }
+  },
+  {
+    "name": "Radiation",
+    "id": 1223441167,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/radiation"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1223441167
+      }
+    }
+  },
+  {
+    "name": "Red",
+    "id": 558647928,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/red"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 558647928
+      }
+    }
+  },
+  {
+    "name": "Redamber",
+    "id": 1784687185,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/redamber"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1784687185
+      }
+    }
+  },
+  {
+    "name": "Rivets",
+    "id": 925876519,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/rivets"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 925876519
+      }
+    }
+  },
+  {
+    "name": "Rocks",
+    "id": -9952811,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/rocks"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -9952811
+      }
+    }
+  },
+  {
+    "name": "Rust",
+    "id": 276536681,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/rust"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 276536681
+      }
+    }
+  },
+  {
+    "name": "Sandstone",
+    "id": 138818312,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/sandstone"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 138818312
+      }
+    }
+  },
+  {
+    "name": "Savanna",
+    "id": -470773521,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/savanna"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -470773521
+      }
+    }
+  },
+  {
+    "name": "Smoke",
+    "id": -9077354,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/smoke"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -9077354
+      }
+    }
+  },
+  {
+    "name": "Spectre",
+    "id": -56970637,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/spectre"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -56970637
+      }
+    }
+  },
+  {
+    "name": "Spiderweb",
+    "id": 355636982,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/spiderweb"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 355636982
+      }
+    }
+  },
+  {
+    "name": "Sport",
+    "id": -1207082244,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/sport"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1207082244
+      }
+    }
+  },
+  {
+    "name": "Starrysky",
+    "id": -1732490966,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/starrysky"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1732490966
+      }
+    }
+  },
+  {
+    "name": "Steamulatorf",
+    "id": 1880146981,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/steamulatorf"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1880146981
+      }
+    }
+  },
+  {
+    "name": "Steamulatorsf",
+    "id": -1844971488,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/steamulatorsf"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1844971488
+      }
+    }
+  },
+  {
+    "name": "Steel",
+    "id": -1501779048,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/steel"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1501779048
+      }
+    }
+  },
+  {
+    "name": "Stone",
+    "id": -1756632159,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/stone"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1756632159
+      }
+    }
+  },
+  {
+    "name": "Storm",
+    "id": -8868592,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/storm"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -8868592
+      }
+    }
+  },
+  {
+    "name": "Stvalentine2017",
+    "id": 986557478,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/stvalentine2017"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 986557478
+      }
+    }
+  },
+  {
+    "name": "Summer",
+    "id": -274067352,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/summer"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -274067352
+      }
+    }
+  },
+  {
+    "name": "Swamp",
+    "id": -8792825,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/swamp"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -8792825
+      }
+    }
+  },
+  {
+    "name": "Taiga",
+    "id": -8517219,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/taiga"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -8517219
+      }
+    }
+  },
+  {
+    "name": "Tar",
+    "id": -1209537658,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/tar"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1209537658
+      }
+    }
+  },
+  {
+    "name": "Tina",
+    "id": 138280417,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/tina"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 138280417
+      }
+    }
+  },
+  {
+    "name": "Trianglecamo",
+    "id": -1902859834,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/trianglecamo"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1902859834
+      }
+    }
+  },
+  {
+    "name": "Trollface",
+    "id": 1546602523,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/trollface"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1546602523
+      }
+    }
+  },
+  {
+    "name": "Tundra",
+    "id": -245416673,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/tundra"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -245416673
+      }
+    }
+  },
+  {
+    "name": "Universe",
+    "id": 942805628,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/universe"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 942805628
+      }
+    }
+  },
+  {
+    "name": "Urban",
+    "id": -7094151,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/urban"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -7094151
+      }
+    }
+  },
+  {
+    "name": "Vostok1",
+    "id": -2023428617,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/vostok1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -2023428617
+      }
+    }
+  },
+  {
+    "name": "Walker",
+    "id": -50932577,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/walker"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -50932577
+      }
+    }
+  }
+]

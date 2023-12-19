@@ -1,0 +1,1357 @@
+﻿[
+  {
+    "name": "FlamethrowerDreadnought",
+    "id": 602602131,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/Dreadnought"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 602602131
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerM0",
+    "id": 2078566312,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 2078566312
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "FlamethrowerM1",
+    "id": 2078566313,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 2078566313
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerM1gold",
+    "id": 1491390890,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 1491390890
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerM1steel",
+    "id": -1000298047,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": -1000298047
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerM2",
+    "id": 1045726795,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 1045726795
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerM2flame",
+    "id": -983916600,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/flamethrower/m2flame"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": -983916600
+      }
+    }
+  },
+  {
+    "name": "FreezeM0",
+    "id": -472765007,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/freeze/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": -472765007
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "FreezeM1",
+    "id": -472765006,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/freeze/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": -472765006
+      }
+    }
+  },
+  {
+    "name": "FreezeM1gold",
+    "id": -362162189,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/freeze/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": -362162189
+      }
+    }
+  },
+  {
+    "name": "FreezeM1steel",
+    "id": 1669098648,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/freeze/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": 1669098648
+      }
+    }
+  },
+  {
+    "name": "FreezeM2",
+    "id": 237598868,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/freeze/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": 237598868
+      }
+    }
+  },
+  {
+    "name": "FreezeXmas",
+    "id": 139596834,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/freeze/xmas"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": 139596834
+      }
+    }
+  },
+  {
+    "name": "HammerCry",
+    "id": 283356827,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/cry"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 283356827
+      }
+    }
+  },
+  {
+    "name": "HammerCrydischarge",
+    "id": -350323544,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/crydischarge"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": -350323544
+      }
+    }
+  },
+  {
+    "name": "HammerCryglow",
+    "id": -350323543,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/cryglow"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": -350323543
+      }
+    }
+  },
+  {
+    "name": "HammerCryrage",
+    "id": -350323545,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/cryrage"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": -350323545
+      }
+    }
+  },
+  {
+    "name": "HammerM0",
+    "id": -635589854,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": -635589854
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "HammerM1",
+    "id": -635589853,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": -635589853
+      }
+    }
+  },
+  {
+    "name": "HammerM1gold",
+    "id": -1427688220,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": -1427688220
+      }
+    }
+  },
+  {
+    "name": "HammerM1steel",
+    "id": 2039676487,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 2039676487
+      }
+    }
+  },
+  {
+    "name": "HammerM2",
+    "id": 1076729477,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/hammer/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 1076729477
+      }
+    }
+  },
+  {
+    "name": "Isis8march2017",
+    "id": -305773183,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/isis/8march2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": -305773183
+      }
+    }
+  },
+  {
+    "name": "IsisM0",
+    "id": -746649388,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/isis/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": -746649388
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "IsisM1",
+    "id": -746649387,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/isis/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": -746649387
+      }
+    }
+  },
+  {
+    "name": "IsisM1gold",
+    "id": -1704481322,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/isis/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": -1704481322
+      }
+    }
+  },
+  {
+    "name": "IsisM1steel",
+    "id": -691629355,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/isis/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": -691629355
+      }
+    }
+  },
+  {
+    "name": "IsisM2",
+    "id": 765745271,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/isis/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": 765745271
+      }
+    }
+  },
+  {
+    "name": "RailgunM0",
+    "id": 599453582,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 599453582
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "RailgunM1",
+    "id": 599453583,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 599453583
+      }
+    }
+  },
+  {
+    "name": "RailgunM1gold",
+    "id": -1704191570,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -1704191570
+      }
+    }
+  },
+  {
+    "name": "RailgunM1steel",
+    "id": -59670077,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -59670077
+      }
+    }
+  },
+  {
+    "name": "RailgunM2",
+    "id": 599479587,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 599479587
+      }
+    }
+  },
+  {
+    "name": "RailgunM2tsk",
+    "id": 254111980,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/m2tsk"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 254111980
+      }
+    }
+  },
+  {
+    "name": "RailgunMay2017",
+    "id": 98615071,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/may2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 98615071
+      }
+    }
+  },
+  {
+    "name": "RailgunXt",
+    "id": 593679593,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 593679593
+      }
+    }
+  },
+  {
+    "name": "RailgunXt_thor",
+    "id": 1793185296,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/railgun/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 1793185296
+      }
+    }
+  },
+  {
+    "name": "RicochetFrontierzero",
+    "id": 1077283204,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/ricochet/frontierzero"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": 1077283204
+      }
+    }
+  },
+  {
+    "name": "RicochetM0",
+    "id": -909167727,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/ricochet/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -909167727
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "RicochetM1",
+    "id": -909167726,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/ricochet/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -909167726
+      }
+    }
+  },
+  {
+    "name": "RicochetM1gold",
+    "id": -475547245,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/ricochet/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -475547245
+      }
+    }
+  },
+  {
+    "name": "RicochetM1steel",
+    "id": -1849888712,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/ricochet/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -1849888712
+      }
+    }
+  },
+  {
+    "name": "RicochetM2",
+    "id": -342766924,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/ricochet/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -342766924
+      }
+    }
+  },
+  {
+    "name": "ShaftM0",
+    "id": 1460259970,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/shaft/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": 1460259970
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "ShaftM1",
+    "id": 1460259971,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/shaft/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": 1460259971
+      }
+    }
+  },
+  {
+    "name": "ShaftM1gold",
+    "id": 54173794,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/shaft/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": 54173794
+      }
+    }
+  },
+  {
+    "name": "ShaftM1steel",
+    "id": -445855153,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/shaft/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": -445855153
+      }
+    }
+  },
+  {
+    "name": "ShaftM2",
+    "id": 1099854083,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/shaft/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": 1099854083
+      }
+    }
+  },
+  {
+    "name": "ShaftT2",
+    "id": 1099854300,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/shaft/t2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": 1099854300
+      }
+    }
+  },
+  {
+    "name": "Smoky23february2017",
+    "id": -1141123658,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/23february2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -1141123658
+      }
+    }
+  },
+  {
+    "name": "SmokyM0",
+    "id": 2008385753,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 2008385753
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "SmokyM1",
+    "id": 2008385754,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 2008385754
+      }
+    }
+  },
+  {
+    "name": "SmokyM1gold",
+    "id": 2004785941,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 2004785941
+      }
+    }
+  },
+  {
+    "name": "SmokyM1steel",
+    "id": -617862056,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -617862056
+      }
+    }
+  },
+  {
+    "name": "SmokyM2",
+    "id": 1647979866,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 1647979866
+      }
+    }
+  },
+  {
+    "name": "SmokyMay2017",
+    "id": -1398640396,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/may2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -1398640396
+      }
+    }
+  },
+  {
+    "name": "SmokyXt",
+    "id": 1647980273,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 1647980273
+      }
+    }
+  },
+  {
+    "name": "SmokyXt_thor",
+    "id": 295929829,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/smoky/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 295929829
+      }
+    }
+  },
+  {
+    "name": "ThunderDreadnought",
+    "id": 1770762539,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/dreadnought"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1770762539
+      }
+    }
+  },
+  {
+    "name": "ThunderM0",
+    "id": 1552497496,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1552497496
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "ThunderM1",
+    "id": 1552497497,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1552497497
+      }
+    }
+  },
+  {
+    "name": "ThunderM1gold",
+    "id": -398757768,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": -398757768
+      }
+    }
+  },
+  {
+    "name": "ThunderM1steel",
+    "id": 1754072121,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1754072121
+      }
+    }
+  },
+  {
+    "name": "ThunderM2",
+    "id": 2097643731,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 2097643731
+      }
+    }
+  },
+  {
+    "name": "ThunderMay2017",
+    "id": 1912357269,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/may2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1912357269
+      }
+    }
+  },
+  {
+    "name": "ThunderXt",
+    "id": 2097644138,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 2097644138
+      }
+    }
+  },
+  {
+    "name": "ThunderXt_thor",
+    "id": -688039802,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/thunder/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": -688039802
+      }
+    }
+  },
+  {
+    "name": "TwinsM0",
+    "id": 1468232592,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": 1468232592
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "TwinsM1",
+    "id": 274558103,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": 274558103
+      }
+    }
+  },
+  {
+    "name": "TwinsM1gold",
+    "id": -1595894991,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -1595894991
+      }
+    }
+  },
+  {
+    "name": "TwinsM1steel",
+    "id": -58379936,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -58379936
+      }
+    }
+  },
+  {
+    "name": "TwinsM2",
+    "id": -788257966,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -788257966
+      }
+    }
+  },
+  {
+    "name": "TwinsSteam",
+    "id": -1959015927,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/steam"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -1959015927
+      }
+    }
+  },
+  {
+    "name": "TwinsXt",
+    "id": -788257559,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -788257559
+      }
+    }
+  },
+  {
+    "name": "TwinsXt_thor",
+    "id": 855411949,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/twins/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": 855411949
+      }
+    }
+  },
+  {
+    "name": "VulcanCry",
+    "id": -388976915,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/cry"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -388976915
+      }
+    }
+  },
+  {
+    "name": "VulcanCrydischarge",
+    "id": -785177863,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/crydischarge"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -785177863
+      }
+    }
+  },
+  {
+    "name": "VulcanCryglow",
+    "id": -1559746012,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/cryglow"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -1559746012
+      }
+    }
+  },
+  {
+    "name": "VulcanCryrage",
+    "id": -1560119161,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/cryrage"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -1560119161
+      }
+    }
+  },
+  {
+    "name": "VulcanM0",
+    "id": -851288667,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -851288667
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "VulcanM1",
+    "id": -851288666,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -851288666
+      }
+    }
+  },
+  {
+    "name": "VulcanM1gold",
+    "id": 1066986983,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": 1066986983
+      }
+    }
+  },
+  {
+    "name": "VulcanM1steel",
+    "id": 2065196452,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": 2065196452
+      }
+    }
+  },
+  {
+    "name": "VulcanM2",
+    "id": -140924792,
+    "template": [
+      "WeaponSkinMarketItemTemplate",
+      "garage/skin/weapon/vulcan/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -140924792
+      }
+    }
+  }
+]

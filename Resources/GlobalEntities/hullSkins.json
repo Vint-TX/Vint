@@ -1,0 +1,1097 @@
+﻿[
+  {
+    "name": "DictatorDreadnought",
+    "id": 732611697,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/dreadnought"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": 732611697
+      }
+    }
+  },
+  {
+    "name": "DictatorM0",
+    "id": -1555682652,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": -1555682652
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "DictatorM1",
+    "id": -1555682651,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": -1555682651
+      }
+    }
+  },
+  {
+    "name": "DictatorM1gold",
+    "id": -767847828,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": -767847828
+      }
+    }
+  },
+  {
+    "name": "DictatorM1steel",
+    "id": -1626035585,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": -1626035585
+      }
+    }
+  },
+  {
+    "name": "DictatorM2",
+    "id": 783713997,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": 783713997
+      }
+    }
+  },
+  {
+    "name": "DictatorM2flame",
+    "id": 1994127174,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/dictator/m2flame"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": 1994127174
+      }
+    }
+  },
+  {
+    "name": "HornetCry",
+    "id": 1765925144,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/cry"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": 1765925144
+      }
+    }
+  },
+  {
+    "name": "HornetCrydischarge",
+    "id": -955210933,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/crydischarge"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -955210933
+      }
+    }
+  },
+  {
+    "name": "HornetCryglow",
+    "id": -955210932,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/cryglow"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -955210932
+      }
+    }
+  },
+  {
+    "name": "HornetCryrage",
+    "id": -955210934,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/cryrage"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -955210934
+      }
+    }
+  },
+  {
+    "name": "HornetM0",
+    "id": -1194388226,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -1194388226
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "HornetM1",
+    "id": -1194388225,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -1194388225
+      }
+    }
+  },
+  {
+    "name": "HornetM1gold",
+    "id": 679021958,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": 679021958
+      }
+    }
+  },
+  {
+    "name": "HornetM1steel",
+    "id": -378883611,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -378883611
+      }
+    }
+  },
+  {
+    "name": "HornetM2",
+    "id": -1992749017,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -1992749017
+      }
+    }
+  },
+  {
+    "name": "HornetMay2017",
+    "id": 963790407,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/may2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": 963790407
+      }
+    }
+  },
+  {
+    "name": "HornetT0",
+    "id": -47777666,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/t0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -47777666
+      }
+    }
+  },
+  {
+    "name": "HornetT0gold",
+    "id": -1475671586,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/t0gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -1475671586
+      }
+    }
+  },
+  {
+    "name": "HornetXt",
+    "id": -47777474,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -47777474
+      }
+    }
+  },
+  {
+    "name": "HornetXt_thor",
+    "id": -1636606664,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hornet/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": -1636606664
+      }
+    }
+  },
+  {
+    "name": "Hunter23february2017",
+    "id": 247232443,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/23february2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 247232443
+      }
+    }
+  },
+  {
+    "name": "HunterM0",
+    "id": 1589207088,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 1589207088
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "HunterM1",
+    "id": 1589207089,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 1589207089
+      }
+    }
+  },
+  {
+    "name": "HunterM1gold",
+    "id": -318345288,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": -318345288
+      }
+    }
+  },
+  {
+    "name": "HunterM1steel",
+    "id": -1267544717,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": -1267544717
+      }
+    }
+  },
+  {
+    "name": "HunterM2",
+    "id": 1589207091,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 1589207091
+      }
+    }
+  },
+  {
+    "name": "HunterMay2017",
+    "id": 110176853,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/may2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 110176853
+      }
+    }
+  },
+  {
+    "name": "HunterXt",
+    "id": 790846704,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 790846704
+      }
+    }
+  },
+  {
+    "name": "HunterXt_thor",
+    "id": 1804747078,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/hunter/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 1804747078
+      }
+    }
+  },
+  {
+    "name": "MammothM0",
+    "id": -543026971,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/mammoth/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": -543026971
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "MammothM1",
+    "id": -543026970,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/mammoth/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": -543026970
+      }
+    }
+  },
+  {
+    "name": "MammothM1gold",
+    "id": -920939649,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/mammoth/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": -920939649
+      }
+    }
+  },
+  {
+    "name": "MammothM1steel",
+    "id": -833500654,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/mammoth/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": -833500654
+      }
+    }
+  },
+  {
+    "name": "MammothM2",
+    "id": -543026935,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/mammoth/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": -543026935
+      }
+    }
+  },
+  {
+    "name": "MammothSteam",
+    "id": 677046075,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/mammoth/steam"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": 677046075
+      }
+    }
+  },
+  {
+    "name": "TitanFrontierzero",
+    "id": 1470436461,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/frontierzero"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": 1470436461
+      }
+    }
+  },
+  {
+    "name": "TitanM0",
+    "id": -1584239704,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -1584239704
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "TitanM1",
+    "id": -1584239703,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -1584239703
+      }
+    }
+  },
+  {
+    "name": "TitanM1gold",
+    "id": -754659582,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -754659582
+      }
+    }
+  },
+  {
+    "name": "TitanM1steel",
+    "id": -133498961,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -133498961
+      }
+    }
+  },
+  {
+    "name": "TitanM2",
+    "id": -1584239766,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -1584239766
+      }
+    }
+  },
+  {
+    "name": "TitanM2tsk",
+    "id": -651639290,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/m2tsk"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -651639290
+      }
+    }
+  },
+  {
+    "name": "TitanXt",
+    "id": 1576595770,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": 1576595770
+      }
+    }
+  },
+  {
+    "name": "TitanXt_thor",
+    "id": 1163905852,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/titan/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": 1163905852
+      }
+    }
+  },
+  {
+    "name": "VikingCry",
+    "id": -1353746752,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/cry"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -1353746752
+      }
+    }
+  },
+  {
+    "name": "VikingCrydischarge",
+    "id": -1363672965,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/crydischarge"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -1363672965
+      }
+    }
+  },
+  {
+    "name": "VikingCryglow",
+    "id": -110402718,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/cryglow"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -110402718
+      }
+    }
+  },
+  {
+    "name": "VikingCryrage",
+    "id": -110775867,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/cryrage"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -110775867
+      }
+    }
+  },
+  {
+    "name": "VikingM0",
+    "id": -353686874,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -353686874
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "VikingM1",
+    "id": -353686873,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -353686873
+      }
+    }
+  },
+  {
+    "name": "VikingM1gold",
+    "id": 499257134,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": 499257134
+      }
+    }
+  },
+  {
+    "name": "VikingM1steel",
+    "id": -1656625859,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -1656625859
+      }
+    }
+  },
+  {
+    "name": "VikingM2",
+    "id": 792923471,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": 792923471
+      }
+    }
+  },
+  {
+    "name": "VikingMay2017",
+    "id": -313951841,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/may2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -313951841
+      }
+    }
+  },
+  {
+    "name": "VikingT2",
+    "id": -1152047448,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/t2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": -1152047448
+      }
+    }
+  },
+  {
+    "name": "VikingXt",
+    "id": 792923878,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": 792923878
+      }
+    }
+  },
+  {
+    "name": "VikingXt_thor",
+    "id": 1380618384,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/viking/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": 1380618384
+      }
+    }
+  },
+  {
+    "name": "Wasp8march2017",
+    "id": -1648311780,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/8march2017"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1648311780
+      }
+    }
+  },
+  {
+    "name": "WaspDreadnought",
+    "id": -2009337684,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/Dreadnought"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -2009337684
+      }
+    }
+  },
+  {
+    "name": "WaspM0",
+    "id": -1774581975,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/m0"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1774581975
+      },
+      "DefaultSkinItemComponent": {}
+    }
+  },
+  {
+    "name": "WaspM1",
+    "id": -1774581974,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/m1"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1774581974
+      }
+    }
+  },
+  {
+    "name": "WaspM1gold",
+    "id": -1774441975,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/m1gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1774441975
+      }
+    }
+  },
+  {
+    "name": "WaspM1steel",
+    "id": -1555805158,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/m1steel"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1555805158
+      }
+    }
+  },
+  {
+    "name": "WaspM2",
+    "id": -10051566,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/m2"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -10051566
+      }
+    }
+  },
+  {
+    "name": "WaspXmas",
+    "id": 72041592,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/xmas"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": 72041592
+      }
+    }
+  },
+  {
+    "name": "WaspXt",
+    "id": -1129770519,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/xt"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1129770519
+      }
+    }
+  },
+  {
+    "name": "WaspXt_thor",
+    "id": -1838544851,
+    "template": [
+      "HullSkinMarketItemTemplate",
+      "garage/skin/tank/wasp/xt_thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": -1838544851
+      }
+    }
+  }
+]

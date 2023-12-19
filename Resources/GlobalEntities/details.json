@@ -1,0 +1,41 @@
+﻿[
+  {
+    "name": "Gold",
+    "id": 215382134,
+    "template": [
+      "DetailMarketItemTemplate",
+      "garage/detail/gold"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 215382134
+      }
+    }
+  },
+  {
+    "name": "Rubber",
+    "id": 1143965766,
+    "template": [
+      "DetailMarketItemTemplate",
+      "garage/detail/rubber"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1143965766
+      }
+    }
+  },
+  {
+    "name": "Xt",
+    "id": -53406574,
+    "template": [
+      "DetailMarketItemTemplate",
+      "garage/detail/xt"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -53406574
+      }
+    }
+  }
+]

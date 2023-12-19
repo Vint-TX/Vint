@@ -1,0 +1,114 @@
+﻿[
+  {
+    "name": "Dictator",
+    "id": 655588521,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/dictator"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 655588521
+      },
+      "MarketItemGroupComponent": {
+        "key": 655588521
+      }
+    }
+  },
+  {
+    "name": "Hornet",
+    "id": 532353871,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/hornet"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 532353871
+      },
+      "MarketItemGroupComponent": {
+        "key": 532353871
+      }
+    }
+  },
+  {
+    "name": "Hunter",
+    "id": 537781597,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/hunter"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 537781597
+      },
+      "MarketItemGroupComponent": {
+        "key": 537781597
+      }
+    }
+  },
+  {
+    "name": "Mammoth",
+    "id": -939793870,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/mammoth"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -939793870
+      },
+      "MarketItemGroupComponent": {
+        "key": -939793870
+      }
+    }
+  },
+  {
+    "name": "Titan",
+    "id": -803206257,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/titan"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -803206257
+      },
+      "MarketItemGroupComponent": {
+        "key": -803206257
+      }
+    }
+  },
+  {
+    "name": "Viking",
+    "id": 927407783,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/viking"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 927407783
+      },
+      "MarketItemGroupComponent": {
+        "key": 927407783
+      }
+    }
+  },
+  {
+    "name": "Wasp",
+    "id": 1913834436,
+    "template": [
+      "TankMarketItemTemplate",
+      "garage/tank/wasp"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1913834436
+      },
+      "MarketItemGroupComponent": {
+        "key": 1913834436
+      }
+    }
+  }
+]

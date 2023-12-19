@@ -9,8 +9,8 @@ public class EntityBuilder(
     public EntityBuilder() : this(EntityRegistry.FreeId) { }
 
     public long Id => id;
-    public TemplateAccessor? TemplateAccessor { get; set; }
-    public HashSet<IComponent> Components { get; } = new();
+    public TemplateAccessor? TemplateAccessor { get; private set; }
+    public HashSet<IComponent> Components { get; } = [];
 
     public IEntityBuilder WithTemplateAccessor(TemplateAccessor templateAccessor) {
         TemplateAccessor = templateAccessor;
