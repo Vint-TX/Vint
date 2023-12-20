@@ -3,4 +3,6 @@
 namespace Vint.Core.ECS.Templates.Avatar;
 
 [ProtocolId(1544694405895)]
-public class AvatarMarketItemTemplate : EntityTemplate;
+public class AvatarMarketItemTemplate : MarketEntityTemplate {
+    public override UserEntityTemplate UserTemplate => new AvatarUserItemTemplate();
+}

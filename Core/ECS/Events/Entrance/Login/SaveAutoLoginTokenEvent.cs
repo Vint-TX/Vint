@@ -7,6 +7,7 @@ public class SaveAutoLoginTokenEvent(
     string username,
     byte[] token
 ) : IEvent {
-    [ProtocolName("uid")] public string Username => username;
+    [ProtocolName("uid")]
+    public string Username => username;
     public byte[] Token => token;
 }

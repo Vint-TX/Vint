@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using NetCoreServer;
@@ -26,6 +25,9 @@ public interface IPlayerConnection {
     public Player Player { get; set; }
     public IEntity User { get; }
     public IEntity ClientSession { get; }
+    public List<IEntity> SharedEntities { get; }
+
+    public Dictionary<string, List<IEntity>> UserEntities { get; }
 
     public void Register(
         string username,
@@ -54,21 +56,13 @@ public interface IPlayerConnection {
 }
 
 public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
-    BlockingCollection<byte[]> ReceivedPackets { get; } = new();
-    BlockingCollection<ICommand> SendingCommands { get; } = new();
-    DatabaseContext Database { get; } = new();
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
+    public Dictionary<string, List<IEntity>> UserEntities { get; } = new();
 
-    public Player Player {
-        get => _player;
-        set {
-            _player = value;
-            Database.Players.Attach(_player);
-        }
-    }
-
+    public Player Player { get; set; } = null!;
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
+    public List<IEntity> SharedEntities { get; private set; } = [];
 
     public void Register(
         string username,
@@ -85,17 +79,20 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
             return;
         }
 
+        byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(encryptedPasswordDigest));
+
         Player = new Player(Logger, username, email) {
             CountryCode = IpUtils.GetCountryCode((Socket.RemoteEndPoint as IPEndPoint)!.Address) ?? "US",
             HardwareFingerprint = hardwareFingerprint,
             Subscribed = subscribed,
-            RegistrationTime = DateTimeOffset.UtcNow
+            RegistrationTime = DateTimeOffset.UtcNow,
+            PasswordHash = passwordHash
         };
 
-        ChangePassword(encryptedPasswordDigest);
-
-        Database.Players.Add(Player);
-        Database.Save();
+        using (DatabaseContext database = new()) {
+            database.Players.Add(Player);
+            database.Save();
+        }
 
         Login(true, hardwareFingerprint);
     }
@@ -126,7 +123,10 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
 
         Logger.Warning("'{Username}' logged in", Player.Username);
 
-        Database.Save();
+        using DatabaseContext database = new();
+
+        database.Players.Update(Player);
+        database.Save();
     }
 
     public void ChangePassword(string passwordDigest) {
@@ -135,13 +135,34 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         byte[] passwordHash = encryption.RsaDecrypt(Convert.FromBase64String(passwordDigest));
         Player.PasswordHash = passwordHash;
 
-        Database.Save();
+        using DatabaseContext database = new();
+
+        database.Players.Update(Player);
+        database.Save();
     }
 
     public void Send(ICommand command) {
-        Logger.Debug("Enqueuing {Command}", command);
+        try {
+            Logger.Debug("Sending {Command}", command);
 
-        SendingCommands.Add(command);
+            ProtocolBuffer buffer = new(new OptionalMap());
+
+            protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
+
+            using MemoryStream stream = new();
+            using BinaryWriter writer = new BigEndianBinaryWriter(stream);
+
+            buffer.Wrap(writer);
+
+            byte[] bytes = stream.ToArray();
+
+            SendAsync(bytes);
+
+            Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
+        } catch (Exception e) {
+            Logger.Error(e, "Socket caught an exception while sending {Command}", command);
+            Disconnect();
+        }
     }
 
     public void Send(IEvent @event) => ClientSession.Send(@event);
@@ -160,94 +181,45 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
 
         Logger.Information("New socket connected");
 
-        new Thread(ReceiveLoop) { Name = $"Player {ClientSession.Id} receive loop" }.Start();
-        new Thread(SendLoop) { Name = $"Player {ClientSession.Id} send loop" }.Start();
-
         Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         ClientSession.Share(this);
     }
 
-    protected override void OnDisconnected() {
-        ReceivedPackets.CompleteAdding();
-        SendingCommands.CompleteAdding();
-
-        ReceivedPackets.Dispose();
-        SendingCommands.Dispose();
-
+    protected override void OnDisconnected() =>
         Logger.Information("Socket disconnected");
-    }
 
     protected override void OnError(SocketError error) =>
         Logger.Error("Socket caught an error: {Error}", error);
 
     protected override void OnReceived(byte[] bytes, long offset, long size) {
-        Logger.Verbose("Received {Size} bytes ({Hex})", size, Convert.ToHexString(bytes[..(int)size]));
-        ReceivedPackets.Add(bytes);
-    }
-
-    void ReceiveLoop() {
         try {
-            while (true) {
-                byte[] packet = ReceivedPackets.Take();
+            Logger.Verbose("Received {Size} bytes ({Hex})", size, Convert.ToHexString(bytes[..(int)size]));
 
-                ProtocolBuffer buffer = new(new OptionalMap());
-                MemoryStream stream = new(packet);
-                BinaryReader reader = new BigEndianBinaryReader(stream);
+            ProtocolBuffer buffer = new(new OptionalMap());
+            MemoryStream stream = new(bytes);
+            BinaryReader reader = new BigEndianBinaryReader(stream);
 
-                if (!buffer.Unwrap(reader))
-                    throw new InvalidDataException("Failed to unwrap packet");
+            if (!buffer.Unwrap(reader))
+                throw new InvalidDataException("Failed to unwrap packet");
 
-                long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+            long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
 
-                while (availableForRead > 0) {
-                    Logger.Verbose("Decode buffer bytes available: {Available}", availableForRead);
+            while (availableForRead > 0) {
+                Logger.Verbose("Decode buffer bytes available: {Available}", availableForRead);
 
-                    ICommand command = (ICommand)protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
-                    Logger.Debug("Received {Command}", command);
+                ICommand command = (ICommand)protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
+                Logger.Debug("Received {Command}", command);
 
-                    availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+                availableForRead = buffer.Stream.Length - buffer.Stream.Position;
 
-                    try {
-                        command.Execute(this);
-                    } catch (Exception e) {
-                        Logger.Error(e, "Failed to execute {Command}", command);
-                    }
+                try {
+                    command.Execute(this);
+                } catch (Exception e) {
+                    Logger.Error(e, "Failed to execute {Command}", command);
                 }
             }
         } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception in the receive loop");
-        } finally {
-            Logger.Warning("Receive loop ended");
-
-            Disconnect();
-        }
-    }
-
-    void SendLoop() {
-        try {
-            while (true) {
-                ICommand command = SendingCommands.Take();
-
-                ProtocolBuffer buffer = new(new OptionalMap());
-
-                protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
-
-                using MemoryStream stream = new();
-                using BinaryWriter writer = new BigEndianBinaryWriter(stream);
-
-                buffer.Wrap(writer);
-
-                byte[] bytes = stream.ToArray();
-
-                SendAsync(bytes);
-
-                Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
-            }
-        } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception in the send loop");
-        } finally {
-            Logger.Warning("Send loop ended");
-
+            Logger.Error(e, "Socket caught an exception while receiving data");
             Disconnect();
         }
     }
@@ -257,6 +229,4 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
                                          $"ClientSession Id: '{ClientSession?.Id}'; " +
                                          $"Username: '{Player?.Username}'; " +
                                          $"Endpoint: {Socket.RemoteEndPoint} }}";
-
-    Player _player = null!;
 }

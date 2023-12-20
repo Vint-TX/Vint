@@ -18,6 +18,9 @@ abstract class Program {
 
         DatabaseConfig.Initialize();
 
+        /*using (DatabaseContext db = new())
+            db.Database.EnsureDeleted();*/
+
         StaticServer staticServer = new(IPAddress.Any, 8080);
         GameServer gameServer = new(IPAddress.Any, 5050);
 

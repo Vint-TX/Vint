@@ -10,7 +10,8 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1439375251389)]
 public class IntroduceUserByUidEvent : IntroduceUserEvent {
-    [ProtocolName("uid")] public string Username { get; private set; } = null!;
+    [ProtocolName("uid")]
+    public string Username { get; private set; } = null!;
 
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());

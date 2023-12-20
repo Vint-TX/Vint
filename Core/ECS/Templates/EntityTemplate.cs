@@ -12,3 +12,11 @@ public abstract class EntityTemplate {
         return entityBuilder.Build();
     }
 }
+
+public abstract class MarketEntityTemplate : EntityTemplate {
+    public abstract UserEntityTemplate UserTemplate { get; }
+}
+
+public abstract class UserEntityTemplate : EntityTemplate {
+    public abstract MarketEntityTemplate MarketTemplate { get; }
+}

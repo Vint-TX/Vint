@@ -1,6 +1,6 @@
 ﻿[
   {
-    "name": "flamethrower",
+    "name": "Flamethrower",
     "id": 1021054379,
     "template": [
       "FlamethrowerMarketItemTemplate",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "name": "freeze",
+    "name": "Freeze",
     "id": 1878479106,
     "template": [
       "FreezeMarketItemTemplate",
@@ -32,7 +32,7 @@
     }
   },
   {
-    "name": "hammer",
+    "name": "Hammer",
     "id": 1920282929,
     "template": [
       "HammerMarketItemTemplate",
@@ -48,7 +48,7 @@
     }
   },
   {
-    "name": "isis",
+    "name": "Isis",
     "id": 1874668799,
     "template": [
       "IsisMarketItemTemplate",
@@ -64,7 +64,7 @@
     }
   },
   {
-    "name": "railgun",
+    "name": "Railgun",
     "id": -319390877,
     "template": [
       "RailgunMarketItemTemplate",
@@ -80,7 +80,7 @@
     }
   },
   {
-    "name": "ricochet",
+    "name": "Ricochet",
     "id": 1324743394,
     "template": [
       "RicochetMarketItemTemplate",
@@ -96,7 +96,7 @@
     }
   },
   {
-    "name": "shaft",
+    "name": "Shaft",
     "id": -2005909841,
     "template": [
       "ShaftMarketItemTemplate",
@@ -112,7 +112,7 @@
     }
   },
   {
-    "name": "smoky",
+    "name": "Smoky",
     "id": -2005747272,
     "template": [
       "SmokyMarketItemTemplate",
@@ -128,7 +128,7 @@
     }
   },
   {
-    "name": "thunder",
+    "name": "Thunder",
     "id": 1667159001,
     "template": [
       "ThunderMarketItemTemplate",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "name": "twins",
+    "name": "Twins",
     "id": -2004531520,
     "template": [
       "TwinsMarketItemTemplate",
@@ -160,7 +160,7 @@
     }
   },
   {
-    "name": "vulcan",
+    "name": "Vulcan",
     "id": -1955445362,
     "template": [
       "VulcanMarketItemTemplate",

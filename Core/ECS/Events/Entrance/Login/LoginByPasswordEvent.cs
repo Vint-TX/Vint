@@ -17,7 +17,7 @@ public class LoginByPasswordEvent : IServerEvent {
         Encryption encryption = new();
 
         if (!encryption.GetLoginPasswordHash(connection.Player.PasswordHash)
-            .SequenceEqual(Convert.FromBase64String(PasswordEncipher))) {
+                .SequenceEqual(Convert.FromBase64String(PasswordEncipher))) {
             connection.Send(new InvalidPasswordEvent());
             connection.Send(new LoginFailedEvent());
 

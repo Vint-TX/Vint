@@ -1,4 +1,6 @@
-﻿using Vint.Core.ECS.Components.User;
+﻿using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Payment;
 using Vint.Core.ECS.Events.User.Friends;
@@ -10,11 +12,24 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 [ProtocolId(1507022246767)]
 public class UserOnlineEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        //todo
-
+        connection.Share(connection.GetEntities());
         connection.User.AddComponent(new UserAvatarComponent());
 
-        //todo
+        Player player = connection.Player;
+        Preset preset = player.Presets[player.CurrentPresetIndex];
+
+        foreach (IEntity entity in new[] {
+                     connection.GetUserEntity(connection.GetEntity(player.CurrentAvatarId)!),
+                     connection.GetUserEntity(preset.Weapon),
+                     connection.GetUserEntity(preset.Hull),
+                     connection.GetUserEntity(preset.WeaponSkin),
+                     connection.GetUserEntity(preset.HullSkin),
+                     connection.GetUserEntity(preset.Cover),
+                     connection.GetUserEntity(preset.Paint),
+                     connection.GetUserEntity(preset.Shell)
+                 }) {
+            entity.AddComponent(new MountedItemComponent());
+        }
 
         connection.ClientSession.Send(new PaymentSectionLoadedEvent());
 

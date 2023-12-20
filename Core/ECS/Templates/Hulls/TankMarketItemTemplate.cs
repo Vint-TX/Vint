@@ -3,4 +3,6 @@
 namespace Vint.Core.ECS.Templates.Hulls;
 
 [ProtocolId(1433406732656)]
-public class TankMarketItemTemplate : EntityTemplate;
+public class TankMarketItemTemplate : MarketEntityTemplate {
+    public override UserEntityTemplate UserTemplate => new TankUserItemTemplate();
+}

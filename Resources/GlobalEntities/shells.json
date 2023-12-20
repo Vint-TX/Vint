@@ -1,0 +1,738 @@
+﻿[
+  {
+    "name": "FlamethrowerAcid",
+    "id": 692677861,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/flamethrower/acid"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 692677861
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerOrange",
+    "id": 357929046,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/flamethrower/orange"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": 357929046
+      }
+    }
+  },
+  {
+    "name": "FlamethrowerRed",
+    "id": -947470487,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/flamethrower/red"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1021054379
+      },
+      "MarketItemGroupComponent": {
+        "key": -947470487
+      }
+    }
+  },
+  {
+    "name": "FreezeIndigo",
+    "id": 224610499,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/freeze/indigo"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": 224610499
+      }
+    }
+  },
+  {
+    "name": "FreezeSkyblue",
+    "id": -1408603862,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/freeze/skyblue"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": -1408603862
+      }
+    }
+  },
+  {
+    "name": "FreezeWhite",
+    "id": -395640808,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/freeze/white"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1878479106
+      },
+      "MarketItemGroupComponent": {
+        "key": -395640808
+      }
+    }
+  },
+  {
+    "name": "HammerPapercracker",
+    "id": 142652989,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/hammer/papercracker"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 142652989
+      }
+    }
+  },
+  {
+    "name": "HammerStandard",
+    "id": 530945311,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/hammer/standard"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 530945311
+      }
+    }
+  },
+  {
+    "name": "HammerThor",
+    "id": 1317881529,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/hammer/thor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1920282929
+      },
+      "MarketItemGroupComponent": {
+        "key": 1317881529
+      }
+    }
+  },
+  {
+    "name": "IsisEmerald",
+    "id": 2065928272,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/isis/emerald"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": 2065928272
+      }
+    }
+  },
+  {
+    "name": "IsisShine",
+    "id": -132552041,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/isis/shine"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": -132552041
+      }
+    }
+  },
+  {
+    "name": "IsisStandard",
+    "id": 48235025,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/isis/standard"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1874668799
+      },
+      "MarketItemGroupComponent": {
+        "key": 48235025
+      }
+    }
+  },
+  {
+    "name": "RailgunGlitch",
+    "id": -1975536348,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/glitch"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -1975536348
+      }
+    }
+  },
+  {
+    "name": "RailgunGloom",
+    "id": -375403918,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/gloom"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -375403918
+      }
+    }
+  },
+  {
+    "name": "RailgunGreen",
+    "id": -660457061,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/green"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -660457061
+      }
+    }
+  },
+  {
+    "name": "RailgunOrange",
+    "id": 1229590166,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/orange"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 1229590166
+      }
+    }
+  },
+  {
+    "name": "RailgunPaleblue",
+    "id": 366763244,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/paleblue"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 366763244
+      }
+    }
+  },
+  {
+    "name": "RailgunPurple",
+    "id": 1261498404,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/purple"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": 1261498404
+      }
+    }
+  },
+  {
+    "name": "RailgunSmoke",
+    "id": -1195981301,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/railgun/smoke"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -319390877
+      },
+      "MarketItemGroupComponent": {
+        "key": -1195981301
+      }
+    }
+  },
+  {
+    "name": "RicochetAcid",
+    "id": -492753567,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/ricochet/acid"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -492753567
+      }
+    }
+  },
+  {
+    "name": "RicochetAurulent",
+    "id": 139800007,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/ricochet/aurulent"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": 139800007
+      }
+    }
+  },
+  {
+    "name": "RicochetCannonball",
+    "id": -1899861235,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/ricochet/cannonball"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -1899861235
+      }
+    }
+  },
+  {
+    "name": "RicochetCoral",
+    "id": 577198848,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/ricochet/coral"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": 577198848
+      }
+    }
+  },
+  {
+    "name": "RicochetMoon",
+    "id": -585038633,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/ricochet/moon"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -585038633
+      }
+    }
+  },
+  {
+    "name": "RicochetRicsnowball",
+    "id": -1073342998,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/ricochet/ricsnowball"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1324743394
+      },
+      "MarketItemGroupComponent": {
+        "key": -1073342998
+      }
+    }
+  },
+  {
+    "name": "ShaftBlue",
+    "id": -1488314890,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/shaft/blue"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": -1488314890
+      }
+    }
+  },
+  {
+    "name": "ShaftLighting",
+    "id": -250346840,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/shaft/lighting"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": -250346840
+      }
+    }
+  },
+  {
+    "name": "ShaftRed",
+    "id": -47995019,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/shaft/red"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": -47995019
+      }
+    }
+  },
+  {
+    "name": "ShaftStandard",
+    "id": 70311513,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/shaft/standard"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005909841
+      },
+      "MarketItemGroupComponent": {
+        "key": 70311513
+      }
+    }
+  },
+  {
+    "name": "SmokyFumes",
+    "id": 860375257,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/smoky/fumes"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": 860375257
+      }
+    }
+  },
+  {
+    "name": "SmokyLightning",
+    "id": -1260549513,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/smoky/lightning"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -1260549513
+      }
+    }
+  },
+  {
+    "name": "SmokyStandard",
+    "id": -966935184,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/smoky/standard"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -966935184
+      }
+    }
+  },
+  {
+    "name": "SmokyThermite",
+    "id": -1165747871,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/smoky/thermite"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2005747272
+      },
+      "MarketItemGroupComponent": {
+        "key": -1165747871
+      }
+    }
+  },
+  {
+    "name": "ThunderDragon",
+    "id": -1852311024,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/thunder/dragon"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": -1852311024
+      }
+    }
+  },
+  {
+    "name": "ThunderLightning",
+    "id": 794635633,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/thunder/lightning"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 794635633
+      }
+    }
+  },
+  {
+    "name": "ThunderStandard",
+    "id": 1067800943,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/thunder/standard"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1667159001
+      },
+      "MarketItemGroupComponent": {
+        "key": 1067800943
+      }
+    }
+  },
+  {
+    "name": "TwinsBlue",
+    "id": 807172229,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/twins/blue"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": 807172229
+      }
+    }
+  },
+  {
+    "name": "TwinsOrange",
+    "id": -1319432295,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/twins/orange"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -1319432295
+      }
+    }
+  },
+  {
+    "name": "TwinsTurquoise",
+    "id": -1173768746,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/twins/turquoise"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -1173768746
+      }
+    }
+  },
+  {
+    "name": "TwinsTwinssnowball",
+    "id": -1092514341,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/twins/twinssnowball"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -1092514341
+      }
+    }
+  },
+  {
+    "name": "TwinsViolet",
+    "id": -1126924822,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/twins/violet"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -1126924822
+      }
+    }
+  },
+  {
+    "name": "TwinsWhite",
+    "id": -728200866,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/twins/white"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2004531520
+      },
+      "MarketItemGroupComponent": {
+        "key": -728200866
+      }
+    }
+  },
+  {
+    "name": "VulcanAcid",
+    "id": 189181410,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/vulcan/acid"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": 189181410
+      }
+    }
+  },
+  {
+    "name": "VulcanBlue",
+    "id": 189220223,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/vulcan/blue"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": 189220223
+      }
+    }
+  },
+  {
+    "name": "VulcanRed",
+    "id": -963712308,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/vulcan/red"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": -963712308
+      }
+    }
+  },
+  {
+    "name": "VulcanStandard",
+    "id": 1322064226,
+    "template": [
+      "ShellMarketItemTemplate",
+      "garage/shell/vulcan/standard"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1955445362
+      },
+      "MarketItemGroupComponent": {
+        "key": 1322064226
+      }
+    }
+  }
+]

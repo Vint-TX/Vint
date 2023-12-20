@@ -11,9 +11,12 @@ public class EntityShareCommand(
     TemplateAccessor? templateAccessor,
     params IComponent[] components
 ) : ICommand {
-    [ProtocolPosition(0)] public long EntityId => entityId;
-    [ProtocolPosition(1)] public TemplateAccessor? TemplateAccessor => templateAccessor;
-    [ProtocolPosition(2)] [ProtocolCollection(varied: true)]
+    [ProtocolPosition(0)]
+    public long EntityId => entityId;
+    [ProtocolPosition(1)]
+    public TemplateAccessor? TemplateAccessor => templateAccessor;
+    [ProtocolPosition(2)]
+    [ProtocolCollection(varied: true)]
     public IComponent[] Components => components;
 
     public void Execute(IPlayerConnection connection) => throw new NotImplementedException();

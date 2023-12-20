@@ -2,8 +2,6 @@
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Entrance.Login;
-using Vint.Core.ECS.Events.Entrance.Validation;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;

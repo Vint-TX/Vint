@@ -16,11 +16,15 @@ public class Entity(
     ILogger Logger { get; } = Log.Logger.ForType(typeof(Entity));
 
     Dictionary<Type, IComponent> TypeToComponent { get; } = components.ToDictionary(c => c.GetType());
-    HashSet<IPlayerConnection> SharedPlayers { get; } = new();
+    HashSet<IPlayerConnection> SharedPlayers { get; } = [];
 
-    public long Id => id;
+    public long Id {
+        get => id;
+        set => id = value;
+    }
+
     public TemplateAccessor? TemplateAccessor => templateAccessor;
-    public HashSet<IComponent> Components => TypeToComponent.Values.ToHashSet();
+    public IEnumerable<IComponent> Components => TypeToComponent.Values.ToHashSet();
 
     public EntityShareCommand ToShareCommand() => new(Id, TemplateAccessor, Components.ToArray());
 
@@ -35,6 +39,7 @@ public class Entity(
         Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
 
         connection.Send(ToShareCommand());
+        connection.SharedEntities.Add(this);
     }
 
     public void Unshare(IPlayerConnection connection) {
@@ -43,7 +48,10 @@ public class Entity(
                 throw new ArgumentException($"{this} is not shared to {connection}");
         }
 
+        Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
+
         connection.Send(ToUnshareCommand());
+        connection.SharedEntities.Remove(this);
     }
 
     public void AddComponent(IComponent component) => AddComponent(component, null);
@@ -80,15 +88,10 @@ public class Entity(
         }
     }
 
-    public IEntity Clone() {
-        if (!TemplateAccessor.HasValue)
-            return new Entity(Id, null, Components.ToHashSet());
-
-        TemplateAccessor templateAccessor = TemplateAccessor.Value;
-        templateAccessor = new TemplateAccessor(templateAccessor.Template, templateAccessor.ConfigPath);
-
-        return new Entity(Id, templateAccessor, Components.ToHashSet());
-    }
+    public IEntity Clone() => new Entity(Id,
+        TemplateAccessor == null ? null
+            : new TemplateAccessor(TemplateAccessor.Template, TemplateAccessor.ConfigPath),
+        Components.ToHashSet());
 
     public void AddComponent(IComponent component, IPlayerConnection? excluded) {
         Type type = component.GetType();

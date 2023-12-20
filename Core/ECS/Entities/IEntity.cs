@@ -7,9 +7,9 @@ using Vint.Core.Server;
 namespace Vint.Core.ECS.Entities;
 
 public interface IEntity {
-    public long Id { get; }
+    public long Id { get; set; }
     public TemplateAccessor? TemplateAccessor { get; }
-    public HashSet<IComponent> Components { get; }
+    public IEnumerable<IComponent> Components { get; }
 
     protected EntityShareCommand ToShareCommand();
 

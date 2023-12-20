@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Serilog;
+﻿using Serilog;
+using Vint.Core.Database.Models;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS;
@@ -12,8 +12,13 @@ public class Player {
         List<string> admins = ["C6OI"];
 
         Logger = Log.Logger.ForType(typeof(Player));
+
+        CurrentAvatarId = 6224; // Tankist (default) avatar id
         Username = username;
         Email = email;
+
+        Avatars = new List<Avatar> { new(this, CurrentAvatarId) };
+        Presets = new List<Preset> { new(this, 0) };
 
         if (admins.Contains(Username))
             Groups |= PlayerGroups.Admin;
@@ -42,6 +47,9 @@ public class Player {
     public bool Subscribed { get; set; }
     public string CountryCode { get; set; } = "RU";
 
+    public long CurrentAvatarId { get; set; }
+    public int CurrentPresetIndex { get; set; }
+
     public long Crystals { get; set; }
     public long XCrystals { get; set; }
 
@@ -49,6 +57,9 @@ public class Player {
 
     public long Experience { get; set; }
     public int Rank => Leveling.GetRank(Experience);
+
+    public List<Avatar> Avatars { get; private set; }
+    public List<Preset> Presets { get; private set; }
 
     public DateTimeOffset RegistrationTime { get; init; }
     public DateTimeOffset LastLoginTime { get; set; }

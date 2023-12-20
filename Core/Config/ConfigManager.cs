@@ -20,6 +20,11 @@ using YamlDotNet.Serialization;
 namespace Vint.Core.Config;
 
 public static class ConfigManager {
+    public static List<string> GlobalEntitiesTypeNames => Root.Children
+        .Where(child => child.Value.Entities.Count != 0)
+        .Select(child => child.Key)
+        .ToList();
+
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(ConfigManager));
     static string ResourcesPath { get; } =
         Path.Combine(Directory.GetCurrentDirectory(), "Resources");
@@ -229,6 +234,10 @@ public static class ConfigManager {
 
         return node.Entities.Values.Select(entity => entity.Clone());
     }
+
+    public static IEnumerable<IEntity> GetGlobalEntities() => Root.Children.Values
+        .SelectMany(child =>
+            child.Entities.Values.Select(entity => entity.Clone()));
 
     public static T GetComponent<T>(string path) where T : class, IComponent {
         ConfigNode node = GetNode(path);

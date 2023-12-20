@@ -1,7 +1,6 @@
 ﻿using Serilog;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Entrance.Validation;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -10,7 +9,8 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1438075609642)]
 public class AutoLoginUserEvent : IServerEvent {
-    [ProtocolName("uid")] public string Username { get; private set; } = null!;
+    [ProtocolName("uid")]
+    public string Username { get; private set; } = null!;
     public byte[] EncryptedToken { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
