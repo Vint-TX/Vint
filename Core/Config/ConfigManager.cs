@@ -150,7 +150,7 @@ public static class ConfigManager {
 
         Dictionary<string, Dictionary<string, IEntity>> globalEntities = new();
 
-        foreach (string filePath in Directory.EnumerateFiles(rootPath, "*.json", SearchOption.AllDirectories)) {
+        foreach (string filePath in Directory.EnumerateFiles(rootPath, "*.json", SearchOption.AllDirectories).OrderBy(path => path)) {
             string relativePath = Path.GetRelativePath(rootPath, filePath).Replace('\\', '/');
             string entitiesTypeName = Path.GetFileNameWithoutExtension(filePath);
 
@@ -272,7 +272,7 @@ public static class ConfigManager {
 }
 
 // Copied from https://github.com/Assasans/TXServer-Public/blob/database/TXServer/Core/Configuration/ComponentDeserializer.cs
-public class ComponentDeserializer : INodeTypeResolver, INodeDeserializer {
+public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserializer {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(ComponentDeserializer));
     Type? Type { get; set; }
 
@@ -332,7 +332,7 @@ public class ComponentDeserializer : INodeTypeResolver, INodeDeserializer {
 
         if (nodeEvent is not Scalar scalar ||
             scalar.Value.Length < 2 ||
-            !Regex.IsMatch(scalar.Value, "^[a-zA-Z]+$")) return false;
+            !MyRegex().IsMatch(scalar.Value)) return false;
 
         string typeName =
             $"{scalar.Value[0].ToString().ToUpper()}{scalar.Value[1..]}Component";
@@ -347,4 +347,7 @@ public class ComponentDeserializer : INodeTypeResolver, INodeDeserializer {
 
         return false;
     }
+
+    [GeneratedRegex("^[a-zA-Z]+$")]
+    private static partial Regex MyRegex();
 }

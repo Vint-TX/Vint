@@ -18,12 +18,14 @@ public class StaticServer(IPAddress host, ushort port) : HttpServer(host, port) 
 }
 
 public class StaticServerSession(HttpServer server) : HttpSession(server) {
-    string IPAddress { get; } = server.Address == "0.0.0.0" ? "127.0.0.1" : server.Address;
+    string IPAddress { get; set; } = null!;
     string Root { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "StaticServer");
     ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServerSession));
 
-    protected override void OnConnecting() =>
+    protected override void OnConnecting() {
         Logger = Logger.WithPlayer(this);
+        IPAddress = ((IPEndPoint)Socket.LocalEndPoint!).Address.ToString();
+    }
 
     protected override void OnReceivedRequest(HttpRequest request) {
         Logger.Information("{Method} {Url}", request.Method, request.Url);
@@ -35,6 +37,11 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
 
         string[] urlParts = request.Url.Split('/', StringSplitOptions.RemoveEmptyEntries);
 
+        if (urlParts.Length == 0) {
+            SendResponseAsync(Response.MakeErrorResponse(400));
+            return;
+        }
+        
         if (urlParts.Last().Contains('?'))
             urlParts[^1] = urlParts[^1][..urlParts[^1].IndexOf('?')];
 
@@ -53,7 +60,7 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
                     SendResponseAsync(ConfigManager.TryGetConfig(locale, out byte[]? config)
                                           ? Response.MakeGetResponse(config)
                                           : Response.MakeErrorResponse(404));
-                }
+                } else SendResponseAsync(Response.MakeErrorResponse(404));
 
                 break;
             }
@@ -75,6 +82,10 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
 
                 break;
             }
+            
+            default:
+                SendResponseAsync(Response.MakeErrorResponse(404));
+                break;
         }
     }
 
