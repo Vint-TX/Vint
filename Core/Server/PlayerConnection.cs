@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
 using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
@@ -145,7 +146,7 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         try {
             Logger.Debug("Sending {Command}", command);
 
-            ProtocolBuffer buffer = new(new OptionalMap());
+            ProtocolBuffer buffer = new(new OptionalMap(), this);
 
             protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
 
@@ -195,7 +196,7 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         try {
             Logger.Verbose("Received {Size} bytes ({Hex})", size, Convert.ToHexString(bytes[..(int)size]));
 
-            ProtocolBuffer buffer = new(new OptionalMap());
+            ProtocolBuffer buffer = new(new OptionalMap(), this);
             MemoryStream stream = new(bytes);
             BinaryReader reader = new BigEndianBinaryReader(stream);
 

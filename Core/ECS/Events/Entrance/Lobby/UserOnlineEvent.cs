@@ -19,14 +19,15 @@ public class UserOnlineEvent : IServerEvent {
         Preset preset = player.Presets[player.CurrentPresetIndex];
 
         foreach (IEntity entity in new[] {
-                     connection.GetUserEntity(connection.GetEntity(player.CurrentAvatarId)!),
-                     connection.GetUserEntity(preset.Weapon),
-                     connection.GetUserEntity(preset.Hull),
-                     connection.GetUserEntity(preset.WeaponSkin),
-                     connection.GetUserEntity(preset.HullSkin),
-                     connection.GetUserEntity(preset.Cover),
-                     connection.GetUserEntity(preset.Paint),
-                     connection.GetUserEntity(preset.Shell)
+                     connection.GetEntity(player.CurrentAvatarId)!.GetUserEntity(connection),
+                     preset.Hull.GetUserEntity(connection),
+                     preset.Paint.GetUserEntity(connection),
+                     preset.HullSkin.GetUserEntity(connection),
+                     preset.Weapon.GetUserEntity(connection),
+                     preset.Cover.GetUserEntity(connection),
+                     preset.WeaponSkin.GetUserEntity(connection),
+                     preset.Shell.GetUserEntity(connection),
+                     preset.Graffiti.GetUserEntity(connection)
                  }) {
             entity.AddComponent(new MountedItemComponent());
         }

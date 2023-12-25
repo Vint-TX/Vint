@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;

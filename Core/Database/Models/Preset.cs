@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Vint.Core.ECS;
 using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Database.Models;
 
+[PrimaryKey(nameof(PlayerId), nameof(Index))]
 public class Preset {
     Preset(int index) {
         Index = index;
@@ -18,10 +20,9 @@ public class Preset {
     public Player Player { get; private set; } = null!;
     public uint PlayerId { get; private set; }
 
-    public int Index { get; set; }
+    public int Index { get; private set; }
     public string Name { get; set; }
 
-    [NotMapped]
     public IEntity Entity { get; set; } = null!;
 
     public IEntity Weapon { get; set; } = GlobalEntities.GetEntity("weapons", "Smoky");
@@ -34,6 +35,6 @@ public class Preset {
     public IEntity Paint { get; set; } = GlobalEntities.GetEntity("paints", "Green");
 
     public IEntity Shell { get; set; } = GlobalEntities.GetEntity("shells", "SmokyStandard");
-    // public IEntity Graffiti { get; set; } = GlobalEntities.GetEntity("graffities", "Logo"); // todo graffities
+    public IEntity Graffiti { get; set; } = GlobalEntities.GetEntity("graffities", "Logo");
     // todo modules
 }

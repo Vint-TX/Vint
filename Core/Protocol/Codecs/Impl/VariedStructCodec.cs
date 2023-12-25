@@ -15,7 +15,7 @@ public class VariedStructCodec : Codec {
         long id = buffer.Reader.ReadInt64();
         Type type = Protocol.GetTypeById(id);
 
-        ProtocolBuffer inner = new(new OptionalMap());
+        ProtocolBuffer inner = new(new OptionalMap(), buffer.Connection);
 
         if (!inner.Unwrap(buffer.Reader)) throw new InvalidOperationException();
 

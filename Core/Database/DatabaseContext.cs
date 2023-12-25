@@ -10,16 +10,22 @@ using Vint.Core.Utils;
 namespace Vint.Core.Database;
 
 public sealed class DatabaseContext : DbContext {
-    public DatabaseContext() =>
-        //Database.EnsureDeleted();
-        Database.EnsureCreated();
+    public DatabaseContext() => Database.EnsureCreated();
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(DatabaseContext));
 
     public DbSet<Player> Players { get; private set; } = null!;
     public DbSet<Preset> Presets { get; private set; } = null!;
     public DbSet<Avatar> Avatars { get; private set; } = null!;
-
+    public DbSet<Cover> Covers { get; private set; } = null!;
+    public DbSet<Graffiti> Graffities { get; private set; } = null!;
+    public DbSet<Hull> Hulls { get; private set; } = null!;
+    public DbSet<HullSkin> HullSkins { get; private set; } = null!;
+    public DbSet<Paint> Paints { get; private set; } = null!;
+    public DbSet<Shell> Shells { get; private set; } = null!;
+    public DbSet<Weapon> Weapons { get; private set; } = null!;
+    public DbSet<WeaponSkin> WeaponSkins { get; private set; } = null!;
+    
     public void Save() {
         int savedChanges = SaveChanges();
 
@@ -29,11 +35,6 @@ public sealed class DatabaseContext : DbContext {
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         configurationBuilder.Properties<IEntity>().HaveConversion<EntityToIdConverter>();
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Avatar>().HasKey(avatar => new { avatar.PlayerId, avatar.AvatarId });
-        modelBuilder.Entity<Preset>().HasKey(preset => new { preset.PlayerId, preset.Index });
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         DatabaseConfig config = DatabaseConfig.Get();

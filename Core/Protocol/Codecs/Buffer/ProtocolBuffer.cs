@@ -1,12 +1,17 @@
-﻿using Vint.Core.Utils;
+﻿using Vint.Core.ECS.Entities;
+using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Codecs.Buffer;
 
-public class ProtocolBuffer(OptionalMap optionalMap) {
+public class ProtocolBuffer(OptionalMap optionalMap, IPlayerConnection connection) {
     public MemoryStream Stream { get; private set; } = new();
     public BinaryReader Reader => new BigEndianBinaryReader(Stream);
     public BinaryWriter Writer => new BigEndianBinaryWriter(Stream);
     public OptionalMap OptionalMap { get; private set; } = optionalMap;
+
+    public IPlayerConnection Connection { get; } = connection;
+    public IEntity? GetSharedEntity(long id) => Connection.SharedEntities.SingleOrDefault(entity => entity.Id == id);
 
     public void Clear() {
         OptionalMap = new OptionalMap();

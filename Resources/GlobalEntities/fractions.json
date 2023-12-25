@@ -1,0 +1,38 @@
+﻿[
+  {
+    "name": "Competition",
+    "id": 1529751975,
+    "template": ["FractionsCompetitionTemplate", "fractionscompetition"],
+    "components": {
+      "FinishedFractionsCompetitionComponent": {
+        "winnerId": -1650120701
+      }
+    }
+  },
+  {
+    "name": "Antaeus",
+    "id": -1650120701,
+    "template": ["FractionTemplate", "fractionscompetition/fractions/antaeus"],
+    "components": {
+      "FractionGroupComponent": {
+        "key": -1650120701
+      },
+      "FractionComponent": {
+        "name": "antaeus"
+      }
+    }
+  },
+  {
+    "name": "Frontier",
+    "id": -372139284,
+    "template": ["FractionTemplate", "fractionscompetition/fractions/frontier"],
+    "components": {
+      "FractionGroupComponent": {
+        "key": -372139284
+      },
+      "FractionComponent": {
+        "name": "frontier"
+      }
+    }
+  }
+]

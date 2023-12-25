@@ -1,0 +1,15 @@
+﻿[
+  {
+    "name": "Preset",
+    "id": -571744569,
+    "template": [
+      "PresetMarketItemTemplate",
+      "garage/preset"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -571744569
+      }
+    }
+  }
+]
