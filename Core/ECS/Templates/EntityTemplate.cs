@@ -1,4 +1,5 @@
 ﻿using Vint.Core.ECS.Entities;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Templates;
 
@@ -11,6 +12,20 @@ public abstract class EntityTemplate {
 
         return entityBuilder.Build();
     }
+
+    public static bool operator ==(EntityTemplate? x, EntityTemplate? y) => Equals(x, y);
+
+    public static bool operator !=(EntityTemplate? x, EntityTemplate? y) => !(x == y);
+
+    public override bool Equals(object? obj) {
+        if (obj == null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        
+        return GetHashCode() == obj.GetHashCode();
+    }
+
+    public override int GetHashCode() => 
+        unchecked((int)GetType().GetProtocolId().Id);
 }
 
 public abstract class MarketEntityTemplate : EntityTemplate {

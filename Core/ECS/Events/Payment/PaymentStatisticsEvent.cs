@@ -7,7 +7,7 @@ public class PaymentStatisticsEvent : IEvent {
     public PaymentStatisticsAction Action { get; private set; }
     public long Item { get; private set; }
     public long Method { get; private set; }
-    public string Screen { get; private set; } = null;
+    public string Screen { get; private set; } = null!;
 }
 
 public enum PaymentStatisticsAction {

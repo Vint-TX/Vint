@@ -23,11 +23,14 @@ namespace Vint.Core.Server;
 public interface IPlayerConnection {
     public ILogger Logger { get; }
 
+    public GameServer Server { get; }
     public Player Player { get; set; }
     public IEntity User { get; }
     public IEntity ClientSession { get; }
-    public List<IEntity> SharedEntities { get; }
 
+    public bool IsOnline { get; }
+
+    public List<IEntity> SharedEntities { get; }
     public Dictionary<string, List<IEntity>> UserEntities { get; }
 
     public void Register(
@@ -49,6 +52,8 @@ public interface IPlayerConnection {
 
     public void Send(IEvent @event);
 
+    public void Send(IEvent @event, params IEntity[] entities);
+
     public void Share(IEntity entity);
 
     public void Share(params IEntity[] entities);
@@ -56,14 +61,17 @@ public interface IPlayerConnection {
     public void Share(IEnumerable<IEntity> entities);
 }
 
-public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
+public class PlayerConnection(GameServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
     public Dictionary<string, List<IEntity>> UserEntities { get; } = new();
 
+    public new GameServer Server { get; } = server;
     public Player Player { get; set; } = null!;
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
     public List<IEntity> SharedEntities { get; private set; } = [];
+
+    public bool IsOnline => ClientSession != null! && User != null! && Player != null!;
 
     public void Register(
         string username,
@@ -74,11 +82,6 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
         bool steam,
         bool quickRegistration) {
         Logger.Information("Registering player '{Username}'", username);
-
-        if (username == "fail") {
-            Send(new RegistrationFailedEvent());
-            return;
-        }
 
         byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(encryptedPasswordDigest));
 
@@ -167,6 +170,8 @@ public class PlayerConnection(TcpServer server, Protocol.Protocol protocol) : Tc
     }
 
     public void Send(IEvent @event) => ClientSession.Send(@event);
+
+    public void Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
 
     public void Share(IEntity entity) => entity.Share(this);
 

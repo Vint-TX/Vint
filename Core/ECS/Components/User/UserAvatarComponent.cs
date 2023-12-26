@@ -1,8 +1,13 @@
-﻿using Vint.Core.Protocol.Attributes;
+﻿using Vint.Core.Config;
+using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Entities;
+using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.User;
 
 [ProtocolId(1545809085571)]
-public class UserAvatarComponent : IComponent {
-    public string Id { get; set; } = "ce4faab6-c441-49f7-9106-8d31c5dcd148"; // morocco avatar id
+public class UserAvatarComponent(IPlayerConnection connection, long avatarId) : IComponent {
+    public string Id { get; set; } =
+        ConfigManager.GetComponent<AvatarItemComponent>(connection.GetEntity(avatarId)?.TemplateAccessor?.ConfigPath!).Id;
 }

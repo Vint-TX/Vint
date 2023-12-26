@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Components.Preset;
 [ProtocolId(1493974995307)]
 public class PresetNameComponent(Database.Models.Preset? preset) : IComponent {
     public void Changing(IPlayerConnection connection, IEntity entity) {
-        preset ??= connection.Player.Presets.Single(p => p.Entity.Id == entity.Id);
+        preset ??= connection.Player.Presets.Single(p => p.Entity!.Id == entity.Id);
         if (_name != null) preset.Name = _name;
     }
     

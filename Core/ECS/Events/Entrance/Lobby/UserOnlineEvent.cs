@@ -13,11 +13,10 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 public class UserOnlineEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         connection.Share(connection.GetEntities());
-        connection.User.AddComponent(new UserAvatarComponent());
 
         Player player = connection.Player;
         Preset preset = player.Presets[player.CurrentPresetIndex];
-
+        
         foreach (IEntity entity in new[] {
                      connection.GetEntity(player.CurrentAvatarId)!.GetUserEntity(connection),
                      preset.Hull.GetUserEntity(connection),
@@ -31,6 +30,8 @@ public class UserOnlineEvent : IServerEvent {
                  }) {
             entity.AddComponent(new MountedItemComponent());
         }
+        
+        connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
 
         connection.ClientSession.Send(new PaymentSectionLoadedEvent());
 

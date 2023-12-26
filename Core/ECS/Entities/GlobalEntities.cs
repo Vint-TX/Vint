@@ -5,6 +5,8 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Preset;
 using Vint.Core.ECS.Templates;
+using Vint.Core.ECS.Templates.Money;
+using Vint.Core.ECS.Templates.Premium;
 using Vint.Core.ECS.Templates.Preset;
 using Vint.Core.Server;
 
@@ -118,21 +120,40 @@ public static class GlobalEntities {
                 case "misc": { // todo
                     entity.AddComponent(new UserGroupComponent(user));
 
-                    if (entity.TemplateAccessor.Template.GetType() == typeof(PresetUserItemTemplate)) {
-                        foreach (Preset preset in player.Presets) {
-                            IEntity presetEntity = entity.Clone();
-                            presetEntity.Id = EntityRegistry.FreeId;
-                            
-                            presetEntity.AddComponent(new PresetEquipmentComponent(preset));
-                            presetEntity.AddComponent(new PresetNameComponent(preset));
-                            
-                            if (preset.Index == player.CurrentPresetIndex)
-                                presetEntity.AddComponent(new MountedItemComponent());
+                    switch (entity.TemplateAccessor.Template) {
+                        case PremiumBoostUserItemTemplate:
+                        case PremiumQuestUserItemTemplate: {
+                            entity.AddComponent(new DurationUserItemComponent());
+                            break;
+                        }
 
-                            preset.Entity = presetEntity;
+                        case CrystalUserItemTemplate: {
+                            entity.AddComponent(new UserItemCounterComponent(player.Crystals));
+                            break;
                         }
                         
-                        connection.Share(player.Presets.Select(preset => preset.Entity));
+                        case XCrystalUserItemTemplate: {
+                            entity.AddComponent(new UserItemCounterComponent(player.XCrystals));
+                            break;
+                        }
+                        
+                        case PresetUserItemTemplate: {
+                            foreach (Preset preset in player.Presets) {
+                                IEntity presetEntity = entity.Clone();
+                                presetEntity.Id = EntityRegistry.FreeId;
+                            
+                                presetEntity.AddComponent(new PresetEquipmentComponent(preset));
+                                presetEntity.AddComponent(new PresetNameComponent(preset));
+                            
+                                if (preset.Index == player.CurrentPresetIndex)
+                                    presetEntity.AddComponent(new MountedItemComponent());
+
+                                preset.Entity = presetEntity;
+                            }
+                        
+                            connection.Share(player.Presets.Select(preset => preset.Entity!));
+                            break;
+                        }
                     }
                     break;
                 }
@@ -164,7 +185,7 @@ public static class GlobalEntities {
         marketEntity.TemplateAccessor!.Template switch {
             UserEntityTemplate => marketEntity,
             MarketEntityTemplate marketTemplate => connection.SharedEntities.Single(entity =>
-                entity.TemplateAccessor?.Template.GetType() == marketTemplate.UserTemplate.GetType() &&
+                entity.TemplateAccessor?.Template == marketTemplate.UserTemplate &&
                 entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id),
             _ => throw new KeyNotFoundException()
         };
@@ -173,7 +194,7 @@ public static class GlobalEntities {
         userEntity.TemplateAccessor!.Template switch {
             MarketEntityTemplate => userEntity,
             UserEntityTemplate userTemplate => connection.SharedEntities.Single(entity =>
-                entity.TemplateAccessor?.Template.GetType() == userTemplate.MarketTemplate.GetType() &&
+                entity.TemplateAccessor?.Template == userTemplate.MarketTemplate &&
                 entity.GetComponent<MarketItemGroupComponent>().Key == userEntity.Id),
             _ => throw new KeyNotFoundException()
         };

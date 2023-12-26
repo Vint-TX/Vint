@@ -19,9 +19,9 @@ public class PresetEquipmentComponent(Database.Models.Preset preset) : IComponen
 
     void RefreshComponent() {
         try {
-            preset.Entity.RemoveComponent<PresetEquipmentComponent>();
+            preset.Entity?.RemoveComponent<PresetEquipmentComponent>();
         } finally {
-            preset.Entity.AddComponent(this);
+            preset.Entity?.AddComponent(this);
         }
     }
 }

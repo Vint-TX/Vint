@@ -180,11 +180,17 @@ public static class ConfigManager {
                     ConstructorInfo componentCtor = componentType.GetConstructors().First();
                     ParameterInfo[] ctorParameters = componentCtor.GetParameters();
 
-                    List<object> parameters = new(ctorParameters.Length);
+                    List<object?> parameters = new(ctorParameters.Length);
 
                     parameters.AddRange(ctorParameters
-                        .Select(ctorParameter =>
-                            rawComponentProperties![ctorParameter.Name!]!.ToObject(ctorParameter.ParameterType)!));
+                        .Select(ctorParameter => {
+                            JToken? rawComponentProperty = rawComponentProperties![ctorParameter.Name!];
+
+                            if (rawComponentProperty == null && ctorParameter.HasDefaultValue)
+                                return ctorParameter.DefaultValue;
+
+                            return rawComponentProperty?.ToObject(ctorParameter.ParameterType);
+                        }));
 
                     components.Add((IComponent)componentCtor.Invoke(parameters.ToArray()));
                 }
@@ -254,7 +260,13 @@ public static class ConfigManager {
     static ConfigNode GetNode(string path) {
         ConfigNode curNode = Root;
 
-        foreach (string part in path.Replace('\\', '/').Split('/'))
+        if (string.IsNullOrWhiteSpace(path)) return null!;
+
+        path = path.Replace('\\', '/');
+
+        if (path.StartsWith('/')) path = path[1..];
+
+        foreach (string part in path.Split('/'))
             if (curNode.Children.TryGetValue(part, out ConfigNode? child))
                 curNode = child;
             else return null!;

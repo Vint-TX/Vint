@@ -68,8 +68,8 @@ public class Player {
     public long CurrentAvatarId { get; set; }
     public int CurrentPresetIndex { get; set; }
 
-    public long Crystals { get; set; }
-    public long XCrystals { get; set; }
+    public long Crystals { get; set; } = 1000000;
+    public long XCrystals { get; set; } = 1000000;
 
     public int GoldBoxItems { get; set; }
 

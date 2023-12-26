@@ -23,7 +23,7 @@ public class Preset {
     public int Index { get; private set; }
     public string Name { get; set; }
 
-    public IEntity Entity { get; set; } = null!;
+    public IEntity? Entity { get; set; }
 
     public IEntity Weapon { get; set; } = GlobalEntities.GetEntity("weapons", "Smoky");
     public IEntity Hull { get; set; } = GlobalEntities.GetEntity("hulls", "Hunter");

@@ -1,4 +1,5 @@
-﻿using Vint.Core.ECS.Entities;
+﻿using Vint.Core.Database;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 
@@ -15,8 +16,14 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool Steam { get; private set; }
     public bool QuickRegistration { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) =>
-        //todo
+    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        using (DatabaseContext database = new()) {
+            if (database.Players.Any(player => player.Username == Username)) {
+                connection.Send(new RegistrationFailedEvent());
+                return;
+            }
+        }
+        
         connection.Register(
             Username,
             EncryptedPasswordDigest,
@@ -25,4 +32,5 @@ public class RequestRegisterUserEvent : IServerEvent {
             Subscribed,
             Steam,
             QuickRegistration);
+    }
 }

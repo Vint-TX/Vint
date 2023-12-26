@@ -13,7 +13,7 @@ public class TypeCodecInfo(
     public Type Type { get; } = type;
     public bool Nullable { get; } = nullable;
     public bool Varied { get; } = varied;
-    public HashSet<Attribute> Attributes { get; } = attributes ?? new HashSet<Attribute>();
+    public HashSet<Attribute> Attributes { get; } = attributes ?? [];
 
     public override bool Equals(object? obj) => Equals(obj as TypeCodecInfo);
 
@@ -22,7 +22,7 @@ public class TypeCodecInfo(
         if (ReferenceEquals(x, null)) return false;
         if (ReferenceEquals(y, null)) return false;
 
-        return x.Type == y.Type /*|| x.Type.DumpInterfaces().SequenceEqual(y.Type.DumpInterfaces())*/ &&
+        return x.Type == y.Type &&
                x.Nullable == y.Nullable &&
                x.Varied == y.Varied &&
                x.Attributes.SetEquals(y.Attributes);

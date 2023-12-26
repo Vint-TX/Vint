@@ -84,7 +84,7 @@ public class Entity(
     public void Send(IEvent @event) {
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers)
-                playerConnection.Send(new SendEventCommand(@event, this));
+                playerConnection.Send(@event, this);
         }
     }
 
