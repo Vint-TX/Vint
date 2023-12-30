@@ -1,20 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using Vint.Core.ECS;
+﻿using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[PrimaryKey(nameof(PlayerId), nameof(Id))]
+[Table("Avatars")]
 public class Avatar {
-    Avatar(long id) => Id = id;
+    [NotColumn] Player _player = null!;
+    [PrimaryKey(1)] public long Id { get; init; }
 
-    public Avatar(Player player, long id) : this(id) {
-        Player = player;
-        PlayerId = player.Id;
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    public Player Player {
+        get => _player;
+        set {
+            _player = value;
+            PlayerId = value.Id;
+        }
     }
 
-    [Key] public long Id { get; private set; }
-
-    public Player Player { get; private set; } = null!;
-    public uint PlayerId { get; private set; }
+    [PrimaryKey(0)] public long PlayerId { get; private set; }
 }

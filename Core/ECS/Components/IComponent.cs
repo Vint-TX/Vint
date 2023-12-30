@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Components;
 
 public interface IComponent {
     public void Changing(IPlayerConnection connection, IEntity entity) { }
-    
+
     public IComponent Clone() {
         ILogger logger = Log.Logger.ForType(GetType());
         IComponent component = (IComponent)RuntimeHelpers.GetUninitializedObject(GetType());

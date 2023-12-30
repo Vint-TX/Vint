@@ -41,7 +41,7 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
             SendResponseAsync(Response.MakeErrorResponse(400));
             return;
         }
-        
+
         if (urlParts.Last().Contains('?'))
             urlParts[^1] = urlParts[^1][..urlParts[^1].IndexOf('?')];
 
@@ -82,7 +82,7 @@ public class StaticServerSession(HttpServer server) : HttpSession(server) {
 
                 break;
             }
-            
+
             default:
                 SendResponseAsync(Response.MakeErrorResponse(404));
                 break;

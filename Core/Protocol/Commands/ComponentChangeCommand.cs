@@ -13,9 +13,7 @@ public class ComponentChangeCommand(
     IEntity entity,
     IComponent component
 ) : EntityCommand(entity) {
-    [ProtocolVaried]
-    [ProtocolPosition(1)]
-    public IComponent Component { get; private set; } = component;
+    [ProtocolVaried] [ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());

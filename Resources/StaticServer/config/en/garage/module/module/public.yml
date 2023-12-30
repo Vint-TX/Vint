@@ -1,0 +1,94 @@
+modulePrices:
+  firstTier:
+    - cards: 2
+      crystals: 0
+      xcrystals: 0
+    - cards: 5
+      crystals: 100
+      xcrystals: 5
+    - cards: 10
+      crystals: 640
+      xcrystals: 10
+    - cards: 50
+      crystals: 1280
+      xcrystals: 20
+    - cards: 100
+      crystals: 1600
+      xcrystals: 26
+    - cards: 200
+      crystals: 2560
+      xcrystals: 41
+    - cards: 500
+      crystals: 4160
+      xcrystals: 67
+    - cards: 800
+      crystals: 5440
+      xcrystals: 87
+    - cards: 1100
+      crystals: 6400
+      xcrystals: 102
+    - cards: 1400
+      crystals: 22400
+      xcrystals: 358
+  secondTier:
+    - cards: 5
+      crystals: 0
+      xcrystals: 0
+    - cards: 10
+      crystals: 950
+      xcrystals: 15
+    - cards: 30
+      crystals: 1920
+      xcrystals: 31
+    - cards: 80
+      crystals: 3840
+      xcrystals: 61
+    - cards: 140
+      crystals: 4800
+      xcrystals: 77
+    - cards: 200
+      crystals: 7680
+      xcrystals: 123
+    - cards: 320
+      crystals: 20800
+      xcrystals: 333
+    - cards: 450
+      crystals: 27200
+      xcrystals: 435
+    - cards: 600
+      crystals: 32000
+      xcrystals: 512
+    - cards: 1400
+      crystals: 112000
+      xcrystals: 1792
+  thirdTier:
+    - cards: 10
+      crystals: 0
+      xcrystals: 0
+    - cards: 40
+      crystals: 2880
+      xcrystals: 46
+    - cards: 80
+      crystals: 3840
+      xcrystals: 61
+    - cards: 190
+      crystals: 7680
+      xcrystals: 123
+    - cards: 250
+      crystals: 9600
+      xcrystals: 156
+    - cards: 400
+      crystals: 15360
+      xcrystals: 246
+    - cards: 500
+      crystals: 41600
+      xcrystals: 666
+    - cards: 800
+      crystals: 54400
+      xcrystals: 870
+    - cards: 1100
+      crystals: 64000
+      xcrystals: 1024
+    - cards: 3000
+      crystals: 224000
+      xcrystals: 3584

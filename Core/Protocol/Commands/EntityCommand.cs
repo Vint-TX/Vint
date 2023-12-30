@@ -7,8 +7,7 @@ namespace Vint.Core.Protocol.Commands;
 
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public abstract class EntityCommand(IEntity entity) : ICommand {
-    [ProtocolPosition(0)]
-    public IEntity Entity { get; protected set; } = entity;
+    [ProtocolPosition(0)] public IEntity Entity { get; protected set; } = entity;
 
     public virtual void Execute(IPlayerConnection connection) => throw new NotImplementedException();
 }

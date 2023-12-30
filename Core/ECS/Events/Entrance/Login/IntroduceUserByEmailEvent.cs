@@ -18,7 +18,7 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
 
         logger.Information("Login by email '{Email}'", Email);
 
-        using DatabaseContext database = new();
+        using DbConnection database = new();
         Player? player = database.Players.SingleOrDefault(player => player.Email == Email);
 
         if (player == null) {

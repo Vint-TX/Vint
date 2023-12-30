@@ -31,11 +31,16 @@ public static class LoggerUtils {
     });
 
     public static void Initialize(LogEventLevel logEventLevel) {
+        const string template =
+            "[{@t:HH:mm:ss.fff}] [{@l}] [{SourceContext}] {#if SessionEndpoint is not null}[{SessionEndpoint}] {#end}{@m:lj}\n{@x}";
+
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
-            .WriteTo.Console(new ExpressionTemplate(
-                "[{@t:HH:mm:ss.fff}] [{@l}] {#if SourceContext is not null}[{SourceContext}] {#end}{#if SessionEndpoint is not null}[{SessionEndpoint}] {#end}{@m:lj}\n{@x}",
-                theme: Theme))
+            .WriteTo.Console(new ExpressionTemplate(template, theme: Theme))
+            .WriteTo.File(new ExpressionTemplate(template),
+                "Vint.log",
+                rollingInterval: RollingInterval.Day,
+                rollOnFileSizeLimit: true)
             .MinimumLevel.Is(logEventLevel)
             .CreateLogger();
 

@@ -11,6 +11,7 @@ public class ProtocolBuffer(OptionalMap optionalMap, IPlayerConnection connectio
     public OptionalMap OptionalMap { get; private set; } = optionalMap;
 
     public IPlayerConnection Connection { get; } = connection;
+
     public IEntity? GetSharedEntity(long id) => Connection.SharedEntities.SingleOrDefault(entity => entity.Id == id);
 
     public void Clear() {

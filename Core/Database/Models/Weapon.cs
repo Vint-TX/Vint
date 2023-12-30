@@ -1,27 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[PrimaryKey(nameof(PlayerId), nameof(Id))]
+[Table("Weapons")]
 public class Weapon {
-    Weapon(long id, long skinId, long shellId) {
-        Id = id;
-        SkinId = skinId;
-        ShellId = shellId;
+    [NotColumn] Player _player = null!;
+    [PrimaryKey(1)] public long Id { get; init; }
+
+    [Column] public long Xp { get; set; }
+
+    [Column] public long SkinId { get; set; }
+    [Column] public long ShellId { get; set; }
+
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    public Player Player {
+        get => _player;
+        set {
+            _player = value;
+            PlayerId = value.Id;
+        }
     }
 
-    public Weapon(Player player, long id, long skinId, long shellId) : this(id, skinId, shellId) {
-        Player = player;
-        PlayerId = player.Id;
-    }
-
-    public long Id { get; private set; }
-
-    public long Xp { get; set; }
-    
-    public long SkinId { get; set; }
-    public long ShellId { get; set; }
-    
-    public Player Player { get; private set; } = null!;
-    public uint PlayerId { get; private set; }
+    [PrimaryKey(0)] public long PlayerId { get; private set; }
 }

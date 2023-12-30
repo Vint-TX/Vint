@@ -9,15 +9,3 @@ public class PaymentStatisticsEvent : IEvent {
     public long Method { get; private set; }
     public string Screen { get; private set; } = null!;
 }
-
-public enum PaymentStatisticsAction {
-    OpenPayment,
-    CountrySelect,
-    ItemSelect,
-    ModeSelect,
-    Proceed,
-    ClosePayment,
-    OpenExchange,
-    PaymentError,
-    ConfirmedOneTimeOffer
-}

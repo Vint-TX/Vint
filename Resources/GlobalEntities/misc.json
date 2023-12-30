@@ -61,6 +61,17 @@
     "components": {}
   },
   {
+    "name": "Rating",
+    "id": -2076021809,
+    "template": [
+      "MatchMakingModeTemplate",
+      "battleselect/matchmaking/mode/rating"
+    ],
+    "components": {
+      "MatchMakingRatingModeComponent": {}
+    }
+  },
+  {
     "name": "Leaguesconfig",
     "id": 1775386509,
     "template": [

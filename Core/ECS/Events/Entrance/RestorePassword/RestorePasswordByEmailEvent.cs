@@ -18,7 +18,7 @@ public class RestorePasswordByEmailEvent : IServerEvent {
 
         logger.Information("Restoring password '{Email}'", Email);
 
-        using DatabaseContext database = new();
+        using DbConnection database = new();
         Player player = database.Players.Single(player => player.Email == Email);
 
         connection.Player = player;

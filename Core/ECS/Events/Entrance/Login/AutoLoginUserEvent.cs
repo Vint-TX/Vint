@@ -10,8 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1438075609642)]
 public class AutoLoginUserEvent : IServerEvent {
-    [ProtocolName("uid")]
-    public string Username { get; private set; } = null!;
+    [ProtocolName("uid")] public string Username { get; private set; } = null!;
     public byte[] EncryptedToken { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
@@ -20,7 +19,7 @@ public class AutoLoginUserEvent : IServerEvent {
 
         logger.Information("Autologin '{Username}'", Username);
 
-        using DatabaseContext database = new();
+        using DbConnection database = new();
         Player? player = database.Players.SingleOrDefault(player => player.Username == Username);
 
         if (player == null) {

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
@@ -12,7 +11,7 @@ public class GameServer(IPAddress host, ushort port) : TcpServer(host, port) {
     Protocol.Protocol Protocol { get; } = new();
 
     public List<IPlayerConnection> PlayerConnections { get; } = [];
-    
+
     protected override PlayerConnection CreateSession() => new(this, Protocol);
 
     protected override void OnConnected(TcpSession session) => PlayerConnections.Add((PlayerConnection)session);

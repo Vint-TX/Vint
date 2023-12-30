@@ -1,5 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using LinqToDB;
 using Vint.Core.Config;
+using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
@@ -17,6 +18,42 @@ public static class GlobalEntities {
         AllMarketTemplateEntities = ConfigManager.GetGlobalEntities().ToList(); // todo
 
     public static List<IEntity> AllMarketTemplateEntities { get; private set; }
+
+    public static IReadOnlyDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
+        { GetEntity("weapons", "Flamethrower").Id, GetEntity("weaponSkins", "FlamethrowerM0").Id },
+        { GetEntity("weapons", "Freeze").Id, GetEntity("weaponSkins", "FreezeM0").Id },
+        { GetEntity("weapons", "Hammer").Id, GetEntity("weaponSkins", "HammerM0").Id },
+        { GetEntity("weapons", "Isis").Id, GetEntity("weaponSkins", "IsisM0").Id },
+        { GetEntity("weapons", "Railgun").Id, GetEntity("weaponSkins", "RailgunM0").Id },
+        { GetEntity("weapons", "Ricochet").Id, GetEntity("weaponSkins", "RicochetM0").Id },
+        { GetEntity("weapons", "Shaft").Id, GetEntity("weaponSkins", "ShaftM0").Id },
+        { GetEntity("weapons", "Smoky").Id, GetEntity("weaponSkins", "SmokyM0").Id },
+        { GetEntity("weapons", "Thunder").Id, GetEntity("weaponSkins", "ThunderM0").Id },
+        { GetEntity("weapons", "Twins").Id, GetEntity("weaponSkins", "TwinsM0").Id },
+        { GetEntity("weapons", "Vulcan").Id, GetEntity("weaponSkins", "VulcanM0").Id },
+
+        { GetEntity("hulls", "Dictator").Id, GetEntity("hullSkins", "DictatorM0").Id },
+        { GetEntity("hulls", "Hornet").Id, GetEntity("hullSkins", "HornetM0").Id },
+        { GetEntity("hulls", "Hunter").Id, GetEntity("hullSkins", "HunterM0").Id },
+        { GetEntity("hulls", "Mammoth").Id, GetEntity("hullSkins", "MammothM0").Id },
+        { GetEntity("hulls", "Titan").Id, GetEntity("hullSkins", "TitanM0").Id },
+        { GetEntity("hulls", "Viking").Id, GetEntity("hullSkins", "VikingM0").Id },
+        { GetEntity("hulls", "Wasp").Id, GetEntity("hullSkins", "WaspM0").Id }
+    };
+
+    public static IReadOnlyDictionary<long, long> DefaultShells { get; } = new Dictionary<long, long> {
+        { GetEntity("weapons", "Flamethrower").Id, GetEntity("shells", "FlamethrowerOrange").Id },
+        { GetEntity("weapons", "Freeze").Id, GetEntity("shells", "FreezeSkyblue").Id },
+        { GetEntity("weapons", "Hammer").Id, GetEntity("shells", "HammerStandard").Id },
+        { GetEntity("weapons", "Isis").Id, GetEntity("shells", "IsisStandard").Id },
+        { GetEntity("weapons", "Railgun").Id, GetEntity("shells", "RailgunPaleblue").Id },
+        { GetEntity("weapons", "Ricochet").Id, GetEntity("shells", "RicochetAurulent").Id },
+        { GetEntity("weapons", "Shaft").Id, GetEntity("shells", "ShaftStandard").Id },
+        { GetEntity("weapons", "Smoky").Id, GetEntity("shells", "SmokyStandard").Id },
+        { GetEntity("weapons", "Thunder").Id, GetEntity("shells", "ThunderStandard").Id },
+        { GetEntity("weapons", "Twins").Id, GetEntity("shells", "TwinsBlue").Id },
+        { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
+    };
 
     public static List<IEntity> GetEntities(this IPlayerConnection connection) {
         List<IEntity> entities = AllMarketTemplateEntities.ToList();
@@ -36,37 +73,39 @@ public static class GlobalEntities {
 
             Player player = connection.Player;
             IEntity user = connection.User;
-            
+
+            using DbConnection db = new();
+
             switch (path) {
                 case "avatars": {
-                    if (player.Avatars.Exists(avatar => avatar.Id == entityId))
+                    if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
                 case "covers": {
-                    if (player.Covers.Exists(cover => cover.Id == entityId))
+                    if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
                 case "graffities": {
-                    if (player.Graffities.Exists(graffiti => graffiti.Id == entityId))
+                    if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
                 case "hulls": {
-                    Hull? hull = player.Hulls.FirstOrDefault(hull => hull.Id == entityId);
-                    
+                    Hull? hull = db.Hulls.FirstOrDefault(hull => hull.PlayerId == player.Id && hull.Id == entityId);
+
                     if (hull != null)
                         entity.AddComponent(new UserGroupComponent(user));
 
                     long xp = hull?.Xp ?? 0;
-                    
+
                     entity.AddComponent(new ExperienceItemComponent(xp));
                     entity.AddComponent(new ExperienceToLevelUpItemComponent(xp));
                     entity.AddComponent(new UpgradeLevelItemComponent(xp));
@@ -75,34 +114,34 @@ public static class GlobalEntities {
                 }
 
                 case "hullSkins": {
-                    if (player.HullSkins.Exists(hullSkin => hullSkin.Id == entityId))
+                    if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
                 case "paints": {
-                    if (player.Paints.Exists(paint => paint.Id == entityId))
+                    if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
                 case "shells": {
-                    if (player.Shells.Exists(shell => shell.Id == entityId))
+                    if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
                 case "weapons": {
-                    Weapon? weapon = player.Weapons.FirstOrDefault(weapon => weapon.Id == entityId);
-                    
+                    Weapon? weapon = db.Weapons.FirstOrDefault(weapon => weapon.PlayerId == player.Id && weapon.Id == entityId);
+
                     if (weapon != null)
                         entity.AddComponent(new UserGroupComponent(user));
 
                     long xp = weapon?.Xp ?? 0;
-                    
+
                     entity.AddComponent(new ExperienceItemComponent(xp));
                     entity.AddComponent(new ExperienceToLevelUpItemComponent(xp));
                     entity.AddComponent(new UpgradeLevelItemComponent(xp));
@@ -111,9 +150,9 @@ public static class GlobalEntities {
                 }
 
                 case "weaponSkins": {
-                    if (player.WeaponSkins.Exists(weaponSkin => weaponSkin.Id == entityId))
+                    if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == entityId))
                         entity.AddComponent(new UserGroupComponent(user));
-                    
+
                     break;
                 }
 
@@ -131,30 +170,35 @@ public static class GlobalEntities {
                             entity.AddComponent(new UserItemCounterComponent(player.Crystals));
                             break;
                         }
-                        
+
                         case XCrystalUserItemTemplate: {
                             entity.AddComponent(new UserItemCounterComponent(player.XCrystals));
                             break;
                         }
-                        
+
                         case PresetUserItemTemplate: {
-                            foreach (Preset preset in player.Presets) {
+                            if (db.Presets.All(preset => preset.PlayerId != player.Id))
+                                db.Insert(new Preset { Player = player, Index = 0, Name = "Preset 1" });
+
+                            foreach (Preset preset in db.Presets.Where(preset => preset.PlayerId == player.Id)) {
                                 IEntity presetEntity = entity.Clone();
                                 presetEntity.Id = EntityRegistry.FreeId;
-                            
+
                                 presetEntity.AddComponent(new PresetEquipmentComponent(preset));
                                 presetEntity.AddComponent(new PresetNameComponent(preset));
-                            
+
                                 if (preset.Index == player.CurrentPresetIndex)
                                     presetEntity.AddComponent(new MountedItemComponent());
 
                                 preset.Entity = presetEntity;
+                                player.Presets.Add(preset);
                             }
-                        
+
                             connection.Share(player.Presets.Select(preset => preset.Entity!));
                             break;
                         }
                     }
+
                     break;
                 }
             }
@@ -214,40 +258,4 @@ public static class GlobalEntities {
 
         return entities;
     }
-
-    public static IReadOnlyDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
-        { GetEntity("weapons", "Flamethrower").Id, GetEntity("weaponSkins", "FlamethrowerM0").Id },
-        { GetEntity("weapons", "Freeze").Id, GetEntity("weaponSkins", "FreezeM0").Id },
-        { GetEntity("weapons", "Hammer").Id, GetEntity("weaponSkins", "HammerM0").Id },
-        { GetEntity("weapons", "Isis").Id, GetEntity("weaponSkins", "IsisM0").Id },
-        { GetEntity("weapons", "Railgun").Id, GetEntity("weaponSkins", "RailgunM0").Id },
-        { GetEntity("weapons", "Ricochet").Id, GetEntity("weaponSkins", "RicochetM0").Id },
-        { GetEntity("weapons", "Shaft").Id, GetEntity("weaponSkins", "ShaftM0").Id },
-        { GetEntity("weapons", "Smoky").Id, GetEntity("weaponSkins", "SmokyM0").Id },
-        { GetEntity("weapons", "Thunder").Id, GetEntity("weaponSkins", "ThunderM0").Id },
-        { GetEntity("weapons", "Twins").Id, GetEntity("weaponSkins", "TwinsM0").Id },
-        { GetEntity("weapons", "Vulcan").Id, GetEntity("weaponSkins", "VulcanM0").Id },
-        
-        { GetEntity("hulls", "Dictator").Id, GetEntity("hullSkins", "DictatorM0").Id },
-        { GetEntity("hulls", "Hornet").Id, GetEntity("hullSkins", "HornetM0").Id },
-        { GetEntity("hulls", "Hunter").Id, GetEntity("hullSkins", "HunterM0").Id },
-        { GetEntity("hulls", "Mammoth").Id, GetEntity("hullSkins", "MammothM0").Id },
-        { GetEntity("hulls", "Titan").Id, GetEntity("hullSkins", "TitanM0").Id },
-        { GetEntity("hulls", "Viking").Id, GetEntity("hullSkins", "VikingM0").Id },
-        { GetEntity("hulls", "Wasp").Id, GetEntity("hullSkins", "WaspM0").Id }
-    };
-
-    public static IReadOnlyDictionary<long, long> DefaultShells { get; } = new Dictionary<long, long> {
-        { GetEntity("weapons", "Flamethrower").Id, GetEntity("shells", "FlamethrowerOrange").Id },
-        { GetEntity("weapons", "Freeze").Id, GetEntity("shells", "FreezeSkyblue").Id },
-        { GetEntity("weapons", "Hammer").Id, GetEntity("shells", "HammerStandard").Id },
-        { GetEntity("weapons", "Isis").Id, GetEntity("shells", "IsisStandard").Id },
-        { GetEntity("weapons", "Railgun").Id, GetEntity("shells", "RailgunPaleblue").Id },
-        { GetEntity("weapons", "Ricochet").Id, GetEntity("shells", "RicochetAurulent").Id },
-        { GetEntity("weapons", "Shaft").Id, GetEntity("shells", "ShaftStandard").Id },
-        { GetEntity("weapons", "Smoky").Id, GetEntity("shells", "SmokyStandard").Id },
-        { GetEntity("weapons", "Thunder").Id, GetEntity("shells", "ThunderStandard").Id },
-        { GetEntity("weapons", "Twins").Id, GetEntity("shells", "TwinsBlue").Id },
-        { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
-    };
 }

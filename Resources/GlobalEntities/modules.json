@@ -1,0 +1,815 @@
+[
+  {
+    "name": "Absorbingarmor",
+    "id": 492941809,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/1/absorbingarmor"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 492941809
+      },
+      "MarketItemGroupComponent": {
+        "key": 492941809
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Repairkit",
+    "id": -862259125,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/1/repairkit"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -862259125
+      },
+      "MarketItemGroupComponent": {
+        "key": -862259125
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Turbospeed",
+    "id": -365494384,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/1/turbospeed"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -365494384
+      },
+      "MarketItemGroupComponent": {
+        "key": -365494384
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Forcefield",
+    "id": -1597839790,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/2/forcefield"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1597839790
+      },
+      "MarketItemGroupComponent": {
+        "key": -1597839790
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Invisibility",
+    "id": 137179508,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/2/invisibility"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 137179508
+      },
+      "MarketItemGroupComponent": {
+        "key": 137179508
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Jumpimpact",
+    "id": 1327463523,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/2/jumpimpact"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1327463523
+      },
+      "MarketItemGroupComponent": {
+        "key": 1327463523
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Firering",
+    "id": 1896579342,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/3/firering"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1896579342
+      },
+      "MarketItemGroupComponent": {
+        "key": 1896579342
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Icetrap",
+    "id": -1177680131,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/3/icetrap"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1177680131
+      },
+      "MarketItemGroupComponent": {
+        "key": -1177680131
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Invulnerability",
+    "id": 1924597477,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/active/3/invulnerability"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1924597477
+      },
+      "MarketItemGroupComponent": {
+        "key": 1924597477
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Backhitdefence",
+    "id": -1962420821,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/passive/1/backhitdefence"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1962420821
+      },
+      "MarketItemGroupComponent": {
+        "key": -1962420821
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Tempblock",
+    "id": 596921121,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/passive/1/tempblock"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 596921121
+      },
+      "MarketItemGroupComponent": {
+        "key": 596921121
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Acceleratedgears",
+    "id": 1365914179,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/passive/2/acceleratedgears"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1365914179
+      },
+      "MarketItemGroupComponent": {
+        "key": 1365914179
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Sapper",
+    "id": -105040547,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/trigger/2/sapper"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -105040547
+      },
+      "MarketItemGroupComponent": {
+        "key": -105040547
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Emergencyprotection",
+    "id": -357196071,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/tank/trigger/3/emergencyprotection"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -357196071
+      },
+      "MarketItemGroupComponent": {
+        "key": -357196071
+      },
+      "ModuleTankPartComponent": {
+        "part": "TANK"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Emp",
+    "id": -1493372159,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/1/emp"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1493372159
+      },
+      "MarketItemGroupComponent": {
+        "key": -1493372159
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Mine",
+    "id": 1133911248,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/1/mine"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1133911248
+      },
+      "MarketItemGroupComponent": {
+        "key": 1133911248
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Sonar",
+    "id": -1318192334,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/1/sonar"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1318192334
+      },
+      "MarketItemGroupComponent": {
+        "key": -1318192334
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Externalimpact",
+    "id": -1334156852,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/2/externalimpact"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1334156852
+      },
+      "MarketItemGroupComponent": {
+        "key": -1334156852
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Increaseddamage",
+    "id": 676407818,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/2/increaseddamage"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 676407818
+      },
+      "MarketItemGroupComponent": {
+        "key": 676407818
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Spidermine",
+    "id": 1458405023,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/2/spidermine"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1458405023
+      },
+      "MarketItemGroupComponent": {
+        "key": 1458405023
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Drone",
+    "id": 1392039140,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/3/drone"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1392039140
+      },
+      "MarketItemGroupComponent": {
+        "key": 1392039140
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Energyinjection",
+    "id": 1128679079,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/3/energyinjection"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1128679079
+      },
+      "MarketItemGroupComponent": {
+        "key": 1128679079
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Explosivemass",
+    "id": 393550399,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/active/3/explosivemass"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 393550399
+      },
+      "MarketItemGroupComponent": {
+        "key": 393550399
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Engineer",
+    "id": -1027949361,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/passive/1/engineer"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1027949361
+      },
+      "MarketItemGroupComponent": {
+        "key": -1027949361
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Adrenaline",
+    "id": 1367280061,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/passive/2/adrenaline"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1367280061
+      },
+      "MarketItemGroupComponent": {
+        "key": 1367280061
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Rage",
+    "id": 1215656773,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/trigger/1/rage"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": 1215656773
+      },
+      "MarketItemGroupComponent": {
+        "key": 1215656773
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "Kamikadze",
+    "id": -1603423529,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/trigger/2/kamikadze"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -1603423529
+      },
+      "MarketItemGroupComponent": {
+        "key": -1603423529
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 1
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 1
+      }
+    }
+  },
+  {
+    "name": "Lifesteal",
+    "id": -246333323,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/trigger/3/lifesteal"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -246333323
+      },
+      "MarketItemGroupComponent": {
+        "key": -246333323
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 2
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 2
+      }
+    }
+  },
+  {
+    "name": "Gold",
+    "id": -150814762,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/prebuildmodule/common/active/1/gold"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -150814762
+      },
+      "MarketItemGroupComponent": {
+        "key": -150814762
+      },
+      "ModuleTankPartComponent": {
+        "part": "COMMON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "ACTIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      },
+      "ImmutableModuleItemComponent": {}
+    }
+  }
+]

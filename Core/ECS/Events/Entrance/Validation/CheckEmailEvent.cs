@@ -15,7 +15,7 @@ public class CheckEmailEvent : IServerEvent {
         try {
             MailAddress email = new(Email);
 
-            using DatabaseContext database = new();
+            using DbConnection database = new();
 
             if (database.Players.Any(player => player.Email == email.Address))
                 connection.Send(new EmailOccupiedEvent(Email));

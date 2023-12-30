@@ -14,7 +14,7 @@ namespace Vint.Core.ECS.Events.Chat;
 public class SendChatMessageEvent : IServerEvent {
     static Dictionary<string, ChatConfigComponent> ConfigPathToConfig { get; } = new();
     public string Message { get; private set; } = null!;
-    
+
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IEntity chat = entities.Single();
         TemplateAccessor chatTemplateAccessor = chat.TemplateAccessor!;
@@ -35,7 +35,7 @@ public class SendChatMessageEvent : IServerEvent {
 
         return Message.Length > 0 && Message.Length <= chatConfig.MaxMessageLength;
     }
-    
+
     [SuppressMessage("ReSharper", "InvertIf")]
     static ChatConfigComponent GetChatConfig(string path) {
         if (!ConfigPathToConfig.TryGetValue(path, out ChatConfigComponent? chatConfig)) {

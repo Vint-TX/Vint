@@ -20,11 +20,11 @@ public abstract class EntityTemplate {
     public override bool Equals(object? obj) {
         if (obj == null) return false;
         if (ReferenceEquals(this, obj)) return true;
-        
+
         return GetHashCode() == obj.GetHashCode();
     }
 
-    public override int GetHashCode() => 
+    public override int GetHashCode() =>
         unchecked((int)GetType().GetProtocolId().Id);
 }
 

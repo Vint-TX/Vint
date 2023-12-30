@@ -17,7 +17,7 @@ public static class Leveling {
     public static int GetLevel(long xp) {
         List<int> experiencePerRank = [0];
         experiencePerRank.AddRange(ConfigManager.GetComponent<UpgradeLevelsComponent>("garage").LevelsExperiences);
-        
+
         int rankIndex = experiencePerRank.IndexOf(experiencePerRank.LastOrDefault(x => x <= xp));
 
         return rankIndex + 1;

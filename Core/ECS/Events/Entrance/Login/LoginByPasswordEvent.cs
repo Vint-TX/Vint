@@ -1,4 +1,6 @@
-﻿using Vint.Core.ECS.Entities;
+﻿using LinqToDB;
+using Vint.Core.Database;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -22,6 +24,20 @@ public class LoginByPasswordEvent : IServerEvent {
             connection.Send(new LoginFailedEvent());
 
             return;
+        }
+
+        List<IPlayerConnection> connections = connection.Server.PlayerConnections
+            .Where(player => player.Player != null! && player.Player.Username == connection.Player.Username)
+            .ToList();
+
+        if (connections.Count > 1) {
+            IPlayerConnection oldConnection = connections.First();
+
+            using (DbConnection database = new()) {
+                database.Update(oldConnection.Player);
+            }
+
+            ((PlayerConnection)oldConnection).Disconnect();
         }
 
         if (connection.Player.IsBanned)

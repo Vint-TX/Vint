@@ -11,15 +11,14 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1439375251389)]
 public class IntroduceUserByUidEvent : IntroduceUserEvent {
-    [ProtocolName("uid")]
-    public string Username { get; private set; } = null!;
+    [ProtocolName("uid")] public string Username { get; private set; } = null!;
 
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Information("Login by username '{Username}'", Username);
 
-        using DatabaseContext database = new();
+        using DbConnection database = new();
         Player? player = database.Players.SingleOrDefault(player => player.Username == Username);
 
         if (player == null) {

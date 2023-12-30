@@ -13,11 +13,8 @@ public class SendEventCommand(
     IEvent @event,
     params IEntity[] entities
 ) : ICommand {
-    [ProtocolVaried]
-    [ProtocolPosition(0)]
-    public IEvent Event { get; private set; } = @event;
-    [ProtocolPosition(1)]
-    public IEntity[] Entities { get; private set; } = entities;
+    [ProtocolVaried] [ProtocolPosition(0)] public IEvent Event { get; private set; } = @event;
+    [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
 
     public void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());

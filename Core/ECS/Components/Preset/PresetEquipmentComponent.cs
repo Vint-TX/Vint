@@ -11,7 +11,7 @@ public class PresetEquipmentComponent(Database.Models.Preset preset) : IComponen
         WeaponId = weaponId;
         RefreshComponent();
     }
-    
+
     public void SetHullId(long hullId) {
         HullId = hullId;
         RefreshComponent();

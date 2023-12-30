@@ -1,16 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
+using LinqToDB;
 using NetCoreServer;
 using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Entrance.Login;
-using Vint.Core.ECS.Events.Entrance.Registration;
 using Vint.Core.ECS.Templates.Entrance;
 using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Codecs.Buffer;
@@ -85,18 +84,22 @@ public class PlayerConnection(GameServer server, Protocol.Protocol protocol) : T
 
         byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(encryptedPasswordDigest));
 
-        Player = new Player(Logger, username, email) {
+        Player = new Player {
+            Username = username,
+            Email = email,
             CountryCode = IpUtils.GetCountryCode((Socket.RemoteEndPoint as IPEndPoint)!.Address) ?? "US",
             HardwareFingerprint = hardwareFingerprint,
             Subscribed = subscribed,
             RegistrationTime = DateTimeOffset.UtcNow,
+            LastLoginTime = DateTimeOffset.UtcNow,
             PasswordHash = passwordHash
         };
 
-        using (DatabaseContext database = new()) {
-            database.Players.Add(Player);
-            database.Save();
+        using (DbConnection database = new()) {
+            Player.Id = database.InsertWithInt64Identity(Player);
         }
+
+        Player.InitializeNew();
 
         Login(true, hardwareFingerprint);
     }
@@ -127,10 +130,9 @@ public class PlayerConnection(GameServer server, Protocol.Protocol protocol) : T
 
         Logger.Warning("'{Username}' logged in", Player.Username);
 
-        using DatabaseContext database = new();
+        using DbConnection database = new();
 
-        database.Players.Update(Player);
-        database.Save();
+        database.Update(Player);
     }
 
     public void ChangePassword(string passwordDigest) {
@@ -139,10 +141,12 @@ public class PlayerConnection(GameServer server, Protocol.Protocol protocol) : T
         byte[] passwordHash = encryption.RsaDecrypt(Convert.FromBase64String(passwordDigest));
         Player.PasswordHash = passwordHash;
 
-        using DatabaseContext database = new();
+        using DbConnection database = new();
 
-        database.Players.Update(Player);
-        database.Save();
+        database.Players
+            .Where(player => player.Id == Player.Id)
+            .Set(player => player.PasswordHash, Player.PasswordHash)
+            .Update();
     }
 
     public void Send(ICommand command) {
@@ -233,6 +237,5 @@ public class PlayerConnection(GameServer server, Protocol.Protocol protocol) : T
     [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
     public override string ToString() => $"PlayerConnection {{ " +
                                          $"ClientSession Id: '{ClientSession?.Id}'; " +
-                                         $"Username: '{Player?.Username}'; " +
-                                         $"Endpoint: {Socket.RemoteEndPoint} }}";
+                                         $"Username: '{Player?.Username}' }}";
 }

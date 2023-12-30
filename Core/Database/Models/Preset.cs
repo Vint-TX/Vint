@@ -1,40 +1,38 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Vint.Core.ECS;
+﻿using LinqToDB.Mapping;
 using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Database.Models;
 
-[PrimaryKey(nameof(PlayerId), nameof(Index))]
+[Table("Presets")]
 public class Preset {
-    Preset(int index) {
-        Index = index;
-        Name = $"Preset {index + 1}";
+    [NotColumn] Player _player = null!;
+
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    public Player Player {
+        get => _player;
+        set {
+            _player = value;
+            PlayerId = value.Id;
+        }
     }
 
-    public Preset(Player player, int index) : this(index) {
-        Player = player;
-        PlayerId = player.Id;
-    }
+    [PrimaryKey(0)] public long PlayerId { get; private set; }
 
-    public Player Player { get; private set; } = null!;
-    public uint PlayerId { get; private set; }
+    [PrimaryKey(1)] public int Index { get; init; }
+    [Column] public string Name { get; set; } = null!;
 
-    public int Index { get; private set; }
-    public string Name { get; set; }
+    [NotColumn] public IEntity? Entity { get; set; }
 
-    public IEntity? Entity { get; set; }
+    [Column] public IEntity Weapon { get; set; } = GlobalEntities.GetEntity("weapons", "Smoky");
+    [Column] public IEntity Hull { get; set; } = GlobalEntities.GetEntity("hulls", "Hunter");
 
-    public IEntity Weapon { get; set; } = GlobalEntities.GetEntity("weapons", "Smoky");
-    public IEntity Hull { get; set; } = GlobalEntities.GetEntity("hulls", "Hunter");
+    [Column] public IEntity WeaponSkin { get; set; } = GlobalEntities.GetEntity("weaponSkins", "SmokyM0");
+    [Column] public IEntity HullSkin { get; set; } = GlobalEntities.GetEntity("hullSkins", "HunterM0");
 
-    public IEntity WeaponSkin { get; set; } = GlobalEntities.GetEntity("weaponSkins", "SmokyM0");
-    public IEntity HullSkin { get; set; } = GlobalEntities.GetEntity("hullSkins", "HunterM0");
+    [Column] public IEntity Cover { get; set; } = GlobalEntities.GetEntity("covers", "None");
+    [Column] public IEntity Paint { get; set; } = GlobalEntities.GetEntity("paints", "Green");
 
-    public IEntity Cover { get; set; } = GlobalEntities.GetEntity("covers", "None");
-    public IEntity Paint { get; set; } = GlobalEntities.GetEntity("paints", "Green");
-
-    public IEntity Shell { get; set; } = GlobalEntities.GetEntity("shells", "SmokyStandard");
-    public IEntity Graffiti { get; set; } = GlobalEntities.GetEntity("graffities", "Logo");
+    [Column] public IEntity Shell { get; set; } = GlobalEntities.GetEntity("shells", "SmokyStandard");
+    [Column] public IEntity Graffiti { get; set; } = GlobalEntities.GetEntity("graffities", "Logo");
     // todo modules
 }

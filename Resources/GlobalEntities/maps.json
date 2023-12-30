@@ -1,0 +1,242 @@
+[
+  {
+    "name": "Silence",
+    "id": -321842153,
+    "template": [
+      "MapTemplate",
+      "battle/map/silence"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-321842153"
+      }
+    }
+  },
+  {
+    "name": "Nightiran",
+    "id": 343745828,
+    "template": [
+      "MapTemplate",
+      "battle/map/nightiran"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "343745828"
+      }
+    }
+  },
+  {
+    "name": "Acidlake",
+    "id": 485053206,
+    "template": [
+      "MapTemplate",
+      "battle/map/acidlake"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "485053206"
+      }
+    }
+  },
+  {
+    "name": "Acidlakehalloween",
+    "id": -820833801,
+    "template": [
+      "MapTemplate",
+      "battle/map/acidlakehalloween"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-820833801"
+      }
+    }
+  },
+  {
+    "name": "Testbox",
+    "id": 458045295,
+    "template": [
+      "MapTemplate",
+      "battle/map/testbox"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "458045295"
+      }
+    }
+  },
+  {
+    "name": "Sandbox",
+    "id": -549069251,
+    "template": [
+      "MapTemplate",
+      "battle/map/sandbox"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-549069251"
+      }
+    }
+  },
+  {
+    "name": "Iran",
+    "id": -51480736,
+    "template": [
+      "MapTemplate",
+      "battle/map/iran"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-51480736"
+      }
+    }
+  },
+  {
+    "name": "Area159",
+    "id": 1133979230,
+    "template": [
+      "MapTemplate",
+      "battle/map/area159"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "1133979230"
+      }
+    }
+  },
+  {
+    "name": "Repin",
+    "id": -1587964040,
+    "template": [
+      "MapTemplate",
+      "battle/map/repin"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-1587964040"
+      }
+    }
+  },
+  {
+    "name": "Westprime",
+    "id": 980475942,
+    "template": [
+      "MapTemplate",
+      "battle/map/westprime"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "980475942"
+      }
+    }
+  },
+  {
+    "name": "Boombox",
+    "id": 1945237110,
+    "template": [
+      "MapTemplate",
+      "battle/map/boombox"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "1945237110"
+      }
+    }
+  },
+  {
+    "name": "Silencemoon",
+    "id": 933129112,
+    "template": [
+      "MapTemplate",
+      "battle/map/silencemoon"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "933129112"
+      }
+    }
+  },
+  {
+    "name": "Rio",
+    "id": -1664220274,
+    "template": [
+      "MapTemplate",
+      "battle/map/rio"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-1664220274"
+      }
+    }
+  },
+  {
+    "name": "MassacremarsBG",
+    "id": 989096365,
+    "template": [
+      "MapTemplate",
+      "battle/map/massacremarsBG"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "989096365"
+      }
+    }
+  },
+  {
+    "name": "Massacre",
+    "id": -1551247853,
+    "template": [
+      "MapTemplate",
+      "battle/map/massacre"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "-1551247853"
+      }
+    }
+  },
+  {
+    "name": "Kungur",
+    "id": 2127033418,
+    "template": [
+      "MapTemplate",
+      "battle/map/kungur"
+    ],
+    "components": {
+      "MapEnabledInCustomGameComponent": {},
+      "MapComponent": {},
+      "MapGroupComponent": {
+        "key": "2127033418"
+      }
+    }
+  }
+]

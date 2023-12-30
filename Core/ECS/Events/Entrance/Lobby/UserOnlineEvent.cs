@@ -1,4 +1,5 @@
-﻿using Vint.Core.Database.Models;
+﻿using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
@@ -6,6 +7,7 @@ using Vint.Core.ECS.Events.Payment;
 using Vint.Core.ECS.Events.User.Friends;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Lobby;
 
@@ -14,9 +16,11 @@ public class UserOnlineEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         connection.Share(connection.GetEntities());
 
+        using DbConnection db = new();
+
         Player player = connection.Player;
-        Preset preset = player.Presets[player.CurrentPresetIndex];
-        
+        Preset preset = db.Presets.Single(preset => preset.PlayerId == player.Id && preset.Index == player.CurrentPresetIndex);
+
         foreach (IEntity entity in new[] {
                      connection.GetEntity(player.CurrentAvatarId)!.GetUserEntity(connection),
                      preset.Hull.GetUserEntity(connection),
@@ -30,15 +34,28 @@ public class UserOnlineEvent : IServerEvent {
                  }) {
             entity.AddComponent(new MountedItemComponent());
         }
-        
+
         connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
 
         connection.ClientSession.Send(new PaymentSectionLoadedEvent());
 
-        connection.ClientSession.Send(
-            new FriendsLoadedEvent(
-                connection.Player.AcceptedFriendIds.ToHashSet(),
-                connection.Player.IncomingFriendIds.ToHashSet(),
-                connection.Player.OutgoingFriendIds.ToHashSet()));
+        IEnumerable<Relation> relations = db.Relations.Where(relation => relation.SourcePlayerId == player.Id);
+
+        HashSet<long> friendIds = relations
+            .Where(RelationUtils.IsFriend)
+            .Select(relation => relation.TargetPlayerId)
+            .ToHashSet();
+
+        HashSet<long> incomingIds = relations
+            .Where(RelationUtils.IsIncoming)
+            .Select(relation => relation.TargetPlayerId)
+            .ToHashSet();
+
+        HashSet<long> outgoingIds = relations
+            .Where(RelationUtils.IsOutgoing)
+            .Select(relation => relation.TargetPlayerId)
+            .ToHashSet();
+
+        connection.ClientSession.Send(new FriendsLoadedEvent(friendIds, incomingIds, outgoingIds));
     }
 }

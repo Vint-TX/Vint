@@ -1,26 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Vint.Core.ECS.Entities;
+﻿using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[PrimaryKey(nameof(PlayerId), nameof(Id))]
+[Table("Hulls")]
 public class Hull {
-    Hull(long id, long skinId) {
-        Id = id;
-        SkinId = skinId;
+    [NotColumn] Player _player = null!;
+    [Column] public long Xp { get; set; }
+
+    [Column] public long SkinId { get; set; }
+
+    [PrimaryKey(1)] public long Id { get; init; }
+
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    public Player Player {
+        get => _player;
+        set {
+            _player = value;
+            PlayerId = value.Id;
+        }
     }
 
-    public Hull(Player player, long id, long skinId) : this(id, skinId) {
-        Player = player;
-        PlayerId = player.Id;
-    }
-
-    public long Id { get; private set; }
-
-    public long Xp { get; set; }
-    
-    public long SkinId { get; set; }
-    
-    public Player Player { get; private set; } = null!;
-    public uint PlayerId { get; private set; }
+    [PrimaryKey(0)] public long PlayerId { get; private set; }
 }

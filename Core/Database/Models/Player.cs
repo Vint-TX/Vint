@@ -1,102 +1,85 @@
-﻿using Serilog;
+﻿using LinqToDB;
+using LinqToDB.Mapping;
+using Serilog;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Database.Models;
 
+[Table("Players")]
 public class Player {
-    public Player(ILogger connectionLogger, string username, string email) : this(username, email) =>
-        Logger = connectionLogger.ForType(typeof(Player));
+    public ILogger Logger { get; } = Log.Logger.ForType(typeof(Player));
 
-    Player(string username, string email) {
-        List<string> admins = ["C6OI"];
+    [PrimaryKey, Identity] public long Id { get; set; }
 
-        Logger = Log.Logger.ForType(typeof(Player));
-        
-        CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
-        Username = username;
-        Email = email;
+    [Column] public string Username { get; set; } = null!;
+    [Column] public string Email { get; set; } = null!;
 
-        long defaultWeaponId = GlobalEntities.GetEntity("weapons", "Smoky").Id;
-        long defaultHullId = GlobalEntities.GetEntity("hulls", "Hunter").Id;
+    [Column] public bool RememberMe { get; set; }
 
-        long defaultShellId = GlobalEntities.DefaultShells[defaultWeaponId];
-        long defaultWeaponSkinId = GlobalEntities.DefaultSkins[defaultWeaponId];
+    [Column] public byte[] AutoLoginToken { get; set; } = [];
+    [Column] public byte[] PasswordHash { get; set; } = [];
+    [Column] public string HardwareFingerprint { get; set; } = "";
 
-        long defaultHullSkinId = GlobalEntities.DefaultSkins[defaultHullId];
-        
-        Hulls = [new Hull(this, defaultHullId, defaultHullSkinId)];
-        HullSkins = [new HullSkin(this, defaultHullSkinId, defaultHullId)];
-        Paints = [new Paint(this, GlobalEntities.GetEntity("paints", "Green").Id)];
-
-        Weapons = [new Weapon(this, defaultWeaponId, defaultWeaponSkinId, defaultShellId)];
-        WeaponSkins = [new WeaponSkin(this, defaultWeaponSkinId, defaultWeaponId)];
-        Covers = [new Cover(this, GlobalEntities.GetEntity("covers", "None").Id)];
-        Shells = [new Shell(this, defaultShellId, defaultWeaponId)];
-        
-        Avatars = [new Avatar(this, CurrentAvatarId)];
-        Graffities = [new Graffiti(this, GlobalEntities.GetEntity("graffities", "Logo").Id)];
-        Presets = [new Preset(this, 0)];
-
-        if (admins.Contains(Username))
-            Groups |= PlayerGroups.Admin;
-    }
-
-    public ILogger Logger { get; }
-
-    public uint Id { get; private init; }
-
-    public string Username { get; set; }
-    public string Email { get; set; }
-
-    public bool RememberMe { get; set; }
-
-    public byte[] AutoLoginToken { get; set; } = [];
-    public byte[] PasswordHash { get; set; } = [];
-    public string HardwareFingerprint { get; set; } = "";
-
-    public PlayerGroups Groups { get; set; }
+    [Column] public PlayerGroups Groups { get; set; }
     public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
     public bool IsModerator => IsAdmin || (Groups & PlayerGroups.Moderator) == PlayerGroups.Moderator;
     public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
     public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
     public bool IsBanned => (Groups & PlayerGroups.Banned) == PlayerGroups.Banned;
 
-    public bool Subscribed { get; set; }
-    public string CountryCode { get; set; } = "RU";
+    [Column] public bool Subscribed { get; set; }
+    [Column] public string CountryCode { get; set; } = "RU";
 
-    public long CurrentAvatarId { get; set; }
-    public int CurrentPresetIndex { get; set; }
+    [Column] public long CurrentAvatarId { get; set; }
+    [Column] public int CurrentPresetIndex { get; set; }
+    [NotColumn] public List<Preset> Presets { get; set; } = [];
 
-    public long Crystals { get; set; } = 1000000;
-    public long XCrystals { get; set; } = 1000000;
+    [Column] public long Crystals { get; set; } = 1000000;
+    [Column] public long XCrystals { get; set; } = 1000000;
 
-    public int GoldBoxItems { get; set; }
+    [Column] public int GoldBoxItems { get; set; }
 
-    public long Experience { get; set; }
+    [Column] public long Experience { get; set; }
     public int Rank => Leveling.GetRank(Experience);
 
-    public List<Avatar> Avatars { get; private set; }
-    public List<Cover> Covers { get; private set; }
-    public List<Paint> Paints { get; private set; }
-    public List<Hull> Hulls { get; private set; }
-    public List<HullSkin> HullSkins { get; private set; }
-    public List<Graffiti> Graffities { get; private set; }
-    public List<Shell> Shells { get; private set; }
-    public List<Weapon> Weapons { get; private set; }
-    public List<WeaponSkin> WeaponSkins { get; private set; }
+    [Column] public DateTimeOffset RegistrationTime { get; init; }
+    [Column] public DateTimeOffset LastLoginTime { get; set; }
 
-    public List<Preset> Presets { get; private set; }
+    public void InitializeNew() {
+        CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
 
-    public DateTimeOffset RegistrationTime { get; init; }
-    public DateTimeOffset LastLoginTime { get; set; }
+        long weaponId = GlobalEntities.GetEntity("weapons", "Smoky").Id;
+        long hullId = GlobalEntities.GetEntity("hulls", "Hunter").Id;
 
-    public List<long> AcceptedFriendIds { get; set; } = [];
-    public List<long> IncomingFriendIds { get; set; } = [];
-    public List<long> OutgoingFriendIds { get; set; } = [];
+        long shellId = GlobalEntities.DefaultShells[weaponId];
+        long weaponSkinId = GlobalEntities.DefaultSkins[weaponId];
+        long coverId = GlobalEntities.GetEntity("covers", "None").Id;
 
-    public List<long> BlockedPlayerIds { get; set; } = [];
-    public List<long> ReportedPlayerIds { get; set; } = [];
+        long hullSkinId = GlobalEntities.DefaultSkins[hullId];
+        long paintId = GlobalEntities.GetEntity("paints", "Green").Id;
+
+        long graffitiId = GlobalEntities.GetEntity("graffities", "Logo").Id;
+
+        using (DbConnection db = new()) {
+            db.Insert(new Hull { Player = this, SkinId = hullSkinId, Id = hullId });
+            db.Insert(new HullSkin { Player = this, HullId = hullId, Id = hullSkinId });
+            db.Insert(new Paint { Player = this, Id = paintId });
+
+            db.Insert(new Weapon { Player = this, Id = weaponId, SkinId = weaponSkinId, ShellId = shellId });
+            db.Insert(new WeaponSkin { Player = this, WeaponId = weaponId, Id = weaponSkinId });
+            db.Insert(new Cover { Player = this, Id = coverId });
+            db.Insert(new Shell { Player = this, Id = shellId, WeaponId = weaponId });
+
+            db.Insert(new Avatar { Player = this, Id = CurrentAvatarId });
+            db.Insert(new Graffiti { Player = this, Id = graffitiId });
+        }
+
+        List<string> admins = ["C6OI"];
+
+        if (admins.Contains(Username))
+            Groups |= PlayerGroups.Admin;
+    }
 }
 
 [Flags]
