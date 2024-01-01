@@ -3,7 +3,9 @@
 namespace Vint.Core.ECS.Components.Preset;
 
 [ProtocolId(1502886877871)]
-public class PresetEquipmentComponent(Database.Models.Preset preset) : IComponent {
+public class PresetEquipmentComponent(
+    Database.Models.Preset preset
+) : IComponent {
     public long WeaponId { get; private set; } = preset.Weapon.Id;
     public long HullId { get; private set; } = preset.Hull.Id;
 

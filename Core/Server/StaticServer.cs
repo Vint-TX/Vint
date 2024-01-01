@@ -7,7 +7,10 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
 
-public class StaticServer(IPAddress host, ushort port) : HttpServer(host, port) {
+public class StaticServer(
+    IPAddress host,
+    ushort port
+) : HttpServer(host, port) {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(StaticServer));
 
     protected override StaticServerSession CreateSession() => new(this);
@@ -17,7 +20,9 @@ public class StaticServer(IPAddress host, ushort port) : HttpServer(host, port) 
     protected override void OnError(SocketError error) => Logger.Error("Static server caught an error: {Error}", error);
 }
 
-public class StaticServerSession(HttpServer server) : HttpSession(server) {
+public class StaticServerSession(
+    HttpServer server
+) : HttpSession(server) {
     string IPAddress { get; set; } = null!;
     string Root { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "StaticServer");
     ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServerSession));

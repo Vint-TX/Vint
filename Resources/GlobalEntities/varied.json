@@ -26,6 +26,32 @@
     }
   },
   {
+    "name": "Goldbonus",
+    "id": 636909271,
+    "template": [
+      "GoldBonusMarketItemTemplate",
+      "garage/goldbonus"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 636909271
+      }
+    }
+  },
+  {
+    "name": "ModuleSlot",
+    "id": 1335431730,
+    "template": [
+      "SlotMarketItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      }
+    }
+  },
+  {
     "name": "Crystal",
     "id": 1317350822,
     "template": [

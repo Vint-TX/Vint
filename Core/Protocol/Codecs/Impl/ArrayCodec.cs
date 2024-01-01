@@ -2,7 +2,9 @@
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
-public class ArrayCodec(ICodecInfo elementCodecInfo) : Codec {
+public class ArrayCodec(
+    ICodecInfo elementCodecInfo
+) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         if (value is not Array array)
             throw new ArgumentException("Value must be array");

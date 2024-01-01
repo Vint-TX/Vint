@@ -1,11 +1,16 @@
-﻿using LinqToDB;
+﻿using System.Diagnostics;
+using LinqToDB;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Preset;
+using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates;
+using Vint.Core.ECS.Templates.Gold;
+using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.ECS.Templates.Money;
 using Vint.Core.ECS.Templates.Premium;
 using Vint.Core.ECS.Templates.Preset;
@@ -64,15 +69,20 @@ public static class GlobalEntities {
 
     public static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) { // todo
         foreach (IEntity entity in GetEntities(path)) {
-            if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue;
-
+            Player player = connection.Player;
+            IEntity user = connection.User;
             long entityId = entity.Id;
 
             entity.Id = EntityRegistry.FreeId;
-            entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
 
-            Player player = connection.Player;
-            IEntity user = connection.User;
+            if (path == "moduleSlots") {
+                entity.AddComponent(new UserGroupComponent(user));
+                yield return entity;
+            }
+
+            if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue; // yield return entity;??
+
+            entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
 
             using DbConnection db = new();
 
@@ -156,7 +166,48 @@ public static class GlobalEntities {
                     break;
                 }
 
-                case "misc": { // todo
+                case "modules": {
+                    ModuleBehaviourType moduleBehaviourType = entity.GetComponent<ModuleBehaviourTypeComponent>().BehaviourType;
+
+                    string[] configPathParts = entity.TemplateAccessor.ConfigPath!.Split('/');
+
+                    switch (moduleBehaviourType) {
+                        case ModuleBehaviourType.Active: {
+                            if (configPathParts[3] == "common") {
+                                entity.TemplateAccessor.Template = new GoldBonusModuleUserItemTemplate();
+                                break;
+                            }
+
+                            entity.TemplateAccessor.Template = new ActiveModuleUserItemTemplate();
+                            break;
+                        }
+
+                        case ModuleBehaviourType.Passive: {
+                            if (configPathParts[4] == "trigger") {
+                                entity.TemplateAccessor.Template = new TriggerModuleUserItemTemplate();
+                                break;
+                            }
+
+                            entity.TemplateAccessor.Template = new PassiveModuleUserItemTemplate();
+                            break;
+                        }
+
+                        default: throw new UnreachableException();
+                    }
+
+                    Module? module = db.Modules.SingleOrDefault(module => module.PlayerId == player.Id && module.Id == entityId);
+                    int moduleLevel = module?.Level ?? 0;
+
+                    if (moduleLevel > 0)
+                        entity.AddComponent(new UserGroupComponent(user));
+
+                    entity.AddComponent(new ModuleGroupComponent(entity));
+                    entity.AddComponent(new ModuleUpgradeLevelComponent(moduleLevel));
+
+                    break;
+                }
+
+                case "varied": { // todo
                     entity.AddComponent(new UserGroupComponent(user));
 
                     switch (entity.TemplateAccessor.Template) {
@@ -191,10 +242,20 @@ public static class GlobalEntities {
                                     presetEntity.AddComponent(new MountedItemComponent());
 
                                 preset.Entity = presetEntity;
-                                player.Presets.Add(preset);
+                                player.UserPresets.Add(preset);
                             }
 
-                            connection.Share(player.Presets.Select(preset => preset.Entity!));
+                            connection.Share(player.UserPresets.Select(preset => preset.Entity!));
+                            break;
+                        }
+
+                        case GoldBonusUserItemTemplate: {
+                            IEntity gold = connection.UserEntities["modules"]
+                                .Single(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
+
+                            entity.AddComponent(new ModuleGroupComponent(gold));
+                            entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
+
                             break;
                         }
                     }
@@ -205,19 +266,6 @@ public static class GlobalEntities {
 
             yield return entity;
         }
-    }
-
-    public static IEntity? GetUserTemplateEntity(this IPlayerConnection connection, string path, string entityName) { // todo
-        IEntity entity = GetEntity(path, entityName);
-
-        if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) return null;
-
-        long entityId = entity.Id;
-
-        entity.Id = EntityRegistry.FreeId;
-        entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
-
-        return entity;
     }
 
     public static IEntity GetEntity(string typeName, string entityName) =>

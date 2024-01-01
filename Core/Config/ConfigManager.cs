@@ -167,6 +167,9 @@ public static class ConfigManager {
 
                 long entityId = jToken["id"]!.ToObject<long>();
 
+                if (entityId == 0)
+                    entityId = EntityRegistry.FreeId;
+
                 JArray templateComponents = jToken["template"]!.ToObject<JArray>()!;
                 string templateName = templateComponents[0].ToObject<string>()!;
                 string configPath = templateComponents[1].ToObject<string>()!;
@@ -241,9 +244,14 @@ public static class ConfigManager {
         return node.Entities.Values.Select(entity => entity.Clone());
     }
 
-    public static IEnumerable<IEntity> GetGlobalEntities() => Root.Children.Values
-        .SelectMany(child =>
-            child.Entities.Values.Select(entity => entity.Clone()));
+    public static IEnumerable<IEntity> GetGlobalEntities() {
+        string[] excluded = ["moduleSlots"];
+
+        return Root.Children
+            .Where(child => !excluded.Contains(child.Key))
+            .SelectMany(child =>
+                child.Value.Entities.Values.Select(entity => entity.Clone()));
+    }
 
     public static T GetComponent<T>(string path) where T : class, IComponent {
         ConfigNode node = GetNode(path);

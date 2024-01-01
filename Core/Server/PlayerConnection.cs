@@ -60,7 +60,10 @@ public interface IPlayerConnection {
     public void Share(IEnumerable<IEntity> entities);
 }
 
-public class PlayerConnection(GameServer server, Protocol.Protocol protocol) : TcpSession(server), IPlayerConnection {
+public class PlayerConnection(
+    GameServer server,
+    Protocol.Protocol protocol
+) : TcpSession(server), IPlayerConnection {
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
     public Dictionary<string, List<IEntity>> UserEntities { get; } = new();
 

@@ -3,6 +3,8 @@
 namespace Vint.Core.ECS.Components.User;
 
 [ProtocolId(1473074767785)]
-public class UserXCrystalsComponent(long money) : IComponent {
+public class UserXCrystalsComponent(
+    long money
+) : IComponent {
     public long Money { get; private set; } = money;
 }

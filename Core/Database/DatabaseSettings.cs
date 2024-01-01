@@ -10,8 +10,6 @@ public class DatabaseSettings : ILinqToDBSettings {
     public string DefaultDataProvider => ProviderName.MariaDB;
 
     public IEnumerable<IConnectionStringSettings> ConnectionStrings {
-        get {
-            yield return new ConnectionStringSettings("Vint", DatabaseConfig.Get().ConnectionString, ProviderName.MariaDB);
-        }
+        get { yield return new ConnectionStringSettings("Vint", DatabaseConfig.Get().ConnectionString, ProviderName.MariaDB); }
     }
 }

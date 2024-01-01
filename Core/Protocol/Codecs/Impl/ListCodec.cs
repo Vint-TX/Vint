@@ -3,7 +3,9 @@ using Vint.Core.Protocol.Codecs.Buffer;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
-public class ListCodec(ICodecInfo elementCodecInfo) : Codec {
+public class ListCodec(
+    ICodecInfo elementCodecInfo
+) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         if (value is not IList list)
             throw new ArgumentException("Value must be list");

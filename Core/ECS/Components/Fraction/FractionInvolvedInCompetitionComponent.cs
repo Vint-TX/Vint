@@ -3,6 +3,8 @@
 namespace Vint.Core.ECS.Components.Fraction;
 
 [ProtocolId(1545106623033)]
-public class FractionInvolvedInCompetitionComponent(long userCount) : IComponent {
+public class FractionInvolvedInCompetitionComponent(
+    long userCount
+) : IComponent {
     public long UserCount { get; private set; } = userCount;
 }

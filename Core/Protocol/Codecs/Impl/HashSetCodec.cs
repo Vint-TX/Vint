@@ -3,7 +3,9 @@ using Vint.Core.Protocol.Codecs.Buffer;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
-public class HashSetCodec(ICodecInfo elementCodecInfo) : Codec {
+public class HashSetCodec(
+    ICodecInfo elementCodecInfo
+) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         IList hashSetList = (IList)typeof(Enumerable)
             .GetMethod("ToList")!

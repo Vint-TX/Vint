@@ -1,0 +1,142 @@
+[
+  {
+    "name": "Slot1",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT1",
+        "behaviour": "ACTIVE"
+      }
+    }
+  },
+  {
+    "name": "Slot2",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT2",
+        "behaviour": "ACTIVE"
+      }
+    }
+  },
+  {
+    "name": "Slot3",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT3",
+        "behaviour": "PASSIVE"
+      }
+    }
+  },
+  {
+    "name": "Slot4",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "TANK"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT4",
+        "behaviour": "ACTIVE"
+      }
+    }
+  },
+  {
+    "name": "Slot5",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "TANK"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT5",
+        "behaviour": "ACTIVE"
+      }
+    }
+  },
+  {
+    "name": "Slot6",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "TANK"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT6",
+        "behaviour": "PASSIVE"
+      }
+    }
+  },
+  {
+    "name": "Slot7",
+    "id": 0,
+    "template": [
+      "SlotUserItemTemplate",
+      "garage/module/slot/market"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      },
+      "SlotTankPartComponent": {
+        "part": "COMMON"
+      },
+      "SlotUserItemInfoComponent": {
+        "slot": "SLOT7",
+        "behaviour": "ACTIVE"
+      }
+    }
+  }
+]

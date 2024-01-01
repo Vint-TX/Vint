@@ -34,4 +34,5 @@ public sealed class DbConnection() : DataConnection(Schema) {
     public ITable<Weapon> Weapons => this.GetTable<Weapon>();
     public ITable<WeaponSkin> WeaponSkins => this.GetTable<WeaponSkin>();
     public ITable<Relation> Relations => this.GetTable<Relation>();
+    public ITable<Module> Modules => this.GetTable<Module>();
 }

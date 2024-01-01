@@ -3,4 +3,6 @@
 namespace Vint.Core.ECS.Templates.Modules;
 
 [ProtocolId(1484905625943)]
-public class ModuleMarketItemTemplate : EntityTemplate;
+public class ModuleMarketItemTemplate : MarketEntityTemplate {
+    public override UserEntityTemplate UserTemplate => null!;
+}

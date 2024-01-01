@@ -4,7 +4,10 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Codecs.Buffer;
 
-public class ProtocolBuffer(OptionalMap optionalMap, IPlayerConnection connection) {
+public class ProtocolBuffer(
+    OptionalMap optionalMap,
+    IPlayerConnection connection
+) {
     public MemoryStream Stream { get; private set; } = new();
     public BinaryReader Reader => new BigEndianBinaryReader(Stream);
     public BinaryWriter Writer => new BigEndianBinaryWriter(Stream);

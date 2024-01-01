@@ -6,7 +6,10 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
 
-public class GameServer(IPAddress host, ushort port) : TcpServer(host, port) {
+public class GameServer(
+    IPAddress host,
+    ushort port
+) : TcpServer(host, port) {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
     Protocol.Protocol Protocol { get; } = new();
 

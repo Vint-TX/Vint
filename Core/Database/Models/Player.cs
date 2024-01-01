@@ -33,7 +33,7 @@ public class Player {
 
     [Column] public long CurrentAvatarId { get; set; }
     [Column] public int CurrentPresetIndex { get; set; }
-    [NotColumn] public List<Preset> Presets { get; set; } = [];
+    [NotColumn] public List<Preset> UserPresets { get; set; } = [];
 
     [Column] public long Crystals { get; set; } = 1000000;
     [Column] public long XCrystals { get; set; } = 1000000;
@@ -45,6 +45,42 @@ public class Player {
 
     [Column] public DateTimeOffset RegistrationTime { get; init; }
     [Column] public DateTimeOffset LastLoginTime { get; set; }
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Avatar.PlayerId))]
+    public List<Avatar> Avatars { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Cover.PlayerId))]
+    public List<Cover> Covers { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Graffiti.PlayerId))]
+    public List<Graffiti> Graffities { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Hull.PlayerId))]
+    public List<Hull> Hulls { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(HullSkin.PlayerId))]
+    public List<HullSkin> HullSkins { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Module.PlayerId))]
+    public List<Module> Modules { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Paint.PlayerId))]
+    public List<Paint> Paints { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Preset.PlayerId))]
+    public List<Preset> Presets { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Relation.SourcePlayerId))]
+    public List<Relation> Relations { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Shell.PlayerId))]
+    public List<Shell> Shells { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Weapon.PlayerId))]
+    public List<Weapon> Weapons { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(WeaponSkin.PlayerId))]
+    public List<WeaponSkin> WeaponSkins { get; private set; } = null!;
 
     public void InitializeNew() {
         CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
@@ -76,9 +112,13 @@ public class Player {
         }
 
         List<string> admins = ["C6OI"];
+        List<string> testers = ["C6OI"];
 
         if (admins.Contains(Username))
             Groups |= PlayerGroups.Admin;
+
+        if (testers.Contains(Username))
+            Groups |= PlayerGroups.Tester;
     }
 }
 
