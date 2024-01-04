@@ -1,0 +1,101 @@
+[
+  {
+    "startPlace": 100,
+    "endPlace": 139,
+    "items": []
+  },
+  {
+    "startPlace": 140,
+    "endPlace": 999,
+    "items": [
+      {
+        "marketEntityType": "containers",
+        "marketEntityName": "Cardsbronze",
+        "amount": 20
+      },
+      {
+        "marketEntityType": "misc",
+        "marketEntityName": "Crystal",
+        "amount": 20000
+      },
+      {
+        "marketEntityType": "paints",
+        "marketEntityName": "League_bronze",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "startPlace": 1000,
+    "endPlace": 2999,
+    "items": [
+      {
+        "marketEntityType": "containers",
+        "marketEntityName": "Cardssilver",
+        "amount": 20
+      },
+      {
+        "marketEntityType": "misc",
+        "marketEntityName": "Crystal",
+        "amount": 60000
+      },
+      {
+        "marketEntityType": "paints",
+        "marketEntityName": "League_silver",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "startPlace": 3000,
+    "endPlace": 4499,
+    "items": [
+      {
+        "marketEntityType": "containers",
+        "marketEntityName": "Cardsgold",
+        "amount": 20
+      },
+      {
+        "marketEntityType": "misc",
+        "marketEntityName": "XCrystal",
+        "amount": 500
+      },
+      {
+        "marketEntityType": "paints",
+        "marketEntityName": "League_gold",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "startPlace": 4500,
+    "endPlace": 99999,
+    "items": [
+      {
+        "marketEntityType": "containers",
+        "marketEntityName": "Cardsmaster",
+        "amount": 20
+      },
+      {
+        "marketEntityType": "containers",
+        "marketEntityName": "Xt_zeus",
+        "amount": 1
+      },
+      {
+        "marketEntityType": "misc",
+        "marketEntityName": "XCrystal",
+        "amount": 9999
+      },
+      {
+        "marketEntityType": "paints",
+        "marketEntityName": "League_master",
+        "amount": 1
+      },
+      {
+        "marketEntityType": "paints",
+        "marketEntityName": "Hero",
+        "amount": 1
+      }
+    ]
+  }
+]

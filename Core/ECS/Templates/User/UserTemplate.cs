@@ -1,5 +1,7 @@
-﻿using Vint.Core.Database.Models;
+﻿using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Chat;
+using Vint.Core.ECS.Components.Fraction;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Components.User;
@@ -11,6 +13,13 @@ namespace Vint.Core.ECS.Templates.User;
 [ProtocolId(1433752208915)]
 public class UserTemplate : EntityTemplate {
     public IEntity Create(Player player) {
+        using DbConnection db = new();
+
+        SeasonStatistics seasonStats = db.SeasonStatistics
+            .Where(stats => stats.PlayerId == player.Id)
+            .OrderByDescending(stats => stats.SeasonNumber)
+            .First();
+
         IEntity user = Entity(null,
             builder => {
                 builder
@@ -28,7 +37,17 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new UserRankComponent(player.Rank))
                     .AddComponent(new UserMoneyComponent(player.Crystals))
                     .AddComponent(new UserXCrystalsComponent(player.XCrystals))
-                    .AddComponent(new QuestReadyComponent());
+                    .AddComponent(new QuestReadyComponent())
+                    .AddComponent(new UserReputationComponent(seasonStats.Reputation))
+                    // todo .AddComponent(new TutorialCompleteIdsComponent())
+                    .AddComponent(new FractionUserScoreComponent(player.FractionScore))
+                    .AddComponent(new UserStatisticsComponent(player.Id))
+                    .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
+                    .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
+                    .AddComponent(new BattleLeaveCounterComponent(0, 0))
+                    .AddComponent(new LeagueGroupComponent(seasonStats.League))
+                    .AddComponent(new GameplayChestScoreComponent(0))
+                    .WithId(player.Id);
 
                 if (player.IsAdmin)
                     builder.AddComponent(new UserAdminComponent());

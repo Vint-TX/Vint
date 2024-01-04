@@ -1,5 +1,4 @@
-﻿using Vint.Core.ECS.Components;
-using Vint.Core.Protocol.Attributes;
+﻿using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Leagues;
 
@@ -9,6 +8,5 @@ public class LeagueConfigComponent(
     double reputationToEnter
 ) : IComponent {
     public int LeagueIndex { get; private set; } = leagueIndex;
-
     public double ReputationToEnter { get; private set; } = reputationToEnter;
 }

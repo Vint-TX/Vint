@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
+using Vint.Core.Battles;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
@@ -13,6 +14,9 @@ public class GameServer(
     ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
     Protocol.Protocol Protocol { get; } = new();
 
+    public IBattleProcessor BattleProcessor { get; private set; } = null!;
+    public IMatchmakingProcessor MatchmakingProcessor { get; private set; } = null!;
+
     public List<IPlayerConnection> PlayerConnections { get; } = [];
 
     protected override PlayerConnection CreateSession() => new(this, Protocol);
@@ -21,7 +25,15 @@ public class GameServer(
 
     protected override void OnDisconnected(TcpSession session) => PlayerConnections.Remove((PlayerConnection)session);
 
-    protected override void OnStarted() => Logger.Information("Started");
+    protected override void OnStarted() {
+        Logger.Information("Started");
+
+        BattleProcessor = new BattleProcessor();
+        MatchmakingProcessor = new MatchmakingProcessor(BattleProcessor);
+
+        new Thread(() => MatchmakingProcessor.StartTicking()) { Name = "Matchmaking ticker" }.Start();
+        new Thread(() => BattleProcessor.StartTicking()) { Name = "Battle ticker" }.Start();
+    }
 
     protected override void OnError(SocketError error) => Logger.Error("Server caught an error: {Error}", error);
 }

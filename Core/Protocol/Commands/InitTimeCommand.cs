@@ -1,4 +1,5 @@
-﻿using Vint.Core.Server;
+﻿using System.Diagnostics;
+using Vint.Core.Server;
 
 namespace Vint.Core.Protocol.Commands;
 
@@ -7,7 +8,7 @@ public class InitTimeCommand(
 ) : ICommand {
     public long ServerTime => serverTime;
 
-    public void Execute(IPlayerConnection connection) => throw new NotImplementedException();
+    public void Execute(IPlayerConnection connection) => throw new UnreachableException();
 
     public override string ToString() => $"InitTime command {{ ServerTime: {ServerTime} }}";
 }

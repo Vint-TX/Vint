@@ -1,0 +1,720 @@
+[
+  {
+    "name": "Cardsbronze",
+    "id": -370755132,
+    "template": [
+      "GameplayChestMarketItemTemplate",
+      "garage/container/cardsbronze"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -370755132
+      }
+    }
+  },
+  {
+    "name": "Cardsgold",
+    "id": -1147355315,
+    "template": [
+      "GameplayChestMarketItemTemplate",
+      "garage/container/cardsgold"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1147355315
+      }
+    }
+  },
+  {
+    "name": "Cardsgolddonut",
+    "id": -1667426315,
+    "template": [
+      "DonutChestMarketItemTemplate",
+      "garage/container/cardsgolddonut"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1667426315
+      }
+    }
+  },
+  {
+    "name": "Cardsmaster",
+    "id": 1357210127,
+    "template": [
+      "GameplayChestMarketItemTemplate",
+      "garage/container/cardsmaster"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1357210127
+      }
+    }
+  },
+  {
+    "name": "Cardsscout",
+    "id": 1357210027,
+    "template": [
+      "DonutChestMarketItemTemplate",
+      "garage/container/cardsscout"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1357210027
+      }
+    }
+  },
+  {
+    "name": "Cardssilver",
+    "id": 1536166586,
+    "template": [
+      "GameplayChestMarketItemTemplate",
+      "garage/container/cardssilver"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1536166586
+      }
+    }
+  },
+  {
+    "name": "Cardssilverdonut",
+    "id": -1308563288,
+    "template": [
+      "DonutChestMarketItemTemplate",
+      "garage/container/cardssilverdonut"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1308563288
+      }
+    }
+  },
+  {
+    "name": "Cardsspydonut",
+    "id": 1060751187,
+    "template": [
+      "DonutChestMarketItemTemplate",
+      "garage/container/cardsspydonut"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1060751187
+      }
+    }
+  },
+  {
+    "name": "Tutorialbronze1",
+    "id": -1415877053,
+    "template": [
+      "TutorialGameplayChestMarketItemTemplate",
+      "garage/container/tutorialbronze1"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1415877053
+      }
+    }
+  },
+  {
+    "name": "Tutorialbronze2",
+    "id": -1415877052,
+    "template": [
+      "TutorialGameplayChestMarketItemTemplate",
+      "garage/container/tutorialbronze2"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -1415877052
+      }
+    }
+  },
+  {
+    "name": "_12april2017",
+    "id": 759177625,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/12april2017"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 759177625
+      }
+    }
+  },
+  {
+    "name": "_12april2018",
+    "id": 100024310,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/12april2018"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 100024310
+      }
+    }
+  },
+  {
+    "name": "_12april2019",
+    "id": 763642357,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/12april2019"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 763642357
+      }
+    }
+  },
+  {
+    "name": "_2018",
+    "id": 158184859,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/2018"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 158184859
+      }
+    }
+  },
+  {
+    "name": "_23february2017",
+    "id": 782261271,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/23february2017"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 782261271
+      }
+    }
+  },
+  {
+    "name": "_23february2018",
+    "id": 782261272,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/23february2018"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 782261272
+      }
+    }
+  },
+  {
+    "name": "_23february2019",
+    "id": 647046527,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/23february2019"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 647046527
+      }
+    }
+  },
+  {
+    "name": "_8march2017",
+    "id": -382197697,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/8march2017"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -382197697
+      }
+    }
+  },
+  {
+    "name": "_8march2019",
+    "id": -2044621657,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/8march2019"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -2044621657
+      }
+    }
+  },
+  {
+    "name": "Avatars",
+    "id": 160097023,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/avatars"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 160097023
+      }
+    }
+  },
+  {
+    "name": "Birthday2017paints",
+    "id": 1616681926,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/birthday2017paints"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1616681926
+      }
+    }
+  },
+  {
+    "name": "Birthday2017skins",
+    "id": -1191706491,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/birthday2017skins"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1191706491
+      }
+    }
+  },
+  {
+    "name": "Camouflage",
+    "id": 255419373,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/camouflage"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 255419373
+      }
+    }
+  },
+  {
+    "name": "Cover",
+    "id": 655960513,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/cover"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 655960513
+      }
+    }
+  },
+  {
+    "name": "Crystallight",
+    "id": 208629334,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/crystallight"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 208629334
+      }
+    }
+  },
+  {
+    "name": "Everything",
+    "id": 1933847273,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/everything"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1933847273
+      }
+    }
+  },
+  {
+    "name": "Frontierzero",
+    "id": 1185680389,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/frontierzero"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1185680389
+      }
+    }
+  },
+  {
+    "name": "Gold",
+    "id": -678260688,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/gold"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -678260688
+      }
+    }
+  },
+  {
+    "name": "Halloween2018",
+    "id": -208273732,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/halloween2018"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -208273732
+      }
+    }
+  },
+  {
+    "name": "Mars",
+    "id": 159038379,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/Mars"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 159038379
+      }
+    }
+  },
+  {
+    "name": "May2017",
+    "id": -1096656045,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/may2017"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1096656045
+      }
+    }
+  },
+  {
+    "name": "May2018_1",
+    "id": -1619467770,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/may2018_1"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1619467770
+      }
+    }
+  },
+  {
+    "name": "May2018_2",
+    "id": -1619467769,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/may2018_2"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1619467769
+      }
+    }
+  },
+  {
+    "name": "May2018_3",
+    "id": -1619467768,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/may2018_3"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1619467768
+      }
+    }
+  },
+  {
+    "name": "Prey",
+    "id": 160097004,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/prey"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 160097004
+      }
+    }
+  },
+  {
+    "name": "Rubber",
+    "id": 1346673024,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/rubber"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1346673024
+      }
+    }
+  },
+  {
+    "name": "Shadowassassin",
+    "id": 145730912,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/shadowassassin"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 145730912
+      }
+    }
+  },
+  {
+    "name": "Smoke",
+    "id": 670670713,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/smoke"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 670670713
+      }
+    }
+  },
+  {
+    "name": "Steam",
+    "id": -1462392318,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/steam"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1462392318
+      }
+    }
+  },
+  {
+    "name": "Steel",
+    "id": 459979771,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/steel"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 459979771
+      }
+    }
+  },
+  {
+    "name": "Superenergy",
+    "id": -1301708723,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/superenergy"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1301708723
+      }
+    }
+  },
+  {
+    "name": "Supportantaeus",
+    "id": -1191706490,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/supportantaeus"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -1191706490
+      }
+    }
+  },
+  {
+    "name": "Supportantaeus1",
+    "id": 2132723585,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/supportantaeus1"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 2132723585
+      }
+    }
+  },
+  {
+    "name": "Supportfrontier",
+    "id": 1616681925,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/supportfrontier"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1616681925
+      }
+    }
+  },
+  {
+    "name": "Supportfrontier1",
+    "id": -132997493,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/supportfrontier1"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": -132997493
+      }
+    }
+  },
+  {
+    "name": "Titanxt",
+    "id": 1046779026,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/titanXT"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1046779026
+      }
+    }
+  },
+  {
+    "name": "Twinsxt",
+    "id": 1437820497,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/twinsXT"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1437820497
+      }
+    }
+  },
+  {
+    "name": "Valhalla",
+    "id": 185937013,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/valhalla"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 185937013
+      }
+    }
+  },
+  {
+    "name": "Vikingt2",
+    "id": 1325772382,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/vikingT2"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 1325772382
+      }
+    }
+  },
+  {
+    "name": "Xmas",
+    "id": 285430311,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/xmas"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 285430311
+      }
+    }
+  },
+  {
+    "name": "Xt",
+    "id": 742065458,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/xt"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 742065458
+      }
+    }
+  },
+  {
+    "name": "Xt_zeus",
+    "id": 598090230,
+    "template": [
+      "ContainerPackPriceMarketItemTemplate",
+      "garage/container/xt_zeus"
+    ],
+    "components": {
+      "RestrictionByUserFractionComponent": {},
+      "MarketItemGroupComponent": {
+        "key": 598090230
+      }
+    }
+  }
+]

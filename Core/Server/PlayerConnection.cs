@@ -4,9 +4,11 @@ using System.Net.Sockets;
 using LinqToDB;
 using NetCoreServer;
 using Serilog;
+using Vint.Core.Battles.Player;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Entrance.Login;
@@ -24,10 +26,12 @@ public interface IPlayerConnection {
 
     public GameServer Server { get; }
     public Player Player { get; set; }
+    public BattlePlayer? BattlePlayer { get; set; }
     public IEntity User { get; }
     public IEntity ClientSession { get; }
 
     public bool IsOnline { get; }
+    public bool IsInBattle { get; }
 
     public List<IEntity> SharedEntities { get; }
     public Dictionary<string, List<IEntity>> UserEntities { get; }
@@ -47,6 +51,8 @@ public interface IPlayerConnection {
 
     public void ChangePassword(string passwordDigest);
 
+    public void ChangeReputation(int reputation);
+
     public void Send(ICommand command);
 
     public void Send(IEvent @event);
@@ -64,16 +70,19 @@ public class PlayerConnection(
     GameServer server,
     Protocol.Protocol protocol
 ) : TcpSession(server), IPlayerConnection {
+    public bool IsSocketConnected => IsConnected && !IsDisposed && !IsSocketDisposed;
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
     public Dictionary<string, List<IEntity>> UserEntities { get; } = new();
 
     public new GameServer Server { get; } = server;
     public Player Player { get; set; } = null!;
+    public BattlePlayer? BattlePlayer { get; set; }
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
     public List<IEntity> SharedEntities { get; private set; } = [];
 
-    public bool IsOnline => ClientSession != null! && User != null! && Player != null!;
+    public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
+    public bool IsInBattle => BattlePlayer is { IsSpectator: false /* ?? */ };
 
     public void Register(
         string username,
@@ -88,6 +97,7 @@ public class PlayerConnection(
         byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(encryptedPasswordDigest));
 
         Player = new Player {
+            Id = EntityRegistry.FreeId,
             Username = username,
             Email = email,
             CountryCode = IpUtils.GetCountryCode((Socket.RemoteEndPoint as IPEndPoint)!.Address) ?? "US",
@@ -99,7 +109,7 @@ public class PlayerConnection(
         };
 
         using (DbConnection database = new()) {
-            Player.Id = database.InsertWithInt64Identity(Player);
+            database.Insert(Player);
         }
 
         Player.InitializeNew();
@@ -152,8 +162,45 @@ public class PlayerConnection(
             .Update();
     }
 
+    public void ChangeReputation(int reputation) {
+        using DbConnection db = new();
+        DateOnly date = DateOnly.FromDateTime(DateTime.Today);
+
+        SeasonStatistics seasonStats = db.SeasonStatistics
+            .Where(stats => stats.PlayerId == Player.Id)
+            .OrderByDescending(stats => stats.SeasonNumber)
+            .First();
+
+        ReputationStatistics? reputationStats = db.ReputationStatistics
+            .SingleOrDefault(repStats => repStats.PlayerId == Player.Id &&
+                                         repStats.Date == date);
+
+        int oldLeagueIndex = seasonStats.LeagueIndex;
+
+        reputationStats ??= new ReputationStatistics {
+            Player = Player,
+            Date = date,
+            SeasonNumber = seasonStats.SeasonNumber
+        };
+
+        seasonStats.Reputation = reputation;
+        reputationStats.Reputation = reputation;
+
+        User.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
+
+        if (oldLeagueIndex != seasonStats.LeagueIndex) {
+            User.RemoveComponent<LeagueGroupComponent>();
+            User.AddComponent(seasonStats.League.GetComponent<LeagueGroupComponent>());
+        }
+
+        db.Update(seasonStats);
+        db.InsertOrReplace(reputationStats);
+    }
+
     public void Send(ICommand command) {
         try {
+            if (!IsSocketConnected) return;
+
             Logger.Debug("Sending {Command}", command);
 
             ProtocolBuffer buffer = new(new OptionalMap(), this);

@@ -8,9 +8,10 @@ public class Weapon {
     [PrimaryKey(1)] public long Id { get; init; }
 
     [Column] public long Xp { get; set; }
-
     [Column] public long SkinId { get; set; }
     [Column] public long ShellId { get; set; }
+    [Column] public long Kills { get; set; }
+    [Column] public long BattlesPlayed { get; set; }
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
     public Player Player {

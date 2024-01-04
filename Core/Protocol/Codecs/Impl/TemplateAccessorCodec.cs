@@ -1,4 +1,5 @@
-﻿using Vint.Core.ECS.Templates;
+﻿using System.Diagnostics;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Codecs.Buffer;
 using Vint.Core.Utils;
 
@@ -15,5 +16,5 @@ public class TemplateAccessorCodec : Codec {
         Protocol.GetCodec(new TypeCodecInfo(typeof(string), true)).Encode(buffer, templateAccessor.ConfigPath!);
     }
 
-    public override object Decode(ProtocolBuffer buffer) => throw new NotImplementedException();
+    public override object Decode(ProtocolBuffer buffer) => throw new UnreachableException();
 }

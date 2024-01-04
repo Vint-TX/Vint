@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Rating",
+    "id": -2076021809,
+    "template": [
+      "MatchMakingModeTemplate",
+      "battleselect/matchmaking/mode/rating"
+    ],
+    "components": {
+      "MatchMakingRatingModeComponent": {}
+    }
+  }
+]

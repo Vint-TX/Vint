@@ -6,8 +6,9 @@ namespace Vint.Core.Database.Models;
 public class Hull {
     [NotColumn] Player _player = null!;
     [Column] public long Xp { get; set; }
-
     [Column] public long SkinId { get; set; }
+    [Column] public long Kills { get; set; }
+    [Column] public long BattlesPlayed { get; set; }
 
     [PrimaryKey(1)] public long Id { get; init; }
 

@@ -3,12 +3,10 @@ using Vint.Core.ECS.Templates;
 
 namespace Vint.Core.ECS.Entities;
 
-public class EntityBuilder(
-    long id
-) : IEntityBuilder {
-    public EntityBuilder() : this(EntityRegistry.FreeId) { }
+public class EntityBuilder() : IEntityBuilder {
+    public EntityBuilder(long id) : this() => Id = id;
 
-    public long Id => id;
+    public long Id { get; private set; }
     public TemplateAccessor? TemplateAccessor { get; private set; }
     public HashSet<IComponent> Components { get; } = [];
 
@@ -22,12 +20,20 @@ public class EntityBuilder(
         return this;
     }
 
+    public IEntityBuilder WithId(long id) {
+        Id = id;
+        return this;
+    }
+
     public IEntityBuilder AddComponent(IComponent component) {
         Components.Add(component);
         return this;
     }
 
     public IEntity Build() {
+        if (Id == 0)
+            Id = EntityRegistry.FreeId;
+
         Entity entity = new(Id, TemplateAccessor, Components.ToArray());
         EntityRegistry.Add(entity);
 

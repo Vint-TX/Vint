@@ -8,32 +8,36 @@ namespace Vint.Core.Database.Models;
 
 [Table("Players")]
 public class Player {
-    public ILogger Logger { get; } = Log.Logger.ForType(typeof(Player));
+    [NotColumn] public ILogger Logger { get; } = Log.Logger.ForType(typeof(Player));
 
-    [PrimaryKey, Identity] public long Id { get; set; }
+    [PrimaryKey] public long Id { get; init; }
 
-    [Column] public string Username { get; set; } = null!;
-    [Column] public string Email { get; set; } = null!;
+    [Column(DataType = DataType.Text)] public string Username { get; set; } = null!;
+    [Column(DataType = DataType.Text)] public string Email { get; set; } = null!;
 
     [Column] public bool RememberMe { get; set; }
 
     [Column] public byte[] AutoLoginToken { get; set; } = [];
     [Column] public byte[] PasswordHash { get; set; } = [];
-    [Column] public string HardwareFingerprint { get; set; } = "";
+    [Column(DataType = DataType.Text)] public string HardwareFingerprint { get; set; } = "";
 
     [Column] public PlayerGroups Groups { get; set; }
-    public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
-    public bool IsModerator => IsAdmin || (Groups & PlayerGroups.Moderator) == PlayerGroups.Moderator;
-    public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
-    public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
-    public bool IsBanned => (Groups & PlayerGroups.Banned) == PlayerGroups.Banned;
+    [NotColumn] public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
+    [NotColumn] public bool IsModerator => IsAdmin || (Groups & PlayerGroups.Moderator) == PlayerGroups.Moderator;
+    [NotColumn] public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
+    [NotColumn] public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
+    [NotColumn] public bool IsBanned => (Groups & PlayerGroups.Banned) == PlayerGroups.Banned;
+
+    [Column] public RewardedLeagues RewardedLeagues { get; set; }
 
     [Column] public bool Subscribed { get; set; }
-    [Column] public string CountryCode { get; set; } = "RU";
+    [Column(DataType = DataType.Text)] public string CountryCode { get; set; } = "RU";
 
     [Column] public long CurrentAvatarId { get; set; }
     [Column] public int CurrentPresetIndex { get; set; }
+
     [NotColumn] public List<Preset> UserPresets { get; set; } = [];
+    [NotColumn] public Preset CurrentPreset => UserPresets.Single(preset => preset.Index == CurrentPresetIndex);
 
     [Column] public long Crystals { get; set; } = 1000000;
     [Column] public long XCrystals { get; set; } = 1000000;
@@ -41,10 +45,24 @@ public class Player {
     [Column] public int GoldBoxItems { get; set; }
 
     [Column] public long Experience { get; set; }
-    public int Rank => Leveling.GetRank(Experience);
+    [NotColumn] public int Rank => Leveling.GetRank(Experience);
+
+    [Column(DataType = DataType.Text)] public string FractionName { get; set; } = "";
+    [Column] public long FractionScore { get; set; }
+
+    [NotColumn] public IEntity Fraction => GlobalEntities.GetEntity("fractions", FractionName);
 
     [Column] public DateTimeOffset RegistrationTime { get; init; }
     [Column] public DateTimeOffset LastLoginTime { get; set; }
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Statistics.PlayerId))]
+    public Statistics Stats { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(ReputationStatistics.PlayerId))]
+    public List<ReputationStatistics> ReputationStats { get; private set; } = null!;
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(SeasonStatistics.PlayerId))]
+    public List<SeasonStatistics> SeasonStats { get; private set; } = null!;
 
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Avatar.PlayerId))]
     public List<Avatar> Avatars { get; private set; } = null!;
@@ -82,6 +100,9 @@ public class Player {
     [Association(ThisKey = nameof(Id), OtherKey = nameof(WeaponSkin.PlayerId))]
     public List<WeaponSkin> WeaponSkins { get; private set; } = null!;
 
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Container.PlayerId))]
+    public List<Container> Containers { get; private set; } = null!;
+
     public void InitializeNew() {
         CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
 
@@ -109,6 +130,11 @@ public class Player {
 
             db.Insert(new Avatar { Player = this, Id = CurrentAvatarId });
             db.Insert(new Graffiti { Player = this, Id = graffitiId });
+
+            db.Insert(new Preset { Player = this, Index = 0, Name = "Preset 1" });
+
+            db.Insert(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = 1 /*todo SeasonNumber*/ });
+            db.Insert(new Statistics { Player = this });
         }
 
         List<string> admins = ["C6OI"];
@@ -130,4 +156,14 @@ public enum PlayerGroups {
     Tester = 4,
     Premium = 8,
     Banned = 16
+}
+
+[Flags]
+public enum RewardedLeagues {
+    None = 0,
+    Training = 1,
+    Bronze = 2,
+    Silver = 4,
+    Gold = 8,
+    Master = 16
 }

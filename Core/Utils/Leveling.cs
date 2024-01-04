@@ -1,4 +1,5 @@
 ﻿using Vint.Core.Config;
+using Vint.Core.Database;
 using Vint.Core.ECS.Components.Experience;
 using Vint.Core.ECS.Components.Server.Experience;
 
@@ -15,11 +16,23 @@ public static class Leveling {
     }
 
     public static int GetLevel(long xp) {
-        List<int> experiencePerRank = [0];
-        experiencePerRank.AddRange(ConfigManager.GetComponent<UpgradeLevelsComponent>("garage").LevelsExperiences);
+        List<int> experiencePerLevel = [0];
+        experiencePerLevel.AddRange(ConfigManager.GetComponent<UpgradeLevelsComponent>("garage").LevelsExperiences);
 
-        int rankIndex = experiencePerRank.IndexOf(experiencePerRank.LastOrDefault(x => x <= xp));
+        int levelIndex = experiencePerLevel.IndexOf(experiencePerLevel.LastOrDefault(x => x <= xp));
 
-        return rankIndex + 1;
+        return levelIndex + 1;
+    }
+
+    public static int GetSeasonPlace(long userId) {
+        using DbConnection db = new();
+
+        return db.SeasonStatistics
+                   .Select(seasonStats => new { Id = seasonStats.PlayerId, seasonStats.Reputation })
+                   .OrderByDescending(p => p.Reputation)
+                   .Select((player, index) => new { player.Id, Index = index })
+                   .Single(p => p.Id == userId)
+                   .Index +
+               1;
     }
 }

@@ -2,11 +2,13 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using SharpCompress.Common;
 using SharpCompress.Writers;
 using SharpCompress.Writers.GZip;
+using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
@@ -20,6 +22,8 @@ using YamlDotNet.Serialization;
 namespace Vint.Core.Config;
 
 public static class ConfigManager {
+    public static IReadOnlyDictionary<string, MapInfo> MapInfos { get; private set; } = null!;
+
     public static List<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key)
@@ -31,6 +35,15 @@ public static class ConfigManager {
 
     static Dictionary<string, byte[]> LocaleToConfigCache { get; } = new(2);
     static ConfigNode Root { get; } = new();
+
+    public static void InitializeMapInfos() {
+        Logger.Information("Generating map infos");
+
+        string mapInfosConfigPath = Path.Combine(ResourcesPath, "mapInfo.json");
+        MapInfos = JsonConvert.DeserializeObject<Dictionary<string, MapInfo>>(File.ReadAllText(mapInfosConfigPath))!;
+
+        Logger.Information("Map infos generated");
+    }
 
     public static void InitializeCache() {
         Logger.Information("Generating config archives");
@@ -150,7 +163,9 @@ public static class ConfigManager {
 
         Dictionary<string, Dictionary<string, IEntity>> globalEntities = new();
 
-        foreach (string filePath in Directory.EnumerateFiles(rootPath, "*.json", SearchOption.AllDirectories).OrderBy(path => path)) {
+        List<string> typesToLoad = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(Path.Combine(rootPath, "typesToLoad.json")))!;
+
+        foreach (string filePath in typesToLoad.Select(type => Path.Combine(rootPath, $"{type}.json"))) {
             string relativePath = Path.GetRelativePath(rootPath, filePath).Replace('\\', '/');
             string entitiesTypeName = Path.GetFileNameWithoutExtension(filePath);
 
@@ -253,14 +268,20 @@ public static class ConfigManager {
                 child.Value.Entities.Values.Select(entity => entity.Clone()));
     }
 
-    public static T GetComponent<T>(string path) where T : class, IComponent {
+    public static T GetComponent<T>(string path) where T : class, IComponent =>
+        GetComponentOrNull<T>(path)!;
+
+    public static T? GetComponentOrNull<T>(string path) where T : class, IComponent {
         ConfigNode node = GetNode(path);
 
         if (!node.Components.TryGetValue(typeof(T), out IComponent? component))
             node.ServerComponents.TryGetValue(typeof(T), out component);
 
-        return (component?.Clone() as T)!;
+        return component?.Clone() as T;
     }
+
+    public static bool TryGetComponent<T>(string path, [NotNullWhen(true)] out T? component) where T : class, IComponent =>
+        (component = GetComponentOrNull<T>(path)) != null;
 
     public static bool TryGetConfig(string locale, [NotNullWhen(true)] out byte[]? config) =>
         LocaleToConfigCache.TryGetValue(locale, out config);

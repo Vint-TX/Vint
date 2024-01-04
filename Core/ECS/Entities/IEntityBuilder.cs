@@ -12,6 +12,8 @@ public interface IEntityBuilder {
 
     public IEntityBuilder WithTemplateAccessor(EntityTemplate template, string? configPath);
 
+    public IEntityBuilder WithId(long id);
+
     public IEntityBuilder AddComponent(IComponent component);
 
     public IEntity Build();

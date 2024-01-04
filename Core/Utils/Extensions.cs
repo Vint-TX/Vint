@@ -10,7 +10,7 @@ public static class Extensions {
         if (!type.IsClass)
             throw new NotSupportedException("Type must be a class");
 
-        HashSet<Type> allInterfaces = new(type.GetInterfaces());
+        HashSet<Type> allInterfaces = [..type.GetInterfaces()];
         Type? baseType = type.BaseType;
 
         if (baseType != null)
@@ -27,6 +27,18 @@ public static class Extensions {
             output.Write(buffer, 0, read);
             limit -= read;
         }
+    }
+
+    public static List<T> Shuffle<T>(this List<T> list) {
+        int n = list.Count;
+
+        while (n > 1) {
+            n--;
+            int k = Random.Shared.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+
+        return list;
     }
 
     public static bool IsNullable(this PropertyInfo property) {

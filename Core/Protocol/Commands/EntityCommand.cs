@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -11,5 +12,5 @@ public abstract class EntityCommand(
 ) : ICommand {
     [ProtocolPosition(0)] public IEntity Entity { get; protected set; } = entity;
 
-    public virtual void Execute(IPlayerConnection connection) => throw new NotImplementedException();
+    public virtual void Execute(IPlayerConnection connection) => throw new UnreachableException();
 }

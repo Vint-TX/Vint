@@ -11,16 +11,17 @@ public interface IComponent {
     public void Changing(IPlayerConnection connection, IEntity entity) { }
 
     public IComponent Clone() {
-        ILogger logger = Log.Logger.ForType(GetType());
-        IComponent component = (IComponent)RuntimeHelpers.GetUninitializedObject(GetType());
+        Type type = GetType();
+        ILogger logger = Log.Logger.ForType(type);
+        IComponent component = (IComponent)RuntimeHelpers.GetUninitializedObject(type);
 
-        foreach (PropertyInfo property in component.GetType().GetProperties()) {
+        foreach (PropertyInfo property in type.GetProperties()) {
             if (property.SetMethod == null) {
                 logger.Warning("Cannot clone {Property} because it does not have set accessor", property.Name);
                 continue;
             }
 
-            property.SetValue(component, GetType().GetProperty(property.Name)!.GetValue(this));
+            property.SetValue(component, type.GetProperty(property.Name)!.GetValue(this));
         }
 
         logger.Verbose("Cloned");

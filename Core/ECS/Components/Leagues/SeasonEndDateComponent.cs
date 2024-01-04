@@ -1,5 +1,4 @@
-﻿using Vint.Core.ECS.Components;
-using Vint.Core.Protocol.Attributes;
+﻿using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Leagues;
 

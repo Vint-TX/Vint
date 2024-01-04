@@ -1,4 +1,5 @@
-﻿using Vint.Core.ECS.Components;
+﻿using System.Diagnostics;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -16,7 +17,7 @@ public class EntityShareCommand(
     [ProtocolPosition(2), ProtocolCollection(varied: true)]
     public IComponent[] Components => components;
 
-    public void Execute(IPlayerConnection connection) => throw new NotImplementedException();
+    public void Execute(IPlayerConnection connection) => throw new UnreachableException();
 
     public override string ToString() => $"EntityShare command {{ " +
                                          $"EntityId: {EntityId}, " +

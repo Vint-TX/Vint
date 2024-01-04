@@ -1,0 +1,117 @@
+[
+  {
+    "name": "Training",
+    "id": -1837531149,
+    "template": [
+      "LeagueTemplate",
+      "leagues/leagues/1_training"
+    ],
+    "components": {
+      "ChestBattleRewardComponent": {
+        "chestName": "Cardsbronze"
+      },
+      "LeagueGroupComponent": {
+        "key": -1837531149
+      },
+      "CurrentSeasonRewardForClientComponent": {
+        "leagueIndex": 0
+      },
+      "LeagueConfigComponent": {
+        "leagueIndex": 0,
+        "reputationToEnter": 100
+      }
+    }
+  },
+  {
+    "name": "Bronze",
+    "id": -101377070,
+    "template": [
+      "LeagueTemplate",
+      "leagues/leagues/2_bronze"
+    ],
+    "components": {
+      "ChestBattleRewardComponent": {
+        "chestName": "Cardsbronze"
+      },
+      "LeagueGroupComponent": {
+        "key": -101377070
+      },
+      "CurrentSeasonRewardForClientComponent": {
+        "leagueIndex": 1
+      },
+      "LeagueConfigComponent": {
+        "leagueIndex": 1,
+        "reputationToEnter": 140
+      }
+    }
+  },
+  {
+    "name": "Silver",
+    "id": 2119734820,
+    "template": [
+      "LeagueTemplate",
+      "leagues/leagues/3_silver"
+    ],
+    "components": {
+      "ChestBattleRewardComponent": {
+        "chestName": "Cardssilver"
+      },
+      "LeagueGroupComponent": {
+        "key": 2119734820
+      },
+      "CurrentSeasonRewardForClientComponent": {
+        "leagueIndex": 2
+      },
+      "LeagueConfigComponent": {
+        "leagueIndex": 2,
+        "reputationToEnter": 1000
+      }
+    }
+  },
+  {
+    "name": "Gold",
+    "id": 414840278,
+    "template": [
+      "LeagueTemplate",
+      "leagues/leagues/4_gold"
+    ],
+    "components": {
+      "ChestBattleRewardComponent": {
+        "chestName": "Cardsgold"
+      },
+      "LeagueGroupComponent": {
+        "key": 414840278
+      },
+      "CurrentSeasonRewardForClientComponent": {
+        "leagueIndex": 3
+      },
+      "LeagueConfigComponent": {
+        "leagueIndex": 3,
+        "reputationToEnter": 3000
+      }
+    }
+  },
+  {
+    "name": "Master",
+    "id": 1131431735,
+    "template": [
+      "LeagueTemplate",
+      "leagues/leagues/5_master"
+    ],
+    "components": {
+      "ChestBattleRewardComponent": {
+        "chestName": "Cardsmaster"
+      },
+      "LeagueGroupComponent": {
+        "key": 1131431735
+      },
+      "CurrentSeasonRewardForClientComponent": {
+        "leagueIndex": 4
+      },
+      "LeagueConfigComponent": {
+        "leagueIndex": 4,
+        "reputationToEnter": 4500
+      }
+    }
+  }
+]

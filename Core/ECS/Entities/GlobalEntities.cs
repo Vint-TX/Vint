@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using LinqToDB;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components.Fraction;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Modules;
@@ -207,7 +207,7 @@ public static class GlobalEntities {
                     break;
                 }
 
-                case "varied": { // todo
+                case "misc": {
                     entity.AddComponent(new UserGroupComponent(user));
 
                     switch (entity.TemplateAccessor.Template) {
@@ -228,9 +228,6 @@ public static class GlobalEntities {
                         }
 
                         case PresetUserItemTemplate: {
-                            if (db.Presets.All(preset => preset.PlayerId != player.Id))
-                                db.Insert(new Preset { Player = player, Index = 0, Name = "Preset 1" });
-
                             foreach (Preset preset in db.Presets.Where(preset => preset.PlayerId == player.Id)) {
                                 IEntity presetEntity = entity.Clone();
                                 presetEntity.Id = EntityRegistry.FreeId;
@@ -262,6 +259,23 @@ public static class GlobalEntities {
 
                     break;
                 }
+
+                case "matchmakingModes": {
+                    entity.AddComponent(new UserGroupComponent(user));
+                    break;
+                }
+
+                case "containers": {
+                    Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == entityId);
+
+                    if (entity.HasComponent<RestrictionByUserFractionComponent>())
+                        entity.RemoveComponent<RestrictionByUserFractionComponent>();
+
+                    entity.AddComponent(new UserGroupComponent(user));
+                    entity.AddComponent(new NotificationGroupComponent(entity));
+                    entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));
+                    break;
+                }
             }
 
             yield return entity;
@@ -273,23 +287,29 @@ public static class GlobalEntities {
 
     public static IEnumerable<IEntity> GetEntities(string typeName) => ConfigManager.GetGlobalEntities(typeName);
 
-    public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection) =>
-        marketEntity.TemplateAccessor!.Template switch {
+    public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
+        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;
+
+        return marketEntity.TemplateAccessor!.Template switch {
             UserEntityTemplate => marketEntity,
             MarketEntityTemplate marketTemplate => connection.SharedEntities.Single(entity =>
                 entity.TemplateAccessor?.Template == marketTemplate.UserTemplate &&
-                entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id),
+                predicate(entity)),
             _ => throw new KeyNotFoundException()
         };
+    }
 
-    public static IEntity GetMarketEntity(this IEntity userEntity, IPlayerConnection connection) =>
-        userEntity.TemplateAccessor!.Template switch {
+    public static IEntity GetMarketEntity(this IEntity userEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
+        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == userEntity.Id;
+
+        return userEntity.TemplateAccessor!.Template switch {
             MarketEntityTemplate => userEntity,
             UserEntityTemplate userTemplate => connection.SharedEntities.Single(entity =>
                 entity.TemplateAccessor?.Template == userTemplate.MarketTemplate &&
-                entity.GetComponent<MarketItemGroupComponent>().Key == userEntity.Id),
+                predicate(entity)),
             _ => throw new KeyNotFoundException()
         };
+    }
 
     public static IEntity? GetEntity(this IPlayerConnection connection, long entityId) =>
         connection.SharedEntities.SingleOrDefault(entity => entity.Id == entityId);

@@ -15,19 +15,27 @@ public class SendChatMessageEvent : IServerEvent {
     static Dictionary<string, ChatConfigComponent> ConfigPathToConfig { get; } = new();
     public string Message { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public void Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
         IEntity chat = entities.Single();
         TemplateAccessor chatTemplateAccessor = chat.TemplateAccessor!;
         Message = Message.Trim();
 
         if (!Validate(chatTemplateAccessor.ConfigPath!)) return;
 
-        switch (chatTemplateAccessor.Template) { // todo
-            case GeneralChatTemplate: {
-                ChatUtils.SendMessage(Message, chat, connection.Server.PlayerConnections, connection);
-                break;
-            }
-        }
+        IEnumerable<IPlayerConnection> receivers = chatTemplateAccessor.Template switch { // todo
+            GeneralChatTemplate => sender.Server.PlayerConnections,
+
+            BattleLobbyChatTemplate => sender.BattlePlayer!.Battle.Players
+                .Select(battlePlayer => battlePlayer.PlayerConnection),
+
+            GeneralBattleChatTemplate => sender.BattlePlayer!.Battle.Players
+                .Where(battlePlayer => battlePlayer.InBattle)
+                .Select(battlePlayer => battlePlayer.PlayerConnection),
+
+            _ => []
+        };
+
+        ChatUtils.SendMessage(Message, chat, receivers, sender);
     }
 
     bool Validate(string chatConfigPath) { // todo
