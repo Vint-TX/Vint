@@ -18,7 +18,8 @@ public abstract class WeaponTemplate : EntityTemplate {
                 .AddComponent(tank.GetComponent<UserGroupComponent>())
                 .AddComponent(tank.GetComponent<TankGroupComponent>())
                 .AddComponent(tank.GetComponent<BattleGroupComponent>())
-                .AddComponent(battlePlayer.PlayerConnection.Player.CurrentPreset.Weapon.GetComponent<MarketItemGroupComponent>()));
+                .AddComponent(battlePlayer.PlayerConnection.Player.CurrentPreset.Weapon.GetComponent<MarketItemGroupComponent>())
+                .AddComponent(ConfigManager.GetComponent<WeaponRotationComponent>(tank.TemplateAccessor!.ConfigPath!.Replace("battle", "garage"))));
 
         // todo hammer
 

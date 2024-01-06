@@ -22,7 +22,7 @@ public class OptionalMap {
         Data[Position / 8] |= (byte)(Convert.ToInt32(isNull) << 7 - Position++ % 8);
     }
 
-    public bool Read() {
+    public bool Get() {
         if (Position >= Length) {
             throw new IndexOutOfRangeException(
                 "Index was out of range. Must be non-negative and less than the size of the OptionalMap.");

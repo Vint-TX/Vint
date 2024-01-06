@@ -1,6 +1,6 @@
 using Vint.Core.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Matchmaking;
+namespace Vint.Core.ECS.Components.Lobby;
 
 [ProtocolId(3911401339075883957)]
 public class UserLimitComponent(

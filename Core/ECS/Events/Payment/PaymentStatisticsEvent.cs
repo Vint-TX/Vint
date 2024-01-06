@@ -1,4 +1,5 @@
-﻿using Vint.Core.Protocol.Attributes;
+﻿using Vint.Core.ECS.Enums;
+using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.Payment;
 

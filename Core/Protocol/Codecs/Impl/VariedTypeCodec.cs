@@ -5,9 +5,7 @@ namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class VariedTypeCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
-        Type type = value.GetType();
-
-        if (!type.IsClass) throw new ArgumentException("Type must be class");
+        if (value is not Type type) throw new ArgumentException("Value must be Type", nameof(value));
 
         Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, type.GetProtocolId().Id);
     }

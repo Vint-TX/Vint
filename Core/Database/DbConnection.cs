@@ -39,4 +39,5 @@ public sealed class DbConnection() : DataConnection(Schema) {
     public ITable<Statistics> Statistics => this.GetTable<Statistics>();
     public ITable<SeasonStatistics> SeasonStatistics => this.GetTable<SeasonStatistics>();
     public ITable<ReputationStatistics> ReputationStatistics => this.GetTable<ReputationStatistics>();
+    public ITable<PresetModule> PresetModules => this.GetTable<PresetModule>();
 }

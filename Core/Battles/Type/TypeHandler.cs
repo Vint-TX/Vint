@@ -11,7 +11,7 @@ public abstract class TypeHandler(
 
     public abstract void Tick();
 
-    public abstract void PlayerEntered(BattlePlayer player);
+    public abstract void PlayerEntered(BattlePlayer battlePlayer);
 
-    public abstract void PlayerExited(BattlePlayer player);
+    public abstract void PlayerExited(BattlePlayer battlePlayer);
 }

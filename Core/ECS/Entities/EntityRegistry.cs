@@ -14,5 +14,12 @@ public static class EntityRegistry {
         }
     }
 
+    public static void Remove(long id) {
+        lock (Entities) {
+            if (!Entities.Remove(id))
+                throw new ArgumentException($"Entity with id {id} is not registered");
+        }
+    }
+
     public static IEntity Get(long id) => Entities[id];
 }

@@ -16,7 +16,7 @@ public class MatchMakingLobbyTemplate : BattleLobbyTemplate {
                 builder.AddComponent(map.GetComponent<MapGroupComponent>())
                     .AddComponent(new BattleModeComponent(battleProperties.BattleMode))
                     .AddComponent(new UserLimitComponent(battleProperties.MaxPlayers))
-                    .AddComponent(new GravityComponent(battleProperties.GravityType, gravity));
+                    .AddComponent(new GravityComponent(battleProperties.Gravity, gravity));
             });
 
         entity.AddComponent(new BattleLobbyGroupComponent(entity));

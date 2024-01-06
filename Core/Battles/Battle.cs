@@ -1,11 +1,15 @@
 using System.Diagnostics;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components.Battle.Round;
+using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
@@ -20,6 +24,7 @@ public class Battle {
         Properties = default;
 
         TypeHandler = new MatchmakingHandler(this);
+        StateManager = new BattleStateManager(this);
 
         Setup();
     }
@@ -28,14 +33,17 @@ public class Battle {
         IsCustom = true;
         Properties = properties;
 
-        TypeHandler = null!; // todo
+        TypeHandler = new CustomHandler(this, owner);
+        StateManager = new BattleStateManager(this);
 
         Setup();
     }
 
     public long Id => BattleEntity.Id;
     public bool IsCustom { get; }
+    public double Timer { get; set; }
 
+    public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }
     public MapInfo MapInfo { get; set; } = null!;
 
@@ -78,13 +86,36 @@ public class Battle {
         };
     }
 
+    public void Start() {
+        // todo modules
+        
+        // todo teams
+
+        foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
+            battlePlayer.Init();
+    }
+
+    public void Finish() {
+        StateManager.SetState(new Ended(StateManager));
+        
+        ModeHandler.OnFinished();
+        
+        // todo sum up results
+    }
+    
     public void Tick(double deltaTime) {
+        Timer -= deltaTime;
+
         ModeHandler.Tick();
         TypeHandler.Tick();
+        StateManager.Tick();
+
+        foreach (BattlePlayer battlePlayer in Players)
+            battlePlayer.Tick();
     }
 
     public void AddPlayer(IPlayerConnection player, bool spectator = false) { // todo spectator
-        if (player.IsInBattle) return;
+        if (player.InBattle) return;
 
         player.Logger.Warning("Joining battle {Id}", Id);
 
@@ -100,10 +131,8 @@ public class Battle {
             foreach (BattlePlayer battlePlayer in Players)
                 battlePlayer.PlayerConnection.Share(player.User);
 
-            BattlePlayer tankPlayer = ModeHandler.SetupBattlePlayer(player);
-            player.BattlePlayer = tankPlayer;
-
-            TypeHandler.PlayerEntered(tankPlayer);
+            player.BattlePlayer = ModeHandler.SetupBattlePlayer(player);
+            TypeHandler.PlayerEntered(player.BattlePlayer);
         }
 
         Players.Add(player.BattlePlayer);

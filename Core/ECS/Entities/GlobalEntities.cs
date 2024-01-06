@@ -276,6 +276,17 @@ public static class GlobalEntities {
                     entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));
                     break;
                 }
+
+                case "moduleCards": {
+                    long moduleId = entity.GetComponent<ParentGroupComponent>().Key;
+                    Module? module = db.Modules
+                        .Where(module => module.PlayerId == player.Id)
+                        .SingleOrDefault(module => module.Id == moduleId);
+
+                    entity.AddComponent(new UserGroupComponent(user));
+                    entity.AddComponent(new UserItemCounterComponent(module?.Cards ?? 0));
+                    break;
+                }
             }
 
             yield return entity;

@@ -39,24 +39,27 @@ public class MatchmakingHandler(
         Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(
             Battle.Properties,
             Battle.MapEntity,
-            BattleProperties.GravityToForce[Battle.Properties.GravityType]);
+            BattleProperties.GravityToForce[Battle.Properties.Gravity]);
     }
 
     public override void Tick() {
         foreach (BattlePlayer player in WaitingPlayers.ToArray()) {
-            if (DateTime.UtcNow < player.BattleJoinCountdown) continue;
+            if (DateTimeOffset.UtcNow < player.BattleJoinTime) continue;
 
             player.Init();
             WaitingPlayers.Remove(player);
         }
     }
 
-    public override void PlayerEntered(BattlePlayer player) { // todo
-        player.PlayerConnection.User.AddComponent(new MatchMakingUserComponent());
-        WaitingPlayers.Add(player);
+    public override void PlayerEntered(BattlePlayer battlePlayer) { // todo
+        battlePlayer.PlayerConnection.User.AddComponent(new MatchMakingUserComponent());
+        WaitingPlayers.Add(battlePlayer);
     }
 
-    public override void PlayerExited(BattlePlayer player) => throw new NotImplementedException();
+    public override void PlayerExited(BattlePlayer battlePlayer) {
+        WaitingPlayers.Remove(battlePlayer);
+        battlePlayer.PlayerConnection.User.RemoveComponent<MatchMakingUserComponent>();
+    }
 
     static BattleMode GetRandomMode() => new Random().Next(0, 100) switch { // todo
         //< 34 => BattleMode.CTF,

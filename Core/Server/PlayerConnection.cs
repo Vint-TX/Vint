@@ -31,7 +31,7 @@ public interface IPlayerConnection {
     public IEntity ClientSession { get; }
 
     public bool IsOnline { get; }
-    public bool IsInBattle { get; }
+    public bool InBattle { get; }
 
     public List<IEntity> SharedEntities { get; }
     public Dictionary<string, List<IEntity>> UserEntities { get; }
@@ -64,6 +64,12 @@ public interface IPlayerConnection {
     public void Share(params IEntity[] entities);
 
     public void Share(IEnumerable<IEntity> entities);
+
+    public void Unshare(IEntity entity);
+
+    public void Unshare(params IEntity[] entities);
+
+    public void Unshare(IEnumerable<IEntity> entities);
 }
 
 public class PlayerConnection(
@@ -82,7 +88,7 @@ public class PlayerConnection(
     public List<IEntity> SharedEntities { get; private set; } = [];
 
     public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
-    public bool IsInBattle => BattlePlayer is { IsSpectator: false /* ?? */ };
+    public bool InBattle => BattlePlayer is { IsSpectator: false /* ?? */ };
 
     public void Register(
         string username,
@@ -233,6 +239,12 @@ public class PlayerConnection(
 
     public void Share(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Share);
 
+    public void Unshare(IEntity entity) => entity.Unshare(this);
+
+    public void Unshare(params IEntity[] entities) => entities.ToList().ForEach(Unshare);
+
+    public void Unshare(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Unshare);
+
     protected override void OnConnecting() =>
         Logger = Logger.WithPlayer(this);
 
@@ -245,8 +257,12 @@ public class PlayerConnection(
         ClientSession.Share(this);
     }
 
-    protected override void OnDisconnected() =>
+    protected override void OnDisconnected() {
         Logger.Information("Socket disconnected");
+        
+        if (User != null!)
+            EntityRegistry.Remove(User.Id);
+    }
 
     protected override void OnError(SocketError error) =>
         Logger.Error("Socket caught an error: {Error}", error);

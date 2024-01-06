@@ -1,7 +1,7 @@
 using Vint.Core.Battles;
 using Vint.Core.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Mode;
+namespace Vint.Core.ECS.Components.Lobby;
 
 [ProtocolId(1432624073184)]
 public class BattleModeComponent(

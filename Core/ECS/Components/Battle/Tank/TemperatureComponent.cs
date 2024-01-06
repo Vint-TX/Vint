@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Tank;
 public class TemperatureComponent(
     float temperature
 ) : IComponent {
-    public float Temperature { get; private set; } = temperature;
+    public float Temperature { get; set; } = temperature;
 }

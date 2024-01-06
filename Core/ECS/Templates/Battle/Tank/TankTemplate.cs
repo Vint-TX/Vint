@@ -10,8 +10,8 @@ namespace Vint.Core.ECS.Templates.Battle.Tank;
 
 [ProtocolId(2012489519776979402)]
 public class TankTemplate : EntityTemplate {
-    public IEntity Create(IEntity hullUserItem, IEntity hullMarketItem, IEntity battleUser) {
-        string configPath = hullUserItem.TemplateAccessor!.ConfigPath!;
+    public IEntity Create(IEntity hull, IEntity battleUser) {
+        string configPath = hull.TemplateAccessor!.ConfigPath!;
 
         IEntity entity = Entity(configPath.Replace("garage", "battle"),
             builder => builder
@@ -21,7 +21,7 @@ public class TankTemplate : EntityTemplate {
                 .AddComponent(new TemperatureComponent(0))
                 .AddComponent(battleUser.GetComponent<UserGroupComponent>())
                 .AddComponent(battleUser.GetComponent<BattleGroupComponent>())
-                .AddComponent(hullMarketItem.GetComponent<MarketItemGroupComponent>())
+                .AddComponent(hull.GetComponent<MarketItemGroupComponent>())
                 .AddComponent(ConfigManager.GetComponent<HealthComponent>(configPath))
                 .AddComponent(ConfigManager.GetComponent<HealthConfigComponent>(configPath))
                 .AddComponent(ConfigManager.GetComponent<DampingComponent>(configPath))

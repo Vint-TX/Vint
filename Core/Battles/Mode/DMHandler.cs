@@ -4,18 +4,30 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Mode;
 
 public class DMHandler : ModeHandler {
     public DMHandler(Battle battle) : base(battle) =>
-        SpawnPoints = Battle.MapInfo.SpawnPoints.Deathmatch.ToReadOnly();
+        SpawnPoints = Battle.MapInfo.SpawnPoints.Deathmatch.ToList();
 
-    public ReadOnlyCollection<SpawnPoint> SpawnPoints { get; private set; }
+    SpawnPoint LastSpawnPoint { get; set; }
+    
+    public List<SpawnPoint> SpawnPoints { get; private set; }
 
     public override BattleMode BattleMode => BattleMode.DM;
 
     public override void Tick() { }
+
+    public override SpawnPoint GetRandomSpawnPoint() => 
+        LastSpawnPoint = SpawnPoints
+            .Shuffle()
+            .First(spawnPoint => spawnPoint != LastSpawnPoint);
+
+    public override void OnStarted() { }
+
+    public override void OnFinished() { }
 
     public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
         BattlePlayer tankPlayer = new(player, Battle, null, false);

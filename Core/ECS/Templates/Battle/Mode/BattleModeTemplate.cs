@@ -28,7 +28,7 @@ public abstract class BattleModeTemplate : EntityTemplate {
                     .AddComponent(new UserCountComponent(userLimitComponent.UserLimit))
                     .AddComponent(new TimeLimitComponent(timeLimit, warmUpTimeLimit))
                     .AddComponent(new ScoreLimitComponent(scoreLimit))
-                    .AddComponent(new BattleStartTimeComponent(DateTime.UtcNow));
+                    .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow));
             });
 
         entity.AddComponent(new BattleGroupComponent(entity));

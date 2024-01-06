@@ -34,5 +34,7 @@ public class Preset {
 
     [Column] public IEntity Shell { get; set; } = GlobalEntities.GetEntity("shells", "SmokyStandard");
     [Column] public IEntity Graffiti { get; set; } = GlobalEntities.GetEntity("graffities", "Logo");
-    // todo modules
+
+    [Association(ThisKey = $"{nameof(PlayerId)},{nameof(Index)}", OtherKey = $"{nameof(PresetModule.PlayerId)},{nameof(PresetModule.PresetIndex)}")]
+    public List<PresetModule> Modules { get; private set; } = [];
 }

@@ -27,7 +27,7 @@ public class MatchmakingProcessor(
                         continue;
                     }
 
-                    battleProcessor.PutPlayer(connection);
+                    battleProcessor.PutPlayerFromMatchmaking(connection);
                     RemovePlayerFromQueue(connection);
                 }
 

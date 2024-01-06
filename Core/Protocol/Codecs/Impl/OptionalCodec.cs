@@ -29,7 +29,7 @@ public class OptionalCodec : Codec {
         Codec.Encode(buffer, value);
     }
 
-    public override object? Decode(ProtocolBuffer buffer) => buffer.OptionalMap.Read()
+    public override object? Decode(ProtocolBuffer buffer) => buffer.OptionalMap.Get()
                                                                  ? null
                                                                  : Codec.Decode(buffer);
 }

@@ -1,16 +1,19 @@
+using Vint.Core.Protocol.Attributes;
+
 namespace Vint.Core.Battles;
 
 public record struct BattleProperties(
     BattleMode BattleMode,
-    GravityType GravityType,
+    GravityType Gravity,
     long MapId,
     bool FriendlyFire,
     bool KillZoneEnabled,
-    bool ModulesEnabled,
+    bool DisabledModules,
     int MaxPlayers,
     int TimeLimit,
     int ScoreLimit // ???
 ) {
+    [ProtocolIgnore] 
     public static IReadOnlyDictionary<GravityType, float> GravityToForce { get; } = new Dictionary<GravityType, float> {
         { GravityType.Earth, 9.81f },
         { GravityType.Moon, 1.62f },

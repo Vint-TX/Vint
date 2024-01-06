@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Events.Payment;
+namespace Vint.Core.ECS.Enums;
 
 public enum PaymentStatisticsAction {
     OpenPayment,

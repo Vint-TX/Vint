@@ -20,7 +20,7 @@ public class PresetNameComponent(
         }
     }
 
-    public void Changing(IPlayerConnection connection, IEntity entity) {
+    public void Changed(IPlayerConnection connection, IEntity entity) {
         preset ??= connection.Player.UserPresets.Single(p => p.Entity!.Id == entity.Id);
         if (_name != null) preset.Name = _name;
 

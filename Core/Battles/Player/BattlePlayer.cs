@@ -1,3 +1,6 @@
+using Vint.Core.Battles.States;
+using Vint.Core.ECS.Components.Battle;
+using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.User;
@@ -29,8 +32,10 @@ public class BattlePlayer {
     public bool IsSpectator { get; }
     public bool InBattleAsTank => Tank != null;
     public bool InBattle { get; private set; }
+    public bool Paused { get; set; }
 
-    public DateTime BattleJoinCountdown { get; } = DateTime.UtcNow.AddSeconds(7);
+    public DateTimeOffset BattleJoinTime { get; } = DateTimeOffset.UtcNow.AddSeconds(10);
+    public DateTimeOffset? KickTime { get; set; }
 
     public void Init() {
         PlayerConnection.Share(Battle.BattleEntity, Battle.RoundEntity, Battle.BattleChatEntity);
@@ -60,5 +65,22 @@ public class BattlePlayer {
         PlayerConnection.Share(Battle.Players
             .Where(player => player != this && player.InBattleAsTank)
             .SelectMany(player => player.Tank!.Entities));
+    }
+
+    public void Tick() {
+        if (Tank == null) return;
+        
+        Tank.StateManager.Tick();
+
+        if (Tank.CollisionsPhase != Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) return;
+
+        if (Tank.Tank.HasComponent<TankStateTimeOutComponent>())
+            Tank.Tank.RemoveComponent<TankStateTimeOutComponent>();
+            
+        Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component => 
+            component.SemiActiveCollisionsPhase++);
+            
+        Tank.StateManager.SetState(new Active(Tank.StateManager));
+        Tank.SetHealth(Tank.MaxHealth);
     }
 }

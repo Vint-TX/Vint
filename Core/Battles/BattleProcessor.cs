@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Serilog;
+using Vint.Core.Battles.States;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -8,7 +9,7 @@ namespace Vint.Core.Battles;
 public interface IBattleProcessor {
     public void StartTicking();
 
-    public void PutPlayer(IPlayerConnection connection);
+    public void PutPlayerFromMatchmaking(IPlayerConnection connection);
 
     public Battle? SingleOrDefault(Func<Battle, bool> predicate);
 
@@ -16,7 +17,9 @@ public interface IBattleProcessor {
 
     public Battle? FindBattle(long id);
 
-    public Battle CreateBattle();
+    public Battle CreateMatchmakingBattle();
+
+    public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner);
 }
 
 public class BattleProcessor : IBattleProcessor {
@@ -34,8 +37,12 @@ public class BattleProcessor : IBattleProcessor {
             while (true) {
                 stopwatch.Restart();
 
-                foreach (Battle battle in Battles.Values.ToArray())
+                foreach (Battle battle in Battles.Values.ToArray()) {
                     battle.Tick(lastBattleTickDuration);
+
+                    if (battle is { IsCustom: false, StateManager.CurrentState: Ended })
+                        Battles.Remove(battle.Id);
+                }
 
                 stopwatch.Stop();
                 TimeSpan elapsed = stopwatch.Elapsed;
@@ -53,8 +60,8 @@ public class BattleProcessor : IBattleProcessor {
         }
     }
 
-    public void PutPlayer(IPlayerConnection connection) {
-        Battle battle = Battles.Values.FirstOrDefault() ?? CreateBattle();
+    public void PutPlayerFromMatchmaking(IPlayerConnection connection) {
+        Battle battle = FirstOrDefault(battle => !battle.IsCustom) ?? CreateMatchmakingBattle();
 
         battle.AddPlayer(connection);
     }
@@ -65,8 +72,15 @@ public class BattleProcessor : IBattleProcessor {
 
     public Battle? FindBattle(long id) => Battles.GetValueOrDefault(id);
 
-    public Battle CreateBattle() { // todo
+    public Battle CreateMatchmakingBattle() {
         Battle battle = new();
+        Battles[battle.Id] = battle;
+
+        return battle;
+    }
+
+    public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner) {
+        Battle battle = new(properties, owner);
         Battles[battle.Id] = battle;
 
         return battle;

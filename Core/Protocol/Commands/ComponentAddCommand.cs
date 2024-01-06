@@ -18,7 +18,8 @@ public class ComponentAddCommand(
     public override void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        (Entity as IInternalEntity)!.AddComponent(Component, connection);
+        Entity.AddComponent(Component, connection);
+        Component.Added(connection, Entity);
 
         logger.Warning("{Connection} added {Component} to {Entity}", connection, Component.GetType().Name, Entity);
     }

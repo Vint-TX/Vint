@@ -8,7 +8,9 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Components;
 
 public interface IComponent {
-    public void Changing(IPlayerConnection connection, IEntity entity) { }
+    public void Added(IPlayerConnection connection, IEntity entity) { }
+
+    public void Changed(IPlayerConnection connection, IEntity entity) { }
 
     public IComponent Clone() {
         Type type = GetType();

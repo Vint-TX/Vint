@@ -12,11 +12,11 @@ public class Entity(
     long id,
     TemplateAccessor? templateAccessor,
     IEnumerable<IComponent> components
-) : IEntity, IInternalEntity {
+) : IEntity {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(Entity));
 
+    public HashSet<IPlayerConnection> SharedPlayers { get; } = [];
     Dictionary<Type, IComponent> TypeToComponent { get; } = components.ToDictionary(c => c.GetType());
-    HashSet<IPlayerConnection> SharedPlayers { get; } = [];
 
     public long Id {
         get => id;
@@ -50,8 +50,8 @@ public class Entity(
 
         Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
 
-        connection.Send(ToUnshareCommand());
         connection.SharedEntities.Remove(this);
+        connection.Send(ToUnshareCommand());
     }
 
     public void AddComponent(IComponent component) => AddComponent(component, null);
@@ -81,6 +81,20 @@ public class Entity(
 
     public void RemoveComponent<T>() where T : IComponent => RemoveComponent<T>(null);
 
+    public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null) {
+        Type type = component.GetType();
+
+        lock (TypeToComponent) {
+            if (!TypeToComponent.Remove(type))
+                throw new ArgumentException($"{this} does not have component {type}");
+        }
+
+        lock (SharedPlayers) {
+            foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
+                playerConnection.Send(new ComponentRemoveCommand(this, type));
+        }
+    }
+    
     public void Send(IEvent @event) {
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers)
@@ -106,6 +120,12 @@ public class Entity(
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
                 playerConnection.Send(new ComponentAddCommand(this, component));
+        }
+    }
+
+    public bool HasComponent(IComponent component) {
+        lock (TypeToComponent) {
+            return TypeToComponent.TryGetValue(component.GetType(), out _);
         }
     }
 

@@ -18,8 +18,8 @@ public class ComponentChangeCommand(
     public override void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        (Entity as IInternalEntity)!.ChangeComponent(Component, connection);
-        Component.Changing(connection, Entity);
+        Entity.ChangeComponent(Component, connection);
+        Component.Changed(connection, Entity);
 
         logger.Warning("{Connection} changed {Component} in {Entity}", connection, Component.GetType().Name, Entity);
     }

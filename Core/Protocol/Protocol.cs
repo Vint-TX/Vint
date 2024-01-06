@@ -2,6 +2,7 @@
 using System.Reflection;
 using Serilog;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Protocol.Codecs;
@@ -41,6 +42,9 @@ public class Protocol {
                 .Register<EntityShareCommand>(CommandCode.EntityShare)
                 .Register<EntityUnshareCommand>(CommandCode.EntityUnshare)
                 .Register<SendEventCommand>(CommandCode.SendEvent));
+
+        Register(typeof(MoveCommand), new MoveCommandCodec());
+        Register(typeof(Movement), new MovementCodec());
 
         Factories.Add(new ArrayCodecFactory());
         Factories.Add(new ListCodecFactory());

@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Time;
 public class BattleStartTimeComponent(
     DateTimeOffset? startTime
 ) : IComponent {
-    public long? RoundStartTime { get; private set; } = startTime?.ToUnixTimeMilliseconds();
+    public DateTimeOffset? RoundStartTime { get; set; } = startTime;
 }

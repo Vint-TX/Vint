@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Round;
 public class RoundStopTimeComponent(
     DateTimeOffset stopTime
 ) : IComponent {
-    public long StopTime { get; private set; } = stopTime.ToUnixTimeMilliseconds();
+    public DateTimeOffset StopTime { get; set; } = stopTime;
 }
