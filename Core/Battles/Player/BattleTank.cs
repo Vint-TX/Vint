@@ -5,11 +5,11 @@ using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components;
+using Vint.Core.ECS.Components.Battle;
 using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
 using Vint.Core.ECS.Components.Battle.Parameters.Health;
 using Vint.Core.ECS.Components.Battle.Tank;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Movement;
@@ -19,9 +19,7 @@ using Vint.Core.ECS.Templates.Battle.Incarnation;
 using Vint.Core.ECS.Templates.Battle.Tank;
 using Vint.Core.ECS.Templates.Battle.Weapon;
 using Vint.Core.ECS.Templates.Weapons.Market;
-using Vint.Core.ECS.Templates.Weapons.User;
 using Vint.Core.Server;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Player;
 
@@ -40,7 +38,7 @@ public class BattleTank {
         IEntity weapon = preset.Weapon;
         IEntity weaponSkin = preset.WeaponSkin;
         IEntity shell = preset.Shell;
-        
+
         IEntity hull = preset.Hull;
         IEntity hullSkin = preset.HullSkin;
 
@@ -49,7 +47,7 @@ public class BattleTank {
         IEntity graffiti = preset.Graffiti;
 
         OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
-        
+
         Tank = new TankTemplate().Create(hull, BattlePlayer.User);
 
         Weapon = weapon.TemplateAccessor!.Template switch {
@@ -63,17 +61,17 @@ public class BattleTank {
         Paint = new TankPaintBattleItemTemplate().Create(paint, Tank);
         Graffiti = new GraffitiBattleItemTemplate().Create(graffiti, Tank);
         Shell = new ShellBattleItemTemplate().Create(shell, Tank);
-        
+
         // todo modules
 
         Incarnation = new TankIncarnationTemplate().Create(Tank);
         RoundUser = new RoundUserTemplate().Create(BattlePlayer, Tank);
-        
+
         WeaponHandler = Weapon.TemplateAccessor!.Template switch {
             SmokyBattleItemTemplate => new SmokyWeaponHandler(this),
             _ => throw new NotImplementedException()
         };
-        
+
         MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         Health = MaxHealth;
 
@@ -86,16 +84,18 @@ public class BattleTank {
     }
 
     public long CollisionsPhase { get; set; } = -1; // I don't understand what is this
-    
+
     public float Health { get; private set; }
     public float MaxHealth { get; }
-    
+
     public Vector3 PreviousPosition { get; set; }
     public Vector3 Position { get; set; }
     public Quaternion Orientation { get; set; }
-    
+
+    public DateTimeOffset? SelfDestructTime { get; set; }
+
     public SpawnPoint SpawnPoint { get; private set; }
-    
+
     public WeaponHandler WeaponHandler { get; }
     public BattlePlayer BattlePlayer { get; }
     public Battle Battle { get; }
@@ -106,33 +106,67 @@ public class BattleTank {
     public IEntity Incarnation { get; private set; }
     public IEntity RoundUser { get; }
     public IEntity BattleUser { get; }
-    
+
     public IEntity Tank { get; }
     public IEntity Weapon { get; }
-    
+
     public IEntity HullSkin { get; }
     public IEntity WeaponSkin { get; }
-    
+
     public IEntity Cover { get; }
     public IEntity Paint { get; }
-    
+
     public IEntity Graffiti { get; }
     public IEntity Shell { get; }
 
     SpeedComponent OriginalSpeedComponent { get; }
 
+    public void Tick() {
+        if (SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow) {
+            SelfDestructTime = null;
+
+            if (StateManager.CurrentState is not Dead) {
+                StateManager.SetState(new Dead(StateManager));
+
+                foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
+                    battlePlayer.PlayerConnection.Send(new SelfDestructionBattleUserEvent(), BattleUser);
+
+                // todo statistics
+
+                Position = default;
+                PreviousPosition = default;
+            }
+        }
+
+        StateManager.Tick();
+
+        if (CollisionsPhase != Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) return;
+
+        if (Tank.HasComponent<TankStateTimeOutComponent>())
+            Tank.RemoveComponent<TankStateTimeOutComponent>();
+
+        Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component =>
+            component.SemiActiveCollisionsPhase++);
+
+        StateManager.SetState(new Active(StateManager));
+        SetHealth(MaxHealth);
+    }
+
     public void Enable() { // todo
         Tank.AddComponent(new TankMovableComponent());
     }
-    
+
     public void Disable() { // todo
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
+
+        if (Tank.HasComponent<SelfDestructionComponent>())
+            Tank.RemoveComponent<SelfDestructionComponent>();
         
         if (Tank.HasComponent<TankMovableComponent>())
             Tank.RemoveComponent<TankMovableComponent>();
     }
 
-    public void PrepareForRespawning() { // todo
+    public void Spawn() { // todo
         if (Tank.HasComponent<TankVisibleStateComponent>())
             Tank.RemoveComponent<TankVisibleStateComponent>();
 
@@ -156,19 +190,19 @@ public class BattleTank {
             AngularVelocity = Vector3.Zero,
             Orientation = SpawnPoint.Rotation
         };
-        
+
         Tank.AddComponent(new TankMovementComponent(movement, new MoveControl(), 0, 0));
     }
 
     public void SetHealth(float health) { // todo
         Health = health;
-        
+
         HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
         healthComponent.CurrentHealth = health;
-        
+
         Tank.RemoveComponent<HealthComponent>();
         Tank.AddComponent(healthComponent);
-        
+
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
             battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
     }

@@ -13,8 +13,7 @@ public record struct BattleProperties(
     int TimeLimit,
     int ScoreLimit // ???
 ) {
-    [ProtocolIgnore] 
-    public static IReadOnlyDictionary<GravityType, float> GravityToForce { get; } = new Dictionary<GravityType, float> {
+    [ProtocolIgnore] public static IReadOnlyDictionary<GravityType, float> GravityToForce { get; } = new Dictionary<GravityType, float> {
         { GravityType.Earth, 9.81f },
         { GravityType.Moon, 1.62f },
         { GravityType.Mars, 3.71f },

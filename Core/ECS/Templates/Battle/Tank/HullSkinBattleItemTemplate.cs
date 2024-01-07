@@ -7,11 +7,12 @@ namespace Vint.Core.ECS.Templates.Battle.Tank;
 
 [ProtocolId(636047163591561471)]
 public class HullSkinBattleItemTemplate : EntityTemplate {
-    public IEntity Create(IEntity skin, IEntity tank) => Entity(skin.TemplateAccessor!.ConfigPath, builder => 
-        builder
-            .AddComponent(new HullSkinBattleItemComponent())
-            .AddComponent(tank.GetComponent<UserGroupComponent>())
-            .AddComponent(tank.GetComponent<BattleGroupComponent>())
-            .AddComponent(tank.GetComponent<TankGroupComponent>())
-            .AddComponent(skin.GetComponent<MarketItemGroupComponent>()));
+    public IEntity Create(IEntity skin, IEntity tank) => Entity(skin.TemplateAccessor!.ConfigPath,
+        builder =>
+            builder
+                .AddComponent(new HullSkinBattleItemComponent())
+                .AddComponent(tank.GetComponent<UserGroupComponent>())
+                .AddComponent(tank.GetComponent<BattleGroupComponent>())
+                .AddComponent(tank.GetComponent<TankGroupComponent>())
+                .AddComponent(skin.GetComponent<MarketItemGroupComponent>()));
 }

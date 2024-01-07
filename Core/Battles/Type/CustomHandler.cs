@@ -14,9 +14,9 @@ public class CustomHandler(
     IPlayerConnection owner
 ) : TypeHandler(battle) {
     public IPlayerConnection Owner { get; private set; } = owner;
-    
+
     public bool IsOpened { get; private set; }
-    
+
     public override void Setup() {
         Battle.MapInfo = ConfigManager.MapInfos.Values.Single(map => map.MapId == Battle.Properties.MapId);
         Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Battle.Properties.MapId);
@@ -33,13 +33,13 @@ public class CustomHandler(
 
     public override void PlayerExited(BattlePlayer battlePlayer) {
         if (battlePlayer.PlayerConnection != Owner) return;
-        
+
         List<IPlayerConnection> players = Battle.Players
             .Where(player => !player.IsSpectator && player != battlePlayer)
             .Select(player => player.PlayerConnection)
             .ToList()
             .Shuffle();
-        
+
         if (players.Count == 0) return;
 
         Owner = players.First();

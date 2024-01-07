@@ -50,7 +50,7 @@ public class GameServer(
                     Logger.Error(e, "Socket caught an exception while sending ping event");
                 }
             }
-            
+
             Thread.Sleep(10000);
         }
     }

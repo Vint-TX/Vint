@@ -1,6 +1,3 @@
-using Vint.Core.Battles.States;
-using Vint.Core.ECS.Components.Battle;
-using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.User;
@@ -68,19 +65,6 @@ public class BattlePlayer {
     }
 
     public void Tick() {
-        if (Tank == null) return;
-        
-        Tank.StateManager.Tick();
-
-        if (Tank.CollisionsPhase != Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) return;
-
-        if (Tank.Tank.HasComponent<TankStateTimeOutComponent>())
-            Tank.Tank.RemoveComponent<TankStateTimeOutComponent>();
-            
-        Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component => 
-            component.SemiActiveCollisionsPhase++);
-            
-        Tank.StateManager.SetState(new Active(Tank.StateManager));
-        Tank.SetHealth(Tank.MaxHealth);
+        Tank?.Tick();
     }
 }

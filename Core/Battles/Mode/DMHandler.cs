@@ -1,4 +1,3 @@
-using SharpCompress;
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Matchmaking;
@@ -13,14 +12,14 @@ public class DMHandler : ModeHandler {
         SpawnPoints = Battle.MapInfo.SpawnPoints.Deathmatch.ToList();
 
     SpawnPoint LastSpawnPoint { get; set; }
-    
+
     public List<SpawnPoint> SpawnPoints { get; private set; }
 
     public override BattleMode BattleMode => BattleMode.DM;
 
     public override void Tick() { }
 
-    public override SpawnPoint GetRandomSpawnPoint() => 
+    public override SpawnPoint GetRandomSpawnPoint() =>
         LastSpawnPoint = SpawnPoints
             .Shuffle()
             .First(spawnPoint => spawnPoint != LastSpawnPoint);

@@ -1,5 +1,3 @@
-using Vint.Core.Battles;
-using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;

@@ -22,14 +22,14 @@ public abstract class MoveCodec : Codec {
 
     public const float HitEps = 0.001f;
 
-    protected static readonly byte[] BufferForWeaponRotation = new byte[WeaponRotationSize];
+    protected readonly static byte[] BufferForWeaponRotation = new byte[WeaponRotationSize];
 
-    protected static readonly byte[] BufferForWeaponRotationEmpty = Array.Empty<byte>();
+    protected readonly static byte[] BufferForWeaponRotationEmpty = Array.Empty<byte>();
 
-    protected static readonly BitArray BitsForWeaponRotation = new(BufferForWeaponRotation);
+    protected readonly static BitArray BitsForWeaponRotation = new(BufferForWeaponRotation);
 
-    protected static readonly BitArray BitsForWeaponRotationEmpty = new(BufferForWeaponRotationEmpty);
-    
+    protected readonly static BitArray BitsForWeaponRotationEmpty = new(BufferForWeaponRotationEmpty);
+
     protected MoveCodec() =>
         Logger = Log.Logger.ForType(GetType());
 
@@ -142,8 +142,9 @@ public abstract class MoveCodec : Codec {
         WriteFloat(bits, ref position, value.Y * num, size, factor);
         WriteFloat(bits, ref position, value.Z * num, size, factor);
     }
-    
+
     protected BitArray GetBitsForWeaponRotation(bool hasWeaponRotation) => !hasWeaponRotation ? BitsForWeaponRotationEmpty : BitsForWeaponRotation;
 
-    protected byte[] GetBufferForWeaponRotation(bool hasWeaponRotation) => !hasWeaponRotation ? BufferForWeaponRotationEmpty : BufferForWeaponRotation;
+    protected byte[] GetBufferForWeaponRotation(bool hasWeaponRotation) =>
+        !hasWeaponRotation ? BufferForWeaponRotationEmpty : BufferForWeaponRotation;
 }

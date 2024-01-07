@@ -5,11 +5,8 @@ using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Battle.Round;
-using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
@@ -77,7 +74,7 @@ public class Battle {
         BattleChatEntity = new GeneralBattleChatTemplate().Create();
 
         // todo height maps (or server physics)
-        
+
         ModeHandler = Properties.BattleMode switch {
             BattleMode.DM => new DMHandler(this),
             BattleMode.TDM => throw new NotImplementedException(),
@@ -88,7 +85,7 @@ public class Battle {
 
     public void Start() {
         // todo modules
-        
+
         // todo teams
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
@@ -97,12 +94,12 @@ public class Battle {
 
     public void Finish() {
         StateManager.SetState(new Ended(StateManager));
-        
+
         ModeHandler.OnFinished();
-        
+
         // todo sum up results
     }
-    
+
     public void Tick(double deltaTime) {
         Timer -= deltaTime;
 
@@ -114,7 +111,7 @@ public class Battle {
             battlePlayer.Tick();
     }
 
-    public void AddPlayer(IPlayerConnection player, bool spectator = false) { // todo spectator
+    public void AddPlayer(IPlayerConnection player, bool spectator = false) { // todo squads
         if (player.InBattle) return;
 
         player.Logger.Warning("Joining battle {Id}", Id);
@@ -128,8 +125,10 @@ public class Battle {
             player.User.AddComponent(new BattleLobbyGroupComponent(LobbyEntity));
             player.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
-            foreach (BattlePlayer battlePlayer in Players)
+            foreach (BattlePlayer battlePlayer in Players) {
                 battlePlayer.PlayerConnection.Share(player.User);
+                player.Share(battlePlayer.PlayerConnection.User);
+            }
 
             player.BattlePlayer = ModeHandler.SetupBattlePlayer(player);
             TypeHandler.PlayerEntered(player.BattlePlayer);

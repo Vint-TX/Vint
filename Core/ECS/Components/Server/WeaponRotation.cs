@@ -11,7 +11,7 @@ public class WeaponRotation {
     }
 
     public class TurretTurnAccelerationPropertyComponent : RangedComponent, IConvertible<WeaponRotationComponent> {
-        public void Convert(WeaponRotationComponent component) => 
+        public void Convert(WeaponRotationComponent component) =>
             component.Acceleration = FinalValue;
     }
 }

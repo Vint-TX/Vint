@@ -7,11 +7,12 @@ namespace Vint.Core.ECS.Templates.Battle.Weapon;
 
 [ProtocolId(-5342270968507348251)]
 public class ShellBattleItemTemplate : EntityTemplate {
-    public IEntity Create(IEntity shell, IEntity tank) => Entity(shell.TemplateAccessor!.ConfigPath, builder => 
-        builder
-            .AddComponent(new ShellBattleItemComponent())
-            .AddComponent(tank.GetComponent<UserGroupComponent>())
-            .AddComponent(tank.GetComponent<BattleGroupComponent>())
-            .AddComponent(tank.GetComponent<TankGroupComponent>())
-            .AddComponent(shell.GetComponent<MarketItemGroupComponent>()));
+    public IEntity Create(IEntity shell, IEntity tank) => Entity(shell.TemplateAccessor!.ConfigPath,
+        builder =>
+            builder
+                .AddComponent(new ShellBattleItemComponent())
+                .AddComponent(tank.GetComponent<UserGroupComponent>())
+                .AddComponent(tank.GetComponent<BattleGroupComponent>())
+                .AddComponent(tank.GetComponent<TankGroupComponent>())
+                .AddComponent(shell.GetComponent<MarketItemGroupComponent>()));
 }

@@ -29,7 +29,7 @@ public class MoveCommandCodec : MoveCodec {
             buffer.Writer.Write(moveCommand.TankControlHorizontal!.Value);
             buffer.Writer.Write(moveCommand.WeaponRotationControl!.Value);
         }
-        
+
         if (movementHasValue)
             Protocol.GetCodec(new TypeCodecInfo(typeof(Movement))).Encode(buffer, moveCommand.Movement!);
 
@@ -37,16 +37,16 @@ public class MoveCommandCodec : MoveCodec {
             int position = 0;
             byte[] bytes = GetBufferForWeaponRotation(weaponRotationHasValue);
             BitArray bits = GetBitsForWeaponRotation(weaponRotationHasValue);
-            
+
             WriteFloat(bits, ref position, moveCommand.WeaponRotation!.Value, WeaponRotationComponentBitsize, WeaponRotationFactor);
 
             bits.CopyTo(bytes, 0);
             buffer.Writer.Write(bytes);
-            
+
             if (position != bits.Length)
                 throw new Exception("Move command pack mismatch");
         }
-        
+
         buffer.Writer.Write(moveCommand.ClientTime);
     }
 
@@ -83,7 +83,7 @@ public class MoveCommandCodec : MoveCodec {
 
         if (weaponRotationHasValue)
             moveCommand.WeaponRotation = ReadFloat(bits, ref position, WeaponRotationComponentBitsize, WeaponRotationFactor);
-        
+
         if (position != bits.Length)
             throw new Exception("Move command unpack mismatch");
 

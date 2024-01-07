@@ -1,12 +1,10 @@
 using Vint.Core.Battles;
 using Vint.Core.ECS.Components.Battle;
 using Vint.Core.ECS.Components.Battle.Limit;
-using Vint.Core.ECS.Components.Battle.Mode;
 using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Lobby;
-using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.ECS.Templates.Battle.Mode;

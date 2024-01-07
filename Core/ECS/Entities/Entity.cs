@@ -14,9 +14,9 @@ public class Entity(
     IEnumerable<IComponent> components
 ) : IEntity {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(Entity));
+    Dictionary<Type, IComponent> TypeToComponent { get; } = components.ToDictionary(c => c.GetType());
 
     public HashSet<IPlayerConnection> SharedPlayers { get; } = [];
-    Dictionary<Type, IComponent> TypeToComponent { get; } = components.ToDictionary(c => c.GetType());
 
     public long Id {
         get => id;
@@ -94,7 +94,7 @@ public class Entity(
                 playerConnection.Send(new ComponentRemoveCommand(this, type));
         }
     }
-    
+
     public void Send(IEvent @event) {
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers)

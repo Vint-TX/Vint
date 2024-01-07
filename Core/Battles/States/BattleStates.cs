@@ -26,7 +26,7 @@ public class Countdown(
 ) : BattleState(stateManager) {
     public override void Start() {
         const int seconds = 10;
-                
+
         Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
         Battle.Timer = seconds;
         base.Start();
@@ -58,7 +58,7 @@ public class Starting(
                 StateManager.SetState(new Running(StateManager));
             }
         }
-        
+
         base.Tick();
     }
 
@@ -73,12 +73,12 @@ public class WarmUp(
 ) : BattleState(stateManager) {
     public override void Start() {
         const int seconds = 60;
-        Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component => 
+        Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow.AddSeconds(seconds));
 
-        Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component => 
+        Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
-                
+
         Battle.RoundEntity.AddComponent(new RoundWarmingUpStateComponent());
         Battle.Timer = seconds;
         base.Start();
@@ -100,10 +100,10 @@ public class Running(
     public override void Start() {
         Battle.Timer = Battle.Properties.TimeLimit * 60;
 
-        Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component => 
+        Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow);
-                
-        Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component => 
+
+        Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
         base.Start();
     }
@@ -114,11 +114,11 @@ public class Running(
                 Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
                 StateManager.SetState(new NotStarted(StateManager));
             }
-                
+
             if (Battle.Timer < 0)
                 Battle.Finish();
         }
-        
+
         base.Tick();
     }
 }

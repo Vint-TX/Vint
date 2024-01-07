@@ -4,7 +4,7 @@ public abstract class StateManager {
     public abstract State CurrentState { get; protected set; }
 
     public virtual void Tick() {
-        if (!CurrentState.Finished) 
+        if (!CurrentState.Finished)
             CurrentState.Tick();
     }
 

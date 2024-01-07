@@ -11,22 +11,22 @@ public class MovementCodec : MoveCodec {
         int position = 0;
         byte[] array = new byte[MovementSize];
         BitArray bitArray = new(array);
-        
+
         WriteVector3(bitArray, ref position, movement.Position, PositionComponentBitsize, PositionFactor);
         WriteQuaternion(bitArray, ref position, movement.Orientation, OrientationComponentBitsize, OrientationPrecision);
         WriteVector3(bitArray, ref position, movement.Velocity, LinearVelocityComponentBitsize, VelocityFactor);
         WriteVector3(bitArray, ref position, movement.AngularVelocity, AngularVelocityComponentBitsize, AngularVelocityFactor);
-        
+
         bitArray.CopyTo(array, 0);
         buffer.Writer.Write(array);
-        
+
         if (position != bitArray.Length)
             throw new Exception("Movement pack mismatch");
     }
 
     public override object Decode(ProtocolBuffer buffer) {
         Movement movement = default;
-        
+
         int position = 0;
         byte[] array = new byte[MovementSize];
         BitArray bitArray = new(array);
@@ -38,10 +38,10 @@ public class MovementCodec : MoveCodec {
         movement.Orientation = ReadQuaternion(bitArray, ref position, OrientationComponentBitsize, OrientationPrecision);
         movement.Velocity = ReadVector3(bitArray, ref position, LinearVelocityComponentBitsize, VelocityFactor);
         movement.AngularVelocity = ReadVector3(bitArray, ref position, AngularVelocityComponentBitsize, AngularVelocityFactor);
-        
+
         if (position != bitArray.Length)
             throw new Exception("Movement unpack mismatch");
-        
+
         return movement;
     }
 }

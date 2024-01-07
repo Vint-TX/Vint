@@ -7,9 +7,10 @@ namespace Vint.Core.ECS.Templates.Battle.Incarnation;
 
 [ProtocolId(1478091203635)]
 public class TankIncarnationTemplate : EntityTemplate {
-    public IEntity Create(IEntity tank) => Entity(null, builder => 
-        builder
-            .AddComponent(new TankIncarnationComponent())
-            .AddComponent(new TankIncarnationKillStatisticsComponent(0))
-            .AddComponent(tank.GetComponent<TankGroupComponent>()));
+    public IEntity Create(IEntity tank) => Entity(null,
+        builder =>
+            builder
+                .AddComponent(new TankIncarnationComponent())
+                .AddComponent(new TankIncarnationKillStatisticsComponent(0))
+                .AddComponent(tank.GetComponent<TankGroupComponent>()));
 }

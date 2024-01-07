@@ -1,4 +1,3 @@
-using Vint.Core.Battles;
 using Vint.Core.Battles.States;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -12,7 +11,7 @@ public class StartBattleEvent : IServerEvent {
         IEntity lobby = entities.Single();
         Battles.Battle battle = connection.BattlePlayer!.Battle;
         BattleStateManager stateManager = battle.StateManager;
-        
+
         switch (stateManager.CurrentState) {
             case NotStarted: {
                 stateManager.SetState(new Starting(stateManager));

@@ -259,7 +259,7 @@ public class PlayerConnection(
 
     protected override void OnDisconnected() {
         Logger.Information("Socket disconnected");
-        
+
         if (User != null!)
             EntityRegistry.Remove(User.Id);
     }

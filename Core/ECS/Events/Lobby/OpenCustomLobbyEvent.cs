@@ -20,7 +20,7 @@ public class OpenCustomLobbyEvent : IServerEvent {
             player.Crystals -= price;
             db.Update(player);
         }
-        
+
         ((CustomHandler)connection.BattlePlayer!.Battle.TypeHandler).OpenLobby();
     }
 }

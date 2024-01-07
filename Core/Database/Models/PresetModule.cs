@@ -20,12 +20,12 @@ public class PresetModule {
     [PrimaryKey(0)] public long PlayerId { get; private set; }
     [PrimaryKey(1)] public int PresetIndex { get; private set; }
     [PrimaryKey(2)] public Slot Slot { get; init; }
-    
+
     [Column] public long Id { get; set; }
-    
+
     [Association(ThisKey = $"{nameof(PlayerId)},{nameof(PresetIndex)}", OtherKey = $"{nameof(Preset.PlayerId)},{nameof(Preset.Index)}")]
     public Preset Preset {
-        get => _preset; 
+        get => _preset;
         set {
             _preset = value;
             PresetIndex = value.Index;

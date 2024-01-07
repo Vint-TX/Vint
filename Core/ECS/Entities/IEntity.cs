@@ -21,7 +21,7 @@ public interface IEntity {
     public void Unshare(IPlayerConnection connection);
 
     public void AddComponent(IComponent component);
-    
+
     public void AddComponent(IComponent component, IPlayerConnection? excluded = null);
 
     public bool HasComponent(IComponent component);
@@ -31,11 +31,11 @@ public interface IEntity {
     public T GetComponent<T>() where T : class, IComponent;
 
     public void ChangeComponent<T>(Action<T> action) where T : class, IComponent;
-    
+
     public void ChangeComponent(IComponent component, IPlayerConnection? excluded = null);
 
     public void RemoveComponent<T>() where T : IComponent;
-    
+
     public void RemoveComponent<T>(IPlayerConnection? excluded = null) where T : IComponent;
 
     public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null);
