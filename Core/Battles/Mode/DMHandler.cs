@@ -35,9 +35,8 @@ public class DMHandler : ModeHandler {
         return tankPlayer;
     }
 
-    public override void RemoveBattlePlayer(BattlePlayer player) {
+    public override void RemoveBattlePlayer(BattlePlayer player) =>
         player.PlayerConnection.User.RemoveComponent<TeamColorComponent>();
-    }
 
     public override void PlayerEntered(BattlePlayer player) { }
 

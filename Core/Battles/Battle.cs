@@ -7,7 +7,9 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
 using Vint.Core.ECS.Templates.Chat;
@@ -37,7 +39,9 @@ public class Battle {
     }
 
     public long Id => BattleEntity.Id;
+    public bool CanAddPlayers => Players.Count < Properties.MaxPlayers;
     public bool IsCustom { get; }
+    public bool WasPlayers { get; private set; }
     public double Timer { get; set; }
 
     public BattleStateManager StateManager { get; }
@@ -107,36 +111,108 @@ public class Battle {
         TypeHandler.Tick();
         StateManager.Tick();
 
-        foreach (BattlePlayer battlePlayer in Players)
+        foreach (BattlePlayer battlePlayer in Players.ToArray())
             battlePlayer.Tick();
     }
 
-    public void AddPlayer(IPlayerConnection player, bool spectator = false) { // todo squads
-        if (player.InBattle) return;
+    public void AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads
+        if (connection.InBattle) return;
 
-        player.Logger.Warning("Joining battle {Id}", Id);
+        connection.Logger.Warning("Joining battle {Id}", Id);
 
         if (spectator) {
-            player.BattlePlayer = new BattlePlayer(player, this, null, true);
+            connection.BattlePlayer = new BattlePlayer(connection, this, null, true);
         } else {
-            Preset preset = player.Player.CurrentPreset;
+            Preset preset = connection.Player.CurrentPreset;
 
-            player.Share(LobbyEntity, LobbyChatEntity);
-            player.User.AddComponent(new BattleLobbyGroupComponent(LobbyEntity));
-            player.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
+            connection.Share(LobbyEntity, LobbyChatEntity);
+            connection.User.AddComponent(new BattleLobbyGroupComponent(LobbyEntity));
+            connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
             foreach (BattlePlayer battlePlayer in Players) {
-                battlePlayer.PlayerConnection.Share(player.User);
-                player.Share(battlePlayer.PlayerConnection.User);
+                battlePlayer.PlayerConnection.Share(connection.User);
+                connection.Share(battlePlayer.PlayerConnection.User);
             }
 
-            player.BattlePlayer = ModeHandler.SetupBattlePlayer(player);
-            TypeHandler.PlayerEntered(player.BattlePlayer);
+            connection.BattlePlayer = ModeHandler.SetupBattlePlayer(connection);
+            TypeHandler.PlayerEntered(connection.BattlePlayer);
         }
 
-        Players.Add(player.BattlePlayer);
+        Players.Add(connection.BattlePlayer);
+        WasPlayers = true;
 
         if (spectator)
-            player.BattlePlayer.Init();
+            connection.BattlePlayer.Init();
+    }
+
+    public void RemovePlayer(BattlePlayer battlePlayer) { // todo
+        IPlayerConnection connection = battlePlayer.PlayerConnection;
+        IEntity user = connection.User;
+
+        connection.Unshare(BattleEntity, RoundEntity, BattleChatEntity);
+
+        foreach (IEntity entity in Players
+                     .Where(player => player.InBattleAsTank &&
+                                      player != battlePlayer)
+                     .SelectMany(player => player.Tank!.Entities))
+            connection.Unshare(entity);
+
+        user.RemoveComponent<BattleGroupComponent>();
+        ModeHandler.PlayerExited(battlePlayer);
+
+        if (battlePlayer.IsSpectator) {
+            connection.Unshare(battlePlayer.BattleUser);
+            RemovePlayerFromLobby(battlePlayer);
+        } else {
+            foreach (BattlePlayer player in Players.Where(player => player.InBattle))
+                player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
+
+            Players.Remove(battlePlayer);
+
+            if (user.HasComponent<MatchMakingUserReadyComponent>())
+                user.RemoveComponent<MatchMakingUserReadyComponent>();
+
+            if (!IsCustom && Players.All(player => player.IsSpectator)) {
+                foreach (BattlePlayer spectator in Players) {
+                    spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
+                    RemovePlayer(spectator);
+                }
+            }
+
+            if (!IsCustom)
+                RemovePlayerFromLobby(battlePlayer);
+        }
+    }
+
+    public void RemovePlayerFromLobby(BattlePlayer battlePlayer) {
+        Players.Remove(battlePlayer);
+
+        IPlayerConnection connection = battlePlayer.PlayerConnection;
+
+        if (battlePlayer.IsSpectator) {
+            foreach (IPlayerConnection otherConnection in Players.Select(player => player.PlayerConnection))
+                connection.Unshare(otherConnection.User);
+        } else {
+            IEntity user = connection.User;
+
+            TypeHandler.PlayerExited(battlePlayer);
+            ModeHandler.RemoveBattlePlayer(battlePlayer);
+
+            user.RemoveComponent<UserEquipmentComponent>();
+            user.RemoveComponent<BattleLobbyGroupComponent>();
+            connection.Unshare(LobbyEntity, LobbyChatEntity);
+
+            if (user.HasComponent<MatchMakingUserReadyComponent>())
+                user.RemoveComponent<MatchMakingUserReadyComponent>();
+
+            foreach (IPlayerConnection otherConnection in Players.Select(player => player.PlayerConnection)) {
+                otherConnection.Unshare(user);
+                connection.Unshare(otherConnection.User);
+            }
+
+            connection.Logger.Warning("Left battle {Id}", Id);
+        }
+
+        connection.BattlePlayer = null;
     }
 }

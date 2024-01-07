@@ -26,7 +26,7 @@ namespace Vint.Core.Battles.Player;
 public class BattleTank {
     public BattleTank(BattlePlayer battlePlayer) {
         BattlePlayer = battlePlayer;
-        BattleUser = battlePlayer.User;
+        BattleUser = battlePlayer.BattleUser;
         Battle = battlePlayer.Battle;
 
         StateManager = new TankStateManager(this);
@@ -48,7 +48,7 @@ public class BattleTank {
 
         OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
 
-        Tank = new TankTemplate().Create(hull, BattlePlayer.User);
+        Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
         Weapon = weapon.TemplateAccessor!.Template switch {
             SmokyMarketItemTemplate => new SmokyBattleItemTemplate().Create(Tank, BattlePlayer),
@@ -140,16 +140,25 @@ public class BattleTank {
 
         StateManager.Tick();
 
-        if (CollisionsPhase != Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) return;
+        if (CollisionsPhase == Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
+            if (Tank.HasComponent<TankStateTimeOutComponent>())
+                Tank.RemoveComponent<TankStateTimeOutComponent>();
 
-        if (Tank.HasComponent<TankStateTimeOutComponent>())
-            Tank.RemoveComponent<TankStateTimeOutComponent>();
+            Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component =>
+                component.SemiActiveCollisionsPhase++);
 
-        Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component =>
-            component.SemiActiveCollisionsPhase++);
+            StateManager.SetState(new Active(StateManager));
+            SetHealth(MaxHealth);
+        }
 
-        StateManager.SetState(new Active(StateManager));
-        SetHealth(MaxHealth);
+        if (BattlePlayer.IsPaused &&
+            (!BattlePlayer.KickTime.HasValue ||
+             DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
+            BattlePlayer.IsPaused = false;
+            BattlePlayer.KickTime = null;
+            BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
+            Battle.RemovePlayer(BattlePlayer);
+        }
     }
 
     public void Enable() { // todo
@@ -161,7 +170,7 @@ public class BattleTank {
 
         if (Tank.HasComponent<SelfDestructionComponent>())
             Tank.RemoveComponent<SelfDestructionComponent>();
-        
+
         if (Tank.HasComponent<TankMovableComponent>())
             Tank.RemoveComponent<TankMovableComponent>();
     }
@@ -186,12 +195,10 @@ public class BattleTank {
 
         Movement movement = new() {
             Position = SpawnPoint.Position,
-            Velocity = Vector3.Zero,
-            AngularVelocity = Vector3.Zero,
             Orientation = SpawnPoint.Rotation
         };
 
-        Tank.AddComponent(new TankMovementComponent(movement, new MoveControl(), 0, 0));
+        Tank.AddComponent(new TankMovementComponent(movement, default, 0, 0));
     }
 
     public void SetHealth(float health) { // todo

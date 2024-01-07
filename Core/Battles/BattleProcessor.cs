@@ -40,7 +40,8 @@ public class BattleProcessor : IBattleProcessor {
                 foreach (Battle battle in Battles.Values.ToArray()) {
                     battle.Tick(lastBattleTickDuration);
 
-                    if (battle is { IsCustom: false, StateManager.CurrentState: Ended })
+                    if (battle is { WasPlayers: true, Players.Count: 0 } or
+                        { IsCustom: false, StateManager.CurrentState: Ended })
                         Battles.Remove(battle.Id);
                 }
 
@@ -61,7 +62,7 @@ public class BattleProcessor : IBattleProcessor {
     }
 
     public void PutPlayerFromMatchmaking(IPlayerConnection connection) {
-        Battle battle = FirstOrDefault(battle => !battle.IsCustom) ?? CreateMatchmakingBattle();
+        Battle battle = FirstOrDefault(battle => battle is { IsCustom: false, CanAddPlayers: true }) ?? CreateMatchmakingBattle();
 
         battle.AddPlayer(connection);
     }

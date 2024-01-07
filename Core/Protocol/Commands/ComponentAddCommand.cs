@@ -13,15 +13,14 @@ public class ComponentAddCommand(
     IEntity entity,
     IComponent component
 ) : EntityCommand(entity) {
+    [ProtocolIgnore] static ILogger Logger { get; } = Log.Logger.ForType(typeof(ComponentAddCommand));
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
-        ILogger logger = connection.Logger.ForType(GetType());
-
         Entity.AddComponent(Component, connection);
         Component.Added(connection, Entity);
 
-        logger.Warning("{Connection} added {Component} to {Entity}", connection, Component.GetType().Name, Entity);
+        Logger.Warning("{Connection} added {Component} to {Entity}", connection, Component.GetType().Name, Entity);
     }
 
     public override string ToString() =>

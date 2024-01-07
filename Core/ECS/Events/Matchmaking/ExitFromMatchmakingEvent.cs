@@ -11,7 +11,6 @@ public class ExitFromMatchmakingEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IEntity lobby = entities.Single();
 
-        connection.Server.MatchmakingProcessor.RemovePlayerFromQueue(connection);
-        connection.Send(new ExitedFromMatchmakingEvent(true), lobby);
+        connection.Server.MatchmakingProcessor.RemovePlayerFromMatchmaking(connection, lobby, true);
     }
 }

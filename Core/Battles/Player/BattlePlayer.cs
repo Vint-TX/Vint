@@ -14,14 +14,14 @@ public class BattlePlayer {
 
         BattleUserTemplate battleUserTemplate = new();
 
-        User = IsSpectator
-                   ? battleUserTemplate.CreateAsSpectator(PlayerConnection.User, Battle.BattleEntity)
-                   : battleUserTemplate.CreateAsTank(PlayerConnection.User, Battle.BattleEntity, Team);
+        BattleUser = IsSpectator
+                         ? battleUserTemplate.CreateAsSpectator(PlayerConnection.User, Battle.BattleEntity)
+                         : battleUserTemplate.CreateAsTank(PlayerConnection.User, Battle.BattleEntity, Team);
     }
 
     public IPlayerConnection PlayerConnection { get; }
     public IEntity? Team { get; }
-    public IEntity User { get; }
+    public IEntity BattleUser { get; }
 
     public Battle Battle { get; }
     public BattleTank? Tank { get; private set; }
@@ -29,9 +29,9 @@ public class BattlePlayer {
     public bool IsSpectator { get; }
     public bool InBattleAsTank => Tank != null;
     public bool InBattle { get; private set; }
-    public bool Paused { get; set; }
+    public bool IsPaused { get; set; }
 
-    public DateTimeOffset BattleJoinTime { get; } = DateTimeOffset.UtcNow.AddSeconds(10);
+    public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(10);
     public DateTimeOffset? KickTime { get; set; }
 
     public void Init() {
@@ -43,7 +43,7 @@ public class BattlePlayer {
         Battle.ModeHandler.PlayerEntered(this);
 
         if (IsSpectator) {
-            PlayerConnection.Share(User);
+            PlayerConnection.Share(BattleUser);
             InBattle = true;
         } else {
             Tank = new BattleTank(this);
@@ -64,7 +64,5 @@ public class BattlePlayer {
             .SelectMany(player => player.Tank!.Entities));
     }
 
-    public void Tick() {
-        Tank?.Tick();
-    }
+    public void Tick() => Tank?.Tick();
 }

@@ -1,4 +1,7 @@
 using Serilog;
+using Vint.Core.Battles.Player;
+using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Matchmaking;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -9,7 +12,7 @@ public interface IMatchmakingProcessor {
 
     public void AddPlayerToQueue(IPlayerConnection connection);
 
-    public void RemovePlayerFromQueue(IPlayerConnection connection);
+    public void RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction);
 }
 
 public class MatchmakingProcessor(
@@ -23,12 +26,12 @@ public class MatchmakingProcessor(
             while (true) {
                 foreach (IPlayerConnection connection in PlayerQueue.ToArray()) {
                     if (!connection.IsOnline) {
-                        RemovePlayerFromQueue(connection);
+                        PlayerQueue.Remove(connection);
                         continue;
                     }
 
                     battleProcessor.PutPlayerFromMatchmaking(connection);
-                    RemovePlayerFromQueue(connection);
+                    PlayerQueue.Remove(connection);
                 }
 
                 Thread.Sleep(10);
@@ -42,6 +45,20 @@ public class MatchmakingProcessor(
     public void AddPlayerToQueue(IPlayerConnection connection) =>
         PlayerQueue.Add(connection);
 
-    public void RemovePlayerFromQueue(IPlayerConnection connection) =>
+    public void RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction) {
+        if (lobby != null)
+            connection.Send(new ExitedFromMatchmakingEvent(selfAction), lobby);
+
+        if (connection.InBattle) {
+            BattlePlayer battlePlayer = connection.BattlePlayer!;
+            Battle battle = battlePlayer.Battle;
+
+            if (battlePlayer.InBattleAsTank)
+                battle.RemovePlayer(battlePlayer);
+            else
+                battle.RemovePlayerFromLobby(battlePlayer);
+        }
+
         PlayerQueue.Remove(connection);
+    }
 }

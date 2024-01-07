@@ -15,21 +15,22 @@ public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InBattle || !connection.BattlePlayer!.InBattleAsTank) return;
+
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 
-        if (connection.InBattle) {
-            MoveCommandServerEvent serverEvent = new(MoveCommand);
+        MoveCommandServerEvent serverEvent = new(MoveCommand);
 
-            foreach (IPlayerConnection playerConnection in battle.Players
-                         .Where(player => player != battlePlayer)
-                         .Select(player => player.PlayerConnection))
-                playerConnection.Send(serverEvent, tank);
-        }
+        foreach (IPlayerConnection playerConnection in battle.Players
+                     .Where(player => player != battlePlayer)
+                     .Select(player => player.PlayerConnection))
+            playerConnection.Send(serverEvent, tank);
 
-        BattleTank? battleTank = battlePlayer.Tank;
-        if (!MoveCommand.Movement.HasValue || !battlePlayer.InBattleAsTank || battleTank!.StateManager.CurrentState is Dead) return; // ???
+
+        BattleTank battleTank = battlePlayer.Tank!;
+        if (!MoveCommand.Movement.HasValue || battleTank.StateManager.CurrentState is Dead) return; // ???
 
         ECS.Movement.Movement movement = MoveCommand.Movement.Value;
 

@@ -13,18 +13,17 @@ public class SendEventCommand(
     IEvent @event,
     params IEntity[] entities
 ) : ICommand {
+    [ProtocolIgnore] static ILogger Logger { get; } = Log.Logger.ForType(typeof(SendEventCommand));
     [ProtocolVaried, ProtocolPosition(0)] public IEvent Event { get; private set; } = @event;
     [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
 
     public void Execute(IPlayerConnection connection) {
-        ILogger logger = connection.Logger.ForType(GetType());
-
         if (Event is not IServerEvent serverEvent) {
-            logger.Warning("Event {Event} is not IServerEvent", Event);
+            Logger.Warning("Event {Event} is not IServerEvent", Event);
             return;
         }
 
-        logger.Information("Executing event {Name} for {Count} entities", serverEvent.GetType().Name, Entities.Length);
+        Logger.Information("Executing event {Name} for {Count} entities", serverEvent.GetType().Name, Entities.Length);
 
         serverEvent.Execute(connection, Entities);
     }

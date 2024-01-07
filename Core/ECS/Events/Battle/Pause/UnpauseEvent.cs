@@ -9,12 +9,12 @@ namespace Vint.Core.ECS.Events.Battle.Pause;
 [ProtocolId(-3944419188146485646)]
 public class UnpauseEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InBattle || !connection.BattlePlayer!.Paused) return;
+        if (!connection.InBattle || !connection.BattlePlayer!.InBattleAsTank || !connection.BattlePlayer.IsPaused) return;
 
         IEntity user = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer;
 
-        battlePlayer.Paused = false;
+        battlePlayer.IsPaused = false;
         battlePlayer.KickTime = null;
 
         user.RemoveComponent<PauseComponent>();

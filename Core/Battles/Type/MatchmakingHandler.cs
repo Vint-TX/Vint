@@ -1,10 +1,13 @@
 using System.Diagnostics;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.States;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Matchmaking;
 using Vint.Core.ECS.Templates.Lobby;
+using Vint.Core.Server;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Type;
@@ -52,7 +55,14 @@ public class MatchmakingHandler(
     }
 
     public override void PlayerEntered(BattlePlayer battlePlayer) { // todo
-        battlePlayer.PlayerConnection.User.AddComponent(new MatchMakingUserComponent());
+        IPlayerConnection connection = battlePlayer.PlayerConnection;
+        IEntity user = connection.User;
+
+        user.AddComponent(new MatchMakingUserComponent());
+
+        if (Battle.StateManager.CurrentState is not (WarmUp or Running)) return;
+
+        connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), user);
         WaitingPlayers.Add(battlePlayer);
     }
 

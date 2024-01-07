@@ -40,6 +40,8 @@ public interface IEntity {
 
     public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null);
 
+    public void RemoveComponent(Type type, IPlayerConnection? excluded = null);
+
     public void Send(IEvent @event);
 
     public IEntity Clone();

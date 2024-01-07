@@ -15,7 +15,14 @@ public abstract class BattleState(
 
 public class NotEnoughPlayers(
     BattleStateManager stateManager
-) : BattleState(stateManager);
+) : BattleState(stateManager) {
+    public override void Tick() {
+        if (Battle.Players.Count > 0)
+            StateManager.SetState(new Countdown(StateManager));
+
+        base.Tick();
+    }
+}
 
 public class NotStarted(
     BattleStateManager stateManager
@@ -30,6 +37,15 @@ public class Countdown(
         Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
         Battle.Timer = seconds;
         base.Start();
+    }
+
+    public override void Tick() {
+        if (Battle.Players.Count <= 0)
+            StateManager.SetState(new NotEnoughPlayers(StateManager));
+        else if (Battle.Timer < 0)
+            StateManager.SetState(new Starting(StateManager));
+
+        base.Tick();
     }
 
     public override void Finish() {
@@ -48,16 +64,10 @@ public class Starting(
     }
 
     public override void Tick() {
-        if (Battle.IsCustom) {
-            if (Battle.Players.Count == 0 ||
-                Battle.Players.All(player => player.IsSpectator))
-                StateManager.SetState(new NotStarted(StateManager));
-            else if (Battle.Timer < 0) {
-                Battle.Start();
-                Battle.LobbyEntity.AddComponent(Battle.BattleEntity.GetComponent<BattleGroupComponent>());
-                StateManager.SetState(new Running(StateManager));
-            }
-        }
+        if (Battle.IsCustom)
+            CustomBattleTick();
+        else
+            MatchmakingBattleTick();
 
         base.Tick();
     }
@@ -66,11 +76,32 @@ public class Starting(
         Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartingComponent>();
         base.Finish();
     }
+
+    void CustomBattleTick() {
+        if (Battle.Players.Count == 0)
+            StateManager.SetState(new NotStarted(StateManager));
+        else if (Battle.Timer < 0) {
+            Battle.Start();
+            Battle.LobbyEntity.AddComponent(Battle.BattleEntity.GetComponent<BattleGroupComponent>());
+            StateManager.SetState(new Running(StateManager));
+        }
+    }
+
+    void MatchmakingBattleTick() {
+        if (Battle.Players.Count <= 0) {
+            StateManager.SetState(new NotEnoughPlayers(StateManager));
+        } else if (Battle.Timer < 0) {
+            Battle.Start();
+            StateManager.SetState(new WarmUp(StateManager));
+        }
+    }
 }
 
 public class WarmUp(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
+    WarmUpStateManager WarmUpStateManager { get; } = new(stateManager);
+
     public override void Start() {
         const int seconds = 60;
         Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component =>
@@ -82,6 +113,11 @@ public class WarmUp(
         Battle.RoundEntity.AddComponent(new RoundWarmingUpStateComponent());
         Battle.Timer = seconds;
         base.Start();
+    }
+
+    public override void Tick() {
+        WarmUpStateManager.Tick();
+        base.Tick();
     }
 
     public override void Finish() {

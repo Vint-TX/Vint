@@ -10,10 +10,9 @@ public class StructCodec(
 ) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
-            ICodec codec = Protocol.GetCodec(codecInfo);
             object? item = property.GetValue(value);
 
-            codec.Encode(buffer, item!);
+            Protocol.GetCodec(codecInfo).Encode(buffer, item!);
         }
     }
 
@@ -21,8 +20,7 @@ public class StructCodec(
         object value = RuntimeHelpers.GetUninitializedObject(type);
 
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
-            ICodec codec = Protocol.GetCodec(codecInfo);
-            object item = codec.Decode(buffer);
+            object item = Protocol.GetCodec(codecInfo).Decode(buffer);
 
             property.SetValue(value, item, null);
         }

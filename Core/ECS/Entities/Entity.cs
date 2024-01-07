@@ -32,8 +32,13 @@ public class Entity(
 
     public void Share(IPlayerConnection connection) {
         lock (SharedPlayers) {
-            if (!SharedPlayers.Add(connection))
-                throw new ArgumentException($"{this} already shared to {connection}");
+            if (!SharedPlayers.Add(connection)) {
+                Logger.Error(new ArgumentException($"{this} already shared to {connection}"),
+                    "An exception occured while sharing {Entity} to {Connection}",
+                    this,
+                    connection);
+                return;
+            }
         }
 
         Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
@@ -44,8 +49,13 @@ public class Entity(
 
     public void Unshare(IPlayerConnection connection) {
         lock (SharedPlayers) {
-            if (!SharedPlayers.Remove(connection))
-                throw new ArgumentException($"{this} is not shared to {connection}");
+            if (!SharedPlayers.Remove(connection)) {
+                Logger.Error(new ArgumentException($"{this} is not shared to {connection}"),
+                    "An exception occured while unsharing {Entity} from {Connection}",
+                    this,
+                    connection);
+                return;
+            }
         }
 
         Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
@@ -84,6 +94,10 @@ public class Entity(
     public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null) {
         Type type = component.GetType();
 
+        RemoveComponent(type, excluded);
+    }
+
+    public void RemoveComponent(Type type, IPlayerConnection? excluded = null) {
         lock (TypeToComponent) {
             if (!TypeToComponent.Remove(type))
                 throw new ArgumentException($"{this} does not have component {type}");
@@ -148,15 +162,7 @@ public class Entity(
     public void RemoveComponent<T>(IPlayerConnection? excluded) where T : IComponent {
         Type type = typeof(T);
 
-        lock (TypeToComponent) {
-            if (!TypeToComponent.Remove(type))
-                throw new ArgumentException($"{this} does not have component {typeof(T)}");
-        }
-
-        lock (SharedPlayers) {
-            foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-                playerConnection.Send(new ComponentRemoveCommand(this, type));
-        }
+        RemoveComponent(type, excluded);
     }
 
     public override string ToString() => $"Entity {{ " +

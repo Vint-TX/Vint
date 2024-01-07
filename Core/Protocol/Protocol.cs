@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Reflection;
 using Serilog;
 using Vint.Core.ECS.Entities;
@@ -27,6 +28,7 @@ public class Protocol {
         Register(typeof(float), new FloatCodec());
         Register(typeof(double), new DoubleCodec());
         Register(typeof(string), new StringCodec());
+        Register(typeof(DateTime), new DateTimeCodec());
         Register(typeof(DateTimeOffset), new DateTimeOffsetCodec());
 
         Register(typeof(TemplateAccessor), new TemplateAccessorCodec());
@@ -43,6 +45,7 @@ public class Protocol {
                 .Register<EntityUnshareCommand>(CommandCode.EntityUnshare)
                 .Register<SendEventCommand>(CommandCode.SendEvent));
 
+        Register(typeof(Vector3), new Vector3Codec());
         Register(typeof(MoveCommand), new MoveCommandCodec());
         Register(typeof(Movement), new MovementCodec());
 

@@ -88,7 +88,7 @@ public class PlayerConnection(
     public List<IEntity> SharedEntities { get; private set; } = [];
 
     public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
-    public bool InBattle => BattlePlayer is { IsSpectator: false /* ?? */ };
+    public bool InBattle => BattlePlayer != null;
 
     public void Register(
         string username,
@@ -260,8 +260,21 @@ public class PlayerConnection(
     protected override void OnDisconnected() {
         Logger.Information("Socket disconnected");
 
+        if (InBattle) {
+            if (BattlePlayer!.IsSpectator || BattlePlayer.InBattleAsTank)
+                BattlePlayer.Battle.RemovePlayer(BattlePlayer);
+            else
+                BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
+        }
+
         if (User != null!)
             EntityRegistry.Remove(User.Id);
+
+        foreach (IEntity entity in SharedEntities)
+            entity.SharedPlayers.Remove(this);
+
+        SharedEntities.Clear();
+        UserEntities.Clear();
     }
 
     protected override void OnError(SocketError error) =>
