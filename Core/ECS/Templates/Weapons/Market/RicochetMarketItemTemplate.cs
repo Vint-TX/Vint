@@ -4,6 +4,6 @@ using Vint.Core.Protocol.Attributes;
 namespace Vint.Core.ECS.Templates.Weapons.Market;
 
 [ProtocolId(1435138247945)]
-public class RicochetMarketItemTemplate : MarketEntityTemplate {
-    public override UserEntityTemplate UserTemplate => new RicochetUserItemTemplate();
+public class RicochetMarketItemTemplate : WeaponMarketItemTemplate {
+    public override WeaponUserItemTemplate UserTemplate => new RicochetUserItemTemplate();
 }

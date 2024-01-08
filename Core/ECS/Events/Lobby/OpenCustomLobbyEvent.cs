@@ -17,7 +17,7 @@ public class OpenCustomLobbyEvent : IServerEvent {
         if (player.Crystals < price) return;
 
         using (DbConnection db = new()) {
-            player.Crystals -= price;
+            connection.SetCrystals(player.Crystals - price);
             db.Update(player);
         }
 

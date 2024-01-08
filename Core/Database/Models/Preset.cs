@@ -1,4 +1,5 @@
-﻿using LinqToDB.Mapping;
+﻿using LinqToDB;
+using LinqToDB.Mapping;
 using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Database.Models;
@@ -19,7 +20,7 @@ public class Preset {
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 
     [PrimaryKey(1)] public int Index { get; init; }
-    [Column] public string Name { get; set; } = null!;
+    [Column(DataType = DataType.Text)] public string Name { get; set; } = null!;
 
     [NotColumn] public IEntity? Entity { get; set; }
 

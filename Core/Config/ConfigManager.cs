@@ -248,13 +248,13 @@ public static class ConfigManager {
     }
 
     public static IEntity GetGlobalEntity(string path, string entityName) {
-        ConfigNode node = GetNode(path);
+        ConfigNode node = GetNode(path)!;
 
         return node.Entities[entityName].Clone();
     }
 
     public static IEnumerable<IEntity> GetGlobalEntities(string path) {
-        ConfigNode node = GetNode(path);
+        ConfigNode node = GetNode(path)!;
 
         return node.Entities.Values.Select(entity => entity.Clone());
     }
@@ -272,7 +272,9 @@ public static class ConfigManager {
         GetComponentOrNull<T>(path)!;
 
     public static T? GetComponentOrNull<T>(string path) where T : class, IComponent {
-        ConfigNode node = GetNode(path);
+        ConfigNode? node = GetNode(path);
+
+        if (node == null) return null;
 
         if (!node.Components.TryGetValue(typeof(T), out IComponent? component))
             node.ServerComponents.TryGetValue(typeof(T), out component);
@@ -286,10 +288,10 @@ public static class ConfigManager {
     public static bool TryGetConfig(string locale, [NotNullWhen(true)] out byte[]? config) =>
         LocaleToConfigCache.TryGetValue(locale, out config);
 
-    static ConfigNode GetNode(string path) {
+    static ConfigNode? GetNode(string path) {
         ConfigNode curNode = Root;
 
-        if (string.IsNullOrWhiteSpace(path)) return null!;
+        if (string.IsNullOrWhiteSpace(path)) return null;
 
         path = path.Replace('\\', '/');
 
@@ -298,7 +300,7 @@ public static class ConfigManager {
         foreach (string part in path.Split('/'))
             if (curNode.Children.TryGetValue(part, out ConfigNode? child))
                 curNode = child;
-            else return null!;
+            else return null;
 
         return curNode;
     }

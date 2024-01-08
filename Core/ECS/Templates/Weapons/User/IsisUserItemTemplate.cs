@@ -4,6 +4,6 @@ using Vint.Core.Protocol.Attributes;
 namespace Vint.Core.ECS.Templates.Weapons.User;
 
 [ProtocolId(1435910167704)]
-public class IsisUserItemTemplate : UserEntityTemplate {
-    public override MarketEntityTemplate MarketTemplate => new IsisMarketItemTemplate();
+public class IsisUserItemTemplate : WeaponUserItemTemplate {
+    public override WeaponMarketItemTemplate MarketTemplate => new IsisMarketItemTemplate();
 }

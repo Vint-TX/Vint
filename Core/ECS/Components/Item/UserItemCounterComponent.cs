@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Item;
 public class UserItemCounterComponent(
     long count
 ) : IComponent {
-    public long Count { get; private set; } = count;
+    public long Count { get; set; } = count;
 }

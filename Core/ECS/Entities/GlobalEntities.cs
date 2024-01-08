@@ -7,6 +7,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Preset;
+using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Gold;
@@ -311,7 +312,7 @@ public static class GlobalEntities {
     }
 
     public static IEntity GetMarketEntity(this IEntity userEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == userEntity.Id;
+        predicate ??= entity => entity.Id == userEntity.GetComponent<MarketItemGroupComponent>().Key;
 
         return userEntity.TemplateAccessor!.Template switch {
             MarketEntityTemplate => userEntity,
@@ -324,6 +325,35 @@ public static class GlobalEntities {
 
     public static IEntity? GetEntity(this IPlayerConnection connection, long entityId) =>
         connection.SharedEntities.SingleOrDefault(entity => entity.Id == entityId);
+
+    public static bool ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
+        int? configPrice = null;
+
+        if (amount == 1) {
+            if (forXCrystals) {
+                if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PriceComponent.XPriceItemComponent? xPriceItemComponent))
+                    configPrice = xPriceItemComponent.Price;
+            } else if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PriceComponent.PriceItemComponent? priceItemComponent))
+                configPrice = priceItemComponent.Price;
+        } else {
+            if (!ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PackPriceComponent? packPriceComponent)) return false;
+
+            Dictionary<int, int> packPrice = forXCrystals
+                                                 ? packPriceComponent.PackXPrice
+                                                 : packPriceComponent.PackPrice;
+
+            if (!packPrice.TryGetValue(amount, out int value)) return false;
+
+            configPrice = value;
+        }
+
+        if (configPrice != price) return false;
+
+        return forXCrystals ||
+               !ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!,
+                   out CrystalsPurchaseUserRankRestrictionComponent? restrictionComponent) ||
+               connection.Player.Rank >= restrictionComponent.RestrictionValue;
+    }
 
     static List<IEntity> GetUserEntities(this IPlayerConnection connection) {
         List<IEntity> entities = [];

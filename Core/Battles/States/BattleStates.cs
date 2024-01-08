@@ -59,7 +59,6 @@ public class Starting(
 ) : BattleState(stateManager) {
     public override void Start() {
         Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartingComponent());
-        //Timer = 3;
         base.Start();
     }
 

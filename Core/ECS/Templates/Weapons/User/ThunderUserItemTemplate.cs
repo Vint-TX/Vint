@@ -4,6 +4,6 @@ using Vint.Core.Protocol.Attributes;
 namespace Vint.Core.ECS.Templates.Weapons.User;
 
 [ProtocolId(1435139182866)]
-public class ThunderUserItemTemplate : UserEntityTemplate {
-    public override MarketEntityTemplate MarketTemplate => new ThunderMarketItemTemplate();
+public class ThunderUserItemTemplate : WeaponUserItemTemplate {
+    public override WeaponMarketItemTemplate MarketTemplate => new ThunderMarketItemTemplate();
 }

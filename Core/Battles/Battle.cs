@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Serilog;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
@@ -16,6 +17,7 @@ using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
 using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles;
 
@@ -39,6 +41,8 @@ public class Battle {
 
         Setup();
     }
+
+    public ILogger Logger { get; } = Log.Logger.ForType(typeof(Battle));
 
     public long Id => BattleEntity.Id;
     public long LobbyId => LobbyEntity.Id;

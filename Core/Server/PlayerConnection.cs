@@ -7,13 +7,29 @@ using Serilog;
 using Vint.Core.Battles.Player;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Components.Preset;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Entrance.Login;
+using Vint.Core.ECS.Events.Items;
+using Vint.Core.ECS.Templates.Avatar;
+using Vint.Core.ECS.Templates.Covers;
 using Vint.Core.ECS.Templates.Entrance;
+using Vint.Core.ECS.Templates.Gold;
+using Vint.Core.ECS.Templates.Graffiti;
+using Vint.Core.ECS.Templates.Hulls;
+using Vint.Core.ECS.Templates.Modules;
+using Vint.Core.ECS.Templates.Money;
+using Vint.Core.ECS.Templates.Paints;
+using Vint.Core.ECS.Templates.Shells;
+using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.ECS.Templates.User;
+using Vint.Core.ECS.Templates.Weapons.Market;
+using Vint.Core.ECS.Templates.Weapons.User;
 using Vint.Core.Protocol.Codecs.Buffer;
 using Vint.Core.Protocol.Codecs.Impl;
 using Vint.Core.Protocol.Commands;
@@ -52,6 +68,16 @@ public interface IPlayerConnection {
     public void ChangePassword(string passwordDigest);
 
     public void ChangeReputation(int reputation);
+
+    public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount);
+
+    public void MountItem(IEntity userItem);
+
+    public void SetCrystals(long crystals);
+
+    public void SetXCrystals(long xCrystals);
+
+    public void SetGoldBoxes(int goldBoxes);
 
     public void Send(ICommand command);
 
@@ -203,6 +229,311 @@ public class PlayerConnection(
         db.InsertOrReplace(reputationStats);
     }
 
+    public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount) {
+        using DbConnection db = new();
+        IEntity? userItem = null;
+
+        switch (marketItem.TemplateAccessor!.Template) {
+            case AvatarMarketItemTemplate: {
+                db.Insert(new Avatar { Player = Player, Id = marketItem.Id });
+                break;
+            }
+
+            case GraffitiMarketItemTemplate or ChildGraffitiMarketItemTemplate: {
+                db.Insert(new Graffiti { Player = Player, Id = marketItem.Id });
+                break;
+            }
+
+            case CrystalMarketItemTemplate: {
+                SetCrystals(Player.Crystals + amount);
+                db.Update(Player);
+                break;
+            }
+
+            case XCrystalMarketItemTemplate: {
+                SetXCrystals(Player.XCrystals + amount);
+                db.Update(Player);
+                break;
+            }
+
+            case GoldBonusMarketItemTemplate: {
+                SetGoldBoxes(Player.GoldBoxItems + amount);
+                db.Update(Player);
+                break;
+            }
+
+            case TankMarketItemTemplate: {
+                long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
+
+                db.Insert(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
+                db.Insert(new HullSkin { Player = Player, Id = skinId, HullId = marketItem.Id });
+
+                if (mount) MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
+                break;
+            }
+
+            case WeaponMarketItemTemplate: {
+                long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
+                long shellId = GlobalEntities.DefaultShells[marketItem.Id];
+
+                db.Insert(new Weapon { Player = Player, Id = marketItem.Id, SkinId = skinId, ShellId = shellId });
+                db.Insert(new WeaponSkin { Player = Player, Id = skinId, WeaponId = marketItem.Id });
+                db.Insert(new Shell { Player = Player, Id = shellId, WeaponId = marketItem.Id });
+
+                if (mount) {
+                    MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
+                    MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId).GetUserEntity(this));
+                }
+
+                break;
+            }
+
+            case HullSkinMarketItemTemplate: {
+                long hullId = marketItem.GetComponent<ParentGroupComponent>().Key;
+
+                db.Insert(new HullSkin { Player = Player, Id = marketItem.Id, HullId = hullId });
+                break;
+            }
+
+            case WeaponSkinMarketItemTemplate: {
+                long weaponId = marketItem.GetComponent<ParentGroupComponent>().Key;
+
+                db.Insert(new WeaponSkin { Player = Player, Id = marketItem.Id, WeaponId = weaponId });
+                break;
+            }
+
+            case TankPaintMarketItemTemplate: {
+                db.Insert(new Paint { Player = Player, Id = marketItem.Id });
+                break;
+            }
+
+            case WeaponPaintMarketItemTemplate: {
+                db.Insert(new Cover { Player = Player, Id = marketItem.Id });
+                break;
+            }
+
+            case ShellMarketItemTemplate: {
+                long weaponId = marketItem.GetComponent<ParentGroupComponent>().Key;
+
+                db.Insert(new Shell { Player = Player, Id = marketItem.Id, WeaponId = weaponId });
+                break;
+            }
+
+            case ModuleCardMarketItemTemplate: {
+                long moduleId = marketItem.GetComponent<ParentGroupComponent>().Key;
+                Module? module = db.Modules
+                    .Where(module => module.PlayerId == Player.Id)
+                    .SingleOrDefault(module => module.Id == moduleId);
+
+                module ??= new Module { Player = Player, Id = moduleId };
+                module.Cards += amount;
+
+                db.Insert(module);
+                break;
+            }
+
+            default: throw new NotImplementedException();
+        }
+
+        userItem ??= marketItem.GetUserEntity(this);
+
+        if (!userItem.HasComponent<UserGroupComponent>())
+            userItem.AddComponent(new UserGroupComponent(User));
+
+        if (price > 0) {
+            if (forXCrystals) SetXCrystals(Player.XCrystals - price);
+            else SetCrystals(Player.Crystals - price);
+
+            db.Update(Player);
+        }
+
+        if (userItem.HasComponent<UserItemCounterComponent>() &&
+            userItem.TemplateAccessor!.Template is GoldBonusMarketItemTemplate) {
+            userItem.ChangeComponent<UserItemCounterComponent>(component => component.Count += amount);
+            Send(new ItemsCountChangedEvent(amount), userItem);
+        }
+
+        if (mount) MountItem(userItem);
+    }
+
+    public void MountItem(IEntity userItem) {
+        using DbConnection db = new();
+        Preset currentPreset = Player.CurrentPreset;
+        IEntity marketItem = userItem.GetMarketEntity(this);
+
+        switch (userItem.TemplateAccessor!.Template) {
+            case AvatarUserItemTemplate: {
+                this.GetEntity(Player.CurrentAvatarId)!.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                userItem.AddComponent(new MountedItemComponent());
+
+                Player.CurrentAvatarId = marketItem.Id;
+                User.ChangeComponent(new UserAvatarComponent(this, Player.CurrentAvatarId));
+
+                db.Update(Player);
+                break;
+            }
+
+            case GraffitiUserItemTemplate: {
+                currentPreset.Graffiti.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Graffiti = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case TankUserItemTemplate: {
+                currentPreset.Hull.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Hull = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+                currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetHullId(currentPreset.Hull.Id);
+
+                Hull newHull = db.Hulls
+                    .Where(hull => hull.PlayerId == Player.Id)
+                    .Single(hull => hull.Id == currentPreset.Hull.Id);
+
+                IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newHull.SkinId);
+
+                currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.HullSkin = skin;
+                currentPreset.HullSkin.GetUserEntity(this).AddComponent(new MountedItemComponent());
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case WeaponUserItemTemplate: {
+                currentPreset.Weapon.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Weapon = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+                currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetWeaponId(currentPreset.Weapon.Id);
+
+                Weapon newWeapon = db.Weapons
+                    .Where(weapon => weapon.PlayerId == Player.Id)
+                    .Single(weapon => weapon.Id == currentPreset.Weapon.Id);
+
+                IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.SkinId);
+                IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.ShellId);
+
+                currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.WeaponSkin = skin;
+                currentPreset.WeaponSkin.GetUserEntity(this).AddComponent(new MountedItemComponent());
+
+                currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Shell = shell;
+                currentPreset.Shell.GetUserEntity(this).AddComponent(new MountedItemComponent());
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case HullSkinUserItemTemplate: {
+                HullSkin skin = db.HullSkins
+                    .Where(skin => skin.PlayerId == Player.Id)
+                    .Single(skin => skin.Id == marketItem.Id);
+
+                if (skin.HullId != currentPreset.Hull.Id) return;
+
+                currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.HullSkin = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+
+                db.Hulls
+                    .Where(hull => hull.PlayerId == Player.Id &&
+                                   hull.Id == currentPreset.Hull.Id)
+                    .Set(hull => hull.SkinId, currentPreset.HullSkin.Id)
+                    .Update();
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case WeaponSkinUserItemTemplate: {
+                WeaponSkin skin = db.WeaponSkins
+                    .Where(skin => skin.PlayerId == Player.Id)
+                    .Single(skin => skin.Id == marketItem.Id);
+
+                if (skin.WeaponId != currentPreset.Weapon.Id) return;
+
+                currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.WeaponSkin = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+
+                db.Weapons
+                    .Where(weapon => weapon.PlayerId == Player.Id &&
+                                     weapon.Id == currentPreset.Weapon.Id)
+                    .Set(weapon => weapon.SkinId, currentPreset.WeaponSkin.Id)
+                    .Update();
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case TankPaintUserItemTemplate: {
+                currentPreset.Paint.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Paint = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case WeaponPaintUserItemTemplate: {
+                currentPreset.Cover.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Cover = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            case ShellUserItemTemplate: {
+                Shell shell = db.Shells
+                    .Where(shell => shell.PlayerId == Player.Id)
+                    .Single(shell => shell.Id == marketItem.Id);
+
+                if (shell.WeaponId != currentPreset.Weapon.Id) return;
+
+                currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                currentPreset.Shell = marketItem;
+                userItem.AddComponent(new MountedItemComponent());
+
+                db.Weapons
+                    .Where(weapon => weapon.PlayerId == Player.Id &&
+                                     weapon.Id == currentPreset.Weapon.Id)
+                    .Set(weapon => weapon.ShellId, currentPreset.Shell.Id)
+                    .Update();
+
+                db.Update(currentPreset);
+                break;
+            }
+
+            default: throw new NotImplementedException();
+        }
+
+        if (!User.HasComponent<UserEquipmentComponent>()) return;
+
+        User.RemoveComponent<UserEquipmentComponent>();
+        User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
+    }
+
+    public void SetCrystals(long crystals) {
+        Player.Crystals = crystals;
+        User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
+    }
+
+    public void SetXCrystals(long xCrystals) {
+        Player.XCrystals = xCrystals;
+        User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
+    }
+
+    public void SetGoldBoxes(int goldBoxes) {
+        Player.GoldBoxItems = goldBoxes;
+        SharedEntities.Single(entity => entity.TemplateAccessor!.Template is GoldBonusUserItemTemplate)
+            .ChangeComponent<UserItemCounterComponent>(component =>
+                component.Count = Player.GoldBoxItems);
+    }
+
     public void Send(ICommand command) {
         try {
             if (!IsSocketConnected) return;
@@ -260,21 +591,25 @@ public class PlayerConnection(
     protected override void OnDisconnected() {
         Logger.Information("Socket disconnected");
 
-        if (InBattle) {
+        try {
+            if (!InBattle) return;
+
             if (BattlePlayer!.IsSpectator || BattlePlayer.InBattleAsTank)
                 BattlePlayer.Battle.RemovePlayer(BattlePlayer);
             else
                 BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
+        } catch (Exception e) {
+            Logger.Error(e, "Caught an exception while disconnecting socket");
+        } finally {
+            if (User != null!)
+                EntityRegistry.Remove(User.Id);
+
+            foreach (IEntity entity in SharedEntities)
+                entity.SharedPlayers.Remove(this);
+
+            SharedEntities.Clear();
+            UserEntities.Clear();
         }
-
-        if (User != null!)
-            EntityRegistry.Remove(User.Id);
-
-        foreach (IEntity entity in SharedEntities)
-            entity.SharedPlayers.Remove(this);
-
-        SharedEntities.Clear();
-        UserEntities.Clear();
     }
 
     protected override void OnError(SocketError error) =>

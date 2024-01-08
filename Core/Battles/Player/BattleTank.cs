@@ -50,10 +50,16 @@ public class BattleTank {
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
-        Weapon = weapon.TemplateAccessor!.Template switch {
-            SmokyMarketItemTemplate => new SmokyBattleItemTemplate().Create(Tank, BattlePlayer),
-            _ => throw new NotImplementedException()
-        };
+        try {
+            Weapon = weapon.TemplateAccessor!.Template switch {
+                SmokyMarketItemTemplate => new SmokyBattleItemTemplate().Create(Tank, BattlePlayer),
+                _ => throw new NotImplementedException()
+            };
+        } catch (NotImplementedException e) {
+            Battle.Logger.Error(e, "Player equipped weapon that is not implemented yet");
+            Battle.RemovePlayer(BattlePlayer);
+            return;
+        }
 
         HullSkin = new HullSkinBattleItemTemplate().Create(hullSkin, Tank);
         WeaponSkin = new WeaponSkinBattleItemTemplate().Create(weaponSkin, Tank);
@@ -67,10 +73,16 @@ public class BattleTank {
         Incarnation = new TankIncarnationTemplate().Create(Tank);
         RoundUser = new RoundUserTemplate().Create(BattlePlayer, Tank);
 
-        WeaponHandler = Weapon.TemplateAccessor!.Template switch {
-            SmokyBattleItemTemplate => new SmokyWeaponHandler(this),
-            _ => throw new NotImplementedException()
-        };
+        try {
+            WeaponHandler = Weapon.TemplateAccessor!.Template switch {
+                SmokyBattleItemTemplate => new SmokyWeaponHandler(this),
+                _ => throw new NotImplementedException()
+            };
+        } catch (NotImplementedException e) {
+            Battle.Logger.Error(e, "Player equipped weapon that is not implemented yet");
+            Battle.RemovePlayer(BattlePlayer);
+            return;
+        }
 
         MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         Health = MaxHealth;
@@ -94,7 +106,7 @@ public class BattleTank {
 
     public DateTimeOffset? SelfDestructTime { get; set; }
 
-    public SpawnPoint SpawnPoint { get; private set; }
+    public SpawnPoint SpawnPoint { get; private set; } = null!;
 
     public WeaponHandler WeaponHandler { get; }
     public BattlePlayer BattlePlayer { get; }

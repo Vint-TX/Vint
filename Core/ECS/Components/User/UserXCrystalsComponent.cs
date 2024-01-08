@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.User;
 public class UserXCrystalsComponent(
     long money
 ) : IComponent {
-    public long Money { get; private set; } = money;
+    public long Money { get; set; } = money;
 }
