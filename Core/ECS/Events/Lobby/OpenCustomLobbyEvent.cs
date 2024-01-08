@@ -12,7 +12,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class OpenCustomLobbyEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         Player player = connection.Player;
-        long price = player.IsPremium ? 0 : 1000;
+        int price = player.IsPremium ? 0 : 1000;
 
         if (player.Crystals < price) return;
 

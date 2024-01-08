@@ -21,7 +21,7 @@ public class CustomBattleLobbyTemplate : BattleLobbyTemplate {
                 builder
                     .AddComponent(new BattleModeComponent(battleProperties.BattleMode))
                     .AddComponent(new UserLimitComponent(battleProperties.MaxPlayers))
-                    .AddComponent(new GravityComponent(battleProperties.Gravity, gravity))
+                    .AddComponent(new GravityComponent(battleProperties.Gravity))
                     .AddComponent(new UserGroupComponent(owner.User))
                     .AddComponent(new ClientBattleParamsComponent(battleProperties))
                     .AddComponent(new OpenCustomLobbyPriceComponent(openLobbyPrice))

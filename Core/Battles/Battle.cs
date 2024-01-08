@@ -3,10 +3,12 @@ using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
+using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
@@ -39,7 +41,8 @@ public class Battle {
     }
 
     public long Id => BattleEntity.Id;
-    public bool CanAddPlayers => Players.Count < Properties.MaxPlayers;
+    public long LobbyId => LobbyEntity.Id;
+    public bool CanAddPlayers => Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
     public bool IsCustom { get; }
     public bool WasPlayers { get; private set; }
     public double Timer { get; set; }
@@ -87,6 +90,32 @@ public class Battle {
         };
     }
 
+    public void UpdateProperties(BattleProperties properties) {
+        ModeHandler previousHandler = ModeHandler;
+
+        Properties = properties;
+        MapInfo = ConfigManager.MapInfos.Values.Single(map => map.MapId == Properties.MapId);
+        MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
+
+        LobbyEntity.RemoveComponent<MapGroupComponent>();
+        LobbyEntity.RemoveComponent<BattleModeComponent>();
+        LobbyEntity.RemoveComponent<UserLimitComponent>();
+        LobbyEntity.RemoveComponent<GravityComponent>();
+
+        LobbyEntity.AddComponent(new MapGroupComponent(MapEntity));
+        LobbyEntity.AddComponent(new BattleModeComponent(Properties.BattleMode));
+        LobbyEntity.AddComponent(new UserLimitComponent(Properties.MaxPlayers));
+        LobbyEntity.AddComponent(new GravityComponent(Properties.Gravity));
+
+        if (IsCustom) {
+            LobbyEntity.RemoveComponent<ClientBattleParamsComponent>();
+            LobbyEntity.AddComponent(new ClientBattleParamsComponent(Properties));
+        }
+
+        Setup();
+        ModeHandler.TransferParameters(previousHandler);
+    }
+
     public void Start() {
         // todo modules
 
@@ -116,7 +145,7 @@ public class Battle {
     }
 
     public void AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads
-        if (connection.InBattle) return;
+        if (connection.InBattle || !spectator && !CanAddPlayers) return;
 
         connection.Logger.Warning("Joining battle {Id}", Id);
 

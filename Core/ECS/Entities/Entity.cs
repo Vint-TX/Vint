@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using System.Diagnostics;
+using Serilog;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
@@ -34,9 +35,10 @@ public class Entity(
         lock (SharedPlayers) {
             if (!SharedPlayers.Add(connection)) {
                 Logger.Error(new ArgumentException($"{this} already shared to {connection}"),
-                    "An exception occured while sharing {Entity} to {Connection}",
+                    "An exception occured while sharing {Entity} to {Connection}\n{StackTrace}",
                     this,
-                    connection);
+                    connection,
+                    new StackTrace());
                 return;
             }
         }
@@ -51,9 +53,10 @@ public class Entity(
         lock (SharedPlayers) {
             if (!SharedPlayers.Remove(connection)) {
                 Logger.Error(new ArgumentException($"{this} is not shared to {connection}"),
-                    "An exception occured while unsharing {Entity} from {Connection}",
+                    "An exception occured while unsharing {Entity} from {Connection}\n{StackTrace}",
                     this,
-                    connection);
+                    connection,
+                    new StackTrace());
                 return;
             }
         }

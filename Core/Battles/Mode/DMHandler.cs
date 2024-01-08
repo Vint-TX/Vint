@@ -7,13 +7,11 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Mode;
 
-public class DMHandler : ModeHandler {
-    public DMHandler(Battle battle) : base(battle) =>
-        SpawnPoints = Battle.MapInfo.SpawnPoints.Deathmatch.ToList();
-
-    SpawnPoint LastSpawnPoint { get; set; }
-
-    public List<SpawnPoint> SpawnPoints { get; private set; }
+public class DMHandler(
+    Battle battle
+) : ModeHandler(battle) {
+    List<SpawnPoint> SpawnPoints { get; set; } = battle.MapInfo.SpawnPoints.Deathmatch.ToList();
+    SpawnPoint LastSpawnPoint { get; set; } = null!;
 
     public override BattleMode BattleMode => BattleMode.DM;
 
@@ -27,6 +25,16 @@ public class DMHandler : ModeHandler {
     public override void OnStarted() { }
 
     public override void OnFinished() { }
+
+    public override void TransferParameters(ModeHandler previousHandler) {
+        if (previousHandler is DMHandler) return;
+
+        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => !battlePlayer.IsSpectator)) {
+            battlePlayer.Team = null;
+            battlePlayer.PlayerConnection.User.ChangeComponent<TeamColorComponent>(component =>
+                component.TeamColor = TeamColor.None);
+        }
+    }
 
     public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
         BattlePlayer tankPlayer = new(player, Battle, null, false);

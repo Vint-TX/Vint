@@ -19,6 +19,8 @@ public abstract class ModeHandler(
 
     public abstract void OnFinished();
 
+    public abstract void TransferParameters(ModeHandler previousHandler);
+
     public abstract BattlePlayer SetupBattlePlayer(IPlayerConnection player);
 
     public abstract void RemoveBattlePlayer(BattlePlayer player);

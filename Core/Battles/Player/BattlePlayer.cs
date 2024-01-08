@@ -20,7 +20,7 @@ public class BattlePlayer {
     }
 
     public IPlayerConnection PlayerConnection { get; }
-    public IEntity? Team { get; }
+    public IEntity? Team { get; set; }
     public IEntity BattleUser { get; }
 
     public Battle Battle { get; }

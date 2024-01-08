@@ -14,7 +14,9 @@ public class MatchMakingUserReadyEvent : IServerEvent {
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
 
-        if (battlePlayer.Battle.StateManager.CurrentState is Running or WarmUp)
-            battlePlayer.BattleJoinTime = DateTimeOffset.UtcNow.AddSeconds(2);
+        if (battlePlayer.Battle.StateManager.CurrentState is not (Running or WarmUp)) return;
+
+        battlePlayer.BattleJoinTime = DateTimeOffset.UtcNow.AddSeconds(3);
+        connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), connection.User);
     }
 }

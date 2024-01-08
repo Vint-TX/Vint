@@ -7,6 +7,8 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IBattleProcessor {
+    public int BattlesCount { get; }
+
     public void StartTicking();
 
     public void PutPlayerFromMatchmaking(IPlayerConnection connection);
@@ -15,7 +17,11 @@ public interface IBattleProcessor {
 
     public Battle? FirstOrDefault(Func<Battle, bool> predicate);
 
-    public Battle? FindBattle(long id);
+    public Battle? FindByBattleId(long id);
+
+    public Battle? FindByLobbyId(long id);
+
+    public Battle? FindByIndex(int index);
 
     public Battle CreateMatchmakingBattle();
 
@@ -26,6 +32,8 @@ public class BattleProcessor : IBattleProcessor {
     Dictionary<long, Battle> Battles { get; } = new();
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(BattleProcessor));
+
+    public int BattlesCount => Battles.Count;
 
     public void StartTicking() {
         const double battleTickDuration = 0.01;
@@ -71,7 +79,11 @@ public class BattleProcessor : IBattleProcessor {
 
     public Battle? FirstOrDefault(Func<Battle, bool> predicate) => Battles.Values.FirstOrDefault(predicate);
 
-    public Battle? FindBattle(long id) => Battles.GetValueOrDefault(id);
+    public Battle? FindByBattleId(long id) => Battles.GetValueOrDefault(id);
+
+    public Battle? FindByLobbyId(long id) => SingleOrDefault(battle => battle.LobbyId == id);
+
+    public Battle? FindByIndex(int index) => Battles.Values.ElementAtOrDefault(index);
 
     public Battle CreateMatchmakingBattle() {
         Battle battle = new();

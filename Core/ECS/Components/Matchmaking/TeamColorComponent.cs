@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Components.Matchmaking;
 public class TeamColorComponent(
     TeamColor color
 ) : IComponent {
-    public TeamColor TeamColor { get; private set; } = color;
+    public TeamColor TeamColor { get; set; } = color;
 }

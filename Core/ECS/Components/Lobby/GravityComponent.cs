@@ -5,9 +5,8 @@ namespace Vint.Core.ECS.Components.Lobby;
 
 [ProtocolId(1435652501758)]
 public class GravityComponent(
-    GravityType gravityType,
-    float gravity
+    GravityType gravityType
 ) : IComponent {
     public GravityType GravityType { get; private set; } = gravityType;
-    public float Gravity { get; private set; } = gravity;
+    public float Gravity { get; private set; } = BattleProperties.GravityToForce[gravityType];
 }
