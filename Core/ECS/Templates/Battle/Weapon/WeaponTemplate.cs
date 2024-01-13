@@ -21,17 +21,15 @@ public abstract class WeaponTemplate : EntityTemplate {
                 .AddComponent(battlePlayer.PlayerConnection.Player.CurrentPreset.Weapon.GetComponent<MarketItemGroupComponent>())
                 .AddComponent(ConfigManager.GetComponent<WeaponRotationComponent>(tank.TemplateAccessor!.ConfigPath!.Replace("battle", "garage"))));
 
-        // todo hammer
+        if (this is not HammerBattleItemTemplate)
+            entity.AddComponent(new WeaponEnergyComponent(1));
 
         if (battlePlayer.Team != null)
             entity.AddComponent(battlePlayer.Team.GetComponent<TeamGroupComponent>());
 
-        if (ConfigManager.TryGetComponent(configPath, out WeaponCooldownComponent? cooldownComponent)) {
-            // todo shaft
+        if (!ConfigManager.TryGetComponent(configPath, out WeaponCooldownComponent? cooldownComponent)) return entity;
 
-            entity.AddComponent(cooldownComponent);
-        }
-
+        entity.AddComponent(cooldownComponent);
         return entity;
     }
 }

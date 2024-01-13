@@ -147,7 +147,7 @@ public class Running(
         if (Battle.IsCustom) {
             if (Battle.Players.All(player => !player.InBattleAsTank)) {
                 Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
-                StateManager.SetState(new NotStarted(StateManager));
+                StateManager.SetState(new Ended(StateManager));
             }
 
             if (Battle.Timer < 0)
@@ -160,4 +160,9 @@ public class Running(
 
 public class Ended(
     BattleStateManager stateManager
-) : BattleState(stateManager);
+) : BattleState(stateManager) {
+    public override void Start() {
+        Battle.Timer = 0;
+        base.Start();
+    }
+}

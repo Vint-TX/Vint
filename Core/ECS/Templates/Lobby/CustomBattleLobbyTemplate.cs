@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Templates.Lobby;
 
 [ProtocolId(1498460950985)]
 public class CustomBattleLobbyTemplate : BattleLobbyTemplate {
-    public IEntity Create(BattleProperties battleProperties, IEntity map, float gravity, IPlayerConnection owner) {
+    public IEntity Create(BattleProperties battleProperties, IEntity map, IPlayerConnection owner) {
         long openLobbyPrice = 1000;
 
         if (owner.Player.IsPremium)

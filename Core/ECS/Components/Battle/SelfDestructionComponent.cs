@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Components.Battle;
 [ProtocolId(-9188485263407476652)]
 public class SelfDestructionComponent : IComponent {
     public void Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InBattle || !connection.BattlePlayer!.InBattleAsTank) return;
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;
 
         connection.BattlePlayer.Tank!.SelfDestructTime = DateTimeOffset.UtcNow.AddSeconds(5);
     }

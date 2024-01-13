@@ -47,7 +47,7 @@ public interface IPlayerConnection {
     public IEntity ClientSession { get; }
 
     public bool IsOnline { get; }
-    public bool InBattle { get; }
+    public bool InLobby { get; }
 
     public List<IEntity> SharedEntities { get; }
     public Dictionary<string, List<IEntity>> UserEntities { get; }
@@ -114,7 +114,7 @@ public class PlayerConnection(
     public List<IEntity> SharedEntities { get; private set; } = [];
 
     public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
-    public bool InBattle => BattlePlayer != null;
+    public bool InLobby => BattlePlayer != null;
 
     public void Register(
         string username,
@@ -592,7 +592,7 @@ public class PlayerConnection(
         Logger.Information("Socket disconnected");
 
         try {
-            if (!InBattle) return;
+            if (!InLobby) return;
 
             if (BattlePlayer!.IsSpectator || BattlePlayer.InBattleAsTank)
                 BattlePlayer.Battle.RemovePlayer(BattlePlayer);
@@ -647,6 +647,8 @@ public class PlayerConnection(
             Disconnect();
         }
     }
+
+    public override int GetHashCode() => Id.GetHashCode();
 
     [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
     public override string ToString() => $"PlayerConnection {{ " +

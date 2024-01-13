@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.States;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Lobby;
@@ -23,8 +24,9 @@ public class CustomHandler(
         Battle.LobbyEntity = new CustomBattleLobbyTemplate().Create(
             Battle.Properties,
             Battle.MapEntity,
-            BattleProperties.GravityToForce[Battle.Properties.Gravity],
             Owner);
+
+        Battle.StateManager.SetState(new NotStarted(Battle.StateManager));
     }
 
     public override void Tick() { }

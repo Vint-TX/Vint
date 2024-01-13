@@ -32,6 +32,8 @@ public class Entity(
     public EntityUnshareCommand ToUnshareCommand() => new(this);
 
     public void Share(IPlayerConnection connection) {
+        Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
+
         lock (SharedPlayers) {
             if (!SharedPlayers.Add(connection)) {
                 Logger.Error(new ArgumentException($"{this} already shared to {connection}"),
@@ -43,13 +45,13 @@ public class Entity(
             }
         }
 
-        Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
-
         connection.Send(ToShareCommand());
         connection.SharedEntities.Add(this);
     }
 
     public void Unshare(IPlayerConnection connection) {
+        Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
+
         lock (SharedPlayers) {
             if (!SharedPlayers.Remove(connection)) {
                 Logger.Error(new ArgumentException($"{this} is not shared to {connection}"),
@@ -60,8 +62,6 @@ public class Entity(
                 return;
             }
         }
-
-        Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
 
         connection.SharedEntities.Remove(this);
         connection.Send(ToUnshareCommand());

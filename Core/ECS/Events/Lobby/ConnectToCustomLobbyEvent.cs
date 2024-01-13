@@ -10,7 +10,7 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
     public long LobbyId { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (connection.InBattle) {
+        if (connection.InLobby) {
             connection.Send(new EnterBattleLobbyFailedEvent(true, false), connection.User);
             return;
         }

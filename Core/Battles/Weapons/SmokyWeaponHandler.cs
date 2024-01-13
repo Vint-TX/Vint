@@ -4,4 +4,4 @@ namespace Vint.Core.Battles.Weapons;
 
 public class SmokyWeaponHandler(
     BattleTank battleTank
-) : WeaponHandler(battleTank);
+) : DiscreteWeaponHandler(battleTank);

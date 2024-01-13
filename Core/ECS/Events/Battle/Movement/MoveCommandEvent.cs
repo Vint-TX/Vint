@@ -15,7 +15,7 @@ public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InBattle || !connection.BattlePlayer!.InBattleAsTank) return;
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;
 
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;

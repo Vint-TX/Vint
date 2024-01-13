@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Templates.Lobby;
 
 [ProtocolId(1495541167479)]
 public class MatchMakingLobbyTemplate : BattleLobbyTemplate {
-    public IEntity Create(BattleProperties battleProperties, IEntity map, float gravity) {
+    public IEntity Create(BattleProperties battleProperties, IEntity map) {
         IEntity entity = Entity(null,
             builder => {
                 builder.AddComponent(map.GetComponent<MapGroupComponent>())

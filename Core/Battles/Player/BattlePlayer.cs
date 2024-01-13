@@ -24,11 +24,11 @@ public class BattlePlayer {
     public IEntity BattleUser { get; }
 
     public Battle Battle { get; }
-    public BattleTank? Tank { get; private set; }
+    public BattleTank? Tank { get; set; }
 
     public bool IsSpectator { get; }
     public bool InBattleAsTank => Tank != null;
-    public bool InBattle { get; private set; }
+    public bool InBattle { get; set; }
     public bool IsPaused { get; set; }
 
     public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(10);
@@ -57,6 +57,8 @@ public class BattlePlayer {
 
             foreach (BattlePlayer spectator in Battle.Players.Where(player => player.IsSpectator))
                 spectator.PlayerConnection.Share(PlayerConnection.User); // Share this player to spectators
+
+            Battle.ModeHandler.SortScoreTable();
         }
 
         PlayerConnection.Share(Battle.Players
@@ -65,4 +67,6 @@ public class BattlePlayer {
     }
 
     public void Tick() => Tank?.Tick();
+
+    public override int GetHashCode() => PlayerConnection.GetHashCode();
 }

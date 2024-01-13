@@ -29,7 +29,7 @@ public interface IBattleProcessor {
 }
 
 public class BattleProcessor : IBattleProcessor {
-    Dictionary<long, Battle> Battles { get; } = new();
+    HashSet<Battle> Battles { get; } = [];
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(BattleProcessor));
 
@@ -45,12 +45,12 @@ public class BattleProcessor : IBattleProcessor {
             while (true) {
                 stopwatch.Restart();
 
-                foreach (Battle battle in Battles.Values.ToArray()) {
+                foreach (Battle battle in Battles.ToArray()) {
                     battle.Tick(lastBattleTickDuration);
 
                     if (battle is { WasPlayers: true, Players.Count: 0 } or
                         { IsCustom: false, StateManager.CurrentState: Ended })
-                        Battles.Remove(battle.Id);
+                        Battles.Remove(battle);
                 }
 
                 stopwatch.Stop();
@@ -75,26 +75,26 @@ public class BattleProcessor : IBattleProcessor {
         battle.AddPlayer(connection);
     }
 
-    public Battle? SingleOrDefault(Func<Battle, bool> predicate) => Battles.Values.SingleOrDefault(predicate);
+    public Battle? SingleOrDefault(Func<Battle, bool> predicate) => Battles.SingleOrDefault(predicate);
 
-    public Battle? FirstOrDefault(Func<Battle, bool> predicate) => Battles.Values.FirstOrDefault(predicate);
+    public Battle? FirstOrDefault(Func<Battle, bool> predicate) => Battles.FirstOrDefault(predicate);
 
-    public Battle? FindByBattleId(long id) => Battles.GetValueOrDefault(id);
+    public Battle? FindByBattleId(long id) => SingleOrDefault(battle => battle.Id == id);
 
     public Battle? FindByLobbyId(long id) => SingleOrDefault(battle => battle.LobbyId == id);
 
-    public Battle? FindByIndex(int index) => Battles.Values.ElementAtOrDefault(index);
+    public Battle? FindByIndex(int index) => Battles.ElementAtOrDefault(index);
 
     public Battle CreateMatchmakingBattle() {
         Battle battle = new();
-        Battles[battle.Id] = battle;
+        Battles.Add(battle);
 
         return battle;
     }
 
     public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner) {
         Battle battle = new(properties, owner);
-        Battles[battle.Id] = battle;
+        Battles.Add(battle);
 
         return battle;
     }

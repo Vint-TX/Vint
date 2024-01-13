@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons;
@@ -50,16 +51,20 @@ public class BattleTank {
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
-        try {
-            Weapon = weapon.TemplateAccessor!.Template switch {
-                SmokyMarketItemTemplate => new SmokyBattleItemTemplate().Create(Tank, BattlePlayer),
-                _ => throw new NotImplementedException()
-            };
-        } catch (NotImplementedException e) {
-            Battle.Logger.Error(e, "Player equipped weapon that is not implemented yet");
-            Battle.RemovePlayer(BattlePlayer);
-            return;
-        }
+        Weapon = weapon.TemplateAccessor!.Template switch {
+            SmokyMarketItemTemplate => new SmokyBattleItemTemplate().Create(Tank, BattlePlayer),
+            TwinsMarketItemTemplate => new TwinsBattleItemTemplate().Create(Tank, BattlePlayer),
+            ThunderMarketItemTemplate => new ThunderBattleItemTemplate().Create(Tank, BattlePlayer),
+            RailgunMarketItemTemplate => new RailgunBattleItemTemplate().Create(Tank, BattlePlayer),
+            RicochetMarketItemTemplate => new RicochetBattleItemTemplate().Create(Tank, BattlePlayer),
+            IsisMarketItemTemplate => new IsisBattleItemTemplate().Create(Tank, BattlePlayer),
+            VulcanMarketItemTemplate => new VulcanBattleItemTemplate().Create(Tank, BattlePlayer),
+            FreezeMarketItemTemplate => new FreezeBattleItemTemplate().Create(Tank, BattlePlayer),
+            FlamethrowerMarketItemTemplate => new FlamethrowerBattleItemTemplate().Create(Tank, BattlePlayer),
+            ShaftMarketItemTemplate => new ShaftBattleItemTemplate().Create(Tank, BattlePlayer),
+            HammerMarketItemTemplate => new HammerBattleItemTemplate().Create(Tank, BattlePlayer),
+            _ => throw new UnreachableException()
+        };
 
         HullSkin = new HullSkinBattleItemTemplate().Create(hullSkin, Tank);
         WeaponSkin = new WeaponSkinBattleItemTemplate().Create(weaponSkin, Tank);
@@ -73,16 +78,20 @@ public class BattleTank {
         Incarnation = new TankIncarnationTemplate().Create(Tank);
         RoundUser = new RoundUserTemplate().Create(BattlePlayer, Tank);
 
-        try {
-            WeaponHandler = Weapon.TemplateAccessor!.Template switch {
-                SmokyBattleItemTemplate => new SmokyWeaponHandler(this),
-                _ => throw new NotImplementedException()
-            };
-        } catch (NotImplementedException e) {
-            Battle.Logger.Error(e, "Player equipped weapon that is not implemented yet");
-            Battle.RemovePlayer(BattlePlayer);
-            return;
-        }
+        WeaponHandler = Weapon.TemplateAccessor!.Template switch {
+            SmokyBattleItemTemplate => new SmokyWeaponHandler(this),
+            TwinsBattleItemTemplate => new TwinsWeaponHandler(this),
+            ThunderBattleItemTemplate => new ThunderWeaponHandler(this),
+            RailgunBattleItemTemplate => new RailgunWeaponHandler(this),
+            RicochetBattleItemTemplate => new RicochetWeaponHandler(this),
+            IsisBattleItemTemplate => new IsisWeaponHandler(this),
+            VulcanBattleItemTemplate => new VulcanWeaponHandler(this),
+            FreezeBattleItemTemplate => new FreezeWeaponHandler(this),
+            FlamethrowerBattleItemTemplate => new FlamethrowerWeaponHandler(this),
+            ShaftBattleItemTemplate => new ShaftWeaponHandler(this),
+            HammerBattleItemTemplate => new HammerWeaponHandler(this),
+            _ => throw new UnreachableException()
+        };
 
         MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         Health = MaxHealth;
@@ -171,20 +180,27 @@ public class BattleTank {
             BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
             Battle.RemovePlayer(BattlePlayer);
         }
+        
+        WeaponHandler.Tick();
     }
 
     public void Enable() { // todo
+        WeaponHandler.OnTankEnable();
         Tank.AddComponent(new TankMovableComponent());
     }
 
     public void Disable() { // todo
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
 
-        if (Tank.HasComponent<SelfDestructionComponent>())
+        if (Tank.HasComponent<SelfDestructionComponent>()) {
             Tank.RemoveComponent<SelfDestructionComponent>();
+            SelfDestructTime = null;
+        }
 
         if (Tank.HasComponent<TankMovableComponent>())
             Tank.RemoveComponent<TankMovableComponent>();
+
+        WeaponHandler.OnTankDisable();
     }
 
     public void Spawn() { // todo
@@ -225,4 +241,6 @@ public class BattleTank {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
             battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
     }
+
+    public override int GetHashCode() => BattlePlayer.GetHashCode();
 }

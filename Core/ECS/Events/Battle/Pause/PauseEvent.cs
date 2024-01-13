@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Battle.Pause;
 [ProtocolId(-1316093147997460626)]
 public class PauseEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InBattle || !connection.BattlePlayer!.InBattleAsTank || connection.BattlePlayer.IsPaused) return;
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank || connection.BattlePlayer.IsPaused) return;
 
         IEntity user = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer;

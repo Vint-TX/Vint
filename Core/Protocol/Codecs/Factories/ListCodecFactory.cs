@@ -16,6 +16,7 @@ public class ListCodecFactory : ICodecFactory {
                                                          ProtocolCollectionAttribute.Default;
 
         return new ListCodec(
+            typeCodecInfo.Type,
             new TypeCodecInfo(
                 typeCodecInfo.Type.GenericTypeArguments.Single(),
                 protocolCollection.Nullable,

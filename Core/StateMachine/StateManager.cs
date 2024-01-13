@@ -25,4 +25,6 @@ public abstract class StateManager<T> : IStateManager where T : State {
         state.Start();
         CurrentState = state;
     }
+
+    public override string ToString() => $"{GetType().Name}: {CurrentState}";
 }

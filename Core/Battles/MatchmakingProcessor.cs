@@ -49,11 +49,11 @@ public class MatchmakingProcessor(
         if (lobby != null)
             connection.Send(new ExitedFromMatchmakingEvent(selfAction), lobby);
 
-        if (connection.InBattle) {
+        if (connection.InLobby) {
             BattlePlayer battlePlayer = connection.BattlePlayer!;
             Battle battle = battlePlayer.Battle;
 
-            if (battlePlayer.InBattleAsTank)
+            if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
                 battle.RemovePlayer(battlePlayer);
             else
                 battle.RemovePlayerFromLobby(battlePlayer);

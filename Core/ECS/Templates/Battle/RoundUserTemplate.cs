@@ -16,16 +16,10 @@ public class RoundUserTemplate : EntityTemplate {
                     .AddComponent(tank.GetComponent<UserGroupComponent>())
                     .AddComponent(tank.GetComponent<BattleGroupComponent>()));
 
-        int place;
-
-        if (battlePlayer.Team != null) {
+        if (battlePlayer.Team != null)
             entity.AddComponent(battlePlayer.Team.GetComponent<TeamGroupComponent>());
-            place = 1; // todo
-        } else {
-            place = battlePlayer.Battle.Players.Count(player => player.InBattleAsTank) + 1;
-        }
 
-        entity.AddComponent(new RoundUserStatisticsComponent(place, 0, 0, 0, 0));
+        entity.AddComponent(new RoundUserStatisticsComponent(0, 0, 0, 0, 0));
 
         return entity;
     }

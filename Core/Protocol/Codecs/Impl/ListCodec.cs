@@ -4,6 +4,7 @@ using Vint.Core.Protocol.Codecs.Buffer;
 namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class ListCodec(
+    Type listType,
     ICodecInfo elementCodecInfo
 ) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
@@ -17,10 +18,10 @@ public class ListCodec(
             elementCodec.Encode(buffer, element);
     }
 
-    public override List<object> Decode(ProtocolBuffer buffer) {
+    public override object Decode(ProtocolBuffer buffer) {
+        IList list = (IList)Activator.CreateInstance(listType)!;
         ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
         int count = VarIntCodecHelper.Decode(buffer.Reader);
-        List<object> list = new(count);
 
         while (list.Count < count)
             list.Add(elementCodec.Decode(buffer));

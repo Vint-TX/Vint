@@ -41,8 +41,7 @@ public class MatchmakingHandler(
         Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.MapId);
         Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(
             Battle.Properties,
-            Battle.MapEntity,
-            BattleProperties.GravityToForce[Battle.Properties.Gravity]);
+            Battle.MapEntity);
     }
 
     public override void Tick() {
@@ -54,7 +53,7 @@ public class MatchmakingHandler(
         }
     }
 
-    public override void PlayerEntered(BattlePlayer battlePlayer) { // todo
+    public override void PlayerEntered(BattlePlayer battlePlayer) {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 

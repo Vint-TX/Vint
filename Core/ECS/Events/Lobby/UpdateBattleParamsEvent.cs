@@ -12,7 +12,7 @@ public class UpdateBattleParamsEvent : IServerEvent {
     public BattleProperties Params { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InBattle) return;
+        if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
 

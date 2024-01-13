@@ -9,5 +9,5 @@ public class ReloadTimePropertyComponent : RangedComponent, IConvertible<WeaponC
     }
 
     public void Convert(WeaponCooldownComponent component) =>
-        component.CooldownIntervalSec = 0f;
+        component.CooldownIntervalSec = FinalValue;
 }

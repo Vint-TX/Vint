@@ -125,7 +125,7 @@ public class Battle {
 
         // todo teams
 
-        foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
+        foreach (BattlePlayer battlePlayer in Players.ToArray().Where(player => !player.IsSpectator))
             battlePlayer.Init();
     }
 
@@ -149,7 +149,7 @@ public class Battle {
     }
 
     public void AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads
-        if (connection.InBattle || !spectator && !CanAddPlayers) return;
+        if (connection.InLobby || !spectator && !CanAddPlayers) return;
 
         connection.Logger.Warning("Joining battle {Id}", Id);
 
@@ -200,8 +200,6 @@ public class Battle {
             foreach (BattlePlayer player in Players.Where(player => player.InBattle))
                 player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
 
-            Players.Remove(battlePlayer);
-
             if (user.HasComponent<MatchMakingUserReadyComponent>())
                 user.RemoveComponent<MatchMakingUserReadyComponent>();
 
@@ -212,8 +210,13 @@ public class Battle {
                 }
             }
 
-            if (!IsCustom)
+            battlePlayer.InBattle = false;
+            battlePlayer.Tank = null;
+
+            if (!IsCustom && battlePlayer.PlayerConnection.IsOnline)
                 RemovePlayerFromLobby(battlePlayer);
+
+            ModeHandler.SortScoreTable();
         }
     }
 
@@ -248,4 +251,6 @@ public class Battle {
 
         connection.BattlePlayer = null;
     }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
