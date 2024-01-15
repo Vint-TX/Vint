@@ -27,8 +27,6 @@ public class DMHandler(
     public override void OnFinished() { }
 
     public override void TransferParameters(ModeHandler previousHandler) {
-        if (previousHandler is DMHandler) return;
-
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => !battlePlayer.IsSpectator)) {
             battlePlayer.Team = null;
             battlePlayer.PlayerConnection.User.ChangeComponent<TeamColorComponent>(component =>

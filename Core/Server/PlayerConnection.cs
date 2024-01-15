@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using LinqToDB;
@@ -590,20 +591,21 @@ public class PlayerConnection(
 
     protected override void OnDisconnected() {
         Logger.Information("Socket disconnected");
+        Logger.Verbose("{X}", new StackTrace());
 
         try {
-            if (!InLobby) return;
+            if (InLobby) {
+                if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
+                    BattlePlayer.Battle.RemovePlayer(BattlePlayer);
+                else
+                    BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
+            }
 
-            if (BattlePlayer!.IsSpectator || BattlePlayer.InBattleAsTank)
-                BattlePlayer.Battle.RemovePlayer(BattlePlayer);
-            else
-                BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
+            if (User != null!)
+                EntityRegistry.Remove(User.Id);
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
         } finally {
-            if (User != null!)
-                EntityRegistry.Remove(User.Id);
-
             foreach (IEntity entity in SharedEntities)
                 entity.SharedPlayers.Remove(this);
 

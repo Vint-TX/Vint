@@ -36,32 +36,34 @@ public class BattleProcessor : IBattleProcessor {
     public int BattlesCount => Battles.Count;
 
     public void StartTicking() {
-        const double battleTickDuration = 0.01;
+        const double battleTickDurationMs = 10;
 
         try {
             Stopwatch stopwatch = new();
-            double lastBattleTickDuration = 0;
+            double lastBattleTickDurationSec = 0;
 
             while (true) {
                 stopwatch.Restart();
 
                 foreach (Battle battle in Battles.ToArray()) {
-                    battle.Tick(lastBattleTickDuration);
+                    battle.Tick(lastBattleTickDurationSec);
 
                     if (battle is { WasPlayers: true, Players.Count: 0 } or
-                        { IsCustom: false, StateManager.CurrentState: Ended })
+                        { IsCustom: false, StateManager.CurrentState: Ended }) {
+                        Logger.Warning("Removing battle {Id}", battle.LobbyId);
                         Battles.Remove(battle);
+                    }
                 }
 
                 stopwatch.Stop();
                 TimeSpan elapsed = stopwatch.Elapsed;
                 stopwatch.Start();
 
-                if (elapsed.TotalSeconds < battleTickDuration)
-                    Thread.Sleep(TimeSpan.FromSeconds(battleTickDuration) - elapsed);
+                if (elapsed.TotalMilliseconds < battleTickDurationMs)
+                    Thread.Sleep(TimeSpan.FromMilliseconds(battleTickDurationMs) - elapsed);
 
                 stopwatch.Stop();
-                lastBattleTickDuration = stopwatch.Elapsed.TotalSeconds;
+                lastBattleTickDurationSec = stopwatch.Elapsed.TotalSeconds;
             }
         } catch (Exception e) {
             Logger.Fatal(e, "Fatal error happened in battles tick loop");

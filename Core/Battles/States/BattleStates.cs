@@ -26,7 +26,12 @@ public class NotEnoughPlayers(
 
 public class NotStarted(
     BattleStateManager stateManager
-) : BattleState(stateManager);
+) : BattleState(stateManager) {
+    public override void Start() {
+        Battle.Timer = 0;
+        base.Start();
+    }
+}
 
 public class Countdown(
     BattleStateManager stateManager
@@ -147,7 +152,7 @@ public class Running(
         if (Battle.IsCustom) {
             if (Battle.Players.All(player => !player.InBattleAsTank)) {
                 Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
-                StateManager.SetState(new Ended(StateManager));
+                StateManager.SetState(new NotStarted(StateManager));
             }
 
             if (Battle.Timer < 0)
@@ -160,9 +165,4 @@ public class Running(
 
 public class Ended(
     BattleStateManager stateManager
-) : BattleState(stateManager) {
-    public override void Start() {
-        Battle.Timer = 0;
-        base.Start();
-    }
-}
+) : BattleState(stateManager);

@@ -1,4 +1,5 @@
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.Server;
@@ -51,12 +52,12 @@ public class BattlePlayer {
             // todo modules
 
             InBattle = true;
+            
+            if (PlayerConnection.User.HasComponent<MatchMakingUserReadyComponent>())
+                PlayerConnection.User.RemoveComponent<MatchMakingUserReadyComponent>();
 
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
-                player.PlayerConnection.Share(Tank.Entities); // Share this player entities to other players in battle
-
-            foreach (BattlePlayer spectator in Battle.Players.Where(player => player.IsSpectator))
-                spectator.PlayerConnection.Share(PlayerConnection.User); // Share this player to spectators
+                player.PlayerConnection.Share(Tank.Entities); // Share this player entities to players in battle
 
             Battle.ModeHandler.SortScoreTable();
         }

@@ -73,10 +73,10 @@ public class HammerWeaponHandler : WeaponHandler {
         StopReload();
         SetCurrentCartridgeCount(MaximumCartridgeCount);
         
+        BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
+        
         if (!BattleEntity.HasComponent<ShootableComponent>()) 
             BattleEntity.AddComponent(new ShootableComponent());
-        
-        BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
     }
 
     void TryReload() {

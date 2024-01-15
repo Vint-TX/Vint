@@ -29,7 +29,11 @@ public class Battle {
         TypeHandler = new MatchmakingHandler(this);
         StateManager = new BattleStateManager(this);
 
+        TypeHandler.Setup();
         Setup();
+
+        LobbyChatEntity = new BattleLobbyChatTemplate().Create();
+        BattleChatEntity = new GeneralBattleChatTemplate().Create();
     }
 
     public Battle(BattleProperties properties, IPlayerConnection owner) { // Custom battle
@@ -39,7 +43,11 @@ public class Battle {
         TypeHandler = new CustomHandler(this, owner);
         StateManager = new BattleStateManager(this);
 
+        TypeHandler.Setup();
         Setup();
+
+        LobbyChatEntity = new BattleLobbyChatTemplate().Create();
+        BattleChatEntity = new GeneralBattleChatTemplate().Create();
     }
 
     public ILogger Logger { get; } = Log.Logger.ForType(typeof(Battle));
@@ -60,29 +68,24 @@ public class Battle {
     public IEntity RoundEntity { get; set; } = null!;
     public IEntity MapEntity { get; set; } = null!;
 
-    public IEntity LobbyChatEntity { get; private set; } = null!;
-    public IEntity BattleChatEntity { get; private set; } = null!;
+    public IEntity LobbyChatEntity { get; }
+    public IEntity BattleChatEntity { get; }
 
     public TypeHandler TypeHandler { get; }
     public ModeHandler ModeHandler { get; private set; } = null!;
 
-    public List<BattlePlayer> Players { get; } = [];
+    public HashSet<BattlePlayer> Players { get; } = [];
 
     public void Setup() {
-        TypeHandler.Setup();
-
         BattleModeTemplate battleModeTemplate = Properties.BattleMode switch {
             BattleMode.DM => new DMTemplate(),
             BattleMode.TDM => throw new NotImplementedException(),
             BattleMode.CTF => throw new NotImplementedException(),
             _ => throw new UnreachableException()
         };
-
+        
         BattleEntity = battleModeTemplate.Create(LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
         RoundEntity = new RoundTemplate().Create(BattleEntity);
-
-        LobbyChatEntity = new BattleLobbyChatTemplate().Create();
-        BattleChatEntity = new GeneralBattleChatTemplate().Create();
 
         // todo height maps (or server physics)
 
@@ -102,13 +105,15 @@ public class Battle {
         MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
 
         LobbyEntity.RemoveComponent<MapGroupComponent>();
-        LobbyEntity.RemoveComponent<BattleModeComponent>();
-        LobbyEntity.RemoveComponent<UserLimitComponent>();
-        LobbyEntity.RemoveComponent<GravityComponent>();
-
         LobbyEntity.AddComponent(new MapGroupComponent(MapEntity));
+        
+        LobbyEntity.RemoveComponent<BattleModeComponent>();
         LobbyEntity.AddComponent(new BattleModeComponent(Properties.BattleMode));
+        
+        LobbyEntity.RemoveComponent<UserLimitComponent>();
         LobbyEntity.AddComponent(new UserLimitComponent(Properties.MaxPlayers));
+        
+        LobbyEntity.RemoveComponent<GravityComponent>();
         LobbyEntity.AddComponent(new GravityComponent(Properties.Gravity));
 
         if (IsCustom) {
@@ -151,7 +156,7 @@ public class Battle {
     public void AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads
         if (connection.InLobby || !spectator && !CanAddPlayers) return;
 
-        connection.Logger.Warning("Joining battle {Id}", Id);
+        connection.Logger.Warning("Joining battle {Id}", LobbyId);
 
         if (spectator) {
             connection.BattlePlayer = new BattlePlayer(connection, this, null, true);
@@ -183,12 +188,11 @@ public class Battle {
         IEntity user = connection.User;
 
         connection.Unshare(BattleEntity, RoundEntity, BattleChatEntity);
-
-        foreach (IEntity entity in Players
-                     .Where(player => player.InBattleAsTank &&
-                                      player != battlePlayer)
-                     .SelectMany(player => player.Tank!.Entities))
-            connection.Unshare(entity);
+        
+        connection.Unshare(Players
+            .Where(player => player.InBattleAsTank &&
+                             player != battlePlayer)
+            .SelectMany(player => player.Tank!.Entities));
 
         user.RemoveComponent<BattleGroupComponent>();
         ModeHandler.PlayerExited(battlePlayer);
@@ -200,9 +204,6 @@ public class Battle {
             foreach (BattlePlayer player in Players.Where(player => player.InBattle))
                 player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
 
-            if (user.HasComponent<MatchMakingUserReadyComponent>())
-                user.RemoveComponent<MatchMakingUserReadyComponent>();
-
             if (!IsCustom && Players.All(player => player.IsSpectator)) {
                 foreach (BattlePlayer spectator in Players) {
                     spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
@@ -213,7 +214,7 @@ public class Battle {
             battlePlayer.InBattle = false;
             battlePlayer.Tank = null;
 
-            if (!IsCustom && battlePlayer.PlayerConnection.IsOnline)
+            if (!IsCustom || !battlePlayer.PlayerConnection.IsOnline)
                 RemovePlayerFromLobby(battlePlayer);
 
             ModeHandler.SortScoreTable();
@@ -221,9 +222,10 @@ public class Battle {
     }
 
     public void RemovePlayerFromLobby(BattlePlayer battlePlayer) {
-        Players.Remove(battlePlayer);
-
         IPlayerConnection connection = battlePlayer.PlayerConnection;
+        connection.Logger.Warning("Leaving battle {Id}", LobbyId);
+        
+        Players.Remove(battlePlayer);
 
         if (battlePlayer.IsSpectator) {
             foreach (IPlayerConnection otherConnection in Players.Select(player => player.PlayerConnection))
@@ -238,19 +240,14 @@ public class Battle {
             user.RemoveComponent<BattleLobbyGroupComponent>();
             connection.Unshare(LobbyEntity, LobbyChatEntity);
 
-            if (user.HasComponent<MatchMakingUserReadyComponent>())
-                user.RemoveComponent<MatchMakingUserReadyComponent>();
-
-            foreach (IPlayerConnection otherConnection in Players.Select(player => player.PlayerConnection)) {
-                otherConnection.Unshare(user);
-                connection.Unshare(otherConnection.User);
+            foreach (BattlePlayer player in Players) {
+                player.PlayerConnection.Unshare(user);
+                connection.Unshare(player.PlayerConnection.User);
             }
-
-            connection.Logger.Warning("Left battle {Id}", Id);
         }
 
         connection.BattlePlayer = null;
     }
 
-    public override int GetHashCode() => Id.GetHashCode();
+    public override int GetHashCode() => LobbyId.GetHashCode();
 }
