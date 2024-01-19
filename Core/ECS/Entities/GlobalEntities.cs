@@ -16,6 +16,7 @@ using Vint.Core.ECS.Templates.Money;
 using Vint.Core.ECS.Templates.Premium;
 using Vint.Core.ECS.Templates.Preset;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Entities;
 
@@ -269,12 +270,10 @@ public static class GlobalEntities {
                 case "containers": {
                     Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == entityId);
 
-                    if (entity.HasComponent<RestrictionByUserFractionComponent>())
-                        entity.RemoveComponent<RestrictionByUserFractionComponent>();
-
                     entity.AddComponent(new UserGroupComponent(user));
                     entity.AddComponent(new NotificationGroupComponent(entity));
                     entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));
+                    entity.RemoveComponentIfPresent<RestrictionByUserFractionComponent>();
                     break;
                 }
 

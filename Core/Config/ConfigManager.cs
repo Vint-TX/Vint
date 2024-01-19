@@ -220,7 +220,7 @@ public static class ConfigManager {
                 IEntityBuilder entityBuilder = new EntityBuilder(entityId).WithTemplateAccessor(template, configPath);
                 components.ForEach(component => entityBuilder.AddComponent(component));
 
-                IEntity entity = entityBuilder.Build();
+                IEntity entity = entityBuilder.Build(false);
 
                 entities[entityName] = entity;
 

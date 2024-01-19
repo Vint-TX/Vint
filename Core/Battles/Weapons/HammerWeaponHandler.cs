@@ -21,12 +21,12 @@ public class HammerWeaponHandler : WeaponHandler {
 
     public float ReloadMagazineTimeSec { get; }
     public float DamagePerPellet { get; }
-    
+
     public int MaximumCartridgeCount { get; }
     public int CurrentCartridgeCount { get; private set; }
 
     DateTime? ReloadEndTime { get; set; }
-    
+
     public override void OnTankDisable() {
         base.OnTankDisable();
         ResetMagazine();
@@ -42,26 +42,21 @@ public class HammerWeaponHandler : WeaponHandler {
 
         CurrentCartridgeCount = count;
         BattleEntity.ChangeComponent<MagazineStorageComponent>(component => component.CurrentCartridgeCount = CurrentCartridgeCount);
-        
+
         if (CurrentCartridgeCount == 0)
             StartReload();
     }
 
     public void StartReload() {
-        if (BattleEntity.HasComponent<ShootableComponent>())
-            BattleEntity.RemoveComponent<ShootableComponent>();
-        
-        if (!BattleEntity.HasComponent<MagazineReloadStateComponent>())
-            BattleEntity.AddComponent(new MagazineReloadStateComponent());
-        
+        BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
+        BattleEntity.AddComponentIfAbsent(new MagazineReloadStateComponent());
+
         ReloadEndTime = DateTime.UtcNow.AddSeconds(ReloadMagazineTimeSec);
     }
 
     public void StopReload() {
         ReloadEndTime = null;
-        
-        if (BattleEntity.HasComponent<MagazineReloadStateComponent>())
-            BattleEntity.RemoveComponent<MagazineReloadStateComponent>();
+        BattleEntity.RemoveComponentIfPresent<MagazineReloadStateComponent>();
     }
 
     public void ResetMagazine() {
@@ -72,16 +67,14 @@ public class HammerWeaponHandler : WeaponHandler {
     public void FillMagazine() { // todo modules
         StopReload();
         SetCurrentCartridgeCount(MaximumCartridgeCount);
-        
+
         BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
-        
-        if (!BattleEntity.HasComponent<ShootableComponent>()) 
-            BattleEntity.AddComponent(new ShootableComponent());
+        BattleEntity.AddComponentIfAbsent(new ShootableComponent());
     }
 
     void TryReload() {
         if (ReloadEndTime == null || ReloadEndTime > DateTime.UtcNow) return;
-        
+
         FillMagazine();
     }
 }

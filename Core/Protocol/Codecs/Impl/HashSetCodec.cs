@@ -1,31 +1,41 @@
 ﻿using System.Collections;
+using System.Reflection;
 using Vint.Core.Protocol.Codecs.Buffer;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class HashSetCodec(
+    Type hashSetType,
     ICodecInfo elementCodecInfo
 ) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
-        IList hashSetList = (IList)typeof(Enumerable)
-            .GetMethod("ToList")!
-            .MakeGenericMethod(value.GetType().GenericTypeArguments[0])
-            .Invoke(value, [value])!;
+        int count = (int)hashSetType.GetProperty("Count")!.GetValue(value)!;
+        VarIntCodecHelper.Encode(buffer.Writer, count);
+
+        if (count <= 0) return;
 
         ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
-        VarIntCodecHelper.Encode(buffer.Writer, hashSetList.Count);
+        IEnumerator enumerator = ((IEnumerable)value).GetEnumerator();
 
-        foreach (object element in hashSetList)
-            elementCodec.Encode(buffer, element);
+        try {
+            while (enumerator.MoveNext())
+                elementCodec.Encode(buffer, enumerator.Current!);
+        } finally {
+            (enumerator as IDisposable)?.Dispose();
+        }
     }
 
-    public override HashSet<object> Decode(ProtocolBuffer buffer) {
-        ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
+    public override object Decode(ProtocolBuffer buffer) {
         int count = VarIntCodecHelper.Decode(buffer.Reader);
-        HashSet<object> hashSet = new(count);
+        object hashSet = Activator.CreateInstance(hashSetType)!;
 
-        while (hashSet.Count < count)
-            hashSet.Add(elementCodec.Decode(buffer));
+        if (count <= 0) return hashSet;
+
+        ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
+        MethodInfo addMethod = hashSetType.GetMethod("Add")!;
+
+        for (int i = 0; i < count; i++)
+            addMethod.Invoke(hashSet, [elementCodec.Decode(buffer)]);
 
         return hashSet;
     }

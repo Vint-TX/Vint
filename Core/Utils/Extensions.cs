@@ -4,6 +4,8 @@ using Vint.Core.Protocol.Attributes;
 namespace Vint.Core.Utils;
 
 public static class Extensions {
+    static Random Random { get; } = new();
+
     public static ProtocolIdAttribute GetProtocolId(this Type type) => type.GetCustomAttribute<ProtocolIdAttribute>()!;
 
     public static List<Type> DumpInterfaces(this Type type) {
@@ -34,7 +36,7 @@ public static class Extensions {
 
         while (n > 1) {
             n--;
-            int k = Random.Shared.Next(n + 1);
+            int k = Random.Next(n + 1);
             (list[k], list[n]) = (list[n], list[k]);
         }
 

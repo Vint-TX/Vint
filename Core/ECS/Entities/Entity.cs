@@ -41,6 +41,8 @@ public class Entity(
                     this,
                     connection,
                     new StackTrace());
+
+                Debugger.Break();
                 return;
             }
         }
@@ -59,20 +61,14 @@ public class Entity(
                     this,
                     connection,
                     new StackTrace());
+
+                Debugger.Break();
                 return;
             }
         }
 
         connection.SharedEntities.Remove(this);
         connection.Send(ToUnshareCommand());
-    }
-
-    public void AddComponent(IComponent component) => AddComponent(component, null);
-
-    public bool HasComponent<T>() where T : IComponent {
-        lock (TypeToComponent) {
-            return TypeToComponent.TryGetValue(typeof(T), out _);
-        }
     }
 
     public T GetComponent<T>() where T : class, IComponent {
@@ -84,32 +80,15 @@ public class Entity(
         }
     }
 
-    public void ChangeComponent<T>(Action<T> action) where T : class, IComponent {
-        T component = GetComponent<T>();
+    public void RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent =>
+        RemoveComponentIfPresent(typeof(T), excluded);
 
-        action(component);
+    public void RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null) =>
+        RemoveComponentIfPresent(component.GetType(), excluded);
 
-        ChangeComponent(component, null);
-    }
-
-    public void RemoveComponent<T>() where T : IComponent => RemoveComponent<T>(null);
-
-    public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null) {
-        Type type = component.GetType();
-
-        RemoveComponent(type, excluded);
-    }
-
-    public void RemoveComponent(Type type, IPlayerConnection? excluded = null) {
-        lock (TypeToComponent) {
-            if (!TypeToComponent.Remove(type))
-                throw new ArgumentException($"{this} does not have component {type}");
-        }
-
-        lock (SharedPlayers) {
-            foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-                playerConnection.Send(new ComponentRemoveCommand(this, type));
-        }
+    public void RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null) {
+        if (HasComponent(type))
+            RemoveComponent(type, excluded);
     }
 
     public void Send(IEvent @event) {
@@ -140,10 +119,28 @@ public class Entity(
         }
     }
 
-    public bool HasComponent(IComponent component) {
+    public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null) {
+        if (!HasComponent(component))
+            AddComponent(component, excluded);
+    }
+
+    public bool HasComponent<T>() where T : class, IComponent =>
+        HasComponent(typeof(T));
+
+    public bool HasComponent(IComponent component) =>
+        HasComponent(component.GetType());
+
+    public bool HasComponent(Type type) {
         lock (TypeToComponent) {
-            return TypeToComponent.TryGetValue(component.GetType(), out _);
+            return TypeToComponent.TryGetValue(type, out _);
         }
+    }
+
+    public void ChangeComponent<T>(Action<T> action) where T : class, IComponent {
+        T component = GetComponent<T>();
+
+        action(component);
+        ChangeComponent(component, null);
     }
 
     public void ChangeComponent(IComponent component, IPlayerConnection? excluded) {
@@ -162,10 +159,22 @@ public class Entity(
         }
     }
 
-    public void RemoveComponent<T>(IPlayerConnection? excluded) where T : IComponent {
-        Type type = typeof(T);
+    public void RemoveComponent<T>(IPlayerConnection? excluded) where T : class, IComponent =>
+        RemoveComponent(typeof(T), excluded);
 
-        RemoveComponent(type, excluded);
+    public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null) =>
+        RemoveComponent(component.GetType(), excluded);
+
+    public void RemoveComponent(Type type, IPlayerConnection? excluded = null) {
+        lock (TypeToComponent) {
+            if (!TypeToComponent.Remove(type))
+                throw new ArgumentException($"{this} does not have component {type}");
+        }
+
+        lock (SharedPlayers) {
+            foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
+                playerConnection.Send(new ComponentRemoveCommand(this, type));
+        }
     }
 
     public override string ToString() => $"Entity {{ " +

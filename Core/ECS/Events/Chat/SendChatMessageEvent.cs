@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Vint.Core.Config;
+using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
@@ -31,6 +32,17 @@ public class SendChatMessageEvent : IServerEvent {
             GeneralBattleChatTemplate => sender.BattlePlayer!.Battle.Players
                 .Where(battlePlayer => battlePlayer.InBattle)
                 .Select(battlePlayer => battlePlayer.PlayerConnection),
+
+            PersonalChatTemplate => chat.GetComponent<ChatParticipantsComponent>().Users
+                .Select(user => {
+                    IPlayerConnection? connection = sender.Server.PlayerConnections
+                        .Where(conn => conn.IsOnline)
+                        .SingleOrDefault(conn => conn.User.Id == user.Id);
+
+                    connection?.ShareIfUnshared(chat, sender.User);
+                    return connection!;
+                })
+                .Where(conn => conn != null!),
 
             _ => []
         };

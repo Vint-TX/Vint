@@ -11,16 +11,20 @@ public class DMHandler(
     Battle battle
 ) : ModeHandler(battle) {
     List<SpawnPoint> SpawnPoints { get; set; } = battle.MapInfo.SpawnPoints.Deathmatch.ToList();
-    SpawnPoint LastSpawnPoint { get; set; } = null!;
+    SpawnPoint? LastSpawnPoint { get; set; }
 
     public override BattleMode BattleMode => BattleMode.DM;
 
     public override void Tick() { }
 
-    public override SpawnPoint GetRandomSpawnPoint() =>
-        LastSpawnPoint = SpawnPoints
+    public override SpawnPoint GetRandomSpawnPoint() {
+        SpawnPoint spawnPoint = SpawnPoints
             .Shuffle()
-            .First(spawnPoint => spawnPoint != LastSpawnPoint);
+            .First(spawnPoint => spawnPoint.Number != LastSpawnPoint?.Number);
+
+        LastSpawnPoint = spawnPoint;
+        return spawnPoint;
+    }
 
     public override void OnStarted() { }
 

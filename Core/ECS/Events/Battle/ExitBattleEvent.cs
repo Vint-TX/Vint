@@ -13,9 +13,11 @@ public class ExitBattleEvent : IServerEvent {
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 
+        if (battlePlayer.IsKicked) return;
+
         if (battlePlayer.IsSpectator || battlePlayer.InBattleAsTank)
             battle.RemovePlayer(battlePlayer);
-        //else
-        //    battle.RemovePlayerFromLobby(battlePlayer);
+        else
+            battle.RemovePlayerFromLobby(battlePlayer);
     }
 }

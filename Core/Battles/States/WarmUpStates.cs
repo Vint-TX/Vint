@@ -15,13 +15,12 @@ public class WarmingUp(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
     public override void Tick() {
-        if (Battle.Timer <= 4) {
+        if (Battle.Timer <= 5) {
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
                 BattleTank tank = battlePlayer.Tank!;
-                tank.Disable();
 
-                if (tank.Tank.HasComponent(tank.StateManager.CurrentState.StateComponent))
-                    tank.Tank.RemoveComponent(tank.StateManager.CurrentState.StateComponent);
+                tank.Disable();
+                tank.Tank.RemoveComponentIfPresent(tank.StateManager.CurrentState.StateComponent);
             }
 
             StateManager.SetState(new PreparingToFight(StateManager));

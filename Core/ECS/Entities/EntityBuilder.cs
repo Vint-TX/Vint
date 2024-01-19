@@ -30,12 +30,12 @@ public class EntityBuilder() : IEntityBuilder {
         return this;
     }
 
-    public IEntity Build() {
+    public IEntity Build(bool temp) {
         if (Id == 0)
             Id = EntityRegistry.FreeId;
 
         Entity entity = new(Id, TemplateAccessor, Components.ToArray());
-        EntityRegistry.Add(entity);
+        if (!temp) EntityRegistry.Add(entity);
 
         return entity;
     }

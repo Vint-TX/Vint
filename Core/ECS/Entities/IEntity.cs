@@ -20,13 +20,15 @@ public interface IEntity {
 
     public void Unshare(IPlayerConnection connection);
 
-    public void AddComponent(IComponent component);
-
     public void AddComponent(IComponent component, IPlayerConnection? excluded = null);
+
+    public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null);
 
     public bool HasComponent(IComponent component);
 
-    public bool HasComponent<T>() where T : IComponent;
+    public bool HasComponent<T>() where T : class, IComponent;
+
+    public bool HasComponent(Type type);
 
     public T GetComponent<T>() where T : class, IComponent;
 
@@ -34,13 +36,17 @@ public interface IEntity {
 
     public void ChangeComponent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void RemoveComponent<T>() where T : IComponent;
-
-    public void RemoveComponent<T>(IPlayerConnection? excluded = null) where T : IComponent;
+    public void RemoveComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent;
 
     public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null);
 
     public void RemoveComponent(Type type, IPlayerConnection? excluded = null);
+
+    public void RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent;
+
+    public void RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null);
+
+    public void RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null);
 
     public void Send(IEvent @event);
 

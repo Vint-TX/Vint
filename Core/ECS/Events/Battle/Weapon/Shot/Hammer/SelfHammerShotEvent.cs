@@ -20,7 +20,7 @@ public class SelfHammerShotEvent : SelfShotEvent {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Tank!.WeaponHandler is not HammerWeaponHandler weaponHandler) return;
-        
+
         base.Execute(connection, entities);
         weaponHandler.SetCurrentCartridgeCount(weaponHandler.CurrentCartridgeCount - 1);
     }

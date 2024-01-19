@@ -7,6 +7,7 @@ using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Templates.User;
 
@@ -55,6 +56,47 @@ public class UserTemplate : EntityTemplate {
                 if (player.IsTester)
                     builder.AddComponent(new ClosedBetaQuestAchievementComponent());
             });
+
+        user.AddComponent(new UserGroupComponent(user));
+
+        return user;
+    }
+
+    public IEntity CreateFake(IPlayerConnection connection, Player player) {
+        using DbConnection db = new();
+
+        SeasonStatistics seasonStats = db.SeasonStatistics
+            .Where(stats => stats.PlayerId == player.Id)
+            .OrderByDescending(stats => stats.SeasonNumber)
+            .First();
+
+        IEntity user = Entity(null,
+            builder => {
+                builder
+                    .AddComponent(new UserComponent())
+                    .AddComponent(new UserPublisherComponent())
+                    .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
+                    .AddComponent(new UserUidComponent(player.Username))
+                    .AddComponent(new UserCountryComponent(player.CountryCode))
+                    .AddComponent(new UserSubscribeComponent(player.Subscribed))
+                    .AddComponent(new UserExperienceComponent(player.Experience))
+                    .AddComponent(new UserRankComponent(player.Rank))
+                    .AddComponent(new UserReputationComponent(seasonStats.Reputation))
+                    .AddComponent(new FractionUserScoreComponent(player.FractionScore))
+                    .AddComponent(new UserStatisticsComponent(player.Id))
+                    .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
+                    .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
+                    .AddComponent(new LeagueGroupComponent(seasonStats.League))
+                    .AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId))
+                    .WithId(player.Id);
+
+                if (player.IsAdmin)
+                    builder.AddComponent(new UserAdminComponent());
+
+                if (player.IsTester)
+                    builder.AddComponent(new ClosedBetaQuestAchievementComponent());
+            },
+            true);
 
         user.AddComponent(new UserGroupComponent(user));
 

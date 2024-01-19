@@ -88,15 +88,11 @@ public interface IPlayerConnection {
 
     public void Share(IEntity entity);
 
-    public void Share(params IEntity[] entities);
-
-    public void Share(IEnumerable<IEntity> entities);
+    public void ShareIfUnshared(IEntity entity);
 
     public void Unshare(IEntity entity);
 
-    public void Unshare(params IEntity[] entities);
-
-    public void Unshare(IEnumerable<IEntity> entities);
+    public void UnshareIfShared(IEntity entity);
 }
 
 public class PlayerConnection(
@@ -337,9 +333,7 @@ public class PlayerConnection(
         }
 
         userItem ??= marketItem.GetUserEntity(this);
-
-        if (!userItem.HasComponent<UserGroupComponent>())
-            userItem.AddComponent(new UserGroupComponent(User));
+        userItem.AddComponentIfAbsent(new UserGroupComponent(User));
 
         if (price > 0) {
             if (forXCrystals) SetXCrystals(Player.XCrystals - price);
@@ -567,15 +561,17 @@ public class PlayerConnection(
 
     public void Share(IEntity entity) => entity.Share(this);
 
-    public void Share(params IEntity[] entities) => entities.ToList().ForEach(Share);
-
-    public void Share(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Share);
+    public void ShareIfUnshared(IEntity entity) {
+        if (!SharedEntities.Contains(entity))
+            Share(entity);
+    }
 
     public void Unshare(IEntity entity) => entity.Unshare(this);
 
-    public void Unshare(params IEntity[] entities) => entities.ToList().ForEach(Unshare);
-
-    public void Unshare(IEnumerable<IEntity> entities) => entities.ToList().ForEach(Unshare);
+    public void UnshareIfShared(IEntity entity) {
+        if (SharedEntities.Contains(entity))
+            Unshare(entity);
+    }
 
     protected override void OnConnecting() =>
         Logger = Logger.WithPlayer(this);
@@ -586,7 +582,7 @@ public class PlayerConnection(
         Logger.Information("New socket connected");
 
         Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
-        ClientSession.Share(this);
+        Share(ClientSession);
     }
 
     protected override void OnDisconnected() {

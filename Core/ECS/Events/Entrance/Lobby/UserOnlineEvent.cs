@@ -36,23 +36,22 @@ public class UserOnlineEvent : IServerEvent {
         }
 
         connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
+        connection.Send(new PaymentSectionLoadedEvent());
 
-        connection.ClientSession.Send(new PaymentSectionLoadedEvent());
-
-        IEnumerable<Relation> relations = db.Relations.Where(relation => relation.SourcePlayerId == player.Id);
+        IQueryable<Relation> relations = db.Relations.Where(relation => relation.SourcePlayerId == player.Id);
 
         HashSet<long> friendIds = relations
-            .Where(RelationUtils.IsFriend)
+            .Where(relation => (relation.Types & RelationTypes.Friend) == RelationTypes.Friend)
             .Select(relation => relation.TargetPlayerId)
             .ToHashSet();
 
         HashSet<long> incomingIds = relations
-            .Where(RelationUtils.IsIncoming)
+            .Where(relation => (relation.Types & RelationTypes.IncomingRequest) == RelationTypes.IncomingRequest)
             .Select(relation => relation.TargetPlayerId)
             .ToHashSet();
 
         HashSet<long> outgoingIds = relations
-            .Where(RelationUtils.IsOutgoing)
+            .Where(relation => (relation.Types & RelationTypes.OutgoingRequest) == RelationTypes.OutgoingRequest)
             .Select(relation => relation.TargetPlayerId)
             .ToHashSet();
 

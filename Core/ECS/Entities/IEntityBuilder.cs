@@ -16,5 +16,5 @@ public interface IEntityBuilder {
 
     public IEntityBuilder AddComponent(IComponent component);
 
-    public IEntity Build();
+    public IEntity Build(bool temp);
 }

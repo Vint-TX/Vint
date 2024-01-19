@@ -14,7 +14,7 @@ public class LoginByPasswordEvent : IServerEvent {
     public string HardwareFingerprint { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        //todo
+        if (connection.IsOnline) return;
 
         Encryption encryption = new();
 
@@ -27,7 +27,7 @@ public class LoginByPasswordEvent : IServerEvent {
         }
 
         List<IPlayerConnection> connections = connection.Server.PlayerConnections
-            .Where(player => player.Player != null! && player.Player.Username == connection.Player.Username)
+            .Where(player => player.IsOnline && player.Player.Id == connection.Player.Id)
             .ToList();
 
         if (connections.Count > 1) {

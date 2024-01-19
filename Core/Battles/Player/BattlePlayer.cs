@@ -3,6 +3,7 @@ using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Player;
 
@@ -31,6 +32,7 @@ public class BattlePlayer {
     public bool InBattleAsTank => Tank != null;
     public bool InBattle { get; set; }
     public bool IsPaused { get; set; }
+    public bool IsKicked { get; set; }
 
     public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(10);
     public DateTimeOffset? KickTime { get; set; }
@@ -52,9 +54,7 @@ public class BattlePlayer {
             // todo modules
 
             InBattle = true;
-            
-            if (PlayerConnection.User.HasComponent<MatchMakingUserReadyComponent>())
-                PlayerConnection.User.RemoveComponent<MatchMakingUserReadyComponent>();
+            PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
 
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
                 player.PlayerConnection.Share(Tank.Entities); // Share this player entities to players in battle

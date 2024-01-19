@@ -18,8 +18,7 @@ public abstract class TankState(
     }
 
     public override void Finish() {
-        if (BattleTank.Tank.HasComponent(StateComponent))
-            BattleTank.Tank.RemoveComponent(StateComponent);
+        BattleTank.Tank.RemoveComponentIfPresent(StateComponent);
         base.Finish();
     }
 }

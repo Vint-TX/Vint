@@ -16,6 +16,7 @@ public class HashSetCodecFactory : ICodecFactory {
                                                          ProtocolCollectionAttribute.Default;
 
         return new HashSetCodec(
+            typeCodecInfo.Type,
             new TypeCodecInfo(
                 typeCodecInfo.Type.GenericTypeArguments.Single(),
                 protocolCollection.Nullable,

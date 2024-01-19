@@ -40,10 +40,8 @@ public abstract class WeaponHandler {
     public virtual void OnTankEnable() =>
         BattleEntity.AddComponent(new ShootableComponent());
 
-    public virtual void OnTankDisable() {
-        if (BattleEntity.HasComponent<ShootableComponent>())
-            BattleEntity.RemoveComponent<ShootableComponent>();
-    }
+    public virtual void OnTankDisable() =>
+        BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
 
     public virtual void Tick() { }
 }

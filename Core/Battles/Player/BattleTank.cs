@@ -162,9 +162,7 @@ public class BattleTank {
         StateManager.Tick();
 
         if (CollisionsPhase == Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
-            if (Tank.HasComponent<TankStateTimeOutComponent>())
-                Tank.RemoveComponent<TankStateTimeOutComponent>();
-
+            Tank.RemoveComponentIfPresent<TankStateTimeOutComponent>();
             Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component =>
                 component.SemiActiveCollisionsPhase++);
 
@@ -177,10 +175,11 @@ public class BattleTank {
              DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
             BattlePlayer.IsPaused = false;
             BattlePlayer.KickTime = null;
+            BattlePlayer.IsKicked = true;
             BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
             Battle.RemovePlayer(BattlePlayer);
         }
-        
+
         WeaponHandler.Tick();
     }
 
@@ -197,15 +196,12 @@ public class BattleTank {
             SelfDestructTime = null;
         }
 
-        if (Tank.HasComponent<TankMovableComponent>())
-            Tank.RemoveComponent<TankMovableComponent>();
-
+        Tank.RemoveComponentIfPresent<TankMovableComponent>();
         WeaponHandler.OnTankDisable();
     }
 
     public void Spawn() { // todo
-        if (Tank.HasComponent<TankVisibleStateComponent>())
-            Tank.RemoveComponent<TankVisibleStateComponent>();
+        Tank.RemoveComponentIfPresent<TankVisibleStateComponent>();
 
         if (Tank.HasComponent<TankMovementComponent>()) {
             Tank.RemoveComponent<TankMovementComponent>();

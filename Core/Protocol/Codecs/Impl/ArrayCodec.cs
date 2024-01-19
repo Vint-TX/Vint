@@ -16,16 +16,16 @@ public class ArrayCodec(
             elementCodec.Encode(buffer, element);
     }
 
-    public override object[] Decode(ProtocolBuffer buffer) {
+    public override object Decode(ProtocolBuffer buffer) {
         if (elementCodecInfo is not ITypeCodecInfo elementTypeCodecInfo)
             throw new NotSupportedException("CodecInfo must implement ITypeCodecInfo");
 
-        ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
         int count = VarIntCodecHelper.Decode(buffer.Reader);
-        object[] array = (Array.CreateInstance(elementTypeCodecInfo.Type, count) as object[])!;
+        ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
+        Array array = Array.CreateInstance(elementTypeCodecInfo.Type, count);
 
         for (int i = 0; i < count; i++)
-            array[i] = elementCodec.Decode(buffer);
+            array.SetValue(elementCodec.Decode(buffer), i);
 
         return array;
     }

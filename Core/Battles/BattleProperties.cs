@@ -22,7 +22,7 @@ public class BattleProperties(
     public int MaxPlayers { get; private set; } = maxPlayers;
     public int TimeLimit { get; private set; } = timeLimit;
     public int ScoreLimit { get; private set; } = scoreLimit;
-    
+
     [ProtocolIgnore] public static IReadOnlyDictionary<GravityType, float> GravityToForce { get; set; } = new Dictionary<GravityType, float> {
         { GravityType.Earth, 9.81f },
         { GravityType.Moon, 1.62f },
