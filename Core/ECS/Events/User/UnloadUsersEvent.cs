@@ -7,13 +7,13 @@ namespace Vint.Core.ECS.Events.User;
 
 [ProtocolId(1458555309592)]
 public class UnloadUsersEvent : IServerEvent {
-    public HashSet<IEntity> Users { get; private set; } = null!;
+    public HashSet<IEntity?> Users { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        IEnumerable<IEntity> users = Users;
+        IEnumerable<IEntity> users = Users.Where(user => user != null)!;
 
         if (connection.InLobby)
-            users = Users
+            users = users
                 .Except(connection.BattlePlayer!.Battle.Players.Select(battlePlayer => battlePlayer.PlayerConnection.User));
 
         connection.UnshareIfShared(users);

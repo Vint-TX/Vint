@@ -7,8 +7,8 @@ public class EntityCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) =>
         Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, ((IEntity)value).Id);
 
-    public override IEntity Decode(ProtocolBuffer buffer) {
+    public override object Decode(ProtocolBuffer buffer) {
         long id = (long)Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Decode(buffer);
-        return buffer.GetSharedEntity(id) ?? EntityRegistry.Get(id);
+        return buffer.GetSharedEntity(id) ?? EntityRegistry.Get(id)!;
     }
 }

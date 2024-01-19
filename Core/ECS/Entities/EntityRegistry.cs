@@ -21,5 +21,5 @@ public static class EntityRegistry {
         }
     }
 
-    public static IEntity Get(long id) => Entities[id];
+    public static IEntity? Get(long id) => Entities.GetValueOrDefault(id);
 }

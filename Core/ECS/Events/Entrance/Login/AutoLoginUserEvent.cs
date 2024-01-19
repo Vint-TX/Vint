@@ -10,17 +10,17 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1438075609642)]
 public class AutoLoginUserEvent : IServerEvent {
-    [ProtocolName("uid")] public string Username { get; private set; } = null!;
+    [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public byte[] EncryptedToken { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Information("Autologin '{Username}'", Username);
+        logger.Warning("Autologin '{Username}'", Username);
 
-        using DbConnection database = new();
-        Player? player = database.Players.SingleOrDefault(player => player.Username == Username);
+        using DbConnection db = new();
+        Player? player = db.Players.SingleOrDefault(player => player.Username == Username);
 
         if (player == null) {
             connection.Send(new AutoLoginFailedEvent());
