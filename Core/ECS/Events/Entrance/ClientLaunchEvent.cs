@@ -13,7 +13,6 @@ public class ClientLaunchEvent : IServerEvent {
         ILogger logger = connection.Logger.ForType(GetType());
 
         connection.ClientSession.AddComponent(new WebIdComponent());
-
-        logger.Information("Executed launch event");
+        logger.Warning("Executed launch event");
     }
 }

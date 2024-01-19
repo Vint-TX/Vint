@@ -63,7 +63,7 @@ public interface IPlayerConnection {
         bool quickRegistration);
 
     public void Login(
-        bool rememberMe,
+        bool saveAutoLoginToken,
         string hardwareFingerprint);
 
     public void ChangePassword(string passwordDigest);
@@ -147,12 +147,12 @@ public class PlayerConnection(
     }
 
     public void Login(
-        bool rememberMe,
+        bool saveAutoLoginToken,
         string hardwareFingerprint) {
         Player.LastLoginTime = DateTimeOffset.UtcNow;
         Player.HardwareFingerprint = hardwareFingerprint;
 
-        if (rememberMe) {
+        if (saveAutoLoginToken) {
             Encryption encryption = new();
 
             byte[] autoLoginToken = new byte[32];
@@ -161,7 +161,6 @@ public class PlayerConnection(
             byte[] encryptedAutoLoginToken = encryption.EncryptAutoLoginToken(autoLoginToken, Player.PasswordHash);
 
             Player.AutoLoginToken = autoLoginToken;
-
             Send(new SaveAutoLoginTokenEvent(Player.Username, encryptedAutoLoginToken));
         }
 
@@ -172,9 +171,8 @@ public class PlayerConnection(
 
         Logger.Warning("'{Username}' logged in", Player.Username);
 
-        using DbConnection database = new();
-
-        database.Update(Player);
+        using DbConnection db = new();
+        db.Update(Player);
     }
 
     public void ChangePassword(string passwordDigest) {

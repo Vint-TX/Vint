@@ -16,13 +16,17 @@ public class LoginByPasswordEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
+        if (connection.Player.IsBanned) {
+            connection.Send(new LoginFailedEvent());
+            return;
+        }
+
         Encryption encryption = new();
 
         if (!encryption.GetLoginPasswordHash(connection.Player.PasswordHash)
                 .SequenceEqual(Convert.FromBase64String(PasswordEncipher))) {
             connection.Send(new InvalidPasswordEvent());
             connection.Send(new LoginFailedEvent());
-
             return;
         }
 
@@ -31,18 +35,14 @@ public class LoginByPasswordEvent : IServerEvent {
             .ToList();
 
         if (connections.Count > 1) {
-            IPlayerConnection oldConnection = connections.First();
-
-            using (DbConnection database = new()) {
-                database.Update(oldConnection.Player);
+            using DbConnection db = new();
+            
+            foreach (IPlayerConnection oldConnection in connections) {
+                db.Update(oldConnection.Player);
+                ((PlayerConnection)oldConnection).Disconnect();
             }
-
-            ((PlayerConnection)oldConnection).Disconnect();
         }
 
-        if (connection.Player.IsBanned)
-            connection.Send(new LoginFailedEvent());
-        else
-            connection.Login(RememberMe, HardwareFingerprint);
+        connection.Login(RememberMe, HardwareFingerprint);
     }
 }
