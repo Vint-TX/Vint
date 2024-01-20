@@ -23,7 +23,7 @@ namespace Vint.Core.Battles;
 public class Battle {
     public Battle() { // Matchmaking battle
         IsCustom = false;
-        Properties = default;
+        Properties = null!;
 
         TypeHandler = new MatchmakingHandler(this);
         StateManager = new BattleStateManager(this);

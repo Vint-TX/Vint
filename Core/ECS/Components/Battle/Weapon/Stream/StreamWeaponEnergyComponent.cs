@@ -7,6 +7,6 @@ public class StreamWeaponEnergyComponent(
     float reloadEnergyPerSec,
     float unloadEnergyPerSec
 ) : IComponent {
-    public float ReloadEnergyPerSec { get; set; }
-    public float UnloadEnergyPerSec { get; set; }
+    public float ReloadEnergyPerSec { get; set; } = reloadEnergyPerSec;
+    public float UnloadEnergyPerSec { get; set; } = unloadEnergyPerSec;
 }

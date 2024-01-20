@@ -12,5 +12,5 @@ public class ClientSessionTemplate : EntityTemplate {
             builder
                 .AddComponent(new ClientSessionComponent())
                 .AddComponent(new SessionSecurityPublicComponent(new Encryption().PublicKey))
-        /*.AddComponent(new InviteComponent(null, false))*/);
+                .AddComponent(new InviteComponent(null, false)));
 }

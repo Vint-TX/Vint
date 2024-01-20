@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1497614958932)]
 public class UpdateBattleParamsEvent : IServerEvent {
-    public BattleProperties Params { get; private set; }
+    public BattleProperties Params { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;

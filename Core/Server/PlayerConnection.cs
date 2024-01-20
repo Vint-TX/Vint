@@ -49,6 +49,7 @@ public interface IPlayerConnection {
 
     public bool IsOnline { get; }
     public bool InLobby { get; }
+    public Invite? Invite { get; set; }
 
     public List<IEntity> SharedEntities { get; }
     public Dictionary<string, List<IEntity>> UserEntities { get; }
@@ -114,6 +115,7 @@ public class PlayerConnection(
 
     public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
     public bool InLobby => BattlePlayer != null;
+    public Invite? Invite { get; set; }
 
     public void Register(
         string username,
@@ -139,8 +141,13 @@ public class PlayerConnection(
             PasswordHash = passwordHash
         };
 
-        using (DbConnection database = new()) {
-            database.Insert(Player);
+        using (DbConnection db = new()) {
+            db.Insert(Player);
+
+            if (Invite != null) {
+                Invite.RemainingUses--;
+                db.Update(Invite);
+            }
         }
 
         Player.InitializeNew();
