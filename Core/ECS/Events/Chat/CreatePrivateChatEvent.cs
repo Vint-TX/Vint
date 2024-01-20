@@ -22,7 +22,7 @@ public class CreatePrivateChatEvent : IServerEvent {
             .Select(chat => new { Chat = chat, chat.GetComponent<ChatParticipantsComponent>().Users })
             .FirstOrDefault(x => x.Users.Contains(connection.User) &&
                                  x.Users.Contains(targetConnection.User))?.Chat;
-        
+
         if (chat == null) {
             chat = new PersonalChatTemplate().Create(connection.User, targetConnection.User);
             connection.ShareIfUnshared(targetConnection.User);

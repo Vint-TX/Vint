@@ -74,6 +74,8 @@ public interface IPlayerConnection {
 
     public void MountItem(IEntity userItem);
 
+    public void SetUsername(string username);
+
     public void SetCrystals(long crystals);
 
     public void SetXCrystals(long xCrystals);
@@ -508,6 +510,11 @@ public class PlayerConnection(
 
         User.RemoveComponent<UserEquipmentComponent>();
         User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
+    }
+
+    public void SetUsername(string username) {
+        Player.Username = username;
+        User.ChangeComponent<UserUidComponent>(component => component.Username = username);
     }
 
     public void SetCrystals(long crystals) {

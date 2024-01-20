@@ -18,22 +18,17 @@ public class AutoLoginUserEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
-        if (connection.Player.IsBanned) {
-            connection.Send(new AutoLoginFailedEvent());
-            return;
-        }
-        
         ILogger logger = connection.Logger.ForType(GetType());
         logger.Warning("Autologin '{Username}'", Username);
 
         using DbConnection db = new();
         Player? player = db.Players.SingleOrDefault(player => player.Username == Username);
 
-        if (player == null || player.HardwareFingerprint != HardwareFingerprint) {
+        if (player == null || player.IsBanned || player.HardwareFingerprint != HardwareFingerprint) {
             connection.Send(new AutoLoginFailedEvent());
             return;
         }
-        
+
         connection.Player = player;
 
         if (player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
@@ -47,7 +42,7 @@ public class AutoLoginUserEvent : IServerEvent {
                     ((PlayerConnection)oldConnection).Disconnect();
                 }
             }
-            
+
             connection.Login(false, HardwareFingerprint);
         } else connection.Send(new AutoLoginFailedEvent());
     }

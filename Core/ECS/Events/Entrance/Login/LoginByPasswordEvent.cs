@@ -36,7 +36,7 @@ public class LoginByPasswordEvent : IServerEvent {
 
         if (connections.Count > 1) {
             using DbConnection db = new();
-            
+
             foreach (IPlayerConnection oldConnection in connections) {
                 db.Update(oldConnection.Player);
                 ((PlayerConnection)oldConnection).Disconnect();
