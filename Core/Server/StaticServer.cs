@@ -62,6 +62,12 @@ public class StaticServerSession(
                 } else if (requestedEntry.EndsWith("config.tar.gz")) {
                     string locale = urlParts[^2];
 
+                    locale = locale.ToLower() switch {
+                        "ru" => "ru",
+                        "en" => "en",
+                        _ => "en"
+                    };
+                    
                     SendResponseAsync(ConfigManager.TryGetConfig(locale, out byte[]? config)
                                           ? Response.MakeGetResponse(config)
                                           : Response.MakeErrorResponse(404));
