@@ -9,6 +9,7 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.User;
+using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Preset;
@@ -133,7 +134,7 @@ public class PlayerConnection(
             Id = EntityRegistry.FreeId,
             Username = username,
             Email = email,
-            CountryCode = IpUtils.GetCountryCode((Socket.RemoteEndPoint as IPEndPoint)!.Address) ?? "US",
+            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
             HardwareFingerprint = hardwareFingerprint,
             Subscribed = subscribed,
             RegistrationTime = DateTimeOffset.UtcNow,

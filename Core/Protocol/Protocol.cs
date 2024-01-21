@@ -49,14 +49,14 @@ public class Protocol {
         Register(typeof(MoveCommand), new MoveCommandCodec());
         Register(typeof(Movement), new MovementCodec());
 
+        Factories.Add(new OptionalCodecFactory());
+        Factories.Add(new VariedCodecFactory());
         Factories.Add(new ArrayCodecFactory());
         Factories.Add(new ListCodecFactory());
         Factories.Add(new HashSetCodecFactory());
         Factories.Add(new DictionaryCodecFactory());
         Factories.Add(new EnumCodecFactory());
         Factories.Add(new GroupComponentCodecFactory());
-        Factories.Add(new VariedCodecFactory());
-        Factories.Add(new OptionalCodecFactory());
         Factories.Add(new StructCodecFactory());
 
         Assembly.GetExecutingAssembly()

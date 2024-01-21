@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Shot;
 
 [ProtocolId(5440037691022467911)]
 public class SelfShotEvent : ShotEvent, IServerEvent {
-    protected virtual RemoteShotEvent RemoteEvent => new() {
+    [ProtocolIgnore] protected virtual RemoteShotEvent RemoteEvent => new() {
         ShotDirection = ShotDirection,
         ShotId = ShotId,
         ClientTime = ClientTime

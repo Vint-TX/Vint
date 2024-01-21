@@ -6,7 +6,7 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 public class SelfShaftAimingHitEvent : SelfHitEvent {
     public float HitPower { get; set; }
 
-    protected override RemoteShaftAimingHitEvent RemoteEvent => new() {
+    [ProtocolIgnore] protected override RemoteShaftAimingHitEvent RemoteEvent => new() {
         HitPower = HitPower,
         Targets = Targets,
         StaticHit = StaticHit,

@@ -9,6 +9,14 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 public class SelfSplashHitEvent : SelfHitEvent {
     public List<HitTarget>? SplashTargets { get; private set; }
 
+    [ProtocolIgnore] protected override RemoteSplashHitEvent RemoteEvent => new() {
+        SplashTargets = SplashTargets,
+        ClientTime = ClientTime,
+        StaticHit = StaticHit,
+        ShotId = ShotId,
+        Targets = Targets
+    };
+
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
@@ -19,18 +27,10 @@ public class SelfSplashHitEvent : SelfHitEvent {
         IEntity weapon = entities.Single();
         Battles.Battle battle = battlePlayer.Battle;
 
-        RemoteSplashHitEvent serverEvent = new() {
-            Targets = Targets,
-            StaticHit = StaticHit,
-            ShotId = ShotId,
-            ClientTime = ClientTime,
-            SplashTargets = SplashTargets
-        };
-
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
-            playerConnection.Send(serverEvent, weapon);
+            playerConnection.Send(RemoteEvent, weapon);
 
         // todo
     }

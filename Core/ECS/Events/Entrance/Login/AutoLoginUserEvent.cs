@@ -36,7 +36,7 @@ public class AutoLoginUserEvent : IServerEvent {
                 .Where(conn => conn.IsOnline && conn.Player.Id == connection.Player.Id)
                 .ToList();
 
-            if (connections.Count > 1) {
+            if (connections.Count != 0) {
                 foreach (IPlayerConnection oldConnection in connections) {
                     db.Update(oldConnection.Player);
                     ((PlayerConnection)oldConnection).Disconnect();

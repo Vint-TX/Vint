@@ -34,7 +34,7 @@ public class LoginByPasswordEvent : IServerEvent {
             .Where(player => player.IsOnline && player.Player.Id == connection.Player.Id)
             .ToList();
 
-        if (connections.Count > 1) {
+        if (connections.Count != 0) {
             using DbConnection db = new();
 
             foreach (IPlayerConnection oldConnection in connections) {

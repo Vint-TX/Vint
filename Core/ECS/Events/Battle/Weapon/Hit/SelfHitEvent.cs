@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 [ProtocolId(8814758840778124785)]
 public class SelfHitEvent : HitEvent, IServerEvent {
-    protected virtual RemoteHitEvent RemoteEvent => new() {
+    [ProtocolIgnore] protected virtual RemoteHitEvent RemoteEvent => new() {
         Targets = Targets,
         StaticHit = StaticHit,
         ShotId = ShotId,
