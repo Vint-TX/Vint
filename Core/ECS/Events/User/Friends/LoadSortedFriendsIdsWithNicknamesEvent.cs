@@ -15,12 +15,18 @@ public class LoadSortedFriendsIdsWithNicknamesEvent : IServerEvent {
         Dictionary<long, string> friends = db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)
             .LoadWith(relation => relation.TargetPlayer)
+            .Select(relation => new { Id = relation.TargetPlayerId, relation.TargetPlayer.Username })
             .ToArray()
-            .OrderBy(relation => connections.SingleOrDefault(conn => conn.Player.Id == relation.TargetPlayerId) != null)
-            .ThenBy(relation => connections.First(conn => conn.Player.Id == relation.TargetPlayerId).IsOnline)
-            .ThenBy(relation => connections.First(conn => conn.Player.Id == relation.TargetPlayerId).InLobby)
-            .ThenBy(relation => relation.TargetPlayer.Username)
-            .ToDictionary(relation => relation.TargetPlayerId, relation => relation.TargetPlayer.Username);
+            .Select(relation => new { 
+                relation.Id,
+                relation.Username,
+                IsOnline = connections.Where(conn => conn.IsOnline).Any(conn => conn.Player.Id == relation.Id), 
+                InLobby = connections.Where(conn => conn is { IsOnline: true, InLobby: true }).Any(conn => conn.Player.Id == relation.Id)
+            })
+            .OrderByDescending(player => player.IsOnline)
+            .ThenBy(player => player.InLobby)
+            .ThenBy(player => player.Username)
+            .ToDictionary(relation => relation.Id, relation => relation.Username);
 
         connection.Send(new SortedFriendsIdsWithNicknamesLoadedEvent(friends));
     }

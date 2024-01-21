@@ -18,14 +18,11 @@ public class MatchmakingHandler(
     public BattleMode BattleMode { get; } = GetRandomMode();
 
     List<BattlePlayer> WaitingPlayers { get; } = [];
+    List<MapInfo> Maps { get; } = ConfigManager.MapInfos.Values.Where(map => map.MatchMaking).ToList();
 
     public override void Setup() {
-        MapInfo mapInfo = ConfigManager.MapInfos.Values
-            .Where(map => map.MatchMaking)
-            .ToList()
-            .Shuffle()
-            .First();
-
+        MapInfo mapInfo = Maps.Shuffle().First();
+        
         Battle.Properties = new BattleProperties(
             BattleMode,
             GravityType.Earth,

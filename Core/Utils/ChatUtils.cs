@@ -40,8 +40,7 @@ public static class ChatUtils {
         bool isBlocked = !isSystem &&
                          db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == receiver.Player.Id &&
                                                                   relation.TargetPlayerId == sender!.Player.Id &&
-                                                                  (relation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) !=
-                         null;
+                                                                  (relation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) != null;
 
         long userId = isSystem ? 0 : sender!.Player.Id;
         string avatarId = isSystem ? "" : sender!.User.GetComponent<UserAvatarComponent>().Id;

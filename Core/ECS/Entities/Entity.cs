@@ -36,14 +36,8 @@ public class Entity(
 
         lock (SharedPlayers) {
             if (!SharedPlayers.Add(connection)) {
-                Logger.Error(new ArgumentException($"{this} already shared to {connection}"),
-                    "An exception occured while sharing {Entity} to {Connection}\n{StackTrace}",
-                    this,
-                    connection,
-                    new StackTrace());
-
+                Logger.Warning("{Entity} is already shared to {Connection}", this, connection);
                 Debugger.Break();
-                return;
             }
         }
 
@@ -56,14 +50,8 @@ public class Entity(
 
         lock (SharedPlayers) {
             if (!SharedPlayers.Remove(connection)) {
-                Logger.Error(new ArgumentException($"{this} is not shared to {connection}"),
-                    "An exception occured while unsharing {Entity} from {Connection}\n{StackTrace}",
-                    this,
-                    connection,
-                    new StackTrace());
-
+                Logger.Warning("{Entity} is not shared to {Connection}", this, connection);
                 Debugger.Break();
-                return;
             }
         }
 
@@ -181,4 +169,6 @@ public class Entity(
                                          $"Id: {Id}; " +
                                          $"TemplateAccessor: {TemplateAccessor}; " +
                                          $"Components {{ {Components.ToString(false)} }} }}";
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

@@ -358,7 +358,7 @@ public static class GlobalEntities {
         List<IEntity> entities = [];
 
         foreach (string entitiesTypeName in ConfigManager.GlobalEntitiesTypeNames) {
-            List<IEntity> userEntities = GetUserTemplateEntities(connection, entitiesTypeName).ToList();
+            HashSet<IEntity> userEntities = GetUserTemplateEntities(connection, entitiesTypeName).ToHashSet();
 
             connection.UserEntities[entitiesTypeName] = userEntities;
             entities.AddRange(userEntities);

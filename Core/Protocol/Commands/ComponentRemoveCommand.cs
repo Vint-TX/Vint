@@ -16,9 +16,9 @@ public class ComponentRemoveCommand(
     [ProtocolVaried, ProtocolPosition(1)] public Type Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
-        Entity.RemoveComponent(Component, connection);
+        Entity.RemoveComponentIfPresent(Component, connection);
 
-        Logger.Warning("{Connection} removed {Component} in {Entity}", connection, Component.Name, Entity);
+        connection.Logger.ForType(GetType()).Warning("{Connection} removed {Component} in {Entity}", connection, Component.Name, Entity);
     }
 
     public override string ToString() => $"ComponentRemove command {{ Entity: {Entity}, Component: {Component.Name} }}";

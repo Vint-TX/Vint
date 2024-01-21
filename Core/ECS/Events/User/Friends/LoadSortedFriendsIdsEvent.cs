@@ -13,30 +13,34 @@ public class LoadSortedFriendsIdsEvent : IServerEvent {
         using DbConnection db = new();
         IPlayerConnection[] connections = connection.Server.PlayerConnections.ToArray();
 
-        Relation[] relations = db.Relations
+        var relations = db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)
             .LoadWith(relation => relation.TargetPlayer)
+            .Select(relation => new { Id = relation.TargetPlayerId, relation.TargetPlayer.Username, relation.Types })
             .ToArray()
-            .OrderBy(relation => connections.SingleOrDefault(conn => conn.Player.Id == relation.TargetPlayerId) != null)
-            .ThenBy(relation => connections.SingleOrDefault(conn => conn.Player.Id == relation.TargetPlayerId)?.IsOnline)
-            .ThenBy(relation => connections.SingleOrDefault(conn => conn.Player.Id == relation.TargetPlayerId)?.InLobby)
-            .ThenBy(relation => relation.TargetPlayer.Username)
+            .Select(relation => new { 
+                relation.Id,
+                relation.Username, 
+                RelationTypes = relation.Types, 
+                IsOnline = connections.Where(conn => conn.IsOnline).Any(conn => conn.Player.Id == relation.Id), 
+                InLobby = connections.Where(conn => conn is { IsOnline: true, InLobby: true }).Any(conn => conn.Player.Id == relation.Id)
+            })
+            .OrderByDescending(player => player.IsOnline)
+            .ThenByDescending(player => player.InLobby)
+            .ThenBy(player => player.Username)
             .ToArray();
 
         Dictionary<long, string> friends = relations
-            .Where(relation => (relation.Types & RelationTypes.Friend) == RelationTypes.Friend)
-            .ToDictionary(relation => relation.TargetPlayerId,
-                relation => relation.TargetPlayer.Username);
+            .Where(player => (player.RelationTypes & RelationTypes.Friend) == RelationTypes.Friend)
+            .ToDictionary(player => player.Id, player => player.Username);
 
         Dictionary<long, string> incoming = relations
-            .Where(relation => (relation.Types & RelationTypes.IncomingRequest) == RelationTypes.IncomingRequest)
-            .ToDictionary(relation => relation.TargetPlayerId,
-                relation => relation.TargetPlayer.Username);
+            .Where(player => (player.RelationTypes & RelationTypes.IncomingRequest) == RelationTypes.IncomingRequest)
+            .ToDictionary(player => player.Id, player => player.Username);
 
         Dictionary<long, string> outgoing = relations
-            .Where(relation => (relation.Types & RelationTypes.OutgoingRequest) == RelationTypes.OutgoingRequest)
-            .ToDictionary(relation => relation.TargetPlayerId,
-                relation => relation.TargetPlayer.Username);
+            .Where(player => (player.RelationTypes & RelationTypes.OutgoingRequest) == RelationTypes.OutgoingRequest)
+            .ToDictionary(player => player.Id, player => player.Username);
 
         connection.Send(new SortedFriendsIdsLoadedEvent(friends, incoming, outgoing));
     }

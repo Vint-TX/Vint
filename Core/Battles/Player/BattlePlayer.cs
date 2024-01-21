@@ -54,7 +54,6 @@ public class BattlePlayer {
             // todo modules
 
             InBattle = true;
-            PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
 
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
                 player.PlayerConnection.Share(Tank.Entities); // Share this player entities to players in battle

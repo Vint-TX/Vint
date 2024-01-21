@@ -16,7 +16,7 @@ abstract class Program {
     static ILogger Logger { get; set; } = null!;
 
     static Task Main() {
-        LoggerUtils.Initialize(LogEventLevel.Verbose);
+        LoggerUtils.Initialize(LogEventLevel.Information);
 
         Logger = Log.Logger.ForType(typeof(Program));
 

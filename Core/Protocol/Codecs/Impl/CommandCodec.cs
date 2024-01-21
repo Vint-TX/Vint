@@ -22,7 +22,7 @@ public class CommandCodec : Codec {
         CommandCode code = (CommandCode)Protocol.GetCodec(new TypeCodecInfo(typeof(CommandCode))).Decode(buffer);
         Type type = CodeToCommand[code];
 
-        Logger.Debug("Decoding command of type {Type}", code);
+        //Logger.Debug("Decoding command of type {Type}", code);
 
         return (Protocol.GetCodec(new TypeCodecInfo(type)).Decode(buffer) as ICommand)!;
     }

@@ -51,8 +51,8 @@ public interface IPlayerConnection {
     public bool InLobby { get; }
     public Invite? Invite { get; set; }
 
-    public List<IEntity> SharedEntities { get; }
-    public Dictionary<string, List<IEntity>> UserEntities { get; }
+    public HashSet<IEntity> SharedEntities { get; }
+    public Dictionary<string, HashSet<IEntity>> UserEntities { get; }
 
     public void Register(
         string username,
@@ -104,14 +104,14 @@ public class PlayerConnection(
 ) : TcpSession(server), IPlayerConnection {
     public bool IsSocketConnected => IsConnected && !IsDisposed && !IsSocketDisposed;
     public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
-    public Dictionary<string, List<IEntity>> UserEntities { get; } = new();
+    public Dictionary<string, HashSet<IEntity>> UserEntities { get; } = new();
 
     public new GameServer Server { get; } = server;
     public Player Player { get; set; } = null!;
     public BattlePlayer? BattlePlayer { get; set; }
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; private set; } = null!;
-    public List<IEntity> SharedEntities { get; private set; } = [];
+    public HashSet<IEntity> SharedEntities { get; private set; } = [];
 
     public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
     public bool InLobby => BattlePlayer != null;
@@ -271,8 +271,15 @@ public class PlayerConnection(
 
                 db.Insert(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
                 db.Insert(new HullSkin { Player = Player, Id = skinId, HullId = marketItem.Id });
-
-                if (mount) MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
+                
+                if (mount) {
+                    mount = false;
+                    userItem = marketItem.GetUserEntity(this);
+                    userItem.AddComponentIfAbsent(new UserGroupComponent(User));
+                    
+                    MountItem(userItem);
+                    MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
+                }
                 break;
             }
 
@@ -283,8 +290,13 @@ public class PlayerConnection(
                 db.Insert(new Weapon { Player = Player, Id = marketItem.Id, SkinId = skinId, ShellId = shellId });
                 db.Insert(new WeaponSkin { Player = Player, Id = skinId, WeaponId = marketItem.Id });
                 db.Insert(new Shell { Player = Player, Id = shellId, WeaponId = marketItem.Id });
-
+                
                 if (mount) {
+                    mount = false;
+                    userItem = marketItem.GetUserEntity(this);
+                    userItem.AddComponentIfAbsent(new UserGroupComponent(User));
+                    
+                    MountItem(userItem);
                     MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
                     MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId).GetUserEntity(this));
                 }
@@ -354,7 +366,7 @@ public class PlayerConnection(
             userItem.ChangeComponent<UserItemCounterComponent>(component => component.Count += amount);
             Send(new ItemsCountChangedEvent(amount), userItem);
         }
-
+        
         if (mount) MountItem(userItem);
     }
 
