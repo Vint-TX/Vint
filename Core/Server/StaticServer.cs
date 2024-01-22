@@ -28,7 +28,7 @@ public class StaticServerSession(
     ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServerSession));
 
     protected override void OnConnecting() {
-        Logger = Logger.WithPlayer(this);
+        Logger = Logger.WithConnection(this);
         IPAddress = ((IPEndPoint)Socket.LocalEndPoint!).Address.ToString();
     }
 

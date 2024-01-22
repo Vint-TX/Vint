@@ -24,7 +24,9 @@ public class AutoLoginUserEvent : IServerEvent {
         using DbConnection db = new();
         Player? player = db.Players.SingleOrDefault(player => player.Username == Username);
 
-        if (player == null || player.IsBanned || player.HardwareFingerprint != HardwareFingerprint) {
+        Punishment? ban = player?.GetBanInfo();
+
+        if (player == null || ban is { Active: true } || player.HardwareFingerprint != HardwareFingerprint) {
             connection.Send(new AutoLoginFailedEvent());
             return;
         }

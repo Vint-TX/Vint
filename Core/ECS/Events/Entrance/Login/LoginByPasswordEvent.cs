@@ -1,6 +1,9 @@
-﻿using LinqToDB;
+﻿using System.Text;
+using LinqToDB;
 using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.User;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -16,7 +19,10 @@ public class LoginByPasswordEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
-        if (connection.Player.IsBanned) {
+        Punishment? ban = connection.Player.GetBanInfo();
+
+        if (ban is { Active: true }) {
+            connection.Send(new UserBlockedEvent($"You are {ban}"));
             connection.Send(new LoginFailedEvent());
             return;
         }

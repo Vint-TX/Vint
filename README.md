@@ -14,9 +14,7 @@ This is an open-source server for the TankiX game.
 
 1. Install [MariaDB Server](https://mariadb.org/download/?t=mariadb&p=mariadb&r=11.2.2)
 2. Create database and user for the server (see [database.json](/Resources/database.json))
-3. (optionally, for locale detecting) Register on [IPinfo service](https://ipinfo.io/), grab the access token and
-   set `IPINFO_TOKEN` environment variable with this token
-4. Start the server
+3. Start the server
 
 ## Information
 

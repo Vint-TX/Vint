@@ -84,6 +84,8 @@ public interface IPlayerConnection {
 
     public void SetGoldBoxes(int goldBoxes);
 
+    public void Kick(string? reason);
+
     public void Send(ICommand command);
 
     public void Send(IEvent @event);
@@ -159,6 +161,8 @@ public class PlayerConnection(
     public void Login(
         bool saveAutoLoginToken,
         string hardwareFingerprint) {
+        Logger = Logger.WithPlayer(this);
+        
         Player.LastLoginTime = DateTimeOffset.UtcNow;
         Player.HardwareFingerprint = hardwareFingerprint;
 
@@ -179,7 +183,7 @@ public class PlayerConnection(
 
         ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
 
-        Logger.Warning("'{Username}' logged in", Player.Username);
+        Logger.Warning("Logged in");
 
         using DbConnection db = new();
         db.Update(Player);
@@ -269,18 +273,9 @@ public class PlayerConnection(
 
             case TankMarketItemTemplate: {
                 long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
-
-                db.Insert(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
-                db.Insert(new HullSkin { Player = Player, Id = skinId, HullId = marketItem.Id });
                 
-                if (mount) {
-                    mount = false;
-                    userItem = marketItem.GetUserEntity(this);
-                    userItem.AddComponentIfAbsent(new UserGroupComponent(User));
-                    
-                    MountItem(userItem);
-                    MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
-                }
+                db.Insert(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
+                PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId), 1, 0, false, mount);
                 break;
             }
 
@@ -289,19 +284,8 @@ public class PlayerConnection(
                 long shellId = GlobalEntities.DefaultShells[marketItem.Id];
 
                 db.Insert(new Weapon { Player = Player, Id = marketItem.Id, SkinId = skinId, ShellId = shellId });
-                db.Insert(new WeaponSkin { Player = Player, Id = skinId, WeaponId = marketItem.Id });
-                db.Insert(new Shell { Player = Player, Id = shellId, WeaponId = marketItem.Id });
-                
-                if (mount) {
-                    mount = false;
-                    userItem = marketItem.GetUserEntity(this);
-                    userItem.AddComponentIfAbsent(new UserGroupComponent(User));
-                    
-                    MountItem(userItem);
-                    MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId).GetUserEntity(this));
-                    MountItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId).GetUserEntity(this));
-                }
-
+                PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId), 1, 0, false, mount);
+                PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId), 1, 0, false, mount);
                 break;
             }
 
@@ -554,6 +538,11 @@ public class PlayerConnection(
                 component.Count = Player.GoldBoxItems);
     }
 
+    public void Kick(string? reason) {
+        Logger.Warning("Player kicked (reason: '{Reason}')", reason);
+        Disconnect();
+    }
+
     public void Send(ICommand command) {
         try {
             if (!IsSocketConnected) return;
@@ -599,7 +588,7 @@ public class PlayerConnection(
     }
 
     protected override void OnConnecting() =>
-        Logger = Logger.WithPlayer(this);
+        Logger = Logger.WithConnection(this);
 
     protected override void OnConnected() {
         ClientSession = new ClientSessionTemplate().Create();
@@ -666,7 +655,7 @@ public class PlayerConnection(
                 }
             }
         } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception while receiving data");
+            Logger.Error(e, "Socket caught an exception while receiving data ({Hex})", Convert.ToHexString(bytes[..(int)size]));
             Disconnect();
         }
     }

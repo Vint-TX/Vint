@@ -53,8 +53,13 @@ public class UserTemplate : EntityTemplate {
                 if (player.IsAdmin)
                     builder.AddComponent(new UserAdminComponent());
 
-                if (player.IsTester)
+                if (player.IsModerator)
+                    builder.AddComponent(new ModeratorComponent());
+
+                if (player.IsTester) {
                     builder.AddComponent(new ClosedBetaQuestAchievementComponent());
+                    builder.AddComponent(new UserTesterComponent());
+                }
             });
 
         user.AddComponent(new UserGroupComponent(user));

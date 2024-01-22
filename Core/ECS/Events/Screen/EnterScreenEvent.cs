@@ -12,7 +12,6 @@ public class EnterScreenEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
-
-        logger.Information("{Connection} entered screen {Screen}", connection, Screen);
+        logger.Information("Entered screen {Screen}", Screen);
     }
 }

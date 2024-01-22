@@ -8,8 +8,6 @@ namespace Vint.Core.Database.Models;
 
 [Table("Players")]
 public class Player {
-    [NotColumn] public ILogger Logger { get; } = Log.Logger.ForType(typeof(Player));
-
     [PrimaryKey] public long Id { get; init; }
 
     [Column(DataType = DataType.Text)] public string Username { get; set; } = null!;
@@ -26,7 +24,6 @@ public class Player {
     [NotColumn] public bool IsModerator => IsAdmin || (Groups & PlayerGroups.Moderator) == PlayerGroups.Moderator;
     [NotColumn] public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
     [NotColumn] public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
-    [NotColumn] public bool IsBanned => (Groups & PlayerGroups.Banned) == PlayerGroups.Banned;
 
     [Column] public RewardedLeagues RewardedLeagues { get; set; }
 
@@ -103,6 +100,9 @@ public class Player {
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Container.PlayerId))]
     public List<Container> Containers { get; private set; } = null!;
 
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(Punishment.PlayerId))]
+    public List<Punishment> Punishments { get; private set; } = null!;
+
     public void InitializeNew() {
         CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
 
@@ -146,6 +146,146 @@ public class Player {
         if (testers.Contains(Username))
             Groups |= PlayerGroups.Tester;
     }
+    
+    public Punishment Warn(string? reason, TimeSpan? duration) {
+        duration = duration?.Duration();
+
+        using DbConnection db = new();
+
+        Punishment punishment = new() {
+            Player = this,
+            PunishTime = DateTimeOffset.UtcNow,
+            Active = true,
+            Duration = duration,
+            Reason = reason,
+            Type = PunishmentType.Warn
+        };
+        
+        punishment.Id = db.InsertWithInt64Identity(punishment);
+        return punishment;
+    }
+
+    public Punishment Mute(string? reason, TimeSpan? duration) {
+        duration = duration?.Duration();
+        UnMute();
+
+        using DbConnection db = new();
+
+        Punishment punishment = new() {
+            Player = this,
+            PunishTime = DateTimeOffset.UtcNow,
+            Active = true,
+            Duration = duration,
+            Reason = reason,
+            Type = PunishmentType.Mute
+        };
+        
+        punishment.Id = db.InsertWithInt64Identity(punishment);
+        return punishment;
+    }
+
+    public Punishment Ban(string? reason, TimeSpan? duration) {
+        duration = duration?.Duration();
+        UnBan();
+
+        using DbConnection db = new();
+
+        Punishment punishment = new() {
+            Player = this,
+            PunishTime = DateTimeOffset.UtcNow,
+            Active = true,
+            Duration = duration,
+            Reason = reason,
+            Type = PunishmentType.Ban
+        };
+        
+        punishment.Id = db.InsertWithInt64Identity(punishment);
+        return punishment;
+    }
+
+    public void UnWarn(long warnId) {
+        using DbConnection db = new();
+        
+        Punishment? punishment = db.Punishments
+            .Where(punishment => punishment.PlayerId == Id &&
+                                 punishment.Type == PunishmentType.Warn)
+            .SingleOrDefault(punishment => punishment.Id == warnId);
+        
+        if (punishment == null) return;
+
+        punishment.Active = false;
+        db.Update(punishment);
+    }
+
+    public void UnMute() {
+        using DbConnection db = new();
+        
+        Punishment? punishment = db.Punishments
+            .Where(punishment => punishment.PlayerId == Id && 
+                                 punishment.Type == PunishmentType.Mute &&
+                                 punishment.Active)
+            .OrderByDescending(punishment => punishment.PunishTime)
+            .FirstOrDefault();
+        
+        if (punishment == null) return;
+
+        punishment.Active = false;
+        db.Update(punishment);
+    }
+    
+    public void UnBan() {
+        using DbConnection db = new();
+        
+        Punishment? punishment = db.Punishments
+            .Where(punishment => punishment.PlayerId == Id && 
+                                 punishment.Type == PunishmentType.Ban &&
+                                 punishment.Active)
+            .OrderByDescending(punishment => punishment.PunishTime)
+            .FirstOrDefault();
+        
+        if (punishment == null) return;
+
+        punishment.Active = false;
+        db.Update(punishment);
+    }
+
+    public Punishment? GetBanInfo() {
+        RefreshPunishments();
+        
+        using DbConnection db = new();
+        return db.Punishments
+            .Where(punishment => punishment.PlayerId == Id && 
+                                 punishment.Type == PunishmentType.Ban &&
+                                 punishment.Active)
+            .OrderByDescending(punishment => punishment.PunishTime)
+            .FirstOrDefault();
+    }
+
+    public Punishment? GetMuteInfo() {
+        RefreshPunishments();
+        
+        using DbConnection db = new();
+        return db.Punishments
+            .Where(punishment => punishment.PlayerId == Id && 
+                                 punishment.Type == PunishmentType.Mute &&
+                                 punishment.Active)
+            .OrderByDescending(punishment => punishment.PunishTime)
+            .FirstOrDefault();
+    }
+
+    void RefreshPunishments() {
+        using DbConnection db = new();
+        db.BeginTransaction();
+        
+        foreach (Punishment punishment in db.Punishments
+                     .Where(punishment => punishment.PlayerId == Id && 
+                                          punishment.PunishTime + punishment.Duration <= DateTimeOffset.UtcNow)) {
+            punishment.Active = false;
+            db.Update(punishment);
+        }
+        
+        db.CommitTransaction();
+    }
 }
 
 [Flags]
@@ -154,8 +294,7 @@ public enum PlayerGroups {
     Admin = 1,
     Moderator = 2,
     Tester = 4,
-    Premium = 8,
-    Banned = 16
+    Premium = 8
 }
 
 [Flags]

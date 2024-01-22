@@ -22,7 +22,7 @@ public abstract class WeaponHandler {
         OriginalWeaponRotationComponent = (WeaponRotationComponent)((IComponent)BattleTank.Weapon.GetComponent<WeaponRotationComponent>()).Clone();
     }
 
-    WeaponRotationComponent OriginalWeaponRotationComponent { get; }
+    protected WeaponRotationComponent OriginalWeaponRotationComponent { get; }
     public BattleTank BattleTank { get; }
     public IEntity BattleEntity { get; }
     public IEntity MarketEntity { get; }

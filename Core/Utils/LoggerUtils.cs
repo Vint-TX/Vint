@@ -5,6 +5,8 @@ using Serilog.Core;
 using Serilog.Events;
 using Serilog.Templates;
 using Serilog.Templates.Themes;
+using Vint.Core.Database.Models;
+using Vint.Core.Server;
 
 namespace Vint.Core.Utils;
 
@@ -32,7 +34,7 @@ public static class LoggerUtils {
 
     public static void Initialize(LogEventLevel logEventLevel) {
         const string template =
-            "[{@t:HH:mm:ss.fff}] [{@l}] [{SourceContext}] {#if SessionEndpoint is not null}[{SessionEndpoint}] {#end}{@m:lj}\n{@x}";
+            "[{@t:HH:mm:ss.fff}] [{@l}] [{SourceContext}] {#if SessionEndpoint is not null}[{SessionEndpoint}] {#end}{#if Username is not null}[{Username}] {#end}{@m:lj}\n{@x}";
 
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -52,6 +54,10 @@ public static class LoggerUtils {
     public static ILogger ForType(this ILogger logger, Type type) =>
         logger.ForContext(Constants.SourceContextPropertyName, type.Name);
 
-    public static ILogger WithPlayer(this ILogger logger, TcpSession session) =>
+    public static ILogger WithConnection(this ILogger logger, TcpSession session) =>
         logger.ForContext("SessionEndpoint", session.Socket.RemoteEndPoint as IPEndPoint);
+    
+    // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+    public static ILogger WithPlayer(this ILogger logger, PlayerConnection player) =>
+        logger.WithConnection(player).ForContext("Username", player.Player?.Username);
 }

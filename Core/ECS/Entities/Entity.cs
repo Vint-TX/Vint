@@ -59,12 +59,14 @@ public class Entity(
         connection.Send(ToUnshareCommand());
     }
 
-    public T GetComponent<T>() where T : class, IComponent {
-        lock (TypeToComponent) {
-            if (TypeToComponent.TryGetValue(typeof(T), out IComponent? component))
-                return (component as T)!;
+    public T GetComponent<T>() where T : class, IComponent => (T)GetComponent(typeof(T));
 
-            throw new ArgumentException($"{this} does not have component {typeof(T)}");
+    public IComponent GetComponent(Type type) {
+        lock (TypeToComponent) {
+            if (TypeToComponent.TryGetValue(type, out IComponent? component))
+                return component;
+
+            throw new ArgumentException($"{this} does not have component {type}");
         }
     }
 

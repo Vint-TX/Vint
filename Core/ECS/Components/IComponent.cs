@@ -11,6 +11,8 @@ public interface IComponent {
     public void Added(IPlayerConnection connection, IEntity entity) { }
 
     public void Changed(IPlayerConnection connection, IEntity entity) { }
+    
+    public void Removed(IPlayerConnection connection, IEntity entity) { }
 
     public IComponent Clone() {
         Type type = GetType();

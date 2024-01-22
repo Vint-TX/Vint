@@ -4,7 +4,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.User;
+namespace Vint.Core.ECS.Templates.Notification;
 
 [ProtocolId(1475750208936)]
 public class UsernameChangedNotificationTemplate : EntityTemplate {

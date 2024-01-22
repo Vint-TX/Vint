@@ -16,10 +16,10 @@ public class ComponentAddCommand(
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
-        Entity.AddComponentIfAbsent(Component, connection);
+        Entity.AddComponent(Component, connection);
         Component.Added(connection, Entity);
 
-        connection.Logger.ForType(GetType()).Warning("{Connection} added {Component} to {Entity}", connection, Component.GetType().Name, Entity);
+        connection.Logger.ForType(GetType()).Warning("Added {Component} to {Entity}", Component.GetType().Name, Entity);
     }
 
     public override string ToString() =>

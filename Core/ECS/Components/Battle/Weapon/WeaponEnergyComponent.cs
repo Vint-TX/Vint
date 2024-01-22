@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Weapon;
 public class WeaponEnergyComponent(
     float energy
 ) : IComponent {
-    public float Energy { get; private set; } = energy;
+    public float Energy { get; set; } = energy;
 }

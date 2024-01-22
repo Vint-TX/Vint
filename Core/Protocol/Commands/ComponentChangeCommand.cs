@@ -19,7 +19,7 @@ public class ComponentChangeCommand(
         Entity.ChangeComponent(Component, connection);
         Component.Changed(connection, Entity);
 
-        connection.Logger.ForType(GetType()).Warning("{Connection} changed {Component} in {Entity}", connection, Component.GetType().Name, Entity);
+        connection.Logger.ForType(GetType()).Warning("Changed {Component} in {Entity}", Component.GetType().Name, Entity);
     }
 
     public override string ToString() =>

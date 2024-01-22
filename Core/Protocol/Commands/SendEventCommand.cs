@@ -20,7 +20,7 @@ public class SendEventCommand(
         ILogger logger = connection.Logger.ForType(GetType());
         
         if (Event is not IServerEvent serverEvent) {
-            logger.Warning("Event {Event} is not IServerEvent", Event);
+            logger.Warning("Event {Event} is not IServerEvent", Event.GetType().Name);
             return;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Serilog;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -12,13 +13,15 @@ public class ComponentRemoveCommand(
     IEntity entity,
     Type component
 ) : EntityCommand(entity) {
-    [ProtocolIgnore] static ILogger Logger { get; } = Log.Logger.ForType(typeof(ComponentRemoveCommand));
     [ProtocolVaried, ProtocolPosition(1)] public Type Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
-        Entity.RemoveComponentIfPresent(Component, connection);
+        IComponent component = Entity.GetComponent(Component);
 
-        connection.Logger.ForType(GetType()).Warning("{Connection} removed {Component} in {Entity}", connection, Component.Name, Entity);
+        component.Removed(connection, Entity);
+        Entity.RemoveComponent(Component, connection);
+
+        connection.Logger.ForType(GetType()).Warning("Removed {Component} in {Entity}", Component.Name, Entity);
     }
 
     public override string ToString() => $"ComponentRemove command {{ Entity: {Entity}, Component: {Component.Name} }}";

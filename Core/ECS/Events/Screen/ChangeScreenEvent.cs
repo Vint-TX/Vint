@@ -15,10 +15,8 @@ public class ChangeScreenEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Information("{Connection} changing screen {Current} to {Next} in {Duration}",
-            connection,
+        logger.Information("Changed screen {Current} to {Next}",
             CurrentScreen,
-            NextScreen,
-            Duration);
+            NextScreen);
     }
 }

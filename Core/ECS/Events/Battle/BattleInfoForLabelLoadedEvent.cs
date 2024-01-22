@@ -2,7 +2,7 @@ using Vint.Core.Battles;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events;
+namespace Vint.Core.ECS.Events.Battle;
 
 [ProtocolId(635890736905417870)]
 public class BattleInfoForLabelLoadedEvent(

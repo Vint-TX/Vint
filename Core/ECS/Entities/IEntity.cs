@@ -32,6 +32,8 @@ public interface IEntity {
 
     public T GetComponent<T>() where T : class, IComponent;
 
+    public IComponent GetComponent(Type type);
+
     public void ChangeComponent<T>(Action<T> action) where T : class, IComponent;
 
     public void ChangeComponent(IComponent component, IPlayerConnection? excluded = null);

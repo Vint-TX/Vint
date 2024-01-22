@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Vint.Core.Config;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
@@ -18,6 +19,14 @@ public class SendChatMessageEvent : IServerEvent {
 
     public void Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
         IEntity chat = entities.Single();
+
+        Punishment? mute = sender.Player.GetMuteInfo();
+
+        if (mute is { Active: true }) {
+            ChatUtils.SendMessage($"You have been {mute}", chat, [sender], null);
+            return;
+        }
+        
         TemplateAccessor chatTemplateAccessor = chat.TemplateAccessor!;
         Message = Message.Trim();
 
