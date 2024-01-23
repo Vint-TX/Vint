@@ -18,14 +18,14 @@ public class Punishment {
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
     [PrimaryKey(1), Identity] public long Id { get; set; }
-    
+
     [Column] public PunishmentType Type { get; init; }
     [Column] public DateTimeOffset PunishTime { get; init; }
     [Column] public TimeSpan? Duration { get; init; }
-    
+
     [Column] public string? Reason { get; init; }
     [Column] public bool Active { get; set; }
-    
+
     [NotColumn] public bool Permanent => Duration == null;
     [NotColumn] public DateTimeOffset? EndTime => PunishTime + Duration;
 
@@ -49,7 +49,7 @@ public class Punishment {
             builder.Append(" until ");
             builder.Append(EndTime);
         }
-        
+
         return builder.ToString();
     }
 }

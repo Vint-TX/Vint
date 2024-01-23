@@ -18,7 +18,7 @@ public class SendEventCommand(
 
     public void Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
-        
+
         if (Event is not IServerEvent serverEvent) {
             logger.Warning("Event {Event} is not IServerEvent", Event.GetType().Name);
             return;

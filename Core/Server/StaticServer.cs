@@ -67,7 +67,7 @@ public class StaticServerSession(
                         "en" => "en",
                         _ => "en"
                     };
-                    
+
                     SendResponseAsync(ConfigManager.TryGetConfig(locale, out byte[]? config)
                                           ? Response.MakeGetResponse(config)
                                           : Response.MakeErrorResponse(404));

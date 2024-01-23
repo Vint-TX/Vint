@@ -18,6 +18,6 @@ public class Module {
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 
-    public int Level { get; set; }
-    public int Cards { get; set; }
+    [Column] public int Level { get; set; }
+    [Column] public int Cards { get; set; }
 }

@@ -12,13 +12,13 @@ public class UnloadUsersEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.InLobby)
             UserIds.ExceptWith(connection.BattlePlayer!.Battle.Players.Select(battlePlayer => battlePlayer.PlayerConnection.User.Id));
-        
+
         IEnumerable<IEntity> users = UserIds
             .Select(id => connection.SharedEntities.SingleOrDefault(entity => entity.Id == id) ??
                           EntityRegistry.GetOrDefault(id)!)
             .Where(user => user != null!)
             .ToList();
-        
+
         connection.Unshare(users);
     }
 }

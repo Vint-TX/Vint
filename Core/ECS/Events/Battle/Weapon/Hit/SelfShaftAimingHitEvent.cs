@@ -19,8 +19,9 @@ public class SelfShaftAimingHitEvent : SelfHitEvent {
 
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         base.Execute(connection, entities);
-        
+
         if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft) return;
+
         shaft.Reset();
     }
 }

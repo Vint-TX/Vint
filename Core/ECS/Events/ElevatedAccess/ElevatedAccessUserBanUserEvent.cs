@@ -10,55 +10,44 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 [ProtocolId(1503470104769)]
 public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent {
     public string Type { get; private set; } = null!;
-    
+
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
-        
+
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections
             .ToArray()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);
-        
+
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
         List<IPlayerConnection>? notifiedConnections = null;
-        
+
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
                 Battles.Battle battle = targetConnection.BattlePlayer!.Battle;
-                
-                if (targetConnection.BattlePlayer.InBattleAsTank) {
-                    notifyChat = battle.BattleChatEntity;
-                    notifiedConnections = battle.Players
-                        .Where(battlePlayer => battlePlayer.InBattle)
-                        .Select(battlePlayer => battlePlayer.PlayerConnection)
-                        .ToList();
-                } else {
-                    notifyChat = battle.LobbyChatEntity;
-                    notifiedConnections = battle.Players
-                        .Where(battlePlayer => !battlePlayer.InBattle)
-                        .Select(battlePlayer => battlePlayer.PlayerConnection)
-                        .ToList();
-                }
+
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
+                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
             using DbConnection db = new();
             targetPlayer = db.Players.SingleOrDefault(player => player.Username == Username);
         }
-        
+
         if (targetPlayer == null) {
             ChatUtils.SendMessage("Player not found", GlobalChat, [connection], null);
             return;
-        } 
-            
+        }
+
         if (targetPlayer.IsAdmin) {
             ChatUtils.SendMessage($"Player {Username} is admin", GlobalChat, [connection], null);
             return;
         }
-        
+
         Punishment? punishment = null;
         string? punishMessage = null;
-        
+
         switch (Type.ToLower()) {
             case "warn": {
                 punishment = targetPlayer.Warn(Reason, null);
@@ -77,6 +66,7 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
                     targetConnection.Kick(Reason);
                     punishMessage = $"{targetPlayer.Username} was kicked for '{Reason}'";
                 }
+
                 break;
             }
 
@@ -86,16 +76,18 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
             }
         }
 
-        if (punishment != null)
+        if (punishment != null) {
+            ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", GlobalChat, [connection], null);
             punishMessage ??= $"{Username} was {punishment}";
+        }
 
         if (punishMessage == null) return;
-        
+
         if (notifyChat == null || notifiedConnections == null) {
             notifyChat = GlobalChat;
             notifiedConnections = connection.Server.PlayerConnections.ToList();
         }
-        
+
         ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
     }
 }

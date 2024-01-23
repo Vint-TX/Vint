@@ -14,7 +14,7 @@ public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
-        
+
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections
             .ToArray()
             .Where(conn => conn.IsOnline)
@@ -31,7 +31,7 @@ public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
             ChatUtils.SendMessage("Player not found", GlobalChat, [connection], null);
             return;
         }
-        
+
         targetPlayer.UnMute();
         ChatUtils.SendMessage($"'{Username}' unmuted", GlobalChat, [connection], null);
     }

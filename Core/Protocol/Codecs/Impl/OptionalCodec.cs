@@ -30,6 +30,6 @@ public class OptionalCodec : Codec {
     }
 
     public override object Decode(ProtocolBuffer buffer) => buffer.OptionalMap.Get()
-                                                                 ? null!
-                                                                 : Codec.Decode(buffer);
+                                                                ? null!
+                                                                : Codec.Decode(buffer);
 }

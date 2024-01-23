@@ -19,11 +19,13 @@ public class ShaftAimingWorkingStateComponent : IComponent { // todo
 
     public void Added(IPlayerConnection connection, IEntity entity) {
         if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft) return;
+
         shaft.Aim();
     }
 
     public void Removed(IPlayerConnection connection, IEntity entity) {
         if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft) return;
+
         shaft.Idle();
     }
 }

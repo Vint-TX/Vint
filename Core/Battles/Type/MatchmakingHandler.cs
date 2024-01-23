@@ -22,7 +22,7 @@ public class MatchmakingHandler(
 
     public override void Setup() {
         MapInfo mapInfo = Maps.Shuffle().First();
-        
+
         Battle.Properties = new BattleProperties(
             BattleMode,
             GravityType.Earth,

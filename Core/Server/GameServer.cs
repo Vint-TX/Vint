@@ -36,7 +36,7 @@ public class GameServer(
         new Thread(() => MatchmakingProcessor.StartTicking()) { Name = "Matchmaking ticker" }.Start();
         new Thread(() => BattleProcessor.StartTicking()) { Name = "Battle ticker" }.Start();
         new Thread(PingLoop) { Name = "Ping loop" }.Start();
-        
+
         ChatCommandProcessor.RegisterCommands();
     }
 

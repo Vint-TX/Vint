@@ -11,7 +11,7 @@ public sealed class ChatCommandAttribute(
     public string Description { get; } = description;
 
     public override string ToString() {
-        StringBuilder builder = new("/");
+        StringBuilder builder = new("!");
 
         builder.Append(Name);
 
@@ -19,7 +19,7 @@ public sealed class ChatCommandAttribute(
 
         builder.Append(": ");
         builder.Append(Description);
-            
+
         if (!Description.EndsWith('.')) builder.Append('.');
 
         return builder.ToString();

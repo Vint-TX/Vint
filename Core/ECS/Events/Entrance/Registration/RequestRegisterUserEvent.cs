@@ -6,9 +6,9 @@ using Vint.Core.Server;
 namespace Vint.Core.ECS.Events.Entrance.Registration;
 
 [ProtocolId(1438590245672)]
-public class RequestRegisterUserEvent : IServerEvent { 
+public class RequestRegisterUserEvent : IServerEvent {
     const int MaxRegistrationsFromOneComputer = 2;
-    
+
     [ProtocolName("uid")] public string Username { get; private set; } = null!;
     public string EncryptedPasswordDigest { get; private set; } = null!;
     public string Email { get; private set; } = null!;
@@ -19,7 +19,7 @@ public class RequestRegisterUserEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         using (DbConnection database = new()) {
-            if (database.Players.Any(player => player.Username == Username) || 
+            if (database.Players.Any(player => player.Username == Username) ||
                 database.Players.Count(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
                 connection.Send(new RegistrationFailedEvent());
                 return;

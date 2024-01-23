@@ -8,9 +8,10 @@ namespace Vint.Core.ECS.Templates.Notification;
 
 [ProtocolId(1481176055388)]
 public class NewItemNotificationTemplate : EntityTemplate {
-    public IEntity Create(IEntity user, IEntity item, int amount) => Entity("notification/newitem", builder =>
-        builder
-            .AddComponent(new NewItemNotificationComponent(item, amount))
-            .AddComponent(new NotificationComponent(NotificationPriority.Message))
-            .AddComponent(new NotificationGroupComponent(user)));
+    public IEntity Create(IEntity user, IEntity item, int amount) => Entity("notification/newitem",
+        builder =>
+            builder
+                .AddComponent(new NewItemNotificationComponent(item, amount))
+                .AddComponent(new NotificationComponent(NotificationPriority.Message))
+                .AddComponent(new NotificationGroupComponent(user)));
 }

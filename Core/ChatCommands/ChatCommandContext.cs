@@ -14,6 +14,9 @@ public sealed class ChatCommandContext(
     public IEntity Chat { get; } = chat;
     public ChatCommandAttribute CommandInfo { get; } = commandInfo;
 
-    public void SendResponse(string response) => 
+    public void SendPrivateResponse(string response) =>
         ChatUtils.SendMessage(response, Chat, [Connection], null);
+
+    public void SendPublicResponse(string response) =>
+        ChatUtils.SendMessage(response, Chat, ChatUtils.GetReceivers(Connection, Chat), null);
 }

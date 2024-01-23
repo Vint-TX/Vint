@@ -18,7 +18,7 @@ public class ShaftWeaponHandler(
     public void Idle() {
         AimingDuration = DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow);
         float energy = (float)Math.Clamp(0.9 - AimingDuration.TotalMilliseconds * 0.0002, 0, 1);
-        
+
         BattleEntity.ChangeComponent<WeaponEnergyComponent>(component => component.Energy = energy);
         BattleEntity.ChangeComponent(((IComponent)OriginalWeaponRotationComponent).Clone());
     }

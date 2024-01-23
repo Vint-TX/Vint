@@ -16,7 +16,7 @@ public class LoadUsersEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.InLobby)
             UsersId.ExceptWith(connection.BattlePlayer!.Battle.Players.Select(battlePlayer => battlePlayer.PlayerConnection.User.Id));
-        
+
         HashSet<IEntity> users = [];
 
         foreach (IEntity user in UsersId
@@ -27,11 +27,11 @@ public class LoadUsersEvent : IServerEvent {
             connection.Unshare(user);
             UsersId.Remove(user.Id);
         }
-        
+
         IPlayerConnection[] playerConnections = connection.Server.PlayerConnections
             .Where(conn => conn.IsOnline)
             .ToArray();
-        
+
         using DbConnection db = new();
 
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -39,9 +39,9 @@ public class LoadUsersEvent : IServerEvent {
             Player? player = db.Players.SingleOrDefault(player => player.Id == userId);
             if (player == null) continue;
 
-            IEntity user = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)?.User ?? 
+            IEntity user = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)?.User ??
                            new UserTemplate().CreateFake(connection, player);
-            
+
             users.Add(user);
         }
 

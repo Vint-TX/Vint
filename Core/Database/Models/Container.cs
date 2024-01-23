@@ -18,5 +18,5 @@ public class Container {
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 
-    public long Count { get; set; }
+    [Column] public long Count { get; set; }
 }

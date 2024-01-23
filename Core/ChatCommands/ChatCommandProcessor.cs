@@ -7,10 +7,10 @@ namespace Vint.Core.ChatCommands;
 
 public static class ChatCommandProcessor {
     public static IReadOnlyList<ChatCommand> Commands { get; private set; } = null!;
-    
+
     public static void RegisterCommands() {
         List<ChatCommand> chatCommands = [];
-        
+
         Type[] commandModules = Assembly
             .GetExecutingAssembly()
             .GetTypes()
@@ -20,7 +20,8 @@ public static class ChatCommandProcessor {
         // ReSharper disable LoopCanBeConvertedToQuery
         foreach (Type commandModule in commandModules) {
             ChatCommandModule chatCommandModule = (ChatCommandModule)Activator.CreateInstance(commandModule)!;
-            
+            ChatCommandGroupAttribute? chatCommandGroupAttribute = commandModule.GetCustomAttribute<ChatCommandGroupAttribute>();
+
             MethodInfo[] commands = commandModule
                 .GetMethods()
                 .Where(method => method.GetCustomAttribute<ChatCommandAttribute>() != null)
@@ -28,26 +29,38 @@ public static class ChatCommandProcessor {
 
             foreach (MethodInfo command in commands) {
                 ChatCommandAttribute chatCommandAttribute = command.GetCustomAttribute<ChatCommandAttribute>()!;
-                
-                IReadOnlyDictionary<string, OptionAttribute> parameters = command
+
+                IReadOnlyDictionary<string, OptionAttribute> options = command
                     .GetParameters()
                     .Where(parameter => parameter.GetCustomAttribute<OptionAttribute>() != null)
                     .ToDictionary(parameter => parameter.Name!, parameter => parameter.GetCustomAttribute<OptionAttribute>()!)
                     .AsReadOnly();
 
-                if (parameters.Count < command.GetParameters().Length - 1) continue;
-                
-                ChatCommand chatCommand = new(command.Name, chatCommandAttribute, chatCommandModule, parameters, command);
+                ParameterInfo[] parameters = command
+                    .GetParameters()
+                    .Skip(1) // Context
+                    .ToArray();
+
+                if (options.Count < command.GetParameters().Length - 1) continue;
+
+                ChatCommand chatCommand = new(command.Name,
+                    chatCommandAttribute,
+                    chatCommandGroupAttribute,
+                    chatCommandModule,
+                    options,
+                    command,
+                    parameters);
+
                 chatCommands.Add(chatCommand);
             }
-        } 
+        }
         // ReSharper restore LoopCanBeConvertedToQuery
 
         Commands = chatCommands.AsReadOnly();
     }
 
     public static bool TryParseCommand(string value, out ChatCommand? chatCommand) {
-        if (!value.StartsWith('/')) {
+        if (!value.StartsWith('!')) {
             chatCommand = null;
             return false;
         }
@@ -61,44 +74,73 @@ public static class ChatCommandProcessor {
     public static void Execute(IPlayerConnection connection, IEntity chat, string rawCommand, ChatCommand command) {
         ChatCommandContext context = new(connection, chat, command.Info);
         bool shouldExecute = command.Module.BeforeCommandExecution(context);
-        
+
         if (!shouldExecute) return;
 
         foreach (BaseCheckAttribute checkAttribute in command.Method.GetCustomAttributes<BaseCheckAttribute>()) {
             if (checkAttribute.Check(context)) continue;
 
-            context.SendResponse(checkAttribute.CheckFailedMessage);
+            context.SendPrivateResponse(checkAttribute.CheckFailedMessage);
             return;
         }
-        
-        string[] rawParameterValues = rawCommand[1..].Split();
-        ParameterInfo[] parameterInfos = command.Method.GetParameters();
-        List<object?> parameters = [context];
 
-        if (rawParameterValues.Length > parameterInfos.Length) {
-            context.SendResponse($"Too much parameters. Expected: {parameterInfos.Length - 1}, got: {rawParameterValues.Length - 1}");
+        if (command.Method.GetCustomAttribute<RequirePermissionsAttribute>() == null &&
+            command.ChatCommandGroupAttribute != null &&
+            (context.Connection.Player.Groups & command.ChatCommandGroupAttribute.Permissions) != command.ChatCommandGroupAttribute.Permissions) {
+            context.SendPrivateResponse("Not enough permissions to execute command");
             return;
         }
-        
-        for (int i = 1; i < parameterInfos.Length; i++) {
-            ParameterInfo parameterInfo = parameterInfos[i];
+
+        List<object?> parameters = [context];
+        string[] rawParameterValues = rawCommand
+            .Split()
+            .Skip(1) // Command name
+            .ToArray();
+
+        if (rawParameterValues.Length > command.Parameters.Length &&
+            command.Parameters.All(param => param.GetCustomAttribute<WaitingForTextAttribute>() == null)) {
+            context.SendPrivateResponse($"Too much parameters. Expected: {command.Parameters.Length}, got: {rawParameterValues.Length}");
+            return;
+        }
+
+        for (int i = 0; i < command.Parameters.Length; i++) {
+            ParameterInfo parameterInfo = command.Parameters[i];
             string? rawParameterValue = rawParameterValues.ElementAtOrDefault(i);
 
             if (rawParameterValue == null) {
                 if (!parameterInfo.IsOptional) {
-                    OptionAttribute optionAttribute = command.Parameters[parameterInfo.Name!];
-                    context.SendResponse($"Parameter {optionAttribute.Name} not found");
+                    OptionAttribute optionAttribute = command.Options[parameterInfo.Name!];
+                    context.SendPrivateResponse($"Parameter '{optionAttribute.Name}' not found");
                     return;
-                } 
-                
+                }
+
                 parameters.Add(parameterInfo.DefaultValue);
-                continue; 
+                continue;
             }
-            
-            parameters.Add(Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType));
+
+            if (parameterInfo.GetCustomAttribute<WaitingForTextAttribute>() != null) {
+                rawParameterValue = string.Join(' ', rawParameterValues.Skip(i - 1));
+                i = command.Parameters.Length;
+            }
+
+            try {
+                parameters.Add(Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType));
+            } catch (FormatException) {
+                context.SendPrivateResponse(
+                    $"Unexpected '{command.Options[parameterInfo.Name!]}' parameter type. Expected: {parameterInfo.ParameterType.Name}");
+                return;
+            }
         }
 
-        command.Method.Invoke(command.Module, parameters.ToArray());
-        command.Module.AfterCommandExecution(context);
+        try {
+            command.Method.Invoke(command.Module, parameters.ToArray());
+            command.Module.AfterCommandExecution(context);
+        } catch (TargetParameterCountException) {
+            context.SendPrivateResponse($"Too few parameters. Expected: {command.Parameters.Length}, got: {parameters.Count - 1}");
+        } catch (TargetInvocationException invocationException) {
+            if (invocationException.InnerException is NotImplementedException)
+                context.SendPrivateResponse($"Handler for '{command.Info.Name}' command is not implemented yet");
+            else throw;
+        }
     }
 }

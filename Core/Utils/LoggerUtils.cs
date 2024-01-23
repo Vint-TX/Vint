@@ -55,7 +55,7 @@ public static class LoggerUtils {
 
     public static ILogger WithConnection(this ILogger logger, TcpSession session) =>
         logger.ForContext("SessionEndpoint", session.Socket.RemoteEndPoint as IPEndPoint);
-    
+
     // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
     public static ILogger WithPlayer(this ILogger logger, PlayerConnection player) =>
         logger.WithConnection(player).ForContext("Username", player.Player?.Username);

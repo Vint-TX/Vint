@@ -10,7 +10,7 @@
     <ItemGroup>
         <PackageReference Include="linq2db" Version="5.3.2"/>
         <PackageReference Include="linq2db.MySqlConnector" Version="5.3.2"/>
-        <PackageReference Include="NetCoreServer" Version="8.0.7" />
+        <PackageReference Include="NetCoreServer" Version="8.0.7"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
         <PackageReference Include="Serilog" Version="3.1.2-dev-02097"/>
         <PackageReference Include="Serilog.Expressions" Version="4.0.0"/>

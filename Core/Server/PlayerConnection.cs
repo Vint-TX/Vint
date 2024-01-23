@@ -161,7 +161,7 @@ public class PlayerConnection(
         bool saveAutoLoginToken,
         string hardwareFingerprint) {
         Logger = Logger.WithPlayer(this);
-        
+
         Player.LastLoginTime = DateTimeOffset.UtcNow;
         Player.HardwareFingerprint = hardwareFingerprint;
 
@@ -272,7 +272,7 @@ public class PlayerConnection(
 
             case TankMarketItemTemplate: {
                 long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
-                
+
                 db.Insert(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
                 PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId), 1, 0, false, mount);
                 break;
@@ -350,7 +350,7 @@ public class PlayerConnection(
             userItem.ChangeComponent<UserItemCounterComponent>(component => component.Count += amount);
             Send(new ItemsCountChangedEvent(amount), userItem);
         }
-        
+
         if (mount) MountItem(userItem);
     }
 

@@ -2,11 +2,8 @@
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates;
-using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -24,55 +21,33 @@ public class SendChatMessageEvent : IServerEvent {
         if (ChatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
             if (chatCommand == null)
                 ChatUtils.SendMessage("Unknown command", chat, [sender], null);
-            else 
+            else
                 ChatCommandProcessor.Execute(sender, chat, Message, chatCommand);
-            
+
             return;
         }
-        
+
         Punishment? mute = sender.Player.GetMuteInfo();
 
         if (mute is { Active: true }) {
             ChatUtils.SendMessage($"You have been {mute}", chat, [sender], null);
             return;
         }
-        
-        TemplateAccessor chatTemplateAccessor = chat.TemplateAccessor!;
+
         Message = Message.Trim();
 
-        if (!Validate(chatTemplateAccessor.ConfigPath!)) return;
+        if (!Validate(chat.TemplateAccessor!.ConfigPath!, Message)) {
+            sender.Logger.ForType(GetType()).Warning("Message failed validation: '{Message}'", Message);
+            return;
+        }
 
-        IEnumerable<IPlayerConnection> receivers = chatTemplateAccessor.Template switch { // todo
-            GeneralChatTemplate => sender.Server.PlayerConnections,
-
-            BattleLobbyChatTemplate => sender.BattlePlayer!.Battle.Players
-                .Select(battlePlayer => battlePlayer.PlayerConnection),
-
-            GeneralBattleChatTemplate => sender.BattlePlayer!.Battle.Players
-                .Where(battlePlayer => battlePlayer.InBattle)
-                .Select(battlePlayer => battlePlayer.PlayerConnection),
-
-            PersonalChatTemplate => chat.GetComponent<ChatParticipantsComponent>().Users
-                .Select(user => {
-                    IPlayerConnection? connection = sender.Server.PlayerConnections
-                        .Where(conn => conn.IsOnline)
-                        .SingleOrDefault(conn => conn.User.Id == user.Id);
-
-                    connection?.ShareIfUnshared(chat, sender.User);
-                    return connection!;
-                })
-                .Where(conn => conn != null!),
-
-            _ => []
-        };
-
-        ChatUtils.SendMessage(Message, chat, receivers, sender);
+        ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(sender, chat), sender);
     }
 
-    bool Validate(string chatConfigPath) { // todo
+    static bool Validate(string chatConfigPath, string message) { // todo
         ChatConfigComponent chatConfig = GetChatConfig(chatConfigPath);
 
-        return Message.Length > 0 && Message.Length <= chatConfig.MaxMessageLength;
+        return message.Length > 0 && message.Length <= chatConfig.MaxMessageLength;
     }
 
     [SuppressMessage("ReSharper", "InvertIf")]

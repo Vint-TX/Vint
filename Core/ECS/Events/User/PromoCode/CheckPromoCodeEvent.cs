@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.User.PromoCode;
 [ProtocolId(1490931976968)]
 public class CheckPromoCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
-    
+
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         string[] parts = Code.Split('/');
 
@@ -24,7 +24,7 @@ public class CheckPromoCodeEvent : IServerEvent {
         try {
             IEntity item = GlobalEntities.GetEntity(parts[0], parts[1]);
 
-            if (item.TemplateAccessor?.Template is not MarketEntityTemplate || 
+            if (item.TemplateAccessor?.Template is not MarketEntityTemplate ||
                 item.GetUserEntity(connection).HasComponent<UserGroupComponent>()) {
                 connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
                 return;
@@ -33,7 +33,7 @@ public class CheckPromoCodeEvent : IServerEvent {
             connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
             return;
         }
-        
+
         connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Valid), user);
     }
 }

@@ -13,8 +13,9 @@ This is an open-source server for the TankiX game.
 ## Setup
 
 1. Install [MariaDB Server](https://mariadb.org/download/?t=mariadb&p=mariadb&r=11.2.2)
-2. Create database and user for the server (see [database.json](/Resources/database.json))
-3. Start the server
+2. Create database and user for the server (see [database.json](./Resources/database.json))
+3. Import database schema (see [Vint.sql](./Vint.sql))
+4. Start the server
 
 ## Information
 

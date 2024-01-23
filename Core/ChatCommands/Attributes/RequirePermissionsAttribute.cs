@@ -9,6 +9,6 @@ public class RequirePermissionsAttribute(
 
     public override string CheckFailedMessage => "Not enough permissions to execute command";
 
-    public override bool Check(ChatCommandContext context) => 
+    public override bool Check(ChatCommandContext context) =>
         (context.Connection.Player.Groups & Permissions) == Permissions;
 }

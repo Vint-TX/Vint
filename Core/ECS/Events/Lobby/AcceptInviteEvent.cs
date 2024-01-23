@@ -13,13 +13,13 @@ public class AcceptInviteEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.InLobby) {
             BattlePlayer battlePlayer = connection.BattlePlayer!;
-            
+
             if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
                 battlePlayer.Battle.RemovePlayer(battlePlayer);
             else
                 battlePlayer.Battle.RemovePlayerFromLobby(battlePlayer);
         }
-        
+
         connection.Server.BattleProcessor
             .FindByLobbyId(LobbyId)?
             .AddPlayer(connection);

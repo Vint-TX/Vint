@@ -14,8 +14,17 @@ public sealed class DbConnection() : DataConnection(Schema) {
 
         Schema = new MappingSchema();
         Schema.SetConverter<IEntity, long>(entity => entity.Id);
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         Schema.SetConverter<IEntity, DataParameter>(entity => new DataParameter(null, entity?.Id, DataType.Int64));
         Schema.SetConverter<long, IEntity>(id => GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == id));
+
+        Schema.SetConverter<TimeSpan, long>(timeSpan => timeSpan.Ticks);
+        Schema.SetConverter<TimeSpan, DataParameter>(timeSpan => new DataParameter(null, timeSpan.Ticks, DataType.Int64));
+        Schema.SetConverter<long, TimeSpan>(TimeSpan.FromTicks);
+
+        Schema.SetConverter<TimeSpan?, long?>(timeSpan => timeSpan?.Ticks);
+        Schema.SetConverter<TimeSpan?, DataParameter>(timeSpan => new DataParameter(null, timeSpan?.Ticks, DataType.Int64));
+        Schema.SetConverter<long?, TimeSpan?>(_ => null);
     }
 
     static MappingSchema Schema { get; set; }

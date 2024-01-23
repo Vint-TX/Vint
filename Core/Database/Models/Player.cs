@@ -147,7 +147,7 @@ public class Player {
         if (testers.Contains(Username))
             Groups |= PlayerGroups.Tester;
     }
-    
+
     public Punishment Warn(string? reason, TimeSpan? duration) {
         duration = duration?.Duration();
 
@@ -161,7 +161,7 @@ public class Player {
             Reason = reason,
             Type = PunishmentType.Warn
         };
-        
+
         punishment.Id = db.InsertWithInt64Identity(punishment);
         return punishment;
     }
@@ -180,7 +180,7 @@ public class Player {
             Reason = reason,
             Type = PunishmentType.Mute
         };
-        
+
         punishment.Id = db.InsertWithInt64Identity(punishment);
         return punishment;
     }
@@ -199,63 +199,66 @@ public class Player {
             Reason = reason,
             Type = PunishmentType.Ban
         };
-        
+
         punishment.Id = db.InsertWithInt64Identity(punishment);
         return punishment;
     }
 
-    public void UnWarn(long warnId) {
+    public bool UnWarn(long warnId) {
         using DbConnection db = new();
-        
+
         Punishment? punishment = db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Warn)
             .SingleOrDefault(punishment => punishment.Id == warnId);
-        
-        if (punishment == null) return;
+
+        if (punishment == null) return false;
 
         punishment.Active = false;
         db.Update(punishment);
+        return true;
     }
 
-    public void UnMute() {
+    public bool UnMute() {
         using DbConnection db = new();
-        
+
         Punishment? punishment = db.Punishments
-            .Where(punishment => punishment.PlayerId == Id && 
+            .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Mute &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
             .FirstOrDefault();
-        
-        if (punishment == null) return;
+
+        if (punishment == null) return false;
 
         punishment.Active = false;
         db.Update(punishment);
+        return true;
     }
-    
-    public void UnBan() {
+
+    public bool UnBan() {
         using DbConnection db = new();
-        
+
         Punishment? punishment = db.Punishments
-            .Where(punishment => punishment.PlayerId == Id && 
+            .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
             .FirstOrDefault();
-        
-        if (punishment == null) return;
+
+        if (punishment == null) return false;
 
         punishment.Active = false;
         db.Update(punishment);
+        return true;
     }
 
     public Punishment? GetBanInfo() {
         RefreshPunishments();
-        
+
         using DbConnection db = new();
         return db.Punishments
-            .Where(punishment => punishment.PlayerId == Id && 
+            .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
@@ -264,10 +267,10 @@ public class Player {
 
     public Punishment? GetMuteInfo() {
         RefreshPunishments();
-        
+
         using DbConnection db = new();
         return db.Punishments
-            .Where(punishment => punishment.PlayerId == Id && 
+            .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Mute &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
@@ -276,16 +279,25 @@ public class Player {
 
     void RefreshPunishments() {
         using DbConnection db = new();
-        db.BeginTransaction();
-        
-        foreach (Punishment punishment in db.Punishments
-                     .Where(punishment => punishment.PlayerId == Id && 
-                                          punishment.PunishTime + punishment.Duration <= DateTimeOffset.UtcNow)) {
-            punishment.Active = false;
-            db.Update(punishment);
+
+        try {
+            db.BeginTransaction();
+
+            foreach (Punishment punishment in db.Punishments
+                         .Where(punishment => punishment.PlayerId == Id &&
+                                              punishment.Active &&
+                                              punishment.PunishTime + punishment.Duration <= DateTimeOffset.UtcNow).ToArray()) {
+                punishment.Active = false;
+                db.Update(punishment);
+            }
+
+            db.CommitTransaction();
+        } catch {
+            db.RollbackTransaction();
+            throw;
+        } finally {
+            db.DisposeTransaction();
         }
-        
-        db.CommitTransaction();
     }
 }
 
