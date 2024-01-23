@@ -1,6 +1,5 @@
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Notification;
 using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Notification;

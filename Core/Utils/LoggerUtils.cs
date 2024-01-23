@@ -5,7 +5,6 @@ using Serilog.Core;
 using Serilog.Events;
 using Serilog.Templates;
 using Serilog.Templates.Themes;
-using Vint.Core.Database.Models;
 using Vint.Core.Server;
 
 namespace Vint.Core.Utils;

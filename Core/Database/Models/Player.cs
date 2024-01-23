@@ -1,6 +1,5 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
-using Serilog;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
@@ -140,8 +139,10 @@ public class Player {
         List<string> admins = ["C6OI"];
         List<string> testers = ["C6OI"];
 
-        if (admins.Contains(Username))
+        if (admins.Contains(Username)) {
             Groups |= PlayerGroups.Admin;
+            Groups |= PlayerGroups.Moderator;
+        }
 
         if (testers.Contains(Username))
             Groups |= PlayerGroups.Tester;

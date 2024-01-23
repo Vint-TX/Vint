@@ -1,5 +1,4 @@
 using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.Server;

@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using NetCoreServer;
 using Serilog;
 using Vint.Core.Battles;
+using Vint.Core.ChatCommands;
 using Vint.Core.ECS.Events.Ping;
 using Vint.Core.Utils;
 
@@ -35,6 +36,8 @@ public class GameServer(
         new Thread(() => MatchmakingProcessor.StartTicking()) { Name = "Matchmaking ticker" }.Start();
         new Thread(() => BattleProcessor.StartTicking()) { Name = "Battle ticker" }.Start();
         new Thread(PingLoop) { Name = "Ping loop" }.Start();
+        
+        ChatCommandProcessor.RegisterCommands();
     }
 
     protected override void OnError(SocketError error) => Logger.Error("Server caught an error: {Error}", error);

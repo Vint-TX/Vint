@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Chat;
@@ -20,6 +21,15 @@ public class SendChatMessageEvent : IServerEvent {
     public void Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
         IEntity chat = entities.Single();
 
+        if (ChatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
+            if (chatCommand == null)
+                ChatUtils.SendMessage("Unknown command", chat, [sender], null);
+            else 
+                ChatCommandProcessor.Execute(sender, chat, Message, chatCommand);
+            
+            return;
+        }
+        
         Punishment? mute = sender.Player.GetMuteInfo();
 
         if (mute is { Active: true }) {

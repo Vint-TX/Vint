@@ -5,7 +5,6 @@ using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Notification;
 using Vint.Core.ECS.Templates.Notification;
-using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 
