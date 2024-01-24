@@ -1,7 +1,7 @@
 namespace Vint.Core.ChatCommands;
 
 [Flags]
-public enum ChatCommandCondition {
+public enum ChatCommandConditions {
     None = 0,
     BattleOwner = 1,
 
