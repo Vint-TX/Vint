@@ -26,16 +26,14 @@ public class AutoLoginUserEvent : IServerEvent {
 
         Punishment? ban = player?.GetBanInfo();
 
-        if (player == null || ban is { Active: true } || player.HardwareFingerprint != HardwareFingerprint) {
+        if (player is not { RememberMe: true } || ban is { Active: true } || player.HardwareFingerprint != HardwareFingerprint) {
             connection.Send(new AutoLoginFailedEvent());
             return;
         }
 
-        connection.Player = player;
-
         if (player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
             List<IPlayerConnection> connections = connection.Server.PlayerConnections
-                .Where(conn => conn.IsOnline && conn.Player.Id == connection.Player.Id)
+                .Where(conn => conn.IsOnline && conn.Player.Id == player.Id)
                 .ToList();
 
             if (connections.Count != 0) {
@@ -45,6 +43,7 @@ public class AutoLoginUserEvent : IServerEvent {
                 }
             }
 
+            connection.Player = player;
             connection.Login(false, HardwareFingerprint);
         } else connection.Send(new AutoLoginFailedEvent());
     }

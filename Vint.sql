@@ -192,8 +192,8 @@ DROP TABLE IF EXISTS `Players`;
 CREATE TABLE `Players`
 (
     `Id`                  bigint(20)     NOT NULL,
-    `Username`            blob           NOT NULL,
-    `Email`               blob           NOT NULL,
+    `Username`            text           NOT NULL COLLATE 'utf8mb4_bin',
+    `Email`               text           NOT NULL COLLATE 'utf8mb4_bin',
     `RememberMe`          tinyint(1)     NOT NULL,
     `AutoLoginToken`      varbinary(255) DEFAULT NULL,
     `PasswordHash`        varbinary(255) NOT NULL,
