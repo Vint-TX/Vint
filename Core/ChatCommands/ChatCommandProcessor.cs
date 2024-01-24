@@ -119,7 +119,7 @@ public static class ChatCommandProcessor {
             }
 
             if (parameterInfo.GetCustomAttribute<WaitingForTextAttribute>() != null) {
-                rawParameterValue = string.Join(' ', rawParameterValues.Skip(i - 1));
+                rawParameterValue = string.Join(' ', rawParameterValues.Skip(i));
                 i = command.Parameters.Length;
             }
 
