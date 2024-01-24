@@ -125,9 +125,18 @@ public static class ChatCommandProcessor {
 
             try {
                 parameters.Add(Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType));
-            } catch (FormatException) {
-                context.SendPrivateResponse(
-                    $"Unexpected '{command.Options[parameterInfo.Name!]}' parameter type. Expected: {parameterInfo.ParameterType.Name}");
+            } catch (FormatException e) {
+                OptionAttribute option = command.Options[parameterInfo.Name!];
+
+                if (e.InnerException is OverflowException) {
+                    object? minValue = parameterInfo.ParameterType.GetField("MinValue")?.GetValue(null);
+                    object? maxValue = parameterInfo.ParameterType.GetField("MaxValue")?.GetValue(null);
+
+                    context.SendPrivateResponse($"'{option}' must be in range from '{minValue}' to '{maxValue}'");
+                    return;
+                }
+                
+                context.SendPrivateResponse($"Unexpected '{option}' parameter type. Expected: {parameterInfo.ParameterType.Name}");
                 return;
             }
         }

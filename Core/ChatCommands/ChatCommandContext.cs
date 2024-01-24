@@ -15,8 +15,11 @@ public sealed class ChatCommandContext(
     public ChatCommandAttribute CommandInfo { get; } = commandInfo;
 
     public void SendPrivateResponse(string response) =>
-        ChatUtils.SendMessage(response, Chat, [Connection], null);
+        SendResponse(response, Chat, [Connection]);
 
     public void SendPublicResponse(string response) =>
-        ChatUtils.SendMessage(response, Chat, ChatUtils.GetReceivers(Connection, Chat), null);
+        SendResponse(response, Chat, ChatUtils.GetReceivers(Connection, Chat));
+
+    public void SendResponse(string response, IEntity chat, IEnumerable<IPlayerConnection> receivers) =>
+        ChatUtils.SendMessage(response, chat, receivers, null);
 }

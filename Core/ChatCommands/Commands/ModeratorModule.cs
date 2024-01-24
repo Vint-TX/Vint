@@ -65,7 +65,7 @@ public class ModeratorModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);
@@ -127,7 +127,7 @@ public class ModeratorModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);
@@ -178,7 +178,7 @@ public class ModeratorModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);
@@ -228,7 +228,7 @@ public class ModeratorModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);
@@ -278,7 +278,7 @@ public class ModeratorModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);

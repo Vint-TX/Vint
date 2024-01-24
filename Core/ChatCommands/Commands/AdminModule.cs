@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Battles;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
@@ -66,7 +67,7 @@ public class AdminModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);
@@ -116,10 +117,32 @@ public class AdminModule : ChatCommandModule {
         if (notifyChat == null || notifiedConnections == null)
             ctx.SendPublicResponse(punishMessage);
         else {
-            ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
                 ctx.SendPrivateResponse(punishMessage);
         }
+    }
+
+    [ChatCommand("createInvite", "Create new invite")]
+    public void CreateInvite(
+        ChatCommandContext ctx,
+        [Option("code", "Code")] string code,
+        [Option("uses", "Maximum uses")] ushort uses) {
+        using DbConnection db = new();
+        Invite? invite = db.Invites.SingleOrDefault(invite => invite.Code == code);
+
+        if (invite != null) {
+            ctx.SendPrivateResponse($"Already exists: {invite}");
+            return;
+        }
+
+        invite = new Invite {
+            Code = code,
+            RemainingUses = uses
+        };
+
+        invite.Id = db.InsertWithInt64Identity(invite);
+        ctx.SendPrivateResponse($"{invite}");
     }
 }
