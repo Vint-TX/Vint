@@ -19,6 +19,6 @@ public class HitTarget {
     public IEntity IncarnationEntity { get; private set; } = null!;
     public Vector3 LocalHitPoint { get; private set; }
     public Vector3 TargetPosition { get; private set; }
-    public float HitDistance { get; private set; }
     public Vector3 HitDirection { get; private set; }
+    public float HitDistance { get; private set; }
 }

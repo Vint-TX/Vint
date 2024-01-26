@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -18,20 +18,12 @@ public class SelfSplashHitEvent : SelfHitEvent {
     };
 
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return;
+        base.Execute(connection, entities);
 
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
+        if (SplashTargets == null ||
+            connection.BattlePlayer?.Tank?.WeaponHandler is not ThunderWeaponHandler thunder) return;
 
-        if (!battlePlayer.InBattleAsTank) return;
-
-        IEntity weapon = entities.Single();
-        Battles.Battle battle = battlePlayer.Battle;
-
-        foreach (IPlayerConnection playerConnection in battle.Players
-                     .Where(player => player != battlePlayer)
-                     .Select(player => player.PlayerConnection))
-            playerConnection.Send(RemoteEvent, weapon);
-
-        // todo
+        foreach (HitTarget target in SplashTargets)
+            thunder.SplashFire(target);
     }
 }

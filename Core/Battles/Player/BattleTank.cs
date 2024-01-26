@@ -13,6 +13,8 @@ using Vint.Core.ECS.Components.Battle.Parameters.Health;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
+using Vint.Core.ECS.Events.Battle.Damage;
+using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Graffiti;
@@ -144,19 +146,7 @@ public class BattleTank {
 
     public void Tick() {
         if (SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow) {
-            SelfDestructTime = null;
-
-            if (StateManager.CurrentState is not Dead) {
-                StateManager.SetState(new Dead(StateManager));
-
-                foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-                    battlePlayer.PlayerConnection.Send(new SelfDestructionBattleUserEvent(), BattleUser);
-
-                // todo statistics
-
-                Position = default;
-                PreviousPosition = default;
-            }
+            SelfDestruct();
         }
 
         StateManager.Tick();
@@ -226,7 +216,7 @@ public class BattleTank {
     }
 
     public void SetHealth(float health) { // todo
-        Health = health;
+        Health = Math.Clamp(health, 0, MaxHealth);
 
         HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
         healthComponent.CurrentHealth = health;
@@ -236,6 +226,46 @@ public class BattleTank {
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
             battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
+    }
+
+    public bool IsEnemy(BattleTank other) => this != other &&
+                                             (Battle.Properties.BattleMode == BattleMode.DM ||
+                                              BattlePlayer.Team != other.BattlePlayer.Team);
+
+    public void KillBy(BattleTank killer, IEntity weapon) {
+        SelfKill();
+
+        Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
+        KillEvent killEvent = new(killer.Tank, weapon);
+
+        foreach (IPlayerConnection connection in Battle.Players
+                     .Where(battlePlayer => battlePlayer.InBattle)
+                     .Select(battlePlayer => battlePlayer.PlayerConnection)
+                     .ToArray()) {
+            connection.Send(killEvent, killer.BattleUser);
+        }
+
+        killer.BattlePlayer.PlayerConnection.Send(new VisualScoreKillEvent(0, currentPlayer.Username, currentPlayer.Rank), killer.BattleUser);
+
+        // todo statistics
+    }
+
+    public void SelfDestruct() {
+        SelfKill();
+        SelfDestructTime = null;
+
+        SelfDestructionBattleUserEvent selfDestructionEvent = new();
+
+        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
+            battlePlayer.PlayerConnection.Send(selfDestructionEvent, BattleUser);
+
+        // todo statistics
+    }
+
+    void SelfKill() {
+        StateManager.SetState(new Dead(StateManager));
+
+        // todo statistics, CTF
     }
 
     public override int GetHashCode() => BattlePlayer.GetHashCode();

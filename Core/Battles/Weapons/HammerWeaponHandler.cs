@@ -4,6 +4,7 @@ using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Events.Battle.Weapon;
+using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
 
@@ -11,7 +12,7 @@ public class HammerWeaponHandler : WeaponHandler {
     public HammerWeaponHandler(BattleTank battleTank) : base(battleTank) {
         MagazineWeaponComponent magazineWeaponComponent = ConfigManager.GetComponent<MagazineWeaponComponent>(MarketConfigPath);
 
-        DamagePerPellet = ConfigManager.GetComponent<Damage.DamagePerPelletPropertyComponent>(MarketConfigPath).FinalValue;
+        DamagePerPellet = ConfigManager.GetComponent<DamagePerPelletPropertyComponent>(MarketConfigPath).FinalValue;
         ReloadMagazineTimeSec = magazineWeaponComponent.ReloadMagazineTimePerSec;
         MaximumCartridgeCount = magazineWeaponComponent.MaxCartridgeCount;
 
@@ -26,6 +27,10 @@ public class HammerWeaponHandler : WeaponHandler {
     public int CurrentCartridgeCount { get; private set; }
 
     DateTime? ReloadEndTime { get; set; }
+
+    public override void Fire(HitTarget target) {
+        throw new NotImplementedException();
+    }
 
     public override void OnTankDisable() {
         base.OnTankDisable();

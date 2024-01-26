@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Buffers;
+using System.Reflection;
 using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.Utils;
@@ -22,13 +23,15 @@ public static class Extensions {
     }
 
     public static void CopyTo(this Stream input, Stream output, int limit) {
-        byte[] buffer = new byte[32768];
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(256);
         int read;
 
         while (limit > 0 && (read = input.Read(buffer, 0, Math.Min(buffer.Length, limit))) > 0) {
             output.Write(buffer, 0, read);
             limit -= read;
         }
+
+        ArrayPool<byte>.Shared.Return(buffer);
     }
 
     public static List<T> Shuffle<T>(this List<T> list) {

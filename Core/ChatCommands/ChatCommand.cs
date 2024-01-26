@@ -1,11 +1,14 @@
 using System.Reflection;
 using System.Text;
 using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.ECS.Entities;
+using Vint.Core.Server;
 
 namespace Vint.Core.ChatCommands;
 
 public sealed class ChatCommand(
     string methodName,
+    IChatCommandProcessor processor,
     ChatCommandAttribute chatCommandAttribute,
     ChatCommandGroupAttribute? chatCommandGroupAttribute,
     ChatCommandModule module,
@@ -14,12 +17,95 @@ public sealed class ChatCommand(
     ParameterInfo[] parameters
 ) {
     public string MethodName { get; } = methodName;
+    public IChatCommandProcessor Processor { get; } = processor;
     public ChatCommandAttribute Info { get; } = chatCommandAttribute;
     public ChatCommandGroupAttribute? ChatCommandGroupAttribute { get; } = chatCommandGroupAttribute;
     public ChatCommandModule Module { get; } = module;
     public IReadOnlyDictionary<string, OptionAttribute> Options { get; } = options;
     public MethodInfo Method { get; } = method;
     public ParameterInfo[] Parameters { get; } = parameters;
+
+    public void Execute(IPlayerConnection connection, IEntity chat, string rawCommand) {
+        ChatCommandContext context = new(Processor, connection, chat, Info);
+        bool shouldExecute = Module.BeforeCommandExecution(context);
+
+        if (!shouldExecute) return;
+
+        foreach (BaseCheckAttribute checkAttribute in Method.GetCustomAttributes<BaseCheckAttribute>()) {
+            if (checkAttribute.Check(context)) continue;
+
+            context.SendPrivateResponse(checkAttribute.CheckFailedMessage);
+            return;
+        }
+
+        if (Method.GetCustomAttribute<RequirePermissionsAttribute>() == null &&
+            ChatCommandGroupAttribute != null &&
+            (context.Connection.Player.Groups & ChatCommandGroupAttribute.Permissions) != ChatCommandGroupAttribute.Permissions) {
+            context.SendPrivateResponse("Not enough permissions to execute command");
+            return;
+        }
+
+        List<object?> parameters = [context];
+        string[] rawParameterValues = rawCommand
+            .Split()
+            .Skip(1) // Command name
+            .ToArray();
+
+        if (rawParameterValues.Length > Parameters.Length &&
+            Parameters.All(param => param.GetCustomAttribute<WaitingForTextAttribute>() == null)) {
+            context.SendPrivateResponse($"Too much parameters. Expected: {Parameters.Length}, got: {rawParameterValues.Length}");
+            return;
+        }
+
+        for (int i = 0; i < Parameters.Length; i++) {
+            ParameterInfo parameterInfo = Parameters[i];
+            string? rawParameterValue = rawParameterValues.ElementAtOrDefault(i);
+
+            if (rawParameterValue == null) {
+                if (!parameterInfo.IsOptional) {
+                    OptionAttribute optionAttribute = Options[parameterInfo.Name!];
+                    context.SendPrivateResponse($"Parameter '{optionAttribute.Name}' not found");
+                    return;
+                }
+
+                parameters.Add(parameterInfo.DefaultValue);
+                continue;
+            }
+
+            if (parameterInfo.GetCustomAttribute<WaitingForTextAttribute>() != null) {
+                rawParameterValue = string.Join(' ', rawParameterValues.Skip(i));
+                i = Parameters.Length;
+            }
+
+            try {
+                parameters.Add(Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType));
+            } catch (FormatException e) {
+                OptionAttribute option = Options[parameterInfo.Name!];
+
+                if (e.InnerException is OverflowException) {
+                    object? minValue = parameterInfo.ParameterType.GetField("MinValue")?.GetValue(null);
+                    object? maxValue = parameterInfo.ParameterType.GetField("MaxValue")?.GetValue(null);
+
+                    context.SendPrivateResponse($"'{option}' must be in range from '{minValue}' to '{maxValue}'");
+                    return;
+                }
+
+                context.SendPrivateResponse($"Unexpected '{option}' parameter type. Expected: {parameterInfo.ParameterType.Name}");
+                return;
+            }
+        }
+
+        try {
+            Method.Invoke(Module, parameters.ToArray());
+            Module.AfterCommandExecution(context);
+        } catch (TargetParameterCountException) {
+            context.SendPrivateResponse($"Too few parameters. Expected: {Parameters.Length}, got: {parameters.Count - 1}");
+        } catch (TargetInvocationException invocationException) {
+            if (invocationException.InnerException is NotImplementedException)
+                context.SendPrivateResponse($"Handler for '{Info.Name}' command is not implemented yet");
+            else throw;
+        }
+    }
 
     public override string ToString() {
         StringBuilder builder = new(Info.ToString());

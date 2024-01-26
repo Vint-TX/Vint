@@ -8,7 +8,7 @@ namespace Vint.Core.Battles.Weapons;
 public abstract class StreamWeaponHandler : WeaponHandler {
     protected StreamWeaponHandler(BattleTank battleTank) : base(battleTank) {
         Cooldown = ConfigManager.GetComponent<WeaponCooldownComponent>(BattleConfigPath).CooldownIntervalSec;
-        DamagePerSecond = ConfigManager.GetComponent<Damage.DamagePerSecondPropertyComponent>(MarketConfigPath).FinalValue;
+        DamagePerSecond = ConfigManager.GetComponent<DamagePerSecondPropertyComponent>(MarketConfigPath).FinalValue;
     }
 
     public float DamagePerSecond { get; }

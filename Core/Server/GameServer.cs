@@ -18,6 +18,7 @@ public class GameServer(
 
     public IBattleProcessor BattleProcessor { get; private set; } = null!;
     public IMatchmakingProcessor MatchmakingProcessor { get; private set; } = null!;
+    public IChatCommandProcessor ChatCommandProcessor { get; private set; } = null!;
 
     public List<IPlayerConnection> PlayerConnections { get; } = [];
 
@@ -30,14 +31,17 @@ public class GameServer(
     protected override void OnStarted() {
         Logger.Information("Started");
 
+        ChatCommandProcessor chatCommandProcessor = new();
+
         BattleProcessor = new BattleProcessor();
         MatchmakingProcessor = new MatchmakingProcessor(BattleProcessor);
+        ChatCommandProcessor = chatCommandProcessor;
 
         new Thread(() => MatchmakingProcessor.StartTicking()) { Name = "Matchmaking ticker" }.Start();
         new Thread(() => BattleProcessor.StartTicking()) { Name = "Battle ticker" }.Start();
         new Thread(PingLoop) { Name = "Ping loop" }.Start();
 
-        ChatCommandProcessor.RegisterCommands();
+        chatCommandProcessor.RegisterCommands();
     }
 
     protected override void OnError(SocketError error) => Logger.Error("Server caught an error: {Error}", error);

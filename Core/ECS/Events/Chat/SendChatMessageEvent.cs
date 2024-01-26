@@ -18,11 +18,11 @@ public class SendChatMessageEvent : IServerEvent {
     public void Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
         IEntity chat = entities.Single();
 
-        if (ChatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
+        if (sender.Server.ChatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
             if (chatCommand == null)
                 ChatUtils.SendMessage("Unknown command", chat, [sender], null);
             else
-                ChatCommandProcessor.Execute(sender, chat, Message, chatCommand);
+                chatCommand.Execute(sender, chat, Message);
 
             return;
         }

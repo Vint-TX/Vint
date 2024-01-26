@@ -6,10 +6,12 @@ using Vint.Core.Utils;
 namespace Vint.Core.ChatCommands;
 
 public sealed class ChatCommandContext(
+    IChatCommandProcessor chatCommandProcessor,
     IPlayerConnection connection,
     IEntity chat,
     ChatCommandAttribute commandInfo
 ) {
+    public IChatCommandProcessor ChatCommandProcessor { get; } = chatCommandProcessor;
     public IPlayerConnection Connection { get; } = connection;
     public IEntity Chat { get; } = chat;
     public ChatCommandAttribute CommandInfo { get; } = commandInfo;

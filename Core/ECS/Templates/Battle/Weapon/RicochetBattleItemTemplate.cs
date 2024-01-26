@@ -15,9 +15,9 @@ public class RicochetBattleItemTemplate : BulletWeaponTemplate {
         IEntity entity = Create(configPath, tank, battlePlayer);
 
         float energyChargePerShot =
-            ConfigManager.GetComponent<EnergyConfig.EnergyChargePerShotPropertyComponent>(configPath).FinalValue;
+            ConfigManager.GetComponent<EnergyChargePerShotPropertyComponent>(configPath).FinalValue;
         float energyRechargeSpeed =
-            ConfigManager.GetComponent<EnergyConfig.EnergyRechargeSpeedPropertyComponent>(configPath).FinalValue;
+            ConfigManager.GetComponent<EnergyRechargeSpeedPropertyComponent>(configPath).FinalValue;
 
         entity.AddComponent(new RicochetComponent());
         entity.AddComponent(new DiscreteWeaponEnergyComponent(energyRechargeSpeed, energyChargePerShot));

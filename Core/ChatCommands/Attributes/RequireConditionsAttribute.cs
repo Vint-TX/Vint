@@ -25,14 +25,14 @@ public class RequireConditionsAttribute(
                     ChatCommandConditions.InBattle => connection.InLobby && connection.BattlePlayer!.InBattle,
 
                     ChatCommandConditions.AllInLobby => connection.InLobby &&
-                                                       connection.BattlePlayer!.Battle.Players.All(battlePlayer => !battlePlayer.InBattleAsTank),
+                                                        connection.BattlePlayer!.Battle.Players.All(battlePlayer => !battlePlayer.InBattleAsTank),
 
                     ChatCommandConditions.AllInBattle => connection.InLobby &&
-                                                        connection.BattlePlayer!.Battle.Players.All(battlePlayer => battlePlayer.InBattle),
+                                                         connection.BattlePlayer!.Battle.Players.All(battlePlayer => battlePlayer.InBattle),
 
                     ChatCommandConditions.BattleOwner => connection.InLobby &&
-                                                        connection.BattlePlayer!.Battle.TypeHandler is CustomHandler customHandler &&
-                                                        customHandler.Owner == connection,
+                                                         connection.BattlePlayer!.Battle.TypeHandler is CustomHandler customHandler &&
+                                                         customHandler.Owner == connection,
 
                     _ => throw new ArgumentOutOfRangeException()
                 };

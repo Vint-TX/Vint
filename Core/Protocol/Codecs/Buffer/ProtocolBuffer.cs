@@ -23,7 +23,7 @@ public class ProtocolBuffer(
         Stream.Close();
         Stream = new MemoryStream();
     }
-    
+
     public bool Unwrap(BinaryReader reader) {
         Clear();
 

@@ -12,7 +12,7 @@ public class UserModule : ChatCommandModule {
         [Option("command", "Name of command to get help", true)]
         string commandName = "") {
         if (!string.IsNullOrWhiteSpace(commandName)) {
-            ChatCommand? command = ChatCommandProcessor.Commands.SingleOrDefault(command => command.Info.Name == commandName);
+            ChatCommand? command = ctx.ChatCommandProcessor.GetOrDefault(commandName);
 
             RequirePermissionsAttribute? requirePermissionsAttribute = command?.Method.GetCustomAttribute<RequirePermissionsAttribute>();
             ChatCommandGroupAttribute? chatCommandGroupAttribute = command?.ChatCommandGroupAttribute;
@@ -28,7 +28,7 @@ public class UserModule : ChatCommandModule {
 
             ctx.SendPrivateResponse(command.ToString());
         } else {
-            IEnumerable<string> commands = ChatCommandProcessor.Commands
+            IEnumerable<string> commands = ctx.ChatCommandProcessor.GetAll()
                 .Where(command => {
                     RequirePermissionsAttribute? requirePermissionsAttribute = command.Method.GetCustomAttribute<RequirePermissionsAttribute>();
 

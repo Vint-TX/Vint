@@ -4,6 +4,7 @@ using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
+using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
@@ -73,6 +74,7 @@ public class Battle {
 
     public TypeHandler TypeHandler { get; }
     public ModeHandler ModeHandler { get; private set; } = null!;
+    public IDamageProcessor DamageProcessor { get; private set; } = null!;
 
     public HashSet<BattlePlayer> Players { get; } = [];
 
@@ -95,6 +97,8 @@ public class Battle {
             BattleMode.CTF => throw new NotImplementedException(),
             _ => throw new UnreachableException()
         };
+
+        DamageProcessor = new DamageProcessor(this);
     }
 
     public void UpdateProperties(BattleProperties properties) {

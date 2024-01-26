@@ -6,6 +6,10 @@ mountUpgradeLevelRestriction:
   restrictionValue: 0
 mountUserRankRestriction:
   restrictionValue: 0
+priceItem:
+  price: 0
+xPriceItem:
+  price: 0
 order:
   index: 300
 unityAsset:
