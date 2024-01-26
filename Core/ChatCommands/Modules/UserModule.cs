@@ -2,7 +2,7 @@ using System.Reflection;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.ChatCommands.Commands;
+namespace Vint.Core.ChatCommands.Modules;
 
 [ChatCommandGroup("user", "Commands for all players", PlayerGroups.None)]
 public class UserModule : ChatCommandModule {

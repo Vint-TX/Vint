@@ -6,7 +6,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ChatCommands.Commands;
+namespace Vint.Core.ChatCommands.Modules;
 
 [ChatCommandGroup("moderator", "Commands for moderators", PlayerGroups.Moderator)]
 public class ModeratorModule : ChatCommandModule {
