@@ -14,7 +14,7 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .ToArray()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);
@@ -85,7 +85,7 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
 
         if (notifyChat == null || notifiedConnections == null) {
             notifyChat = GlobalChat;
-            notifiedConnections = connection.Server.PlayerConnections.ToList();
+            notifiedConnections = connection.Server.PlayerConnections.Values.ToList();
         }
 
         ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);

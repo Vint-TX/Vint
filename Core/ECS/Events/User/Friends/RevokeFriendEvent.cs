@@ -32,7 +32,7 @@ public class RevokeFriendEvent : FriendBaseEvent, IServerEvent {
 
         db.CommitTransaction();
         connection.Send(new OutgoingFriendRemovedEvent(player.Id), connection.User);
-        connection.Server.PlayerConnections
+        connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id)?
             .Send(new IncomingFriendRemovedEvent(connection.Player.Id), User);

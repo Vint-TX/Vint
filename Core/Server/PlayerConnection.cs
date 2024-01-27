@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System.Buffers;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Sockets;
 using LinqToDB;
-using NetCoreServer;
 using Serilog;
 using Vint.Core.Battles.Player;
 using Vint.Core.Database;
@@ -100,22 +102,21 @@ public interface IPlayerConnection {
     public void UnshareIfShared(IEntity entity);
 }
 
-public class PlayerConnection(
-    GameServer server,
-    Protocol.Protocol protocol
-) : TcpSession(server), IPlayerConnection {
-    public bool IsSocketConnected => IsConnected && !IsDisposed && !IsSocketDisposed;
-    public ILogger Logger { get; private set; } = Log.Logger.ForType(typeof(PlayerConnection));
+public abstract class PlayerConnection(
+    GameServer server
+) : IPlayerConnection {
+    public Guid Id { get; } = Guid.NewGuid();
+    public ILogger Logger { get; protected set; } = Log.Logger.ForType(typeof(PlayerConnection));
     public Dictionary<string, HashSet<IEntity>> UserEntities { get; } = new();
 
-    public new GameServer Server { get; } = server;
+    public GameServer Server { get; } = server;
     public Player Player { get; set; } = null!;
-    public BattlePlayer? BattlePlayer { get; set; }
     public IEntity User { get; private set; } = null!;
-    public IEntity ClientSession { get; private set; } = null!;
+    public IEntity ClientSession { get; protected set; } = null!;
+    public BattlePlayer? BattlePlayer { get; set; }
     public HashSet<IEntity> SharedEntities { get; private set; } = [];
 
-    public bool IsOnline => IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
+    public abstract bool IsOnline { get; }
     public bool InLobby => BattlePlayer != null;
     public Invite? Invite { get; set; }
 
@@ -160,8 +161,9 @@ public class PlayerConnection(
     public void Login(
         bool saveAutoLoginToken,
         string hardwareFingerprint) {
-        Logger = Logger.WithPlayer(this);
+        Logger = Logger.WithPlayer((SocketPlayerConnection)this);
 
+        Player.RememberMe = saveAutoLoginToken;
         Player.LastLoginTime = DateTimeOffset.UtcNow;
         Player.HardwareFingerprint = hardwareFingerprint;
 
@@ -537,36 +539,9 @@ public class PlayerConnection(
                 component.Count = Player.GoldBoxItems);
     }
 
-    public void Kick(string? reason) {
-        Logger.Warning("Player kicked (reason: '{Reason}')", reason);
-        Disconnect();
-    }
+    public abstract void Kick(string? reason);
 
-    public void Send(ICommand command) {
-        try {
-            if (!IsSocketConnected) return;
-
-            Logger.Debug("Sending {Command}", command);
-
-            ProtocolBuffer buffer = new(new OptionalMap(), this);
-
-            protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
-
-            using MemoryStream stream = new();
-            using BinaryWriter writer = new BigEndianBinaryWriter(stream);
-
-            buffer.Wrap(writer);
-
-            byte[] bytes = stream.ToArray();
-
-            SendAsync(bytes);
-
-            Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
-        } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception while sending {Command}", command);
-            Disconnect();
-        }
-    }
+    public abstract void Send(ICommand command);
 
     public void Send(IEvent @event) => ClientSession.Send(@event);
 
@@ -586,19 +561,65 @@ public class PlayerConnection(
             Unshare(entity);
     }
 
-    protected override void OnConnecting() =>
-        Logger = Logger.WithConnection(this);
+    public override int GetHashCode() => Id.GetHashCode();
 
-    protected override void OnConnected() {
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
+    public override string ToString() => $"PlayerConnection {{ " +
+                                         $"ClientSession Id: '{ClientSession?.Id}'; " +
+                                         $"Username: '{Player?.Username}' }}";
+}
+
+public class SocketPlayerConnection(
+    GameServer server,
+    Socket socket,
+    Protocol.Protocol protocol
+) : PlayerConnection(server) {
+    public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
+
+    public override bool IsOnline => IsConnected && ClientSession != null! && User != null! && Player != null!;
+    bool IsConnected => Socket.Connected;
+
+    Socket Socket { get; } = socket;
+    Protocol.Protocol Protocol { get; } = protocol;
+    BlockingCollection<ICommand> ExecuteBuffer { get; } = new();
+    BlockingCollection<ICommand> SendBuffer { get; } = new();
+
+    public override void Kick(string? reason) {
+        Logger.Warning("Player kicked (reason: '{Reason}')", reason);
+        Disconnect();
+    }
+
+    public void OnConnected() {
+        Logger = Logger.WithEndPoint(EndPoint);
+
         ClientSession = new ClientSessionTemplate().Create();
-
         Logger.Information("New socket connected");
 
         Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         Share(ClientSession);
+
+        Task.Run(ReceiveLoop).Catch();
+        Task.Run(SendLoop).Catch();
+        Task.Run(ExecuteLoop).Catch();
     }
 
-    protected override void OnDisconnected() {
+    public override void Send(ICommand command) {
+        if (!IsConnected || SendBuffer.IsAddingCompleted) return;
+
+        Logger.Debug("Queueing for sending {Command}", command);
+        SendBuffer.Add(command);
+    }
+
+    public void Disconnect() {
+        try {
+            Socket.Shutdown(SocketShutdown.Both);
+        } finally {
+            Socket.Close();
+            OnDisconnected();
+        }
+    }
+
+    void OnDisconnected() {
         Logger.Information("Socket disconnected");
         Logger.Verbose("{X}", new StackTrace());
 
@@ -615,37 +636,121 @@ public class PlayerConnection(
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
         } finally {
+            SendBuffer.CompleteAdding();
+            ExecuteBuffer.CompleteAdding();
+
             foreach (IEntity entity in SharedEntities)
                 entity.SharedPlayers.Remove(this);
 
             SharedEntities.Clear();
             UserEntities.Clear();
+            SendBuffer.Dispose();
+            ExecuteBuffer.Dispose();
         }
     }
 
-    protected override void OnError(SocketError error) =>
-        Logger.Error("Socket caught an error: {Error}", error);
+    async Task ReceiveLoop() {
+        byte[] bytes = ArrayPool<byte>.Shared.Rent(4096);
 
-    protected override void OnReceived(byte[] bytes, long offset, long size) {
         try {
-            Logger.Verbose("Received {Size} bytes ({Hex})", size, Convert.ToHexString(bytes[..(int)size]));
+            while (IsConnected) {
+                ProtocolBuffer buffer = new(new OptionalMap(), this);
+                await using NetworkStream stream = new(Socket);
+                using BinaryReader reader = new BigEndianBinaryReader(stream);
 
-            ProtocolBuffer buffer = new(new OptionalMap(), this);
-            MemoryStream stream = new(bytes);
-            BinaryReader reader = new BigEndianBinaryReader(stream);
+                if (!buffer.Unwrap(reader))
+                    throw new InvalidDataException("Failed to unwrap packet");
 
-            if (!buffer.Unwrap(reader))
-                throw new InvalidDataException("Failed to unwrap packet");
+                long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
 
-            long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+                while (availableForRead > 0) {
+                    Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
 
-            while (availableForRead > 0) {
-                Logger.Verbose("Decode buffer bytes available: {Available}", availableForRead);
+                    ICommand command = (ICommand)Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
 
-                ICommand command = (ICommand)protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
-                Logger.Debug("Received {Command}", command);
+                    Logger.Debug("Queueing for executing: {Command}", command);
+                    ExecuteBuffer.Add(command);
 
-                availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+                    availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+                }
+
+                Array.Clear(bytes);
+            }
+        } catch (IOException ioEx) {
+            if (ioEx.InnerException is SocketException sEx) {
+                switch (sEx.SocketErrorCode) {
+                    case SocketError.Shutdown:
+                    case SocketError.OperationAborted:
+                    case SocketError.ConnectionReset:
+                    case SocketError.ConnectionRefused:
+                    case SocketError.ConnectionAborted: {
+                        Socket.Close();
+                        OnDisconnected();
+                        break;
+                    }
+
+                    default:
+                        Logger.Error(sEx, "Socket caught an exception while receiving data");
+                        Disconnect();
+                        break;
+                }
+            } else {
+                Logger.Error(ioEx, "Socket caught an exception while receiving data");
+                Disconnect();
+            }
+        } catch (SocketException sEx) { // wtf??? sex??????????
+            switch (sEx.SocketErrorCode) {
+                case SocketError.Shutdown:
+                case SocketError.OperationAborted:
+                case SocketError.ConnectionReset:
+                case SocketError.ConnectionRefused:
+                case SocketError.ConnectionAborted: {
+                    Socket.Close();
+                    OnDisconnected();
+                    break;
+                }
+
+                default:
+                    Logger.Error(sEx, "Socket caught an exception while receiving data");
+                    Disconnect();
+                    break;
+            }
+        } catch (Exception ex) {
+            Logger.Error(ex, "Socket caught an exception while receiving data");
+            Disconnect();
+        } finally {
+            ArrayPool<byte>.Shared.Return(bytes);
+        }
+    }
+
+    async Task SendLoop() {
+        try {
+            while (!SendBuffer.IsCompleted) {
+                ICommand command = SendBuffer.Take();
+
+                try {
+                    ProtocolBuffer buffer = new(new OptionalMap(), this);
+                    Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
+
+                    using MemoryStream stream = new();
+                    await using BinaryWriter writer = new BigEndianBinaryWriter(stream);
+                    buffer.Wrap(writer);
+
+                    byte[] bytes = stream.ToArray();
+                    await Socket.SendAsync(bytes);
+
+                    Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
+                } catch (Exception e) {
+                    Logger.Error(e, "Failed to send {Command}", command);
+                }
+            }
+        } catch (InvalidOperationException) { }
+    }
+
+    void ExecuteLoop() {
+        try {
+            while (!ExecuteBuffer.IsCompleted) {
+                ICommand command = ExecuteBuffer.Take();
 
                 try {
                     command.Execute(this);
@@ -653,16 +758,6 @@ public class PlayerConnection(
                     Logger.Error(e, "Failed to execute {Command}", command);
                 }
             }
-        } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception while receiving data ({Hex})", Convert.ToHexString(bytes[..(int)size]));
-            Disconnect();
-        }
+        } catch (InvalidOperationException) { }
     }
-
-    public override int GetHashCode() => Id.GetHashCode();
-
-    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
-    public override string ToString() => $"PlayerConnection {{ " +
-                                         $"ClientSession Id: '{ClientSession?.Id}'; " +
-                                         $"Username: '{Player?.Username}' }}";
 }

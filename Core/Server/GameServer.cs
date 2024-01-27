@@ -1,6 +1,6 @@
-﻿using System.Net;
+using System.Collections.Concurrent;
+using System.Net;
 using System.Net.Sockets;
-using NetCoreServer;
 using Serilog;
 using Vint.Core.Battles;
 using Vint.Core.ChatCommands;
@@ -12,23 +12,31 @@ namespace Vint.Core.Server;
 public class GameServer(
     IPAddress host,
     ushort port
-) : TcpServer(host, port) {
+) {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
     Protocol.Protocol Protocol { get; } = new();
+    TcpListener Listener { get; } = new(host, port);
 
+    public ConcurrentDictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();
     public IBattleProcessor BattleProcessor { get; private set; } = null!;
     public IMatchmakingProcessor MatchmakingProcessor { get; private set; } = null!;
     public IChatCommandProcessor ChatCommandProcessor { get; private set; } = null!;
 
-    public List<IPlayerConnection> PlayerConnections { get; } = [];
+    public bool IsStarted { get; private set; }
+    public bool IsAccepting { get; private set; }
 
-    protected override PlayerConnection CreateSession() => new(this, Protocol);
+    public void Start() {
+        if (IsStarted) return;
 
-    protected override void OnConnected(TcpSession session) => PlayerConnections.Add((PlayerConnection)session);
+        Listener.Start();
+        IsStarted = true;
+        OnStarted();
 
-    protected override void OnDisconnected(TcpSession session) => PlayerConnections.Remove((PlayerConnection)session);
+        IsAccepting = true;
+        Task.Run(async () => await Accept());
+    }
 
-    protected override void OnStarted() {
+    public void OnStarted() {
         Logger.Information("Started");
 
         ChatCommandProcessor chatCommandProcessor = new();
@@ -44,13 +52,32 @@ public class GameServer(
         chatCommandProcessor.RegisterCommands();
     }
 
-    protected override void OnError(SocketError error) => Logger.Error("Server caught an error: {Error}", error);
+    public void OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
+
+    async Task Accept() {
+        while (IsAccepting) {
+            try {
+                Socket socket = await Listener.AcceptSocketAsync();
+                SocketPlayerConnection connection = new(this, socket, Protocol);
+                OnConnected(connection);
+
+                bool tryAdd = PlayerConnections.TryAdd(connection.Id, connection);
+
+                if (tryAdd) continue;
+
+                Logger.Error("Cannot add {Connection}", connection);
+                connection.Kick("Internal error");
+            } catch (Exception e) {
+                Logger.Error(e, "");
+            }
+        }
+    }
 
     void PingLoop() {
         while (true) {
             if (!IsStarted) return;
 
-            foreach (IPlayerConnection playerConnection in PlayerConnections.ToArray()) {
+            foreach (IPlayerConnection playerConnection in PlayerConnections.Values.ToArray()) {
                 try {
                     playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
                 } catch (Exception e) {

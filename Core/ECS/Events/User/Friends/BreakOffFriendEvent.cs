@@ -32,7 +32,7 @@ public class BreakOffFriendEvent : FriendBaseEvent, IServerEvent {
 
         db.CommitTransaction();
         connection.Send(new AcceptedFriendRemovedEvent(player.Id), connection.User);
-        connection.Server.PlayerConnections
+        connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id)?
             .Send(new AcceptedFriendRemovedEvent(connection.Player.Id), User);

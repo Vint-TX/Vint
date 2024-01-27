@@ -34,7 +34,7 @@ public class AcceptFriendEvent : FriendBaseEvent, IServerEvent {
         connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.User);
         connection.Send(new AcceptedFriendAddedEvent(player.Id), connection.User);
 
-        IPlayerConnection? playerConnection = connection.Server.PlayerConnections
+        IPlayerConnection? playerConnection = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 

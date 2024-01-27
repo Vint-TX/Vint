@@ -58,7 +58,7 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
 
         db.CommitTransaction();
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 

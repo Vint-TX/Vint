@@ -17,6 +17,7 @@ public class RequireConditionsAttribute(
 
         foreach (ChatCommandConditions condition in checkValues) {
             if (returnValue == false) break;
+
             if (condition == ChatCommandConditions.None) continue;
 
             if ((Conditions & condition) == condition) {

@@ -22,7 +22,7 @@ public class AdminModule : ChatCommandModule {
         string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections
+        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
             .ToArray()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
@@ -79,7 +79,7 @@ public class AdminModule : ChatCommandModule {
         ChatCommandContext ctx,
         [Option("username", "Username of player to unban")]
         string username) {
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections
+        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
             .ToArray()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);

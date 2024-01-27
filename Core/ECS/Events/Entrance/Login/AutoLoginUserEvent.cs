@@ -32,14 +32,14 @@ public class AutoLoginUserEvent : IServerEvent {
         }
 
         if (player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
-            List<IPlayerConnection> connections = connection.Server.PlayerConnections
+            List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
                 .Where(conn => conn.IsOnline && conn.Player.Id == player.Id)
                 .ToList();
 
             if (connections.Count != 0) {
                 foreach (IPlayerConnection oldConnection in connections) {
                     db.Update(oldConnection.Player);
-                    ((PlayerConnection)oldConnection).Disconnect();
+                    oldConnection.Kick("Login from new place");
                 }
             }
 

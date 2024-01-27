@@ -11,7 +11,7 @@ public class InviteToLobbyEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
-        IPlayerConnection[] connections = connection.Server.PlayerConnections
+        IPlayerConnection[] connections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .ToArray();
 

@@ -117,6 +117,7 @@ public class BattleTank {
 
     public DateTimeOffset? SelfDestructTime { get; set; }
 
+    public SpawnPoint PreviousSpawnPoint { get; private set; } = null!;
     public SpawnPoint SpawnPoint { get; private set; } = null!;
 
     public WeaponHandler WeaponHandler { get; }
@@ -205,6 +206,7 @@ public class BattleTank {
             }
         }
 
+        PreviousSpawnPoint = SpawnPoint;
         SpawnPoint = Battle.ModeHandler.GetRandomSpawnPoint();
 
         Movement movement = new() {

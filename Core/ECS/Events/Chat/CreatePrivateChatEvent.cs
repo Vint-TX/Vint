@@ -11,7 +11,7 @@ public class CreatePrivateChatEvent : IServerEvent {
     [ProtocolName("UserUid")] public string Username { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .Where(playerConnection => playerConnection.IsOnline)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 

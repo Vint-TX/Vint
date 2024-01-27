@@ -19,7 +19,7 @@ public class RequestLoadUserProfileEvent : IServerEvent {
         if (player == null) return;
 
         IEntity user = connection.SharedEntities.SingleOrDefault(entity => entity.Id == UserId) ??
-                       connection.Server.PlayerConnections
+                       connection.Server.PlayerConnections.Values
                            .Where(conn => conn.IsOnline)
                            .SingleOrDefault(conn => conn.Player.Id == UserId)?.User ??
                        new UserTemplate().CreateFake(connection, player);

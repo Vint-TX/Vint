@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.User.Friends;
 public class LoadSortedFriendsIdsEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         using DbConnection db = new();
-        IPlayerConnection[] connections = connection.Server.PlayerConnections.ToArray();
+        IPlayerConnection[] connections = connection.Server.PlayerConnections.Values.ToArray();
 
         var relations = db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)

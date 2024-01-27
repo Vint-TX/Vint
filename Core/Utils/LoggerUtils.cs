@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using NetCoreServer;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -53,10 +52,10 @@ public static class LoggerUtils {
     public static ILogger ForType(this ILogger logger, Type type) =>
         logger.ForContext(Constants.SourceContextPropertyName, type.Name);
 
-    public static ILogger WithConnection(this ILogger logger, TcpSession session) =>
-        logger.ForContext("SessionEndpoint", session.Socket.RemoteEndPoint as IPEndPoint);
+    public static ILogger WithEndPoint(this ILogger logger, IPEndPoint endPoint) =>
+        logger.ForContext("SessionEndpoint", endPoint);
 
     // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
-    public static ILogger WithPlayer(this ILogger logger, PlayerConnection player) =>
-        logger.WithConnection(player).ForContext("Username", player.Player?.Username);
+    public static ILogger WithPlayer(this ILogger logger, SocketPlayerConnection player) =>
+        logger.WithEndPoint(player.EndPoint).ForContext("Username", player.Player?.Username);
 }

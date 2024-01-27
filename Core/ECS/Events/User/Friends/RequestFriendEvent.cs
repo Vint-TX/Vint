@@ -55,7 +55,7 @@ public class RequestFriendEvent : FriendBaseEvent, IServerEvent {
 
         connection.Unshare(User);
         connection.Send(new OutgoingFriendAddedEvent(player.Id), connection.User);
-        connection.Server.PlayerConnections
+        connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id)?
             .Send(new IncomingFriendAddedEvent(connection.Player.Id), User);

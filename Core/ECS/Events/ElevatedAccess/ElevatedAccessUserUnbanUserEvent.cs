@@ -15,7 +15,7 @@ public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .ToArray()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);

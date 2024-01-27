@@ -35,7 +35,7 @@ public class LoginByPasswordEvent : IServerEvent {
             return;
         }
 
-        List<IPlayerConnection> connections = connection.Server.PlayerConnections
+        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
             .Where(player => player.IsOnline && player.Player.Id == connection.Player.Id)
             .ToList();
 
@@ -44,7 +44,7 @@ public class LoginByPasswordEvent : IServerEvent {
 
             foreach (IPlayerConnection oldConnection in connections) {
                 db.Update(oldConnection.Player);
-                ((PlayerConnection)oldConnection).Disconnect();
+                oldConnection.Kick("Login from new place");
             }
         }
 

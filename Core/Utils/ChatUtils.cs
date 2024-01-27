@@ -64,7 +64,7 @@ public static class ChatUtils {
 
     // todo
     public static IEnumerable<IPlayerConnection> GetReceivers(IPlayerConnection from, IEntity chat) => chat.TemplateAccessor?.Template switch {
-        GeneralChatTemplate => from.Server.PlayerConnections,
+        GeneralChatTemplate => from.Server.PlayerConnections.Values,
 
         BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players
             .Select(battlePlayer => battlePlayer.PlayerConnection),
@@ -75,7 +75,7 @@ public static class ChatUtils {
 
         PersonalChatTemplate => chat.GetComponent<ChatParticipantsComponent>().Users
             .Select(user => {
-                IPlayerConnection? connection = from.Server.PlayerConnections
+                IPlayerConnection? connection = from.Server.PlayerConnections.Values
                     .Where(conn => conn.IsOnline)
                     .SingleOrDefault(conn => conn.User.Id == user.Id);
 
