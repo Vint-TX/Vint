@@ -224,7 +224,7 @@ public class BattleTank {
         Health = Math.Clamp(health, 0, MaxHealth);
 
         HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
-        healthComponent.CurrentHealth = health;
+        healthComponent.CurrentHealth = (float)Math.Ceiling(Health);
 
         Tank.RemoveComponent<HealthComponent>();
         Tank.AddComponent(healthComponent);

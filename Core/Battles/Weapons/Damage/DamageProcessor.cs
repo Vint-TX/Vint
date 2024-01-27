@@ -42,7 +42,10 @@ public class DamageProcessor(
                 break;
         }
 
-        sourcePlayerConnection.Send(new DamageInfoEvent(damage.HitPoint, (float)Math.Ceiling(damage.Value), damage.IsCritical), target.Tank);
+        sourcePlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
+                damage.Value,
+                damage.IsCritical || damage.IsBackHit || damage.IsTurretHit),
+            target.Tank);
     }
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage) {

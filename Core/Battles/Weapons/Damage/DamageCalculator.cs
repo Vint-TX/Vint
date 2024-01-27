@@ -33,7 +33,7 @@ public class DamageCalculator : IDamageCalculator {
 
         bool isTurretHit = handler is ShaftWeaponHandler { Aiming: true } && IsTurretHit(hitPoint, target.Tank);
         bool isBackHit = !isTurretHit && IsBackHit(hitPoint, target.Tank);
-        bool isCritical = isTurretHit || isBackHit;
+        bool isCritical = false;
 
         float weakening = !isSplash && handler.DamageWeakeningByDistance ? GetWeakeningMultiplier(handler, distance) : 1;
         float splash = isSplash && handler is ThunderWeaponHandler thunderHandler ? thunderHandler.GetSplashMultiplier(distance) : 1;
@@ -43,9 +43,9 @@ public class DamageCalculator : IDamageCalculator {
         float damage = baseDamage * weakening * splash * backHit * turretHit;
 
         if (handler is SmokyWeaponHandler smokyHandler)
-            isCritical = smokyHandler.TryCalculateCriticalDamage(isBackHit, ref damage) || isCritical;
+            isCritical = smokyHandler.TryCalculateCriticalDamage(isBackHit, ref damage);
 
-        return new CalculatedDamage(hitPoint, damage, isCritical);
+        return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }
 
     public float GetShaftDamage(ShaftWeaponHandler shaftHandler) {

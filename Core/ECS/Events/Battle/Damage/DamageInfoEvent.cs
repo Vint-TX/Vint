@@ -7,11 +7,11 @@ namespace Vint.Core.ECS.Events.Battle.Damage;
 public class DamageInfoEvent(
     Vector3 hitPoint,
     float damage,
-    bool isCritical,
+    bool backHit,
     bool isHealHit = false
 ) : IEvent {
     public Vector3 HitPoint { get; } = hitPoint;
     public float Damage { get; } = damage;
-    [ProtocolName("BackHit")] public bool Critical { get; } = isCritical;
+    public bool BackHit { get; } = backHit;
     public bool HealHit { get; } = isHealHit;
 }
