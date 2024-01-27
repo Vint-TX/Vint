@@ -725,8 +725,10 @@ public class SocketPlayerConnection(
 
     async Task SendLoop() {
         try {
-            while (!SendBuffer.IsCompleted) {
+            while (IsConnected && !SendBuffer.IsCompleted) {
                 ICommand command = SendBuffer.Take();
+                
+                if (!IsConnected) return;
 
                 try {
                     ProtocolBuffer buffer = new(new OptionalMap(), this);

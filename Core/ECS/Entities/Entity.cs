@@ -101,7 +101,7 @@ public class Entity(
                 throw new ArgumentException($"{this} already has component {type}");
         }
 
-        Logger.Debug("Added {Type} component to the {Entity}", type, this);
+        Logger.Debug("Added {Name} component to the {Entity}", type.Name, this);
 
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
@@ -142,6 +142,8 @@ public class Entity(
 
             TypeToComponent[type] = component;
         }
+        
+        Logger.Debug("Changed {Name} component in the {Entity}", type.Name, this);
 
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
@@ -160,6 +162,8 @@ public class Entity(
             if (!TypeToComponent.Remove(type))
                 throw new ArgumentException($"{this} does not have component {type}");
         }
+        
+        Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
         lock (SharedPlayers) {
             foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))

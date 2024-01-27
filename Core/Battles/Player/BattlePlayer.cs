@@ -12,17 +12,11 @@ public class BattlePlayer {
         Team = team;
         Battle = battle;
         IsSpectator = isSpectator;
-
-        BattleUserTemplate battleUserTemplate = new();
-
-        BattleUser = IsSpectator
-                         ? battleUserTemplate.CreateAsSpectator(PlayerConnection.User, Battle.BattleEntity)
-                         : battleUserTemplate.CreateAsTank(PlayerConnection.User, Battle.BattleEntity, Team);
     }
 
     public IPlayerConnection PlayerConnection { get; }
     public IEntity? Team { get; set; }
-    public IEntity BattleUser { get; }
+    public IEntity BattleUser { get; set; } = null!;
 
     public Battle Battle { get; }
     public BattleTank? Tank { get; set; }

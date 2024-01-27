@@ -20,6 +20,7 @@ using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Graffiti;
 using Vint.Core.ECS.Templates.Battle.Incarnation;
 using Vint.Core.ECS.Templates.Battle.Tank;
+using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.ECS.Templates.Battle.Weapon;
 using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.Server;
@@ -29,13 +30,11 @@ namespace Vint.Core.Battles.Player;
 public class BattleTank {
     public BattleTank(BattlePlayer battlePlayer) {
         BattlePlayer = battlePlayer;
-        BattleUser = battlePlayer.BattleUser;
         Battle = battlePlayer.Battle;
-
         StateManager = new TankStateManager(this);
 
+        BattleUserTemplate battleUserTemplate = new();
         IPlayerConnection playerConnection = battlePlayer.PlayerConnection;
-
         Preset preset = playerConnection.Player.CurrentPreset;
 
         IEntity weapon = preset.Weapon;
@@ -50,6 +49,10 @@ public class BattleTank {
         IEntity graffiti = preset.Graffiti;
 
         OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
+        
+        BattleUser = battlePlayer.BattleUser = battlePlayer.IsSpectator
+                                                   ? battleUserTemplate.CreateAsSpectator(playerConnection.User, Battle.BattleEntity)
+                                                   : battleUserTemplate.CreateAsTank(playerConnection.User, Battle.BattleEntity, battlePlayer.Team);
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
