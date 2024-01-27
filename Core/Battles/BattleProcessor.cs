@@ -45,7 +45,7 @@ public class BattleProcessor : IBattleProcessor {
             while (true) {
                 stopwatch.Restart();
 
-                foreach (Battle battle in Battles.ToArray()) {
+                foreach (Battle battle in Battles.ToList()) {
                     battle.Tick(lastBattleTickDurationSec);
 
                     if (battle is { WasPlayers: true, Players.Count: 0 } or

@@ -16,9 +16,9 @@ public class LoadUsersEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         using DbConnection db = new();
 
-        IPlayerConnection[] playerConnections = connection.Server.PlayerConnections.Values
+        List<IPlayerConnection> playerConnections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
-            .ToArray();
+            .ToList();
 
         foreach (IEntity user in UsersId
                      .Select(userId => db.Players.SingleOrDefault(player => player.Id == userId))

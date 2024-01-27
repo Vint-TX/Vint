@@ -38,6 +38,6 @@ public abstract class DiscreteWeaponHandler : WeaponHandler {
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, BattleEntity, damage);
+        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 }

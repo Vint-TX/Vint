@@ -15,7 +15,7 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
         if (!connection.Player.IsAdmin) return;
 
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);
 

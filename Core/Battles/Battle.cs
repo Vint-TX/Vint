@@ -134,7 +134,7 @@ public class Battle {
 
         // todo teams
 
-        foreach (BattlePlayer battlePlayer in Players.ToArray().Where(player => !player.IsSpectator))
+        foreach (BattlePlayer battlePlayer in Players.ToList().Where(player => !player.IsSpectator))
             battlePlayer.Init();
     }
 
@@ -153,7 +153,7 @@ public class Battle {
         TypeHandler.Tick();
         StateManager.Tick();
 
-        foreach (BattlePlayer battlePlayer in Players.ToArray())
+        foreach (BattlePlayer battlePlayer in Players.ToList())
             battlePlayer.Tick();
     }
 
@@ -215,6 +215,13 @@ public class Battle {
                 RemovePlayerFromLobby(battlePlayer);
 
             ModeHandler.SortScoreTable();
+
+            if (Players.Any(player => player.InBattleAsTank)) return;
+
+            foreach (BattlePlayer spectator in Players.ToList()) {
+                spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
+                RemovePlayer(spectator);
+            }
         }
     }
 
@@ -243,8 +250,8 @@ public class Battle {
                 connection.Unshare(player.PlayerConnection.User);
             }
 
-            if (!IsCustom && Players.All(player => player.IsSpectator)) {
-                foreach (BattlePlayer spectator in Players) {
+            if (Players.All(player => player.IsSpectator)) {
+                foreach (BattlePlayer spectator in Players.ToList()) {
                     spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
                     RemovePlayer(spectator);
                 }

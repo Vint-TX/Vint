@@ -10,13 +10,13 @@ namespace Vint.Core.ECS.Events.User.Friends;
 public class LoadSortedFriendsIdsWithNicknamesEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         using DbConnection db = new();
-        IPlayerConnection[] connections = connection.Server.PlayerConnections.Values.ToArray();
+        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values.ToList();
 
         Dictionary<long, string> friends = db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)
             .LoadWith(relation => relation.TargetPlayer)
             .Select(relation => new { Id = relation.TargetPlayerId, relation.TargetPlayer.Username })
-            .ToArray()
+            .ToList()
             .Select(relation => new {
                 relation.Id,
                 relation.Username,

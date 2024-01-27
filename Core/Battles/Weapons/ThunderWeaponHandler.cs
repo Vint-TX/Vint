@@ -21,7 +21,7 @@ public class ThunderWeaponHandler(
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, true);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, BattleEntity, damage);
+        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 
     public float GetSplashMultiplier(float distance) {

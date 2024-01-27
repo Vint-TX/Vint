@@ -22,7 +22,7 @@ public class ModeratorModule : ChatCommandModule {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -84,7 +84,7 @@ public class ModeratorModule : ChatCommandModule {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -141,7 +141,7 @@ public class ModeratorModule : ChatCommandModule {
         string username,
         [Option("id", "Id of warn")] long id) {
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -191,7 +191,7 @@ public class ModeratorModule : ChatCommandModule {
         [Option("username", "Username of player to unmute")]
         string username) {
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -243,7 +243,7 @@ public class ModeratorModule : ChatCommandModule {
         [WaitingForText, Option("reason", "Reason for kick", true)]
         string? reason = null) {
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 

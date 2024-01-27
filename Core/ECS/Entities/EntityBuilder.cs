@@ -34,7 +34,7 @@ public class EntityBuilder() : IEntityBuilder {
         if (Id == 0)
             Id = EntityRegistry.FreeId;
 
-        Entity entity = new(Id, TemplateAccessor, Components.ToArray());
+        Entity entity = new(Id, TemplateAccessor, Components.ToList());
         if (!temp) EntityRegistry.Add(entity);
 
         return entity;

@@ -32,8 +32,7 @@ public class BattleTank {
         BattlePlayer = battlePlayer;
         Battle = battlePlayer.Battle;
         StateManager = new TankStateManager(this);
-
-        BattleUserTemplate battleUserTemplate = new();
+        
         IPlayerConnection playerConnection = battlePlayer.PlayerConnection;
         Preset preset = playerConnection.Player.CurrentPreset;
 
@@ -50,9 +49,7 @@ public class BattleTank {
 
         OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
         
-        BattleUser = battlePlayer.BattleUser = battlePlayer.IsSpectator
-                                                   ? battleUserTemplate.CreateAsSpectator(playerConnection.User, Battle.BattleEntity)
-                                                   : battleUserTemplate.CreateAsTank(playerConnection.User, Battle.BattleEntity, battlePlayer.Team);
+        BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.User, Battle.BattleEntity, battlePlayer.Team);
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
@@ -241,12 +238,12 @@ public class BattleTank {
         SelfKill();
 
         Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
-        KillEvent killEvent = new(killer.Tank, weapon);
+        KillEvent killEvent = new(weapon, Tank);
 
         foreach (IPlayerConnection connection in Battle.Players
                      .Where(battlePlayer => battlePlayer.InBattle)
                      .Select(battlePlayer => battlePlayer.PlayerConnection)
-                     .ToArray()) {
+                     .ToList()) {
             connection.Send(killEvent, killer.BattleUser);
         }
 

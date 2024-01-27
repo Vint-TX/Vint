@@ -1,4 +1,7 @@
+using System.Diagnostics;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.States;
+using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
@@ -28,8 +31,45 @@ public class HammerWeaponHandler : WeaponHandler {
 
     DateTime? ReloadEndTime { get; set; }
 
-    public override void Fire(HitTarget target) {
-        throw new NotImplementedException();
+    public override void Fire(HitTarget target) => throw new UnreachableException();
+
+    public void Fire(List<HitTarget> hitTargets) {
+        Battle battle = BattleTank.Battle;
+        List<BattleTank> tanks = battle.Players
+            .Where(battlePlayer => battlePlayer.InBattleAsTank)
+            .Select(battlePlayer => battlePlayer.Tank!)
+            .ToList();
+
+        Dictionary<BattleTank, CalculatedDamage> tankToDamage = new();
+        
+        foreach (HitTarget hitTarget in hitTargets) {
+            BattleTank targetTank = tanks.Single(battleTank => battleTank.Incarnation == hitTarget.IncarnationEntity);
+            
+            bool isEnemy = BattleTank.IsEnemy(targetTank);
+
+            // ReSharper disable once ArrangeRedundantParentheses
+            if (targetTank.StateManager.CurrentState is not Active ||
+                (!isEnemy && !battle.Properties.FriendlyFire)) continue;
+            
+            CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, hitTarget);
+
+            if (tankToDamage.TryAdd(targetTank, damage)) continue;
+
+            CalculatedDamage calculatedDamage = tankToDamage[targetTank];
+                
+            calculatedDamage = new CalculatedDamage(
+                damage.IsBackHit ? damage.HitPoint : calculatedDamage.HitPoint,
+                damage.Value + calculatedDamage.Value,
+                damage.IsCritical || calculatedDamage.IsCritical,
+                damage.IsBackHit || calculatedDamage.IsBackHit,
+                damage.IsTurretHit || calculatedDamage.IsTurretHit,
+                damage.IsSplash || calculatedDamage.IsSplash);
+                
+            tankToDamage[targetTank] = calculatedDamage;
+        }
+
+        foreach ((BattleTank targetTank, CalculatedDamage damage) in tankToDamage)
+            battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 
     public override void OnTankDisable() {

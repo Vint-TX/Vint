@@ -19,7 +19,7 @@ public abstract class ModeHandler(
 
     public virtual void SortScoreTable() {
         foreach (var roundUserToPlace in Battle.Players
-                     .ToArray()
+                     .ToList()
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .Select(battlePlayer => battlePlayer.Tank!.RoundUser)
                      .OrderBy(roundUser => roundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses)

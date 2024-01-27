@@ -41,6 +41,11 @@ public class SelfHitEvent : HitEvent, IServerEvent {
 
         WeaponHandler weaponHandler = battleTank.WeaponHandler;
 
+        if (weaponHandler is HammerWeaponHandler hammerHandler) {
+            hammerHandler.Fire(Targets);
+            return;
+        }
+
         foreach (HitTarget target in Targets) {
             try {
                 weaponHandler.Fire(target);

@@ -7,7 +7,7 @@ namespace Vint.Core.ChatCommands.Modules;
 [ChatCommandGroup("user", "Commands for all players", PlayerGroups.None)]
 public class UserModule : ChatCommandModule {
     [ChatCommand("help", "Show list of commands or usage of specified command")]
-    public void HelpCommand(
+    public void Help(
         ChatCommandContext ctx,
         [Option("command", "Name of command to get help", true)]
         string commandName = "") {

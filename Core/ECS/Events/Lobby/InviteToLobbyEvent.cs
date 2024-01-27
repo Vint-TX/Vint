@@ -11,9 +11,9 @@ public class InviteToLobbyEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
-        IPlayerConnection[] connections = connection.Server.PlayerConnections.Values
+        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
-            .ToArray();
+            .ToList();
 
         foreach (IPlayerConnection? receiver in InvitedUsersIds.Select(userId => connections.SingleOrDefault(conn => conn.Player.Id == userId)))
             receiver?.Send(new InvitedToLobbyEvent(connection.Player.Username, connection.BattlePlayer!.Battle.LobbyId), receiver.User);

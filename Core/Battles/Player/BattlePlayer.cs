@@ -12,6 +12,9 @@ public class BattlePlayer {
         Team = team;
         Battle = battle;
         IsSpectator = isSpectator;
+
+        if (IsSpectator)
+            BattleUser = new BattleUserTemplate().CreateAsSpectator(PlayerConnection.User, Battle.BattleEntity);
     }
 
     public IPlayerConnection PlayerConnection { get; }

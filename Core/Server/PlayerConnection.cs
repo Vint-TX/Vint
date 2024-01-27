@@ -576,8 +576,9 @@ public class SocketPlayerConnection(
 ) : PlayerConnection(server) {
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
-    public override bool IsOnline => IsConnected && ClientSession != null! && User != null! && Player != null!;
-    bool IsConnected => Socket.Connected;
+    public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
+    bool IsSocketConnected => Socket.Connected;
+    bool IsConnected { get; set; }
 
     Socket Socket { get; } = socket;
     Protocol.Protocol Protocol { get; } = protocol;
@@ -601,16 +602,20 @@ public class SocketPlayerConnection(
         Task.Run(ReceiveLoop).Catch();
         Task.Run(SendLoop).Catch();
         Task.Run(ExecuteLoop).Catch();
+
+        IsConnected = true;
     }
 
     public override void Send(ICommand command) {
-        if (!IsConnected || SendBuffer.IsAddingCompleted) return;
+        if (!IsSocketConnected || SendBuffer.IsAddingCompleted) return;
 
         Logger.Debug("Queueing for sending {Command}", command);
         SendBuffer.Add(command);
     }
 
     public void Disconnect() {
+        if (!IsConnected) return;
+        
         try {
             Socket.Shutdown(SocketShutdown.Both);
         } finally {
@@ -620,8 +625,12 @@ public class SocketPlayerConnection(
     }
 
     void OnDisconnected() {
+        if (!IsConnected) return;
+
+        IsConnected = false;
+        
         Logger.Information("Socket disconnected");
-        Logger.Verbose("{X}", new StackTrace());
+        Logger.Warning("{X}", new StackTrace());
 
         try {
             if (InLobby) {
@@ -653,7 +662,7 @@ public class SocketPlayerConnection(
         byte[] bytes = ArrayPool<byte>.Shared.Rent(4096);
 
         try {
-            while (IsConnected) {
+            while (IsSocketConnected) {
                 ProtocolBuffer buffer = new(new OptionalMap(), this);
                 await using NetworkStream stream = new(Socket);
                 using BinaryReader reader = new BigEndianBinaryReader(stream);
@@ -725,10 +734,10 @@ public class SocketPlayerConnection(
 
     async Task SendLoop() {
         try {
-            while (IsConnected && !SendBuffer.IsCompleted) {
+            while (IsSocketConnected && !SendBuffer.IsCompleted) {
                 ICommand command = SendBuffer.Take();
                 
-                if (!IsConnected) return;
+                if (!IsSocketConnected) return;
 
                 try {
                     ProtocolBuffer buffer = new(new OptionalMap(), this);

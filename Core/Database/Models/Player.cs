@@ -287,7 +287,7 @@ public class Player {
                          .Where(punishment => punishment.PlayerId == Id &&
                                               punishment.Active &&
                                               punishment.Duration.HasValue &&
-                                              punishment.PunishTime + punishment.Duration <= DateTimeOffset.UtcNow).ToArray()) {
+                                              punishment.PunishTime + punishment.Duration <= DateTimeOffset.UtcNow).ToList()) {
                 punishment.Active = false;
                 db.Update(punishment);
             }

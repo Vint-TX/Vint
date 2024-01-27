@@ -11,13 +11,13 @@ namespace Vint.Core.ECS.Events.User.Friends;
 public class LoadSortedFriendsIdsEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         using DbConnection db = new();
-        IPlayerConnection[] connections = connection.Server.PlayerConnections.Values.ToArray();
+        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values.ToList();
 
         var relations = db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)
             .LoadWith(relation => relation.TargetPlayer)
             .Select(relation => new { Id = relation.TargetPlayerId, relation.TargetPlayer.Username, relation.Types })
-            .ToArray()
+            .ToList()
             .Select(relation => new {
                 relation.Id,
                 relation.Username,
@@ -28,7 +28,7 @@ public class LoadSortedFriendsIdsEvent : IServerEvent {
             .OrderByDescending(player => player.IsOnline)
             .ThenByDescending(player => player.InLobby)
             .ThenBy(player => player.Username)
-            .ToArray();
+            .ToList();
 
         Dictionary<long, string> friends = relations
             .Where(player => (player.RelationTypes & RelationTypes.Friend) == RelationTypes.Friend)

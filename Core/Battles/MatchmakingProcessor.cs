@@ -24,7 +24,7 @@ public class MatchmakingProcessor(
     public void StartTicking() {
         try {
             while (true) {
-                foreach (IPlayerConnection connection in PlayerQueue.ToArray()) {
+                foreach (IPlayerConnection connection in PlayerQueue.ToList()) {
                     if (!connection.IsOnline) {
                         PlayerQueue.Remove(connection);
                         continue;

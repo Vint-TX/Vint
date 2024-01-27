@@ -1,5 +1,6 @@
 using LinqToDB;
 using Vint.Core.Battles;
+using Vint.Core.Battles.Player;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -23,7 +24,7 @@ public class AdminModule : ChatCommandModule {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -80,7 +81,7 @@ public class AdminModule : ChatCommandModule {
         [Option("username", "Username of player to unban")]
         string username) {
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToArray()
+            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -144,5 +145,14 @@ public class AdminModule : ChatCommandModule {
 
         invite.Id = db.InsertWithInt64Identity(invite);
         ctx.SendPrivateResponse($"{invite}");
+    }
+
+    [RequireConditions(ChatCommandConditions.InLobby)]
+    [ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby")]
+    public void KickAllFromBattle(ChatCommandContext ctx) {
+        Battle battle = ctx.Connection.BattlePlayer!.Battle;
+
+        foreach (BattlePlayer battlePlayer in battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattleAsTank))
+            battle.RemovePlayer(battlePlayer);
     }
 }

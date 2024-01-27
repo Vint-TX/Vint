@@ -77,7 +77,7 @@ public class GameServer(
         while (true) {
             if (!IsStarted) return;
 
-            foreach (IPlayerConnection playerConnection in PlayerConnections.Values.ToArray()) {
+            foreach (IPlayerConnection playerConnection in PlayerConnections.Values.ToList()) {
                 try {
                     playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
                 } catch (Exception e) {

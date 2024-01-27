@@ -42,7 +42,7 @@ public class MatchmakingHandler(
     }
 
     public override void Tick() {
-        foreach (BattlePlayer player in WaitingPlayers.ToArray()) {
+        foreach (BattlePlayer player in WaitingPlayers.ToList()) {
             if (DateTimeOffset.UtcNow < player.BattleJoinTime) continue;
 
             player.Init();

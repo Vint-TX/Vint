@@ -14,7 +14,7 @@ public sealed class ChatCommand(
     ChatCommandModule module,
     IReadOnlyDictionary<string, OptionAttribute> options,
     MethodInfo method,
-    ParameterInfo[] parameters
+    List<ParameterInfo> parameters
 ) {
     public string MethodName { get; } = methodName;
     public IChatCommandProcessor Processor { get; } = processor;
@@ -23,7 +23,7 @@ public sealed class ChatCommand(
     public ChatCommandModule Module { get; } = module;
     public IReadOnlyDictionary<string, OptionAttribute> Options { get; } = options;
     public MethodInfo Method { get; } = method;
-    public ParameterInfo[] Parameters { get; } = parameters;
+    public List<ParameterInfo> Parameters { get; } = parameters;
 
     public void Execute(IPlayerConnection connection, IEntity chat, string rawCommand) {
         ChatCommandContext context = new(Processor, connection, chat, Info);
@@ -46,18 +46,18 @@ public sealed class ChatCommand(
         }
 
         List<object?> parameters = [context];
-        string[] rawParameterValues = rawCommand
+        List<string> rawParameterValues = rawCommand
             .Split()
             .Skip(1) // Command name
-            .ToArray();
+            .ToList();
 
-        if (rawParameterValues.Length > Parameters.Length &&
+        if (rawParameterValues.Count > Parameters.Count &&
             Parameters.All(param => param.GetCustomAttribute<WaitingForTextAttribute>() == null)) {
-            context.SendPrivateResponse($"Too much parameters. Expected: {Parameters.Length}, got: {rawParameterValues.Length}");
+            context.SendPrivateResponse($"Too much parameters. Expected: {Parameters.Count}, got: {rawParameterValues.Count}");
             return;
         }
 
-        for (int i = 0; i < Parameters.Length; i++) {
+        for (int i = 0; i < Parameters.Count; i++) {
             ParameterInfo parameterInfo = Parameters[i];
             string? rawParameterValue = rawParameterValues.ElementAtOrDefault(i);
 
@@ -74,7 +74,7 @@ public sealed class ChatCommand(
 
             if (parameterInfo.GetCustomAttribute<WaitingForTextAttribute>() != null) {
                 rawParameterValue = string.Join(' ', rawParameterValues.Skip(i));
-                i = Parameters.Length;
+                i = Parameters.Count;
             }
 
             try {
@@ -99,7 +99,7 @@ public sealed class ChatCommand(
             Method.Invoke(Module, parameters.ToArray());
             Module.AfterCommandExecution(context);
         } catch (TargetParameterCountException) {
-            context.SendPrivateResponse($"Too few parameters. Expected: {Parameters.Length}, got: {parameters.Count - 1}");
+            context.SendPrivateResponse($"Too few parameters. Expected: {Parameters.Count}, got: {parameters.Count - 1}");
         } catch (TargetInvocationException invocationException) {
             if (invocationException.InnerException is NotImplementedException)
                 context.SendPrivateResponse($"Handler for '{Info.Name}' command is not implemented yet");
