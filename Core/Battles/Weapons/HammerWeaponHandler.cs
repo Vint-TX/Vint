@@ -41,30 +41,28 @@ public class HammerWeaponHandler : WeaponHandler {
             .ToList();
 
         Dictionary<BattleTank, CalculatedDamage> tankToDamage = new();
-        
+
         foreach (HitTarget hitTarget in hitTargets) {
             BattleTank targetTank = tanks.Single(battleTank => battleTank.Incarnation == hitTarget.IncarnationEntity);
-            
+
             bool isEnemy = BattleTank.IsEnemy(targetTank);
 
             // ReSharper disable once ArrangeRedundantParentheses
             if (targetTank.StateManager.CurrentState is not Active ||
                 (!isEnemy && !battle.Properties.FriendlyFire)) continue;
-            
+
             CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, hitTarget);
 
             if (tankToDamage.TryAdd(targetTank, damage)) continue;
 
             CalculatedDamage calculatedDamage = tankToDamage[targetTank];
-                
-            calculatedDamage = new CalculatedDamage(
-                damage.IsBackHit ? damage.HitPoint : calculatedDamage.HitPoint,
-                damage.Value + calculatedDamage.Value,
-                damage.IsCritical || calculatedDamage.IsCritical,
-                damage.IsBackHit || calculatedDamage.IsBackHit,
-                damage.IsTurretHit || calculatedDamage.IsTurretHit,
-                damage.IsSplash || calculatedDamage.IsSplash);
-                
+
+            calculatedDamage = calculatedDamage with {
+                HitPoint = damage.IsBackHit ? damage.HitPoint : calculatedDamage.HitPoint,
+                Value = damage.Value + calculatedDamage.Value,
+                IsBackHit = damage.IsBackHit || calculatedDamage.IsBackHit
+            };
+
             tankToDamage[targetTank] = calculatedDamage;
         }
 

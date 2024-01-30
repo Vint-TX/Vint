@@ -82,23 +82,23 @@ public class DamageCalculator : IDamageCalculator {
                        1);
     }
 
-    public static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers 
+    static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers 
+        hitPoint.Z <
         hull.TemplateAccessor?.ConfigPath?.Split('/').Last() switch {
             "dictator" => -1.9,
             "mammoth" => -1.8,
             "viking" => -1.6,
             _ => -1.25
-        } >
-        hitPoint.Z;
+        };
 
-    static bool IsTurretHit(Vector3 hitPoint, IEntity hull) =>
-        hull.TemplateAccessor?.ConfigPath?.Split('/').Last() switch { // "magic" numbers
+    static bool IsTurretHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers
+        hitPoint.Y >
+        hull.TemplateAccessor?.ConfigPath?.Split('/').Last() switch {
             "dictator" => 2.015,
             "hornet" => 1.37,
             "mammoth" => 1.74,
             "titan" => 1.6265,
             "viking" => 1.2955,
             _ => 1.51
-        } <
-        hitPoint.Y;
+        };
 }

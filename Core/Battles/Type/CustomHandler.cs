@@ -27,6 +27,9 @@ public class CustomHandler(
             Owner);
 
         Battle.StateManager.SetState(new NotStarted(Battle.StateManager));
+
+        if (!Battle.MapInfo.HasSpawnPoints(Battle.Properties.BattleMode))
+            Battle.MapInfo.InitializeDefaultSpawnPoints(Battle.Properties.BattleMode);
     }
 
     public override void Tick() { }

@@ -18,7 +18,7 @@ public abstract class DiscreteWeaponTemplate : WeaponTemplate {
         if (ConfigManager.TryGetComponent(configPath, out DamageWeakeningByDistanceComponent? damageWeakeningByDistanceComponent))
             entity.AddComponent(damageWeakeningByDistanceComponent);
 
-        if (this is not RicochetBattleItemTemplate or ShaftBattleItemTemplate)
+        if (this is not RicochetBattleItemTemplate)
             entity.AddComponent(ConfigManager.GetComponent<DiscreteWeaponEnergyComponent>(configPath));
 
         return entity;

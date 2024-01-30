@@ -615,7 +615,7 @@ public class SocketPlayerConnection(
 
     public void Disconnect() {
         if (!IsConnected) return;
-        
+
         try {
             Socket.Shutdown(SocketShutdown.Both);
         } finally {
@@ -628,7 +628,7 @@ public class SocketPlayerConnection(
         if (!IsConnected) return;
 
         IsConnected = false;
-        
+
         Logger.Information("Socket disconnected");
         Logger.Warning("{X}", new StackTrace());
 
@@ -736,7 +736,7 @@ public class SocketPlayerConnection(
         try {
             while (IsSocketConnected && !SendBuffer.IsCompleted) {
                 ICommand command = SendBuffer.Take();
-                
+
                 if (!IsSocketConnected) return;
 
                 try {

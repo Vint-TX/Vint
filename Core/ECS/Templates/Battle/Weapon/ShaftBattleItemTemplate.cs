@@ -13,10 +13,7 @@ public class ShaftBattleItemTemplate : DiscreteWeaponTemplate {
         IEntity entity = base.Create(configPath, tank, battlePlayer);
 
         entity.AddComponent(new ShaftComponent());
-        entity.AddComponent(new ShaftEnergyComponent(0.2857f,
-            1,
-            0.2f,
-            0.143f)); // values from https://github.com/Assasans/TXServer-Public/blob/826161beae3ecbd7bb32403f0109752716bdf965/TXServer/ECSSystem/EntityTemplates/Battle/Weapon/ShaftBattleItemTemplate.cs#L22
+        entity.AddComponent(new ShaftEnergyComponent(0.4f, 1, 0.2f, 0.143f));
         entity.AddComponent(ConfigManager.GetComponent<ShaftAimingImpactComponent>(configPath));
         entity.AddComponent(ConfigManager.GetComponent<ShaftAimingSpeedComponent>(configPath));
         entity.AddComponent(ConfigManager.GetComponent<ShaftStateConfigComponent>(configPath.Replace("garage", "battle")));

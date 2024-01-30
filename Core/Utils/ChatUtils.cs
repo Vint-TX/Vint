@@ -84,6 +84,10 @@ public static class ChatUtils {
             })
             .Where(conn => conn != null!),
 
+        TeamBattleChatTemplate => from.BattlePlayer!.Battle.Players
+            .Where(battlePlayer => battlePlayer.Team == from.BattlePlayer.Team)
+            .Select(battlePlayer => battlePlayer.PlayerConnection),
+
         _ => []
     };
 }

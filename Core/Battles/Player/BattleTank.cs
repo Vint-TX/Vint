@@ -32,7 +32,7 @@ public class BattleTank {
         BattlePlayer = battlePlayer;
         Battle = battlePlayer.Battle;
         StateManager = new TankStateManager(this);
-        
+
         IPlayerConnection playerConnection = battlePlayer.PlayerConnection;
         Preset preset = playerConnection.Player.CurrentPreset;
 
@@ -48,7 +48,7 @@ public class BattleTank {
         IEntity graffiti = preset.Graffiti;
 
         OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
-        
+
         BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.User, Battle.BattleEntity, battlePlayer.Team);
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
@@ -207,7 +207,7 @@ public class BattleTank {
         }
 
         PreviousSpawnPoint = SpawnPoint;
-        SpawnPoint = Battle.ModeHandler.GetRandomSpawnPoint();
+        SpawnPoint = Battle.ModeHandler.GetRandomSpawnPoint(BattlePlayer);
 
         Movement movement = new() {
             Position = SpawnPoint.Position,

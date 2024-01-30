@@ -12,13 +12,14 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Type;
 
-public class MatchmakingHandler(
-    Battle battle
-) : TypeHandler(battle) {
+public class MatchmakingHandler : TypeHandler {
+    public MatchmakingHandler(Battle battle) : base(battle) =>
+        Maps = ConfigManager.MapInfos.Values.Where(map => map.MatchMaking && map.HasSpawnPoints(BattleMode)).ToList();
+
     public BattleMode BattleMode { get; } = GetRandomMode();
 
     List<BattlePlayer> WaitingPlayers { get; } = [];
-    List<MapInfo> Maps { get; } = ConfigManager.MapInfos.Values.Where(map => map.MatchMaking).ToList();
+    List<MapInfo> Maps { get; }
 
     public override void Setup() {
         MapInfo mapInfo = Maps.Shuffle().First();
@@ -69,8 +70,8 @@ public class MatchmakingHandler(
 
     static BattleMode GetRandomMode() => new Random().Next(0, 100) switch { // todo
         //< 34 => BattleMode.CTF,
-        //< 67 => BattleMode.TDM,
-        <= 100 => BattleMode.DM,
+        /*< 67*/ < 50 => BattleMode.TDM,
+        /*<= 100*/ < 100 => BattleMode.DM,
         _ => throw new UnreachableException()
     };
 }

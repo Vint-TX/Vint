@@ -1,6 +1,7 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Battle.Round;
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.Server;
 
@@ -11,14 +12,12 @@ public abstract class ModeHandler(
 ) {
     public Battle Battle { get; } = battle;
 
-    public abstract BattleMode BattleMode { get; }
-
     public abstract void Tick();
 
-    public abstract SpawnPoint GetRandomSpawnPoint();
+    public abstract SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer);
 
-    public virtual void SortScoreTable() {
-        foreach (var roundUserToPlace in Battle.Players
+    protected void SortPlayers(IEnumerable<BattlePlayer> players) {
+        foreach (var roundUserToPlace in players
                      .ToList()
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .Select(battlePlayer => battlePlayer.Tank!.RoundUser)
@@ -34,6 +33,8 @@ public abstract class ModeHandler(
         }
     }
 
+    public abstract void SortPlayers();
+
     public abstract void OnStarted();
 
     public abstract void OnFinished();
@@ -42,7 +43,8 @@ public abstract class ModeHandler(
 
     public abstract BattlePlayer SetupBattlePlayer(IPlayerConnection player);
 
-    public abstract void RemoveBattlePlayer(BattlePlayer player);
+    public virtual void RemoveBattlePlayer(BattlePlayer player) =>
+        player.PlayerConnection.User.RemoveComponent<TeamColorComponent>();
 
     public abstract void PlayerEntered(BattlePlayer player);
 

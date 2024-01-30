@@ -142,7 +142,7 @@ public class Entity(
 
             TypeToComponent[type] = component;
         }
-        
+
         Logger.Debug("Changed {Name} component in the {Entity}", type.Name, this);
 
         lock (SharedPlayers) {
@@ -162,7 +162,7 @@ public class Entity(
             if (!TypeToComponent.Remove(type))
                 throw new ArgumentException($"{this} does not have component {type}");
         }
-        
+
         Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
         lock (SharedPlayers) {

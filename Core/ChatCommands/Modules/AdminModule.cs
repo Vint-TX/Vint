@@ -5,6 +5,7 @@ using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Battle;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -147,12 +148,13 @@ public class AdminModule : ChatCommandModule {
         ctx.SendPrivateResponse($"{invite}");
     }
 
-    [RequireConditions(ChatCommandConditions.InLobby)]
-    [ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby")]
+    [RequireConditions(ChatCommandConditions.InLobby), ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby")]
     public void KickAllFromBattle(ChatCommandContext ctx) {
         Battle battle = ctx.Connection.BattlePlayer!.Battle;
 
-        foreach (BattlePlayer battlePlayer in battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattleAsTank))
+        foreach (BattlePlayer battlePlayer in battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattleAsTank)) {
+            battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
             battle.RemovePlayer(battlePlayer);
+        }
     }
 }

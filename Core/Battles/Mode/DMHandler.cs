@@ -1,6 +1,6 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Matchmaking;
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -9,22 +9,24 @@ namespace Vint.Core.Battles.Mode;
 
 public class DMHandler(
     Battle battle
-) : ModeHandler(battle) {
+) : SoloHandler(battle) {
     List<SpawnPoint> SpawnPoints { get; set; } = battle.MapInfo.SpawnPoints.Deathmatch.ToList();
     SpawnPoint? LastSpawnPoint { get; set; }
 
-    public override BattleMode BattleMode => BattleMode.DM;
-
     public override void Tick() { }
 
-    public override SpawnPoint GetRandomSpawnPoint() {
+    public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
         SpawnPoint spawnPoint = SpawnPoints
             .Shuffle()
-            .First(spawnPoint => spawnPoint.Number != LastSpawnPoint?.Number);
+            .First(spawnPoint => spawnPoint.Number != LastSpawnPoint?.Number &&
+                                 spawnPoint.Number != battlePlayer.Tank?.SpawnPoint?.Number &&
+                                 spawnPoint.Number != battlePlayer.Tank?.PreviousSpawnPoint?.Number);
 
         LastSpawnPoint = spawnPoint;
         return spawnPoint;
     }
+
+    public override void SortPlayers() => SortPlayers(Battle.Players.ToList());
 
     public override void OnStarted() { }
 
@@ -44,9 +46,6 @@ public class DMHandler(
         player.User.AddComponent(new TeamColorComponent(TeamColor.None));
         return tankPlayer;
     }
-
-    public override void RemoveBattlePlayer(BattlePlayer player) =>
-        player.PlayerConnection.User.RemoveComponent<TeamColorComponent>();
 
     public override void PlayerEntered(BattlePlayer player) { }
 

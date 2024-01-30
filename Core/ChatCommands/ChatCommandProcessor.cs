@@ -24,7 +24,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
 
     public void RegisterCommands() {
         Logger.Information("Generating chat commands");
-        
+
         List<Type> commandModules = Assembly
             .GetExecutingAssembly()
             .GetTypes()
@@ -34,7 +34,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
         // ReSharper disable LoopCanBeConvertedToQuery
         foreach (Type commandModule in commandModules) {
             Logger.Debug("Generating {Name} group", commandModule.Name);
-            
+
             ChatCommandModule chatCommandModule = (ChatCommandModule)Activator.CreateInstance(commandModule)!;
             ChatCommandGroupAttribute? chatCommandGroupAttribute = commandModule.GetCustomAttribute<ChatCommandGroupAttribute>();
 
@@ -73,7 +73,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
                 Commands.Add(chatCommand);
             }
         }
-        
+
         Logger.Information("Chat commands generated");
     }
 

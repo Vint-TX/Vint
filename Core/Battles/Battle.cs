@@ -81,7 +81,7 @@ public class Battle {
     public void Setup() {
         BattleModeTemplate battleModeTemplate = Properties.BattleMode switch {
             BattleMode.DM => new DMTemplate(),
-            BattleMode.TDM => throw new NotImplementedException(),
+            BattleMode.TDM => new TDMTemplate(),
             BattleMode.CTF => throw new NotImplementedException(),
             _ => throw new UnreachableException()
         };
@@ -93,7 +93,7 @@ public class Battle {
 
         ModeHandler = Properties.BattleMode switch {
             BattleMode.DM => new DMHandler(this),
-            BattleMode.TDM => throw new NotImplementedException(),
+            BattleMode.TDM => new TDMHandler(this),
             BattleMode.CTF => throw new NotImplementedException(),
             _ => throw new UnreachableException()
         };
@@ -214,9 +214,9 @@ public class Battle {
             if (!IsCustom || !battlePlayer.PlayerConnection.IsOnline)
                 RemovePlayerFromLobby(battlePlayer);
 
-            ModeHandler.SortScoreTable();
+            ModeHandler.SortPlayers();
 
-            if (Players.Any(player => player.InBattleAsTank)) return;
+            if (Players.Any(player => !player.IsSpectator)) return;
 
             foreach (BattlePlayer spectator in Players.ToList()) {
                 spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);

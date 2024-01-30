@@ -1,10 +1,8 @@
 using Vint.Core.Database;
-using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
-using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.User;
 

@@ -28,7 +28,7 @@ public class ShaftWeaponHandler : DiscreteWeaponHandler {
         AimingDuration = TimeSpan.FromMilliseconds(durationMs);
         float energy = (float)Math.Clamp(0.9 - AimingDuration.TotalMilliseconds * EnergyDrainPerMs, 0, 1);
 
-        BattleEntity.ChangeComponent<WeaponEnergyComponent>(component => component.Energy = energy);
+        //BattleEntity.ChangeComponent<WeaponEnergyComponent>(component => component.Energy = energy);
         BattleEntity.ChangeComponent(((IComponent)OriginalWeaponRotationComponent).Clone());
     }
 
