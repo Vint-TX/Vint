@@ -47,12 +47,12 @@ public class MoveCommandEvent : IServerEvent {
         battleTank.Orientation = movement.Orientation;
 
         if (PhysicsUtils.CheckOverflow(movement.Position + velocity))
-            battleTank.SelfDestructTime = DateTimeOffset.UtcNow;
+            battleTank.ForceSelfDestruct = true;
 
         if (!battle.Properties.KillZoneEnabled) return;
 
         foreach (PuntativeGeometry geometry in battle.MapInfo.PuntativeGeoms)
             if (PhysicsUtils.IsInsideBox(movement.Position, geometry.Position, geometry.Size))
-                battleTank.SelfDestructTime = DateTimeOffset.UtcNow;
+                battleTank.ForceSelfDestruct = true;
     }
 }

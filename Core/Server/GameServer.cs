@@ -16,6 +16,7 @@ public class GameServer(
     ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
     Protocol.Protocol Protocol { get; } = new();
     TcpListener Listener { get; } = new(host, port);
+    IEnumerable<SocketPlayerConnection> SocketPlayerConnections => PlayerConnections.Values.Cast<SocketPlayerConnection>();
 
     public ConcurrentDictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();
     public IBattleProcessor BattleProcessor { get; private set; } = null!;
@@ -73,19 +74,26 @@ public class GameServer(
         }
     }
 
+    public void RemovePlayer(Guid id) => PlayerConnections.Remove(id, out _);
+
     void PingLoop() {
         while (true) {
             if (!IsStarted) return;
 
-            foreach (IPlayerConnection playerConnection in PlayerConnections.Values.ToList()) {
+            foreach (SocketPlayerConnection playerConnection in SocketPlayerConnections.ToList()) {
                 try {
+                    if (!playerConnection.IsSocketConnected) {
+                        playerConnection.Kick("Zombie");
+                        continue;
+                    }
+                    
                     playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
                 } catch (Exception e) {
                     Logger.Error(e, "Socket caught an exception while sending ping event");
                 }
             }
 
-            Thread.Sleep(10000);
+            Thread.Sleep(5000);
         }
     }
 }

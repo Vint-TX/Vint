@@ -57,6 +57,6 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             }
         }
 
-        // todo
+        // todo statistics
     }
 }

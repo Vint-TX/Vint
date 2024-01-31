@@ -68,10 +68,10 @@ public class MatchmakingHandler : TypeHandler {
         battlePlayer.PlayerConnection.User.RemoveComponent<MatchMakingUserComponent>();
     }
 
-    static BattleMode GetRandomMode() => new Random().Next(0, 100) switch { // todo
-        //< 34 => BattleMode.CTF,
-        /*< 67*/ < 50 => BattleMode.TDM,
-        /*<= 100*/ < 100 => BattleMode.DM,
+    static BattleMode GetRandomMode() => Random.Shared.NextDouble() switch {
+        < 0.34 => BattleMode.CTF,
+        < 0.67 => BattleMode.TDM,
+        < 1 => BattleMode.DM,
         _ => throw new UnreachableException()
     };
 }

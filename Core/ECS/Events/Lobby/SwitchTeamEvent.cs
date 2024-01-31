@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
-using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
@@ -20,16 +19,11 @@ public class SwitchTeamEvent : IServerEvent {
         if (battle.ModeHandler is not TeamHandler teamHandler) return;
 
         UserLimitComponent userLimitComponent = battle.LobbyEntity.GetComponent<UserLimitComponent>();
-        TeamColorComponent teamColorComponent = connection.User.GetComponent<TeamColorComponent>();
-        TeamColor prevColor = teamColorComponent.TeamColor;
+        TeamColor prevColor = battlePlayer.TeamColor;
         int newTeamPlayersCount = prevColor == TeamColor.Red ? teamHandler.BluePlayers.Count() : teamHandler.RedPlayers.Count();
 
         if (newTeamPlayersCount >= userLimitComponent.TeamLimit) return;
 
-        teamColorComponent.TeamColor = prevColor == TeamColor.Red ? TeamColor.Blue : TeamColor.Red;
         battlePlayer.Team = prevColor == TeamColor.Red ? teamHandler.BlueTeam : teamHandler.RedTeam;
-
-        connection.User.RemoveComponent(teamColorComponent);
-        connection.User.AddComponent(teamColorComponent);
     }
 }

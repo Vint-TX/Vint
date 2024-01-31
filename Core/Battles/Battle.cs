@@ -53,7 +53,7 @@ public class Battle {
 
     public ILogger Logger { get; } = Log.Logger.ForType(typeof(Battle));
 
-    public long Id => BattleEntity.Id;
+    public long Id => Entity.Id;
     public long LobbyId => LobbyEntity.Id;
     public bool CanAddPlayers => Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
     public bool IsCustom { get; }
@@ -64,10 +64,10 @@ public class Battle {
     public BattleProperties Properties { get; set; }
     public MapInfo MapInfo { get; set; } = null!;
 
-    public IEntity BattleEntity { get; set; } = null!;
     public IEntity LobbyEntity { get; set; } = null!;
-    public IEntity RoundEntity { get; set; } = null!;
     public IEntity MapEntity { get; set; } = null!;
+    public IEntity RoundEntity { get; private set; } = null!;
+    public IEntity Entity { get; private set; } = null!;
 
     public IEntity LobbyChatEntity { get; }
     public IEntity BattleChatEntity { get; }
@@ -82,19 +82,19 @@ public class Battle {
         BattleModeTemplate battleModeTemplate = Properties.BattleMode switch {
             BattleMode.DM => new DMTemplate(),
             BattleMode.TDM => new TDMTemplate(),
-            BattleMode.CTF => throw new NotImplementedException(),
+            BattleMode.CTF => new CTFTemplate(),
             _ => throw new UnreachableException()
         };
 
-        BattleEntity = battleModeTemplate.Create(LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
-        RoundEntity = new RoundTemplate().Create(BattleEntity);
+        Entity = battleModeTemplate.Create(LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
+        RoundEntity = new RoundTemplate().Create(Entity);
 
         // todo height maps (or server physics)
 
         ModeHandler = Properties.BattleMode switch {
             BattleMode.DM => new DMHandler(this),
             BattleMode.TDM => new TDMHandler(this),
-            BattleMode.CTF => throw new NotImplementedException(),
+            BattleMode.CTF => new CTFHandler(this),
             _ => throw new UnreachableException()
         };
 
@@ -188,11 +188,11 @@ public class Battle {
             connection.BattlePlayer.Init();
     }
 
-    public void RemovePlayer(BattlePlayer battlePlayer) { // todo
+    public void RemovePlayer(BattlePlayer battlePlayer) { // todo squads
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 
-        connection.Unshare(BattleEntity, RoundEntity, BattleChatEntity);
+        connection.Unshare(Entity, RoundEntity, BattleChatEntity);
         connection.Unshare(Players
             .Where(player => player.InBattleAsTank &&
                              player != battlePlayer)

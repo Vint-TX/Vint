@@ -12,5 +12,7 @@ public class TDMHandler(
 
     public override void OnStarted() { }
 
+    public override void OnWarmUpCompleted() { }
+
     public override void OnFinished() { }
 }

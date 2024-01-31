@@ -16,7 +16,7 @@ public class RestorePasswordByEmailEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Information("Restoring password '{Email}'", Email);
+        logger.Warning("Restoring password '{Email}'", Email);
 
         using DbConnection database = new();
         Player player = database.Players.Single(player => player.Email == Email);

@@ -37,6 +37,8 @@ public abstract class ModeHandler(
 
     public abstract void OnStarted();
 
+    public abstract void OnWarmUpCompleted();
+
     public abstract void OnFinished();
 
     public abstract void TransferParameters(ModeHandler previousHandler);

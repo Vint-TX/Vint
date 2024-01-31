@@ -1,6 +1,9 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Tank;
+using Vint.Core.ECS.Events.Battle.Damage;
+using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battles.States;
@@ -35,8 +38,10 @@ public class Dead(
     public override IComponent StateComponent { get; } = new TankDeadStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
-    public override void Start() { // todo
+    public override void Start() { // todo CTF (flags)
+        BattleTank.BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), BattleTank.Tank);
         BattleTank.Disable();
+
         base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(3);
     }
@@ -68,7 +73,7 @@ public class Spawn(
 
 public class SemiActive(
     TankStateManager stateManager
-) : TankState(stateManager) {
+) : TankState(stateManager) { // todo temperature
     public override IComponent StateComponent { get; } = new TankSemiActiveStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
@@ -90,4 +95,11 @@ public class Active(
     TankStateManager stateManager
 ) : TankState(stateManager) {
     public override IComponent StateComponent { get; } = new TankActiveStateComponent();
+
+    public override void Start() {
+        base.Start();
+
+        if (BattleTank.WeaponHandler is HammerWeaponHandler hammer)
+            BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), hammer.BattleEntity);
+    }
 }

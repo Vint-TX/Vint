@@ -24,4 +24,6 @@ public sealed class ChatCommandContext(
 
     public void SendResponse(string response, IEntity chat, IEnumerable<IPlayerConnection> receivers) =>
         ChatUtils.SendMessage(response, chat, receivers, null);
+
+    public void DisplayMessage(string message) => Connection.DisplayMessage(message);
 }

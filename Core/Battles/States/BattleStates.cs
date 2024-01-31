@@ -86,7 +86,7 @@ public class Starting(
             StateManager.SetState(new NotStarted(StateManager));
         else if (Battle.Timer < 0) {
             Battle.Start();
-            Battle.LobbyEntity.AddComponent(Battle.BattleEntity.GetComponent<BattleGroupComponent>());
+            Battle.LobbyEntity.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
             StateManager.SetState(new Running(StateManager));
         }
     }
@@ -108,7 +108,7 @@ public class WarmUp(
 
     public override void Start() {
         const int seconds = 60;
-        Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component =>
+        Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow.AddSeconds(seconds));
 
         Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
@@ -127,6 +127,7 @@ public class WarmUp(
     public override void Finish() {
         Battle.RoundEntity.RemoveComponent<RoundWarmingUpStateComponent>();
         base.Finish();
+        Battle.ModeHandler.OnWarmUpCompleted();
     }
 }
 
@@ -140,7 +141,7 @@ public class Running(
     public override void Start() {
         Battle.Timer = Battle.Properties.TimeLimit * 60;
 
-        Battle.BattleEntity.ChangeComponent<BattleStartTimeComponent>(component =>
+        Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow);
 
         Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
@@ -152,7 +153,7 @@ public class Running(
         if (Battle.IsCustom) {
             if (Battle.Players.All(player => !player.InBattleAsTank)) {
                 Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
-                StateManager.SetState(new NotStarted(StateManager));
+                StateManager.SetState(new Ended(StateManager));
             }
 
             if (Battle.Timer < 0)
@@ -165,4 +166,9 @@ public class Running(
 
 public class Ended(
     BattleStateManager stateManager
-) : BattleState(stateManager);
+) : BattleState(stateManager) {
+    public override void Start() {
+        Battle.Timer = 0;
+        base.Start();
+    }
+}

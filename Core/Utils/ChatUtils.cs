@@ -62,7 +62,7 @@ public static class ChatUtils {
             receiver.Send(CreateMessageEvent(message, receiver, sender), chat);
     }
 
-    // todo
+    // todo squads
     public static IEnumerable<IPlayerConnection> GetReceivers(IPlayerConnection from, IEntity chat) => chat.TemplateAccessor?.Template switch {
         GeneralChatTemplate => from.Server.PlayerConnections.Values,
 
@@ -85,7 +85,7 @@ public static class ChatUtils {
             .Where(conn => conn != null!),
 
         TeamBattleChatTemplate => from.BattlePlayer!.Battle.Players
-            .Where(battlePlayer => battlePlayer.Team == from.BattlePlayer.Team)
+            .Where(battlePlayer => battlePlayer.TeamColor == from.BattlePlayer.TeamColor)
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 
         _ => []

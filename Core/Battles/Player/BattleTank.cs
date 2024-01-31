@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Numerics;
+using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
@@ -49,7 +50,7 @@ public class BattleTank {
 
         OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
 
-        BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.User, Battle.BattleEntity, battlePlayer.Team);
+        BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.User, Battle.Entity, battlePlayer.Team);
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
@@ -116,6 +117,7 @@ public class BattleTank {
     public Quaternion Orientation { get; set; }
 
     public DateTimeOffset? SelfDestructTime { get; set; }
+    public bool ForceSelfDestruct { get; set; }
 
     public SpawnPoint PreviousSpawnPoint { get; private set; } = null!;
     public SpawnPoint SpawnPoint { get; private set; } = null!;
@@ -146,15 +148,15 @@ public class BattleTank {
     SpeedComponent OriginalSpeedComponent { get; }
 
     public void Tick() {
-        if (SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow) {
-            SelfDestruct();
+        if (ForceSelfDestruct || SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow) {
+            SelfDestruct(!ForceSelfDestruct);
         }
 
         StateManager.Tick();
 
-        if (CollisionsPhase == Battle.BattleEntity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
+        if (CollisionsPhase == Battle.Entity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
             Tank.RemoveComponentIfPresent<TankStateTimeOutComponent>();
-            Battle.BattleEntity.ChangeComponent<BattleTankCollisionsComponent>(component =>
+            Battle.Entity.ChangeComponent<BattleTankCollisionsComponent>(component =>
                 component.SemiActiveCollisionsPhase++);
 
             StateManager.SetState(new Active(StateManager));
@@ -174,24 +176,25 @@ public class BattleTank {
         WeaponHandler.Tick();
     }
 
-    public void Enable() { // todo
+    public void Enable() { // todo modules
         WeaponHandler.OnTankEnable();
         Tank.AddComponent(new TankMovableComponent());
     }
 
-    public void Disable() { // todo
+    public void Disable() { // todo modules, temperature
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             Tank.RemoveComponent<SelfDestructionComponent>();
             SelfDestructTime = null;
+            ForceSelfDestruct = false;
         }
 
         Tank.RemoveComponentIfPresent<TankMovableComponent>();
         WeaponHandler.OnTankDisable();
     }
 
-    public void Spawn() { // todo
+    public void Spawn() {
         Tank.RemoveComponentIfPresent<TankVisibleStateComponent>();
 
         if (Tank.HasComponent<TankMovementComponent>()) {
@@ -217,7 +220,7 @@ public class BattleTank {
         Tank.AddComponent(new TankMovementComponent(movement, default, 0, 0));
     }
 
-    public void SetHealth(float health) { // todo
+    public void SetHealth(float health) { // todo modules
         Health = Math.Clamp(health, 0, MaxHealth);
 
         HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
@@ -232,10 +235,10 @@ public class BattleTank {
 
     public bool IsEnemy(BattleTank other) => this != other &&
                                              (Battle.Properties.BattleMode == BattleMode.DM ||
-                                              BattlePlayer.Team != other.BattlePlayer.Team);
+                                              BattlePlayer.TeamColor != other.BattlePlayer.TeamColor);
 
     public void KillBy(BattleTank killer, IEntity weapon) {
-        SelfKill();
+        SelfKill(false);
 
         Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
         KillEvent killEvent = new(weapon, Tank);
@@ -252,8 +255,9 @@ public class BattleTank {
         // todo statistics
     }
 
-    public void SelfDestruct() {
-        SelfKill();
+    public void SelfDestruct(bool isUserAction) {
+        SelfKill(!isUserAction);
+        ForceSelfDestruct = false;
         SelfDestructTime = null;
 
         SelfDestructionBattleUserEvent selfDestructionEvent = new();
@@ -264,10 +268,15 @@ public class BattleTank {
         // todo statistics
     }
 
-    void SelfKill() {
+    void SelfKill(bool isByServer) {
         StateManager.SetState(new Dead(StateManager));
 
-        // todo statistics, CTF
+        if (Battle.ModeHandler is not CTFHandler ctf) return;
+
+        foreach (Flag flag in ctf.Flags.Values.Where(flag => flag.Carrier == BattlePlayer))
+            flag.CarrierDied(!isByServer);
+
+        // todo statistics
     }
 
     public override int GetHashCode() => BattlePlayer.GetHashCode();

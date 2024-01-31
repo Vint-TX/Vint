@@ -25,6 +25,6 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
                      .Select(player => player.PlayerConnection))
             playerConnection.Send(RemoteEvent, tank);
 
-        // todo
+        // todo modules
     }
 }

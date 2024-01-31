@@ -15,7 +15,10 @@ public class CreatePrivateChatEvent : IServerEvent {
             .Where(playerConnection => playerConnection.IsOnline)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 
-        if (targetConnection == null) return; // todo show "{username} is offline" message
+        if (targetConnection == null) {
+            connection.DisplayMessage($"{Username} is offline");
+            return;
+        }
 
         IEntity? chat = connection.User.GetComponent<PersonalChatOwnerComponent>().Chats
             .Concat(targetConnection.User.GetComponent<PersonalChatOwnerComponent>().Chats)

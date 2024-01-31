@@ -32,7 +32,7 @@ public class DamageProcessor(
         switch (type) {
             case DamageType.Kill:
                 if (source == target)
-                    target.SelfDestruct();
+                    target.SelfDestruct(true);
                 else
                     target.KillBy(source, weapon);
                 break;

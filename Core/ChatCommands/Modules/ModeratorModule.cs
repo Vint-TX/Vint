@@ -284,4 +284,25 @@ public class ModeratorModule : ChatCommandModule {
                 ctx.SendPrivateResponse(punishMessage);
         }
     }
+
+    [ChatCommand("dmsg", "Displays a message on player screen")]
+    public void DisplayMessage(
+        ChatCommandContext ctx,
+        [Option("username", "Username of player")]
+        string username,
+        [WaitingForText, Option("message", "Message to display")]
+        string message) {
+        IPlayerConnection? target = ctx.Connection.Server.PlayerConnections.Values
+            .Where(conn => conn.IsOnline)
+            .ToList()
+            .SingleOrDefault(conn => conn.Player.Username == username);
+
+        if (target == null) {
+            ctx.SendPrivateResponse($"Player '{username}' not found");
+            return;
+        }
+
+        target.DisplayMessage(message);
+        ctx.SendPrivateResponse("Message displayed");
+    }
 }

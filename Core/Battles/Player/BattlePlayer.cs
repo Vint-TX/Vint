@@ -1,5 +1,7 @@
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -7,6 +9,9 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles.Player;
 
 public class BattlePlayer {
+    IEntity? _team;
+    TeamColor _teamColor = TeamColor.None;
+
     public BattlePlayer(IPlayerConnection playerConnection, Battle battle, IEntity? team, bool isSpectator) {
         PlayerConnection = playerConnection;
         Team = team;
@@ -14,15 +19,35 @@ public class BattlePlayer {
         IsSpectator = isSpectator;
 
         if (IsSpectator)
-            BattleUser = new BattleUserTemplate().CreateAsSpectator(PlayerConnection.User, Battle.BattleEntity);
+            BattleUser = new BattleUserTemplate().CreateAsSpectator(PlayerConnection.User, Battle.Entity);
     }
 
     public IPlayerConnection PlayerConnection { get; }
-    public IEntity? Team { get; set; }
+
+    public IEntity? Team {
+        get => _team;
+        set {
+            _team = value;
+            TeamColor = _team?.GetComponent<TeamColorComponent>().TeamColor ?? TeamColor.None;
+        }
+    }
+
     public IEntity BattleUser { get; set; } = null!;
 
     public Battle Battle { get; }
     public BattleTank? Tank { get; set; }
+
+    public TeamColor TeamColor {
+        get => _teamColor;
+        private set {
+            _teamColor = value;
+
+            if (PlayerConnection.User.HasComponent<TeamColorComponent>())
+                PlayerConnection.User.ChangeComponent<TeamColorComponent>(component => component.TeamColor = _teamColor);
+            else
+                PlayerConnection.User.AddComponent(new TeamColorComponent(_teamColor));
+        }
+    }
 
     public bool IsSpectator { get; }
     public bool InBattleAsTank => Tank != null;
@@ -34,11 +59,11 @@ public class BattlePlayer {
     public DateTimeOffset? KickTime { get; set; }
 
     public void Init() {
-        PlayerConnection.Share(Battle.BattleEntity, Battle.RoundEntity, Battle.BattleChatEntity);
+        PlayerConnection.Share(Battle.Entity, Battle.RoundEntity, Battle.BattleChatEntity);
 
         // todo modules & supplies
 
-        PlayerConnection.User.AddComponent(Battle.BattleEntity.GetComponent<BattleGroupComponent>());
+        PlayerConnection.User.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
         Battle.ModeHandler.PlayerEntered(this);
 
         if (IsSpectator) {

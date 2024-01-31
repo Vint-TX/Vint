@@ -27,6 +27,7 @@ using Vint.Core.ECS.Templates.Graffiti;
 using Vint.Core.ECS.Templates.Hulls;
 using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.ECS.Templates.Money;
+using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.ECS.Templates.Paints;
 using Vint.Core.ECS.Templates.Shells;
 using Vint.Core.ECS.Templates.Skins;
@@ -51,6 +52,7 @@ public interface IPlayerConnection {
 
     public bool IsOnline { get; }
     public bool InLobby { get; }
+    public int Ping { get; set; }
     public Invite? Invite { get; set; }
 
     public HashSet<IEntity> SharedEntities { get; }
@@ -85,6 +87,8 @@ public interface IPlayerConnection {
 
     public void SetGoldBoxes(int goldBoxes);
 
+    public void DisplayMessage(string message);
+
     public void Kick(string? reason);
 
     public void Send(ICommand command);
@@ -118,6 +122,7 @@ public abstract class PlayerConnection(
 
     public abstract bool IsOnline { get; }
     public bool InLobby => BattlePlayer != null;
+    public int Ping { get; set; }
     public Invite? Invite { get; set; }
 
     public void Register(
@@ -517,7 +522,8 @@ public abstract class PlayerConnection(
         User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
     }
 
-    public void SetUsername(string username) {
+    public virtual void SetUsername(string username) {
+        Logger.Warning("Changed username => '{New}'", username);
         Player.Username = username;
         User.ChangeComponent<UserUidComponent>(component => component.Username = username);
     }
@@ -538,6 +544,9 @@ public abstract class PlayerConnection(
             .ChangeComponent<UserItemCounterComponent>(component =>
                 component.Count = Player.GoldBoxItems);
     }
+
+    public void DisplayMessage(string message) =>
+        Share(new SimpleTextNotificationTemplate().Create(message));
 
     public abstract void Kick(string? reason);
 
@@ -577,13 +586,18 @@ public class SocketPlayerConnection(
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
     public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
-    bool IsSocketConnected => Socket.Connected;
+    public bool IsSocketConnected => Socket.Connected;
     bool IsConnected { get; set; }
 
     Socket Socket { get; } = socket;
     Protocol.Protocol Protocol { get; } = protocol;
     BlockingCollection<ICommand> ExecuteBuffer { get; } = new();
     BlockingCollection<ICommand> SendBuffer { get; } = new();
+
+    public override void SetUsername(string username) {
+        base.SetUsername(username);
+        Logger = Logger.WithPlayer(this);
+    }
 
     public override void Kick(string? reason) {
         Logger.Warning("Player kicked (reason: '{Reason}')", reason);
@@ -645,6 +659,8 @@ public class SocketPlayerConnection(
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
         } finally {
+            Server.RemovePlayer(Id);
+            
             SendBuffer.CompleteAdding();
             ExecuteBuffer.CompleteAdding();
 
@@ -736,8 +752,6 @@ public class SocketPlayerConnection(
         try {
             while (IsSocketConnected && !SendBuffer.IsCompleted) {
                 ICommand command = SendBuffer.Take();
-
-                if (!IsSocketConnected) return;
 
                 try {
                     ProtocolBuffer buffer = new(new OptionalMap(), this);

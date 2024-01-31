@@ -44,7 +44,8 @@ public class SendChatMessageEvent : IServerEvent {
         ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(sender, chat), sender);
     }
 
-    static bool Validate(string chatConfigPath, string message) { // todo
+    // todo ban-words (C6OI: I dont want to implement it, but I dont mind if someone sends a PR with it)
+    static bool Validate(string chatConfigPath, string message) {
         ChatConfigComponent chatConfig = GetChatConfig(chatConfigPath);
 
         return message.Length > 0 && message.Length <= chatConfig.MaxMessageLength;

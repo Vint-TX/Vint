@@ -48,4 +48,16 @@ public class UserModule : ChatCommandModule {
             ctx.SendPrivateResponse(response);
         }
     }
+
+    [ChatCommand("players", "Show online players count")]
+    public void Players(ChatCommandContext ctx) =>
+        ctx.SendPrivateResponse($"{ctx.Connection.Server.PlayerConnections.Count} players online");
+
+    [ChatCommand("battles", "Show current battles count")]
+    public void Battles(ChatCommandContext ctx) =>
+        ctx.SendPrivateResponse($"{ctx.Connection.Server.BattleProcessor.BattlesCount} battles");
+
+    [ChatCommand("ping", "Show ping")]
+    public void Ping(ChatCommandContext ctx) =>
+        ctx.SendPrivateResponse($"Ping: {ctx.Connection.Ping}");
 }

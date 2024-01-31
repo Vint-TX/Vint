@@ -1,3 +1,4 @@
+using System.Text;
 using LinqToDB;
 using Vint.Core.Battles;
 using Vint.Core.Battles.Player;
@@ -156,5 +157,19 @@ public class AdminModule : ChatCommandModule {
             battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
             battle.RemovePlayer(battlePlayer);
         }
+    }
+
+    [ChatCommand("usernames", "Online player usernames")]
+    public void Usernames(ChatCommandContext ctx) {
+        StringBuilder builder = new();
+        List<IPlayerConnection> connections = ctx.Connection.Server.PlayerConnections.Values.ToList();
+        List<string> onlineUsernames = connections
+            .Where(connection => connection.IsOnline)
+            .Select(connection => connection.Player.Username)
+            .ToList();
+
+        builder.AppendLine($"{connections.Count} players connected, {onlineUsernames.Count} players online:");
+        builder.AppendJoin(Environment.NewLine, onlineUsernames);
+        ctx.SendPrivateResponse(builder.ToString());
     }
 }

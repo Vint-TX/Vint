@@ -20,6 +20,7 @@ public class StartBattleEvent : IServerEvent {
 
             case Ended: {
                 battle.Setup();
+                battle.ModeHandler.TransferParameters(battle.ModeHandler);
                 stateManager.SetState(new Starting(stateManager));
                 break;
             }

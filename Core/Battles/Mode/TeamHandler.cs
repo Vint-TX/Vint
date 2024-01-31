@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates.Battle;
@@ -13,15 +12,15 @@ namespace Vint.Core.Battles.Mode;
 public abstract class TeamHandler(
     Battle battle
 ) : ModeHandler(battle) {
-    public IEntity RedTeam { get; } = new TeamTemplate().Create(TeamColor.Red, battle.BattleEntity);
-    public IEntity BlueTeam { get; } = new TeamTemplate().Create(TeamColor.Blue, battle.BattleEntity);
+    public IEntity RedTeam { get; } = new TeamTemplate().Create(TeamColor.Red, battle.Entity);
+    public IEntity BlueTeam { get; } = new TeamTemplate().Create(TeamColor.Blue, battle.Entity);
     protected IEntity TeamChat { get; } = new TeamBattleChatTemplate().Create();
 
     public IEnumerable<BattlePlayer> RedPlayers => Battle.Players
-        .Where(battlePlayer => battlePlayer.Team?.GetComponent<TeamColorComponent>().TeamColor == TeamColor.Red);
+        .Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Red);
 
     public IEnumerable<BattlePlayer> BluePlayers => Battle.Players
-        .Where(battlePlayer => battlePlayer.Team?.GetComponent<TeamColorComponent>().TeamColor == TeamColor.Blue);
+        .Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Blue);
 
     protected SpawnPoint? LastRedSpawnPoint { get; set; }
     protected SpawnPoint? LastBlueSpawnPoint { get; set; }
@@ -34,16 +33,13 @@ public abstract class TeamHandler(
     }
 
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
-        TeamColor teamColor;
-        List<SpawnPoint> spawnPoints;
+        TeamColor teamColor = battlePlayer.TeamColor;
 
-        if (battlePlayer.Team == RedTeam) {
-            spawnPoints = RedSpawnPoints;
-            teamColor = TeamColor.Red;
-        } else if (battlePlayer.Team == BlueTeam) {
-            spawnPoints = BlueSpawnPoints;
-            teamColor = TeamColor.Blue;
-        } else throw new ArgumentException("Unexpected team");
+        List<SpawnPoint> spawnPoints = teamColor switch {
+            TeamColor.Red => RedSpawnPoints,
+            TeamColor.Blue => BlueSpawnPoints,
+            _ => throw new ArgumentException("Unexpected team")
+        };
 
         SpawnPoint spawnPoint = spawnPoints
             .Shuffle()
@@ -81,7 +77,6 @@ public abstract class TeamHandler(
                 BattlePlayer battlePlayer = players.First();
 
                 battlePlayer.Team = currentColor == TeamColor.Red ? RedTeam : BlueTeam;
-                battlePlayer.PlayerConnection.User.ChangeComponent(new TeamColorComponent(currentColor));
 
                 players.Remove(battlePlayer);
                 currentColor = currentColor == TeamColor.Red ? TeamColor.Blue : TeamColor.Red;
@@ -99,7 +94,6 @@ public abstract class TeamHandler(
         IEntity team = RedPlayers.Count() < BluePlayers.Count() ? RedTeam : BlueTeam;
         BattlePlayer battlePlayer = new(player, Battle, team, false);
 
-        player.User.AddComponent(team.GetComponent<TeamColorComponent>());
         return battlePlayer;
     }
 }

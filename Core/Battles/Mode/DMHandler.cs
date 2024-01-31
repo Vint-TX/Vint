@@ -1,7 +1,5 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -30,20 +28,17 @@ public class DMHandler(
 
     public override void OnStarted() { }
 
+    public override void OnWarmUpCompleted() { }
+
     public override void OnFinished() { }
 
     public override void TransferParameters(ModeHandler previousHandler) {
-        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => !battlePlayer.IsSpectator)) {
+        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => !battlePlayer.IsSpectator))
             battlePlayer.Team = null;
-            battlePlayer.PlayerConnection.User.ChangeComponent<TeamColorComponent>(component =>
-                component.TeamColor = TeamColor.None);
-        }
     }
 
     public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
         BattlePlayer tankPlayer = new(player, Battle, null, false);
-
-        player.User.AddComponent(new TeamColorComponent(TeamColor.None));
         return tankPlayer;
     }
 
