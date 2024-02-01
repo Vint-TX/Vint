@@ -331,10 +331,10 @@ DROP TABLE IF EXISTS `ReputationStatistics`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ReputationStatistics`
 (
-    `PlayerId`     bigint(20) NOT NULL,
-    `Date`         date       NOT NULL,
-    `SeasonNumber` int(11)    NOT NULL,
-    `Reputation`   bigint(20) NOT NULL,
+    `PlayerId`     bigint(20)          NOT NULL,
+    `Date`         date                NOT NULL,
+    `SeasonNumber` int(11)    UNSIGNED NOT NULL,
+    `Reputation`   bigint(20) UNSIGNED NOT NULL,
     PRIMARY KEY (`PlayerId`, `Date`),
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
 ) ENGINE = InnoDB
@@ -351,15 +351,15 @@ DROP TABLE IF EXISTS `SeasonStatistics`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `SeasonStatistics`
 (
-    `PlayerId`         bigint(20) NOT NULL,
-    `SeasonNumber`     int(11)    NOT NULL,
-    `Reputation`       int(11)    NOT NULL,
-    `BattlesPlayed`    int(11)    NOT NULL,
-    `Kills`            int(11)    NOT NULL,
-    `ExperienceEarned` int(11)    NOT NULL,
-    `CrystalsEarned`   int(11)    NOT NULL,
-    `XCrystalsEarned`  int(11)    NOT NULL,
-    `ContainersOpened` int(11)    NOT NULL,
+    `PlayerId`         bigint(20)          NOT NULL,
+    `SeasonNumber`     int(11)    UNSIGNED NOT NULL,
+    `Reputation`       int(11)    UNSIGNED NOT NULL,
+    `BattlesPlayed`    int(11)    UNSIGNED NOT NULL,
+    `Kills`            int(11)    UNSIGNED NOT NULL,
+    `ExperienceEarned` int(11)    UNSIGNED NOT NULL,
+    `CrystalsEarned`   int(11)    UNSIGNED NOT NULL,
+    `XCrystalsEarned`  int(11)    UNSIGNED NOT NULL,
+    `ContainersOpened` int(11)    UNSIGNED NOT NULL,
     PRIMARY KEY (`PlayerId`, `SeasonNumber`),
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
 ) ENGINE = InnoDB
@@ -396,12 +396,21 @@ DROP TABLE IF EXISTS `Statistics`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Statistics`
 (
-    `PlayerId`                     bigint(20) NOT NULL,
-    `BattlesParticipated`          bigint(20) NOT NULL,
-    `AllBattlesParticipated`       bigint(20) NOT NULL,
-    `AllCustomBattlesParticipated` bigint(20) NOT NULL,
-    `Victories`                    bigint(20) NOT NULL,
-    `Defeats`                      bigint(20) NOT NULL,
+    `PlayerId`                     bigint(20)          NOT NULL,
+    `BattlesParticipated`          bigint(20)          NOT NULL,
+    `AllBattlesParticipated`       bigint(20)          NOT NULL,
+    `AllCustomBattlesParticipated` bigint(20)          NOT NULL,
+    `Victories`                    bigint(20)          NOT NULL,
+    `Defeats`                      bigint(20)          NOT NULL,
+    `CrystalsEarned`               bigint(20) UNSIGNED NOT NULL,
+    `XCrystalsEarned`              bigint(20) UNSIGNED NOT NULL,
+    `Kills`                        int(11)    UNSIGNED NOT NULL,
+    `Deaths`                       int(11)    UNSIGNED NOT NULL,
+    `FlagsDelivered`               int(11)    UNSIGNED NOT NULL,
+    `FlagsReturned`                int(11)    UNSIGNED NOT NULL,
+    `GoldBoxesCaught`              int(11)    UNSIGNED NOT NULL,
+    `Shots`                        int(11)    UNSIGNED NOT NULL,
+    `Hits`                         int(11)    UNSIGNED NOT NULL,
     PRIMARY KEY (`PlayerId`),
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
 ) ENGINE = InnoDB

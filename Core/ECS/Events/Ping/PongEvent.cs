@@ -14,6 +14,6 @@ public class PongEvent : IServerEvent {
         float ping = receiveTime.ToUnixTimeMilliseconds() - PongCommandClientRealTime;
 
         connection.Send(new PingResultEvent(receiveTime, ping));
-        connection.Ping = (int)Math.Round(ping);
+        connection.PongReceiveTime = receiveTime;
     }
 }

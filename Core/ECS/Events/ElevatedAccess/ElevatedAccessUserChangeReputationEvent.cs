@@ -9,8 +9,8 @@ public class ElevatedAccessUserChangeReputationEvent : IServerEvent {
     public int Count { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.Player.IsAdmin) return;
+        if (!connection.Player.IsAdmin || Count < 0) return;
 
-        connection.ChangeReputation(Count);
+        connection.ChangeReputation((uint)Count);
     }
 }

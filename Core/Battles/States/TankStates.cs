@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components;
@@ -33,17 +34,23 @@ public class New(
 }
 
 public class Dead(
-    TankStateManager stateManager
+    TankStateManager stateManager,
+    bool isByServer
 ) : TankState(stateManager) {
     public override IComponent StateComponent { get; } = new TankDeadStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
-    public override void Start() { // todo CTF (flags)
+    public override void Start() {
         BattleTank.BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), BattleTank.Tank);
         BattleTank.Disable();
 
         base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(3);
+        
+        if (BattleTank.Battle.ModeHandler is not CTFHandler ctf) return;
+
+        foreach (Flag flag in ctf.Flags.Values.Where(flag => flag.Carrier == BattleTank.BattlePlayer))
+            flag.CarrierDied(!isByServer);
     }
 
     public override void Tick() {

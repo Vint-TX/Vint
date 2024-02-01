@@ -55,6 +55,6 @@ public class UserOnlineEvent : IServerEvent {
             .Select(relation => relation.TargetPlayerId)
             .ToHashSet();
 
-        connection.ClientSession.Send(new FriendsLoadedEvent(friendIds, incomingIds, outgoingIds));
+        connection.Send(new FriendsLoadedEvent(friendIds, incomingIds, outgoingIds));
     }
 }

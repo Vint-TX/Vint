@@ -17,15 +17,15 @@ public class SeasonStatistics {
     }
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
-    [PrimaryKey(1)] public int SeasonNumber { get; init; }
+    [PrimaryKey(1)] public uint SeasonNumber { get; init; }
 
-    [Column] public int Reputation { get; set; }
-    [Column] public int BattlesPlayed { get; set; }
-    [Column] public int Kills { get; set; }
-    [Column] public int ExperienceEarned { get; set; }
-    [Column] public int CrystalsEarned { get; set; }
-    [Column] public int XCrystalsEarned { get; set; }
-    [Column] public int ContainersOpened { get; set; }
+    [Column] public uint Reputation { get; set; }
+    [Column] public uint BattlesPlayed { get; set; }
+    [Column] public uint Kills { get; set; }
+    [Column] public uint ExperienceEarned { get; set; }
+    [Column] public uint CrystalsEarned { get; set; }
+    [Column] public uint XCrystalsEarned { get; set; }
+    [Column] public uint ContainersOpened { get; set; }
 
     [NotColumn] public int LeagueIndex => Reputation switch {
         < 139 => 0,

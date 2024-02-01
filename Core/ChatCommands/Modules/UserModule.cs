@@ -1,5 +1,7 @@
 using System.Reflection;
+using System.Text;
 using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Database;
 using Vint.Core.Database.Models;
 
 namespace Vint.Core.ChatCommands.Modules;
@@ -59,5 +61,28 @@ public class UserModule : ChatCommandModule {
 
     [ChatCommand("ping", "Show ping")]
     public void Ping(ChatCommandContext ctx) =>
-        ctx.SendPrivateResponse($"Ping: {ctx.Connection.Ping}");
+        ctx.SendPrivateResponse($"Ping: {ctx.Connection.Ping}ms");
+
+    [ChatCommand("stats", "Get statistics")]
+    public void Stats(ChatCommandContext ctx) {
+        using DbConnection db = new();
+        Statistics? statistics = db.Statistics.SingleOrDefault(stats => stats.PlayerId == ctx.Connection.Player.Id);
+        
+        if (statistics == null) return;
+
+        StringBuilder builder = new();
+        builder.AppendLine($"Kills: {statistics.Kills}");
+        builder.AppendLine($"Deaths: {statistics.Deaths}");
+        builder.AppendLine($"Victories: {statistics.Victories}");
+        builder.AppendLine($"Defeats: {statistics.Defeats}");
+        builder.AppendLine($"Crystals earned: {statistics.CrystalsEarned}");
+        builder.AppendLine($"XCrystals earned: {statistics.XCrystalsEarned}");
+        builder.AppendLine($"Shots: {statistics.Shots}");
+        builder.AppendLine($"Hits: {statistics.Hits}");
+        builder.AppendLine($"Flags delivered: {statistics.FlagsDelivered}");
+        builder.AppendLine($"Flags returned: {statistics.FlagsReturned}");
+        builder.AppendLine($"Gold boxes caught: {statistics.GoldBoxesCaught}");
+        
+        ctx.SendPrivateResponse(builder.ToString());
+    }
 }

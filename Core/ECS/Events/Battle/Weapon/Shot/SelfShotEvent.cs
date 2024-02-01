@@ -1,4 +1,6 @@
+using LinqToDB;
 using Vint.Core.Battles.Player;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -19,11 +21,18 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
-
+        
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             playerConnection.Send(RemoteEvent, tank);
+
+        using DbConnection db = new();
+
+        db.Statistics
+            .Where(stats => stats.PlayerId == connection.Player.Id)
+            .Set(stats => stats.Shots, stats => stats.Shots + 1)
+            .Update();
 
         // todo modules
     }

@@ -18,6 +18,6 @@ public class ReputationStatistics {
     [PrimaryKey(0)] public long PlayerId { get; private set; }
     [PrimaryKey(1)] public DateOnly Date { get; init; }
 
-    [Column] public int SeasonNumber { get; init; }
-    [Column] public long Reputation { get; set; }
+    [Column] public uint SeasonNumber { get; init; }
+    [Column] public ulong Reputation { get; set; }
 }

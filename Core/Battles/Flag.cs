@@ -1,12 +1,13 @@
 using System.Numerics;
+using LinqToDB;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
+using Vint.Core.Database;
 using Vint.Core.ECS.Components.Battle.Flag;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Battle.Flag;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Templates.Battle.Flag;
@@ -36,7 +37,7 @@ public class Flag {
     public TeamColor TeamColor { get; private set; }
     public Vector3 PedestalPosition { get; }
 
-    public BattlePlayer? Carrier { get; set; }
+    public BattlePlayer? Carrier { get; private set; }
     public BattlePlayer? LastCarrier { get; set; }
     public DateTimeOffset UnfrozeForLastCarrierTime { get; private set; }
     public HashSet<BattlePlayer> Assistants { get; } = [];
@@ -70,7 +71,7 @@ public class Flag {
         Assistants.Add(carrier);
     }
 
-    public void Return(BattlePlayer? returner = null) { // todo statistics
+    public void Return(BattlePlayer? returner = null) {
         if (StateManager.CurrentState is not OnGround) return;
 
         StateManager.SetState(new OnPedestal(StateManager));
@@ -92,22 +93,30 @@ public class Flag {
 
         LastCarrier = null;
         Refresh();
+
+        if (returner == null) return;
+
+        using DbConnection db = new();
+        db.Statistics
+            .Where(stats => stats.PlayerId == returner.PlayerConnection.Player.Id)
+            .Set(stats => stats.FlagsReturned, stats => stats.FlagsReturned + 1)
+            .Update();
     }
 
-    public void Deliver() { // todo statistics
+    public void Deliver(BattlePlayer battlePlayer) {
         if (StateManager.CurrentState is not Captured ||
             Battle.ModeHandler is not CTFHandler ctf) return;
         
         StateManager.SetState(new OnPedestal(StateManager));
         Entity.AddComponent(new FlagHomeStateComponent());
 
-        if (ctf.RedPlayers.Any(battlePlayer => battlePlayer.InBattleAsTank) &&
-            ctf.BluePlayers.Any(battlePlayer => battlePlayer.InBattleAsTank)) {
-            foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
-                battlePlayer.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
+        if (ctf.RedPlayers.Any(player => player.InBattleAsTank) &&
+            ctf.BluePlayers.Any(player => player.InBattleAsTank)) {
+            foreach (BattlePlayer player in Battle.Players.ToList())
+                player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
         } else {
-            foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
-                battlePlayer.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Battle.Entity);
+            foreach (BattlePlayer player in Battle.Players.ToList())
+                player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Battle.Entity);
         }
 
         Entity.RemoveComponent<TankGroupComponent>();
@@ -117,6 +126,12 @@ public class Flag {
         Carrier = null;
         LastCarrier = null;
         Assistants.Clear();
+
+        using DbConnection db = new();
+        db.Statistics
+            .Where(stats => stats.PlayerId == battlePlayer.PlayerConnection.Player.Id)
+            .Set(stats => stats.FlagsDelivered, stats => stats.FlagsDelivered + 1)
+            .Update();
     }
 
     public void CarrierDied(bool isKilledByPlayer) {

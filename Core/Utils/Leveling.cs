@@ -32,7 +32,6 @@ public static class Leveling {
                    .OrderByDescending(p => p.Reputation)
                    .Select((player, index) => new { player.Id, Index = index })
                    .Single(p => p.Id == userId)
-                   .Index +
-               1;
+                   .Index + 1;
     }
 }

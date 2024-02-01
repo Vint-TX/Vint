@@ -22,7 +22,7 @@ namespace Vint.Core.ECS.Entities;
 
 public static class GlobalEntities {
     static GlobalEntities() =>
-        AllMarketTemplateEntities = ConfigManager.GetGlobalEntities().ToList(); // todo
+        AllMarketTemplateEntities = ConfigManager.GetGlobalEntities().ToList();
 
     public static List<IEntity> AllMarketTemplateEntities { get; private set; }
 
@@ -69,7 +69,7 @@ public static class GlobalEntities {
         return entities;
     }
 
-    public static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) { // todo
+    public static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) {
         foreach (IEntity entity in GetEntities(path)) {
             Player player = connection.Player;
             IEntity user = connection.User;
@@ -82,7 +82,7 @@ public static class GlobalEntities {
                 yield return entity;
             }
 
-            if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue; // yield return entity;??
+            if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue;
 
             entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
 

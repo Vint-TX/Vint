@@ -16,9 +16,9 @@ public class DamageCalculator : IDamageCalculator {
     public const float BackHitMultiplier = 1.20f;
     public const float TurretHitMultiplier = 2f;
 
-    IRandomSource RandomSource { get; } = new WyRandom();
+    IRandomSource RandomSource { get; } = new Xoshiro256PlusRandom();
 
-    public CalculatedDamage Calculate(BattleTank source, BattleTank target, HitTarget hitTarget, bool isSplash = false) { // todo modules, statistics
+    public CalculatedDamage Calculate(BattleTank source, BattleTank target, HitTarget hitTarget, bool isSplash = false) { // todo modules
         WeaponHandler handler = source.WeaponHandler;
         Vector3 hitPoint = hitTarget.LocalHitPoint;
         float distance = hitTarget.HitDistance;
@@ -40,7 +40,7 @@ public class DamageCalculator : IDamageCalculator {
         float backHit = isBackHit ? BackHitMultiplier : 1;
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
 
-        float damage = baseDamage * weakening * splash * backHit * turretHit;
+        float damage = baseDamage * weakening * backHit * turretHit * splash;
 
         if (handler is SmokyWeaponHandler smokyHandler)
             isCritical = smokyHandler.TryCalculateCriticalDamage(isBackHit, ref damage);

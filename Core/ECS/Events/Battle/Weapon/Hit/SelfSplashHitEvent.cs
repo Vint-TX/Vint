@@ -1,4 +1,6 @@
+using LinqToDB;
 using Vint.Core.Battles.Weapons;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -25,5 +27,12 @@ public class SelfSplashHitEvent : SelfHitEvent {
 
         foreach (HitTarget target in SplashTargets)
             thunder.SplashFire(target);
+        
+        using DbConnection db = new();
+
+        db.Statistics
+            .Where(stats => stats.PlayerId == connection.Player.Id)
+            .Set(stats => stats.Hits, stats => stats.Hits + SplashTargets.Count)
+            .Update();
     }
 }

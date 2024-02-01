@@ -1,6 +1,8 @@
+using LinqToDB;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -57,6 +59,11 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             }
         }
 
-        // todo statistics
+        using DbConnection db = new();
+
+        db.Statistics
+            .Where(stats => stats.PlayerId == connection.Player.Id)
+            .Set(stats => stats.Hits, stats => stats.Hits + Targets.Count)
+            .Update();
     }
 }

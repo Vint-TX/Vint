@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using LinqToDB;
 using Serilog;
 using Vint.Core.Battles.Player;
+using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.User;
@@ -52,7 +53,9 @@ public interface IPlayerConnection {
 
     public bool IsOnline { get; }
     public bool InLobby { get; }
-    public int Ping { get; set; }
+    public DateTimeOffset PingSendTime { get; set; }
+    public DateTimeOffset PongReceiveTime { get; set; }
+    public long Ping { get; }
     public Invite? Invite { get; set; }
 
     public HashSet<IEntity> SharedEntities { get; }
@@ -73,7 +76,7 @@ public interface IPlayerConnection {
 
     public void ChangePassword(string passwordDigest);
 
-    public void ChangeReputation(int reputation);
+    public void ChangeReputation(uint reputation);
 
     public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount);
 
@@ -122,7 +125,9 @@ public abstract class PlayerConnection(
 
     public abstract bool IsOnline { get; }
     public bool InLobby => BattlePlayer != null;
-    public int Ping { get; set; }
+    public DateTimeOffset PingSendTime { get; set; }
+    public DateTimeOffset PongReceiveTime { get; set; }
+    public long Ping => (PongReceiveTime - PingSendTime).Milliseconds;
     public Invite? Invite { get; set; }
 
     public void Register(
@@ -209,7 +214,7 @@ public abstract class PlayerConnection(
             .Update();
     }
 
-    public void ChangeReputation(int reputation) {
+    public void ChangeReputation(uint reputation) {
         using DbConnection db = new();
         DateOnly date = DateOnly.FromDateTime(DateTime.Today);
 
@@ -529,11 +534,42 @@ public abstract class PlayerConnection(
     }
 
     public void SetCrystals(long crystals) {
+        long diff = crystals - Player.Crystals;
+
+        if (diff > 0) {
+            using DbConnection db = new();
+            db.Statistics
+                .Where(stats => stats.PlayerId == Player.Id)
+                .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)diff)
+                .Update();
+
+            db.SeasonStatistics
+                .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.SeasonNumber)
+                .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)diff)
+                .Update();
+        }
+
         Player.Crystals = crystals;
         User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
     }
 
     public void SetXCrystals(long xCrystals) {
+        long diff = xCrystals - Player.XCrystals;
+
+        if (diff > 0) {
+            using DbConnection db = new();
+            
+            db.Statistics
+                .Where(stats => stats.PlayerId == Player.Id)
+                .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
+                .Update();
+
+            db.SeasonStatistics
+                .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.SeasonNumber)
+                .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
+                .Update();
+        }
+        
         Player.XCrystals = xCrystals;
         User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
     }

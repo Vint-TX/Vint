@@ -22,8 +22,8 @@ public class DamageProcessor(
 ) : IDamageProcessor {
     public Battle Battle { get; } = battle;
 
-    public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage) { // todo modules, statistics
-        if (damage.Value < 0) return;
+    public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage) { // todo modules
+        if (damage.Value <= 0) return;
 
         DamageType type = Damage(target, damage);
         IPlayerConnection sourcePlayerConnection = source.BattlePlayer.PlayerConnection;

@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Weapon.Splash;
 public class SplashImpactComponent(
     float impactForce
 ) : IComponent {
-    public float ImpactForce { get; private set; } = impactForce;
+    public float ImpactForce { get; set; } = impactForce;
 }

@@ -43,9 +43,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
                             !oppositeFlag.Entity.HasComponent<TankGroupComponent>() ||
                             oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return;
 
-                        oppositeFlag.Deliver();
-
-                        // todo statistics
+                        oppositeFlag.Deliver(battlePlayer);
                     } else collisionFlag.Capture(battlePlayer);
 
                     break;

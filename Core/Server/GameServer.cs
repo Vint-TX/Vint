@@ -88,6 +88,7 @@ public class GameServer(
                     }
                     
                     playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
+                    playerConnection.PingSendTime = DateTimeOffset.UtcNow;
                 } catch (Exception e) {
                     Logger.Error(e, "Socket caught an exception while sending ping event");
                 }

@@ -1,10 +1,12 @@
 using System.Diagnostics;
 using System.Numerics;
+using LinqToDB;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle;
@@ -107,7 +109,7 @@ public class BattleTank {
         else Tank.AddComponent(new HealthComponent(Health, MaxHealth));
     }
 
-    public long CollisionsPhase { get; set; } = -1; // I don't understand what is this
+    public long CollisionsPhase { get; set; } = -1;
 
     public float Health { get; private set; }
     public float MaxHealth { get; }
@@ -252,7 +254,21 @@ public class BattleTank {
 
         killer.BattlePlayer.PlayerConnection.Send(new VisualScoreKillEvent(0, currentPlayer.Username, currentPlayer.Rank), killer.BattleUser);
 
-        // todo statistics
+        using DbConnection db = new();
+        db.BeginTransaction();
+
+        db.Statistics
+            .Where(stats => stats.PlayerId == killer.BattlePlayer.PlayerConnection.Player.Id)
+            .Set(stats => stats.Kills, stats => stats.Kills + 1)
+            .Update();
+
+        db.SeasonStatistics
+            .Where(stats => stats.PlayerId == killer.BattlePlayer.PlayerConnection.Player.Id)
+            .Where(stats => stats.SeasonNumber == ConfigManager.SeasonNumber)
+            .Set(stats => stats.Kills, stats => stats.Kills + 1)
+            .Update();
+        
+        db.CommitTransaction();
     }
 
     public void SelfDestruct(bool isUserAction) {
@@ -264,19 +280,16 @@ public class BattleTank {
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
             battlePlayer.PlayerConnection.Send(selfDestructionEvent, BattleUser);
-
-        // todo statistics
     }
 
     void SelfKill(bool isByServer) {
-        StateManager.SetState(new Dead(StateManager));
+        StateManager.SetState(new Dead(StateManager, isByServer));
 
-        if (Battle.ModeHandler is not CTFHandler ctf) return;
-
-        foreach (Flag flag in ctf.Flags.Values.Where(flag => flag.Carrier == BattlePlayer))
-            flag.CarrierDied(!isByServer);
-
-        // todo statistics
+        using DbConnection db = new();
+        db.Statistics
+            .Where(stats => stats.PlayerId == BattlePlayer.PlayerConnection.Player.Id)
+            .Set(stats => stats.Deaths, stats => stats.Deaths + 1)
+            .Update();
     }
 
     public override int GetHashCode() => BattlePlayer.GetHashCode();

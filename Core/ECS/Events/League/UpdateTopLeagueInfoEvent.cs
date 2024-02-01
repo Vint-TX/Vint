@@ -8,8 +8,6 @@ public class UpdateTopLeagueInfoEvent(
     long userId
 ) : IEvent {
     public long UserId { get; set; } = userId;
-
     public double LastPlaceReputation { get; set; } = 1; // todo
-
     public int Place { get; set; } = Leveling.GetSeasonPlace(userId);
 }

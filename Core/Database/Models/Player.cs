@@ -1,5 +1,6 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
+using Vint.Core.Config;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
@@ -132,7 +133,7 @@ public class Player {
 
             db.Insert(new Preset { Player = this, Index = 0, Name = "Preset 1" });
 
-            db.Insert(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = 1 /*todo SeasonNumber*/ });
+            db.Insert(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.SeasonNumber });
             db.Insert(new Statistics { Player = this });
         }
 
