@@ -1,0 +1,22 @@
+[
+  {
+    "name": "About",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Large",
+          "headerText": "Invite your friends!",
+          "tooltip": "Vint is the first alternative to the ReviveTX server",
+          "externalUrl": "https://discord.gg/upyXe3F2Fe",
+          "date": "2024-02-02Z",
+          "previewImageUrl": "https://media.discordapp.net/attachments/1196050318128058504/1196141610803671110/image.png"
+        }
+      }
+    }
+  }
+]
