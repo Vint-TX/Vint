@@ -19,5 +19,5 @@ public class ReputationStatistics {
     [PrimaryKey(1)] public DateOnly Date { get; init; }
 
     [Column] public uint SeasonNumber { get; init; }
-    [Column] public ulong Reputation { get; set; }
+    [Column] public uint Reputation { get; set; }
 }

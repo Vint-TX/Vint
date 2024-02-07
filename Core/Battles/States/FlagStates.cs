@@ -1,11 +1,8 @@
 using System.Numerics;
-using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
-using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Flag;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Battle.Flag;
 using Vint.Core.StateMachine;
 
@@ -30,10 +27,10 @@ public class Captured(
     public override void Start() {
         base.Start();
         Flag.Entity.AddComponent(new TankGroupComponent(carrierTank));
-        
+
         foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
             battlePlayer.PlayerConnection.Send(new FlagPickupEvent(), Flag.Entity);
-        
+
         Flag.Entity.RemoveComponentIfPresent<FlagHomeStateComponent>();
         Flag.Entity.RemoveComponentIfPresent<FlagGroundedStateComponent>();
     }
@@ -47,15 +44,15 @@ public class OnGround(
 
     public override void Start() {
         base.Start();
-        
+
         foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
             battlePlayer.PlayerConnection.Send(new FlagDropEvent(isUserAction), Flag.Entity);
-        
+
         Vector3 newPosition = Flag.Carrier!.Tank!.Position - Vector3.UnitY;
-        
+
         Flag.Entity.RemoveComponent<TankGroupComponent>();
         Flag.Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = newPosition);
-        Flag.Entity.AddComponent(new FlagGroundedStateComponent());        
+        Flag.Entity.AddComponent(new FlagGroundedStateComponent());
     }
 
     public override void Tick() {

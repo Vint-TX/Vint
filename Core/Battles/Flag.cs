@@ -12,6 +12,7 @@ using Vint.Core.ECS.Events.Battle.Flag;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Templates.Battle.Flag;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles;
 
@@ -36,6 +37,7 @@ public class Flag {
     public Battle Battle { get; private set; }
     public TeamColor TeamColor { get; private set; }
     public Vector3 PedestalPosition { get; }
+    public Vector3 Position => Entity.GetComponent<FlagPositionComponent>().Position;
 
     public BattlePlayer? Carrier { get; private set; }
     public BattlePlayer? LastCarrier { get; set; }
@@ -75,7 +77,7 @@ public class Flag {
         if (StateManager.CurrentState is not OnGround) return;
 
         StateManager.SetState(new OnPedestal(StateManager));
-        
+
         if (returner != null) {
             Entity.AddComponent(new TankGroupComponent(returner.Tank!.Tank));
             returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(0), returner.BattleUser);
@@ -106,7 +108,7 @@ public class Flag {
     public void Deliver(BattlePlayer battlePlayer) {
         if (StateManager.CurrentState is not Captured ||
             Battle.ModeHandler is not CTFHandler ctf) return;
-        
+
         StateManager.SetState(new OnPedestal(StateManager));
         Entity.AddComponent(new FlagHomeStateComponent());
 
@@ -121,7 +123,7 @@ public class Flag {
 
         Entity.RemoveComponent<TankGroupComponent>();
         Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
-        
+
         Refresh();
         Carrier = null;
         LastCarrier = null;
@@ -134,10 +136,11 @@ public class Flag {
             .Update();
     }
 
-    public void CarrierDied(bool isKilledByPlayer) {
+    public void CarrierDied() {
         Drop(false);
 
-        if (!isKilledByPlayer) Return();
+        if (PhysicsUtils.IsOutsideMap(Battle.MapInfo.PuntativeGeoms, Position, Vector3.Zero, Battle.Properties.KillZoneEnabled))
+            Return();
     }
 
     void Refresh() {

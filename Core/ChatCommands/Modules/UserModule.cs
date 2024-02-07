@@ -67,7 +67,7 @@ public class UserModule : ChatCommandModule {
     public void Stats(ChatCommandContext ctx) {
         using DbConnection db = new();
         Statistics? statistics = db.Statistics.SingleOrDefault(stats => stats.PlayerId == ctx.Connection.Player.Id);
-        
+
         if (statistics == null) return;
 
         StringBuilder builder = new();
@@ -82,7 +82,7 @@ public class UserModule : ChatCommandModule {
         builder.AppendLine($"Flags delivered: {statistics.FlagsDelivered}");
         builder.AppendLine($"Flags returned: {statistics.FlagsReturned}");
         builder.AppendLine($"Gold boxes caught: {statistics.GoldBoxesCaught}");
-        
+
         ctx.SendPrivateResponse(builder.ToString());
     }
 }

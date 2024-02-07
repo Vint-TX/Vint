@@ -34,27 +34,26 @@ public class New(
 }
 
 public class Dead(
-    TankStateManager stateManager,
-    bool isByServer
+    TankStateManager stateManager
 ) : TankState(stateManager) {
     public override IComponent StateComponent { get; } = new TankDeadStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
     public override void Start() {
         BattleTank.BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), BattleTank.Tank);
-        BattleTank.Disable();
+        BattleTank.Disable(false);
 
         base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(3);
-        
+
         if (BattleTank.Battle.ModeHandler is not CTFHandler ctf) return;
 
         foreach (Flag flag in ctf.Flags.Values.Where(flag => flag.Carrier == BattleTank.BattlePlayer))
-            flag.CarrierDied(!isByServer);
+            flag.CarrierDied();
     }
 
     public override void Tick() {
-        if (DateTimeOffset.UtcNow >= TimeToNextState)
+        if (!BattleTank.BattlePlayer.IsPaused && DateTimeOffset.UtcNow >= TimeToNextState)
             StateManager.SetState(new Spawn(StateManager));
     }
 }
@@ -66,7 +65,7 @@ public class Spawn(
     DateTimeOffset TimeToNextState { get; set; }
 
     public override void Start() {
-        BattleTank.Disable();
+        BattleTank.Disable(false);
         BattleTank.Spawn();
         base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1.75);

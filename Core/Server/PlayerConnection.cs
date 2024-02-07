@@ -1,6 +1,5 @@
 ﻿using System.Buffers;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
@@ -58,6 +57,8 @@ public interface IPlayerConnection {
     public long Ping { get; }
     public Invite? Invite { get; set; }
 
+    public int BattleSeries { get; set; }
+
     public HashSet<IEntity> SharedEntities { get; }
     public Dictionary<string, HashSet<IEntity>> UserEntities { get; }
 
@@ -72,11 +73,14 @@ public interface IPlayerConnection {
 
     public void Login(
         bool saveAutoLoginToken,
+        bool rememberMe,
         string hardwareFingerprint);
 
     public void ChangePassword(string passwordDigest);
 
-    public void ChangeReputation(uint reputation);
+    public void ChangeReputation(int delta);
+
+    public void ChangeGameplayChestScore(int delta);
 
     public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount);
 
@@ -121,6 +125,7 @@ public abstract class PlayerConnection(
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; protected set; } = null!;
     public BattlePlayer? BattlePlayer { get; set; }
+    public int BattleSeries { get; set; }
     public HashSet<IEntity> SharedEntities { get; private set; } = [];
 
     public abstract bool IsOnline { get; }
@@ -165,15 +170,16 @@ public abstract class PlayerConnection(
 
         Player.InitializeNew();
 
-        Login(true, hardwareFingerprint);
+        Login(true, true, hardwareFingerprint);
     }
 
     public void Login(
         bool saveAutoLoginToken,
+        bool rememberMe,
         string hardwareFingerprint) {
         Logger = Logger.WithPlayer((SocketPlayerConnection)this);
 
-        Player.RememberMe = saveAutoLoginToken;
+        Player.RememberMe = rememberMe;
         Player.LastLoginTime = DateTimeOffset.UtcNow;
         Player.HardwareFingerprint = hardwareFingerprint;
 
@@ -214,39 +220,70 @@ public abstract class PlayerConnection(
             .Update();
     }
 
-    public void ChangeReputation(uint reputation) {
+    public void ChangeReputation(int delta) {
         using DbConnection db = new();
         DateOnly date = DateOnly.FromDateTime(DateTime.Today);
 
+        db.BeginTransaction();
+
         SeasonStatistics seasonStats = db.SeasonStatistics
-            .Where(stats => stats.PlayerId == Player.Id)
-            .OrderByDescending(stats => stats.SeasonNumber)
-            .First();
+            .Single(stats => stats.PlayerId == Player.Id &&
+                             stats.SeasonNumber == ConfigManager.SeasonNumber);
 
         ReputationStatistics? reputationStats = db.ReputationStatistics
             .SingleOrDefault(repStats => repStats.PlayerId == Player.Id &&
                                          repStats.Date == date);
 
-        int oldLeagueIndex = seasonStats.LeagueIndex;
+        int oldLeagueIndex = Player.LeagueIndex;
+        uint oldReputation = Player.Reputation;
 
         reputationStats ??= new ReputationStatistics {
             Player = Player,
             Date = date,
-            SeasonNumber = seasonStats.SeasonNumber
+            SeasonNumber = ConfigManager.SeasonNumber
         };
 
+        uint reputation = (uint)Math.Clamp(oldReputation + delta, 0, 99999);
+
+        Player.Reputation = reputation;
         seasonStats.Reputation = reputation;
         reputationStats.Reputation = reputation;
 
         User.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
 
-        if (oldLeagueIndex != seasonStats.LeagueIndex) {
+        if (oldLeagueIndex != Player.LeagueIndex) {
             User.RemoveComponent<LeagueGroupComponent>();
-            User.AddComponent(seasonStats.League.GetComponent<LeagueGroupComponent>());
+            User.AddComponent(Player.League.GetComponent<LeagueGroupComponent>());
         }
 
-        db.Update(seasonStats);
+        if (seasonStats.Reputation != oldReputation)
+            db.Update(seasonStats);
+
+        db.Update(Player);
         db.InsertOrReplace(reputationStats);
+        db.CommitTransaction();
+    }
+
+    public void ChangeGameplayChestScore(int delta) {
+        const int scoreLimit = 1000;
+
+        Player.GameplayChestScore += delta;
+        int earned = (int)Math.Floor((double)Player.GameplayChestScore / scoreLimit);
+
+        if (earned != 0) {
+            Player.GameplayChestScore -= earned * scoreLimit;
+            // todo connection.PurchaseItem(Container, earned, 0, false, false);
+        }
+
+        try {
+            using DbConnection db = new();
+            db.Update(Player);
+        } catch (Exception e) {
+            Logger.Error(e, "Failed to update gameplay chest score in database");
+            return;
+        }
+
+        User.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
     }
 
     public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount) {
@@ -558,7 +595,7 @@ public abstract class PlayerConnection(
 
         if (diff > 0) {
             using DbConnection db = new();
-            
+
             db.Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
                 .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
@@ -569,7 +606,7 @@ public abstract class PlayerConnection(
                 .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
                 .Update();
         }
-        
+
         Player.XCrystals = xCrystals;
         User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
     }
@@ -678,25 +715,23 @@ public class SocketPlayerConnection(
         if (!IsConnected) return;
 
         IsConnected = false;
-
         Logger.Information("Socket disconnected");
-        Logger.Warning("{X}", new StackTrace());
 
         try {
-            if (InLobby) {
-                if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
-                    BattlePlayer.Battle.RemovePlayer(BattlePlayer);
-                else
-                    BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
-            }
-
             if (User != null!)
                 EntityRegistry.Remove(User.Id);
+
+            if (!InLobby) return;
+
+            if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
+                BattlePlayer.Battle.RemovePlayer(BattlePlayer);
+            else
+                BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
         } finally {
             Server.RemovePlayer(Id);
-            
+
             SendBuffer.CompleteAdding();
             ExecuteBuffer.CompleteAdding();
 

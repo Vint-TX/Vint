@@ -1,5 +1,5 @@
 matchMakingModeRestrictions:
-  minimalRank: 2
+  minimalRank: 1
 imageItem:
   spriteUid: c03953f1-0289-4d9e-a893-889b82e76f34
 order:

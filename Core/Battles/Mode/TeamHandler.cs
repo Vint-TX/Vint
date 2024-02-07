@@ -14,7 +14,7 @@ public abstract class TeamHandler(
 ) : ModeHandler(battle) {
     public IEntity RedTeam { get; } = new TeamTemplate().Create(TeamColor.Red, battle.Entity);
     public IEntity BlueTeam { get; } = new TeamTemplate().Create(TeamColor.Blue, battle.Entity);
-    protected IEntity TeamChat { get; } = new TeamBattleChatTemplate().Create();
+    IEntity TeamChat { get; } = new TeamBattleChatTemplate().Create();
 
     public IEnumerable<BattlePlayer> RedPlayers => Battle.Players
         .Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Red);
@@ -22,8 +22,8 @@ public abstract class TeamHandler(
     public IEnumerable<BattlePlayer> BluePlayers => Battle.Players
         .Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Blue);
 
-    protected SpawnPoint? LastRedSpawnPoint { get; set; }
-    protected SpawnPoint? LastBlueSpawnPoint { get; set; }
+    SpawnPoint? LastRedSpawnPoint { get; set; }
+    SpawnPoint? LastBlueSpawnPoint { get; set; }
     protected abstract List<SpawnPoint> RedSpawnPoints { get; }
     protected abstract List<SpawnPoint> BlueSpawnPoints { get; }
 

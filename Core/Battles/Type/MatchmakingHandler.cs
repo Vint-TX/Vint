@@ -1,9 +1,12 @@
 using System.Diagnostics;
+using LinqToDB;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.Database;
 using Vint.Core.ECS.Components.Matchmaking;
+using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Matchmaking;
 using Vint.Core.ECS.Templates.Lobby;
@@ -27,7 +30,7 @@ public class MatchmakingHandler : TypeHandler {
         Battle.Properties = new BattleProperties(
             BattleMode,
             GravityType.Earth,
-            mapInfo.MapId,
+            mapInfo.Id,
             false,
             true,
             true,
@@ -36,18 +39,16 @@ public class MatchmakingHandler : TypeHandler {
             100);
 
         Battle.MapInfo = mapInfo;
-        Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.MapId);
+        Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.Id);
         Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(
             Battle.Properties,
             Battle.MapEntity);
     }
 
     public override void Tick() {
-        foreach (BattlePlayer player in WaitingPlayers.ToList()) {
-            if (DateTimeOffset.UtcNow < player.BattleJoinTime) continue;
-
-            player.Init();
-            WaitingPlayers.Remove(player);
+        foreach (BattlePlayer battlePlayer in WaitingPlayers.ToList().Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
+            battlePlayer.Init();
+            WaitingPlayers.Remove(battlePlayer);
         }
     }
 
@@ -65,7 +66,42 @@ public class MatchmakingHandler : TypeHandler {
 
     public override void PlayerExited(BattlePlayer battlePlayer) {
         WaitingPlayers.Remove(battlePlayer);
-        battlePlayer.PlayerConnection.User.RemoveComponent<MatchMakingUserComponent>();
+        battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
+
+        bool battleEnded = Battle.StateManager.CurrentState is Ended;
+        bool hasEnemies = Battle.Players.ToList().Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));
+        bool bigBattleSeries = battlePlayer.PlayerConnection.BattleSeries >= 3;
+
+        battlePlayer.PlayerConnection.User.ChangeComponent<BattleLeaveCounterComponent>(component => {
+            long lefts = component.Value;
+            int needGoodBattles = component.NeedGoodBattles;
+
+            if (battleEnded) {
+                if (needGoodBattles > 0)
+                    lefts = --needGoodBattles == 0 ? 0 : lefts;
+                else if (lefts > 0 && bigBattleSeries)
+                    lefts--;
+            } else if (hasEnemies) {
+                battlePlayer.PlayerConnection.BattleSeries = 0;
+                lefts++;
+
+                if (lefts >= 3) {
+                    if (needGoodBattles > 0) needGoodBattles += (int)lefts / 2;
+                    else needGoodBattles = 3;
+                }
+            }
+
+            component.Value = lefts;
+            component.NeedGoodBattles = needGoodBattles;
+
+            using DbConnection db = new();
+            
+            Database.Models.Player player = battlePlayer.PlayerConnection.Player;
+            player.DesertedBattlesCount = lefts;
+            player.NeedGoodBattlesCount = needGoodBattles;
+            
+            db.Update(player);
+        });
     }
 
     static BattleMode GetRandomMode() => Random.Shared.NextDouble() switch {

@@ -9,5 +9,49 @@
     "components": {
       "MatchMakingRatingModeComponent": {}
     }
+  },
+  {
+    "name": "CosmicBattle",
+    "id": -176533989,
+    "template": [
+      "MatchMakingModeTemplate",
+      "battleselect/matchmaking/mode/cosmicbattle"
+    ],
+    "components": {
+      "MatchMakingArcadeModeComponent": {}
+    }
+  },
+  {
+    "name": "Deathmatch",
+    "id": 596799940,
+    "template": [
+      "MatchMakingModeTemplate",
+      "battleselect/matchmaking/mode/deathmatch"
+    ],
+    "components": {
+      "MatchMakingArcadeModeComponent": {}
+    }
+  },
+  {
+    "name": "QuickPlay",
+    "id": -1445747122,
+    "template": [
+      "MatchMakingModeTemplate",
+      "battleselect/matchmaking/mode/quickplay"
+    ],
+    "components": {
+      "MatchMakingArcadeModeComponent": {}
+    }
+  },
+  {
+    "name": "Soon",
+    "id": 305493269,
+    "template": [
+      "MatchMakingModeTemplate",
+      "battleselect/matchmaking/mode/soon"
+    ],
+    "components": {
+      "MatchMakingArcadeModeComponent": {}
+    }
   }
 ]

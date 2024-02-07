@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using LinqToDB;
-using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Results;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
@@ -27,6 +27,7 @@ using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.ECS.Templates.Battle.Weapon;
 using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Player;
 
@@ -101,15 +102,21 @@ public class BattleTank {
         MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         Health = MaxHealth;
 
-        if (Tank.HasComponent<HealthComponent>())
-            Tank.ChangeComponent<HealthComponent>(component => {
-                component.CurrentHealth = Health;
-                component.MaxHealth = MaxHealth;
-            });
-        else Tank.AddComponent(new HealthComponent(Health, MaxHealth));
+        Tank.ChangeComponent<HealthComponent>(component => {
+            component.CurrentHealth = Health;
+            component.MaxHealth = MaxHealth;
+        });
+
+        UserResult = new UserResult(BattlePlayer);
+        BattleEnterTime = DateTimeOffset.UtcNow;
     }
 
     public long CollisionsPhase { get; set; } = -1;
+
+    public DateTimeOffset BattleEnterTime { get; }
+    public UserResult UserResult { get; }
+    public float DealtDamage { get; set; }
+    public float TakenDamage { get; set; }
 
     public float Health { get; private set; }
     public float MaxHealth { get; }
@@ -120,6 +127,7 @@ public class BattleTank {
 
     public DateTimeOffset? SelfDestructTime { get; set; }
     public bool ForceSelfDestruct { get; set; }
+    public bool FullDisabled { get; private set; }
 
     public SpawnPoint PreviousSpawnPoint { get; private set; } = null!;
     public SpawnPoint SpawnPoint { get; private set; } = null!;
@@ -150,9 +158,8 @@ public class BattleTank {
     SpeedComponent OriginalSpeedComponent { get; }
 
     public void Tick() {
-        if (ForceSelfDestruct || SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow) {
-            SelfDestruct(!ForceSelfDestruct);
-        }
+        if (ForceSelfDestruct || SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow)
+            SelfDestruct();
 
         StateManager.Tick();
 
@@ -173,17 +180,21 @@ public class BattleTank {
             BattlePlayer.IsKicked = true;
             BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
             Battle.RemovePlayer(BattlePlayer);
+            BattlePlayer.PlayerConnection.Logger.ForType(GetType()).Warning("Player kicked from battle (pause)");
         }
 
         WeaponHandler.Tick();
     }
 
     public void Enable() { // todo modules
+        if (FullDisabled) return;
+
         WeaponHandler.OnTankEnable();
         Tank.AddComponent(new TankMovableComponent());
     }
 
-    public void Disable() { // todo modules, temperature
+    public void Disable(bool full) { // todo modules, temperature
+        FullDisabled = full;
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
@@ -191,6 +202,9 @@ public class BattleTank {
             SelfDestructTime = null;
             ForceSelfDestruct = false;
         }
+
+        if (full)
+            Tank.RemoveComponentIfPresent(StateManager.CurrentState.StateComponent);
 
         Tank.RemoveComponentIfPresent<TankMovableComponent>();
         WeaponHandler.OnTankDisable();
@@ -236,11 +250,12 @@ public class BattleTank {
     }
 
     public bool IsEnemy(BattleTank other) => this != other &&
+                                             other != null! &&
                                              (Battle.Properties.BattleMode == BattleMode.DM ||
                                               BattlePlayer.TeamColor != other.BattlePlayer.TeamColor);
 
     public void KillBy(BattleTank killer, IEntity weapon) {
-        SelfKill(false);
+        SelfKill();
 
         Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
         KillEvent killEvent = new(weapon, Tank);
@@ -253,6 +268,8 @@ public class BattleTank {
         }
 
         killer.BattlePlayer.PlayerConnection.Send(new VisualScoreKillEvent(0, currentPlayer.Username, currentPlayer.Rank), killer.BattleUser);
+
+        if (Battle.IsCustom) return;
 
         using DbConnection db = new();
         db.BeginTransaction();
@@ -267,12 +284,12 @@ public class BattleTank {
             .Where(stats => stats.SeasonNumber == ConfigManager.SeasonNumber)
             .Set(stats => stats.Kills, stats => stats.Kills + 1)
             .Update();
-        
+
         db.CommitTransaction();
     }
 
-    public void SelfDestruct(bool isUserAction) {
-        SelfKill(!isUserAction);
+    public void SelfDestruct() {
+        SelfKill();
         ForceSelfDestruct = false;
         SelfDestructTime = null;
 
@@ -282,8 +299,10 @@ public class BattleTank {
             battlePlayer.PlayerConnection.Send(selfDestructionEvent, BattleUser);
     }
 
-    void SelfKill(bool isByServer) {
-        StateManager.SetState(new Dead(StateManager, isByServer));
+    void SelfKill() {
+        StateManager.SetState(new Dead(StateManager));
+
+        if (Battle.IsCustom) return;
 
         using DbConnection db = new();
         db.Statistics

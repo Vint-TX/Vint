@@ -44,7 +44,7 @@ public class AutoLoginUserEvent : IServerEvent {
             }
 
             connection.Player = player;
-            connection.Login(false, HardwareFingerprint);
+            connection.Login(false, true, HardwareFingerprint);
         } else connection.Send(new AutoLoginFailedEvent());
     }
 }

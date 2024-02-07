@@ -1,5 +1,4 @@
-﻿using Vint.Core.Database;
-using Vint.Core.Database.Models;
+﻿using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Components.Fraction;
 using Vint.Core.ECS.Components.Group;
@@ -14,13 +13,6 @@ namespace Vint.Core.ECS.Templates.User;
 [ProtocolId(1433752208915)]
 public class UserTemplate : EntityTemplate {
     public IEntity Create(Player player) {
-        using DbConnection db = new();
-
-        SeasonStatistics seasonStats = db.SeasonStatistics
-            .Where(stats => stats.PlayerId == player.Id)
-            .OrderByDescending(stats => stats.SeasonNumber)
-            .First();
-
         IEntity user = Entity(null,
             builder => {
                 builder
@@ -39,15 +31,15 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new UserMoneyComponent(player.Crystals))
                     .AddComponent(new UserXCrystalsComponent(player.XCrystals))
                     .AddComponent(new QuestReadyComponent())
-                    .AddComponent(new UserReputationComponent(seasonStats.Reputation))
+                    .AddComponent(new UserReputationComponent(player.Reputation))
                     // todo .AddComponent(new TutorialCompleteIdsComponent())
                     .AddComponent(new FractionUserScoreComponent(player.FractionScore))
                     .AddComponent(new UserStatisticsComponent(player.Id))
                     .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
                     .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new BattleLeaveCounterComponent(0, 0))
-                    .AddComponent(new LeagueGroupComponent(seasonStats.League))
-                    .AddComponent(new GameplayChestScoreComponent(0))
+                    .AddComponent(new BattleLeaveCounterComponent(player.DesertedBattlesCount, player.NeedGoodBattlesCount))
+                    .AddComponent(new LeagueGroupComponent(player.League))
+                    .AddComponent(new GameplayChestScoreComponent(player.GameplayChestScore))
                     .WithId(player.Id);
 
                 if (player.IsAdmin)
@@ -68,13 +60,6 @@ public class UserTemplate : EntityTemplate {
     }
 
     public IEntity CreateFake(IPlayerConnection connection, Player player) {
-        using DbConnection db = new();
-
-        SeasonStatistics seasonStats = db.SeasonStatistics
-            .Where(stats => stats.PlayerId == player.Id)
-            .OrderByDescending(stats => stats.SeasonNumber)
-            .First();
-
         IEntity user = Entity(null,
             builder => {
                 builder
@@ -86,12 +71,12 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new UserSubscribeComponent(player.Subscribed))
                     .AddComponent(new UserExperienceComponent(player.Experience))
                     .AddComponent(new UserRankComponent(player.Rank))
-                    .AddComponent(new UserReputationComponent(seasonStats.Reputation))
+                    .AddComponent(new UserReputationComponent(player.Reputation))
                     .AddComponent(new FractionUserScoreComponent(player.FractionScore))
                     .AddComponent(new UserStatisticsComponent(player.Id))
                     .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
                     .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new LeagueGroupComponent(seasonStats.League))
+                    .AddComponent(new LeagueGroupComponent(player.League))
                     .AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId))
                     .WithId(player.Id);
 

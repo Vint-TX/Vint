@@ -86,7 +86,7 @@ public class GameServer(
                         playerConnection.Kick("Zombie");
                         continue;
                     }
-                    
+
                     playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
                     playerConnection.PingSendTime = DateTimeOffset.UtcNow;
                 } catch (Exception e) {

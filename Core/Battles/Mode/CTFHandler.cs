@@ -30,7 +30,7 @@ public class CTFHandler : TeamHandler {
     public override void OnWarmUpCompleted() {
         CanShareFlags = true;
 
-        foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
+        foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattle))
             battlePlayer.PlayerConnection.Share(Flags.Values.Select(flag => flag.Entity));
     }
 
@@ -53,6 +53,8 @@ public class CTFHandler : TeamHandler {
 
         player.PlayerConnection.UnshareIfShared(Flags.Values.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
     }
+
+    public override int CalculateReputationDelta(BattlePlayer player) => 0; // todo calculate by flags
 
     public override void Tick() {
         foreach (Flag flag in Flags.Values)

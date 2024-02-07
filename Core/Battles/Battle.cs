@@ -8,6 +8,7 @@ using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Lobby;
@@ -105,7 +106,7 @@ public class Battle {
         ModeHandler previousHandler = ModeHandler;
 
         Properties = properties;
-        MapInfo = ConfigManager.MapInfos.Values.Single(map => map.MapId == Properties.MapId);
+        MapInfo = ConfigManager.MapInfos.Values.Single(map => map.Id == Properties.MapId);
         MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
 
         LobbyEntity.RemoveComponent<MapGroupComponent>();
@@ -140,10 +141,22 @@ public class Battle {
 
     public void Finish() {
         StateManager.SetState(new Ended(StateManager));
-
         ModeHandler.OnFinished();
 
-        // todo sum up results
+        List<BattlePlayer> players = Players.ToList();
+
+        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
+            BattleTank battleTank = battlePlayer.Tank!;
+            battleTank.Disable(true);
+        }
+
+        foreach (BattlePlayer battlePlayer in players)
+            battlePlayer.OnBattleEnded();
+
+        // todo
+
+        RoundEntity.AddComponentIfAbsent(new RoundRestartingStateComponent());
+        LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
     }
 
     public void Tick(double deltaTime) {

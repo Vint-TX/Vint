@@ -19,7 +19,7 @@ public class WarmingUp(
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
                 BattleTank tank = battlePlayer.Tank!;
 
-                tank.Disable();
+                tank.Disable(true);
                 tank.Tank.RemoveComponentIfPresent(tank.StateManager.CurrentState.StateComponent);
             }
 

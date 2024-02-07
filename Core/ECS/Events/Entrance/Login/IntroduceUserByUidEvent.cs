@@ -18,8 +18,8 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
 
         logger.Information("Login by username '{Username}'", Username);
 
-        using DbConnection database = new();
-        Player? player = database.Players.SingleOrDefault(player => player.Username == Username);
+        using DbConnection db = new();
+        Player? player = db.Players.SingleOrDefault(player => player.Username == Username);
 
         if (player == null) {
             connection.Send(new UidInvalidEvent());

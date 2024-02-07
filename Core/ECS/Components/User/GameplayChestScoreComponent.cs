@@ -7,6 +7,6 @@ public class GameplayChestScoreComponent(
     long current,
     long limit = 1000
 ) : IComponent {
-    public long Current { get; private set; } = current;
+    public long Current { get; set; } = current;
     public long Limit { get; private set; } = limit;
 }

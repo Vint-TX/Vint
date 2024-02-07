@@ -5,7 +5,7 @@ namespace Vint.Core.Config.MapInformation;
 // Copied from https://github.com/Assasans/TXServer-Public/blob/database/TXServer/Library/ServerMapInfo.json
 public class MapInfo {
     public string Name { get; set; } = null!;
-    public long MapId { get; set; }
+    public long Id { get; set; }
     public int MaxPlayers { get; set; }
     public bool MatchMaking { get; set; }
     public bool Custom { get; set; }

@@ -27,7 +27,7 @@ public class SelfSplashHitEvent : SelfHitEvent {
 
         foreach (HitTarget target in SplashTargets)
             thunder.SplashFire(target);
-        
+
         using DbConnection db = new();
 
         db.Statistics

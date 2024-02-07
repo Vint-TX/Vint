@@ -16,7 +16,7 @@ public class DamageCalculator : IDamageCalculator {
     public const float BackHitMultiplier = 1.20f;
     public const float TurretHitMultiplier = 2f;
 
-    IRandomSource RandomSource { get; } = new Xoshiro256PlusRandom();
+    IRandomSource RandomSource { get; } = new WyRandom();
 
     public CalculatedDamage Calculate(BattleTank source, BattleTank target, HitTarget hitTarget, bool isSplash = false) { // todo modules
         WeaponHandler handler = source.WeaponHandler;
@@ -28,7 +28,7 @@ public class DamageCalculator : IDamageCalculator {
             HammerWeaponHandler hammerHandler => hammerHandler.DamagePerPellet,
             StreamWeaponHandler streamHandler => streamHandler.DamagePerSecond,
             DiscreteWeaponHandler discreteHandler => GetRandomDamage(discreteHandler),
-            _ => throw new InvalidOperationException($"Can not find base damage for {handler.GetType().Name}")
+            _ => throw new InvalidOperationException($"Cannot find base damage for {handler.GetType().Name}")
         };
 
         bool isTurretHit = handler is ShaftWeaponHandler { Aiming: true } && IsTurretHit(hitPoint, target.Tank);

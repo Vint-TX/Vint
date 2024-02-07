@@ -1,4 +1,5 @@
 using System.Numerics;
+using Vint.Core.Config.MapInformation;
 
 namespace Vint.Core.Utils;
 
@@ -28,4 +29,9 @@ public static class PhysicsUtils {
                                                                                    point.X < center.X + size.X / 2 &&
                                                                                    point.Y < center.Y + size.Y / 2 &&
                                                                                    point.Z < center.Z + size.Z / 2;
+
+    public static bool IsOutsideMap(IEnumerable<PuntativeGeometry> puntativeGeometries, Vector3 position, Vector3 velocity, bool killZonesEnabled) =>
+        CheckOverflow(position + velocity) ||
+        killZonesEnabled &&
+        puntativeGeometries.Any(geometry => IsInsideBox(position, geometry.Position, geometry.Size));
 }

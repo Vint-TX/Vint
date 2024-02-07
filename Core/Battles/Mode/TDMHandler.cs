@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
 
 namespace Vint.Core.Battles.Mode;
@@ -15,4 +16,6 @@ public class TDMHandler(
     public override void OnWarmUpCompleted() { }
 
     public override void OnFinished() { }
+
+    public override int CalculateReputationDelta(BattlePlayer player) => 0; // todo calculate by K/D
 }

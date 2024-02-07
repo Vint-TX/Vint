@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Item;
 public class ExperienceItemComponent(
     long xp
 ) : IComponent {
-    public long Experience { get; } = xp;
+    public long Experience { get; set; } = xp;
 }

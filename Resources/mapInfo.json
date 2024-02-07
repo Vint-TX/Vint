@@ -1,7 +1,7 @@
 {
   "Acidlake": {
     "name": "Acid Lake",
-    "mapId": 485053206,
+    "id": 485053206,
     "maxPlayers": 20,
     "matchMaking": true,
     "custom": false,
@@ -1328,7 +1328,7 @@
   },
   "Acidlakehalloween": {
     "name": "Lake Hell",
-    "mapId": -820833801,
+    "id": -820833801,
     "maxPlayers": 20,
     "matchMaking": true,
     "custom": false,
@@ -2668,7 +2668,7 @@
   },
   "Area159": {
     "name": "Area 159",
-    "mapId": 1133979230,
+    "id": 1133979230,
     "maxPlayers": 8,
     "matchMaking": true,
     "custom": true,
@@ -3714,7 +3714,7 @@
   },
   "Boombox": {
     "name": "Old School",
-    "mapId": 1945237110,
+    "id": 1945237110,
     "maxPlayers": 8,
     "matchMaking": true,
     "custom": true,
@@ -5005,7 +5005,7 @@
   },
   "Iran": {
     "name": "Iran",
-    "mapId": -51480736,
+    "id": -51480736,
     "maxPlayers": 12,
     "matchMaking": true,
     "custom": true,
@@ -7473,7 +7473,7 @@
   },
   "Kungur": {
     "name": "Kungur",
-    "mapId": 2127033418,
+    "id": 2127033418,
     "maxPlayers": 20,
     "matchMaking": true,
     "custom": true,
@@ -10160,7 +10160,7 @@
   },
   "Massacre": {
     "name": "Massacre",
-    "mapId": -1551247853,
+    "id": -1551247853,
     "maxPlayers": 12,
     "matchMaking": true,
     "custom": true,
@@ -11734,7 +11734,7 @@
   },
   "MassacremarsBG": {
     "name": "Ares",
-    "mapId": 989096365,
+    "id": 989096365,
     "maxPlayers": 16,
     "matchMaking": true,
     "custom": true,
@@ -14441,7 +14441,7 @@
   },
   "Nightiran": {
     "name": "Arabian Night",
-    "mapId": 343745828,
+    "id": 343745828,
     "maxPlayers": 8,
     "matchMaking": true,
     "custom": true,
@@ -16855,7 +16855,7 @@
   },
   "Repin": {
     "name": "Repin",
-    "mapId": -1587964040,
+    "id": -1587964040,
     "maxPlayers": 16,
     "matchMaking": true,
     "custom": true,
@@ -18313,7 +18313,7 @@
   },
   "Rio": {
     "name": "Rio",
-    "mapId": -1664220274,
+    "id": -1664220274,
     "maxPlayers": 16,
     "matchMaking": true,
     "custom": true,
@@ -20674,7 +20674,7 @@
   },
   "Sandbox": {
     "name": "Sandbox",
-    "mapId": -549069251,
+    "id": -549069251,
     "maxPlayers": 8,
     "matchMaking": true,
     "custom": true,
@@ -22133,7 +22133,7 @@
   },
   "Silence": {
     "name": "Silence",
-    "mapId": -321842153,
+    "id": -321842153,
     "maxPlayers": 16,
     "matchMaking": true,
     "custom": true,
@@ -23980,7 +23980,7 @@
   },
   "Silencemoon": {
     "name": "Moon Silence",
-    "mapId": 933129112,
+    "id": 933129112,
     "maxPlayers": 16,
     "matchMaking": true,
     "custom": true,
@@ -25759,7 +25759,7 @@
   },
   "Testbox": {
     "name": "Testbox",
-    "mapId": 458045295,
+    "id": 458045295,
     "maxPlayers": 8,
     "matchMaking": false,
     "custom": true,
@@ -26448,7 +26448,7 @@
   },
   "Westprime": {
     "name": "West Prime",
-    "mapId": 980475942,
+    "id": 980475942,
     "maxPlayers": 20,
     "matchMaking": true,
     "custom": true,

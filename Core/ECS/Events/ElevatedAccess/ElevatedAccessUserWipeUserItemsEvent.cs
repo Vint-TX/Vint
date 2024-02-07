@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 public class ElevatedAccessUserWipeUserItemsEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin || !connection.InLobby) return;
-        
+
         // todo modules        
     }
 }

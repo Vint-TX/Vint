@@ -26,9 +26,8 @@ public class LoginByPasswordEvent : IServerEvent {
             return;
         }
 
-        Encryption encryption = new();
-
-        if (!encryption.GetLoginPasswordHash(connection.Player.PasswordHash)
+        if (!new Encryption()
+                .GetLoginPasswordHash(connection.Player.PasswordHash)
                 .SequenceEqual(Convert.FromBase64String(PasswordEncipher))) {
             connection.Send(new InvalidPasswordEvent());
             connection.Send(new LoginFailedEvent());
@@ -48,6 +47,6 @@ public class LoginByPasswordEvent : IServerEvent {
             }
         }
 
-        connection.Login(RememberMe, HardwareFingerprint);
+        connection.Login(RememberMe, RememberMe, HardwareFingerprint);
     }
 }

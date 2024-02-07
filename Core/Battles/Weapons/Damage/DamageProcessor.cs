@@ -27,12 +27,13 @@ public class DamageProcessor(
 
         DamageType type = Damage(target, damage);
         IPlayerConnection sourcePlayerConnection = source.BattlePlayer.PlayerConnection;
+        source.DealtDamage += damage.Value;
 
         // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
         switch (type) {
             case DamageType.Kill:
                 if (source == target)
-                    target.SelfDestruct(true);
+                    target.SelfDestruct();
                 else
                     target.KillBy(source, weapon);
                 break;
@@ -49,9 +50,10 @@ public class DamageProcessor(
     }
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage) {
-        if (damage.Value < 0) return DamageType.Normal;
+        if (damage.Value <= 0) return DamageType.Normal;
 
         target.SetHealth(target.Health - damage.Value);
+        target.TakenDamage += damage.Value;
 
         return target.Health switch {
             <= 0 => DamageType.Kill,

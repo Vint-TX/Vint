@@ -44,6 +44,49 @@ public class Player {
     [Column] public long Experience { get; set; }
     [NotColumn] public int Rank => Leveling.GetRank(Experience);
 
+    [Column] public uint Reputation { get; set; }
+    [Column] public long GameplayChestScore { get; set; }
+    [Column] public long DesertedBattlesCount { get; set; }
+    [Column] public int NeedGoodBattlesCount { get; set; }
+
+    [NotColumn] public int LeagueIndex => Reputation switch {
+        < 139 => 0,
+        < 999 => 1,
+        < 2999 => 2,
+        < 4499 => 3,
+        < 99999 => 4,
+        _ => 0
+    };
+
+    [NotColumn] public string LeagueName => LeagueIndex switch {
+        0 => "Training",
+        1 => "Bronze",
+        2 => "Silver",
+        3 => "Gold",
+        4 => "Master",
+        _ => "Training"
+    };
+
+    [NotColumn] public int MinReputationDelta => LeagueIndex switch {
+        0 => -3,
+        1 => -20,
+        2 => -30,
+        3 => -35,
+        4 => -40,
+        _ => 0
+    };
+
+    [NotColumn] public int MaxReputationDelta => LeagueIndex switch {
+        0 => 20,
+        1 => 40,
+        2 => 35,
+        3 => 30,
+        4 => 20,
+        _ => 0
+    };
+
+    [NotColumn] public IEntity League => GlobalEntities.GetEntity("leagues", LeagueName);
+
     [Column(DataType = DataType.Text)] public string FractionName { get; set; } = "";
     [Column] public long FractionScore { get; set; }
 
@@ -105,6 +148,7 @@ public class Player {
 
     public void InitializeNew() {
         CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
+        Reputation = 100;
 
         long weaponId = GlobalEntities.GetEntity("weapons", "Smoky").Id;
         long hullId = GlobalEntities.GetEntity("hulls", "Hunter").Id;

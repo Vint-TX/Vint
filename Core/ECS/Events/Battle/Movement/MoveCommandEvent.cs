@@ -1,7 +1,6 @@
 using System.Numerics;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
-using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
 using Vint.Core.Protocol.Attributes;
@@ -39,20 +38,12 @@ public class MoveCommandEvent : IServerEvent {
         // Reasons:
         // - velocity sent by client may be corrupted by overflow
         // - latest position may be corrupted too
-
         Vector3 velocity = battleTank.Position - battleTank.PreviousPosition;
 
         battleTank.PreviousPosition = battleTank.Position;
         battleTank.Position = movement.Position;
         battleTank.Orientation = movement.Orientation;
-
-        if (PhysicsUtils.CheckOverflow(movement.Position + velocity))
-            battleTank.ForceSelfDestruct = true;
-
-        if (!battle.Properties.KillZoneEnabled) return;
-
-        foreach (PuntativeGeometry geometry in battle.MapInfo.PuntativeGeoms)
-            if (PhysicsUtils.IsInsideBox(movement.Position, geometry.Position, geometry.Size))
-                battleTank.ForceSelfDestruct = true;
+        battleTank.ForceSelfDestruct =
+            PhysicsUtils.IsOutsideMap(battle.MapInfo.PuntativeGeoms, battleTank.Position, velocity, battle.Properties.KillZoneEnabled);
     }
 }

@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Battle.Weapon;
 public class DetachWeaponEvent : IServerEvent {
     public Vector3 AngularVelocity { get; private set; }
     public Vector3 Velocity { get; private set; }
-    
+
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IEntity tank = entities.Single();
 

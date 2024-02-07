@@ -11,6 +11,6 @@ public class RequestChangePasswordEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         connection.ChangePassword(PasswordDigest);
-        connection.Login(true, HardwareFingerprint);
+        connection.Login(true, true, HardwareFingerprint);
     }
 }

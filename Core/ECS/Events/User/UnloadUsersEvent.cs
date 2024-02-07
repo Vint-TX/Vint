@@ -11,7 +11,7 @@ public class UnloadUsersEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         Users.RemoveWhere(user => connection.BattlePlayer?.Battle.Players.Any(battlePlayer => battlePlayer.PlayerConnection.User == user) ?? false);
-        
+
         connection.Unshare(Users);
     }
 }

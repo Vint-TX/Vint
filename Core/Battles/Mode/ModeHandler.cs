@@ -10,7 +10,7 @@ namespace Vint.Core.Battles.Mode;
 public abstract class ModeHandler(
     Battle battle
 ) {
-    public Battle Battle { get; } = battle;
+    protected Battle Battle { get; } = battle;
 
     public abstract void Tick();
 
@@ -51,4 +51,6 @@ public abstract class ModeHandler(
     public abstract void PlayerEntered(BattlePlayer player);
 
     public abstract void PlayerExited(BattlePlayer player);
+
+    public abstract int CalculateReputationDelta(BattlePlayer player);
 }

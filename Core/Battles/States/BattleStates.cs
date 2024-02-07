@@ -150,15 +150,13 @@ public class Running(
     }
 
     public override void Tick() {
-        if (Battle.IsCustom) {
-            if (Battle.Players.All(player => !player.InBattleAsTank)) {
-                Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
-                StateManager.SetState(new Ended(StateManager));
-            }
-
-            if (Battle.Timer < 0)
-                Battle.Finish();
+        if (Battle.IsCustom && Battle.Players.All(player => !player.InBattleAsTank)) {
+            Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
+            StateManager.SetState(new Ended(StateManager));
         }
+
+        if (Battle.Timer < 0)
+            Battle.Finish();
 
         base.Tick();
     }

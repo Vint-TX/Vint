@@ -21,7 +21,7 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
-        
+
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))

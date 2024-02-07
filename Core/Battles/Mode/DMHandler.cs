@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.Server;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Mode;
@@ -8,41 +7,17 @@ namespace Vint.Core.Battles.Mode;
 public class DMHandler(
     Battle battle
 ) : SoloHandler(battle) {
-    List<SpawnPoint> SpawnPoints { get; set; } = battle.MapInfo.SpawnPoints.Deathmatch.ToList();
-    SpawnPoint? LastSpawnPoint { get; set; }
+    protected override List<SpawnPoint> SpawnPoints { get; } = battle.MapInfo.SpawnPoints.Deathmatch.ToList();
 
-    public override void Tick() { }
+    public override int CalculateReputationDelta(BattlePlayer battlePlayer) {
+        List<BattlePlayer> players = Battle.Players.ToList()
+            .Where(player => player.InBattleAsTank)
+            .OrderBy(player => player.Tank!.DealtDamage)
+            .ToList();
 
-    public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
-        SpawnPoint spawnPoint = SpawnPoints
-            .Shuffle()
-            .First(spawnPoint => spawnPoint.Number != LastSpawnPoint?.Number &&
-                                 spawnPoint.Number != battlePlayer.Tank?.SpawnPoint?.Number &&
-                                 spawnPoint.Number != battlePlayer.Tank?.PreviousSpawnPoint?.Number);
-
-        LastSpawnPoint = spawnPoint;
-        return spawnPoint;
+        Database.Models.Player player = battlePlayer.PlayerConnection.Player;
+        return players.Count < 2
+                   ? 0
+                   : MathUtils.Map(players.IndexOf(battlePlayer) + 1, 1, players.Count, player.MaxReputationDelta, player.MinReputationDelta);
     }
-
-    public override void SortPlayers() => SortPlayers(Battle.Players.ToList());
-
-    public override void OnStarted() { }
-
-    public override void OnWarmUpCompleted() { }
-
-    public override void OnFinished() { }
-
-    public override void TransferParameters(ModeHandler previousHandler) {
-        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => !battlePlayer.IsSpectator))
-            battlePlayer.Team = null;
-    }
-
-    public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
-        BattlePlayer tankPlayer = new(player, Battle, null, false);
-        return tankPlayer;
-    }
-
-    public override void PlayerEntered(BattlePlayer player) { }
-
-    public override void PlayerExited(BattlePlayer player) { }
 }

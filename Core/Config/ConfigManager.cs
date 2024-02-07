@@ -23,7 +23,7 @@ namespace Vint.Core.Config;
 
 public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
-    
+
     public static IReadOnlyDictionary<string, MapInfo> MapInfos { get; private set; } = null!;
 
     public static List<string> GlobalEntitiesTypeNames => Root.Children

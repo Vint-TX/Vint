@@ -1,3 +1,4 @@
+using System.Numerics;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
@@ -7,7 +8,6 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
-using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Flag;
 
@@ -35,28 +35,28 @@ public class FlagCollisionRequestEvent : IServerEvent {
         TeamColor flagTeamColor = collisionFlag.TeamColor;
         bool isAllyFlag = tankTeamColor == flagTeamColor;
 
-        try {
-            switch (collisionFlag.StateManager.CurrentState) {
-                case OnPedestal: {
-                    if (isAllyFlag) {
-                        if (oppositeFlag.StateManager.CurrentState is not Captured ||
-                            !oppositeFlag.Entity.HasComponent<TankGroupComponent>() ||
-                            oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return;
+        switch (collisionFlag.StateManager.CurrentState) {
+            case OnPedestal: {
+                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.PedestalPosition) > 10) return;
 
-                        oppositeFlag.Deliver(battlePlayer);
-                    } else collisionFlag.Capture(battlePlayer);
+                if (isAllyFlag) {
+                    if (oppositeFlag.StateManager.CurrentState is not Captured ||
+                        !oppositeFlag.Entity.HasComponent<TankGroupComponent>() ||
+                        oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return;
 
-                    break;
-                }
+                    oppositeFlag.Deliver(battlePlayer);
+                } else collisionFlag.Capture(battlePlayer);
 
-                case OnGround: {
-                    if (isAllyFlag) collisionFlag.Return(battlePlayer);
-                    else collisionFlag.Pickup(battlePlayer);
-                    break;
-                }
+                break;
             }
-        } catch (NotImplementedException) {
-            ChatUtils.SendMessage("Flag actions is not implemented yet", battle.BattleChatEntity, [connection], null);
+
+            case OnGround: {
+                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.Position) > 10) return;
+
+                if (isAllyFlag) collisionFlag.Return(battlePlayer);
+                else collisionFlag.Pickup(battlePlayer);
+                break;
+            }
         }
     }
 }

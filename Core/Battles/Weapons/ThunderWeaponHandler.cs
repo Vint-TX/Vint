@@ -1,7 +1,6 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons.Damage;
-using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon.Splash;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
@@ -40,10 +39,10 @@ public class ThunderWeaponHandler : DiscreteWeaponHandler {
         if (distance < RadiusOfMaxSplashDamage) return 1;
         if (distance > RadiusOfMinSplashDamage) return 0;
 
-        return 0.01f * 
+        return 0.01f *
                (MinSplashDamagePercent +
-               (RadiusOfMinSplashDamage - distance) * 
-               (100f - MinSplashDamagePercent) / 
-               (RadiusOfMinSplashDamage - RadiusOfMaxSplashDamage));
+                (RadiusOfMinSplashDamage - distance) *
+                (100f - MinSplashDamagePercent) /
+                (RadiusOfMinSplashDamage - RadiusOfMaxSplashDamage));
     }
 }
