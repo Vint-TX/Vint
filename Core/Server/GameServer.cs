@@ -21,6 +21,7 @@ public class GameServer(
     public ConcurrentDictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();
     public IBattleProcessor BattleProcessor { get; private set; } = null!;
     public IMatchmakingProcessor MatchmakingProcessor { get; private set; } = null!;
+    public IArcadeProcessor ArcadeProcessor { get; private set; } = null!;
     public IChatCommandProcessor ChatCommandProcessor { get; private set; } = null!;
 
     public bool IsStarted { get; private set; }
@@ -44,9 +45,11 @@ public class GameServer(
 
         BattleProcessor = new BattleProcessor();
         MatchmakingProcessor = new MatchmakingProcessor(BattleProcessor);
+        ArcadeProcessor = new ArcadeProcessor(BattleProcessor);
         ChatCommandProcessor = chatCommandProcessor;
 
         new Thread(() => MatchmakingProcessor.StartTicking()) { Name = "Matchmaking ticker" }.Start();
+        new Thread(() => ArcadeProcessor.StartTicking()) { Name = "Arcade ticker" }.Start();
         new Thread(() => BattleProcessor.StartTicking()) { Name = "Battle ticker" }.Start();
         new Thread(PingLoop) { Name = "Ping loop" }.Start();
 

@@ -1,4 +1,5 @@
 using Vint.Core.Battles;
+using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -32,6 +33,11 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
     static bool ValidateAndJoin(IPlayerConnection connection, Battles.Battle? battle) {
         if (battle is not { CanAddPlayers: true }) {
             connection.Send(new EnterBattleLobbyFailedEvent(false, true), connection.User);
+            return false;
+        }
+
+        if (battle is not { TypeHandler: CustomHandler } && !connection.Player.IsAdmin) {
+            connection.Send(new CustomLobbyNotExistsEvent(), connection.User);
             return false;
         }
 

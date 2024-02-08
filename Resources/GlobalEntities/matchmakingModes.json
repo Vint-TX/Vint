@@ -11,22 +11,22 @@
     }
   },
   {
-    "name": "CosmicBattle",
-    "id": -176533989,
+    "name": "WithoutDamage",
+    "id": 305493369,
     "template": [
       "MatchMakingModeTemplate",
-      "battleselect/matchmaking/mode/cosmicbattle"
+      "battleselect/arcade/mode/withoutdamage"
     ],
     "components": {
       "MatchMakingArcadeModeComponent": {}
     }
   },
   {
-    "name": "Deathmatch",
-    "id": 596799940,
+    "name": "CosmicBattle",
+    "id": -176533989,
     "template": [
       "MatchMakingModeTemplate",
-      "battleselect/matchmaking/mode/deathmatch"
+      "battleselect/arcade/mode/cosmicbattle"
     ],
     "components": {
       "MatchMakingArcadeModeComponent": {}
@@ -37,18 +37,18 @@
     "id": -1445747122,
     "template": [
       "MatchMakingModeTemplate",
-      "battleselect/matchmaking/mode/quickplay"
+      "battleselect/arcade/mode/quickplay"
     ],
     "components": {
       "MatchMakingArcadeModeComponent": {}
     }
   },
   {
-    "name": "Soon",
-    "id": 305493269,
+    "name": "FullRandom",
+    "id": 305493469,
     "template": [
       "MatchMakingModeTemplate",
-      "battleselect/matchmaking/mode/soon"
+      "battleselect/arcade/mode/fullrandom"
     ],
     "components": {
       "MatchMakingArcadeModeComponent": {}

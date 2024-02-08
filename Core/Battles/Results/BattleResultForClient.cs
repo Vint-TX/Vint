@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Enums;
 
@@ -7,11 +8,12 @@ namespace Vint.Core.Battles.Results;
 public class BattleResultForClient {
     public BattleResultForClient(Battle battle, bool isSpectator, PersonalBattleResultForClient? personalBattleResult) {
         Spectator = isSpectator;
-        Custom = battle.IsCustom;
+        Custom = battle.TypeHandler is CustomHandler;
         BattleId = battle.Id;
         MapId = battle.MapInfo.Id;
         BattleMode = battle.Properties.BattleMode;
-
+        MatchMakingModeType = battle.TypeHandler is ArcadeHandler ? BattleType.Arcade : BattleType.Rating;
+        
         switch (battle.ModeHandler) {
             case TeamHandler teamHandler:
                 RedTeamScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>().Score;
@@ -46,6 +48,6 @@ public class BattleResultForClient {
     public List<UserResult> BlueUsers { get; set; } = [];
     public List<UserResult> DmUsers { get; set; } = [];
     public BattleMode BattleMode { get; set; }
-    public BattleType MatchMakingModeType { get; set; } = BattleType.Rating;
+    public BattleType MatchMakingModeType { get; set; }
     public PersonalBattleResultForClient? PersonalResult { get; set; }
 }

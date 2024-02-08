@@ -18,6 +18,7 @@ public class MoveCommandEvent : IServerEvent {
 
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;
+        BattleTank battleTank = battlePlayer.Tank!;
         Battles.Battle battle = battlePlayer.Battle;
 
         MoveCommandServerEvent serverEvent = new(MoveCommand);
@@ -27,9 +28,7 @@ public class MoveCommandEvent : IServerEvent {
                      .Select(player => player.PlayerConnection))
             playerConnection.Send(serverEvent, tank);
 
-
-        BattleTank battleTank = battlePlayer.Tank!;
-        if (!MoveCommand.Movement.HasValue || battleTank.StateManager.CurrentState is Dead) return; // ???
+        if (!MoveCommand.Movement.HasValue || battleTank.StateManager.CurrentState is Dead) return;
 
         ECS.Movement.Movement movement = MoveCommand.Movement.Value;
 

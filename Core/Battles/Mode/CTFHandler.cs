@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Type;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Utils;
@@ -15,7 +16,7 @@ public class CTFHandler : TeamHandler {
             { TeamColor.Blue, new Flag(Battle, BlueTeam, TeamColor.Blue, Battle.MapInfo.Flags.Blue) }
         };
 
-        CanShareFlags = Battle.IsCustom;
+        CanShareFlags = Battle.TypeHandler is not MatchmakingHandler;
     }
 
     bool CanShareFlags { get; set; }
@@ -54,7 +55,12 @@ public class CTFHandler : TeamHandler {
         player.PlayerConnection.UnshareIfShared(Flags.Values.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
     }
 
-    public override int CalculateReputationDelta(BattlePlayer player) => 0; // todo calculate by flags
+    public override int CalculateReputationDelta(BattlePlayer player) => player.TeamBattleResult switch { // todo calculate by flags
+        TeamBattleResult.Win => player.PlayerConnection.Player.MaxReputationDelta,
+        TeamBattleResult.Draw => 0,
+        TeamBattleResult.Defeat => player.PlayerConnection.Player.MinReputationDelta,
+        _ => -99999
+    };
 
     public override void Tick() {
         foreach (Flag flag in Flags.Values)

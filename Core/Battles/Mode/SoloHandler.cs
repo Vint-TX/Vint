@@ -11,11 +11,6 @@ public abstract class SoloHandler(
     protected abstract List<SpawnPoint> SpawnPoints { get; }
     protected SpawnPoint? LastSpawnPoint { get; set; }
 
-    /*public IEnumerable<UserResult> UserResults => Battle.Players
-        .ToList()
-        .Where(battlePlayer => battlePlayer.InBattleAsTank)
-        .Select(battlePlayer => battlePlayer.Tank!.UserResult);*/
-
     public override void Tick() { }
 
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {

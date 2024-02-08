@@ -3,6 +3,7 @@ using System.Numerics;
 using LinqToDB;
 using Vint.Core.Battles.Results;
 using Vint.Core.Battles.States;
+using Vint.Core.Battles.Type;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
@@ -269,7 +270,7 @@ public class BattleTank {
 
         killer.BattlePlayer.PlayerConnection.Send(new VisualScoreKillEvent(0, currentPlayer.Username, currentPlayer.Rank), killer.BattleUser);
 
-        if (Battle.IsCustom) return;
+        if (Battle.TypeHandler is not MatchmakingHandler) return;
 
         using DbConnection db = new();
         db.BeginTransaction();
@@ -302,7 +303,7 @@ public class BattleTank {
     void SelfKill() {
         StateManager.SetState(new Dead(StateManager));
 
-        if (Battle.IsCustom) return;
+        if (Battle.TypeHandler is not MatchmakingHandler) return;
 
         using DbConnection db = new();
         db.Statistics

@@ -8,16 +8,18 @@ public class BattleProperties(
     long mapId,
     bool friendlyFire,
     bool killZoneEnabled,
+    bool damageEnabled,
     bool disabledModules,
     int maxPlayers,
     int timeLimit,
-    int scoreLimit // ???
+    int scoreLimit
 ) {
     public BattleMode BattleMode { get; private set; } = battleMode;
     public GravityType Gravity { get; private set; } = gravity;
     public long MapId { get; private set; } = mapId;
     public bool FriendlyFire { get; private set; } = friendlyFire;
     public bool KillZoneEnabled { get; private set; } = killZoneEnabled;
+    [ProtocolIgnore] public bool DamageEnabled { get; private set; } = damageEnabled;
     public bool DisabledModules { get; private set; } = disabledModules;
     public int MaxPlayers { get; private set; } = maxPlayers;
     public int TimeLimit { get; private set; } = timeLimit;

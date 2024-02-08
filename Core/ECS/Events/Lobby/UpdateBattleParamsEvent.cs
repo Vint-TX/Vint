@@ -16,7 +16,8 @@ public class UpdateBattleParamsEvent : IServerEvent {
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
 
-        if ((!battlePlayer.Battle.IsCustom || ((CustomHandler)battlePlayer.Battle.TypeHandler).Owner != connection) &&
+        if ((battlePlayer.Battle.TypeHandler is not CustomHandler customHandler || 
+             customHandler.Owner != connection) && 
             !connection.Player.IsAdmin) return;
 
         battlePlayer.Battle.UpdateProperties(Params);

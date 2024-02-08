@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -9,11 +10,24 @@ public class EnterToMatchmakingEvent : IServerEvent {
     static IEnumerable<IEntity> Modes { get; } = GlobalEntities.GetEntities("matchmakingModes").ToList();
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.InLobby) return;
+
         IEntity selectedMode = entities.Single();
 
         if (Modes.All(mode => mode.Id != selectedMode.Id)) return;
 
-        connection.Server.MatchmakingProcessor.AddPlayerToQueue(connection);
+        string[]? configPathParts = selectedMode.TemplateAccessor?.ConfigPath?.Split('/');
+
+        if (configPathParts == null) return;
+
+        if (configPathParts[1] == "arcade") {
+            if (!Enum.TryParse(configPathParts[3], true, out ArcadeModeType mode)) return;
+
+            connection.Server.ArcadeProcessor.AddPlayerToQueue(connection, mode);
+        } else {
+            connection.Server.MatchmakingProcessor.AddPlayerToQueue(connection);
+        }
+
         connection.Send(new EnteredToMatchmakingEvent(), selectedMode);
     }
 }

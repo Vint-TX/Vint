@@ -25,7 +25,6 @@ namespace Vint.Core.Battles;
 
 public class Battle {
     public Battle() { // Matchmaking battle
-        IsCustom = false;
         Properties = null!;
 
         TypeHandler = new MatchmakingHandler(this);
@@ -38,8 +37,20 @@ public class Battle {
         BattleChatEntity = new GeneralBattleChatTemplate().Create();
     }
 
+    public Battle(ArcadeModeType arcadeMode) { // Arcade battle
+        Properties = null!;
+
+        TypeHandler = new ArcadeHandler(this, arcadeMode);
+        StateManager = new BattleStateManager(this);
+
+        TypeHandler.Setup();
+        Setup();
+
+        LobbyChatEntity = new BattleLobbyChatTemplate().Create();
+        BattleChatEntity = new GeneralBattleChatTemplate().Create();
+    }
+
     public Battle(BattleProperties properties, IPlayerConnection owner) { // Custom battle
-        IsCustom = true;
         Properties = properties;
 
         TypeHandler = new CustomHandler(this, owner);
@@ -57,7 +68,6 @@ public class Battle {
     public long Id => Entity.Id;
     public long LobbyId => LobbyEntity.Id;
     public bool CanAddPlayers => Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
-    public bool IsCustom { get; }
     public bool WasPlayers { get; private set; }
     public double Timer { get; set; }
 
@@ -87,7 +97,7 @@ public class Battle {
             _ => throw new UnreachableException()
         };
 
-        Entity = battleModeTemplate.Create(LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
+        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
         RoundEntity = new RoundTemplate().Create(Entity);
 
         // todo height maps (or server physics)
@@ -121,7 +131,7 @@ public class Battle {
         LobbyEntity.RemoveComponent<GravityComponent>();
         LobbyEntity.AddComponent(new GravityComponent(Properties.Gravity));
 
-        if (IsCustom) {
+        if (TypeHandler is CustomHandler) {
             LobbyEntity.RemoveComponent<ClientBattleParamsComponent>();
             LobbyEntity.AddComponent(new ClientBattleParamsComponent(Properties));
         }
@@ -224,7 +234,7 @@ public class Battle {
             battlePlayer.InBattle = false;
             battlePlayer.Tank = null;
 
-            if (!IsCustom || !battlePlayer.PlayerConnection.IsOnline)
+            if (TypeHandler is not CustomHandler || !battlePlayer.PlayerConnection.IsOnline)
                 RemovePlayerFromLobby(battlePlayer);
 
             ModeHandler.SortPlayers();

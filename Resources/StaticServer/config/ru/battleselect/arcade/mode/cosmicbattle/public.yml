@@ -1,7 +1,7 @@
 matchMakingModeRestrictions:
-  minimalRank: 6
+  minimalRank: 1
 imageItem:
-  spriteUid: 4acd61d9-0af9-4ed4-8733-dd1e09e09bb8
+  spriteUid: 63c16c3f-49d6-47a9-81b1-12e0183a7414
 order:
   index: 3
 matchMakingModeActivation:

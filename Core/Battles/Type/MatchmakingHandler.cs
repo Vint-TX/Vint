@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using LinqToDB;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
@@ -34,6 +33,7 @@ public class MatchmakingHandler : TypeHandler {
             false,
             true,
             true,
+            false,
             mapInfo.MaxPlayers,
             10,
             100);
@@ -95,19 +95,12 @@ public class MatchmakingHandler : TypeHandler {
             component.NeedGoodBattles = needGoodBattles;
 
             using DbConnection db = new();
-            
+
             Database.Models.Player player = battlePlayer.PlayerConnection.Player;
             player.DesertedBattlesCount = lefts;
             player.NeedGoodBattlesCount = needGoodBattles;
-            
+
             db.Update(player);
         });
     }
-
-    static BattleMode GetRandomMode() => Random.Shared.NextDouble() switch {
-        < 0.34 => BattleMode.CTF,
-        < 0.67 => BattleMode.TDM,
-        < 1 => BattleMode.DM,
-        _ => throw new UnreachableException()
-    };
 }

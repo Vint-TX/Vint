@@ -23,16 +23,12 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
+        Battles.Battle battle = battlePlayer.Battle;
 
-        if (!battlePlayer.InBattleAsTank) return;
+        if (!battlePlayer.InBattleAsTank || !battle.Properties.DamageEnabled) return;
 
         BattleTank battleTank = battlePlayer.Tank!;
-
-        if (battleTank.StateManager.CurrentState is Dead &&
-            battleTank.WeaponHandler is not BulletWeaponHandler) return;
-
         IEntity weapon = entities.Single();
-        Battles.Battle battle = battlePlayer.Battle;
 
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)

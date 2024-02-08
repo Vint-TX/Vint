@@ -1,6 +1,7 @@
 using LinqToDB;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Results;
+using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -148,13 +149,14 @@ public class BattlePlayer {
             .Set(weapon => weapon.BattlesPlayed, weapon => weapon.BattlesPlayed + 1)
             .Update();
 
-        if (Battle.IsCustom) {
+        if (Battle.TypeHandler is not MatchmakingHandler) {
             db.Statistics
                 .Where(stats => stats.PlayerId == player.Id)
                 .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
                 .Set(stats => stats.AllCustomBattlesParticipated, stats => stats.AllCustomBattlesParticipated + 1)
                 .Update();
 
+            db.CommitTransaction();
             reputationDelta = 0;
         } else {
             db.Statistics
@@ -164,6 +166,8 @@ public class BattlePlayer {
                 .Set(stats => stats.Defeats, stats => stats.Defeats + (TeamBattleResult == TeamBattleResult.Defeat ? 1 : 0))
                 .Set(stats => stats.Victories, stats => stats.Victories + (TeamBattleResult == TeamBattleResult.Win ? 1 : 0))
                 .Update();
+
+            db.CommitTransaction();
 
             PlayerConnection.BattleSeries++;
             int score = GetBattleUserScoreWithBonus();
@@ -175,8 +179,6 @@ public class BattlePlayer {
             PlayerConnection.ChangeReputation(reputationDelta);
             PlayerConnection.ChangeGameplayChestScore(score);
         }
-
-        db.CommitTransaction();
 
         PersonalBattleResultForClient personalBattleResult = new(PlayerConnection, previousLeague, reputationDelta);
         BattleResultForClient battleResult = new(Battle, IsSpectator, personalBattleResult);

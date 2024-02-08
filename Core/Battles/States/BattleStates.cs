@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Group;
@@ -68,10 +69,19 @@ public class Starting(
     }
 
     public override void Tick() {
-        if (Battle.IsCustom)
-            CustomBattleTick();
-        else
-            MatchmakingBattleTick();
+        switch (Battle.TypeHandler) {
+            case MatchmakingHandler:
+                MatchmakingBattleTick();
+                break;
+
+            case ArcadeHandler:
+                ArcadeBattleTick();
+                break;
+
+            case CustomHandler:
+                CustomBattleTick();
+                break;
+        }
 
         base.Tick();
     }
@@ -81,6 +91,24 @@ public class Starting(
         base.Finish();
     }
 
+    void MatchmakingBattleTick() {
+        if (Battle.Players.Count <= 0) {
+            StateManager.SetState(new NotEnoughPlayers(StateManager));
+        } else if (Battle.Timer < 0) {
+            Battle.Start();
+            StateManager.SetState(new WarmUp(StateManager));
+        }
+    }
+
+    void ArcadeBattleTick() {
+        if (Battle.Players.Count <= 0) {
+            StateManager.SetState(new NotEnoughPlayers(StateManager));
+        } else if (Battle.Timer < 0) {
+            Battle.Start();
+            StateManager.SetState(new Running(StateManager));
+        }
+    }
+
     void CustomBattleTick() {
         if (Battle.Players.Count == 0)
             StateManager.SetState(new NotStarted(StateManager));
@@ -88,15 +116,6 @@ public class Starting(
             Battle.Start();
             Battle.LobbyEntity.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
             StateManager.SetState(new Running(StateManager));
-        }
-    }
-
-    void MatchmakingBattleTick() {
-        if (Battle.Players.Count <= 0) {
-            StateManager.SetState(new NotEnoughPlayers(StateManager));
-        } else if (Battle.Timer < 0) {
-            Battle.Start();
-            StateManager.SetState(new WarmUp(StateManager));
         }
     }
 }
@@ -150,7 +169,7 @@ public class Running(
     }
 
     public override void Tick() {
-        if (Battle.IsCustom && Battle.Players.All(player => !player.InBattleAsTank)) {
+        if (Battle.TypeHandler is CustomHandler && Battle.Players.All(player => !player.InBattleAsTank)) {
             Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
             StateManager.SetState(new Ended(StateManager));
         }

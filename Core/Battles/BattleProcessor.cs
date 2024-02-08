@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Serilog;
 using Vint.Core.Battles.States;
+using Vint.Core.Battles.Type;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -13,6 +14,8 @@ public interface IBattleProcessor {
 
     public void PutPlayerFromMatchmaking(IPlayerConnection connection);
 
+    public void PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode);
+
     public Battle? SingleOrDefault(Func<Battle, bool> predicate);
 
     public Battle? FirstOrDefault(Func<Battle, bool> predicate);
@@ -24,6 +27,8 @@ public interface IBattleProcessor {
     public Battle? FindByIndex(int index);
 
     public Battle CreateMatchmakingBattle();
+
+    public Battle CreateArcadeBattle(ArcadeModeType mode);
 
     public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner);
 }
@@ -49,7 +54,7 @@ public class BattleProcessor : IBattleProcessor {
                     battle.Tick(lastBattleTickDurationSec);
 
                     if (battle is { WasPlayers: true, Players.Count: 0 } or
-                        { IsCustom: false, StateManager.CurrentState: Ended }) {
+                        { TypeHandler: CustomHandler, StateManager.CurrentState: Ended }) {
                         Logger.Warning("Removing battle {Id}", battle.LobbyId);
                         Battles.Remove(battle);
                     }
@@ -72,7 +77,16 @@ public class BattleProcessor : IBattleProcessor {
     }
 
     public void PutPlayerFromMatchmaking(IPlayerConnection connection) {
-        Battle battle = FirstOrDefault(battle => battle is { IsCustom: false, CanAddPlayers: true }) ?? CreateMatchmakingBattle();
+        Battle battle = FirstOrDefault(battle => battle is { TypeHandler: MatchmakingHandler, CanAddPlayers: true }) ?? CreateMatchmakingBattle();
+
+        battle.AddPlayer(connection);
+    }
+
+    public void PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode) {
+        Battle battle =
+            FirstOrDefault(battle => battle is { TypeHandler: ArcadeHandler arcadeHandler, CanAddPlayers: true } &&
+                                     arcadeHandler.Mode == mode) ??
+            CreateArcadeBattle(mode);
 
         battle.AddPlayer(connection);
     }
@@ -89,6 +103,13 @@ public class BattleProcessor : IBattleProcessor {
 
     public Battle CreateMatchmakingBattle() {
         Battle battle = new();
+        Battles.Add(battle);
+
+        return battle;
+    }
+
+    public Battle CreateArcadeBattle(ArcadeModeType mode) {
+        Battle battle = new(mode);
         Battles.Add(battle);
 
         return battle;

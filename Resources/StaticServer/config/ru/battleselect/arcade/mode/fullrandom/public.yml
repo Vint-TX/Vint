@@ -1,0 +1,8 @@
+matchMakingModeRestrictions:
+  minimalRank: 1
+imageItem:
+  spriteUid: 8714f757-765e-490e-80f2-1967bcf2e75f
+order:
+  index: 5
+matchMakingModeActivation:
+  active: true
