@@ -41,6 +41,9 @@ public abstract class WeaponHandler {
     public float MinDamageDistance { get; }
     public float MinDamagePercent { get; }
 
+    public DateTimeOffset LastHitTime { get; set; }
+    public abstract int MaxHitTargets { get; }
+
     public abstract void Fire(HitTarget target);
 
     public virtual void OnTankEnable() =>

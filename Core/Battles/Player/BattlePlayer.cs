@@ -63,6 +63,7 @@ public class BattlePlayer {
     public bool InBattle { get; set; }
     public bool IsPaused { get; set; }
     public bool IsKicked { get; set; }
+    bool ReportedInChat { get; set; }
 
     public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(10);
     public DateTimeOffset? KickTime { get; set; }
@@ -184,6 +185,17 @@ public class BattlePlayer {
         BattleResultForClient battleResult = new(Battle, IsSpectator, personalBattleResult);
 
         PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.User);
+    }
+
+    public void OnAntiCheatSuspected() {
+        if (ReportedInChat) return;
+
+        ChatUtils.SendMessage($"{PlayerConnection.Player.Username} suspected to be cheating. Please, report it to the moderators if it is true",
+            Battle.BattleChatEntity,
+            ChatUtils.GetReceivers(PlayerConnection, Battle.BattleChatEntity),
+            null);
+
+        ReportedInChat = true;
     }
 
     public float GetBattleSeriesMultiplier() {

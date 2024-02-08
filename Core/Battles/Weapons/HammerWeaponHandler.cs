@@ -31,6 +31,8 @@ public class HammerWeaponHandler : WeaponHandler {
 
     DateTime? ReloadEndTime { get; set; }
 
+    public override int MaxHitTargets => BattleTank.Battle.Players.Count;
+
     public override void Fire(HitTarget target) => throw new UnreachableException();
 
     public void Fire(List<HitTarget> hitTargets) {

@@ -8,6 +8,8 @@ namespace Vint.Core.Battles.Weapons;
 public class RicochetWeaponHandler(
     BattleTank battleTank
 ) : DiscreteWeaponHandler(battleTank) {
+    public override int MaxHitTargets => 1;
+
     public override void Fire(HitTarget target) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players

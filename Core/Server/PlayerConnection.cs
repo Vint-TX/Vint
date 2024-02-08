@@ -52,8 +52,8 @@ public interface IPlayerConnection {
 
     public bool IsOnline { get; }
     public bool InLobby { get; }
-    public DateTimeOffset PingSendTime { get; set; }
-    public DateTimeOffset PongReceiveTime { get; set; }
+    public DateTimeOffset PingSendTime { set; }
+    public DateTimeOffset PongReceiveTime { set; }
     public long Ping { get; }
     public Invite? Invite { get; set; }
 
@@ -131,8 +131,12 @@ public abstract class PlayerConnection(
     public abstract bool IsOnline { get; }
     public bool InLobby => BattlePlayer != null;
     public DateTimeOffset PingSendTime { get; set; }
-    public DateTimeOffset PongReceiveTime { get; set; }
-    public long Ping => (PongReceiveTime - PingSendTime).Milliseconds;
+
+    public DateTimeOffset PongReceiveTime {
+        set => Ping = (value - PingSendTime).Milliseconds;
+    }
+
+    public long Ping { get; private set; }
     public Invite? Invite { get; set; }
 
     public void Register(

@@ -19,6 +19,8 @@ public class ThunderWeaponHandler : DiscreteWeaponHandler {
     public float RadiusOfMaxSplashDamage { get; }
     public float RadiusOfMinSplashDamage { get; }
 
+    public override int MaxHitTargets => 1;
+
     public void SplashFire(HitTarget target) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players

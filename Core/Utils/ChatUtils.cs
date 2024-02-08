@@ -67,13 +67,16 @@ public static class ChatUtils {
         GeneralChatTemplate => from.Server.PlayerConnections.Values,
 
         BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players
+            .ToList()
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 
         GeneralBattleChatTemplate => from.BattlePlayer!.Battle.Players
+            .ToList()
             .Where(battlePlayer => battlePlayer.InBattle)
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 
         PersonalChatTemplate => chat.GetComponent<ChatParticipantsComponent>().Users
+            .ToList()
             .Select(user => {
                 IPlayerConnection? connection = from.Server.PlayerConnections.Values
                     .Where(conn => conn.IsOnline)
@@ -85,6 +88,7 @@ public static class ChatUtils {
             .Where(conn => conn != null!),
 
         TeamBattleChatTemplate => from.BattlePlayer!.Battle.Players
+            .ToList()
             .Where(battlePlayer => battlePlayer.TeamColor == from.BattlePlayer.TeamColor)
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 

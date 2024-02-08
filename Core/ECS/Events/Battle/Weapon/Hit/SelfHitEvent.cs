@@ -1,6 +1,5 @@
 using LinqToDB;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
@@ -19,16 +18,33 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         ClientTime = ClientTime
     };
 
+    [ProtocolIgnore] protected bool IsProceeded { get; private set; }
+
     public virtual void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return;
+        IsProceeded = true;
+
+        if (!connection.InLobby) {
+            IsProceeded = false;
+            return;
+        }
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 
-        if (!battlePlayer.InBattleAsTank || !battle.Properties.DamageEnabled) return;
+        if (!battlePlayer.InBattleAsTank || !battle.Properties.DamageEnabled) {
+            IsProceeded = false;
+            return;
+        }
 
         BattleTank battleTank = battlePlayer.Tank!;
         IEntity weapon = entities.Single();
+        WeaponHandler weaponHandler = battleTank.WeaponHandler;
+
+        if (!Validate(connection, weaponHandler)) {
+            IsProceeded = false;
+            battlePlayer.OnAntiCheatSuspected();
+            return;
+        }
 
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
@@ -36,8 +52,6 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             playerConnection.Send(RemoteEvent, weapon);
 
         if (Targets == null) return;
-
-        WeaponHandler weaponHandler = battleTank.WeaponHandler;
 
         if (weaponHandler is HammerWeaponHandler hammerHandler) {
             hammerHandler.Fire(Targets);
@@ -61,5 +75,36 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Hits, stats => stats.Hits + Targets.Count)
             .Update();
+    }
+
+    bool Validate(IPlayerConnection connection, WeaponHandler weaponHandler) {
+        DateTimeOffset currentHitTime = DateTimeOffset.UtcNow;
+        DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
+        float timePassedMs = (currentHitTime - previousHitTime).Milliseconds + connection.Ping;
+        float cooldownMs = weaponHandler.Cooldown / 1000;
+
+        if (timePassedMs < cooldownMs) {
+            connection.Logger.ForType(GetType())
+                .Warning("Suspicious behaviour: cooldown has not passed yet: {TimePassed} < {Cooldown} ({WeaponHandlerName})",
+                    timePassedMs,
+                    cooldownMs,
+                    weaponHandler.GetType().Name);
+
+            return false;
+        }
+
+        weaponHandler.LastHitTime = currentHitTime;
+
+        if (Targets?.Count > weaponHandler.MaxHitTargets) {
+            connection.Logger.ForType(GetType())
+                .Warning("Suspicious behaviour: hit targets count is greater than max hit targets count: {Current} > {Max} ({WeaponHandlerName})",
+                    Targets?.Count,
+                    weaponHandler.MaxHitTargets,
+                    weaponHandler.GetType().Name);
+
+            return false;
+        }
+
+        return true;
     }
 }

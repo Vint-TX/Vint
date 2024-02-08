@@ -15,6 +15,8 @@ public class ShaftWeaponHandler : DiscreteWeaponHandler {
     public TimeSpan AimingDuration { get; private set; }
     public float EnergyDrainPerMs { get; private set; }
 
+    public override int MaxHitTargets => 1;
+
     public void Aim() {
         Aiming = true;
         AimingBeginTime = DateTimeOffset.UtcNow;

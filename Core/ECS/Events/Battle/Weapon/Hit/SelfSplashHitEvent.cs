@@ -22,11 +22,14 @@ public class SelfSplashHitEvent : SelfHitEvent {
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         base.Execute(connection, entities);
 
+        if (!IsProceeded) return;
+
         Battles.Battle battle = connection.BattlePlayer!.Battle;
+        WeaponHandler weaponHandler = connection.BattlePlayer!.Tank!.WeaponHandler;
 
         if (!battle.Properties.DamageEnabled ||
             SplashTargets == null ||
-            connection.BattlePlayer?.Tank?.WeaponHandler is not ThunderWeaponHandler thunder) return;
+            weaponHandler is not ThunderWeaponHandler thunder) return;
 
         foreach (HitTarget target in SplashTargets)
             thunder.SplashFire(target);

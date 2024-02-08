@@ -4,4 +4,6 @@ namespace Vint.Core.Battles.Weapons;
 
 public class RailgunWeaponHandler(
     BattleTank battleTank
-) : DiscreteWeaponHandler(battleTank);
+) : DiscreteWeaponHandler(battleTank) {
+    public override int MaxHitTargets => BattleTank.Battle.Players.Count;
+}
