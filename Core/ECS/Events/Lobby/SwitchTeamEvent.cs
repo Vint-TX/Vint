@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
@@ -24,6 +25,7 @@ public class SwitchTeamEvent : IServerEvent {
 
         if (newTeamPlayersCount >= userLimitComponent.TeamLimit) return;
 
+        connection.User.RemoveComponent<TeamColorComponent>();
         battlePlayer.Team = prevColor == TeamColor.Red ? teamHandler.BlueTeam : teamHandler.RedTeam;
     }
 }

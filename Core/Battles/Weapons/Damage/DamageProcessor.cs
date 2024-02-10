@@ -12,9 +12,9 @@ public interface IDamageProcessor {
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage);
 
-    public void Heal(BattleTank source, BattleTank target, float heal);
+    public void Heal(BattleTank source, BattleTank target, CalculatedDamage heal);
 
-    public void Heal(BattleTank target, float heal);
+    public void Heal(BattleTank target, CalculatedDamage heal);
 }
 
 public class DamageProcessor(
@@ -61,7 +61,21 @@ public class DamageProcessor(
         };
     }
 
-    public void Heal(BattleTank source, BattleTank target, float heal) => throw new NotImplementedException();
+    public void Heal(BattleTank source, BattleTank target, CalculatedDamage damage) { // todo modules
+        Heal(target, damage);
+        source.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
+                damage.Value,
+                damage.IsCritical || damage.IsBackHit || damage.IsTurretHit,
+                true),
+            target.Tank);
+    }
 
-    public void Heal(BattleTank target, float heal) => throw new NotImplementedException();
+    public void Heal(BattleTank target, CalculatedDamage damage) {
+        target.SetHealth(target.Health + damage.Value);
+        target.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
+                damage.Value,
+                damage.IsCritical || damage.IsBackHit || damage.IsTurretHit,
+                true),
+            target.Tank);
+    }
 }

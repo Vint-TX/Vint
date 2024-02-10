@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Serilog;
-using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -53,8 +52,7 @@ public class BattleProcessor : IBattleProcessor {
                 foreach (Battle battle in Battles.ToList()) {
                     battle.Tick(lastBattleTickDurationSec);
 
-                    if (battle is { WasPlayers: true, Players.Count: 0 } or
-                        { TypeHandler: CustomHandler, StateManager.CurrentState: Ended }) {
+                    if (battle is { WasPlayers: true, Players.Count: 0 }) {
                         Logger.Warning("Removing battle {Id}", battle.LobbyId);
                         Battles.Remove(battle);
                     }

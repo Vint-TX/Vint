@@ -34,7 +34,7 @@ public abstract class WeaponHandler {
     public string MarketConfigPath => MarketEntity.TemplateAccessor!.ConfigPath!;
 
     public bool CanSelfDamage => this is ThunderWeaponHandler or RicochetWeaponHandler;
-    public float Cooldown { get; init; }
+    public TimeSpan Cooldown { get; protected init; }
 
     public bool DamageWeakeningByDistance { get; }
     public float MaxDamageDistance { get; }

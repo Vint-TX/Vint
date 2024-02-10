@@ -111,7 +111,8 @@
       "LeagueConfigComponent": {
         "leagueIndex": 4,
         "reputationToEnter": 4500
-      }
+      },
+      "TopLeagueComponent": {}
     }
   }
 ]

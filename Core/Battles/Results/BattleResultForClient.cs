@@ -13,7 +13,7 @@ public class BattleResultForClient {
         MapId = battle.MapInfo.Id;
         BattleMode = battle.Properties.BattleMode;
         MatchMakingModeType = battle.TypeHandler is ArcadeHandler ? BattleType.Arcade : BattleType.Rating;
-        
+
         switch (battle.ModeHandler) {
             case TeamHandler teamHandler:
                 RedTeamScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>().Score;

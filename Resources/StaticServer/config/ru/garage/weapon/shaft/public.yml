@@ -11,23 +11,23 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 9
 aimingMinDamageProperty:
-  initialValue: 480.000
-  finalValue: 480.000
+  initialValue: 300.000
+  finalValue: 300.000
 aimingMaxDamageProperty:
-  initialValue: 1200.000
-  finalValue: 1200.000
+  initialValue: 900.000
+  finalValue: 900.000
 energyChargePerShotProperty:
   initialValue: 0.400
   finalValue: 0.400
 energyChargeSpeedProperty:
-  initialValue: 0.200
-  finalValue: 0.200
+  initialValue: 0.120
+  finalValue: 0.120
 energyRechargeSpeedProperty:
-  initialValue: 0.143
-  finalValue: 0.143
+  initialValue: 0.001
+  finalValue: 0.001
 reloadTimeProperty:
-  initialValue: 2.000
-  finalValue: 2.000
+  initialValue: 2.500
+  finalValue: 2.500
 aimingVerticalAccelerationProperty:
   initialValue: 30.000
   finalValue: 30.000
@@ -59,25 +59,25 @@ visualProperties:
       normalizedValue: 0.10
   properties:
     - name: DPM
-      initialValue: 14400
-      finalValue: 14400
+      initialValue: 10800
+      finalValue: 10800
     - name: Damage
-      initialValue: 480
-      finalValue: 480
+      initialValue: 300
+      finalValue: 300
       format: 0
     - name: Aiming Damage
-      initialValue: 1200
-      finalValue: 1200
+      initialValue: 900
+      finalValue: 900
       format: 0
     - name: Loading Time
-      initialValue: 5
-      finalValue: 5
-      format: 0
+      initialValue: 8.3
+      finalValue: 8.3
+      format: 0.0
       unit: sec
     - name: Reload Time
-      initialValue: 7
-      finalValue: 7
-      format: 0
+      initialValue: 2.5
+      finalValue: 2.5
+      format: 0.0
       unit: sec
     - name: Aiming Speed
       initialValue: 30

@@ -51,6 +51,7 @@ public class Battle {
     }
 
     public Battle(BattleProperties properties, IPlayerConnection owner) { // Custom battle
+        properties.DamageEnabled = true;
         Properties = properties;
 
         TypeHandler = new CustomHandler(this, owner);

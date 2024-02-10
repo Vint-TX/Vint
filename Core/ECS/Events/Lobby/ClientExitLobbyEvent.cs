@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class ClientExitLobbyEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
-        
+
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 

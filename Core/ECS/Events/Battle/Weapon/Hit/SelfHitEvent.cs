@@ -59,14 +59,7 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         }
 
         foreach (HitTarget target in Targets) {
-            try {
-                weaponHandler.Fire(target);
-            } catch (NotImplementedException) {
-                ChatUtils.SendMessage($"{weaponHandler.GetType().Name}.Fire method is not implemented yet",
-                    battle.BattleChatEntity,
-                    [connection],
-                    null);
-            }
+            weaponHandler.Fire(target);
         }
 
         using DbConnection db = new();
@@ -81,13 +74,12 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         DateTimeOffset currentHitTime = DateTimeOffset.UtcNow;
         DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
         float timePassedMs = (currentHitTime - previousHitTime).Milliseconds + connection.Ping;
-        float cooldownMs = weaponHandler.Cooldown / 1000;
 
-        if (timePassedMs < cooldownMs) {
+        if (weaponHandler is not StreamWeaponHandler && timePassedMs < weaponHandler.Cooldown.Milliseconds) {
             connection.Logger.ForType(GetType())
                 .Warning("Suspicious behaviour: cooldown has not passed yet: {TimePassed} < {Cooldown} ({WeaponHandlerName})",
                     timePassedMs,
-                    cooldownMs,
+                    weaponHandler.Cooldown.Milliseconds,
                     weaponHandler.GetType().Name);
 
             return false;

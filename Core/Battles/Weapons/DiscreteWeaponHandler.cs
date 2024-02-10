@@ -19,7 +19,7 @@ public abstract class DiscreteWeaponHandler : WeaponHandler {
             MaxDamage = ConfigManager.GetComponent<AimingMaxDamagePropertyComponent>(MarketConfigPath).FinalValue;
         }
 
-        Cooldown = ConfigManager.GetComponent<WeaponCooldownComponent>(MarketConfigPath).CooldownIntervalSec;
+        Cooldown = TimeSpan.FromSeconds(ConfigManager.GetComponent<WeaponCooldownComponent>(MarketConfigPath).CooldownIntervalSec);
     }
 
     public float MinDamage { get; }

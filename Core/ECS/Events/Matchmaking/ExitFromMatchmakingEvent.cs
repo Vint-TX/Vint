@@ -24,10 +24,10 @@ public class ExitFromMatchmakingEvent : IServerEvent {
             case ArcadeHandler:
                 connection.Server.ArcadeProcessor.RemoveArcadePlayer(connection, lobby, true);
                 break;
-            
+
             case CustomHandler:
                 break;
-            
+
             default:
                 connection.Logger.ForType(GetType()).Error("Unexpected type handler: {Handler}", battle.TypeHandler.GetType().Name);
                 break;

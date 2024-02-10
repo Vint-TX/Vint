@@ -13,9 +13,9 @@ public class ShaftBattleItemTemplate : DiscreteWeaponTemplate {
         IEntity entity = base.Create(configPath, tank, battlePlayer);
 
         entity.AddComponent(new ShaftComponent());
-        entity.AddComponent(new ShaftEnergyComponent(0.4f, 1, 0.2f, 0.143f));
-        entity.AddComponent(ConfigManager.GetComponent<ShaftAimingImpactComponent>(configPath));
+        entity.AddComponent(ConfigManager.GetComponent<ShaftEnergyComponent>(configPath));
         entity.AddComponent(ConfigManager.GetComponent<ShaftAimingSpeedComponent>(configPath));
+        entity.AddComponent(ConfigManager.GetComponent<ShaftAimingImpactComponent>(configPath));
         entity.AddComponent(ConfigManager.GetComponent<ShaftStateConfigComponent>(configPath.Replace("garage", "battle")));
         return entity;
     }

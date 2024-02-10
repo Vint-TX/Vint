@@ -19,7 +19,7 @@ public class BattleProperties(
     public long MapId { get; private set; } = mapId;
     public bool FriendlyFire { get; private set; } = friendlyFire;
     public bool KillZoneEnabled { get; private set; } = killZoneEnabled;
-    [ProtocolIgnore] public bool DamageEnabled { get; private set; } = damageEnabled;
+    [ProtocolIgnore] public bool DamageEnabled { get; set; } = damageEnabled;
     public bool DisabledModules { get; private set; } = disabledModules;
     public int MaxPlayers { get; private set; } = maxPlayers;
     public int TimeLimit { get; private set; } = timeLimit;

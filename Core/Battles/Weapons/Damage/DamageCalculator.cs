@@ -25,9 +25,10 @@ public class DamageCalculator : IDamageCalculator {
 
         float baseDamage = handler switch {
             ShaftWeaponHandler shaftHandler => GetShaftDamage(shaftHandler),
+            IsisWeaponHandler isisHandler => GetIsisDamage(isisHandler, source, target),
             HammerWeaponHandler hammerHandler => hammerHandler.DamagePerPellet,
-            StreamWeaponHandler streamHandler => streamHandler.DamagePerSecond,
-            DiscreteWeaponHandler discreteHandler => GetRandomDamage(discreteHandler),
+            StreamWeaponHandler streamHandler => GetStreamDamage(streamHandler),
+            DiscreteWeaponHandler discreteHandler => GetDiscreteDamage(discreteHandler),
             _ => throw new InvalidOperationException($"Cannot find base damage for {handler.GetType().Name}")
         };
 
@@ -52,12 +53,21 @@ public class DamageCalculator : IDamageCalculator {
         const int magicNumber = 400;
         float baseDamage = shaftHandler.Aiming
                                ? (float)(shaftHandler.AimingDuration.TotalMilliseconds + magicNumber)
-                               : GetRandomDamage(shaftHandler);
+                               : GetDiscreteDamage(shaftHandler);
 
         return MathUtils.Map(baseDamage, 0, 1 / shaftHandler.EnergyDrainPerMs + magicNumber, shaftHandler.MinDamage, shaftHandler.MaxDamage);
     }
 
-    public float GetRandomDamage(DiscreteWeaponHandler discreteHandler) {
+    public float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank) => Convert.ToSingle(
+        (sourceTank == targetTank || sourceTank.IsEnemy(targetTank)
+             ? isisHandler.DamagePerSecond
+             : isisHandler.HealPerSecond) *
+        isisHandler.Cooldown.TotalSeconds);
+
+    public float GetStreamDamage(StreamWeaponHandler streamHandler) =>
+        Convert.ToSingle(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);
+
+    public float GetDiscreteDamage(DiscreteWeaponHandler discreteHandler) {
         float min = discreteHandler.MinDamage;
         float max = discreteHandler.MaxDamage;
         float mean = (min + max) / 2;

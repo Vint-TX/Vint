@@ -190,7 +190,7 @@ public class BattlePlayer {
     public void OnAntiCheatSuspected() {
         if (ReportedInChat) return;
 
-        ChatUtils.SendMessage($"{PlayerConnection.Player.Username} suspected to be cheating. Please, report it to the moderators if it is true",
+        ChatUtils.SendMessage($"{PlayerConnection.Player.Username} suspected to be cheating. Please, report it to the moderators as soon as possible",
             Battle.BattleChatEntity,
             ChatUtils.GetReceivers(PlayerConnection, Battle.BattleChatEntity),
             null);

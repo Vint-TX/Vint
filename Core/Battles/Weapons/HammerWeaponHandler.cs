@@ -15,6 +15,7 @@ public class HammerWeaponHandler : WeaponHandler {
     public HammerWeaponHandler(BattleTank battleTank) : base(battleTank) {
         MagazineWeaponComponent magazineWeaponComponent = ConfigManager.GetComponent<MagazineWeaponComponent>(MarketConfigPath);
 
+        PelletCount = BattleEntity.GetComponent<HammerPelletConeComponent>().PelletCount;
         DamagePerPellet = ConfigManager.GetComponent<DamagePerPelletPropertyComponent>(MarketConfigPath).FinalValue;
         ReloadMagazineTimeSec = magazineWeaponComponent.ReloadMagazineTimePerSec;
         MaximumCartridgeCount = magazineWeaponComponent.MaxCartridgeCount;
@@ -25,13 +26,14 @@ public class HammerWeaponHandler : WeaponHandler {
 
     public float ReloadMagazineTimeSec { get; }
     public float DamagePerPellet { get; }
+    public int PelletCount { get; }
 
     public int MaximumCartridgeCount { get; }
     public int CurrentCartridgeCount { get; private set; }
 
     DateTime? ReloadEndTime { get; set; }
 
-    public override int MaxHitTargets => BattleTank.Battle.Players.Count;
+    public override int MaxHitTargets => PelletCount;
 
     public override void Fire(HitTarget target) => throw new UnreachableException();
 
