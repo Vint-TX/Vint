@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Vint.Core.Battles.Weapons.Damage;
+namespace Vint.Core.Battles.Damage;
 
 public readonly record struct CalculatedDamage(
     Vector3 HitPoint,

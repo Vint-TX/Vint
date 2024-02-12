@@ -67,6 +67,7 @@ public class MatchmakingHandler : TypeHandler {
     public override void PlayerExited(BattlePlayer battlePlayer) {
         WaitingPlayers.Remove(battlePlayer);
         battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
+        battlePlayer.PlayerConnection.BattleSeries = 0;
 
         bool battleEnded = Battle.StateManager.CurrentState is Ended;
         bool hasEnemies = Battle.Players.ToList().Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));

@@ -9,8 +9,8 @@ namespace Vint.Core.ECS.Templates.Battle;
 public class RoundTemplate : EntityTemplate {
     public IEntity Create(IEntity battle) => Entity(null,
         builder => {
-            builder.AddComponent(new RoundComponent())
-                .AddComponent(new BattleGroupComponent(battle))
+            builder.AddComponent(battle.GetComponent<BattleGroupComponent>())
+                .AddComponent(new RoundComponent())
                 .AddComponent(new RoundStopTimeComponent(DateTimeOffset.UtcNow.AddSeconds(40)))
                 .AddComponent(new RoundActiveStateComponent());
         });

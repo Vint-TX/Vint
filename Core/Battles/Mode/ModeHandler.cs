@@ -2,6 +2,7 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Team;
+using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.Server;
 
@@ -21,7 +22,7 @@ public abstract class ModeHandler(
                      .ToList()
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .Select(battlePlayer => battlePlayer.Tank!.RoundUser)
-                     .OrderBy(roundUser => roundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses)
+                     .OrderByDescending(roundUser => roundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses)
                      .Select((roundUser, index) => new { RoundUser = roundUser, Place = index + 1 })
                      .Where(roundUserToPlace =>
                          roundUserToPlace.RoundUser.GetComponent<RoundUserStatisticsComponent>().Place != roundUserToPlace.Place)) {
@@ -35,7 +36,7 @@ public abstract class ModeHandler(
 
     public abstract void SortPlayers();
 
-    public abstract void OnStarted();
+    public abstract void UpdateScore(IEntity? team, int score);
 
     public abstract void OnWarmUpCompleted();
 

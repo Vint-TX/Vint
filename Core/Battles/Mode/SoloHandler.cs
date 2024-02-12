@@ -1,5 +1,8 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.ECS.Components.Battle.Limit;
+using Vint.Core.ECS.Components.Battle.Round;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -13,6 +16,16 @@ public abstract class SoloHandler(
 
     public override void Tick() { }
 
+    public override void UpdateScore(IEntity? team, int score) {
+        int maxScore = Battle.Players
+            .ToList()
+            .Where(battlePlayer => battlePlayer.InBattleAsTank)
+            .Max(battlePlayer => battlePlayer.Tank!.RoundUser
+                .GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses);
+
+        Battle.Entity.ChangeComponent<ScoreLimitComponent>(component => component.ScoreLimit = maxScore);
+    }
+
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
         SpawnPoint spawnPoint = SpawnPoints
             .Shuffle()
@@ -25,8 +38,6 @@ public abstract class SoloHandler(
     }
 
     public override void SortPlayers() => SortPlayers(Battle.Players.ToList());
-
-    public override void OnStarted() { }
 
     public override void OnWarmUpCompleted() { }
 
@@ -44,5 +55,5 @@ public abstract class SoloHandler(
 
     public override void PlayerEntered(BattlePlayer player) { }
 
-    public override void PlayerExited(BattlePlayer player) { }
+    public override void PlayerExited(BattlePlayer player) => UpdateScore(null, 0);
 }

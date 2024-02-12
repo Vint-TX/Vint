@@ -1,7 +1,9 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Server;
@@ -30,6 +32,19 @@ public abstract class TeamHandler(
     public override void SortPlayers() {
         SortPlayers(RedPlayers.ToList());
         SortPlayers(BluePlayers.ToList());
+    }
+
+    public override void UpdateScore(IEntity? team, int score) {
+        if (team == null) return;
+
+        team.ChangeComponent<TeamScoreComponent>(component => component.Score = Math.Max(0, component.Score + score));
+        foreach (IPlayerConnection connection in Battle.Players.ToList().Where(player => player.InBattle).Select(player => player.PlayerConnection))
+            connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
+    }
+
+    public override void OnWarmUpCompleted() {
+        UpdateScore(RedTeam, int.MinValue);
+        UpdateScore(BlueTeam, int.MinValue);
     }
 
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
@@ -96,4 +111,6 @@ public abstract class TeamHandler(
 
         return battlePlayer;
     }
+
+    public abstract TeamColor GetDominatedTeam();
 }

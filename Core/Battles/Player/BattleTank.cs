@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using LinqToDB;
+using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Results;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
@@ -11,13 +12,16 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle;
+using Vint.Core.ECS.Components.Battle.Incarnation;
 using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
 using Vint.Core.ECS.Components.Battle.Parameters.Health;
+using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
+using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates.Battle;
@@ -112,10 +116,15 @@ public class BattleTank {
         BattleEnterTime = DateTimeOffset.UtcNow;
     }
 
+    public static IReadOnlyDictionary<int, int> KillStreakToScore { get; } = new Dictionary<int, int> {
+        { 2, 0 }, { 3, 5 }, { 4, 7 }, { 5, 10 }, { 10, 10 }, { 15, 10 }, { 20, 20 }, { 25, 30 }, { 30, 40 }, { 35, 50 }, { 40, 60 }
+    };
+
     public long CollisionsPhase { get; set; } = -1;
 
     public DateTimeOffset BattleEnterTime { get; }
     public UserResult UserResult { get; }
+    public Dictionary<BattleTank, float> KillAssistants { get; } = new();
     public float DealtDamage { get; set; }
     public float TakenDamage { get; set; }
 
@@ -181,7 +190,6 @@ public class BattleTank {
             BattlePlayer.IsKicked = true;
             BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
             Battle.RemovePlayer(BattlePlayer);
-            BattlePlayer.PlayerConnection.Logger.ForType(GetType()).Warning("Player kicked from battle (pause)");
         }
 
         WeaponHandler.Tick();
@@ -239,12 +247,13 @@ public class BattleTank {
 
     public void SetHealth(float health) { // todo modules
         Health = Math.Clamp(health, 0, MaxHealth);
+        Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = (float)Math.Ceiling(Health));
 
-        HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
+        /*HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
         healthComponent.CurrentHealth = (float)Math.Ceiling(Health);
 
         Tank.RemoveComponent<HealthComponent>();
-        Tank.AddComponent(healthComponent);
+        Tank.AddComponent(healthComponent);*/
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
             battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
@@ -256,6 +265,7 @@ public class BattleTank {
                                               BattlePlayer.TeamColor != other.BattlePlayer.TeamColor);
 
     public void KillBy(BattleTank killer, IEntity weapon) {
+        Dictionary<BattleTank, float> assistants = KillAssistants.Where(assist => assist.Key != this && assist.Key != killer).ToDictionary();
         SelfKill();
 
         Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
@@ -268,20 +278,64 @@ public class BattleTank {
             connection.Send(killEvent, killer.BattleUser);
         }
 
-        killer.BattlePlayer.PlayerConnection.Send(new VisualScoreKillEvent(0, currentPlayer.Username, currentPlayer.Rank), killer.BattleUser);
+        killer.BattlePlayer.PlayerConnection.Send(
+            new VisualScoreKillEvent(BattlePlayer.GetScoreWithBonus(10), currentPlayer.Username, currentPlayer.Rank),
+            killer.BattleUser);
+
+        killer.UpdateStatistics(1, 0, 0, 10);
+        UpdateStatistics(0, 0, 1, 0);
+
+        killer.UpdateKillStreak();
+        ResetKillStreak(killer);
+
+        foreach ((BattleTank assistant, float damageDealt) in assistants) {
+            int percent = Convert.ToInt32(Math.Round(damageDealt / MaxHealth * 100));
+
+            if (percent < 1) continue;
+
+            int score = MathUtils.Map(percent, 1, 100, 1, 10);
+            assistant.UpdateStatistics(0, 1, 0, score);
+            assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreAssistEvent(BattlePlayer.GetScoreWithBonus(score),
+                percent,
+                currentPlayer.Username));
+        }
+
+        switch (Battle.ModeHandler) {
+            case TDMHandler tdm:
+                tdm.UpdateScore(killer.BattlePlayer.Team, 1);
+                break;
+
+            case SoloHandler dm:
+                dm.UpdateScore(null, 0);
+                break;
+        }
 
         if (Battle.TypeHandler is not MatchmakingHandler) return;
+
+        Database.Models.Player player = killer.BattlePlayer.PlayerConnection.Player;
 
         using DbConnection db = new();
         db.BeginTransaction();
 
+        db.Hulls
+            .Where(hull => hull.PlayerId == player.Id &&
+                           hull.Id == player.CurrentPreset.Hull.Id)
+            .Set(hull => hull.Kills, hull => hull.Kills + 1)
+            .Update();
+
+        db.Weapons
+            .Where(w => w.PlayerId == player.Id &&
+                        w.Id == player.CurrentPreset.Weapon.Id)
+            .Set(w => w.Kills, w => w.Kills + 1)
+            .Update();
+
         db.Statistics
-            .Where(stats => stats.PlayerId == killer.BattlePlayer.PlayerConnection.Player.Id)
+            .Where(stats => stats.PlayerId == player.Id)
             .Set(stats => stats.Kills, stats => stats.Kills + 1)
             .Update();
 
         db.SeasonStatistics
-            .Where(stats => stats.PlayerId == killer.BattlePlayer.PlayerConnection.Player.Id)
+            .Where(stats => stats.PlayerId == player.Id)
             .Where(stats => stats.SeasonNumber == ConfigManager.SeasonNumber)
             .Set(stats => stats.Kills, stats => stats.Kills + 1)
             .Update();
@@ -298,10 +352,17 @@ public class BattleTank {
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
             battlePlayer.PlayerConnection.Send(selfDestructionEvent, BattleUser);
+
+        UpdateStatistics(-1, 0, 1, -10);
+        ResetKillStreak();
+
+        if (Battle.ModeHandler is TDMHandler)
+            Battle.ModeHandler.UpdateScore(BattlePlayer.Team, -1);
     }
 
     void SelfKill() {
         StateManager.SetState(new Dead(StateManager));
+        KillAssistants.Clear();
 
         if (Battle.TypeHandler is not MatchmakingHandler) return;
 
@@ -310,6 +371,56 @@ public class BattleTank {
             .Where(stats => stats.PlayerId == BattlePlayer.PlayerConnection.Player.Id)
             .Set(stats => stats.Deaths, stats => stats.Deaths + 1)
             .Update();
+    }
+
+    public void UpdateStatistics(int kills, int assists, int deaths, int score) {
+        RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => {
+            component.Kills = Math.Max(0, component.Kills + kills);
+            component.KillAssists = Math.Max(0, component.KillAssists + assists);
+            component.Deaths = Math.Max(0, component.Deaths + deaths);
+            component.ScoreWithoutBonuses = Math.Max(0, component.ScoreWithoutBonuses + score);
+        });
+
+        if (Battle.TypeHandler is MatchmakingHandler && score > 0) {
+            BattlePlayer.PlayerConnection.ChangeExperience(BattlePlayer.GetScoreWithBonus(score));
+            BattlePlayer.PlayerConnection.CheckRank();
+        }
+
+        if (kills > 0)
+            Incarnation.ChangeComponent<TankIncarnationKillStatisticsComponent>(component => component.Kills += kills);
+
+        foreach (IPlayerConnection connection in Battle.Players.ToList().Where(player => player.InBattle).Select(player => player.PlayerConnection))
+            connection.Send(new RoundUserStatisticsUpdatedEvent(), RoundUser);
+
+        Battle.ModeHandler.SortPlayers();
+    }
+
+    public void UpdateKillStreak() {
+        int killStreak = Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>().Kills;
+        
+        UserResult.KillStrike = Math.Max(UserResult.KillStrike, killStreak);
+        if (killStreak < 2) return;
+
+        int score = KillStreakToScore.GetValueOrDefault(killStreak, killStreak);
+
+        RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.ScoreWithoutBonuses += score);
+        BattlePlayer.PlayerConnection.Send(new VisualScoreStreakEvent(BattlePlayer.GetScoreWithBonus(score)), BattleUser);
+
+        if (killStreak < 5 || killStreak % 5 == 0)
+            BattlePlayer.PlayerConnection.Send(new KillStreakEvent(score), Incarnation);
+    }
+
+    public void ResetKillStreak(BattleTank? killer = null) {
+        TankIncarnationKillStatisticsComponent incarnationStatisticsComponent =
+            Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>();
+
+        if (incarnationStatisticsComponent.Kills >= 2 && killer != null)
+            killer.BattlePlayer.PlayerConnection.Send(
+                new StreakTerminationEvent(BattlePlayer.PlayerConnection.Player.Username),
+                killer.BattleUser);
+
+        incarnationStatisticsComponent.Kills = 0;
+        Incarnation.ChangeComponent(incarnationStatisticsComponent);
     }
 
     public override int GetHashCode() => BattlePlayer.GetHashCode();

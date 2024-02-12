@@ -73,13 +73,13 @@ public class SelfHitEvent : HitEvent, IServerEvent {
     bool Validate(IPlayerConnection connection, WeaponHandler weaponHandler) {
         DateTimeOffset currentHitTime = DateTimeOffset.UtcNow;
         DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
-        float timePassedMs = (currentHitTime - previousHitTime).Milliseconds + connection.Ping;
+        double timePassedMs = (currentHitTime - previousHitTime).TotalMilliseconds + connection.Ping;
 
-        if (weaponHandler is not StreamWeaponHandler && timePassedMs < weaponHandler.Cooldown.Milliseconds) {
+        if (weaponHandler is not StreamWeaponHandler && timePassedMs < weaponHandler.Cooldown.TotalMilliseconds) {
             connection.Logger.ForType(GetType())
-                .Warning("Suspicious behaviour: cooldown has not passed yet: {TimePassed} < {Cooldown} ({WeaponHandlerName})",
+                .Warning("Suspicious behaviour: cooldown has not passed: {TimePassed} < {Cooldown} ({WeaponHandlerName})",
                     timePassedMs,
-                    weaponHandler.Cooldown.Milliseconds,
+                    weaponHandler.Cooldown.TotalMilliseconds,
                     weaponHandler.GetType().Name);
 
             return false;

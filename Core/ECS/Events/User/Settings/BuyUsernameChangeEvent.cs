@@ -1,6 +1,4 @@
-using LinqToDB;
 using Vint.Core.Config;
-using Vint.Core.Database;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Notification;
@@ -25,10 +23,6 @@ public class BuyUsernameChangeEvent : IServerEvent {
 
         connection.SetXCrystals(connection.Player.XCrystals - truePrice);
         connection.SetUsername(Username);
-
-        using (DbConnection db = new()) {
-            db.Update(connection.Player);
-        }
 
         connection.Share(new UsernameChangedNotificationTemplate().Create(Username, user));
         connection.Send(new ShowNotificationGroupEvent(1), user);

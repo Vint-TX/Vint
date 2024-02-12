@@ -14,7 +14,7 @@ using Vint.Core.ECS.Templates.Battle.Flag;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battles;
+namespace Vint.Core.Battles.Flags;
 
 public class Flag {
     public Flag(Battle battle, IEntity team, TeamColor teamColor, Vector3 pedestalPosition) {
@@ -42,7 +42,7 @@ public class Flag {
     public BattlePlayer? Carrier { get; private set; }
     public BattlePlayer? LastCarrier { get; set; }
     public DateTimeOffset UnfrozeForLastCarrierTime { get; private set; }
-    public HashSet<BattlePlayer> Assistants { get; } = [];
+    public HashSet<FlagAssist> Assists { get; } = [];
 
     public void Capture(BattlePlayer carrier) { // todo modules
         if (StateManager.CurrentState is not OnPedestal) return;
@@ -50,7 +50,7 @@ public class Flag {
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
 
         Carrier = carrier;
-        Assistants.Add(carrier);
+        Assists.Add(new FlagAssist(carrier.Tank!, Position));
     }
 
     public void Drop(bool isUserAction) { // todo height maps (or server physics)
@@ -61,6 +61,9 @@ public class Flag {
 
         StateManager.SetState(new OnGround(StateManager, isUserAction));
         Carrier = null;
+
+        FlagAssist assist = Assists.Single(assist => assist.Player == LastCarrier?.Tank);
+        assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
     }
 
     public void Pickup(BattlePlayer carrier) { // todo modules
@@ -70,17 +73,33 @@ public class Flag {
 
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
         Carrier = carrier;
-        Assistants.Add(carrier);
+
+        FlagAssist assist = Assists.SingleOrDefault(assist => assist.Player == carrier.Tank!, new FlagAssist(carrier.Tank, Position));
+        assist.LastPickupPoint = Position;
+
+        Assists.Add(assist);
     }
 
     public void Return(BattlePlayer? returner = null) {
-        if (StateManager.CurrentState is not OnGround) return;
+        if (StateManager.CurrentState is not OnGround ||
+            Battle.ModeHandler is not CTFHandler ctf) return;
 
         StateManager.SetState(new OnPedestal(StateManager));
 
         if (returner != null) {
             Entity.AddComponent(new TankGroupComponent(returner.Tank!.Tank));
-            returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(0), returner.BattleUser);
+
+            Vector3 carrierPedestal = ctf.Flags[LastCarrier!.TeamColor].PedestalPosition;
+            Vector3 returnPosition = Position;
+
+            float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
+            float traveledDistance = float.Min(Vector3.Distance(PedestalPosition, returnPosition), maxDistance);
+            int score = Convert.ToInt32(Math.Round(MathUtils.Map(traveledDistance, 0, maxDistance, 5, 40)));
+            int scoreWithBonus = returner.GetScoreWithBonus(score);
+
+            returner.Tank!.UpdateStatistics(0, 0, 0, score);
+            returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(scoreWithBonus), returner.BattleUser);
+            returner.Tank!.UserResult.FlagReturns += 1;
         }
 
         foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
@@ -93,8 +112,9 @@ public class Flag {
         Entity.RemoveComponent<FlagGroundedStateComponent>();
         Entity.AddComponent(new FlagHomeStateComponent());
 
-        LastCarrier = null;
         Refresh();
+        Assists.Clear();
+        LastCarrier = null;
 
         if (returner == null) return;
 
@@ -114,20 +134,43 @@ public class Flag {
 
         if (ctf.RedPlayers.Any(player => player.InBattleAsTank) &&
             ctf.BluePlayers.Any(player => player.InBattleAsTank)) {
-            foreach (BattlePlayer player in Battle.Players.ToList())
+            foreach (BattlePlayer player in Battle.Players.ToList().Where(player => player.InBattle))
                 player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
-        } else {
-            foreach (BattlePlayer player in Battle.Players.ToList())
+
+            Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
+
+            Vector3 carrierPedestal = ctf.Flags[battlePlayer.TeamColor].PedestalPosition;
+            Vector3 pickupPosition = Position;
+
+            float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
+            float traveledDistance = float.Min(Vector3.Distance(pickupPosition, carrierPedestal), maxDistance);
+            int score = Convert.ToInt32(Math.Round(MathUtils.Map(traveledDistance, 0, maxDistance, 10, 75)));
+            int scoreWithBonus = battlePlayer.GetScoreWithBonus(score);
+
+            battlePlayer.Tank!.UserResult.Flags += 1;
+            battlePlayer.Tank!.UpdateStatistics(0, 0, 0, score);
+            battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
+
+            foreach ((BattleTank? assistant, _, float dist) in Assists.Where(assist => assist.Player != battlePlayer.Tank)) {
+                float distance = float.Min(dist, maxDistance);
+                int assistScore = Convert.ToInt32(Math.Round(MathUtils.Map(distance, 0, maxDistance, 1, 30)));
+                int assistScoreWithBonus = assistant.BattlePlayer.GetScoreWithBonus(assistScore);
+
+                assistant.UserResult.FlagAssists += 1;
+                assistant.UpdateStatistics(0, 0, 0, assistScore);
+                assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(assistScoreWithBonus), assistant.BattleUser);
+            }
+        } else
+            foreach (BattlePlayer player in Battle.Players.ToList().Where(player => player.InBattle))
                 player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Battle.Entity);
-        }
 
         Entity.RemoveComponent<TankGroupComponent>();
         Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
 
         Refresh();
+        Assists.Clear();
         Carrier = null;
         LastCarrier = null;
-        Assistants.Clear();
 
         using DbConnection db = new();
         db.Statistics

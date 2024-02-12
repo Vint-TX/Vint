@@ -2,11 +2,12 @@ using System.Numerics;
 using Redzen.Numerics.Distributions.Float;
 using Redzen.Random;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 using MathUtils = Vint.Core.Utils.MathUtils;
 
-namespace Vint.Core.Battles.Weapons.Damage;
+namespace Vint.Core.Battles.Damage;
 
 public interface IDamageCalculator {
     public CalculatedDamage Calculate(BattleTank source, BattleTank target, HitTarget hitTarget, bool isSplash = false);

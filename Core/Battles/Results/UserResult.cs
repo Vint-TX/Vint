@@ -17,10 +17,10 @@ public class UserResult(
     public double ReputationInBattle => battlePlayer.PlayerConnection.Player.Reputation;
     public long EnterTime => battlePlayer.Tank!.BattleEnterTime.ToUnixTimeMilliseconds();
     public int Place => battlePlayer.Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>().Place;
-    public int Kills { get; set; }
-    public int KillAssists { get; set; }
+    public int Kills => battlePlayer.Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>().Kills;
+    public int KillAssists => battlePlayer.Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>().KillAssists;
     public int KillStrike { get; set; }
-    public int Deaths { get; set; }
+    public int Deaths => battlePlayer.Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>().Deaths;
     public int Damage => (int)battlePlayer.Tank!.DealtDamage;
     public int Score => battlePlayer.GetScoreWithBonus(ScoreWithoutPremium);
     public int ScoreWithoutPremium => battlePlayer.Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses;

@@ -1,10 +1,10 @@
 using System.Diagnostics;
 using Serilog;
+using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
-using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database.Models;
@@ -71,6 +71,11 @@ public class Battle {
     public bool CanAddPlayers => Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
     public bool WasPlayers { get; private set; }
     public double Timer { get; set; }
+
+    public RoundStopTimeComponent? StopTimeComponentBeforeDomination { get; set; }
+    public DateTimeOffset? DominationStartTime { get; set; }
+    public TimeSpan DominationDuration { get; } = TimeSpan.FromSeconds(45);
+    public bool DominationCanBegin => !DominationStartTime.HasValue && Timer > 120 && Timer < Properties.TimeLimit * 60 - 60;
 
     public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }
@@ -151,6 +156,8 @@ public class Battle {
     }
 
     public void Finish() {
+        if (StateManager.CurrentState is Ended) return;
+
         StateManager.SetState(new Ended(StateManager));
         ModeHandler.OnFinished();
 

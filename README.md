@@ -2,9 +2,9 @@
 
 # Vint
 
-This is the first open-source server for the TankiX game.  
+This is the first open-source server for the TankiX game
 
-Issues and pull-requests are acceptable.
+Issues and pull-requests are acceptable
 
 ## Building
 

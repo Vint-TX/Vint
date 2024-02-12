@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Team;
 public class TeamScoreComponent(
     int score = 0
 ) : IComponent {
-    public int Score { get; private set; } = score;
+    public int Score { get; set; } = score;
 }

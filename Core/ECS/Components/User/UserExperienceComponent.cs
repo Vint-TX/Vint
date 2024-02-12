@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.User;
 public class UserExperienceComponent(
     long experience
 ) : IComponent {
-    public long Experience { get; private set; } = experience;
+    public long Experience { get; set; } = experience;
 }

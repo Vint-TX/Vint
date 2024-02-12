@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Battles.Mode;
@@ -7,14 +8,28 @@ namespace Vint.Core.Battles.Mode;
 public class TDMHandler(
     Battle battle
 ) : TeamHandler(battle) {
+    TeamColor LastDominationTeam { get; set; } = TeamColor.None;
     protected override List<SpawnPoint> RedSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch.RedTeam.ToList();
     protected override List<SpawnPoint> BlueSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch.BlueTeam.ToList();
 
     public override void Tick() { }
 
-    public override void OnStarted() { }
+    public override TeamColor GetDominatedTeam() {
+        const int dominationDiff = 30;
+        const int restoreDominationDiff = 26;
 
-    public override void OnWarmUpCompleted() { }
+        int redScore = RedTeam.GetComponent<TeamScoreComponent>().Score;
+        int blueScore = BlueTeam.GetComponent<TeamScoreComponent>().Score;
+        int diff = Math.Abs(redScore - blueScore);
+
+        LastDominationTeam = diff switch {
+            >= dominationDiff => redScore > blueScore ? TeamColor.Blue : TeamColor.Red,
+            <= restoreDominationDiff => TeamColor.None,
+            _ => LastDominationTeam
+        };
+
+        return LastDominationTeam;
+    }
 
     public override void OnFinished() { }
 

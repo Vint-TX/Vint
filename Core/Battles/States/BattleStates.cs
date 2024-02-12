@@ -1,8 +1,13 @@
+using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Type;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Matchmaking;
+using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events.Battle;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battles.States;
@@ -169,15 +174,69 @@ public class Running(
     }
 
     public override void Tick() {
-        if (Battle.TypeHandler is CustomHandler && Battle.Players.All(player => !player.InBattleAsTank)) {
-            Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
-            StateManager.SetState(new Ended(StateManager));
+        switch (Battle.TypeHandler) {
+            case CustomHandler:
+                CustomBattleTick();
+                break;
+
+            case ArcadeHandler:
+            case MatchmakingHandler:
+                NonCustomBattleTick();
+                break;
         }
+
 
         if (Battle.Timer < 0)
             Battle.Finish();
 
         base.Tick();
+    }
+
+    void NonCustomBattleTick() {
+        if (Battle.ModeHandler is not TeamHandler teamHandler) return;
+
+        if (Battle is { DominationCanBegin: true }) {
+            TeamColor dominatedTeam = teamHandler.GetDominatedTeam();
+
+            if (dominatedTeam == TeamColor.None) return;
+
+            Battle.DominationStartTime = DateTimeOffset.UtcNow;
+            Battle.StopTimeComponentBeforeDomination =
+                (RoundStopTimeComponent)((IComponent)Battle.RoundEntity.GetComponent<RoundStopTimeComponent>()).Clone();
+            DateTimeOffset battleEndTime = Battle.DominationStartTime.Value + Battle.DominationDuration;
+
+            Battle.RoundEntity.AddComponent(new RoundDisbalancedComponent(dominatedTeam,
+                Convert.ToInt32(Battle.DominationDuration.TotalSeconds),
+                battleEndTime));
+
+            Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component => component.StopTime = battleEndTime);
+        } else if (Battle.DominationStartTime.HasValue) {
+            TeamColor dominatedTeam = teamHandler.GetDominatedTeam();
+
+            if (dominatedTeam != TeamColor.None) {
+                if (Battle.DominationStartTime.Value + Battle.DominationDuration > DateTimeOffset.UtcNow) return;
+
+                Battle.DominationStartTime = null;
+                Battle.Finish();
+                return;
+            }
+
+            Battle.DominationStartTime = null;
+            Battle.RoundEntity.ChangeComponent(Battle.StopTimeComponentBeforeDomination!);
+            Battle.StopTimeComponentBeforeDomination = null;
+
+            foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(player => player.InBattle))
+                battlePlayer.PlayerConnection.Send(new RoundBalanceRestoredEvent(), Battle.RoundEntity);
+
+            Battle.RoundEntity.RemoveComponent<RoundDisbalancedComponent>();
+        }
+    }
+
+    void CustomBattleTick() {
+        if (Battle.Players.Any(player => player.InBattleAsTank)) return;
+
+        Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
+        StateManager.SetState(new Ended(StateManager));
     }
 }
 

@@ -17,21 +17,26 @@ namespace Vint.Core.Utils;
 
 public static class Leveling {
     public static int GetRank(long xp) {
-        List<int> xpPerRank = new(101) { 0 };
+        List<int> xpPerRank = ConfigManager
+            .GetComponent<RanksExperiencesConfigComponent>("ranksconfig")
+            .RanksExperiences
+            .Prepend(0)
+            .OrderBy(x => x)
+            .ToList();
 
-        xpPerRank.AddRange(ConfigManager.GetComponent<RanksExperiencesConfigComponent>("ranksconfig").RanksExperiences);
-        xpPerRank = xpPerRank.OrderBy(x => x).ToList();
-
-        return xpPerRank.IndexOf(xpPerRank.LastOrDefault(x => x <= xp)) + 1;
+        return Math.Max(xpPerRank.IndexOf(xpPerRank.LastOrDefault(x => x <= xp)) + 1, 1);
     }
 
     public static int GetLevel(long xp) {
-        List<int> experiencePerLevel = [0];
-        experiencePerLevel.AddRange(ConfigManager.GetComponent<UpgradeLevelsComponent>("garage").LevelsExperiences);
+        List<int> experiencePerLevel = ConfigManager
+            .GetComponent<UpgradeLevelsComponent>("garage")
+            .LevelsExperiences
+            .Prepend(0)
+            .OrderBy(x => x)
+            .ToList();
 
         int levelIndex = experiencePerLevel.IndexOf(experiencePerLevel.LastOrDefault(x => x <= xp));
-
-        return levelIndex + 1;
+        return Math.Max(levelIndex + 1, 0);
     }
 
     public static int GetSeasonPlace(long userId) {

@@ -1,6 +1,8 @@
+using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Utils;
 
@@ -26,9 +28,8 @@ public class CTFHandler : TeamHandler {
     protected override List<SpawnPoint> RedSpawnPoints { get; }
     protected override List<SpawnPoint> BlueSpawnPoints { get; }
 
-    public override void OnStarted() { }
-
     public override void OnWarmUpCompleted() {
+        base.OnWarmUpCompleted();
         CanShareFlags = true;
 
         foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattle))
@@ -53,6 +54,20 @@ public class CTFHandler : TeamHandler {
             flag.Drop(false);
 
         player.PlayerConnection.UnshareIfShared(Flags.Values.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
+    }
+
+    public override TeamColor GetDominatedTeam() {
+        const int dominationDiff = 6;
+
+        TeamColor dominationTeam = TeamColor.None;
+        int redScore = RedTeam.GetComponent<TeamScoreComponent>().Score;
+        int blueScore = BlueTeam.GetComponent<TeamScoreComponent>().Score;
+        int diff = Math.Abs(redScore - blueScore);
+
+        if (diff >= dominationDiff)
+            dominationTeam = redScore > blueScore ? TeamColor.Blue : TeamColor.Red;
+
+        return dominationTeam;
     }
 
     public override int CalculateReputationDelta(BattlePlayer player) => player.TeamBattleResult switch { // todo calculate by flags

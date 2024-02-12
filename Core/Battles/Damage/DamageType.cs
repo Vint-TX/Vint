@@ -1,4 +1,4 @@
-namespace Vint.Core.Battles.Weapons.Damage;
+namespace Vint.Core.Battles.Damage;
 
 public enum DamageType {
     Normal,

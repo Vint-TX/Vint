@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.User;
 public class UserRankComponent(
     int rank
 ) : IComponent {
-    public int Rank { get; private set; } = rank;
+    public int Rank { get; set; } = rank;
 }

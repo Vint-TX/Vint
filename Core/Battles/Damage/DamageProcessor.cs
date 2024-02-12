@@ -3,7 +3,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.Server;
 
-namespace Vint.Core.Battles.Weapons.Damage;
+namespace Vint.Core.Battles.Damage;
 
 public interface IDamageProcessor {
     public Battle Battle { get; }
@@ -38,8 +38,16 @@ public class DamageProcessor(
                     target.KillBy(source, weapon);
                 break;
 
+            case DamageType.Normal:
+                if (!target.KillAssistants.TryAdd(source, damage.Value))
+                    target.KillAssistants[source] += damage.Value;
+                break;
+
             case DamageType.Critical:
                 sourcePlayerConnection.Send(new CriticalDamageEvent(target.Tank, damage.HitPoint), source.Weapon);
+
+                if (!target.KillAssistants.TryAdd(source, damage.Value))
+                    target.KillAssistants[source] += damage.Value;
                 break;
         }
 

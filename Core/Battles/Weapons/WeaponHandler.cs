@@ -1,5 +1,5 @@
+using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Weapon;
@@ -33,7 +33,6 @@ public abstract class WeaponHandler {
     public string BattleConfigPath => BattleEntity.TemplateAccessor!.ConfigPath!;
     public string MarketConfigPath => MarketEntity.TemplateAccessor!.ConfigPath!;
 
-    public bool CanSelfDamage => this is ThunderWeaponHandler or RicochetWeaponHandler;
     public TimeSpan Cooldown { get; protected init; }
 
     public bool DamageWeakeningByDistance { get; }

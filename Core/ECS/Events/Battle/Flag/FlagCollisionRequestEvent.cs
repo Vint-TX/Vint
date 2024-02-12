@@ -28,8 +28,8 @@ public class FlagCollisionRequestEvent : IServerEvent {
         IEntity tankEntity = entities.ElementAt(0);
         IEntity flagEntity = entities.ElementAt(1);
 
-        Battles.Flag collisionFlag = ctf.Flags.Values.Single(flag => flag.Entity == flagEntity);
-        Battles.Flag oppositeFlag = ctf.Flags.Values.Single(flag => flag != collisionFlag);
+        Battles.Flags.Flag collisionFlag = ctf.Flags.Values.Single(flag => flag.Entity == flagEntity);
+        Battles.Flags.Flag oppositeFlag = ctf.Flags.Values.Single(flag => flag != collisionFlag);
 
         TeamColor tankTeamColor = battlePlayer.PlayerConnection.User.GetComponent<TeamColorComponent>().TeamColor;
         TeamColor flagTeamColor = collisionFlag.TeamColor;

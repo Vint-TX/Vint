@@ -1,6 +1,6 @@
+using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
-using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
@@ -47,12 +47,14 @@ public class IsisWeaponHandler : StreamWeaponHandler {
             battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
             battle.DamageProcessor.Heal(BattleTank, heal);
         } else {
+            const int healScore = 1;
             if (targetTank.Health >= targetTank.MaxHealth) return;
 
             battle.DamageProcessor.Heal(BattleTank, targetTank, damage);
 
-            int healScore = BattleTank.BattlePlayer.GetScoreWithBonus(2);
-            BattleTank.BattlePlayer.PlayerConnection.Send(new VisualScoreHealEvent(healScore), BattleTank.BattleUser);
+            int scoreWithBonus = BattleTank.BattlePlayer.GetScoreWithBonus(healScore);
+            BattleTank.UpdateStatistics(0, 0, 0, healScore);
+            BattleTank.BattlePlayer.PlayerConnection.Send(new VisualScoreHealEvent(scoreWithBonus), BattleTank.BattleUser);
         }
     }
 }

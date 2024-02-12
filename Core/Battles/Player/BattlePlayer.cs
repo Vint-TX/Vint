@@ -11,6 +11,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
+using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -170,7 +171,9 @@ public class BattlePlayer {
 
             db.CommitTransaction();
 
-            PlayerConnection.BattleSeries++;
+            if (player.DesertedBattlesCount == 0)
+                PlayerConnection.BattleSeries++;
+            
             int score = GetBattleUserScoreWithBonus();
 
             Leveling.UpdateItemXp(preset.Hull.GetUserEntity(PlayerConnection), score);
@@ -190,7 +193,8 @@ public class BattlePlayer {
     public void OnAntiCheatSuspected() {
         if (ReportedInChat) return;
 
-        ChatUtils.SendMessage($"{PlayerConnection.Player.Username} suspected to be cheating. Please, report it to the moderators as soon as possible",
+        ChatUtils.SendMessage(
+            $"{PlayerConnection.Player.Username} is suspected to be cheating. Please, report it to the moderators as soon as possible",
             Battle.BattleChatEntity,
             ChatUtils.GetReceivers(PlayerConnection, Battle.BattleChatEntity),
             null);
@@ -213,6 +217,11 @@ public class BattlePlayer {
         float battleSeriesMultiplier = GetBattleSeriesMultiplier() / 100;
 
         return (int)Math.Round(scoreWithBonus + scoreWithoutBonuses * battleSeriesMultiplier);
+    }
+
+    public void RankUp() {
+        foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(player => player.InBattle))
+            battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
     }
 
     public void Tick() => Tank?.Tick();

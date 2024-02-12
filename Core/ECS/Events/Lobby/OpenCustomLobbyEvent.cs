@@ -1,6 +1,4 @@
-using LinqToDB;
 using Vint.Core.Battles.Type;
-using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -19,10 +17,7 @@ public class OpenCustomLobbyEvent : IServerEvent {
 
         if (player.Crystals < price) return;
 
-        using (DbConnection db = new()) {
-            connection.SetCrystals(player.Crystals - price);
-            db.Update(player);
-        }
+        connection.SetCrystals(player.Crystals - price);
 
         if (customHandler.Owner != connection) return;
 

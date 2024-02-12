@@ -80,6 +80,10 @@ public interface IPlayerConnection {
 
     public void ChangeReputation(int delta);
 
+    public void CheckRank();
+
+    public void ChangeExperience(int delta);
+
     public void ChangeGameplayChestScore(int delta);
 
     public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount);
@@ -173,7 +177,6 @@ public abstract class PlayerConnection(
         }
 
         Player.InitializeNew();
-
         Login(true, true, hardwareFingerprint);
     }
 
@@ -268,6 +271,26 @@ public abstract class PlayerConnection(
         db.CommitTransaction();
     }
 
+    public void ChangeExperience(int delta) {
+        using DbConnection db = new();
+        db.BeginTransaction();
+
+        db.Players
+            .Where(player => player.Id == Player.Id)
+            .Set(player => player.Experience, player => player.Experience + delta)
+            .Update();
+
+        db.SeasonStatistics
+            .Where(stats => stats.PlayerId == Player.Id &&
+                            stats.SeasonNumber == ConfigManager.SeasonNumber)
+            .Set(stats => stats.ExperienceEarned, stats => stats.ExperienceEarned + delta)
+            .Update();
+
+        db.CommitTransaction();
+        Player.Experience += delta;
+        User.ChangeComponent<UserExperienceComponent>(component => component.Experience = Player.Experience);
+    }
+
     public void ChangeGameplayChestScore(int delta) {
         const int scoreLimit = 1000;
 
@@ -290,6 +313,42 @@ public abstract class PlayerConnection(
         User.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
     }
 
+    public void CheckRank() {
+        UserRankComponent rankComponent = User.GetComponent<UserRankComponent>();
+
+        while (rankComponent.Rank < Player.Rank) {
+            rankComponent.Rank++;
+            User.ChangeComponent(rankComponent);
+
+            int rankIndex = rankComponent.Rank - 1;
+            int crystals = CalculateCrystals(rankIndex);
+            int xCrystals = CalculateXCrystals(rankIndex);
+
+            SetCrystals(Player.Crystals + crystals);
+            SetXCrystals(Player.XCrystals + xCrystals);
+            Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
+            BattlePlayer?.RankUp();
+        }
+
+        return;
+
+        static int CalculateCrystals(int rankIndex) => rankIndex switch {
+            < 9 => 100,
+            < 12 => 500,
+            < 14 => 1200,
+            < 19 => 3000,
+            < 49 => 3500,
+            < 99 => 4000,
+            _ => 7500
+        };
+
+        static int CalculateXCrystals(int rankIndex) =>
+            rankIndex == 100 ? 100 :
+            rankIndex % 10 == 0 ? 50 :
+            rankIndex % 5 == 0 ? 20 :
+            0;
+    }
+
     public void PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount) {
         using DbConnection db = new();
         IEntity? userItem = null;
@@ -307,19 +366,16 @@ public abstract class PlayerConnection(
 
             case CrystalMarketItemTemplate: {
                 SetCrystals(Player.Crystals + amount);
-                db.Update(Player);
                 break;
             }
 
             case XCrystalMarketItemTemplate: {
                 SetXCrystals(Player.XCrystals + amount);
-                db.Update(Player);
                 break;
             }
 
             case GoldBonusMarketItemTemplate: {
                 SetGoldBoxes(Player.GoldBoxItems + amount);
-                db.Update(Player);
                 break;
             }
 
@@ -344,12 +400,16 @@ public abstract class PlayerConnection(
             case HullSkinMarketItemTemplate: {
                 long hullId = marketItem.GetComponent<ParentGroupComponent>().Key;
 
+                if (!db.Hulls.Any(hull => hull.PlayerId == Player.Id && hull.Id == hullId)) return;
+
                 db.Insert(new HullSkin { Player = Player, Id = marketItem.Id, HullId = hullId });
                 break;
             }
 
             case WeaponSkinMarketItemTemplate: {
                 long weaponId = marketItem.GetComponent<ParentGroupComponent>().Key;
+
+                if (!db.Weapons.Any(weapon => weapon.PlayerId == Player.Id && weapon.Id == weaponId)) return;
 
                 db.Insert(new WeaponSkin { Player = Player, Id = marketItem.Id, WeaponId = weaponId });
                 break;
@@ -367,6 +427,8 @@ public abstract class PlayerConnection(
 
             case ShellMarketItemTemplate: {
                 long weaponId = marketItem.GetComponent<ParentGroupComponent>().Key;
+
+                if (!db.Weapons.Any(weapon => weapon.PlayerId == Player.Id && weapon.Id == weaponId)) return;
 
                 db.Insert(new Shell { Player = Player, Id = marketItem.Id, WeaponId = weaponId });
                 break;
@@ -394,8 +456,6 @@ public abstract class PlayerConnection(
         if (price > 0) {
             if (forXCrystals) SetXCrystals(Player.XCrystals - price);
             else SetCrystals(Player.Crystals - price);
-
-            db.Update(Player);
         }
 
         if (userItem.HasComponent<UserItemCounterComponent>() &&
@@ -572,13 +632,22 @@ public abstract class PlayerConnection(
         Logger.Warning("Changed username => '{New}'", username);
         Player.Username = username;
         User.ChangeComponent<UserUidComponent>(component => component.Username = username);
+
+        using DbConnection db = new();
+
+        db.Players
+            .Where(player => player.Id == Player.Id)
+            .Set(player => player.Username, username)
+            .Update();
     }
 
     public void SetCrystals(long crystals) {
         long diff = crystals - Player.Crystals;
 
+        using DbConnection db = new();
+        db.BeginTransaction();
+
         if (diff > 0) {
-            using DbConnection db = new();
             db.Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
                 .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)diff)
@@ -590,6 +659,12 @@ public abstract class PlayerConnection(
                 .Update();
         }
 
+        db.Players
+            .Where(player => player.Id == Player.Id)
+            .Set(player => player.Crystals, crystals)
+            .Update();
+
+        db.CommitTransaction();
         Player.Crystals = crystals;
         User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
     }
@@ -597,9 +672,10 @@ public abstract class PlayerConnection(
     public void SetXCrystals(long xCrystals) {
         long diff = xCrystals - Player.XCrystals;
 
-        if (diff > 0) {
-            using DbConnection db = new();
+        using DbConnection db = new();
+        db.BeginTransaction();
 
+        if (diff > 0) {
             db.Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
                 .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
@@ -611,11 +687,24 @@ public abstract class PlayerConnection(
                 .Update();
         }
 
+        db.Players
+            .Where(player => player.Id == Player.Id)
+            .Set(player => player.XCrystals, xCrystals)
+            .Update();
+
+        db.CommitTransaction();
         Player.XCrystals = xCrystals;
         User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
     }
 
     public void SetGoldBoxes(int goldBoxes) {
+        using DbConnection db = new();
+
+        db.Players
+            .Where(player => player.Id == Player.Id)
+            .Set(player => player.GoldBoxItems, goldBoxes)
+            .Update();
+
         Player.GoldBoxItems = goldBoxes;
         SharedEntities.Single(entity => entity.TemplateAccessor!.Template is GoldBonusUserItemTemplate)
             .ChangeComponent<UserItemCounterComponent>(component =>

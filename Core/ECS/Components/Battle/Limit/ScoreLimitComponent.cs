@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Battle.Limit;
 public class ScoreLimitComponent(
     int scoreLimit
 ) : IComponent {
-    public int ScoreLimit { get; private set; } = scoreLimit;
+    public int ScoreLimit { get; set; } = scoreLimit;
 }

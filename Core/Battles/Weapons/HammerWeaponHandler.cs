@@ -1,7 +1,7 @@
 using System.Diagnostics;
+using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
-using Vint.Core.Battles.Weapons.Damage;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;

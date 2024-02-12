@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Flags;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battles.States;
