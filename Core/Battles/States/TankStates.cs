@@ -37,7 +37,7 @@ public class New(
 public class Dead(
     TankStateManager stateManager
 ) : TankState(stateManager) {
-    public override IComponent StateComponent { get; } = new TankDeadStateComponent();
+    public override IComponent StateComponent => new TankDeadStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
     public override void Start() {
