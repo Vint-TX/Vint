@@ -62,7 +62,7 @@ public class Flag {
         StateManager.SetState(new OnGround(StateManager, isUserAction));
         Carrier = null;
 
-        FlagAssist assist = Assists.Single(assist => assist.Player == LastCarrier?.Tank);
+        FlagAssist assist = Assists.SingleOrDefault(assist => assist.Player == LastCarrier?.Tank);
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
     }
 
