@@ -6,7 +6,7 @@ namespace Vint.Core.ECS.Components.Leagues;
 
 [ProtocolId(1503654626834)]
 public class CurrentSeasonRewardForClientComponent(
-    int leagueIndex
+    int minimumReputation
 ) : IComponent {
     static CurrentSeasonRewardForClientComponent() {
         string path = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "leagueRewards.json");
@@ -16,7 +16,8 @@ public class CurrentSeasonRewardForClientComponent(
 
     [ProtocolIgnore] public static IReadOnlyList<EndSeasonRewardItem> AllRewards { get; }
 
-    public List<EndSeasonRewardItem> Rewards { get; private set; } = [AllRewards[leagueIndex]];
+    public List<EndSeasonRewardItem> Rewards { get; private set; } =
+        [..AllRewards.Where(reward => reward.StartPlace <= minimumReputation && reward.EndPlace > minimumReputation)];
 }
 
 public class EndSeasonRewardItem(

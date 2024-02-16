@@ -14,7 +14,7 @@
         "key": -1837531149
       },
       "CurrentSeasonRewardForClientComponent": {
-        "leagueIndex": 0
+        "minimumReputation": 100
       },
       "LeagueConfigComponent": {
         "leagueIndex": 0,
@@ -37,7 +37,7 @@
         "key": -101377070
       },
       "CurrentSeasonRewardForClientComponent": {
-        "leagueIndex": 1
+        "minimumReputation": 140
       },
       "LeagueConfigComponent": {
         "leagueIndex": 1,
@@ -60,7 +60,7 @@
         "key": 2119734820
       },
       "CurrentSeasonRewardForClientComponent": {
-        "leagueIndex": 2
+        "minimumReputation": 1000
       },
       "LeagueConfigComponent": {
         "leagueIndex": 2,
@@ -83,7 +83,7 @@
         "key": 414840278
       },
       "CurrentSeasonRewardForClientComponent": {
-        "leagueIndex": 3
+        "minimumReputation": 3000
       },
       "LeagueConfigComponent": {
         "leagueIndex": 3,
@@ -106,7 +106,7 @@
         "key": 1131431735
       },
       "CurrentSeasonRewardForClientComponent": {
-        "leagueIndex": 4
+        "minimumReputation": 4500
       },
       "LeagueConfigComponent": {
         "leagueIndex": 4,
