@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ConcurrentCollections;
 using Serilog;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Events;
@@ -17,7 +18,7 @@ public class Entity(
     ILogger Logger { get; } = Log.Logger.ForType(typeof(Entity));
     Dictionary<Type, IComponent> TypeToComponent { get; } = components.ToDictionary(c => c.GetType());
 
-    public HashSet<IPlayerConnection> SharedPlayers { get; } = [];
+    public ConcurrentHashSet<IPlayerConnection> SharedPlayers { get; } = [];
 
     public long Id {
         get => id;
@@ -49,13 +50,13 @@ public class Entity(
         Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
 
         lock (SharedPlayers) {
-            if (!SharedPlayers.Remove(connection)) {
+            if (!SharedPlayers.TryRemove(connection)) {
                 Logger.Warning("{Entity} is not shared to {Connection}", this, connection);
                 Debugger.Break();
             }
         }
 
-        connection.SharedEntities.Remove(this);
+        connection.SharedEntities.TryRemove(this);
         connection.Send(ToUnshareCommand());
     }
 

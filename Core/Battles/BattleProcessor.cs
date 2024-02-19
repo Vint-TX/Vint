@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Battles.Type;
 using Vint.Core.Server;
@@ -33,7 +34,7 @@ public interface IBattleProcessor {
 }
 
 public class BattleProcessor : IBattleProcessor {
-    HashSet<Battle> Battles { get; } = [];
+    ConcurrentHashSet<Battle> Battles { get; } = [];
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(BattleProcessor));
 
@@ -49,12 +50,12 @@ public class BattleProcessor : IBattleProcessor {
             while (true) {
                 stopwatch.Restart();
 
-                foreach (Battle battle in Battles.ToList()) {
+                foreach (Battle battle in Battles) {
                     battle.Tick(lastBattleTickDurationSec);
 
                     if (battle is { WasPlayers: true, Players.Count: 0 }) {
                         Logger.Warning("Removing battle {Id}", battle.LobbyId);
-                        Battles.Remove(battle);
+                        Battles.TryRemove(battle);
                     }
                 }
 

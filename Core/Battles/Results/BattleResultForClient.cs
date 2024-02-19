@@ -24,7 +24,6 @@ public class BattleResultForClient {
 
             case DMHandler:
                 List<UserResult> userResults = battle.Players
-                    .ToList()
                     .Where(player => player.InBattleAsTank)
                     .Select(player => player.Tank!.UserResult)
                     .ToList();

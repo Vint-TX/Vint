@@ -273,8 +273,7 @@ public class BattleTank {
 
         foreach (IPlayerConnection connection in Battle.Players
                      .Where(battlePlayer => battlePlayer.InBattle)
-                     .Select(battlePlayer => battlePlayer.PlayerConnection)
-                     .ToList()) {
+                     .Select(battlePlayer => battlePlayer.PlayerConnection)) {
             connection.Send(killEvent, killer.BattleUser);
         }
 
@@ -389,7 +388,7 @@ public class BattleTank {
         if (kills > 0)
             Incarnation.ChangeComponent<TankIncarnationKillStatisticsComponent>(component => component.Kills += kills);
 
-        foreach (IPlayerConnection connection in Battle.Players.ToList().Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
             connection.Send(new RoundUserStatisticsUpdatedEvent(), RoundUser);
 
         Battle.ModeHandler.SortPlayers();

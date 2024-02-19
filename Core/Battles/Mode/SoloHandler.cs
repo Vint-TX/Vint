@@ -18,7 +18,6 @@ public abstract class SoloHandler(
 
     public override void UpdateScore(IEntity? team, int score) {
         int maxScore = Battle.Players
-            .ToList()
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Max(battlePlayer => battlePlayer.Tank!.RoundUser
                 .GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses);
@@ -37,7 +36,7 @@ public abstract class SoloHandler(
         return spawnPoint;
     }
 
-    public override void SortPlayers() => SortPlayers(Battle.Players.ToList());
+    public override void SortPlayers() => SortPlayers(Battle.Players);
 
     public override void OnWarmUpCompleted() { }
 

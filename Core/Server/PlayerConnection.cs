@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
+using ConcurrentCollections;
 using LinqToDB;
 using Serilog;
 using Vint.Core.Battles.Player;
@@ -59,7 +60,7 @@ public interface IPlayerConnection {
 
     public int BattleSeries { get; set; }
 
-    public HashSet<IEntity> SharedEntities { get; }
+    public ConcurrentHashSet<IEntity> SharedEntities { get; }
     public Dictionary<string, HashSet<IEntity>> UserEntities { get; }
 
     public void Register(
@@ -130,7 +131,7 @@ public abstract class PlayerConnection(
     public IEntity ClientSession { get; protected set; } = null!;
     public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
-    public HashSet<IEntity> SharedEntities { get; private set; } = [];
+    public ConcurrentHashSet<IEntity> SharedEntities { get; private set; } = [];
 
     public abstract bool IsOnline { get; }
     public bool InLobby => BattlePlayer != null;
@@ -829,7 +830,7 @@ public class SocketPlayerConnection(
             ExecuteBuffer.CompleteAdding();
 
             foreach (IEntity entity in SharedEntities)
-                entity.SharedPlayers.Remove(this);
+                entity.SharedPlayers.TryRemove(this);
 
             SharedEntities.Clear();
             UserEntities.Clear();

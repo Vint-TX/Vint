@@ -320,7 +320,7 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
     ILogger Logger { get; } = Log.Logger.ForType(typeof(ComponentDeserializer));
     Type? Type { get; set; }
 
-    IEnumerable<Type> Types { get; } = Assembly.GetExecutingAssembly().GetTypes().ToList();
+    IEnumerable<Type> Types { get; } = Assembly.GetExecutingAssembly().GetTypes();
 
     public bool Deserialize(
         IParser reader,

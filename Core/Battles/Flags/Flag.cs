@@ -102,7 +102,7 @@ public class Flag {
             returner.Tank!.UserResult.FlagReturns += 1;
         }
 
-        foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
+        foreach (BattlePlayer battlePlayer in Battle.Players)
             battlePlayer.PlayerConnection.Send(new FlagReturnEvent(), Entity);
 
         if (returner != null)
@@ -134,7 +134,7 @@ public class Flag {
 
         if (ctf.RedPlayers.Any(player => player.InBattleAsTank) &&
             ctf.BluePlayers.Any(player => player.InBattleAsTank)) {
-            foreach (BattlePlayer player in Battle.Players.ToList().Where(player => player.InBattle))
+            foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
                 player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
 
             Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
@@ -161,7 +161,7 @@ public class Flag {
                 assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(assistScoreWithBonus), assistant.BattleUser);
             }
         } else
-            foreach (BattlePlayer player in Battle.Players.ToList().Where(player => player.InBattle))
+            foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
                 player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Battle.Entity);
 
         Entity.RemoveComponent<TankGroupComponent>();
@@ -187,7 +187,7 @@ public class Flag {
     }
 
     void Refresh() {
-        foreach (IPlayerConnection playerConnection in Entity.SharedPlayers.ToList()) {
+        foreach (IPlayerConnection playerConnection in Entity.SharedPlayers) {
             playerConnection.Unshare(Entity);
             playerConnection.Share(Entity);
         }

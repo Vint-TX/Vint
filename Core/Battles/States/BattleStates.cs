@@ -225,7 +225,7 @@ public class Running(
             Battle.RoundEntity.ChangeComponent(Battle.StopTimeComponentBeforeDomination!);
             Battle.StopTimeComponentBeforeDomination = null;
 
-            foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(player => player.InBattle))
+            foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
                 battlePlayer.PlayerConnection.Send(new RoundBalanceRestoredEvent(), Battle.RoundEntity);
 
             Battle.RoundEntity.RemoveComponent<RoundDisbalancedComponent>();

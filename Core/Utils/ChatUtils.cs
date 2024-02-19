@@ -67,11 +67,9 @@ public static class ChatUtils {
         GeneralChatTemplate => from.Server.PlayerConnections.Values,
 
         BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players
-            .ToList()
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 
         GeneralBattleChatTemplate => from.BattlePlayer!.Battle.Players
-            .ToList()
             .Where(battlePlayer => battlePlayer.InBattle)
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 
@@ -88,7 +86,6 @@ public static class ChatUtils {
             .Where(conn => conn != null!),
 
         TeamBattleChatTemplate => from.BattlePlayer!.Battle.Players
-            .ToList()
             .Where(battlePlayer => battlePlayer.TeamColor == from.BattlePlayer.TeamColor)
             .Select(battlePlayer => battlePlayer.PlayerConnection),
 

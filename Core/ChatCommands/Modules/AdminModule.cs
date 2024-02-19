@@ -26,7 +26,6 @@ public class AdminModule : ChatCommandModule {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -83,7 +82,6 @@ public class AdminModule : ChatCommandModule {
         [Option("username", "Username of player to unban")]
         string username) {
         IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
-            .ToList()
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -153,7 +151,7 @@ public class AdminModule : ChatCommandModule {
     public void KickAllFromBattle(ChatCommandContext ctx) {
         Battle battle = ctx.Connection.BattlePlayer!.Battle;
 
-        foreach (BattlePlayer battlePlayer in battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattleAsTank)) {
+        foreach (BattlePlayer battlePlayer in battle.Players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
             battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
             battle.RemovePlayer(battlePlayer);
         }

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Mode;
@@ -93,7 +94,7 @@ public class Battle {
     public ModeHandler ModeHandler { get; private set; } = null!;
     public IDamageProcessor DamageProcessor { get; private set; } = null!;
 
-    public HashSet<BattlePlayer> Players { get; } = [];
+    public ConcurrentHashSet<BattlePlayer> Players { get; } = [];
 
     public void Setup() {
         BattleModeTemplate battleModeTemplate = Properties.BattleMode switch {
@@ -149,9 +150,7 @@ public class Battle {
     public void Start() {
         // todo modules
 
-        // todo teams
-
-        foreach (BattlePlayer battlePlayer in Players.ToList().Where(player => !player.IsSpectator))
+        foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
             battlePlayer.Init();
     }
 
@@ -184,7 +183,7 @@ public class Battle {
         TypeHandler.Tick();
         StateManager.Tick();
 
-        foreach (BattlePlayer battlePlayer in Players.ToList())
+        foreach (BattlePlayer battlePlayer in Players)
             battlePlayer.Tick();
     }
 
@@ -249,7 +248,7 @@ public class Battle {
 
             if (Players.Any(player => !player.IsSpectator)) return;
 
-            foreach (BattlePlayer spectator in Players.ToList()) {
+            foreach (BattlePlayer spectator in Players) {
                 spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
                 RemovePlayer(spectator);
             }
@@ -260,7 +259,7 @@ public class Battle {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         connection.Logger.Warning("Leaving battle {Id}", LobbyId);
 
-        Players.Remove(battlePlayer);
+        Players.TryRemove(battlePlayer);
 
         if (battlePlayer.IsSpectator) {
             foreach (BattlePlayer player in Players.Where(player => !player.IsSpectator))
@@ -282,7 +281,7 @@ public class Battle {
             }
 
             if (Players.All(player => player.IsSpectator)) {
-                foreach (BattlePlayer spectator in Players.ToList()) {
+                foreach (BattlePlayer spectator in Players) {
                     spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
                     RemovePlayer(spectator);
                 }

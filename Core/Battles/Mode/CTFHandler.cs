@@ -32,7 +32,7 @@ public class CTFHandler : TeamHandler {
         base.OnWarmUpCompleted();
         CanShareFlags = true;
 
-        foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(battlePlayer => battlePlayer.InBattle))
+        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
             battlePlayer.PlayerConnection.Share(Flags.Values.Select(flag => flag.Entity));
     }
 

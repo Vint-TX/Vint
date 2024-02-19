@@ -1,3 +1,4 @@
+using ConcurrentCollections;
 using LinqToDB;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
@@ -20,7 +21,7 @@ public class MatchmakingHandler : TypeHandler {
 
     public BattleMode BattleMode { get; } = GetRandomMode();
 
-    List<BattlePlayer> WaitingPlayers { get; } = [];
+    ConcurrentHashSet<BattlePlayer> WaitingPlayers { get; } = [];
     List<MapInfo> Maps { get; }
 
     public override void Setup() {
@@ -46,9 +47,9 @@ public class MatchmakingHandler : TypeHandler {
     }
 
     public override void Tick() {
-        foreach (BattlePlayer battlePlayer in WaitingPlayers.ToList().Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
+        foreach (BattlePlayer battlePlayer in WaitingPlayers.Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
             battlePlayer.Init();
-            WaitingPlayers.Remove(battlePlayer);
+            WaitingPlayers.TryRemove(battlePlayer);
         }
     }
 
@@ -65,12 +66,12 @@ public class MatchmakingHandler : TypeHandler {
     }
 
     public override void PlayerExited(BattlePlayer battlePlayer) {
-        WaitingPlayers.Remove(battlePlayer);
+        WaitingPlayers.TryRemove(battlePlayer);
         battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
         battlePlayer.PlayerConnection.BattleSeries = 0;
 
         bool battleEnded = Battle.StateManager.CurrentState is Ended;
-        bool hasEnemies = Battle.Players.ToList().Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));
+        bool hasEnemies = Battle.Players.Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));
         bool bigBattleSeries = battlePlayer.PlayerConnection.BattleSeries >= 3;
 
         battlePlayer.PlayerConnection.User.ChangeComponent<BattleLeaveCounterComponent>(component => {

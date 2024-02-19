@@ -18,7 +18,7 @@ public class DetachWeaponEvent : IServerEvent {
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Tank!.Tank != tank) return;
 
-        foreach (BattlePlayer battlePlayer in connection.BattlePlayer.Battle.Players.ToList())
+        foreach (BattlePlayer battlePlayer in connection.BattlePlayer.Battle.Players)
             battlePlayer.PlayerConnection.Send(this, tank);
     }
 }

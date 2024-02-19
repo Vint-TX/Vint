@@ -19,7 +19,6 @@ public abstract class ModeHandler(
 
     protected void SortPlayers(IEnumerable<BattlePlayer> players) {
         foreach (var roundUserToPlace in players
-                     .ToList()
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .Select(battlePlayer => battlePlayer.Tank!.RoundUser)
                      .OrderByDescending(roundUser => roundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses)

@@ -1,4 +1,5 @@
-﻿using Vint.Core.ECS.Components;
+﻿using ConcurrentCollections;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Commands;
@@ -10,7 +11,7 @@ public interface IEntity {
     public long Id { get; set; }
     public TemplateAccessor? TemplateAccessor { get; }
     public IEnumerable<IComponent> Components { get; }
-    public HashSet<IPlayerConnection> SharedPlayers { get; }
+    public ConcurrentHashSet<IPlayerConnection> SharedPlayers { get; }
 
     protected EntityShareCommand ToShareCommand();
 

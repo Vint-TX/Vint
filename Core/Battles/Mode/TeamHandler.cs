@@ -30,15 +30,15 @@ public abstract class TeamHandler(
     protected abstract List<SpawnPoint> BlueSpawnPoints { get; }
 
     public override void SortPlayers() {
-        SortPlayers(RedPlayers.ToList());
-        SortPlayers(BluePlayers.ToList());
+        SortPlayers(RedPlayers);
+        SortPlayers(BluePlayers);
     }
 
     public override void UpdateScore(IEntity? team, int score) {
         if (team == null) return;
 
         team.ChangeComponent<TeamScoreComponent>(component => component.Score = Math.Max(0, component.Score + score));
-        foreach (IPlayerConnection connection in Battle.Players.ToList().Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
             connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
     }
 

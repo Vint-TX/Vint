@@ -10,7 +10,7 @@ public class DMHandler(
     protected override List<SpawnPoint> SpawnPoints { get; } = battle.MapInfo.SpawnPoints.Deathmatch.ToList();
 
     public override int CalculateReputationDelta(BattlePlayer battlePlayer) {
-        List<BattlePlayer> players = Battle.Players.ToList()
+        List<BattlePlayer> players = Battle.Players
             .Where(player => player.InBattleAsTank)
             .OrderByDescending(player => player.Tank!.DealtDamage)
             .ToList();

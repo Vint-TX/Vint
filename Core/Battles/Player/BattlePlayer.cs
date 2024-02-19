@@ -220,7 +220,7 @@ public class BattlePlayer {
     }
 
     public void RankUp() {
-        foreach (BattlePlayer battlePlayer in Battle.Players.ToList().Where(player => player.InBattle))
+        foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
             battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
     }
 

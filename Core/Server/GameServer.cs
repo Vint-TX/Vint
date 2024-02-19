@@ -83,7 +83,7 @@ public class GameServer(
         while (true) {
             if (!IsStarted) return;
 
-            foreach (SocketPlayerConnection playerConnection in SocketPlayerConnections.ToList()) {
+            foreach (SocketPlayerConnection playerConnection in SocketPlayerConnections) {
                 try {
                     if (!playerConnection.IsSocketConnected) {
                         playerConnection.Kick("Zombie");

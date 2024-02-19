@@ -1,3 +1,4 @@
+using ConcurrentCollections;
 using Vint.Core.Battles.ArcadeMode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
@@ -21,14 +22,14 @@ public class ArcadeHandler : TypeHandler {
     public ArcadeModeType Mode { get; }
     public ArcadeModeHandler ModeHandler { get; }
     public IReadOnlyList<MapInfo> Maps { get; }
-    List<BattlePlayer> WaitingPlayers { get; } = [];
+    ConcurrentHashSet<BattlePlayer> WaitingPlayers { get; } = [];
 
     public override void Setup() => ModeHandler.Setup();
 
     public override void Tick() {
-        foreach (BattlePlayer battlePlayer in WaitingPlayers.ToList().Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
+        foreach (BattlePlayer battlePlayer in WaitingPlayers.Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
             battlePlayer.Init();
-            WaitingPlayers.Remove(battlePlayer);
+            WaitingPlayers.TryRemove(battlePlayer);
         }
     }
 
@@ -49,7 +50,7 @@ public class ArcadeHandler : TypeHandler {
     public override void PlayerExited(BattlePlayer battlePlayer) {
         ModeHandler.PlayerExited(battlePlayer);
 
-        WaitingPlayers.Remove(battlePlayer);
+        WaitingPlayers.TryRemove(battlePlayer);
         battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
     }
 

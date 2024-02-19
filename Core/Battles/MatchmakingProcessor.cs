@@ -1,3 +1,4 @@
+using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Entities;
@@ -19,19 +20,19 @@ public class MatchmakingProcessor(
     IBattleProcessor battleProcessor
 ) : IMatchmakingProcessor {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(MatchmakingProcessor));
-    HashSet<IPlayerConnection> PlayerQueue { get; } = [];
+    ConcurrentHashSet<IPlayerConnection> PlayerQueue { get; } = [];
 
     public void StartTicking() {
         try {
             while (true) {
-                foreach (IPlayerConnection connection in PlayerQueue.ToList()) {
+                foreach (IPlayerConnection connection in PlayerQueue) {
                     if (!connection.IsOnline) {
-                        PlayerQueue.Remove(connection);
+                        PlayerQueue.TryRemove(connection);
                         continue;
                     }
 
                     battleProcessor.PutPlayerFromMatchmaking(connection);
-                    PlayerQueue.Remove(connection);
+                    PlayerQueue.TryRemove(connection);
                 }
 
                 Thread.Sleep(10);
@@ -59,6 +60,6 @@ public class MatchmakingProcessor(
                 battle.RemovePlayerFromLobby(battlePlayer);
         }
 
-        PlayerQueue.Remove(connection);
+        PlayerQueue.TryRemove(connection);
     }
 }

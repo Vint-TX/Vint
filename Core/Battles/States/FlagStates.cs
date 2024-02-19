@@ -29,7 +29,7 @@ public class Captured(
         base.Start();
         Flag.Entity.AddComponent(new TankGroupComponent(carrierTank));
 
-        foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
+        foreach (BattlePlayer battlePlayer in Battle.Players)
             battlePlayer.PlayerConnection.Send(new FlagPickupEvent(), Flag.Entity);
 
         Flag.Entity.RemoveComponentIfPresent<FlagHomeStateComponent>();
@@ -46,7 +46,7 @@ public class OnGround(
     public override void Start() {
         base.Start();
 
-        foreach (BattlePlayer battlePlayer in Battle.Players.ToList())
+        foreach (BattlePlayer battlePlayer in Battle.Players)
             battlePlayer.PlayerConnection.Send(new FlagDropEvent(isUserAction), Flag.Entity);
 
         Vector3 newPosition = Flag.Carrier!.Tank!.Position - Vector3.UnitY;
