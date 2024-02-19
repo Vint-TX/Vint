@@ -93,8 +93,8 @@ public class SemiActive(
     }
 
     public override void Tick() {
-        if (DateTimeOffset.UtcNow >= TimeToNextState && !BattleTank.Tank.HasComponent<TankStateTimeOutComponent>())
-            BattleTank.Tank.AddComponent(new TankStateTimeOutComponent());
+        if (DateTimeOffset.UtcNow >= TimeToNextState)
+            BattleTank.Tank.AddComponentIfAbsent(new TankStateTimeOutComponent());
     }
 }
 
