@@ -25,7 +25,7 @@ public class Player {
     [NotColumn] public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
     [NotColumn] public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
 
-    [Column] public Leagues RewardedLeagues { get; set; }
+    [Column] public League RewardedLeagues { get; set; }
 
     [Column] public bool Subscribed { get; set; }
     [Column(DataType = DataType.Text)] public string CountryCode { get; set; } = "RU";
@@ -49,39 +49,30 @@ public class Player {
     [Column] public long DesertedBattlesCount { get; set; }
     [Column] public int NeedGoodBattlesCount { get; set; }
 
-    [NotColumn] public int LeagueIndex => Reputation switch {
-        < 139 => 0,
-        < 999 => 1,
-        < 2999 => 2,
-        < 4499 => 3,
-        < 99999 => 4,
+    [NotColumn] public League League => Reputation switch {
+        < 139 => League.Training,
+        < 999 => League.Bronze,
+        < 2999 => League.Silver,
+        < 4499 => League.Gold,
+        < 99999 => League.Master,
+        _ => League.None
+    };
+
+    [NotColumn] public int MinReputationDelta => League switch {
+        League.Training => -3,
+        League.Bronze => -20,
+        League.Silver => -30,
+        League.Gold => -35,
+        League.Master => -40,
         _ => 0
     };
 
-    [NotColumn] public Leagues League => LeagueIndex switch {
-        0 => Leagues.Training,
-        1 => Leagues.Bronze,
-        2 => Leagues.Silver,
-        3 => Leagues.Gold,
-        4 => Leagues.Master,
-        _ => Leagues.Training
-    };
-
-    [NotColumn] public int MinReputationDelta => LeagueIndex switch {
-        0 => -3,
-        1 => -20,
-        2 => -30,
-        3 => -35,
-        4 => -40,
-        _ => 0
-    };
-
-    [NotColumn] public int MaxReputationDelta => LeagueIndex switch {
-        0 => 20,
-        1 => 40,
-        2 => 35,
-        3 => 30,
-        4 => 20,
+    [NotColumn] public int MaxReputationDelta => League switch {
+        League.Training => 20,
+        League.Bronze => 40,
+        League.Silver => 35,
+        League.Gold => 30,
+        League.Master => 20,
         _ => 0
     };
 
@@ -357,7 +348,7 @@ public enum PlayerGroups {
 }
 
 [Flags]
-public enum Leagues {
+public enum League {
     None = 0,
     Training = 1,
     Bronze = 2,

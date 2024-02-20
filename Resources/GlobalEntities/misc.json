@@ -26,6 +26,19 @@
     }
   },
   {
+    "name": "Premiumquest",
+    "id": -180272377,
+    "template": [
+      "PremiumQuestMarketItemTemplate",
+      "garage/premium/quest"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -180272377
+      }
+    }
+  },
+  {
     "name": "Goldbonus",
     "id": 636909271,
     "template": [

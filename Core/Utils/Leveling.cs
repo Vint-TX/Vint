@@ -118,12 +118,12 @@ public static class Leveling {
         userItem.AddComponent(new UpgradeLevelItemComponent(xp));
     }
 
-    public static Dictionary<IEntity, int> GetFirstLeagueEntranceReward(Leagues league) => league switch {
-        Leagues.Training => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsbronze"), 1 } },
-        Leagues.Bronze => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsbronze"), 5 } },
-        Leagues.Silver => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardssilver"), 5 } },
-        Leagues.Gold => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsgold"), 5 } },
-        Leagues.Master => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsmaster"), 5 } },
+    public static Dictionary<IEntity, int> GetFirstLeagueEntranceReward(League league) => league switch {
+        League.Training => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsbronze"), 1 } },
+        League.Bronze => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsbronze"), 5 } },
+        League.Silver => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardssilver"), 5 } },
+        League.Gold => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsgold"), 5 } },
+        League.Master => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsmaster"), 5 } },
         _ => new Dictionary<IEntity, int>()
     };
 }

@@ -243,7 +243,7 @@ public abstract class PlayerConnection(
             .SingleOrDefault(repStats => repStats.PlayerId == Player.Id &&
                                          repStats.Date == date);
 
-        int oldLeagueIndex = Player.LeagueIndex;
+        League oldLeagueIndex = Player.League;
         uint oldReputation = Player.Reputation;
 
         reputationStats ??= new ReputationStatistics {
@@ -260,7 +260,7 @@ public abstract class PlayerConnection(
 
         User.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
 
-        if (oldLeagueIndex != Player.LeagueIndex) {
+        if (oldLeagueIndex != Player.League) {
             User.RemoveComponent<LeagueGroupComponent>();
             User.AddComponent(Player.LeagueEntity.GetComponent<LeagueGroupComponent>());
         }
