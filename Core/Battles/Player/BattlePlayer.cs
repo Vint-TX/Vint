@@ -128,7 +128,7 @@ public class BattlePlayer {
         }
 
         Preset preset = player.CurrentPreset;
-        IEntity previousLeague = player.League;
+        IEntity previousLeague = player.LeagueEntity;
         int reputationDelta;
         using DbConnection db = new();
 

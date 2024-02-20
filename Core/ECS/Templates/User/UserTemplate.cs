@@ -38,7 +38,7 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
                     .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
                     .AddComponent(new BattleLeaveCounterComponent(player.DesertedBattlesCount, player.NeedGoodBattlesCount))
-                    .AddComponent(new LeagueGroupComponent(player.League))
+                    .AddComponent(new LeagueGroupComponent(player.LeagueEntity))
                     .AddComponent(new GameplayChestScoreComponent(player.GameplayChestScore))
                     .WithId(player.Id);
 
@@ -76,7 +76,7 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new UserStatisticsComponent(player.Id))
                     .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
                     .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new LeagueGroupComponent(player.League))
+                    .AddComponent(new LeagueGroupComponent(player.LeagueEntity))
                     .AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId))
                     .WithId(player.Id);
 

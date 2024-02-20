@@ -14,6 +14,7 @@ using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Components.Preset;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
@@ -261,14 +262,28 @@ public abstract class PlayerConnection(
 
         if (oldLeagueIndex != Player.LeagueIndex) {
             User.RemoveComponent<LeagueGroupComponent>();
-            User.AddComponent(Player.League.GetComponent<LeagueGroupComponent>());
+            User.AddComponent(Player.LeagueEntity.GetComponent<LeagueGroupComponent>());
         }
 
         if (seasonStats.Reputation != oldReputation)
             db.Update(seasonStats);
-
-        db.Update(Player);
+        
         db.InsertOrReplace(reputationStats);
+        
+        if ((Player.RewardedLeagues & Player.League) != Player.League) {
+            Dictionary<IEntity, int> rewards = Leveling.GetFirstLeagueEntranceReward(Player.League);
+
+            foreach ((IEntity entity, int amount) in rewards) {
+                // todo PurchaseItem(entity, amount, 0, false, false);
+            }
+            
+            Player.RewardedLeagues |= Player.League;
+            
+            IEntity rewardNotification = new LeagueFirstEntranceRewardPersistentNotificationTemplate().Create(rewards);
+            Share(rewardNotification);
+        }
+        
+        db.Update(Player);
         db.CommitTransaction();
     }
 

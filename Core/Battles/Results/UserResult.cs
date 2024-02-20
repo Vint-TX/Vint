@@ -39,6 +39,6 @@ public class UserResult(
     public int BonusesTaken { get; set; }
     public bool UnfairMatching { get; set; } // todo
     public bool Deserted { get; set; } // todo
-    public IEntity League => battlePlayer.PlayerConnection.Player.League;
+    public IEntity League => battlePlayer.PlayerConnection.Player.LeagueEntity;
     public List<ModuleInfo> Modules { get; set; } = []; // todo modules
 }

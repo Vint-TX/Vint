@@ -45,7 +45,7 @@ public class PersonalBattleResultForClient {
         ReputationDelta = reputationDelta;
         Reputation = player.Reputation;
         PrevLeague = prevLeague;
-        League = player.League;
+        League = player.LeagueEntity;
         LeaguePlace = Leveling.GetSeasonPlace(player.Id);
 
         Container = PrevLeague.GetComponent<ChestBattleRewardComponent>().Chest;

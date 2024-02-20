@@ -1,0 +1,67 @@
+[
+  {
+    "name": "LeagueFirstEntrance",
+    "id": -1658996640,
+    "template": [
+      "LeagueFirstEntranceRewardTemplate",
+      "battle_rewards/new_league"
+    ],
+    "components": {
+      "BattleRewardGroupComponent": {
+        "key": -1658996640
+      }
+    }
+  },
+  {
+    "name": "ItemLevelUp",
+    "id": 1672895928,
+    "template": [
+      "LevelUpUnlockBattleRewardTemplate",
+      "battle_rewards/lvlup_unlock"
+    ],
+    "components": {
+      "BattleRewardGroupComponent": {
+        "key": 1672895928
+      }
+    }
+  }, 
+  {
+    "name": "XCrystal",
+    "id": 473122320,
+    "template": [
+      "XCrystalBattleRewardTemplate",
+      "battle_rewards/xcrystal_bonus"
+    ],
+    "components": {
+      "BattleRewardGroupComponent": {
+        "key": 473122320
+      }
+    }
+  },
+  {
+    "name": "Tutorial",
+    "id": 646862480,
+    "template": [
+      "TutorialBattleRewardTemplate",
+      "battle_rewards/tutorial"
+    ],
+    "components": {
+      "BattleRewardGroupComponent": {
+        "key": 646862480
+      }
+    }
+  },
+  {
+    "name": "ModuleContainer",
+    "id": 1069395872,
+    "template": [
+      "ModuleContainerBattleRewardTemplate",
+      "battle_rewards/module_container"
+    ],
+    "components": {
+      "BattleRewardGroupComponent": {
+        "key": 1069395872
+      }
+    }
+  }
+]

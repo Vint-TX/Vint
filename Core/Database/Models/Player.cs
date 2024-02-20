@@ -25,7 +25,7 @@ public class Player {
     [NotColumn] public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
     [NotColumn] public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
 
-    [Column] public RewardedLeagues RewardedLeagues { get; set; }
+    [Column] public Leagues RewardedLeagues { get; set; }
 
     [Column] public bool Subscribed { get; set; }
     [Column(DataType = DataType.Text)] public string CountryCode { get; set; } = "RU";
@@ -58,13 +58,13 @@ public class Player {
         _ => 0
     };
 
-    [NotColumn] public string LeagueName => LeagueIndex switch {
-        0 => "Training",
-        1 => "Bronze",
-        2 => "Silver",
-        3 => "Gold",
-        4 => "Master",
-        _ => "Training"
+    [NotColumn] public Leagues League => LeagueIndex switch {
+        0 => Leagues.Training,
+        1 => Leagues.Bronze,
+        2 => Leagues.Silver,
+        3 => Leagues.Gold,
+        4 => Leagues.Master,
+        _ => Leagues.Training
     };
 
     [NotColumn] public int MinReputationDelta => LeagueIndex switch {
@@ -85,7 +85,7 @@ public class Player {
         _ => 0
     };
 
-    [NotColumn] public IEntity League => GlobalEntities.GetEntity("leagues", LeagueName);
+    [NotColumn] public IEntity LeagueEntity => GlobalEntities.GetEntity("leagues", League.ToString());
 
     [Column(DataType = DataType.Text)] public string FractionName { get; set; } = "";
     [Column] public long FractionScore { get; set; }
@@ -357,7 +357,7 @@ public enum PlayerGroups {
 }
 
 [Flags]
-public enum RewardedLeagues {
+public enum Leagues {
     None = 0,
     Training = 1,
     Bronze = 2,
