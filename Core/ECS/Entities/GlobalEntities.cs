@@ -62,14 +62,10 @@ public static class GlobalEntities {
         { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
     };
 
-    public static List<IEntity> GetEntities(this IPlayerConnection connection) {
-        List<IEntity> entities = AllMarketTemplateEntities.ToList();
-        entities.AddRange(GetUserEntities(connection));
+    public static IEnumerable<IEntity> GetEntities(this IPlayerConnection connection) =>
+        AllMarketTemplateEntities.Concat(GetUserEntities(connection));
 
-        return entities;
-    }
-
-    public static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) {
+    static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) {
         foreach (IEntity entity in GetEntities(path)) {
             Player player = connection.Player;
             IEntity user = connection.User;
@@ -249,12 +245,10 @@ public static class GlobalEntities {
                         }
 
                         case GoldBonusUserItemTemplate: {
-                            IEntity gold = connection.UserEntities["modules"]
-                                .Single(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
+                            IEntity gold = connection.SharedEntities.Single(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
 
                             entity.AddComponent(new ModuleGroupComponent(gold));
                             entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
-
                             break;
                         }
                     }
@@ -354,16 +348,7 @@ public static class GlobalEntities {
                connection.Player.Rank >= restrictionComponent.RestrictionValue;
     }
 
-    static List<IEntity> GetUserEntities(this IPlayerConnection connection) {
-        List<IEntity> entities = [];
-
-        foreach (string entitiesTypeName in ConfigManager.GlobalEntitiesTypeNames) {
-            HashSet<IEntity> userEntities = GetUserTemplateEntities(connection, entitiesTypeName).ToHashSet();
-
-            connection.UserEntities[entitiesTypeName] = userEntities;
-            entities.AddRange(userEntities);
-        }
-
-        return entities;
-    }
+    static IEnumerable<IEntity> GetUserEntities(this IPlayerConnection connection) =>
+        ConfigManager.GlobalEntitiesTypeNames
+            .SelectMany(entitiesTypeName => GetUserTemplateEntities(connection, entitiesTypeName));
 }

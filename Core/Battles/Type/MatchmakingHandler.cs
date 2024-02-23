@@ -96,12 +96,11 @@ public class MatchmakingHandler : TypeHandler {
             component.Value = lefts;
             component.NeedGoodBattles = needGoodBattles;
 
-            using DbConnection db = new();
-
             Database.Models.Player player = battlePlayer.PlayerConnection.Player;
             player.DesertedBattlesCount = lefts;
             player.NeedGoodBattlesCount = needGoodBattles;
 
+            using DbConnection db = new();
             db.Update(player);
         });
     }

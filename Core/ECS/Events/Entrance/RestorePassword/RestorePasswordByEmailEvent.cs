@@ -18,8 +18,8 @@ public class RestorePasswordByEmailEvent : IServerEvent {
 
         logger.Warning("Restoring password '{Email}'", Email);
 
-        using DbConnection database = new();
-        Player player = database.Players.Single(player => player.Email == Email);
+        using DbConnection db = new();
+        Player player = db.Players.Single(player => player.Email == Email);
 
         connection.Player = player;
 

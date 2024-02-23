@@ -7,12 +7,12 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 
 [ProtocolId(1437990639822)]
 public class CheckUserUidEvent : IServerEvent {
-    [ProtocolName("uid")] public string Username { get; private set; } = null!;
+    [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection database = new();
+        using DbConnection db = new();
 
-        if (database.Players.Any(player => player.Username == Username))
+        if (db.Players.Any(player => player.Username == Username))
             connection.Send(new UserUidOccupiedEvent(Username));
         else connection.Send(new UserUidVacantEvent(Username));
     }

@@ -9,7 +9,7 @@ namespace Vint.Core.Battles.Results;
 public class UserResult(
     BattlePlayer battlePlayer
 ) {
-    [ProtocolName("uid")] public string Username => battlePlayer.PlayerConnection.Player.Username;
+    [ProtocolName("Uid")] public string Username => battlePlayer.PlayerConnection.Player.Username;
     public long UserId => battlePlayer.PlayerConnection.Player.Id;
     public long BattleUserId => battlePlayer.BattleUser.Id;
     public string AvatarId => battlePlayer.PlayerConnection.User.GetComponent<UserAvatarComponent>().Id;

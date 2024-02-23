@@ -48,7 +48,7 @@ public class PersonalBattleResultForClient {
         League = player.LeagueEntity;
         LeaguePlace = Leveling.GetSeasonPlace(player.Id);
 
-        Container = PrevLeague.GetComponent<ChestBattleRewardComponent>().Chest;
+        Container = League.GetComponent<ChestBattleRewardComponent>().Chest;
         ContainerScoreDelta = battleScore;
         ContainerScore = (int)player.GameplayChestScore;
         ContainerScoreMultiplier = battleSeriesMultiplier;

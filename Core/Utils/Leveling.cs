@@ -8,9 +8,12 @@ using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.Server.Experience;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Battle.Reward;
 using Vint.Core.ECS.Templates.Graffiti;
+using Vint.Core.ECS.Templates.Hulls;
 using Vint.Core.ECS.Templates.Skins;
+using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.Server;
 
 namespace Vint.Core.Utils;
@@ -45,6 +48,7 @@ public static class Leveling {
         return db.SeasonStatistics
                    .Select(seasonStats => new { Id = seasonStats.PlayerId, seasonStats.Reputation })
                    .OrderByDescending(p => p.Reputation)
+                   .ToList()
                    .Select((player, index) => new { player.Id, Index = index })
                    .Single(p => p.Id == userId)
                    .Index +
@@ -58,9 +62,6 @@ public static class Leveling {
         List<IEntity> entities = connection.SharedEntities.ToList();
         Player player = connection.Player;
 
-        List<long> graffities = db.Graffities.Where(graffiti => graffiti.PlayerId == player.Id).Select(graffiti => graffiti.Id).ToList();
-        List<long> hullSkins = db.HullSkins.Where(hullSkin => hullSkin.PlayerId == player.Id).Select(hullSkin => hullSkin.Id).ToList();
-        List<long> weaponSkins = db.WeaponSkins.Where(weaponSkin => weaponSkin.PlayerId == player.Id).Select(weaponSkin => weaponSkin.Id).ToList();
         var hulls = db.Hulls.Where(hull => hull.PlayerId == player.Id).Select(hull => new { hull.Id, hull.Xp }).ToList();
         var weapons = db.Weapons.Where(weapon => weapon.PlayerId == player.Id).Select(weapon => new { weapon.Id, weapon.Xp }).ToList();
 
@@ -68,9 +69,7 @@ public static class Leveling {
                                                                is ChildGraffitiMarketItemTemplate
                                                                or HullSkinMarketItemTemplate
                                                                or WeaponSkinMarketItemTemplate)) {
-            if (graffities.Any(id => id == child.Id) ||
-                hullSkins.Any(id => id == child.Id) ||
-                weaponSkins.Any(id => id == child.Id)) continue;
+            if (connection.OwnsItem(child)) continue;
 
             int rewardLevel = ConfigManager.GetComponent<MountUpgradeLevelRestrictionComponent>(child.TemplateAccessor!.ConfigPath!).RestrictionValue;
 
@@ -93,23 +92,31 @@ public static class Leveling {
         return rewards.Count == 0 ? null : new LevelUpUnlockBattleRewardTemplate().Create(rewards);
     }
 
-    public static void UpdateItemXp(IEntity userItem, long delta) {
+    public static void UpdateItemXp(IEntity marketItem, IPlayerConnection connection, long delta) {
+        IEntity userItem = marketItem.GetUserEntity(connection);
+
         if (!userItem.HasComponent<UserGroupComponent>()) return;
 
-        using DbConnection db = new();
-
+        EntityTemplate? template = marketItem.TemplateAccessor?.Template;
         long playerId = userItem.GetComponent<UserGroupComponent>().Key;
         long xp = 0;
 
-        db.Hulls
-            .Where(hull => hull.PlayerId == playerId && hull.Id == userItem.Id)
-            .Set(hull => hull.Xp, hull => hull.Xp + delta)
-            .Update();
+        using (DbConnection db = new())
+            switch (template) {
+                case TankMarketItemTemplate:
+                    db.Hulls
+                        .Where(hull => hull.PlayerId == playerId && hull.Id == marketItem.Id)
+                        .Set(hull => hull.Xp, hull => hull.Xp + delta)
+                        .Update();
+                    break;
 
-        db.Weapons
-            .Where(weapon => weapon.PlayerId == playerId && weapon.Id == userItem.Id)
-            .Set(weapon => weapon.Xp, weapon => weapon.Xp + delta)
-            .Update();
+                case WeaponMarketItemTemplate:
+                    db.Weapons
+                        .Where(weapon => weapon.PlayerId == playerId && weapon.Id == marketItem.Id)
+                        .Set(weapon => weapon.Xp, weapon => weapon.Xp + delta)
+                        .Update();
+                    break;
+            }
 
         userItem.ChangeComponent<ExperienceItemComponent>(component => xp = component.Experience += delta);
         userItem.RemoveComponent<ExperienceToLevelUpItemComponent>();

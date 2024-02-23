@@ -185,56 +185,52 @@ public class Player {
     }
 
     public Punishment Warn(string? reason, TimeSpan? duration) {
-        duration = duration?.Duration();
-
-        using DbConnection db = new();
-
         Punishment punishment = new() {
             Player = this,
             PunishTime = DateTimeOffset.UtcNow,
             Active = true,
-            Duration = duration,
+            Duration = duration?.Duration(),
             Reason = reason,
             Type = PunishmentType.Warn
         };
+
+        using DbConnection db = new();
 
         punishment.Id = db.InsertWithInt64Identity(punishment);
         return punishment;
     }
 
     public Punishment Mute(string? reason, TimeSpan? duration) {
-        duration = duration?.Duration();
         UnMute();
-
-        using DbConnection db = new();
 
         Punishment punishment = new() {
             Player = this,
             PunishTime = DateTimeOffset.UtcNow,
             Active = true,
-            Duration = duration,
+            Duration = duration?.Duration(),
             Reason = reason,
             Type = PunishmentType.Mute
         };
+
+        using DbConnection db = new();
 
         punishment.Id = db.InsertWithInt64Identity(punishment);
         return punishment;
     }
 
     public Punishment Ban(string? reason, TimeSpan? duration) {
-        duration = duration?.Duration();
         UnBan();
-
-        using DbConnection db = new();
 
         Punishment punishment = new() {
             Player = this,
             PunishTime = DateTimeOffset.UtcNow,
             Active = true,
-            Duration = duration,
+            Duration = duration?.Duration(),
             Reason = reason,
             Type = PunishmentType.Ban
         };
+
+        using DbConnection db = new();
 
         punishment.Id = db.InsertWithInt64Identity(punishment);
         return punishment;

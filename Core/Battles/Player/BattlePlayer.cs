@@ -173,11 +173,11 @@ public class BattlePlayer {
 
             if (player.DesertedBattlesCount == 0)
                 PlayerConnection.BattleSeries++;
-            
+
             int score = GetBattleUserScoreWithBonus();
 
-            Leveling.UpdateItemXp(preset.Hull.GetUserEntity(PlayerConnection), score);
-            Leveling.UpdateItemXp(preset.Weapon.GetUserEntity(PlayerConnection), score);
+            Leveling.UpdateItemXp(preset.Hull, PlayerConnection, score);
+            Leveling.UpdateItemXp(preset.Weapon, PlayerConnection, score);
 
             reputationDelta = Battle.ModeHandler.CalculateReputationDelta(this);
             PlayerConnection.ChangeReputation(reputationDelta);

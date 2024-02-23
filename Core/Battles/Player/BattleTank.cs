@@ -396,7 +396,7 @@ public class BattleTank {
 
     public void UpdateKillStreak() {
         int killStreak = Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>().Kills;
-        
+
         UserResult.KillStrike = Math.Max(UserResult.KillStrike, killStreak);
         if (killStreak < 2) return;
 

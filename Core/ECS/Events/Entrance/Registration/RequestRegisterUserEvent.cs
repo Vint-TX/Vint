@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Entrance.Registration;
 public class RequestRegisterUserEvent : IServerEvent {
     const int MaxRegistrationsFromOneComputer = 5;
 
-    [ProtocolName("uid")] public string Username { get; private set; } = null!;
+    [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public string EncryptedPasswordDigest { get; private set; } = null!;
     public string Email { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
@@ -18,9 +18,9 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool QuickRegistration { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using (DbConnection database = new()) {
-            if (database.Players.Any(player => player.Username == Username) ||
-                database.Players.Count(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
+        using (DbConnection db = new()) {
+            if (db.Players.Any(player => player.Username == Username) ||
+                db.Players.Count(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
                 connection.Send(new RegistrationFailedEvent());
                 return;
             }

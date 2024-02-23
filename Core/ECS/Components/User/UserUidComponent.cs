@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.User;
 public class UserUidComponent(
     string username
 ) : IComponent {
-    [ProtocolName("uid")] public string Username { get; set; } = username;
+    [ProtocolName("Uid")] public string Username { get; set; } = username;
 }

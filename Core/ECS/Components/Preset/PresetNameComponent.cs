@@ -24,8 +24,8 @@ public class PresetNameComponent(
         preset ??= connection.Player.UserPresets.Single(p => p.Entity!.Id == entity.Id);
         if (_name != null) preset.Name = _name;
 
-        using DbConnection database = new();
+        using DbConnection db = new();
 
-        database.Update(preset);
+        db.Update(preset);
     }
 }

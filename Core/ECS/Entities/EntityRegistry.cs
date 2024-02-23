@@ -1,8 +1,10 @@
-﻿namespace Vint.Core.ECS.Entities;
+﻿using System.Collections.Concurrent;
+
+namespace Vint.Core.ECS.Entities;
 
 public static class EntityRegistry {
     static long _lastId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-    static Dictionary<long, IEntity> Entities { get; } = new();
+    static ConcurrentDictionary<long, IEntity> Entities { get; } = new();
 
 
     public static long FreeId => Interlocked.Increment(ref _lastId);
@@ -16,7 +18,7 @@ public static class EntityRegistry {
 
     public static void Remove(long id) {
         lock (Entities) {
-            if (!Entities.Remove(id))
+            if (!Entities.TryRemove(id, out _))
                 throw new ArgumentException($"Entity with id {id} is not registered");
         }
     }

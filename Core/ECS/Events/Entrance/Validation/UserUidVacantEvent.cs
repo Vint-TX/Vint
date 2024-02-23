@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class UserUidVacantEvent(
     string username
 ) : IEvent {
-    [ProtocolName("uid")] public string Username => username;
+    [ProtocolName("Uid")] public string Username => username;
 }

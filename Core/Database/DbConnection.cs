@@ -1,10 +1,8 @@
 ﻿using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.Mapping;
-using Serilog;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Database;
 
@@ -28,8 +26,6 @@ public sealed class DbConnection() : DataConnection(Schema) {
     }
 
     static MappingSchema Schema { get; set; }
-
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(DbConnection));
 
     public ITable<Player> Players => this.GetTable<Player>();
     public ITable<Preset> Presets => this.GetTable<Preset>();
