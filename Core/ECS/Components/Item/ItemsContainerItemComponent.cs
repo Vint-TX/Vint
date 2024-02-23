@@ -5,7 +5,7 @@ namespace Vint.Core.ECS.Components.Item;
 [ProtocolId(1479806073802)]
 public class ItemsContainerItemComponent : IComponent {
     public List<ContainerItem> Items { get; set; } = null!;
-    public List<ContainerItem> RareItems { get; set; } = null!;
+    public List<ContainerItem>? RareItems { get; set; }
 }
 
 public class ContainerItem : IComponent {

@@ -1,8 +1,12 @@
 using Redzen.Random;
 using Vint.Core.Config;
+using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Notification;
+using Vint.Core.ECS.Templates.Shells;
+using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.Server;
 
 namespace Vint.Core.Containers;
@@ -22,7 +26,7 @@ public class ItemsContainer(
             IEntity regularReward = GetReward(ItemsComponent.Items, connection, random, out int itemAmount, out long compensation);
             yield return SaveRewardOrCompensation(connection, regularReward, itemAmount, compensation);
 
-            if (ItemsComponent.RareItems.Count == 0 || random.NextFloat() > 0.05) continue;
+            if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || random.NextFloat() > 0.05) continue;
 
             IEntity rareReward = GetReward(ItemsComponent.RareItems, connection, random, out itemAmount, out compensation);
             yield return SaveRewardOrCompensation(connection, rareReward, itemAmount, compensation);
@@ -35,12 +39,24 @@ public class ItemsContainer(
         IRandomSource random,
         out int amount,
         out long compensation) {
-        ContainerItem item = rewards[random.Next(rewards.Count)];
-        MarketItemBundle bundle = item.ItemBundles[random.Next(item.ItemBundles.Count)];
+        int rollCountLeft = 10;
+        IEntity reward;
 
-        compensation = item.Compensation;
-        amount = random.Next(bundle.Amount, bundle.Max + 1);
-        return connection.SharedEntities.Single(entity => entity.Id == bundle.MarketItem);
+        do {
+            ContainerItem item = rewards[random.Next(rewards.Count)];
+            MarketItemBundle bundle = item.ItemBundles[random.Next(item.ItemBundles.Count)];
+
+            compensation = item.Compensation;
+            amount = random.Next(bundle.Amount, bundle.Max + 1);
+            reward = connection.SharedEntities.Single(entity => entity.Id == bundle.MarketItem);
+            rollCountLeft--;
+        } while (rollCountLeft >= 0 && !ValidateReward(connection, reward));
+
+        if (rollCountLeft >= 0 || ValidateReward(connection, reward)) return reward;
+
+        reward = GlobalEntities.GetEntity("misc", "Crystal");
+        amount = (int)compensation;
+        return reward;
     }
 
     IEntity SaveRewardOrCompensation(IPlayerConnection connection, IEntity marketItem, int amount, long compensation) {
@@ -52,5 +68,19 @@ public class ItemsContainer(
             connection.PurchaseItem(marketItem, amount, 0, false, false);
 
         return new NewItemNotificationTemplate().Create(MarketItem, marketItem, amount);
+    }
+
+    static bool ValidateReward(IPlayerConnection connection, IEntity marketItem) {
+        if (!marketItem.HasComponent<ParentGroupComponent>()) return true;
+
+        EntityTemplate? template = marketItem.TemplateAccessor?.Template;
+
+        if (template == null) return false;
+
+        return template is not
+                   (HullSkinMarketItemTemplate or WeaponSkinMarketItemTemplate or ShellMarketItemTemplate) ||
+               connection.OwnsItem(GlobalEntities.AllMarketTemplateEntities
+                   .Single(entity =>
+                       entity.Id == marketItem.GetComponent<ParentGroupComponent>().Key));
     }
 }

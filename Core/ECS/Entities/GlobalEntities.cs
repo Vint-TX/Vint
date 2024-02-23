@@ -322,15 +322,7 @@ public static class GlobalEntities {
     public static bool ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
         int? configPrice = null;
 
-        if (amount == 1) {
-            if (forXCrystals) {
-                if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PriceComponent.XPriceItemComponent? xPriceItemComponent))
-                    configPrice = xPriceItemComponent.Price;
-            } else if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PriceComponent.PriceItemComponent? priceItemComponent))
-                configPrice = priceItemComponent.Price;
-        } else {
-            if (!ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PackPriceComponent? packPriceComponent)) return false;
-
+        if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PackPriceComponent? packPriceComponent)) {
             Dictionary<int, int> packPrice = forXCrystals
                                                  ? packPriceComponent.PackXPrice
                                                  : packPriceComponent.PackPrice;
@@ -338,6 +330,13 @@ public static class GlobalEntities {
             if (!packPrice.TryGetValue(amount, out int value)) return false;
 
             configPrice = value;
+        } else {
+            if (forXCrystals) {
+                if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out XPriceItemComponent? xPriceItemComponent))
+                    configPrice = xPriceItemComponent.Price;
+            } else if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PriceItemComponent? priceItemComponent))
+                configPrice = priceItemComponent.Price;
+            else return false;
         }
 
         if (configPrice != price) return false;
