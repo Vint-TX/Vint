@@ -80,13 +80,13 @@ public class Spawn(
 
 public class SemiActive(
     TankStateManager stateManager
-) : TankState(stateManager) { // todo temperature
+) : TankState(stateManager) {
     public override IComponent StateComponent { get; } = new TankSemiActiveStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
     public override void Start() {
         BattleTank.Enable();
-        BattleTank.Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = 0);
+        BattleTank.SetTemperature(0);
         BattleTank.Tank.AddComponent(new TankVisibleStateComponent());
         base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1);

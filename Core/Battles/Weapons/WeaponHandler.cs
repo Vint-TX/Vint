@@ -26,7 +26,7 @@ public abstract class WeaponHandler {
     }
 
     protected IDamageCalculator DamageCalculator { get; }
-    protected WeaponRotationComponent OriginalWeaponRotationComponent { get; }
+    public WeaponRotationComponent OriginalWeaponRotationComponent { get; }
     public BattleTank BattleTank { get; }
     public IEntity BattleEntity { get; }
     public IEntity MarketEntity { get; }

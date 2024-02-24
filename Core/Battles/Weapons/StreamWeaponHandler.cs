@@ -8,7 +8,7 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
 
-public abstract class StreamWeaponHandler : WeaponHandler {
+public abstract class StreamWeaponHandler : WeaponHandler, ITemperatureWeaponHandler {
     protected StreamWeaponHandler(BattleTank battleTank) : base(battleTank) {
         Cooldown = TimeSpan.FromSeconds(ConfigManager.GetComponent<WeaponCooldownComponent>(BattleConfigPath).CooldownIntervalSec);
         DamagePerSecond = ConfigManager.GetComponent<DamagePerSecondPropertyComponent>(MarketConfigPath).FinalValue;
@@ -16,6 +16,9 @@ public abstract class StreamWeaponHandler : WeaponHandler {
 
     public float DamagePerSecond { get; }
     public Dictionary<long, DateTimeOffset> IncarnationIdToHitTime { get; } = new();
+
+    public abstract float TemperatureLimit { get; }
+    public abstract float TemperatureDelta { get; }
 
     public override void Fire(HitTarget target) {
         long incarnationId = target.IncarnationEntity.Id;
@@ -29,6 +32,8 @@ public abstract class StreamWeaponHandler : WeaponHandler {
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
+
+        targetTank.UpdateTemperatureAssists(BattleTank, !isEnemy);
 
         // ReSharper disable once ArrangeRedundantParentheses
         if (targetTank.StateManager.CurrentState is not Active ||

@@ -64,7 +64,8 @@ public static class ChatUtils {
 
     // todo squads
     public static IEnumerable<IPlayerConnection> GetReceivers(IPlayerConnection from, IEntity chat) => chat.TemplateAccessor?.Template switch {
-        GeneralChatTemplate => from.Server.PlayerConnections.Values,
+        GeneralChatTemplate => from.Server.PlayerConnections.Values
+            .Where(conn => conn.IsOnline),
 
         BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players
             .Select(battlePlayer => battlePlayer.PlayerConnection),

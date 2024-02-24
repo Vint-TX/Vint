@@ -25,6 +25,9 @@ public class IsisWeaponHandler : StreamWeaponHandler {
 
     public override int MaxHitTargets => 1;
 
+    public override float TemperatureLimit => 0;
+    public override float TemperatureDelta => 0;
+
     public override void Fire(HitTarget target) {
         long incarnationId = target.IncarnationEntity.Id;
 
@@ -47,6 +50,8 @@ public class IsisWeaponHandler : StreamWeaponHandler {
             battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
             battle.DamageProcessor.Heal(BattleTank, heal);
         } else {
+            targetTank.UpdateTemperatureAssists(BattleTank, true);
+
             const int healScore = 1;
             if (targetTank.Health >= targetTank.MaxHealth) return;
 

@@ -1,3 +1,5 @@
+using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
+
 namespace Vint.Core.ECS.Components.Server;
 
 public class DamagePerPelletPropertyComponent : RangedComponent;
@@ -21,3 +23,9 @@ public class MaxDamagePropertyComponent : RangedComponent;
 public class DecreaseFriendTemperaturePropertyComponent : RangedComponent;
 
 public class IncreaseFriendTemperaturePropertyComponent : RangedComponent;
+
+public class DeltaTemperaturePerSecondPropertyComponent : RangedComponent;
+
+public class TemperatureLimitPropertyComponent : RangedComponent, IConvertible<VulcanWeaponComponent> {
+    public void Convert(VulcanWeaponComponent component) => component.TemperatureLimit = FinalValue;
+}
