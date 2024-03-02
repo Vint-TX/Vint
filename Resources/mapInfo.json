@@ -1,6 +1,5 @@
 {
-  "Acidlake": {
-    "name": "Acid Lake",
+  "AcidLake": {
     "id": 485053206,
     "maxPlayers": 20,
     "matchMaking": true,
@@ -1326,8 +1325,7 @@
       }
     }
   },
-  "Acidlakehalloween": {
-    "name": "Lake Hell",
+  "AcidLakeHalloween": {
     "id": -820833801,
     "maxPlayers": 20,
     "matchMaking": true,
@@ -2667,7 +2665,6 @@
     }
   },
   "Area159": {
-    "name": "Area 159",
     "id": 1133979230,
     "maxPlayers": 8,
     "matchMaking": true,
@@ -3713,7 +3710,6 @@
     }
   },
   "Boombox": {
-    "name": "Old School",
     "id": 1945237110,
     "maxPlayers": 8,
     "matchMaking": true,
@@ -5004,7 +5000,6 @@
     }
   },
   "Iran": {
-    "name": "Iran",
     "id": -51480736,
     "maxPlayers": 12,
     "matchMaking": true,
@@ -7472,7 +7467,6 @@
     }
   },
   "Kungur": {
-    "name": "Kungur",
     "id": 2127033418,
     "maxPlayers": 20,
     "matchMaking": true,
@@ -10159,7 +10153,6 @@
     }
   },
   "Massacre": {
-    "name": "Massacre",
     "id": -1551247853,
     "maxPlayers": 12,
     "matchMaking": true,
@@ -11732,8 +11725,7 @@
       }
     }
   },
-  "MassacremarsBG": {
-    "name": "Ares",
+  "MassacreMars": {
     "id": 989096365,
     "maxPlayers": 16,
     "matchMaking": true,
@@ -14439,8 +14431,7 @@
       }
     }
   },
-  "Nightiran": {
-    "name": "Arabian Night",
+  "NightIran": {
     "id": 343745828,
     "maxPlayers": 8,
     "matchMaking": true,
@@ -16854,7 +16845,6 @@
     }
   },
   "Repin": {
-    "name": "Repin",
     "id": -1587964040,
     "maxPlayers": 16,
     "matchMaking": true,
@@ -18312,7 +18302,6 @@
     }
   },
   "Rio": {
-    "name": "Rio",
     "id": -1664220274,
     "maxPlayers": 16,
     "matchMaking": true,
@@ -20673,7 +20662,6 @@
     }
   },
   "Sandbox": {
-    "name": "Sandbox",
     "id": -549069251,
     "maxPlayers": 8,
     "matchMaking": true,
@@ -22132,7 +22120,6 @@
     }
   },
   "Silence": {
-    "name": "Silence",
     "id": -321842153,
     "maxPlayers": 16,
     "matchMaking": true,
@@ -22240,6 +22227,19 @@
           "x": 97.7,
           "y": 100.0,
           "z": 31.0
+        }
+      },
+      {
+        "number": 6,
+        "position": {
+          "x": 43.1046,
+          "y": -6.27881,
+          "z": -60.2942
+        },
+        "size": {
+          "x": 6.07428,
+          "y": 2.9523,
+          "z": 6.49712
         }
       }
     ],
@@ -23978,8 +23978,7 @@
       }
     }
   },
-  "Silencemoon": {
-    "name": "Moon Silence",
+  "SilenceMoon": {
     "id": 933129112,
     "maxPlayers": 16,
     "matchMaking": true,
@@ -24074,6 +24073,19 @@
           "x": 257.2,
           "y": 100.0,
           "z": 106.0
+        }
+      },
+      {
+        "number": 6,
+        "position": {
+          "x": 43.1046,
+          "y": -6.27881,
+          "z": -60.2942
+        },
+        "size": {
+          "x": 6.07428,
+          "y": 2.9523,
+          "z": 6.49712
         }
       }
     ],
@@ -25758,7 +25770,6 @@
     }
   },
   "Testbox": {
-    "name": "Testbox",
     "id": 458045295,
     "maxPlayers": 8,
     "matchMaking": false,
@@ -26446,8 +26457,7 @@
       }
     }
   },
-  "Westprime": {
-    "name": "West Prime",
+  "WestPrime": {
     "id": 980475942,
     "maxPlayers": 20,
     "matchMaking": true,

@@ -39,6 +39,7 @@ public class Captured(
 
 public class OnGround(
     FlagStateManager stateManager,
+    Vector3 position,
     bool isUserAction
 ) : FlagState(stateManager) {
     DateTimeOffset ReturnAtTime { get; } = DateTimeOffset.UtcNow.AddMinutes(1);
@@ -49,10 +50,8 @@ public class OnGround(
         foreach (BattlePlayer battlePlayer in Battle.Players)
             battlePlayer.PlayerConnection.Send(new FlagDropEvent(isUserAction), Flag.Entity);
 
-        Vector3 newPosition = Flag.Carrier!.Tank!.Position - Vector3.UnitY;
-
         Flag.Entity.RemoveComponent<TankGroupComponent>();
-        Flag.Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = newPosition);
+        Flag.Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = position);
         Flag.Entity.AddComponent(new FlagGroundedStateComponent());
     }
 

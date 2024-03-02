@@ -15,7 +15,7 @@
     }
   },
   {
-    "name": "Nightiran",
+    "name": "NightIran",
     "id": 343745828,
     "template": [
       "MapTemplate",
@@ -30,7 +30,7 @@
     }
   },
   {
-    "name": "Acidlake",
+    "name": "AcidLake",
     "id": 485053206,
     "template": [
       "MapTemplate",
@@ -45,7 +45,7 @@
     }
   },
   {
-    "name": "Acidlakehalloween",
+    "name": "AcidLakeHalloween",
     "id": -820833801,
     "template": [
       "MapTemplate",
@@ -135,7 +135,7 @@
     }
   },
   {
-    "name": "Westprime",
+    "name": "WestPrime",
     "id": 980475942,
     "template": [
       "MapTemplate",
@@ -165,7 +165,7 @@
     }
   },
   {
-    "name": "Silencemoon",
+    "name": "SilenceMoon",
     "id": 933129112,
     "template": [
       "MapTemplate",
@@ -195,7 +195,7 @@
     }
   },
   {
-    "name": "MassacremarsBG",
+    "name": "MassacreMars",
     "id": 989096365,
     "template": [
       "MapTemplate",

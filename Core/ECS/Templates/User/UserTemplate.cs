@@ -67,8 +67,6 @@ public class UserTemplate : EntityTemplate {
                     .AddComponent(new UserPublisherComponent())
                     .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
                     .AddComponent(new UserUidComponent(player.Username))
-                    .AddComponent(new UserCountryComponent(player.CountryCode))
-                    .AddComponent(new UserSubscribeComponent(player.Subscribed))
                     .AddComponent(new UserExperienceComponent(player.Experience))
                     .AddComponent(new UserRankComponent(player.Rank))
                     .AddComponent(new UserReputationComponent(player.Reputation))
@@ -83,8 +81,11 @@ public class UserTemplate : EntityTemplate {
                 if (player.IsAdmin)
                     builder.AddComponent(new UserAdminComponent());
 
+                if (player.IsModerator)
+                    builder.AddComponent(new ModeratorComponent());
+                
                 if (player.IsTester)
-                    builder.AddComponent(new ClosedBetaQuestAchievementComponent());
+                    builder.AddComponent(new UserTesterComponent());
             },
             true);
 

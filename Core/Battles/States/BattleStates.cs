@@ -91,11 +91,6 @@ public class Starting(
         base.Tick();
     }
 
-    public override void Finish() {
-        Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartingComponent>();
-        base.Finish();
-    }
-
     void MatchmakingBattleTick() {
         if (Battle.Players.Count <= 0) {
             StateManager.SetState(new NotEnoughPlayers(StateManager));
@@ -122,6 +117,11 @@ public class Starting(
             Battle.LobbyEntity.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
             StateManager.SetState(new Running(StateManager));
         }
+    }
+
+    public override void Finish() {
+        Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartingComponent>();
+        base.Finish();
     }
 }
 
@@ -154,10 +154,6 @@ public class WarmUp(
         Battle.ModeHandler.OnWarmUpCompleted();
     }
 }
-
-public class MatchBegins(
-    BattleStateManager stateManager
-) : BattleState(stateManager);
 
 public class Running(
     BattleStateManager stateManager

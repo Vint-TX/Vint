@@ -11,6 +11,7 @@ using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle.Flag;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Templates.Battle.Flag;
+using Vint.Core.Physics;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -53,14 +54,29 @@ public class Flag {
         Assists.Add(new FlagAssist(carrier.Tank!, Position));
     }
 
-    public void Drop(bool isUserAction) { // todo height maps (or server physics)
+    public void Drop(bool isUserAction) {
         if (StateManager.CurrentState is not Captured) return;
 
         LastCarrier = Carrier;
-        UnfrozeForLastCarrierTime = DateTimeOffset.UtcNow.AddSeconds(3);
-
-        StateManager.SetState(new OnGround(StateManager, isUserAction));
         Carrier = null;
+
+        Vector3 newPosition;
+        Vector3 tankPosition = LastCarrier!.Tank!.Position;
+        RayHitHandler hitHandler = new();
+        Battle.Simulation?.RayCast(tankPosition, -Vector3.UnitY, 1000, ref hitHandler);
+
+        if (Battle.Simulation == null) newPosition = tankPosition - Vector3.UnitY;
+        else if (!hitHandler.ClosestHit.HasValue) newPosition = Vector3.UnitY * 1000;
+        else newPosition = hitHandler.ClosestHit.Value;
+
+        StateManager.SetState(new OnGround(StateManager, newPosition, isUserAction));
+
+        if (PhysicsUtils.IsOutsideMap(Battle.MapInfo.PuntativeGeoms, newPosition, Vector3.Zero, Battle.Properties.KillZoneEnabled)) {
+            Return();
+            return;
+        }
+
+        UnfrozeForLastCarrierTime = DateTimeOffset.UtcNow.AddSeconds(3);
 
         FlagAssist assist = Assists.SingleOrDefault(assist => assist.Player == LastCarrier?.Tank);
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
@@ -177,13 +193,6 @@ public class Flag {
             .Where(stats => stats.PlayerId == battlePlayer.PlayerConnection.Player.Id)
             .Set(stats => stats.FlagsDelivered, stats => stats.FlagsDelivered + 1)
             .Update();
-    }
-
-    public void CarrierDied() {
-        Drop(false);
-
-        if (PhysicsUtils.IsOutsideMap(Battle.MapInfo.PuntativeGeoms, Position, Vector3.Zero, Battle.Properties.KillZoneEnabled))
-            Return();
     }
 
     void Refresh() {

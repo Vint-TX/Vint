@@ -1,4 +1,9 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Numerics;
+using BepuPhysics;
+using BepuPhysics.Collidables;
+using BepuUtilities.Memory;
 using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Battles.Damage;
@@ -19,6 +24,7 @@ using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
 using Vint.Core.ECS.Templates.Chat;
+using Vint.Core.Physics;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -93,6 +99,7 @@ public class Battle {
     public TypeHandler TypeHandler { get; }
     public ModeHandler ModeHandler { get; private set; } = null!;
     public IDamageProcessor DamageProcessor { get; private set; } = null!;
+    public Simulation? Simulation { get; private set; }
 
     public ConcurrentHashSet<BattlePlayer> Players { get; } = [];
 
@@ -123,7 +130,7 @@ public class Battle {
         ModeHandler previousHandler = ModeHandler;
 
         Properties = properties;
-        MapInfo = ConfigManager.MapInfos.Values.Single(map => map.Id == Properties.MapId);
+        MapInfo = ConfigManager.MapInfos.Single(map => map.Id == Properties.MapId);
         MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
 
         LobbyEntity.RemoveComponent<MapGroupComponent>();
@@ -149,6 +156,19 @@ public class Battle {
 
     public void Start() {
         // todo modules
+
+        if (ConfigManager.MapNameToTriangles.TryGetValue(MapInfo.Name, out ImmutableList<Triangle>? triangles)) {
+            Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
+            Simulation.BufferPool.Take(triangles.Count, out Buffer<Triangle> buffer);
+
+            for (int i = 0; i < triangles.Count; i++)
+                buffer[i] = triangles[i];
+
+            Simulation.Statics.Add(
+                new StaticDescription(Vector3.Zero,
+                    Simulation.Shapes.Add(
+                        new Mesh(buffer, Vector3.One, Simulation.BufferPool))));
+        }
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
             battlePlayer.Init();

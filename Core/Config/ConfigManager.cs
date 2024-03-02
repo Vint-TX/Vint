@@ -1,13 +1,17 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using BepuPhysics.Collidables;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using SharpCompress.Common;
 using SharpCompress.Writers;
 using SharpCompress.Writers.GZip;
+using SharpGLTF.Schema2;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Server;
@@ -24,12 +28,13 @@ namespace Vint.Core.Config;
 public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
 
-    public static IReadOnlyDictionary<string, MapInfo> MapInfos { get; private set; } = null!;
+    public static IReadOnlyList<MapInfo> MapInfos { get; private set; } = null!;
 
-    public static List<string> GlobalEntitiesTypeNames => Root.Children
+    public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
-        .Select(child => child.Key)
-        .ToList();
+        .Select(child => child.Key);
+
+    public static IReadOnlyDictionary<string, ImmutableList<Triangle>> MapNameToTriangles { get; private set; } = null!;
 
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(ConfigManager));
     static string ResourcesPath { get; } =
@@ -42,9 +47,48 @@ public static class ConfigManager {
         Logger.Information("Generating map infos");
 
         string mapInfosConfigPath = Path.Combine(ResourcesPath, "mapInfo.json");
-        MapInfos = JsonConvert.DeserializeObject<Dictionary<string, MapInfo>>(File.ReadAllText(mapInfosConfigPath))!;
+        Dictionary<string, MapInfo> mapInfos = JsonConvert.DeserializeObject<Dictionary<string, MapInfo>>(File.ReadAllText(mapInfosConfigPath))!;
+
+        foreach ((string mapName, MapInfo mapInfo) in mapInfos)
+            mapInfo.Name = mapName;
+
+        MapInfos = mapInfos.Values.ToImmutableList();
 
         Logger.Information("Map infos generated");
+    }
+
+    public static void InitializeMapModels() {
+        Logger.Information("Generating map models");
+
+        string mapModelsConfigPath = Path.Combine(ResourcesPath, "MapModels");
+        Vector3 gltfToUnity = new(-1, 1, 1);
+
+        Dictionary<string, ImmutableList<Triangle>> mapNameToTriangles = new();
+
+        foreach (string mapModelPath in Directory.EnumerateFiles(mapModelsConfigPath)) {
+            string mapName = Path.GetFileNameWithoutExtension(mapModelPath);
+            Logger.Debug("Generating {MapName}", mapName);
+
+            try {
+                ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
+
+                ImmutableList<Triangle> triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
+                    .EvaluateTriangles()
+                    .Select(tuple =>
+                        new Triangle(
+                            tuple.A.GetGeometry().GetPosition() * gltfToUnity,
+                            tuple.B.GetGeometry().GetPosition() * gltfToUnity,
+                            tuple.C.GetGeometry().GetPosition() * gltfToUnity))
+                    .ToImmutableList();
+
+                mapNameToTriangles[mapName] = triangles;
+            } catch (Exception e) {
+                Logger.Error(e, "An exception occured while generating {MapName} map model", mapName);
+            }
+        }
+
+        MapNameToTriangles = mapNameToTriangles;
+        Logger.Information("Map models generated");
     }
 
     public static void InitializeCache() {

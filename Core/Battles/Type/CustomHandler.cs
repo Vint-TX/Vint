@@ -19,7 +19,7 @@ public class CustomHandler(
     public bool IsOpened { get; private set; }
 
     public override void Setup() {
-        Battle.MapInfo = ConfigManager.MapInfos.Values.Single(map => map.Id == Battle.Properties.MapId);
+        Battle.MapInfo = ConfigManager.MapInfos.Single(map => map.Id == Battle.Properties.MapId);
         Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Battle.Properties.MapId);
         Battle.LobbyEntity = new CustomBattleLobbyTemplate().Create(
             Battle.Properties,

@@ -1,10 +1,13 @@
 ﻿using System.Buffers;
+using System.Collections.Concurrent;
 using System.Reflection;
 using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.Utils;
 
 public static class Extensions {
+    static ConcurrentDictionary<PropertyInfo, bool> NullabilityPool { get; } = new();
+
     public static ProtocolIdAttribute GetProtocolId(this Type type) => type.GetCustomAttribute<ProtocolIdAttribute>()!;
 
     public static List<Type> DumpInterfaces(this Type type) {
@@ -45,10 +48,15 @@ public static class Extensions {
     }
 
     public static bool IsNullable(this PropertyInfo property) {
-        NullabilityInfo nullabilityInfo = new NullabilityInfoContext().Create(property);
+        if (NullabilityPool.TryGetValue(property, out bool isNullable))
+            return isNullable;
 
-        return nullabilityInfo.ReadState == NullabilityState.Nullable ||
-               nullabilityInfo.WriteState == NullabilityState.Nullable;
+        NullabilityInfo nullabilityInfo = new NullabilityInfoContext().Create(property);
+        isNullable = nullabilityInfo.ReadState == NullabilityState.Nullable ||
+                     nullabilityInfo.WriteState == NullabilityState.Nullable;
+
+        NullabilityPool.TryAdd(property, isNullable);
+        return isNullable;
     }
 
     public static bool IsList(this Type type) => type.IsGenericType &&

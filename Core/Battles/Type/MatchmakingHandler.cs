@@ -17,7 +17,7 @@ namespace Vint.Core.Battles.Type;
 
 public class MatchmakingHandler : TypeHandler {
     public MatchmakingHandler(Battle battle) : base(battle) =>
-        Maps = ConfigManager.MapInfos.Values.Where(map => map.MatchMaking && map.HasSpawnPoints(BattleMode)).ToList();
+        Maps = ConfigManager.MapInfos.Where(map => map.MatchMaking && map.HasSpawnPoints(BattleMode)).ToList();
 
     public BattleMode BattleMode { get; } = GetRandomMode();
 
