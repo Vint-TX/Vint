@@ -68,6 +68,8 @@ public sealed class GoldBox(
 
     public override void Tick() {
         base.Tick();
+        
+        if (StateManager.CurrentState is not None) return;
 
         Ticks++;
         if (Ticks % DropCheckTicksCount != 0) return;

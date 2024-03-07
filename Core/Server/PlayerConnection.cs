@@ -555,11 +555,8 @@ public abstract class PlayerConnection(
                         .Single(hull => hull.Id == currentPreset.Hull.Id);
 
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newHull.SkinId);
-
-                    currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.HullSkin = skin;
-                    currentPreset.HullSkin.GetUserEntity(this).AddComponent(new MountedItemComponent());
-
+                    
                     db.Update(currentPreset);
                     break;
                 }
@@ -578,13 +575,8 @@ public abstract class PlayerConnection(
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.SkinId);
                     IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.ShellId);
 
-                    currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.WeaponSkin = skin;
-                    currentPreset.WeaponSkin.GetUserEntity(this).AddComponent(new MountedItemComponent());
-
-                    currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Shell = shell;
-                    currentPreset.Shell.GetUserEntity(this).AddComponent(new MountedItemComponent());
 
                     db.Update(currentPreset);
                     break;
@@ -595,16 +587,24 @@ public abstract class PlayerConnection(
                         .Where(skin => skin.PlayerId == Player.Id)
                         .Single(skin => skin.Id == marketItem.Id);
 
-                    if (skin.HullId != currentPreset.Hull.Id) return;
+                    bool isCurrentHull = skin.HullId == currentPreset.Hull.Id;
 
-                    currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
-                    currentPreset.HullSkin = marketItem;
+                    if (isCurrentHull) {
+                        currentPreset.HullSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                        currentPreset.HullSkin = marketItem;
+                    } else {
+                        Hull? skinHull = db.Hulls.SingleOrDefault(hull => hull.PlayerId == Player.Id && hull.Id == skin.HullId);
+
+                        if (skinHull != null && skin.Id != skinHull.SkinId)
+                            this.GetEntity(skinHull.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    }
+                    
                     userItem.AddComponent(new MountedItemComponent());
 
                     db.Hulls
                         .Where(hull => hull.PlayerId == Player.Id &&
-                                       hull.Id == currentPreset.Hull.Id)
-                        .Set(hull => hull.SkinId, currentPreset.HullSkin.Id)
+                                       hull.Id == skin.HullId)
+                        .Set(hull => hull.SkinId, skin.Id)
                         .Update();
 
                     db.Update(currentPreset);
@@ -616,10 +616,18 @@ public abstract class PlayerConnection(
                         .Where(skin => skin.PlayerId == Player.Id)
                         .Single(skin => skin.Id == marketItem.Id);
 
-                    if (skin.WeaponId != currentPreset.Weapon.Id) return;
+                    bool isCurrentWeapon = skin.WeaponId == currentPreset.Weapon.Id;
 
-                    currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
-                    currentPreset.WeaponSkin = marketItem;
+                    if (isCurrentWeapon) {
+                        currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                        currentPreset.WeaponSkin = marketItem;
+                    } else {
+                        Weapon? skinWeapon = db.Weapons.SingleOrDefault(weapon => weapon.PlayerId == Player.Id && weapon.Id == skin.WeaponId);
+
+                        if (skinWeapon != null && skinWeapon.SkinId != skin.Id)
+                            this.GetEntity(skinWeapon.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    }
+                    
                     userItem.AddComponent(new MountedItemComponent());
 
                     db.Weapons
@@ -655,10 +663,18 @@ public abstract class PlayerConnection(
                         .Where(shell => shell.PlayerId == Player.Id)
                         .Single(shell => shell.Id == marketItem.Id);
 
-                    if (shell.WeaponId != currentPreset.Weapon.Id) return;
+                    bool isCurrentWeapon = shell.WeaponId == currentPreset.Weapon.Id;
 
-                    currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
-                    currentPreset.Shell = marketItem;
+                    if (isCurrentWeapon) {
+                        currentPreset.Shell.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                        currentPreset.Shell = marketItem;
+                    } else {
+                        Weapon? shellWeapon = db.Weapons.SingleOrDefault(weapon => weapon.PlayerId == Player.Id && weapon.Id == shell.WeaponId);
+
+                        if (shellWeapon != null && shellWeapon.ShellId != shell.Id)
+                            this.GetEntity(shellWeapon.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    }
+                    
                     userItem.AddComponent(new MountedItemComponent());
 
                     db.Weapons
