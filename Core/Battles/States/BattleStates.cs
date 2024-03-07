@@ -16,7 +16,7 @@ public abstract class BattleState(
     BattleStateManager stateManager
 ) : State {
     public override BattleStateManager StateManager { get; } = stateManager;
-    public Battle Battle => StateManager.Battle;
+    protected Battle Battle => StateManager.Battle;
 }
 
 public class NotEnoughPlayers(

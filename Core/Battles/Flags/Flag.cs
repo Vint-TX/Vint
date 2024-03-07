@@ -63,7 +63,7 @@ public class Flag {
         Vector3 newPosition;
         Vector3 tankPosition = LastCarrier!.Tank!.Position;
         RayHitHandler hitHandler = new();
-        Battle.Simulation?.RayCast(tankPosition, -Vector3.UnitY, 1000, ref hitHandler);
+        Battle.Simulation?.RayCast(tankPosition, -Vector3.UnitY, 655.36f, ref hitHandler);
 
         if (Battle.Simulation == null) newPosition = tankPosition - Vector3.UnitY;
         else if (!hitHandler.ClosestHit.HasValue) newPosition = Vector3.UnitY * 1000;

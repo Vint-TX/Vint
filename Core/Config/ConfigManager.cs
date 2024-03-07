@@ -34,7 +34,7 @@ public static class ConfigManager {
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
 
-    public static IReadOnlyDictionary<string, ImmutableList<Triangle>> MapNameToTriangles { get; private set; } = null!;
+    public static IReadOnlyDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = new Dictionary<string, Triangle[]>();
 
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(ConfigManager));
     static string ResourcesPath { get; } =
@@ -63,7 +63,7 @@ public static class ConfigManager {
         string mapModelsConfigPath = Path.Combine(ResourcesPath, "MapModels");
         Vector3 gltfToUnity = new(-1, 1, 1);
 
-        Dictionary<string, ImmutableList<Triangle>> mapNameToTriangles = new();
+        Dictionary<string, Triangle[]> mapNameToTriangles = new();
 
         foreach (string mapModelPath in Directory.EnumerateFiles(mapModelsConfigPath)) {
             string mapName = Path.GetFileNameWithoutExtension(mapModelPath);
@@ -72,14 +72,14 @@ public static class ConfigManager {
             try {
                 ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
 
-                ImmutableList<Triangle> triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
+                Triangle[] triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
                     .EvaluateTriangles()
                     .Select(tuple =>
                         new Triangle(
                             tuple.A.GetGeometry().GetPosition() * gltfToUnity,
                             tuple.B.GetGeometry().GetPosition() * gltfToUnity,
                             tuple.C.GetGeometry().GetPosition() * gltfToUnity))
-                    .ToImmutableList();
+                    .ToArray();
 
                 mapNameToTriangles[mapName] = triangles;
             } catch (Exception e) {

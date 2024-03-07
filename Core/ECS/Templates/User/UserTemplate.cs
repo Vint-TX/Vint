@@ -83,7 +83,7 @@ public class UserTemplate : EntityTemplate {
 
                 if (player.IsModerator)
                     builder.AddComponent(new ModeratorComponent());
-                
+
                 if (player.IsTester)
                     builder.AddComponent(new UserTesterComponent());
             },

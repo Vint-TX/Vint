@@ -9,6 +9,8 @@ using Vint.Core.Utils;
 namespace Vint;
 
 abstract class Program {
+    const ushort GameServerPort = 5050, StaticServerPort = 8080;
+
     static ILogger Logger { get; set; } = null!;
 
     static Task Main() {
@@ -18,8 +20,8 @@ abstract class Program {
 
         DatabaseConfig.Initialize();
 
-        StaticServer staticServer = new(IPAddress.Any, 8080);
-        GameServer gameServer = new(IPAddress.Any, 5050);
+        StaticServer staticServer = new(IPAddress.Any, StaticServerPort);
+        GameServer gameServer = new(IPAddress.Any, GameServerPort);
 
         ConfigManager.InitializeCache();
         ConfigManager.InitializeNodes();

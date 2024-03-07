@@ -21,17 +21,37 @@ public class UserOnlineEvent : IServerEvent {
         Player player = connection.Player;
         Preset preset = db.Presets.Single(preset => preset.PlayerId == player.Id && preset.Index == player.CurrentPresetIndex);
 
+        IEnumerable<IEntity> mountedHullSkins = db.Hulls
+            .Where(hull => hull.PlayerId == player.Id)
+            .Select(hull => hull.SkinId)
+            .ToList()
+            .Select(connection.GetEntity)
+            .Where(entity => entity != null)
+            .Select(entity => entity!.GetUserEntity(connection));
+
+        IEnumerable<IEntity> mountedWeaponSkins = db.Weapons
+            .Where(weapon => weapon.PlayerId == player.Id)
+            .Select(weapon => new { weapon.SkinId, weapon.ShellId })
+            .ToList()
+            .SelectMany(skins => new[] { skins.SkinId, skins.ShellId })
+            .Select(connection.GetEntity)
+            .Where(entity => entity != null)
+            .Select(entity => entity!.GetUserEntity(connection));
+
         foreach (IEntity entity in new[] {
-                     connection.GetEntity(player.CurrentAvatarId)!.GetUserEntity(connection),
-                     preset.Hull.GetUserEntity(connection),
-                     preset.Paint.GetUserEntity(connection),
-                     preset.HullSkin.GetUserEntity(connection),
-                     preset.Weapon.GetUserEntity(connection),
-                     preset.Cover.GetUserEntity(connection),
-                     preset.WeaponSkin.GetUserEntity(connection),
-                     preset.Shell.GetUserEntity(connection),
-                     preset.Graffiti.GetUserEntity(connection)
-                 }) {
+                         connection.GetEntity(player.CurrentAvatarId)!.GetUserEntity(connection),
+                         preset.Hull.GetUserEntity(connection),
+                         preset.Paint.GetUserEntity(connection),
+                         preset.HullSkin.GetUserEntity(connection),
+                         preset.Weapon.GetUserEntity(connection),
+                         preset.Cover.GetUserEntity(connection),
+                         preset.WeaponSkin.GetUserEntity(connection),
+                         preset.Shell.GetUserEntity(connection),
+                         preset.Graffiti.GetUserEntity(connection)
+                     }
+                     .Concat(mountedHullSkins)
+                     .Concat(mountedWeaponSkins)
+                     .Distinct()) {
             entity.AddComponent(new MountedItemComponent());
         }
 

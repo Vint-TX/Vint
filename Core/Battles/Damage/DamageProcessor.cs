@@ -6,8 +6,6 @@ using Vint.Core.Server;
 namespace Vint.Core.Battles.Damage;
 
 public interface IDamageProcessor {
-    public Battle Battle { get; }
-
     public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage);
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage);
@@ -17,12 +15,8 @@ public interface IDamageProcessor {
     public void Heal(BattleTank target, CalculatedDamage heal);
 }
 
-public class DamageProcessor(
-    Battle battle
-) : IDamageProcessor {
-    public Battle Battle { get; } = battle;
-
-    public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage) { // todo modules
+public class DamageProcessor : IDamageProcessor {
+    public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage) {
         if (damage.Value <= 0) return;
 
         DamageType type = Damage(target, damage);
@@ -69,7 +63,9 @@ public class DamageProcessor(
         };
     }
 
-    public void Heal(BattleTank source, BattleTank target, CalculatedDamage damage) { // todo modules
+    public void Heal(BattleTank source, BattleTank target, CalculatedDamage damage) {
+        if (damage.Value <= 0) return;
+
         Heal(target, damage);
         source.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
                 damage.Value,
@@ -79,6 +75,8 @@ public class DamageProcessor(
     }
 
     public void Heal(BattleTank target, CalculatedDamage damage) {
+        if (damage.Value <= 0) return;
+
         target.SetHealth(target.Health + damage.Value);
         target.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
                 damage.Value,

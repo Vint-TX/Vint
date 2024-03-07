@@ -11,7 +11,7 @@ public class LoadUsersEvent : IServerEvent {
     public long RequestEntityId { get; private set; }
     public HashSet<long> UsersId { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list 
         using DbConnection db = new();
 
         List<IPlayerConnection> playerConnections = connection.Server.PlayerConnections.Values

@@ -43,7 +43,7 @@ public abstract class StreamWeaponHandler : WeaponHandler, ITemperatureWeaponHan
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 
-    public bool IsCooldownActive(long targetIncarnationId) {
+    protected bool IsCooldownActive(long targetIncarnationId) {
         if (!IncarnationIdToHitTime.TryGetValue(targetIncarnationId, out DateTimeOffset lastHitTime)) {
             IncarnationIdToHitTime[targetIncarnationId] = DateTimeOffset.UtcNow;
             return true;

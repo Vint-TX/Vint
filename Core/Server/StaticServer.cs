@@ -23,13 +23,27 @@ public class StaticServer(
 public class StaticServerSession(
     HttpServer server
 ) : HttpSession(server) {
-    string IPAddress { get; set; } = null!;
+    string Host { get; set; } = null!;
     string Root { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "StaticServer");
     ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServerSession));
 
-    protected override void OnConnecting() {
+    protected override void OnConnecting() =>
         Logger = Logger.WithEndPoint((IPEndPoint)Socket.RemoteEndPoint!);
-        IPAddress = ((IPEndPoint)Socket.LocalEndPoint!).Address.ToString();
+
+    protected override void OnReceivedRequestHeader(HttpRequest request) {
+        for (int i = 0; i < request.Headers; i++) {
+            (string header, string value) = request.Header(i);
+
+            switch (header) {
+                case "X-Real-IP": // nginx proxying
+                    Logger = Logger.WithEndPoint(IPEndPoint.Parse(value));
+                    break;
+
+                case "Host":
+                    Host = value;
+                    break;
+            }
+        }
     }
 
     protected override void OnReceivedRequest(HttpRequest request) {
@@ -57,7 +71,8 @@ public class StaticServerSession(
                 if (requestedEntry.EndsWith("init.yml")) {
                     SendResponseAsync(File.Exists(requestedEntry)
                                           ? Response.MakeGetResponse(File.ReadAllText(requestedEntry)
-                                              .Replace("*ip*", IPAddress))
+                                              .Replace("*host*", Host)
+                                              .Replace("*ip*", Host.Split(':')[0]))
                                           : Response.MakeErrorResponse(404));
                 } else if (requestedEntry.EndsWith("config.tar.gz")) {
                     string locale = urlParts[^2];
@@ -80,7 +95,7 @@ public class StaticServerSession(
             case "update": {
                 SendResponseAsync(File.Exists(requestedEntry)
                                       ? Response.MakeGetResponse(File.ReadAllText(requestedEntry)
-                                          .Replace("*ip*", IPAddress))
+                                          .Replace("*host*", Host))
                                       : Response.MakeErrorResponse(404));
 
                 break;

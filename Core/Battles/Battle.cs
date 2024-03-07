@@ -1,12 +1,12 @@
-using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Numerics;
 using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuUtilities.Memory;
 using ConcurrentCollections;
-using Serilog;
+using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Damage;
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
@@ -71,11 +71,10 @@ public class Battle {
         BattleChatEntity = new GeneralBattleChatTemplate().Create();
     }
 
-    public ILogger Logger { get; } = Log.Logger.ForType(typeof(Battle));
-
     public long Id => Entity.Id;
     public long LobbyId => LobbyEntity.Id;
-    public bool CanAddPlayers => Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
+    public bool CanAddPlayers => StateManager.CurrentState is not Ended &&
+                                 Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
     public bool WasPlayers { get; private set; }
     public double Timer { get; set; }
 
@@ -99,6 +98,7 @@ public class Battle {
     public TypeHandler TypeHandler { get; }
     public ModeHandler ModeHandler { get; private set; } = null!;
     public IDamageProcessor DamageProcessor { get; private set; } = null!;
+    public IBonusProcessor? BonusProcessor { get; private set; }
     public Simulation? Simulation { get; private set; }
 
     public ConcurrentHashSet<BattlePlayer> Players { get; } = [];
@@ -114,8 +114,6 @@ public class Battle {
         Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
         RoundEntity = new RoundTemplate().Create(Entity);
 
-        // todo height maps (or server physics)
-
         ModeHandler = Properties.BattleMode switch {
             BattleMode.DM => new DMHandler(this),
             BattleMode.TDM => new TDMHandler(this),
@@ -123,7 +121,18 @@ public class Battle {
             _ => throw new UnreachableException()
         };
 
-        DamageProcessor = new DamageProcessor(this);
+        DamageProcessor = new DamageProcessor();
+
+        if (Properties.DisabledModules) {
+            BonusProcessor = null;
+            return;
+        }
+
+        IDictionary<BonusType, IEnumerable<Config.MapInformation.Bonus>> bonuses = MapInfo.BonusRegions
+            .Get(Properties.BattleMode)
+            .ToDictionary();
+
+        BonusProcessor = new BonusProcessor(this, bonuses);
     }
 
     public void UpdateProperties(BattleProperties properties) {
@@ -155,13 +164,11 @@ public class Battle {
     }
 
     public void Start() {
-        // todo modules
-
-        if (ConfigManager.MapNameToTriangles.TryGetValue(MapInfo.Name, out ImmutableList<Triangle>? triangles)) {
+        if (ConfigManager.MapNameToTriangles.TryGetValue(MapInfo.Name, out Triangle[]? triangles)) {
             Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
-            Simulation.BufferPool.Take(triangles.Count, out Buffer<Triangle> buffer);
+            Simulation.BufferPool.Take(triangles.Length, out Buffer<Triangle> buffer);
 
-            for (int i = 0; i < triangles.Count; i++)
+            for (int i = 0; i < triangles.Length; i++)
                 buffer[i] = triangles[i];
 
             Simulation.Statics.Add(
@@ -172,6 +179,8 @@ public class Battle {
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
             battlePlayer.Init();
+
+        BonusProcessor?.Start();
     }
 
     public void Finish() {
@@ -187,7 +196,10 @@ public class Battle {
             battleTank.Disable(true);
         }
 
-        foreach (BattlePlayer battlePlayer in players)
+        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => !battlePlayer.InBattle))
+            RemovePlayerFromLobby(battlePlayer);
+
+        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattle))
             battlePlayer.OnBattleEnded();
 
         // todo
@@ -202,6 +214,7 @@ public class Battle {
         ModeHandler.Tick();
         TypeHandler.Tick();
         StateManager.Tick();
+        BonusProcessor?.Tick();
 
         foreach (BattlePlayer battlePlayer in Players)
             battlePlayer.Tick();
@@ -248,8 +261,15 @@ public class Battle {
                              player != battlePlayer)
             .SelectMany(player => player.Tank!.Entities));
 
+        BonusProcessor?.UnshareEntities(connection);
+
         user.RemoveComponent<BattleGroupComponent>();
         ModeHandler.PlayerExited(battlePlayer);
+
+        foreach (Effect effect in Players
+                     .Where(player => player.InBattleAsTank)
+                     .SelectMany(player => player.Tank!.Effects))
+            effect.Unshare(battlePlayer);
 
         if (battlePlayer.IsSpectator) {
             connection.Unshare(battlePlayer.BattleUser);

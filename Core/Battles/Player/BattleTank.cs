@@ -3,6 +3,7 @@ using System.Numerics;
 using ConcurrentCollections;
 using LinqToDB;
 using Vint.Core.Battles.Damage;
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Results;
 using Vint.Core.Battles.States;
@@ -129,6 +130,8 @@ public class BattleTank {
 
     public long CollisionsPhase { get; set; } = -1;
 
+    public ConcurrentHashSet<Effect> Effects { get; } = [];
+
     public DateTimeOffset BattleEnterTime { get; }
     public UserResult UserResult { get; }
     public Dictionary<BattleTank, float> KillAssistants { get; } = new();
@@ -204,6 +207,9 @@ public class BattleTank {
             Battle.RemovePlayer(BattlePlayer);
         }
 
+        foreach (Effect effect in Effects)
+            effect.Tick();
+
         WeaponHandler.Tick();
         HandleTemperature();
     }
@@ -222,6 +228,11 @@ public class BattleTank {
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
         TemperatureAssists.Clear();
         SetTemperature(0);
+
+        foreach (Effect effect in Effects) {
+            effect.UnScheduleAll();
+            effect.Deactivate();
+        }
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             Tank.RemoveComponent<SelfDestructionComponent>();

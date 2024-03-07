@@ -15,7 +15,7 @@ public abstract class TankState(
 ) : State {
     public abstract IComponent StateComponent { get; }
     public override TankStateManager StateManager { get; } = stateManager;
-    public BattleTank BattleTank => StateManager.BattleTank;
+    protected BattleTank BattleTank => StateManager.BattleTank;
 
     public override void Start() {
         BattleTank.Tank.AddComponent(StateComponent);

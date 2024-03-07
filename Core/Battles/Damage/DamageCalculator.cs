@@ -1,6 +1,7 @@
 using System.Numerics;
 using Redzen.Numerics.Distributions.Float;
 using Redzen.Random;
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
@@ -10,16 +11,26 @@ using MathUtils = Vint.Core.Utils.MathUtils;
 namespace Vint.Core.Battles.Damage;
 
 public interface IDamageCalculator {
-    public CalculatedDamage Calculate(BattleTank source, BattleTank target, HitTarget hitTarget, bool isSplash = false);
+    public CalculatedDamage Calculate(
+        BattleTank source,
+        BattleTank target,
+        HitTarget hitTarget,
+        bool isSplash = false,
+        bool ignoreSourceEffects = false);
 }
 
 public class DamageCalculator : IDamageCalculator {
     public const float BackHitMultiplier = 1.20f;
-    public const float TurretHitMultiplier = 2f;
+    const float TurretHitMultiplier = 2f;
 
     IRandomSource RandomSource { get; } = new WyRandom();
 
-    public CalculatedDamage Calculate(BattleTank source, BattleTank target, HitTarget hitTarget, bool isSplash = false) { // todo modules
+    public CalculatedDamage Calculate(
+        BattleTank source,
+        BattleTank target,
+        HitTarget hitTarget,
+        bool isSplash = false,
+        bool ignoreSourceEffects = false) {
         WeaponHandler handler = source.WeaponHandler;
         Vector3 hitPoint = hitTarget.LocalHitPoint;
         float distance = hitTarget.HitDistance;
@@ -39,10 +50,11 @@ public class DamageCalculator : IDamageCalculator {
 
         float weakening = !isSplash && handler.DamageWeakeningByDistance ? GetWeakeningMultiplier(handler, distance) : 1;
         float splash = isSplash && handler is ThunderWeaponHandler thunderHandler ? thunderHandler.GetSplashMultiplier(distance) : 1;
+        float effects = GetEffectsMultiplier(source, target, isSplash, ignoreSourceEffects);
         float backHit = isBackHit ? BackHitMultiplier : 1;
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
 
-        float damage = baseDamage * weakening * backHit * turretHit * splash;
+        float damage = baseDamage * weakening * splash * effects * backHit * turretHit;
 
         if (handler is SmokyWeaponHandler smokyHandler)
             isCritical = smokyHandler.TryCalculateCriticalDamage(isBackHit, ref damage);
@@ -50,7 +62,7 @@ public class DamageCalculator : IDamageCalculator {
         return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }
 
-    public float GetShaftDamage(ShaftWeaponHandler shaftHandler) {
+    float GetShaftDamage(ShaftWeaponHandler shaftHandler) {
         const int magicNumber = 400;
         float baseDamage = shaftHandler.Aiming
                                ? (float)(shaftHandler.AimingDuration.TotalMilliseconds + magicNumber)
@@ -59,16 +71,16 @@ public class DamageCalculator : IDamageCalculator {
         return MathUtils.Map(baseDamage, 0, 1 / shaftHandler.EnergyDrainPerMs + magicNumber, shaftHandler.MinDamage, shaftHandler.MaxDamage);
     }
 
-    public float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank) => Convert.ToSingle(
+    static float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank) => Convert.ToSingle(
         (sourceTank == targetTank || sourceTank.IsEnemy(targetTank)
              ? isisHandler.DamagePerSecond
              : isisHandler.HealPerSecond) *
         isisHandler.Cooldown.TotalSeconds);
 
-    public float GetStreamDamage(StreamWeaponHandler streamHandler) =>
+    static float GetStreamDamage(StreamWeaponHandler streamHandler) =>
         Convert.ToSingle(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);
 
-    public float GetDiscreteDamage(DiscreteWeaponHandler discreteHandler) {
+    float GetDiscreteDamage(DiscreteWeaponHandler discreteHandler) {
         float min = discreteHandler.MinDamage;
         float max = discreteHandler.MaxDamage;
         float mean = (min + max) / 2;
@@ -76,7 +88,7 @@ public class DamageCalculator : IDamageCalculator {
         return ZigguratGaussian.Sample(RandomSource, mean, deviation);
     }
 
-    public float GetWeakeningMultiplier(WeaponHandler handler, float distance) {
+    static float GetWeakeningMultiplier(WeaponHandler handler, float distance) {
         float minDamagePercent = handler.MinDamagePercent;
         float minDamageDistance = handler.MinDamageDistance;
         float maxDamageDistance = handler.MaxDamageDistance;
@@ -91,6 +103,15 @@ public class DamageCalculator : IDamageCalculator {
                        maxDamageDistance,
                        minDamagePercent / 100,
                        1);
+    }
+
+    static float GetEffectsMultiplier(BattleTank source, BattleTank target, bool isSplash, bool ignoreSourceEffects) {
+        List<IDamageEffect> effects = target.Effects.OfType<IDamageEffect>().ToList();
+
+        if (!ignoreSourceEffects && source != target)
+            effects.AddRange(source.Effects.OfType<IDamageEffect>());
+
+        return effects.Aggregate<IDamageEffect, float>(1, (current, damageEffect) => current * damageEffect.GetMultiplier(target, isSplash));
     }
 
     static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers 

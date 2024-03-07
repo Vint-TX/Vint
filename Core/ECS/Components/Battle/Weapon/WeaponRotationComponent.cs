@@ -7,7 +7,7 @@ public class WeaponRotationComponent(
     float speed,
     float acceleration,
     float baseSpeed
-) : IComponent { // todo temperature
+) : IComponent {
     public float Speed { get; set; } = speed;
     public float Acceleration { get; set; } = acceleration;
     public float BaseSpeed { get; set; } = baseSpeed;

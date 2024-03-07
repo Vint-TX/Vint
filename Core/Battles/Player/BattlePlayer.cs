@@ -1,4 +1,5 @@
 using LinqToDB;
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Results;
 using Vint.Core.Battles.Type;
@@ -91,8 +92,12 @@ public class BattlePlayer {
 
     public void Init() {
         PlayerConnection.Share(Battle.Entity, Battle.RoundEntity, Battle.BattleChatEntity);
+        Battle.BonusProcessor?.ShareEntities(PlayerConnection);
 
-        // todo modules & supplies
+        foreach (Effect effect in Battle.Players
+                     .Where(battlePlayer => battlePlayer.InBattleAsTank)
+                     .SelectMany(battlePlayer => battlePlayer.Tank!.Effects))
+            effect.Share(this);
 
         PlayerConnection.User.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
         Battle.ModeHandler.PlayerEntered(this);

@@ -80,4 +80,12 @@ public static class Extensions {
     public static Task Catch(this Task task) => task.ContinueWith(t =>
             t.Exception!.Flatten().InnerExceptions.ToList().ForEach(Console.Error.WriteLine),
         TaskContinuationOptions.OnlyOnFaulted);
+
+    public static T? SingleOrDefaultSafe<T>(this IEnumerable<T> enumerable, T? defaultValue = default) {
+        try {
+            return enumerable.SingleOrDefault(defaultValue);
+        } catch {
+            return defaultValue;
+        }
+    }
 }

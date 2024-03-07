@@ -1,5 +1,6 @@
 using Vint.Core.Battles;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -15,11 +16,13 @@ public class UpdateBattleParamsEvent : IServerEvent {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
+        Battles.Battle battle = battlePlayer.Battle;
 
-        if ((battlePlayer.Battle.TypeHandler is not CustomHandler customHandler ||
+        if ((battle.TypeHandler is not CustomHandler customHandler ||
+             battle.StateManager.CurrentState is not NotStarted ||
              customHandler.Owner != connection) &&
             !connection.Player.IsAdmin) return;
 
-        battlePlayer.Battle.UpdateProperties(Params);
+        battle.UpdateProperties(Params);
     }
 }
