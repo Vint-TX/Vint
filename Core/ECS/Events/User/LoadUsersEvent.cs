@@ -12,20 +12,20 @@ public class LoadUsersEvent : IServerEvent {
     public HashSet<long> UsersId { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list 
-        using DbConnection db = new();
-
+        UsersId.RemoveWhere(id => connection.SharedEntities.Any(entity => entity.Id == id));
+        
         List<IPlayerConnection> playerConnections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .ToList();
+        
+        using DbConnection db = new();
 
         foreach (IEntity user in UsersId
                      .Select(userId => db.Players.SingleOrDefault(player => player.Id == userId))
                      .Where(player => player != null)
-                     .Select(player => connection.SharedEntities.SingleOrDefault(entity => entity.Id == player!.Id) ??
-                                       playerConnections
-                                           .SingleOrDefault(conn =>
-                                               conn.Player.Id == player!.Id)?.User ??
-                                       new UserTemplate().CreateFake(connection, player!))) connection.ShareIfUnshared(user);
+                     .Select(player => playerConnections.SingleOrDefault(conn => conn.Player.Id == player!.Id)?.User ?? // user is online
+                                       new UserTemplate().CreateFake(connection, player!))) // user is offline
+            connection.ShareIfUnshared(user);
 
         connection.Send(new UsersLoadedEvent(RequestEntityId));
     }

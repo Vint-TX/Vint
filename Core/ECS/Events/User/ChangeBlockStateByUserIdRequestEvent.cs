@@ -21,33 +21,33 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
         if (targetPlayer == null) return;
 
         Relation? thisToTargetRelation = db.Relations
-            .SingleOrDefault(relation => relation.SourcePlayerId == SourceId &&
+            .SingleOrDefault(relation => relation.SourcePlayerId == connection.User.Id &&
                                          relation.TargetPlayerId == UserId);
 
         db.BeginTransaction();
 
-        if (thisToTargetRelation == null) {
+        if (thisToTargetRelation == null) { // no relation to target; block
             thisToTargetRelation = new Relation { SourcePlayer = connection.Player, TargetPlayer = targetPlayer, Types = RelationTypes.Blocked };
             db.Insert(thisToTargetRelation);
-        } else {
-            if ((thisToTargetRelation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) {
+        } else { // change the state of relations
+            if ((thisToTargetRelation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) { // player already blocked target player; unblock
                 thisToTargetRelation.Types &= ~(RelationTypes.Blocked |
                                                 RelationTypes.Friend |
                                                 RelationTypes.IncomingRequest |
                                                 RelationTypes.OutgoingRequest);
-
+            } else { // target player is not blocked; block
+                thisToTargetRelation.Types |= RelationTypes.Blocked;
+                
                 Relation? targetToThisRelation = db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == UserId &&
-                                                                                          relation.TargetPlayerId == SourceId);
+                                                                                          relation.TargetPlayerId == connection.User.Id);
 
                 if (targetToThisRelation != null) {
                     targetToThisRelation.Types &= ~(RelationTypes.Friend |
                                                     RelationTypes.IncomingRequest |
                                                     RelationTypes.OutgoingRequest);
-
+                    
                     db.Update(targetToThisRelation);
                 }
-            } else {
-                thisToTargetRelation.Types |= RelationTypes.Blocked;
             }
 
             db.Update(thisToTargetRelation);

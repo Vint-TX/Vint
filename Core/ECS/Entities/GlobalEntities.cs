@@ -341,10 +341,12 @@ public static class GlobalEntities {
 
         if (configPrice != price) return false;
 
-        return forXCrystals ||
-               !ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!,
-                   out CrystalsPurchaseUserRankRestrictionComponent? restrictionComponent) ||
-               connection.Player.Rank >= restrictionComponent.RestrictionValue;
+        bool crystalsEnough = (forXCrystals ? connection.Player.XCrystals : connection.Player.Crystals) >= price;
+
+        return crystalsEnough && (forXCrystals ||
+                                  !ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!,
+                                      out CrystalsPurchaseUserRankRestrictionComponent? restrictionComponent) ||
+                                  connection.Player.Rank >= restrictionComponent.RestrictionValue);
     }
 
     static IEnumerable<IEntity> GetUserEntities(this IPlayerConnection connection) =>

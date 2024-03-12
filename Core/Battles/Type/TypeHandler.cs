@@ -17,8 +17,8 @@ public abstract class TypeHandler(
     public abstract void PlayerExited(BattlePlayer battlePlayer);
 
     protected static BattleMode GetRandomMode() => Random.Shared.NextDouble() switch {
-        < 0.34 => BattleMode.CTF,
-        < 0.67 => BattleMode.TDM,
+        < 0.45 => BattleMode.CTF,
+        < 0.80 => BattleMode.TDM,
         < 1 => BattleMode.DM,
         _ => throw new UnreachableException()
     };

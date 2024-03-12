@@ -24,9 +24,9 @@ public class SmokyWeaponHandler : DiscreteWeaponHandler {
 
     public override int MaxHitTargets => 1;
 
-    public bool TryCalculateCriticalDamage(bool isBackHit, ref float damage) {
+    public bool TryCalculateCriticalDamage(ref float damage) {
         if (Random.NextSingle() <= CurrentCriticalProbability) {
-            damage += isBackHit ? CriticalDamage * Damage.DamageCalculator.BackHitMultiplier : CriticalDamage;
+            damage += CriticalDamage;
             CurrentCriticalProbability = AfterCriticalProbability;
             return true;
         }

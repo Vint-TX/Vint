@@ -72,7 +72,7 @@ public class SelfHitEvent : HitEvent, IServerEvent {
 
     bool Validate(IPlayerConnection connection, WeaponHandler weaponHandler) {
         DateTimeOffset currentHitTime = DateTimeOffset.UtcNow;
-        DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
+        /*DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
         double timePassedMs = (currentHitTime - previousHitTime).TotalMilliseconds + connection.Ping;
 
         if (weaponHandler is not StreamWeaponHandler && timePassedMs < weaponHandler.Cooldown.TotalMilliseconds) {
@@ -83,7 +83,7 @@ public class SelfHitEvent : HitEvent, IServerEvent {
                     weaponHandler.GetType().Name);
 
             return false;
-        }
+        }*/
 
         weaponHandler.LastHitTime = currentHitTime;
 

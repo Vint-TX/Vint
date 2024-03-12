@@ -57,7 +57,7 @@ public class DamageCalculator : IDamageCalculator {
         float damage = baseDamage * weakening * splash * effects * backHit * turretHit;
 
         if (handler is SmokyWeaponHandler smokyHandler)
-            isCritical = smokyHandler.TryCalculateCriticalDamage(isBackHit, ref damage);
+            isCritical = smokyHandler.TryCalculateCriticalDamage(ref damage);
 
         return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }

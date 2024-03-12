@@ -65,6 +65,7 @@ public interface IPlayerConnection {
     public int BattleSeries { get; set; }
 
     public ConcurrentHashSet<IEntity> SharedEntities { get; }
+    public ConcurrentHashSet<Notification> Notifications { get; }
 
     public void Register(
         string username,
@@ -121,6 +122,8 @@ public interface IPlayerConnection {
     public void Unshare(IEntity entity);
 
     public void UnshareIfShared(IEntity entity);
+
+    public void Tick();
 }
 
 public abstract class PlayerConnection(
@@ -148,6 +151,8 @@ public abstract class PlayerConnection(
     public long Ping { get; private set; }
     public Invite? Invite { get; set; }
 
+    public ConcurrentHashSet<Notification> Notifications { get; } = [];
+    
     public void Register(
         string username,
         string encryptedPasswordDigest,
@@ -799,8 +804,12 @@ public abstract class PlayerConnection(
         Player.GoldBoxItems = goldBoxes;
     }
 
-    public void DisplayMessage(string message) =>
-        Share(new SimpleTextNotificationTemplate().Create(message));
+    public void DisplayMessage(string message) {
+        IEntity notification = new SimpleTextNotificationTemplate().Create(message);
+
+        Share(notification);
+        Notifications.Add(new Notification(notification, DateTimeOffset.UtcNow + TimeSpan.FromSeconds(20)));
+    }
 
     public abstract void Kick(string? reason);
 
@@ -822,6 +831,13 @@ public abstract class PlayerConnection(
     public void UnshareIfShared(IEntity entity) {
         if (SharedEntities.Contains(entity))
             Unshare(entity);
+    }
+
+    public void Tick() {
+        foreach (Notification notification in Notifications.Where(notification => notification.CloseTime < DateTimeOffset.UtcNow)) {
+            UnshareIfShared(notification.Entity);
+            Notifications.TryRemove(notification);
+        }
     }
 
     public override int GetHashCode() => Id.GetHashCode();
@@ -1037,3 +1053,8 @@ public class SocketPlayerConnection(
         } catch (InvalidOperationException) { }
     }
 }
+
+public record struct Notification(
+    IEntity Entity,
+    DateTimeOffset CloseTime
+);

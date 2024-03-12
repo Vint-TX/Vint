@@ -16,22 +16,29 @@ public class UserInteractionDataRequestEvent : IServerEvent {
 
         if (player == null) return;
 
-        Relation? relation = db.Relations
+        Relation? thisToTargetRelation = db.Relations
             .SingleOrDefault(relation => relation.SourcePlayerId == connection.Player.Id &&
                                          relation.TargetPlayerId == player.Id);
+        
+        Relation? targetToThisRelation = db.Relations
+            .SingleOrDefault(relation => relation.SourcePlayerId == player.Id &&
+                                         relation.TargetPlayerId == connection.Player.Id);
 
-        bool noRelations = !IsFriend(relation) &&
-                           !IsBlocked(relation) &&
-                           !IsIncoming(relation) &&
-                           !IsOutgoing(relation);
+        bool noRelations = !IsFriend(thisToTargetRelation) &&
+                           !IsBlocked(thisToTargetRelation) &&
+                           !IsIncoming(thisToTargetRelation) &&
+                           !IsOutgoing(thisToTargetRelation);
 
-        bool canRequestFriend = connection.Player.Id != player.Id && noRelations;
+        bool canRequestFriend = connection.Player.Id != player.Id && 
+                                noRelations &&
+                                (targetToThisRelation?.Types & RelationTypes.Blocked) != RelationTypes.Blocked;
+        
         connection.Send(new UserInteractionDataResponseEvent(UserId,
             player.Username,
             canRequestFriend,
-            !noRelations && IsOutgoing(relation),
-            !noRelations && IsBlocked(relation),
-            IsReported(relation)));
+            !noRelations && IsOutgoing(thisToTargetRelation),
+            !noRelations && IsBlocked(thisToTargetRelation),
+            IsReported(thisToTargetRelation)), entities.Single());
         return;
 
         static bool IsFriend(Relation? relation) => (relation?.Types & RelationTypes.Friend) == RelationTypes.Friend;

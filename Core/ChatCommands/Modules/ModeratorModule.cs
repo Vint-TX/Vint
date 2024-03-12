@@ -1,4 +1,5 @@
 using Vint.Core.Battles;
+using Vint.Core.Battles.Player;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -283,20 +284,39 @@ public class ModeratorModule : ChatCommandModule {
     [ChatCommand("dmsg", "Displays a message on player screen")]
     public void DisplayMessage(
         ChatCommandContext ctx,
-        [Option("username", "Username of player")]
+        [Option("username", "Username of player (@a for broadcast, @b for broadcast in battle)")]
         string username,
         [WaitingForText, Option("message", "Message to display")]
         string message) {
-        IPlayerConnection? target = ctx.Connection.Server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Username == username);
+        switch (username) {
+            case "@a": {
+                foreach (IPlayerConnection connection in ctx.Connection.Server.PlayerConnections.Values)
+                    connection.DisplayMessage(message);
+                break;
+            }
 
-        if (target == null) {
-            ctx.SendPrivateResponse($"Player '{username}' not found");
-            return;
+            case "@b":
+                if (!ctx.Connection.InLobby || !ctx.Connection.BattlePlayer!.InBattle) return;
+
+                foreach (BattlePlayer battlePlayer in ctx.Connection.BattlePlayer.Battle.Players.Where(player => player.InBattleAsTank))
+                    battlePlayer.PlayerConnection.DisplayMessage(message);
+                break;
+
+            default: {
+                IPlayerConnection? target = ctx.Connection.Server.PlayerConnections.Values
+                    .Where(conn => conn.IsOnline)
+                    .SingleOrDefault(conn => conn.Player.Username == username);
+
+                if (target == null) {
+                    ctx.SendPrivateResponse($"Player '{username}' not found");
+                    return;
+                }
+
+                target.DisplayMessage(message);
+                break;
+            }
         }
 
-        target.DisplayMessage(message);
         ctx.SendPrivateResponse("Message displayed");
     }
 }

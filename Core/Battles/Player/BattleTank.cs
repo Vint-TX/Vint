@@ -224,10 +224,10 @@ public class BattleTank {
     public void Disable(bool full) { // todo modules
         FullDisabled = full;
         TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
-
-        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
+        
         TemperatureAssists.Clear();
         SetTemperature(0);
+        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
 
         foreach (Effect effect in Effects) {
             effect.UnScheduleAll();
@@ -310,6 +310,12 @@ public class BattleTank {
         }
 
         foreach (TemperatureAssist assist in TemperatureAssists) {
+            if (StateManager.CurrentState is Dead) {
+                TemperatureAssists.Clear();
+                SetTemperature(0);
+                break;
+            }
+            
             if (DateTimeOffset.UtcNow - assist.LastTick < period) continue;
 
             float temperatureDelta = assist.CurrentTemperature switch {

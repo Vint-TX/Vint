@@ -11,10 +11,66 @@
         "newsItem": {
           "layout": "Large",
           "headerText": "Invite your friends!",
-          "tooltip": "Vint is the first alternative to the ReviveTX server",
+          "tooltip": "Vint is the first custom open-source TX server",
           "externalUrl": "https://discord.gg/upyXe3F2Fe",
-          "date": "2024-02-02Z",
-          "previewImageUrl": "https://i.imgur.com/TmS3PlG.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Wallpaper.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "YouTube",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Small",
+          "headerText": "YouTube",
+          "tooltip": "Vint on YouTube",
+          "externalUrl": "https://youtube.com/@Vint-TX",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "GitHub",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Small",
+          "headerText": "GitHub",
+          "tooltip": "Vint on GitHub",
+          "externalUrl": "https://github.com/C6OI/Vint",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "BugReports",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Medium",
+          "headerText": "Report bug reports and suggest ideas",
+          "tooltip": "We appreciate your help!",
+          "externalUrl": "https://discord.gg/F9HZRSjqTE",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo_Full.png"
         }
       }
     }
