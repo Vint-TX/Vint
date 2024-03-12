@@ -22121,7 +22121,7 @@
   },
   "Silence": {
     "id": -321842153,
-    "maxPlayers": 16,
+    "maxPlayers": 12,
     "matchMaking": true,
     "custom": true,
     "goldProbability": 0.0001,
@@ -23980,7 +23980,7 @@
   },
   "SilenceMoon": {
     "id": 933129112,
-    "maxPlayers": 16,
+    "maxPlayers": 14,
     "matchMaking": true,
     "custom": true,
     "goldProbability": 0.0001,
