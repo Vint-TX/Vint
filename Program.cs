@@ -26,7 +26,7 @@ abstract class Program {
         ConfigManager.InitializeCache();
         ConfigManager.InitializeNodes();
         ConfigManager.InitializeMapInfos();
-        //ConfigManager.InitializeMapModels();
+        ConfigManager.InitializeMapModels();
         ConfigManager.InitializeGlobalEntities();
 
         new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
