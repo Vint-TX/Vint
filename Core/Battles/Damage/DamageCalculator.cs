@@ -92,17 +92,14 @@ public class DamageCalculator : IDamageCalculator {
         float minDamagePercent = handler.MinDamagePercent;
         float minDamageDistance = handler.MinDamageDistance;
         float maxDamageDistance = handler.MaxDamageDistance;
+        float minMultiplier = minDamagePercent / 100;
 
         if (maxDamageDistance >= minDamageDistance)
-            throw new ArgumentException($"{nameof(maxDamageDistance)} must be more than {nameof(minDamageDistance)}");
+            throw new ArgumentException($"{nameof(minDamageDistance)} must be more than {nameof(maxDamageDistance)}");
 
-        return distance < maxDamageDistance
-                   ? 1
-                   : MathUtils.Map(distance,
-                       minDamageDistance,
-                       maxDamageDistance,
-                       minDamagePercent / 100,
-                       1);
+        return distance < maxDamageDistance ? 1
+               : distance > minDamageDistance ? minMultiplier
+               : MathUtils.Map(distance, minDamageDistance, maxDamageDistance, minMultiplier, 1);
     }
 
     static float GetEffectsMultiplier(BattleTank source, BattleTank target, bool isSplash, bool ignoreSourceEffects) {

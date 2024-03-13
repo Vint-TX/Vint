@@ -217,6 +217,13 @@ public abstract class PlayerConnection(
 
         ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
 
+        if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) {
+            foreach (IPlayerConnection connection in tempUser.SharedPlayers) {
+                connection.Unshare(tempUser);
+                connection.Share(User);
+            }
+        }
+
         Logger.Warning("Logged in");
 
         using DbConnection db = new();
