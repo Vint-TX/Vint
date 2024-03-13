@@ -1,4 +1,5 @@
 using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Attributes;
@@ -11,21 +12,39 @@ public class LoadUsersEvent : IServerEvent {
     public long RequestEntityId { get; private set; }
     public HashSet<long> UsersId { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list 
-        UsersId.RemoveWhere(id => connection.SharedEntities.Any(entity => entity.Id == id));
-        
+    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
         List<IPlayerConnection> playerConnections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .ToList();
-        
-        using DbConnection db = new();
 
-        foreach (IEntity user in UsersId
-                     .Select(userId => db.Players.SingleOrDefault(player => player.Id == userId))
-                     .Where(player => player != null)
-                     .Select(player => playerConnections.SingleOrDefault(conn => conn.Player.Id == player!.Id)?.User ?? // user is online
-                                       new UserTemplate().CreateFake(connection, player!))) // user is offline
-            connection.ShareIfUnshared(user);
+        foreach (long userId in UsersId) {
+            IEntity? user = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)?.User;
+
+            if (EntityRegistry.TryGetTemp(userId, out IEntity? tempUser)) { // temp user exists..
+                if (user != null) { // ..but player is online
+                    foreach (IPlayerConnection shared in tempUser.SharedPlayers) {
+                        shared.Unshare(tempUser);
+                        shared.Share(user);
+                    }
+
+                    connection.ShareIfUnshared(user);
+                    EntityRegistry.RemoveTemp(userId);
+                } else { // ..and player is offline
+                    connection.ShareIfUnshared(tempUser);
+                }
+            } else if (user != null) { // player is online
+                connection.ShareIfUnshared(user);
+            } else { // player is offline
+                using DbConnection db = new();
+
+                Player? player = db.Players.SingleOrDefault(player => player.Id == userId);
+
+                if (player == null) continue;
+
+                user = new UserTemplate().CreateFake(connection, player);
+                connection.Share(user);
+            }
+        }
 
         connection.Send(new UsersLoadedEvent(RequestEntityId));
     }

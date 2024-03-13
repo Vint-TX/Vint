@@ -37,7 +37,7 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
                                                 RelationTypes.OutgoingRequest);
             } else { // target player is not blocked; block
                 thisToTargetRelation.Types |= RelationTypes.Blocked;
-                
+
                 Relation? targetToThisRelation = db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == UserId &&
                                                                                           relation.TargetPlayerId == connection.User.Id);
 
@@ -45,7 +45,7 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
                     targetToThisRelation.Types &= ~(RelationTypes.Friend |
                                                     RelationTypes.IncomingRequest |
                                                     RelationTypes.OutgoingRequest);
-                    
+
                     db.Update(targetToThisRelation);
                 }
             }

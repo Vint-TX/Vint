@@ -68,7 +68,7 @@ public sealed class GoldBox(
 
     public override void Tick() {
         base.Tick();
-        
+
         if (Battle.Timer < 120 || StateManager.CurrentState is not None) return;
 
         Ticks++;

@@ -56,6 +56,7 @@ public class BattleProcessor : IBattleProcessor {
                     if (battle is { WasPlayers: true, Players.Count: 0 }) {
                         Logger.Warning("Removing battle {Id}", battle.LobbyId);
                         Battles.TryRemove(battle);
+                        battle.Simulation?.Dispose();
                     }
                 }
 

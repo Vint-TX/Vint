@@ -12,19 +12,35 @@ public class RequestLoadUserProfileEvent : IServerEvent {
     public long UserId { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
+        IEntity? user = connection.Server.PlayerConnections.Values
+            .Where(conn => conn.IsOnline)
+            .SingleOrDefault(conn => conn.Player.Id == UserId)?.User;
 
-        Player? player = db.Players.SingleOrDefault(player => player.Id == UserId);
+        if (EntityRegistry.TryGetTemp(UserId, out IEntity? tempUser)) { // temp user exists..
+            if (user != null) { // ..but player is online
+                foreach (IPlayerConnection shared in tempUser.SharedPlayers) {
+                    shared.Unshare(tempUser);
+                    shared.Share(user);
+                }
 
-        if (player == null) return;
+                connection.ShareIfUnshared(user);
+                EntityRegistry.RemoveTemp(UserId);
+            } else { // ..and player is offline
+                connection.ShareIfUnshared(tempUser);
+                user = tempUser;
+            }
+        } else if (user != null) { // player is online
+            connection.ShareIfUnshared(user);
+        } else { // player is offline
+            using DbConnection db = new();
+            Player? player = db.Players.SingleOrDefault(player => player.Id == UserId);
 
-        IEntity user = connection.SharedEntities.SingleOrDefault(entity => entity.Id == UserId) ??
-                       connection.Server.PlayerConnections.Values
-                           .Where(conn => conn.IsOnline)
-                           .SingleOrDefault(conn => conn.Player.Id == UserId)?.User ??
-                       new UserTemplate().CreateFake(connection, player);
+            if (player == null) return;
 
-        if (!user.SharedPlayers.Contains(connection)) connection.Share(user);
+            user = new UserTemplate().CreateFake(connection, player);
+            connection.Share(user);
+        }
+
         connection.Send(new UserProfileLoadedEvent(), user);
     }
 }

@@ -1,27 +1,46 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
+using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Entities;
 
 public static class EntityRegistry {
     static long _lastId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     static ConcurrentDictionary<long, IEntity> Entities { get; } = new();
+    static ConcurrentDictionary<long, IEntity> TempEntities { get; } = new();
 
 
     public static long FreeId => Interlocked.Increment(ref _lastId);
 
     public static void Add(IEntity entity) {
-        lock (Entities) {
-            if (!Entities.TryAdd(entity.Id, entity))
-                throw new ArgumentException($"Entity with id {entity.Id} already registered");
-        }
+        if (!Entities.TryAdd(entity.Id, entity))
+            throw new ArgumentException($"Entity with id {entity.Id} already registered");
+    }
+
+    public static void AddTemp(IEntity entity) {
+        TempEntities.AddOrUpdate(entity.Id,
+            _ => entity,
+            (_, existingEntity) => {
+                foreach (IPlayerConnection connection in existingEntity.SharedPlayers) {
+                    connection.UnshareIfShared(existingEntity);
+                    connection.ShareIfUnshared(entity);
+                }
+
+                return entity;
+            });
     }
 
     public static void Remove(long id) {
-        lock (Entities) {
-            if (!Entities.TryRemove(id, out _))
-                throw new ArgumentException($"Entity with id {id} is not registered");
-        }
+        if (!Entities.TryRemove(id, out _))
+            throw new ArgumentException($"Entity with id {id} is not registered");
+    }
+
+    public static void RemoveTemp(long id) {
+        if (!TempEntities.TryRemove(id, out _))
+            throw new ArgumentException($"Temporary entity with id {id} is not registered");
     }
 
     public static IEntity Get(long id) => Entities[id];
+
+    public static bool TryGetTemp(long id, [NotNullWhen(true)] out IEntity? entity) => TempEntities.TryGetValue(id, out entity);
 }

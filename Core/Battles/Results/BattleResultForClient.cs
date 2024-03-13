@@ -18,8 +18,10 @@ public class BattleResultForClient {
             case TeamHandler teamHandler:
                 RedTeamScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>().Score;
                 BlueTeamScore = teamHandler.BlueTeam.GetComponent<TeamScoreComponent>().Score;
-                RedUsers = teamHandler.RedPlayers.Select(player => player.Tank!.UserResult).OrderByDescending(userResult => userResult.ScoreWithoutPremium).ToList();
-                BlueUsers = teamHandler.BluePlayers.Select(player => player.Tank!.UserResult).OrderByDescending(userResult => userResult.ScoreWithoutPremium).ToList();
+                RedUsers = teamHandler.RedPlayers.Select(player => player.Tank!.UserResult)
+                    .OrderByDescending(userResult => userResult.ScoreWithoutPremium).ToList();
+                BlueUsers = teamHandler.BluePlayers.Select(player => player.Tank!.UserResult)
+                    .OrderByDescending(userResult => userResult.ScoreWithoutPremium).ToList();
                 break;
 
             case DMHandler:

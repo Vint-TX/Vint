@@ -11,7 +11,7 @@ public class NotificationShownEvent : IServerEvent {
 
         foreach (Server.Notification notify in connection.Notifications.Where(notify => notify.Entity == notification))
             connection.Notifications.TryRemove(notify);
-        
+
         connection.Unshare(notification);
     }
 }

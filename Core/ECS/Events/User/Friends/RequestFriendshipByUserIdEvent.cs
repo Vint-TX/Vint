@@ -29,7 +29,7 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
         Relation? targetToThisRelation = db.Relations
             .SingleOrDefault(relation => relation.SourcePlayerId == player.Id &&
                                          relation.TargetPlayerId == connection.Player.Id);
-        
+
         if ((targetToThisRelation?.Types & RelationTypes.Blocked) == RelationTypes.Blocked)
             return;
 

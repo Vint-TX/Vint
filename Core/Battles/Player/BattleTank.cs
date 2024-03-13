@@ -224,7 +224,7 @@ public class BattleTank {
     public void Disable(bool full) { // todo modules
         FullDisabled = full;
         TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
-        
+
         TemperatureAssists.Clear();
         SetTemperature(0);
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
@@ -315,7 +315,7 @@ public class BattleTank {
                 SetTemperature(0);
                 break;
             }
-            
+
             if (DateTimeOffset.UtcNow - assist.LastTick < period) continue;
 
             float temperatureDelta = assist.CurrentTemperature switch {

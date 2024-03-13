@@ -111,7 +111,7 @@ public class DamageCalculator : IDamageCalculator {
         if (!ignoreSourceEffects && source != target)
             effects.AddRange(source.Effects.OfType<IDamageEffect>());
 
-        return effects.Aggregate<IDamageEffect, float>(1, (current, damageEffect) => current * damageEffect.GetMultiplier(target, isSplash));
+        return effects.Aggregate<IDamageEffect, float>(1, (current, damageEffect) => current * damageEffect.GetMultiplier(source, target, isSplash));
     }
 
     static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers 

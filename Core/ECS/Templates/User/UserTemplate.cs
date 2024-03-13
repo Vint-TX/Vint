@@ -55,7 +55,6 @@ public class UserTemplate : EntityTemplate {
             });
 
         user.AddComponent(new UserGroupComponent(user));
-
         return user;
     }
 
@@ -90,7 +89,6 @@ public class UserTemplate : EntityTemplate {
             true);
 
         user.AddComponent(new UserGroupComponent(user));
-
         return user;
     }
 }

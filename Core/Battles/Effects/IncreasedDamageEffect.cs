@@ -27,7 +27,7 @@ public sealed class IncreasedDamageEffect : Effect, ISupplyEffect, IDamageEffect
     ModuleDamageEffectMaxFactorPropertyComponent MultipliersComponent { get; }
     public float Multiplier { get; private set; }
 
-    public float GetMultiplier(BattleTank target, bool isSplash) => IsActive && (Tank != target || isSplash) ? Multiplier : 1;
+    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash) => IsActive && (Tank != target || isSplash) ? Multiplier : 1;
 
     public ModuleEffectDurationPropertyComponent DurationsComponent { get; }
 

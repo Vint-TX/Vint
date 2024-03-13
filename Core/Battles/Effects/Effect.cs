@@ -82,5 +82,5 @@ public interface IExtendableEffect {
 }
 
 public interface IDamageEffect : IMultiplierEffect {
-    public float GetMultiplier(BattleTank target, bool isSplash);
+    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash);
 }

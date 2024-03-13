@@ -152,7 +152,7 @@ public abstract class PlayerConnection(
     public Invite? Invite { get; set; }
 
     public ConcurrentHashSet<Notification> Notifications { get; } = [];
-    
+
     public void Register(
         string username,
         string encryptedPasswordDigest,
@@ -561,7 +561,7 @@ public abstract class PlayerConnection(
 
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newHull.SkinId);
                     currentPreset.HullSkin = skin;
-                    
+
                     db.Update(currentPreset);
                     break;
                 }
@@ -603,7 +603,7 @@ public abstract class PlayerConnection(
                         if (skinHull != null && skin.Id != skinHull.SkinId)
                             this.GetEntity(skinHull.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
                     }
-                    
+
                     userItem.AddComponent(new MountedItemComponent());
 
                     db.Hulls
@@ -632,7 +632,7 @@ public abstract class PlayerConnection(
                         if (skinWeapon != null && skinWeapon.SkinId != skin.Id)
                             this.GetEntity(skinWeapon.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
                     }
-                    
+
                     userItem.AddComponent(new MountedItemComponent());
 
                     db.Weapons
@@ -679,7 +679,7 @@ public abstract class PlayerConnection(
                         if (shellWeapon != null && shellWeapon.ShellId != shell.Id)
                             this.GetEntity(shellWeapon.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
                     }
-                    
+
                     userItem.AddComponent(new MountedItemComponent());
 
                     db.Weapons
@@ -915,8 +915,15 @@ public class SocketPlayerConnection(
         Logger.Information("Socket disconnected");
 
         try {
-            if (User != null!)
+            if (User != null!) {
+                foreach (IPlayerConnection connection in User.SharedPlayers) {
+                    try {
+                        connection.Unshare(User);
+                    } catch { /**/ }
+                }
+
                 EntityRegistry.Remove(User.Id);
+            }
 
             if (!InLobby) return;
 
