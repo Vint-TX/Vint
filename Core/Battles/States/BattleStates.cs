@@ -43,7 +43,7 @@ public class Countdown(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override void Start() {
-        const int seconds = 10;
+        const int seconds = 20;
 
         Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
         Battle.Timer = seconds;

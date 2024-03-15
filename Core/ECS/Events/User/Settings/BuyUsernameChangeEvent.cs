@@ -5,6 +5,7 @@ using Vint.Core.ECS.Events.Notification;
 using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.User.Settings;
 
@@ -14,6 +15,8 @@ public class BuyUsernameChangeEvent : IServerEvent {
     public long Price { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!RegexUtils.IsLoginValid(Username)) return;
+
         IEntity user = entities.Single();
         long truePrice = ConfigManager.GetComponent<GoodsXPriceComponent>("payment/payable/changeuid").Price;
         bool success = Price == truePrice && connection.Player.Crystals >= truePrice;

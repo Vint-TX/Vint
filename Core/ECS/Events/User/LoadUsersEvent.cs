@@ -28,7 +28,7 @@ public class LoadUsersEvent : IServerEvent {
                     }
 
                     connection.ShareIfUnshared(user);
-                    EntityRegistry.RemoveTemp(userId);
+                    EntityRegistry.TryRemoveTemp(userId);
                 } else { // ..and player is offline
                     connection.ShareIfUnshared(tempUser);
                 }

@@ -890,9 +890,9 @@ public class SocketPlayerConnection(
         Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         Share(ClientSession);
 
-        Task.Run(ReceiveLoop).Catch();
-        Task.Run(SendLoop).Catch();
-        Task.Run(ExecuteLoop).Catch();
+        Task.Factory.StartNew(ReceiveLoop, TaskCreationOptions.LongRunning).Catch();
+        Task.Factory.StartNew(SendLoop, TaskCreationOptions.LongRunning).Catch();
+        Task.Factory.StartNew(ExecuteLoop, TaskCreationOptions.LongRunning).Catch();
 
         IsConnected = true;
     }
@@ -923,7 +923,7 @@ public class SocketPlayerConnection(
 
         try {
             if (User != null!) {
-                foreach (IPlayerConnection connection in User.SharedPlayers) {
+                foreach (IPlayerConnection connection in User.SharedPlayers.Where(connection => !connection.InLobby)) {
                     try {
                         connection.Unshare(User);
                     } catch { /**/ }
@@ -946,8 +946,12 @@ public class SocketPlayerConnection(
             SendBuffer.CompleteAdding();
             ExecuteBuffer.CompleteAdding();
 
-            foreach (IEntity entity in SharedEntities)
+            foreach (IEntity entity in SharedEntities) {
                 entity.SharedPlayers.TryRemove(this);
+
+                if (entity.SharedPlayers.Count == 0 && !EntityRegistry.TryRemoveTemp(entity.Id))
+                    EntityRegistry.Remove(entity.Id);
+            }
 
             SharedEntities.Clear();
             SendBuffer.Dispose();

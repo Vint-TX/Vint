@@ -48,6 +48,9 @@ public class DamageCalculator : IDamageCalculator {
         bool isBackHit = !isTurretHit && IsBackHit(hitPoint, target.Tank);
         bool isCritical = false;
 
+        if (handler is SmokyWeaponHandler smokyHandler)
+            isCritical = smokyHandler.TryCalculateCriticalDamage(ref baseDamage);
+
         float weakening = !isSplash && handler.DamageWeakeningByDistance ? GetWeakeningMultiplier(handler, distance) : 1;
         float splash = isSplash && handler is ThunderWeaponHandler thunderHandler ? thunderHandler.GetSplashMultiplier(distance) : 1;
         float effects = GetEffectsMultiplier(source, target, isSplash, ignoreSourceEffects);
@@ -55,9 +58,6 @@ public class DamageCalculator : IDamageCalculator {
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
 
         float damage = baseDamage * weakening * splash * effects * backHit * turretHit;
-
-        if (handler is SmokyWeaponHandler smokyHandler)
-            isCritical = smokyHandler.TryCalculateCriticalDamage(ref damage);
 
         return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }
@@ -97,8 +97,8 @@ public class DamageCalculator : IDamageCalculator {
         if (maxDamageDistance >= minDamageDistance)
             throw new ArgumentException($"{nameof(minDamageDistance)} must be more than {nameof(maxDamageDistance)}");
 
-        return distance < maxDamageDistance ? 1
-               : distance > minDamageDistance ? minMultiplier
+        return distance <= maxDamageDistance ? 1
+               : distance >= minDamageDistance ? minMultiplier
                : MathUtils.Map(distance, minDamageDistance, maxDamageDistance, minMultiplier, 1);
     }
 

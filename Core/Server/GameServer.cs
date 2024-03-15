@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Serilog;
 using Vint.Core.Battles;
 using Vint.Core.ChatCommands;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Events.Ping;
 using Vint.Core.Utils;
 
@@ -13,6 +14,8 @@ public class GameServer(
     IPAddress host,
     ushort port
 ) {
+    const string DiscordDebugToken = "VINT_DISCORD_BOT_DEBUG_TOKEN", DiscordProdToken = "VINT_DISCORD_BOT_PROD_TOKEN";
+
     ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
     Protocol.Protocol Protocol { get; } = new();
     TcpListener Listener { get; } = new(host, port);
@@ -23,6 +26,7 @@ public class GameServer(
     public IMatchmakingProcessor MatchmakingProcessor { get; private set; } = null!;
     public IArcadeProcessor ArcadeProcessor { get; private set; } = null!;
     public IChatCommandProcessor ChatCommandProcessor { get; private set; } = null!;
+    public DiscordBot? DiscordBot { get; private set; }
 
     public bool IsStarted { get; private set; }
     public bool IsAccepting { get; private set; }
@@ -43,15 +47,23 @@ public class GameServer(
 
         ChatCommandProcessor chatCommandProcessor = new();
 
+        string? discordBotToken = Environment.GetEnvironmentVariable(DiscordDebugToken) ??
+                                  Environment.GetEnvironmentVariable(DiscordProdToken);
+
+        if (!string.IsNullOrWhiteSpace(discordBotToken))
+            DiscordBot = new DiscordBot(discordBotToken, this);
+
         BattleProcessor = new BattleProcessor();
         MatchmakingProcessor = new MatchmakingProcessor(BattleProcessor);
         ArcadeProcessor = new ArcadeProcessor(BattleProcessor);
         ChatCommandProcessor = chatCommandProcessor;
 
-        new Thread(() => MatchmakingProcessor.StartTicking()) { Name = "Matchmaking ticker" }.Start();
-        new Thread(() => ArcadeProcessor.StartTicking()) { Name = "Arcade ticker" }.Start();
-        new Thread(() => BattleProcessor.StartTicking()) { Name = "Battle ticker" }.Start();
+        new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
+        new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
+        new Thread(BattleProcessor.StartTicking) { Name = "Battle ticker" }.Start();
         new Thread(PingLoop) { Name = "Ping loop" }.Start();
+
+        Task.Factory.StartNew(() => DiscordBot?.Start(), TaskCreationOptions.LongRunning).Catch();
 
         chatCommandProcessor.RegisterCommands();
     }
@@ -99,6 +111,7 @@ public class GameServer(
                 }
             }
 
+            DiscordBot?.SetPlayersCount(PlayerConnections.Count);
             Thread.Sleep(5000);
         }
     }

@@ -22,6 +22,7 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
         Player? player = db.Players.SingleOrDefault(player => player.Email == Email);
 
         if (player == null) {
+            connection.Player = null!;
             connection.Send(new EmailInvalidEvent(Email));
             connection.Send(new LoginFailedEvent());
             return;

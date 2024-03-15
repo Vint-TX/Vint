@@ -9,7 +9,6 @@ public static class EntityRegistry {
     static ConcurrentDictionary<long, IEntity> Entities { get; } = new();
     static ConcurrentDictionary<long, IEntity> TempEntities { get; } = new();
 
-
     public static long FreeId => Interlocked.Increment(ref _lastId);
 
     public static void Add(IEntity entity) {
@@ -35,10 +34,7 @@ public static class EntityRegistry {
             throw new ArgumentException($"Entity with id {id} is not registered");
     }
 
-    public static void RemoveTemp(long id) {
-        if (!TempEntities.TryRemove(id, out _))
-            throw new ArgumentException($"Temporary entity with id {id} is not registered");
-    }
+    public static bool TryRemoveTemp(long id) => TempEntities.TryRemove(id, out _);
 
     public static IEntity Get(long id) => Entities[id];
 

@@ -1,7 +1,4 @@
 ﻿using Serilog;
-using Vint.Core.Database;
-using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -17,14 +14,16 @@ public class RestorePasswordByEmailEvent : IServerEvent {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Warning("Restoring password '{Email}'", Email);
-
+/*
         using DbConnection db = new();
-        Player player = db.Players.Single(player => player.Email == Email);
+        Player? player = db.Players.SingleOrDefault(player => player.Email == Email);
+
+        if (player == null) return;
 
         connection.Player = player;
 
         //todo
 
-        connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(Email));
+        connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(Email));*/
     }
 }

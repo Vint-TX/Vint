@@ -45,7 +45,6 @@ public static class LoggerUtils {
             .CreateLogger();
 
         Logger = Log.Logger.ForType(typeof(LoggerUtils));
-
         Logger.Information("Logger initialized");
     }
 

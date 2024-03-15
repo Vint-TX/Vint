@@ -2,6 +2,7 @@
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Registration;
 
@@ -18,6 +19,11 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool QuickRegistration { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!RegexUtils.IsLoginValid(Username) || !RegexUtils.IsEmailValid(Email)) {
+            connection.Send(new RegistrationFailedEvent());
+            return;
+        }
+
         using (DbConnection db = new()) {
             if (db.Players.Any(player => player.Username == Username) ||
                 db.Players.Count(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {

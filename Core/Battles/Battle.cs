@@ -237,7 +237,7 @@ public class Battle {
             connection.User.AddComponent(new BattleLobbyGroupComponent(LobbyEntity));
             connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
-            foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
+            foreach (BattlePlayer battlePlayer in Players)
                 battlePlayer.PlayerConnection.ShareIfUnshared(connection.User);
 
             connection.BattlePlayer = ModeHandler.SetupBattlePlayer(connection);
@@ -315,9 +315,9 @@ public class Battle {
             user.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
             connection.Unshare(LobbyEntity, LobbyChatEntity);
 
-            foreach (BattlePlayer player in Players.Where(player => !player.IsSpectator)) {
+            foreach (BattlePlayer player in Players) {
                 player.PlayerConnection.Unshare(user);
-                connection.Unshare(player.PlayerConnection.User);
+                connection.UnshareIfShared(player.PlayerConnection.User);
             }
 
             if (Players.All(player => player.IsSpectator)) {

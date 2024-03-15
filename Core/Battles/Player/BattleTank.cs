@@ -299,6 +299,7 @@ public class BattleTank {
 
         if (StateManager.CurrentState is Dead) {
             TemperatureAssists.Clear();
+            if (Temperature != 0) SetTemperature(0);
             return;
         }
 

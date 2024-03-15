@@ -22,6 +22,7 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
         Player? player = db.Players.SingleOrDefault(player => player.Username == Username);
 
         if (player == null) {
+            connection.Player = null!;
             connection.Send(new UidInvalidEvent());
             connection.Send(new LoginFailedEvent());
             return;

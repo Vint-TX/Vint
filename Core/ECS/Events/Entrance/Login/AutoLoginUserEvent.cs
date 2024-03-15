@@ -27,6 +27,7 @@ public class AutoLoginUserEvent : IServerEvent {
         Punishment? ban = player?.GetBanInfo();
 
         if (player is not { RememberMe: true } || ban is { Active: true } || player.HardwareFingerprint != HardwareFingerprint) {
+            connection.Player = null!;
             connection.Send(new AutoLoginFailedEvent());
             return;
         }
@@ -45,6 +46,9 @@ public class AutoLoginUserEvent : IServerEvent {
 
             connection.Player = player;
             connection.Login(false, true, HardwareFingerprint);
-        } else connection.Send(new AutoLoginFailedEvent());
+        } else {
+            connection.Player = null!;
+            connection.Send(new AutoLoginFailedEvent());
+        }
     }
 }
