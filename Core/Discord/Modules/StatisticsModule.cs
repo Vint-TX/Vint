@@ -20,6 +20,7 @@ public class StatisticsModule(
         await ctx.EditResponseAsync(embed);
     }
 
+    [Command("battles")]
     public async Task Battles(SlashCommandContext ctx) {
         await ctx.DeferResponseAsync();
 

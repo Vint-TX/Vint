@@ -16,6 +16,7 @@ using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Preset;
+using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
@@ -34,6 +35,7 @@ using Vint.Core.ECS.Templates.Money;
 using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.ECS.Templates.Paints;
 using Vint.Core.ECS.Templates.Premium;
+using Vint.Core.ECS.Templates.Preset;
 using Vint.Core.ECS.Templates.Shells;
 using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.ECS.Templates.User;
@@ -355,6 +357,11 @@ public abstract class PlayerConnection(
             int crystals = CalculateCrystals(rankIndex);
             int xCrystals = CalculateXCrystals(rankIndex);
 
+            CreateByRankConfigComponent createByRankConfigComponent = ConfigManager.GetComponent<CreateByRankConfigComponent>("garage/preset");
+
+            if (createByRankConfigComponent.UserRankListToCreateItem.Contains(rankComponent.Rank))
+                PurchaseItem(GlobalEntities.GetEntity("misc", "Preset"), 1, 0, false, false);
+
             SetCrystals(Player.Crystals + crystals);
             SetXCrystals(Player.XCrystals + xCrystals);
             Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
@@ -506,6 +513,26 @@ public abstract class PlayerConnection(
             case PremiumQuestMarketItemTemplate:
                 Logger.Information("User purchased Premium Boost or Quest. Action is not implemented");
                 break;
+
+            case PresetMarketItemTemplate: {
+                List<Preset> presets = db.Presets.Where(preset => preset.PlayerId == Player.Id).ToList();
+
+                Preset preset = new() { Player = Player, Index = presets.Count, Name = $"Preset {presets.Count + 1}" };
+                userItem = GlobalEntities.GetEntity("misc", "Preset");
+
+                userItem.TemplateAccessor!.Template = ((MarketEntityTemplate)userItem.TemplateAccessor.Template).UserTemplate;
+                userItem.Id = EntityRegistry.FreeId;
+
+                userItem.AddComponent(new PresetEquipmentComponent(preset));
+                userItem.AddComponent(new PresetNameComponent(preset));
+
+                preset.Entity = userItem;
+                Player.UserPresets.Add(preset);
+
+                db.Insert(preset);
+                Share(userItem);
+                break;
+            }
 
             default:
                 Logger.Error("{Name} purchase is not implemented", template?.GetType().Name);
@@ -696,6 +723,48 @@ public abstract class PlayerConnection(
                         .Update();
 
                     db.Update(currentPreset);
+                    break;
+                }
+
+                case PresetUserItemTemplate: { // todo modules
+                    changeEquipment = true;
+                    Preset? newPreset = Player.UserPresets.SingleOrDefault(preset => preset.Entity == userItem);
+
+                    if (newPreset == null) return;
+
+                    foreach (IEntity entity in new[] {
+                                 currentPreset.Hull.GetUserEntity(this),
+                                 currentPreset.Paint.GetUserEntity(this),
+                                 currentPreset.HullSkin.GetUserEntity(this),
+                                 currentPreset.Weapon.GetUserEntity(this),
+                                 currentPreset.Cover.GetUserEntity(this),
+                                 currentPreset.WeaponSkin.GetUserEntity(this),
+                                 currentPreset.Shell.GetUserEntity(this),
+                                 currentPreset.Graffiti.GetUserEntity(this),
+                                 currentPreset.Entity!
+                             }) {
+                        entity.RemoveComponentIfPresent<MountedItemComponent>();
+                    }
+
+                    foreach (IEntity entity in new[] {
+                                 newPreset.Hull.GetUserEntity(this),
+                                 newPreset.Paint.GetUserEntity(this),
+                                 newPreset.HullSkin.GetUserEntity(this),
+                                 newPreset.Weapon.GetUserEntity(this),
+                                 newPreset.Cover.GetUserEntity(this),
+                                 newPreset.WeaponSkin.GetUserEntity(this),
+                                 newPreset.Shell.GetUserEntity(this),
+                                 newPreset.Graffiti.GetUserEntity(this),
+                                 newPreset.Entity!
+                             }) {
+                        entity.AddComponentIfAbsent(new MountedItemComponent());
+                    }
+
+                    Player.CurrentPresetIndex = newPreset.Index;
+                    db.Players
+                        .Where(player => player.Id == Player.Id)
+                        .Set(player => player.CurrentPresetIndex, () => Player.CurrentPresetIndex)
+                        .Update();
                     break;
                 }
 
@@ -929,7 +998,11 @@ public class SocketPlayerConnection(
                     } catch { /**/ }
                 }
 
-                EntityRegistry.Remove(User.Id);
+                try {
+                    EntityRegistry.Remove(User.Id);
+                } catch (Exception e) {
+                    Logger.Error(e, "User is already removed from registry");
+                }
             }
 
             if (!InLobby) return;
@@ -949,8 +1022,10 @@ public class SocketPlayerConnection(
             foreach (IEntity entity in SharedEntities) {
                 entity.SharedPlayers.TryRemove(this);
 
-                if (entity.SharedPlayers.Count == 0 && !EntityRegistry.TryRemoveTemp(entity.Id))
-                    EntityRegistry.Remove(entity.Id);
+                try {
+                    if (entity.SharedPlayers.Count == 0 && !EntityRegistry.TryRemoveTemp(entity.Id))
+                        EntityRegistry.Remove(entity.Id);
+                } catch { /**/ }
             }
 
             SharedEntities.Clear();

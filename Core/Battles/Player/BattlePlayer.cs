@@ -67,7 +67,7 @@ public class BattlePlayer {
     public bool IsKicked { get; set; }
     bool ReportedInChat { get; set; }
 
-    public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(10);
+    public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(20);
     public DateTimeOffset? KickTime { get; set; }
 
     public TeamBattleResult TeamBattleResult {

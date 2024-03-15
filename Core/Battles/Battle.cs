@@ -286,7 +286,7 @@ public class Battle {
 
             ModeHandler.SortPlayers();
 
-            if (Players.Any(player => !player.IsSpectator)) return;
+            if (Players.Where(player => player.InBattle).Any(player => !player.IsSpectator)) return;
 
             foreach (BattlePlayer spectator in Players) {
                 spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);

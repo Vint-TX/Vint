@@ -1,5 +1,4 @@
-﻿using LinqToDB;
-using Serilog;
+﻿using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -26,29 +25,21 @@ public class AutoLoginUserEvent : IServerEvent {
 
         Punishment? ban = player?.GetBanInfo();
 
-        if (player is not { RememberMe: true } || ban is { Active: true } || player.HardwareFingerprint != HardwareFingerprint) {
+        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
+            .Where(conn => conn.IsOnline && conn.Player.Username == Username)
+            .ToList();
+
+        if (player is not { RememberMe: true } ||
+            ban is { Active: true } ||
+            connections.Count != 0 ||
+            player.HardwareFingerprint != HardwareFingerprint ||
+            !player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
             connection.Player = null!;
             connection.Send(new AutoLoginFailedEvent());
             return;
         }
 
-        if (player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
-            List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
-                .Where(conn => conn.IsOnline && conn.Player.Id == player.Id)
-                .ToList();
-
-            if (connections.Count != 0) {
-                foreach (IPlayerConnection oldConnection in connections) {
-                    db.Update(oldConnection.Player);
-                    oldConnection.Kick("Login from new place");
-                }
-            }
-
-            connection.Player = player;
-            connection.Login(false, true, HardwareFingerprint);
-        } else {
-            connection.Player = null!;
-            connection.Send(new AutoLoginFailedEvent());
-        }
+        connection.Player = player;
+        connection.Login(false, true, HardwareFingerprint);
     }
 }

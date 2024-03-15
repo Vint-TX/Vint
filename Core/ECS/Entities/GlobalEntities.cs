@@ -16,7 +16,6 @@ using Vint.Core.ECS.Templates.Money;
 using Vint.Core.ECS.Templates.Premium;
 using Vint.Core.ECS.Templates.Preset;
 using Vint.Core.Server;
-using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Entities;
 
@@ -238,10 +237,10 @@ public static class GlobalEntities {
 
                                 preset.Entity = presetEntity;
                                 player.UserPresets.Add(preset);
+                                connection.Share(preset.Entity);
                             }
 
-                            connection.Share(player.UserPresets.Select(preset => preset.Entity!));
-                            break;
+                            continue;
                         }
 
                         case GoldBonusUserItemTemplate: {
@@ -320,9 +319,10 @@ public static class GlobalEntities {
         connection.SharedEntities.SingleOrDefault(entity => entity.Id == entityId);
 
     public static bool ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
+        string configPath = item.TemplateAccessor!.ConfigPath!;
         int? configPrice = null;
 
-        if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PackPriceComponent? packPriceComponent)) {
+        if (ConfigManager.TryGetComponent(configPath, out PackPriceComponent? packPriceComponent)) {
             Dictionary<int, int> packPrice = forXCrystals
                                                  ? packPriceComponent.PackXPrice
                                                  : packPriceComponent.PackPrice;
@@ -332,11 +332,29 @@ public static class GlobalEntities {
             configPrice = value;
         } else {
             if (forXCrystals) {
-                if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out XPriceItemComponent? xPriceItemComponent))
+                if (ConfigManager.TryGetComponent(configPath, out XPriceItemComponent? xPriceItemComponent))
                     configPrice = xPriceItemComponent.Price;
-            } else if (ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!, out PriceItemComponent? priceItemComponent))
+            } else if (ConfigManager.TryGetComponent(configPath, out PriceItemComponent? priceItemComponent))
                 configPrice = priceItemComponent.Price;
             else return false;
+        }
+
+        if (item.TemplateAccessor?.Template is PresetMarketItemTemplate) {
+            ItemsBuyCountLimitComponent buyCountLimitComponent = ConfigManager.GetComponent<ItemsBuyCountLimitComponent>(configPath);
+
+            using DbConnection db = new();
+            int count = db.Presets.Count(preset => preset.PlayerId == connection.Player.Id);
+
+            if (count >= buyCountLimitComponent.Limit) return false;
+
+            if (count == 1) {
+                FirstBuySaleComponent firstBuySaleComponent = ConfigManager.GetComponent<FirstBuySaleComponent>(configPath);
+                configPrice -= configPrice * firstBuySaleComponent.SalePercent / 100;
+            }
+
+            ItemsAutoIncreasePriceComponent increasePriceComponent = ConfigManager.GetComponent<ItemsAutoIncreasePriceComponent>(configPath);
+
+            configPrice += CalculateAdditionalPrice(increasePriceComponent, count);
         }
 
         if (configPrice != price) return false;
@@ -344,7 +362,7 @@ public static class GlobalEntities {
         bool crystalsEnough = (forXCrystals ? connection.Player.XCrystals : connection.Player.Crystals) >= price;
 
         return crystalsEnough && (forXCrystals ||
-                                  !ConfigManager.TryGetComponent(item.TemplateAccessor!.ConfigPath!,
+                                  !ConfigManager.TryGetComponent(configPath,
                                       out CrystalsPurchaseUserRankRestrictionComponent? restrictionComponent) ||
                                   connection.Player.Rank >= restrictionComponent.RestrictionValue);
     }
@@ -352,4 +370,20 @@ public static class GlobalEntities {
     static IEnumerable<IEntity> GetUserEntities(this IPlayerConnection connection) =>
         ConfigManager.GlobalEntitiesTypeNames
             .SelectMany(entitiesTypeName => GetUserTemplateEntities(connection, entitiesTypeName));
+
+    static int CalculateAdditionalPrice(ItemsAutoIncreasePriceComponent increasePrice, int itemCount) {
+        itemCount++;
+
+        if (itemCount <= increasePrice.StartCount)
+            return 0;
+
+        long num = itemCount - increasePrice.StartCount;
+        int num2 = (int)num * increasePrice.PriceIncreaseAmount;
+        int maxAdditionalPrice = increasePrice.MaxAdditionalPrice;
+
+        if (maxAdditionalPrice <= 0 || num2 < maxAdditionalPrice)
+            return num2;
+
+        return maxAdditionalPrice;
+    }
 }
