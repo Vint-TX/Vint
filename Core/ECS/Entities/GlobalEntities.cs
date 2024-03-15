@@ -347,10 +347,10 @@ public static class GlobalEntities {
 
             if (count >= buyCountLimitComponent.Limit) return false;
 
-            if (count == 1) {
+            /*if (count == 1) {
                 FirstBuySaleComponent firstBuySaleComponent = ConfigManager.GetComponent<FirstBuySaleComponent>(configPath);
                 configPrice -= configPrice * firstBuySaleComponent.SalePercent / 100;
-            }
+            }*/
 
             ItemsAutoIncreasePriceComponent increasePriceComponent = ConfigManager.GetComponent<ItemsAutoIncreasePriceComponent>(configPath);
 
