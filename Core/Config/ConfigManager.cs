@@ -182,9 +182,10 @@ public static class ConfigManager {
                 }
 
                 foreach (IComponent serverComponent in curNode.ServerComponents.Values) {
-                    foreach (Type type in serverComponent.GetType().GetInterfaces()) {
-                        if (!type.IsGenericType || type.GetGenericTypeDefinition() != typeof(IConvertible<>)) continue;
-
+                    foreach (Type type in serverComponent
+                                 .GetType()
+                                 .FindInterfaces((type, iType) => type.IsGenericType && 
+                                                                  ReferenceEquals(type.GetGenericTypeDefinition(), iType), typeof(IConvertible<>))) {
                         Type resultType = type.GenericTypeArguments[0];
 
                         curNode.Components.TryGetValue(resultType, out IComponent? component);

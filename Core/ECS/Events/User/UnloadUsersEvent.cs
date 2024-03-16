@@ -6,7 +6,7 @@ namespace Vint.Core.ECS.Events.User;
 
 [ProtocolId(1458555309592)]
 public class UnloadUsersEvent : IServerEvent {
-    public HashSet<IEntity> Users { get; private set; } = null!;
+    public HashSet<long /*IEntity*/> Users { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
         // todo temporary solution: do not unshare the players

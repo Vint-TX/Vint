@@ -1,16 +1,19 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
+using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Templates.Battle.Effect;
+using Vint.Core.Utils;
 using DurationComponent = Vint.Core.ECS.Components.Battle.Effect.DurationComponent;
 using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponent;
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect {
+public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect, ISpeedEffect {
     const string EffectConfigPath = "battle/effect/turbospeed";
 
     public TurboSpeedEffect(BattleTank tank, int level = -1) : base(tank, level) {
@@ -28,6 +31,7 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect 
 
     public override string ConfigPath => "garage/module/upgrade/properties/turbospeed";
     ModuleTurbospeedEffectPropertyComponent MultipliersComponent { get; }
+    SpeedComponent SpeedComponentWithEffect { get; set; } = null!;
 
     public ModuleEffectDurationPropertyComponent DurationsComponent { get; }
 
@@ -75,6 +79,7 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect 
 
         Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= Multiplier);
         LastActivationTime = DateTimeOffset.UtcNow;
+        SpeedComponentWithEffect = (SpeedComponent)((IComponent)Tank.Tank.GetComponent<SpeedComponent>()).Clone();
 
         Schedule(Duration, Deactivate);
     }
@@ -89,5 +94,26 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect 
 
         Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed /= Multiplier);
         LastActivationTime = default;
+    }
+    
+    public void UpdateTankSpeed() {
+        if (!IsActive) return;
+        
+        if (Tank.Temperature < 0) {
+            float minTemperature = Tank.TemperatureConfig.MinTemperature;
+
+            float newSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.Speed, 0);
+            float newTurnSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.TurnSpeed, 0);
+            float newWeaponSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed, 0);
+
+            Tank.Tank.ChangeComponent<SpeedComponent>(component => {
+                component.Speed = newSpeed;
+                component.TurnSpeed = newTurnSpeed;
+            });
+            Tank.Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
+        } else {
+            Tank.Tank.ChangeComponent((SpeedComponent)((IComponent)SpeedComponentWithEffect).Clone());
+            Tank.Weapon.ChangeComponent(((IComponent)Tank.WeaponHandler.OriginalWeaponRotationComponent).Clone());
+        }
     }
 }

@@ -167,7 +167,7 @@ public class Flag {
             battlePlayer.Tank!.UpdateStatistics(0, 0, 0, score);
             battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
 
-            foreach ((BattleTank? assistant, _, float dist) in Assists.Where(assist => assist.Player != battlePlayer.Tank)) {
+            foreach ((BattleTank? assistant, _, float dist) in Assists.Where(assist => assist.Player != battlePlayer.Tank)) { // bug in calculations
                 float distance = float.Min(dist, maxDistance);
                 int assistScore = Convert.ToInt32(Math.Round(MathUtils.Map(distance, 0, maxDistance, 1, 30)));
                 int assistScoreWithBonus = assistant.BattlePlayer.GetScoreWithBonus(assistScore);

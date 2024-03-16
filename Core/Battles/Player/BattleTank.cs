@@ -179,7 +179,7 @@ public class BattleTank {
     public IEntity Graffiti { get; }
     public IEntity Shell { get; }
 
-    SpeedComponent OriginalSpeedComponent { get; }
+    public SpeedComponent OriginalSpeedComponent { get; }
     TemperatureConfigComponent OriginalTemperatureConfigComponent { get; }
 
     public void Tick() {
@@ -219,20 +219,26 @@ public class BattleTank {
 
         WeaponHandler.OnTankEnable();
         Tank.AddComponent(new TankMovableComponent());
+        
+        TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
+        TemperatureAssists.Clear();
+        
+        SetTemperature(0);
+        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
     }
 
     public void Disable(bool full) { // todo modules
         FullDisabled = full;
         TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
 
-        TemperatureAssists.Clear();
-        SetTemperature(0);
-        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
-
         foreach (Effect effect in Effects) {
             effect.UnScheduleAll();
             effect.Deactivate();
         }
+        
+        TemperatureAssists.Clear();
+        SetTemperature(0);
+        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             Tank.RemoveComponent<SelfDestructionComponent>();
@@ -275,10 +281,10 @@ public class BattleTank {
 
     public void SetHealth(float health) { // todo modules
         Health = Math.Clamp(health, 0, MaxHealth);
-        Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = (float)Math.Ceiling(Health));
+        Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = MathF.Ceiling(Health));
 
         /*HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
-        healthComponent.CurrentHealth = (float)Math.Ceiling(Health);
+        healthComponent.CurrentHealth = MathF.Ceiling(Health);
 
         Tank.RemoveComponent<HealthComponent>();
         Tank.AddComponent(healthComponent);*/
@@ -326,7 +332,7 @@ public class BattleTank {
             } * TemperatureConfig.TactPeriodInMs;
 
             if (assist is { CurrentTemperature: > 0, Weapon: not IsisWeaponHandler } && (assist.Assistant == this || IsEnemy(assist.Assistant))) {
-                float value = (float)Math.Round(MathUtils.Map(assist.CurrentTemperature, 0, assist.Weapon.TemperatureLimit, 0, assist.MaxDamage));
+                float value = MathF.Round(MathUtils.Map(assist.CurrentTemperature, 0, assist.Weapon.TemperatureLimit, 0, assist.MaxDamage));
 
                 CalculatedDamage damage = new(default, value, false, false, false, false);
                 Battle.DamageProcessor.Damage(assist.Assistant, this, ((WeaponHandler)assist.Weapon).MarketEntity, damage);
@@ -412,6 +418,15 @@ public class BattleTank {
     }
 
     public void UpdateSpeed() {
+        List<ISpeedEffect> speedEffects = Effects.OfType<ISpeedEffect>().ToList();
+
+        if (speedEffects.Count > 0) {
+            foreach (ISpeedEffect speedEffect in speedEffects)
+                speedEffect.UpdateTankSpeed();
+            
+            return;
+        }
+
         if (Temperature < 0) {
             float minTemperature = TemperatureConfig.MinTemperature;
 

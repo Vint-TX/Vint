@@ -15,18 +15,29 @@ public static class ChatUtils {
             "RU", new Dictionary<string, string> {
                 { "SystemUsername", "Системное сообщение" },
                 { "BlockedUsername", "Заблокированный игрок" },
-                { "BlockedMessage", "Заблокировано" }
+                { "BlockedMessage", "[Заблокировано]" }
             }
         }, {
             "EN", new Dictionary<string, string> {
                 { "SystemUsername", "System message" },
                 { "BlockedUsername", "Blocked player" },
-                { "BlockedMessage", "Blocked" }
+                { "BlockedMessage", "[Blocked]" }
             }
         }
     };
 
-    public static ChatMessageReceivedEvent CreateMessageEvent(string message, IPlayerConnection receiver, IPlayerConnection? sender) {
+    public static ChatMessageReceivedEvent? CreateMessageEvent(string message, IPlayerConnection receiver, IPlayerConnection? sender) {
+        bool isSystem = sender == null;
+
+        using DbConnection db = new();
+        bool isBlocked = !isSystem &&
+                         db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == receiver.Player.Id &&
+                                                                  relation.TargetPlayerId == sender!.Player.Id &&
+                                                                  (relation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) !=
+                         null;
+
+        if (isBlocked) return null;
+
         string receiverLocale = receiver.Player.CountryCode.ToUpper() switch {
             "RU" => "RU",
             "EN" => "EN",
@@ -34,17 +45,7 @@ public static class ChatUtils {
         };
 
         Dictionary<string, string> localizedStrings = Localization[receiverLocale];
-
-        bool isSystem = sender == null;
-
-        using DbConnection db = new();
-
-        bool isBlocked = !isSystem &&
-                         db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == receiver.Player.Id &&
-                                                                  relation.TargetPlayerId == sender!.Player.Id &&
-                                                                  (relation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) !=
-                         null;
-
+        
         long userId = isSystem ? 0 : sender!.Player.Id;
         string avatarId = isSystem ? "" : sender!.User.GetComponent<UserAvatarComponent>().Id;
 
@@ -58,8 +59,13 @@ public static class ChatUtils {
     }
 
     public static void SendMessage(string message, IEntity chat, IEnumerable<IPlayerConnection> receivers, IPlayerConnection? sender) {
-        foreach (IPlayerConnection receiver in receivers)
-            receiver.Send(CreateMessageEvent(message, receiver, sender), chat);
+        foreach (IPlayerConnection receiver in receivers) {
+            ChatMessageReceivedEvent? messageEvent = CreateMessageEvent(message, receiver, sender);
+            
+            if (messageEvent == null) continue;
+
+            receiver.Send(messageEvent, chat);
+        }
     }
 
     // todo squads

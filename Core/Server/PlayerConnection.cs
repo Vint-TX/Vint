@@ -740,8 +740,7 @@ public abstract class PlayerConnection(
                                  currentPreset.Cover.GetUserEntity(this),
                                  currentPreset.WeaponSkin.GetUserEntity(this),
                                  currentPreset.Shell.GetUserEntity(this),
-                                 currentPreset.Graffiti.GetUserEntity(this),
-                                 currentPreset.Entity!
+                                 currentPreset.Graffiti.GetUserEntity(this)
                              }) {
                         entity.RemoveComponentIfPresent<MountedItemComponent>();
                     }
@@ -754,11 +753,13 @@ public abstract class PlayerConnection(
                                  newPreset.Cover.GetUserEntity(this),
                                  newPreset.WeaponSkin.GetUserEntity(this),
                                  newPreset.Shell.GetUserEntity(this),
-                                 newPreset.Graffiti.GetUserEntity(this),
-                                 newPreset.Entity!
+                                 newPreset.Graffiti.GetUserEntity(this)
                              }) {
                         entity.AddComponentIfAbsent(new MountedItemComponent());
                     }
+                    
+                    currentPreset.Entity!.RemoveComponent<MountedItemComponent>();
+                    newPreset.Entity!.AddComponent(new MountedItemComponent());
 
                     Player.CurrentPresetIndex = newPreset.Index;
                     db.Players

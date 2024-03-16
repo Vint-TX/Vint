@@ -263,7 +263,11 @@ public class Battle {
 
         BonusProcessor?.UnshareEntities(connection);
 
-        user.RemoveComponent<BattleGroupComponent>();
+        if (user.HasComponent<BattleGroupComponent>())
+            user.RemoveComponent<BattleGroupComponent>();
+        else 
+            connection.Logger.Error("User does not have BattleGroupComponent (Battle#RemovePlayer)");
+        
         ModeHandler.PlayerExited(battlePlayer);
 
         foreach (Effect effect in Players
@@ -286,9 +290,9 @@ public class Battle {
 
             ModeHandler.SortPlayers();
 
-            if (Players.Where(player => player.InBattle).Any(player => !player.IsSpectator)) return;
+            if (!Players.All(player => player.IsSpectator)) return;
 
-            foreach (BattlePlayer spectator in Players) {
+            foreach (BattlePlayer spectator in Players.Where(player => player.IsSpectator)) {
                 spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
                 RemovePlayer(spectator);
             }
