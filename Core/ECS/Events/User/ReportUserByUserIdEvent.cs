@@ -16,9 +16,13 @@ public class ReportUserByUserIdEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // todo send to moderators in discord or smth else
         using DbConnection db = new();
+        
         Player? targetPlayer = db.Players.SingleOrDefault(player => player.Id == UserId);
 
         if (targetPlayer == null) return;
+        
+        //Oh
+        connection.Server.DiscordBot?.SendReport($"{connection.Player.Username} reported {targetPlayer.Username}");
 
         Relation? relation = db.Relations
             .SingleOrDefault(relation => relation.SourcePlayerId == SourceId &&
