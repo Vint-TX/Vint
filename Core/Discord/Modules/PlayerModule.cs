@@ -2,6 +2,7 @@ using System.Text;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Commands.Trees.Attributes;
 using DSharpPlus.Entities;
+using LinqToDB;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -32,7 +33,7 @@ public class PlayerModule(
         StringBuilder builder = new StringBuilder();
 
         builder.AppendLine($"Status: Online/Offline/InBattle");
-        builder.AppendLine($"Current Preset: {targetPlayer.CurrentPreset.Name}");
+        builder.AppendLine($"");
 
         DiscordEmbedBuilder embed = Embeds.GetSuccessfulEmbed(builder.ToString(), $"{username} Profile");
 
@@ -45,10 +46,13 @@ public class PlayerModule(
         
         using DbConnection db = new();
         
-        //TODO(Kurays): Reduce requests to db
-        Player? targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+        Player? targetPlayer = db.Players.LoadWith(player => player.Stats).SingleOrDefault(player => player.Username == username);
 
-        if (targetPlayer == null) return;
+        if (targetPlayer == null) {
+            DiscordEmbedBuilder error = Embeds.GetWarningEmbed($"Player {username} not found");
+            await ctx.EditResponseAsync(error);
+            return;
+        };
         Statistics statistics = targetPlayer.Stats;
 
         StringBuilder builder = new();
