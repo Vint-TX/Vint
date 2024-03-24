@@ -1,5 +1,148 @@
 ﻿[
   {
+    "name": "Lobster",
+    "id": 300183098,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/lobster"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183098
+      }
+    }
+  },
+  {
+    "name": "Code",
+    "id": 300183097,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/code"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183097
+      }
+    }
+  },
+  {
+    "name": "Ink",
+    "id": 300183096,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/ink"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183096
+      }
+    }
+  },
+  {
+    "name": "Vortex",
+    "id": 300183091,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/vortex"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183091
+      }
+    }
+  },
+  {
+    "name": "Eclipse",
+    "id": 300183092,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/eclipse"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183092
+      }
+    }
+  },
+  {
+    "name": "Glittery",
+    "id": 300183093,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/glittery"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183093
+      }
+    }
+  },
+  {
+    "name": "Schematic",
+    "id": 300183095,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/schematic"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183095
+      }
+    }
+  },
+  {
+    "name": "CondensedMilk",
+    "id": 300183094,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/condensedMilk"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183094
+      }
+    }
+  },
+  {
+    "name": "Consumed",
+    "id": 300183089,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/consumed"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183089
+      }
+    }
+  },
+  {
+    "name": "Frost",
+    "id": 300183090,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/frost"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183090
+      }
+    }
+  },
+  {
+    "name": "Jokerge",
+    "id": 300183088,
+    "template": [
+      "TankPaintMarketItemTemplate",
+      "garage/paint/jokerge"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 300183088
+      }
+    }
+  },
+  {
     "name": "_23feb2019",
     "id": 300183087,
     "template": [
