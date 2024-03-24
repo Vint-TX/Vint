@@ -5,6 +5,7 @@ using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Vint.Core.Discord.Utils;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 using ILogger = Serilog.ILogger;
@@ -60,5 +61,13 @@ public class DiscordBot(
 
         Task.Run(async () => await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), ActivityType.Competing)));
         LastPlayersCount = count;
+    }
+
+    public async void SendReport(string report) {
+        DiscordEmbedBuilder embed = Embeds.GetWarningEmbed(report);
+        
+        //TODO(Kurays): Change later this shit 
+        DiscordChannel channel = await Client.GetChannelAsync(1196058513693216838);
+        await channel.SendMessageAsync(embed);
     }
 }
