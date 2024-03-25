@@ -1,9 +1,9 @@
-using System.Text;
-using DSharpPlus.Commands.Processors.SlashCommands;
-using DSharpPlus.Commands.Trees.Attributes;
+using System.Diagnostics;
+using DSharpPlus;
 using DSharpPlus.Entities;
-using LinqToDB;
-using Vint.Core.ChatCommands.Attributes;
+using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.Attributes;
+using Vint.Core.Battles;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
@@ -11,65 +11,87 @@ using Vint.Core.Server;
 
 namespace Vint.Core.Discord.Modules;
 
-[Command("player")]
+[SlashCommandGroup("player", "Player-specific commands")]
 public class PlayerModule(
     GameServer gameServer
-) {
-    [Command("profile")]
-    public async Task Profile(SlashCommandContext ctx, [Option("user", "Username in Vint")] string username) {
-        await ctx.DeferResponseAsync();
-        
-        using DbConnection db = new();
-        
-        Player? targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
-        
+) : ApplicationCommandModule {
+    [SlashCommand("profile", "Get player profile"), SlashCooldown(1, 60, SlashCooldownBucketType.User)]
+    public async Task Profile(InteractionContext ctx, 
+        [Option("username", "Username in Vint")] string username) {
+        await ctx.DeferAsync();
+
+        IPlayerConnection? connection = gameServer.PlayerConnections.Values
+            .Where(conn => conn.IsOnline)
+            .SingleOrDefault(conn => conn.Player.Username == username);
+
+        bool isOnline = connection != null;
+        Player? targetPlayer = connection?.Player;
 
         if (targetPlayer == null) {
-            DiscordEmbedBuilder error = Embeds.GetWarningEmbed($"player with username **{username}** does not exist.");
-            await ctx.EditResponseAsync(error);
+            await using DbConnection db = new();
+            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+
+            if (targetPlayer == null) {
+                DiscordEmbedBuilder error = Embeds.GetErrorEmbed($"Player with username **{username}** does not exist.", critical: true);
+                await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(error));
+                return;
+            }
+        }
+        
+        Battle? battle = connection?.BattlePlayer?.Battle;
+        bool inBattle = battle != null;
+
+        string status = isOnline 
+                            ? inBattle 
+                                  ? $"In battle: {battle!.MapInfo.Name}, {battle.Properties.BattleMode}" 
+                                  : "Online" 
+                            : "Offline";
+
+        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(status, $"{username}'s profile")
+            .AddField("Experience", $"{targetPlayer.Experience}", true)
+            .AddField("Reputation", $"{targetPlayer.Reputation}", true)
+            .AddField("League", $"{targetPlayer.League}", true)
+            .AddField("Registered", Formatter.Timestamp(targetPlayer.RegistrationTime, TimestampFormat.ShortDateTime), true)
+            .AddField("Last login", Formatter.Timestamp(targetPlayer.LastLoginTime), true);
+
+        await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
+    }
+
+    [SlashCommand("statistics", "Get player statistics"), SlashCooldown(1, 60, SlashCooldownBucketType.User)]
+    public async Task Statistics(InteractionContext ctx, 
+        [Option("user", "Username in Vint")] string username) {
+        await ctx.DeferAsync();
+
+        await using DbConnection db = new();
+
+        long playerId = db.Players
+            .Where(player => player.Username == username)
+            .Select(player => player.Id)
+            .SingleOrDefault();
+
+        if (playerId == default) {
+            DiscordEmbedBuilder error = Embeds.GetErrorEmbed($"Player with username **{username}** does not exist.", critical: true);
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(error));
             return;
         }
 
-        StringBuilder builder = new StringBuilder();
+        Statistics? statistics = db.Statistics.SingleOrDefault(stats => stats.PlayerId == playerId);
 
-        builder.AppendLine($"Status: Online/Offline/InBattle");
-        builder.AppendLine($"");
+        if (statistics == null) {
+            DiscordEmbedBuilder error = Embeds.GetErrorEmbed("Internal error. Report it to the Vint developers", critical: true);
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(error));
+            throw new UnreachableException($"Statistics for player '{username}' (id: {playerId}) does not exists");
+        }
 
-        DiscordEmbedBuilder embed = Embeds.GetSuccessfulEmbed(builder.ToString(), $"{username} Profile");
+        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed("", $"{username}'s statistics")
+            .AddField("Kills/Deaths", $"{statistics.Kills}/{statistics.Deaths} ({statistics.KD})", true)
+            .AddField("Victories/Defeats", $"{statistics.Victories}/{statistics.Defeats} ({statistics.VD})", true)
+            .AddField("Crystals earned", $"{statistics.CrystalsEarned}", true)
+            .AddField("XCrystals earned", $"{statistics.XCrystalsEarned}", true)
+            .AddField("Flags delivered", $"{statistics.FlagsDelivered}", true)
+            .AddField("Flags returned", $"{statistics.FlagsReturned}", true)
+            .AddField("GoldBoxes caught", $"{statistics.GoldBoxesCaught}", true);
 
-        await ctx.EditResponseAsync(embed);
-    }
-
-    [Command("stats")]
-    public async Task Stats(SlashCommandContext ctx, [Option("user", "Username in Vint")] string username) {
-        await ctx.DeferResponseAsync();
-        
-        using DbConnection db = new();
-        
-        Player? targetPlayer = db.Players.LoadWith(player => player.Stats).SingleOrDefault(player => player.Username == username);
-
-        if (targetPlayer == null) {
-            DiscordEmbedBuilder error = Embeds.GetWarningEmbed($"Player {username} not found");
-            await ctx.EditResponseAsync(error);
-            return;
-        };
-        Statistics statistics = targetPlayer.Stats;
-
-        StringBuilder builder = new();
-        builder.AppendLine($"Kills: {statistics.Kills}");
-        builder.AppendLine($"Deaths: {statistics.Deaths}");
-        builder.AppendLine($"Victories: {statistics.Victories}");
-        builder.AppendLine($"Defeats: {statistics.Defeats}");
-        builder.AppendLine($"Crystals earned: {statistics.CrystalsEarned}");
-        builder.AppendLine($"XCrystals earned: {statistics.XCrystalsEarned}");
-        builder.AppendLine($"Shots: {statistics.Shots}");
-        builder.AppendLine($"Hits: {statistics.Hits}");
-        builder.AppendLine($"Flags delivered: {statistics.FlagsDelivered}");
-        builder.AppendLine($"Flags returned: {statistics.FlagsReturned}");
-        builder.AppendLine($"Gold boxes caught: {statistics.GoldBoxesCaught}");
-
-        DiscordEmbedBuilder embed = Embeds.GetSuccessfulEmbed(builder.ToString(), $"{username} statistics");
-
-        await ctx.EditResponseAsync(embed);
+        await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
     }
 }

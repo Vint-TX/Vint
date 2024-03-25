@@ -1,10 +1,10 @@
 using System.Reflection;
 using DSharpPlus;
-using DSharpPlus.Commands;
-using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Vint.Core.Config;
 using Vint.Core.Discord.Utils;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -20,8 +20,11 @@ public class DiscordBot(
     int LastPlayersCount { get; set; }
     ILogger Logger { get; } = Log.Logger.ForType(typeof(DiscordBot));
     DiscordClient Client { get; set; } = null!;
+    DiscordChannel ReportsChannel { get; set; } = null!;
 
     public async Task Start() {
+        ConfigManager.InitializeDiscordConfig();
+        
         Client = new DiscordClient(new DiscordConfiguration {
             Token = token,
             TokenType = TokenType.Bot,
@@ -33,27 +36,28 @@ public class DiscordBot(
             .AddSingleton(gameServer)
             .BuildServiceProvider();
 
-        CommandsExtension commands = Client.UseCommands(new CommandsConfiguration { ServiceProvider = serviceProvider });
-        commands.AddCommands(Assembly.GetExecutingAssembly());
-        await commands.AddProcessorAsync(new SlashCommandProcessor());
+        SlashCommandsExtension commands = Client.UseSlashCommands(new SlashCommandsConfiguration { Services = serviceProvider });
+        commands.RegisterCommands(Assembly.GetExecutingAssembly());
 
-        commands.CommandExecuted += (_, args) => {
-            CommandContext ctx = args.Context;
+        commands.SlashCommandExecuted += (_, args) => {
+            InteractionContext ctx = args.Context;
             string username = ctx.User.Username;
-            string commandName = ctx.Command.Name;
+            string commandName = ctx.CommandName;
             string channelName = ctx.Channel.Name;
-            string executionPlace = ctx.Guild! == null! ? "DMs" : ctx.Guild.Name;
+            string executionPlace = ctx.Guild == null! ? "DMs" : ctx.Guild.Name;
 
             Logger.Information("{User} executed command \'{Name}\' in {Place}, {Channel}", username, commandName, executionPlace, channelName);
             return Task.CompletedTask;
         };
 
-        commands.CommandErrored += (_, args) => {
-            Logger.Error(args.Exception, "Got an exception while executing command {Name}", args.Context.Command.Name);
+        commands.SlashCommandErrored += (_, args) => {
+            Logger.Error(args.Exception, "Got an exception while executing command {Name}", args.Context.CommandName);
             return Task.CompletedTask;
         };
 
         await Client.ConnectAsync(new DiscordActivity("Vint", ActivityType.Competing));
+
+        ReportsChannel = await Client.GetChannelAsync(ConfigManager.Discord.ReportsChannelId);
     }
 
     public void SetPlayersCount(int count) {
@@ -63,11 +67,9 @@ public class DiscordBot(
         LastPlayersCount = count;
     }
 
-    public async void SendReport(string report) {
-        DiscordEmbedBuilder embed = Embeds.GetWarningEmbed(report);
-        
-        //TODO(Kurays): Change later this shit 
-        DiscordChannel channel = await Client.GetChannelAsync(1196058513693216838);
-        await channel.SendMessageAsync(embed);
+    public void SendReport(string message, string reporter) {
+        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(message, "New report submitted", $"Reported by **{reporter}**");
+
+        Task.Run(async () => await ReportsChannel.SendMessageAsync(embed));
     }
 }

@@ -31,10 +31,10 @@ static class Embeds {
     public static DiscordEmbedBuilder GetWarningEmbed(string description, string title = "Warning", string? footer = null) =>
         GetEmbed(title, description, footer, "#FFCC00");
 
-    public static DiscordEmbedBuilder GetErrorEmbed(string description, string title = "Error", bool critical = true) =>
+    public static DiscordEmbedBuilder GetErrorEmbed(string description, string title = "Error", bool critical = false) =>
         GetEmbed(title,
             description,
-            critical ? "Просим вас сообщать о неправильном поведении бота на сервер поддержки." : null,
+            critical ? "If you think an error has occurred, report it to the Vint server" : null,
             "#CC0605");
 
     static DiscordEmbedBuilder GetEmbed(string title, string description, string? footer, string color) => new DiscordEmbedBuilder()

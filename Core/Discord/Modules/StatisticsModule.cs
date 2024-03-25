@@ -1,32 +1,26 @@
-using DSharpPlus.Commands.Processors.SlashCommands;
-using DSharpPlus.Commands.Trees.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.Attributes;
 using Vint.Core.Discord.Utils;
 using Vint.Core.Server;
 
 namespace Vint.Core.Discord.Modules;
 
-[Command("statistics")]
+[SlashCommandGroup("statistics", "Some sort of statistics")]
 public class StatisticsModule(
     GameServer gameServer
-) {
-    [Command("players")]
-    public async Task Players(SlashCommandContext ctx) {
-        await ctx.DeferResponseAsync();
+) : ApplicationCommandModule {
+    [SlashCommand("count", "Get current players and battles count"), SlashCooldown(1, 60, SlashCooldownBucketType.Channel)]
+    public async Task Count(InteractionContext ctx) {
+        await ctx.DeferAsync();
 
-        int count = gameServer.PlayerConnections.Count;
-        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed($"{count} players online");
+        int players = gameServer.PlayerConnections.Count;
+        int battles = gameServer.BattleProcessor.BattlesCount;
 
-        await ctx.EditResponseAsync(embed);
-    }
+        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed("")
+            .AddField("Players", $"{players}", true)
+            .AddField("Battles", $"{battles}", true);
 
-    [Command("battles")]
-    public async Task Battles(SlashCommandContext ctx) {
-        await ctx.DeferResponseAsync();
-
-        int count = gameServer.BattleProcessor.BattlesCount;
-        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed($"{count} battles");
-
-        await ctx.EditResponseAsync(embed);
+        await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
     }
 }

@@ -14,15 +14,14 @@ public class ReportUserByUserIdEvent : IServerEvent {
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // todo send to moderators in discord or smth else
+    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // todo improve
         using DbConnection db = new();
         
         Player? targetPlayer = db.Players.SingleOrDefault(player => player.Id == UserId);
 
         if (targetPlayer == null) return;
         
-        //Oh
-        connection.Server.DiscordBot?.SendReport($"{connection.Player.Username} reported {targetPlayer.Username}");
+        connection.Server.DiscordBot?.SendReport($"{targetPlayer.Username} has been reported", connection.Player.Username);
 
         Relation? relation = db.Relations
             .SingleOrDefault(relation => relation.SourcePlayerId == SourceId &&

@@ -29,7 +29,8 @@ public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
 
     public static IReadOnlyList<MapInfo> MapInfos { get; private set; } = null!;
-
+    public static DiscordConfig Discord { get; private set; }
+    
     public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
@@ -44,7 +45,7 @@ public static class ConfigManager {
     static ConfigNode Root { get; } = new();
 
     public static void InitializeMapInfos() {
-        Logger.Information("Generating map infos");
+        Logger.Information("Parsing map infos");
 
         string mapInfosConfigPath = Path.Combine(ResourcesPath, "mapInfo.json");
         Dictionary<string, MapInfo> mapInfos = JsonConvert.DeserializeObject<Dictionary<string, MapInfo>>(File.ReadAllText(mapInfosConfigPath))!;
@@ -54,11 +55,20 @@ public static class ConfigManager {
 
         MapInfos = mapInfos.Values.ToImmutableList();
 
-        Logger.Information("Map infos generated");
+        Logger.Information("Map infos parsed");
     }
+    
+    public static void InitializeDiscordConfig() {
+        Logger.Information("Parsing discord config");
 
+        string discordConfigPath = Path.Combine(ResourcesPath, "discord.json");
+        Discord = JsonConvert.DeserializeObject<DiscordConfig>(File.ReadAllText(discordConfigPath));
+        
+        Logger.Information("Discord config parsed");    
+    }
+    
     public static void InitializeMapModels() {
-        Logger.Information("Generating map models");
+        Logger.Information("Parsing map models");
 
         string mapModelsConfigPath = Path.Combine(ResourcesPath, "MapModels");
         Vector3 gltfToUnity = new(-1, 1, 1);
@@ -67,7 +77,7 @@ public static class ConfigManager {
 
         foreach (string mapModelPath in Directory.EnumerateFiles(mapModelsConfigPath)) {
             string mapName = Path.GetFileNameWithoutExtension(mapModelPath);
-            Logger.Debug("Generating {MapName}", mapName);
+            Logger.Debug("Parsing {MapName}", mapName);
 
             try {
                 ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
@@ -88,7 +98,7 @@ public static class ConfigManager {
         }
 
         MapNameToTriangles = mapNameToTriangles;
-        Logger.Information("Map models generated");
+        Logger.Information("Map models parsed");
     }
 
     public static void InitializeCache() {

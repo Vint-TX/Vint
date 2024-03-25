@@ -1,30 +1,22 @@
 using DSharpPlus;
-using DSharpPlus.Commands.Processors.SlashCommands;
-using DSharpPlus.Commands.Trees.Attributes;
 using DSharpPlus.Entities;
-using Vint.Core.Battles;
-using Vint.Core.Battles.Player;
-using Vint.Core.ChatCommands.Attributes;
+using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.Attributes;
 using Vint.Core.Discord.Utils;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Discord.Modules;
 
-[Command("mod")]
+[SlashCommandGroup("mod", "Commands for moderators", false), SlashRequireUserPermissions(Permissions.ModerateMembers)]
 public class ModModule(
     GameServer gameServer
-) {
-    [Command("dmsg")]
-    public async Task DisplayMessage(SlashCommandContext ctx, [Option("target")] string username, [Option("text")] string message) {
-        await ctx.DeferResponseAsync();
-        
-        if (!ctx.Member.Permissions.HasPermission(Permissions.KickMembers)) {
-            DiscordEmbedBuilder error = Embeds.GetErrorEmbed($"No permissions!");
-            await ctx.EditResponseAsync(error);
-            return;
-        }
+) : ApplicationCommandModule {
+    [SlashCommand("dmsg", "Display message")]
+    public async Task DisplayMessage(InteractionContext ctx, 
+        [Option("target", "Username of player or @a for broadcast")] string username, 
+        [Option("message", "Message to display")] string message) {
+        await ctx.DeferAsync();
         
         switch (username) {
             case "@a": {
@@ -39,8 +31,8 @@ public class ModModule(
                     .SingleOrDefault(conn => conn.Player.Username == username);
 
                 if (target == null) {
-                    DiscordEmbedBuilder error = Embeds.GetWarningEmbed($"Player '{username}' not found");
-                    await ctx.EditResponseAsync(error);
+                    DiscordEmbedBuilder error = Embeds.GetErrorEmbed($"Player '{username}' not found");
+                    await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(error));
                     return;
                 }
 
@@ -48,44 +40,37 @@ public class ModModule(
                 break;
             }
         }
-        DiscordEmbedBuilder embed = Embeds.GetSuccessfulEmbed($"Done");
-
-        await ctx.EditResponseAsync(embed);
+        
+        DiscordEmbedBuilder embed = Embeds.GetSuccessfulEmbed("Message displayed");
+        await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
     }
 
-    [Command("kick")]
-    public async Task KickPlayer(SlashCommandContext ctx, [Option("target")] string username, [Option("reason")] string reason) {
-        await ctx.DeferResponseAsync();
-        
-        if (!ctx.Member.Permissions.HasPermission(Permissions.KickMembers)) {
-            DiscordEmbedBuilder error = Embeds.GetErrorEmbed($"No permissions!");
-            await ctx.EditResponseAsync(error);
-            return;
-        }
+    [SlashCommand("kick", "Kick the player")]
+    public async Task KickPlayer(InteractionContext ctx, 
+        [Option("target", "Username of player")] string username, 
+        [Option("reason", "Reason for kick")] string? reason = null) {
+        await ctx.DeferAsync();
         
         IPlayerConnection? targetConnection = gameServer.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
+
+        DiscordEmbedBuilder? error = null;
         
-        IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
-
-        if (targetConnection == null) {
-            DiscordEmbedBuilder noTarget = Embeds.GetWarningEmbed($"Player is not on the server");
-            await ctx.EditResponseAsync(noTarget);
-            return;
-        }
-
-        if (targetConnection.Player.IsAdmin) {
-            DiscordEmbedBuilder targetAdmin = Embeds.GetWarningEmbed($"Player '{username}' is admin");
-            await ctx.EditResponseAsync(targetAdmin);
+        if (targetConnection == null)
+            error = Embeds.GetErrorEmbed("Player is offline");
+        else if (targetConnection.Player.IsAdmin)
+            error = Embeds.GetErrorEmbed($"Player '{username}' is admin");
+        
+        if (error != null) {
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(error));
             return;
         }
         
-
-        targetConnection.Kick(reason);
+        targetConnection?.Kick(reason);
         string punishMessage = $"{username} was kicked for '{reason}'";
+        
         DiscordEmbedBuilder success = Embeds.GetSuccessfulEmbed(punishMessage);
-        await ctx.EditResponseAsync(success);
+        await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(success));
     }
 }

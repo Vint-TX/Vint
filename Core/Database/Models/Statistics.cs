@@ -32,6 +32,9 @@ public class Statistics {
     [Column] public uint Shots { get; set; }
     [Column] public uint Hits { get; set; }
 
+    [NotColumn] public double KD => Deaths == 0 ? Kills : Math.Round((double)Kills / Deaths, 2);
+    [NotColumn] public double VD => Defeats == 0 ? Victories : Math.Round((double)Victories / Defeats, 2);
+
     public Dictionary<string, long> CollectClientSide() => new() {
         { "BATTLES_PARTICIPATED", BattlesParticipated },
         { "ALL_BATTLES_PARTICIPATED", AllBattlesParticipated },

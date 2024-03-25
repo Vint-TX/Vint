@@ -198,7 +198,7 @@ public class BattlePlayer {
     public void OnAntiCheatSuspected() {
         if (ReportedInChat) return;
         
-        PlayerConnection.Server.DiscordBot?.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.");
+        PlayerConnection.Server.DiscordBot?.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
         
         ChatUtils.SendMessage(
             $"{PlayerConnection.Player.Username} is suspected to be cheating. Please, report it to the moderators as soon as possible",
