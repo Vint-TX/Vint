@@ -99,7 +99,7 @@ public class BattlePlayer {
                      .SelectMany(battlePlayer => battlePlayer.Tank!.Effects))
             effect.Share(this);
 
-        PlayerConnection.User.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
+        PlayerConnection.User.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
         Battle.ModeHandler.PlayerEntered(this);
 
         if (IsSpectator) {
@@ -197,9 +197,9 @@ public class BattlePlayer {
 
     public void OnAntiCheatSuspected() {
         if (ReportedInChat) return;
-        
+
         PlayerConnection.Server.DiscordBot?.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
-        
+
         ChatUtils.SendMessage(
             $"{PlayerConnection.Player.Username} is suspected to be cheating. Please, report it to the moderators as soon as possible",
             Battle.BattleChatEntity,

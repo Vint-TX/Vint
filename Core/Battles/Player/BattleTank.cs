@@ -218,11 +218,11 @@ public class BattleTank {
         if (FullDisabled) return;
 
         WeaponHandler.OnTankEnable();
-        Tank.AddComponent(new TankMovableComponent());
-        
+        Tank.AddComponent<TankMovableComponent>();
+
         TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
         TemperatureAssists.Clear();
-        
+
         SetTemperature(0);
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
     }
@@ -235,7 +235,7 @@ public class BattleTank {
             effect.UnScheduleAll();
             effect.Deactivate();
         }
-        
+
         TemperatureAssists.Clear();
         SetTemperature(0);
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
@@ -423,7 +423,7 @@ public class BattleTank {
         if (speedEffects.Count > 0) {
             foreach (ISpeedEffect speedEffect in speedEffects)
                 speedEffect.UpdateTankSpeed();
-            
+
             return;
         }
 

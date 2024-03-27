@@ -8,19 +8,11 @@ namespace Vint.Core.ECS.Templates.Battle;
 
 [ProtocolId(140335313420508312)]
 public class RoundUserTemplate : EntityTemplate {
-    public IEntity Create(BattlePlayer battlePlayer, IEntity tank) {
-        IEntity entity = Entity("battle/round/rounduser",
-            builder =>
-                builder
-                    .AddComponent(new RoundUserComponent())
-                    .AddComponent(tank.GetComponent<UserGroupComponent>())
-                    .AddComponent(tank.GetComponent<BattleGroupComponent>()));
-
-        if (battlePlayer.Team != null)
-            entity.AddComponent(battlePlayer.Team.GetComponent<TeamGroupComponent>());
-
-        entity.AddComponent(new RoundUserStatisticsComponent(0, 0, 0, 0, 0));
-
-        return entity;
-    }
+    public IEntity Create(BattlePlayer battlePlayer, IEntity tank) => Entity("battle/round/rounduser",
+        builder => builder
+            .AddComponent<RoundUserComponent>()
+            .AddComponent(new RoundUserStatisticsComponent(0, 0, 0, 0, 0))
+            .AddComponentFrom<UserGroupComponent>(tank)
+            .AddComponentFrom<BattleGroupComponent>(tank)
+            .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddComponentFrom<TeamGroupComponent>(battlePlayer.Team!)));
 }

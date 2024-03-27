@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using ConcurrentCollections;
 using Serilog;
+using Vint.Core.Config;
 using Vint.Core.ECS.Components;
+using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Commands;
@@ -87,7 +89,7 @@ public class Entity(
             : new TemplateAccessor(TemplateAccessor.Template, TemplateAccessor.ConfigPath),
         Components.ToHashSet());
 
-    public void AddComponent(IComponent component, IPlayerConnection? excluded) {
+    public void AddComponent(IComponent component, IPlayerConnection? excluded = null) {
         Type type = component.GetType();
 
         if (!TypeToComponent.TryAdd(type, component))
@@ -99,9 +101,25 @@ public class Entity(
             playerConnection.Send(new ComponentAddCommand(this, component));
     }
 
+    public void AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() => AddComponent(new T(), excluded);
+
+    public void AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent =>
+        AddComponent(ConfigManager.GetComponent<T>(configPath), excluded);
+
+    public void AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent =>
+        AddComponent((T)Activator.CreateInstance(typeof(T), entity ?? this)!, excluded);
+
+    public void AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent =>
+        AddComponent(entity.GetComponent<T>(), excluded);
+
     public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null) {
         if (!HasComponent(component))
             AddComponent(component, excluded);
+    }
+
+    public void AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() {
+        if (!HasComponent<T>())
+            AddComponent<T>(excluded);
     }
 
     public bool HasComponent<T>() where T : class, IComponent =>

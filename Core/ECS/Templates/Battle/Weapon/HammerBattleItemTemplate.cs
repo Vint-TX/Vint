@@ -1,5 +1,4 @@
 using Vint.Core.Battles.Player;
-using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -12,10 +11,10 @@ public class HammerBattleItemTemplate : DiscreteWeaponTemplate {
         const string configPath = "garage/weapon/hammer";
         IEntity entity = Create(configPath, tank, battlePlayer);
 
-        entity.AddComponent(new HammerComponent());
-        entity.AddComponent(new MagazineReadyStateComponent());
-        entity.AddComponent(ConfigManager.GetComponent<MagazineWeaponComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<HammerPelletConeComponent>(configPath.Replace("garage", "battle")));
+        entity.AddComponent<HammerComponent>();
+        entity.AddComponent<MagazineReadyStateComponent>();
+        entity.AddComponent<MagazineWeaponComponent>(configPath);
+        entity.AddComponent<HammerPelletConeComponent>(configPath.Replace("garage", "battle"));
         return entity;
     }
 }

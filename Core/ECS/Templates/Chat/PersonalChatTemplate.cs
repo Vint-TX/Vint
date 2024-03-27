@@ -7,8 +7,7 @@ namespace Vint.Core.ECS.Templates.Chat;
 [ProtocolId(636469998634338659)]
 public class PersonalChatTemplate : EntityTemplate {
     public IEntity Create(IEntity sourceUser, IEntity targetUser) => Entity("chat",
-        builder =>
-            builder
-                .AddComponent(new ChatComponent())
-                .AddComponent(new ChatParticipantsComponent(sourceUser, targetUser)));
+        builder => builder
+            .AddComponent<ChatComponent>()
+            .AddComponent(new ChatParticipantsComponent(sourceUser, targetUser)));
 }

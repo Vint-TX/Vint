@@ -9,17 +9,17 @@ namespace Vint.Core.ECS.Templates.Battle.User;
 public class BattleUserTemplate : EntityTemplate {
     IEntity Create(IEntity user, IEntity battle) => Entity("battle/battleuser",
         builder => builder
-            .AddComponent(user.GetComponent<UserGroupComponent>())
-            .AddComponent(battle.GetComponent<BattleGroupComponent>())
-            .AddComponent(new BattleUserComponent()));
+            .AddComponent<BattleUserComponent>()
+            .AddComponentFrom<UserGroupComponent>(user)
+            .AddComponentFrom<BattleGroupComponent>(battle));
 
     public IEntity CreateAsTank(IEntity user, IEntity battle, IEntity? team) {
         IEntity entity = Create(user, battle);
 
         if (team != null)
-            entity.AddComponent(team.GetComponent<TeamGroupComponent>());
+            entity.AddComponentFrom<TeamGroupComponent>(team);
 
-        entity.AddComponent(new UserInBattleAsTankComponent());
+        entity.AddComponent<UserInBattleAsTankComponent>();
         return entity;
     }
 

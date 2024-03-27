@@ -1,5 +1,4 @@
 using Vint.Core.Battles.Player;
-using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Entities;
 
@@ -9,7 +8,7 @@ public abstract class BulletWeaponTemplate : DiscreteWeaponTemplate {
     protected override IEntity Create(string configPath, IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = base.Create(configPath, tank, battlePlayer);
 
-        entity.AddComponent(ConfigManager.GetComponent<WeaponBulletShotComponent>(configPath));
+        entity.AddComponent<WeaponBulletShotComponent>(configPath);
         return entity;
     }
 }

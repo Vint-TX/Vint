@@ -12,83 +12,61 @@ namespace Vint.Core.ECS.Templates.User;
 
 [ProtocolId(1433752208915)]
 public class UserTemplate : EntityTemplate {
-    public IEntity Create(Player player) {
-        IEntity user = Entity(null,
-            builder => {
-                builder
-                    .AddComponent(new UserComponent())
-                    .AddComponent(new UserOnlineComponent())
-                    .AddComponent(new UserPublisherComponent())
-                    .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
-                    .AddComponent(new UserUidComponent(player.Username))
-                    .AddComponent(new UserCountryComponent(player.CountryCode))
-                    .AddComponent(new UserSubscribeComponent(player.Subscribed))
-                    .AddComponent(new ConfirmedUserEmailComponent(player.Email, player.Subscribed))
-                    .AddComponent(new PersonalChatOwnerComponent())
-                    .AddComponent(new BlackListComponent())
-                    .AddComponent(new UserExperienceComponent(player.Experience))
-                    .AddComponent(new UserRankComponent(player.Rank))
-                    .AddComponent(new UserMoneyComponent(player.Crystals))
-                    .AddComponent(new UserXCrystalsComponent(player.XCrystals))
-                    .AddComponent(new QuestReadyComponent())
-                    .AddComponent(new UserReputationComponent(player.Reputation))
-                    // todo .AddComponent(new TutorialCompleteIdsComponent())
-                    .AddComponent(new FractionUserScoreComponent(player.FractionScore))
-                    .AddComponent(new UserStatisticsComponent(player.Id))
-                    .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new BattleLeaveCounterComponent(player.DesertedBattlesCount, player.NeedGoodBattlesCount))
-                    .AddComponent(new LeagueGroupComponent(player.LeagueEntity))
-                    .AddComponent(new GameplayChestScoreComponent(player.GameplayChestScore))
-                    .WithId(player.Id);
+    public IEntity Create(Player player) => Entity(null,
+        builder => builder
+            .AddComponent<UserComponent>()
+            .AddComponent<UserOnlineComponent>()
+            .AddComponent<UserPublisherComponent>()
+            .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
+            .AddComponent(new UserUidComponent(player.Username))
+            .AddComponent(new UserCountryComponent(player.CountryCode))
+            .AddComponent(new UserSubscribeComponent(player.Subscribed))
+            .AddComponent(new ConfirmedUserEmailComponent(player.Email, player.Subscribed))
+            .AddComponent(new PersonalChatOwnerComponent())
+            .AddComponent(new BlackListComponent())
+            .AddComponent(new UserExperienceComponent(player.Experience))
+            .AddComponent(new UserRankComponent(player.Rank))
+            .AddComponent(new UserMoneyComponent(player.Crystals))
+            .AddComponent(new UserXCrystalsComponent(player.XCrystals))
+            .AddComponent<QuestReadyComponent>()
+            .AddComponent(new UserReputationComponent(player.Reputation))
+            // todo .AddComponent(new TutorialCompleteIdsComponent())
+            .AddComponent(new FractionUserScoreComponent(player.FractionScore))
+            .AddComponent(new UserStatisticsComponent(player.Id))
+            .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
+            .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
+            .AddComponent(new BattleLeaveCounterComponent(player.DesertedBattlesCount, player.NeedGoodBattlesCount))
+            .AddComponent(new GameplayChestScoreComponent(player.GameplayChestScore))
+            .AddGroupComponent<LeagueGroupComponent>(player.LeagueEntity)
+            .AddGroupComponent<UserGroupComponent>()
+            .ThenExecuteIf(_ => player.IsAdmin, entity => entity.AddComponent<UserAdminComponent>())
+            .ThenExecuteIf(_ => player.IsModerator, entity => entity.AddComponent<ModeratorComponent>())
+            .ThenExecuteIf(_ => player.IsTester,
+                entity => {
+                    entity.AddComponent<ClosedBetaQuestAchievementComponent>();
+                    entity.AddComponent<UserTesterComponent>();
+                })
+            .WithId(player.Id));
 
-                if (player.IsAdmin)
-                    builder.AddComponent(new UserAdminComponent());
-
-                if (player.IsModerator)
-                    builder.AddComponent(new ModeratorComponent());
-
-                if (player.IsTester) {
-                    builder.AddComponent(new ClosedBetaQuestAchievementComponent());
-                    builder.AddComponent(new UserTesterComponent());
-                }
-            });
-
-        user.AddComponent(new UserGroupComponent(user));
-        return user;
-    }
-
-    public IEntity CreateFake(IPlayerConnection connection, Player player) {
-        IEntity user = Entity(null,
-            builder => {
-                builder
-                    .AddComponent(new UserComponent())
-                    .AddComponent(new UserPublisherComponent())
-                    .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
-                    .AddComponent(new UserUidComponent(player.Username))
-                    .AddComponent(new UserExperienceComponent(player.Experience))
-                    .AddComponent(new UserRankComponent(player.Rank))
-                    .AddComponent(new UserReputationComponent(player.Reputation))
-                    .AddComponent(new FractionUserScoreComponent(player.FractionScore))
-                    .AddComponent(new UserStatisticsComponent(player.Id))
-                    .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
-                    .AddComponent(new LeagueGroupComponent(player.LeagueEntity))
-                    .AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId))
-                    .WithId(player.Id);
-
-                if (player.IsAdmin)
-                    builder.AddComponent(new UserAdminComponent());
-
-                if (player.IsModerator)
-                    builder.AddComponent(new ModeratorComponent());
-
-                if (player.IsTester)
-                    builder.AddComponent(new UserTesterComponent());
-            },
-            true);
-
-        user.AddComponent(new UserGroupComponent(user));
-        return user;
-    }
+    public IEntity CreateFake(IPlayerConnection connection, Player player) => Entity(null,
+        builder => builder
+            .AddComponent<UserComponent>()
+            .AddComponent<UserPublisherComponent>()
+            .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
+            .AddComponent(new UserUidComponent(player.Username))
+            .AddComponent(new UserExperienceComponent(player.Experience))
+            .AddComponent(new UserRankComponent(player.Rank))
+            .AddComponent(new UserReputationComponent(player.Reputation))
+            .AddComponent(new FractionUserScoreComponent(player.FractionScore))
+            .AddComponent(new UserStatisticsComponent(player.Id))
+            .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
+            .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
+            .AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId))
+            .ThenExecuteIf(_ => player.IsAdmin, entity => entity.AddComponent<UserAdminComponent>())
+            .ThenExecuteIf(_ => player.IsModerator, entity => entity.AddComponent<ModeratorComponent>())
+            .ThenExecuteIf(_ => player.IsTester, entity => entity.AddComponent<UserTesterComponent>())
+            .AddGroupComponent<LeagueGroupComponent>(player.LeagueEntity)
+            .AddGroupComponent<UserGroupComponent>()
+            .WithId(player.Id),
+        true);
 }

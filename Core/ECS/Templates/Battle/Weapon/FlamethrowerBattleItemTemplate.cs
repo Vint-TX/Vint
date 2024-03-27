@@ -10,7 +10,7 @@ public class FlamethrowerBattleItemTemplate : StreamWeaponTemplate {
     public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = Create("garage/weapon/flamethrower", tank, battlePlayer);
 
-        entity.AddComponent(new FlamethrowerComponent());
+        entity.AddComponent<FlamethrowerComponent>();
         return entity;
     }
 }

@@ -45,7 +45,7 @@ public static class ChatUtils {
         };
 
         Dictionary<string, string> localizedStrings = Localization[receiverLocale];
-        
+
         long userId = isSystem ? 0 : sender!.Player.Id;
         string avatarId = isSystem ? "" : sender!.User.GetComponent<UserAvatarComponent>().Id;
 
@@ -61,7 +61,7 @@ public static class ChatUtils {
     public static void SendMessage(string message, IEntity chat, IEnumerable<IPlayerConnection> receivers, IPlayerConnection? sender) {
         foreach (IPlayerConnection receiver in receivers) {
             ChatMessageReceivedEvent? messageEvent = CreateMessageEvent(message, receiver, sender);
-            
+
             if (messageEvent == null) continue;
 
             receiver.Send(messageEvent, chat);

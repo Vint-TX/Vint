@@ -1,5 +1,6 @@
 ﻿using ConcurrentCollections;
 using Vint.Core.ECS.Components;
+using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Commands;
@@ -23,7 +24,17 @@ public interface IEntity {
 
     public void AddComponent(IComponent component, IPlayerConnection? excluded = null);
 
+    public void AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
+
+    public void AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent;
+
+    public void AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent;
+
+    public void AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent;
+
     public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null);
+    
+    public void AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
 
     public bool HasComponent(IComponent component);
 

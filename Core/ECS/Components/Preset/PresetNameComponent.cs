@@ -22,7 +22,7 @@ public class PresetNameComponent( // wtf is this shit? todo refactor
 
     public void Changed(IPlayerConnection connection, IEntity entity) {
         if (_name?.Length > 18) return;
-        
+
         preset ??= connection.Player.UserPresets.Single(p => p.Entity!.Id == entity.Id);
         if (_name != null) preset.Name = _name;
 

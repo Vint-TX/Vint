@@ -11,9 +11,9 @@ public class FlagTemplate : EntityTemplate {
     public IEntity Create(Vector3 position, IEntity team, IEntity battle) => Entity("battle/modes/ctf",
         builder =>
             builder
-                .AddComponent(new FlagComponent())
-                .AddComponent(new FlagHomeStateComponent())
+                .AddComponent<FlagComponent>()
+                .AddComponent<FlagHomeStateComponent>()
                 .AddComponent(new FlagPositionComponent(position))
-                .AddComponent(team.GetComponent<TeamGroupComponent>())
-                .AddComponent(battle.GetComponent<BattleGroupComponent>()));
+                .AddComponentFrom<TeamGroupComponent>(team)
+                .AddComponentFrom<BattleGroupComponent>(battle));
 }

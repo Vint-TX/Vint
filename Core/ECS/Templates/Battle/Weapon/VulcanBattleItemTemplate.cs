@@ -1,5 +1,4 @@
 using Vint.Core.Battles.Player;
-using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Stream;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
@@ -14,11 +13,11 @@ public class VulcanBattleItemTemplate : StreamWeaponTemplate {
         const string configPath = "garage/weapon/vulcan";
         IEntity entity = Create(configPath, tank, battlePlayer);
 
-        entity.AddComponent(new VulcanComponent());
-        entity.AddComponent(ConfigManager.GetComponent<StreamHitConfigComponent>("battle/weapon/vulcan"));
-        entity.AddComponent(ConfigManager.GetComponent<VulcanWeaponComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<KickbackComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<ImpactComponent>(configPath));
+        entity.AddComponent<VulcanComponent>();
+        entity.AddComponent<StreamHitConfigComponent>("battle/weapon/vulcan");
+        entity.AddComponent<VulcanWeaponComponent>(configPath);
+        entity.AddComponent<KickbackComponent>(configPath);
+        entity.AddComponent<ImpactComponent>(configPath);
 
         return entity;
     }

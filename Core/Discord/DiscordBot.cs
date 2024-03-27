@@ -24,7 +24,7 @@ public class DiscordBot(
 
     public async Task Start() {
         ConfigManager.InitializeDiscordConfig();
-        
+
         Client = new DiscordClient(new DiscordConfiguration {
             Token = token,
             TokenType = TokenType.Bot,

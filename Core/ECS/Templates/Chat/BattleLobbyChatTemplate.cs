@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Templates.Chat;
 [ProtocolId(1499421322354)]
 public class BattleLobbyChatTemplate : EntityTemplate {
     public IEntity Create() =>
-        Entity("chat/general/ru", builder => builder.AddComponent(new ChatComponent()));
+        Entity("chat/general/ru", builder => builder.AddComponent<ChatComponent>());
 }

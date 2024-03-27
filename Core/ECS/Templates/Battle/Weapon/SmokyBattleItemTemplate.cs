@@ -10,7 +10,7 @@ public class SmokyBattleItemTemplate : DiscreteWeaponTemplate {
     public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = base.Create("garage/weapon/smoky", tank, battlePlayer);
 
-        entity.AddComponent(new SmokyComponent());
+        entity.AddComponent<SmokyComponent>();
         return entity;
     }
 }

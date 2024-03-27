@@ -10,7 +10,7 @@ public class TwinsBattleItemTemplate : BulletWeaponTemplate {
     public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = base.Create("garage/weapon/twins", tank, battlePlayer);
 
-        entity.AddComponent(new TwinsComponent());
+        entity.AddComponent<TwinsComponent>();
         return entity;
     }
 }

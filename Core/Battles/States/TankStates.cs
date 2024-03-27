@@ -87,7 +87,7 @@ public class SemiActive(
     public override void Start() {
         BattleTank.Enable();
         BattleTank.SetTemperature(0);
-        BattleTank.Tank.AddComponent(new TankVisibleStateComponent());
+        BattleTank.Tank.AddComponent<TankVisibleStateComponent>();
         base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1);
     }

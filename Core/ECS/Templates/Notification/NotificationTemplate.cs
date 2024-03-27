@@ -8,13 +8,8 @@ namespace Vint.Core.ECS.Templates.Notification;
 
 [ProtocolId(1454656560829)]
 public abstract class NotificationTemplate : EntityTemplate {
-    protected IEntity Create(string configPath) {
-        IEntity entity = Entity(configPath,
-            builder =>
-                builder
-                    .AddComponent(new NotificationComponent(NotificationPriority.Message)));
-
-        entity.AddComponent(new NotificationGroupComponent(entity));
-        return entity;
-    }
+    protected IEntity Create(string configPath) => Entity(configPath,
+        builder => builder
+            .AddComponent(new NotificationComponent(NotificationPriority.Message))
+            .AddGroupComponent<NotificationGroupComponent>());
 }

@@ -46,7 +46,7 @@ public abstract class WeaponHandler {
     public abstract void Fire(HitTarget target);
 
     public virtual void OnTankEnable() =>
-        BattleEntity.AddComponent(new ShootableComponent());
+        BattleEntity.AddComponent<ShootableComponent>();
 
     public virtual void OnTankDisable() =>
         BattleEntity.RemoveComponentIfPresent<ShootableComponent>();

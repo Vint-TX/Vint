@@ -9,9 +9,8 @@ namespace Vint.Core.ECS.Templates.Battle.Flag;
 [ProtocolId(1431942342249)]
 public class PedestalTemplate : EntityTemplate {
     public IEntity Create(Vector3 position, IEntity team, IEntity battle) => Entity("battle/modes/ctf",
-        builder =>
-            builder
-                .AddComponent(new FlagPedestalComponent(position))
-                .AddComponent(team.GetComponent<TeamGroupComponent>())
-                .AddComponent(battle.GetComponent<BattleGroupComponent>()));
+        builder => builder
+            .AddComponent(new FlagPedestalComponent(position))
+            .AddComponentFrom<TeamGroupComponent>(team)
+            .AddComponentFrom<BattleGroupComponent>(battle));
 }

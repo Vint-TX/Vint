@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
 public class ShaftIdleStateComponent : IComponent {
     public void Added(IPlayerConnection connection, IEntity entity) {
         if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft) return;
-        
+
         shaft.Reset();
     }
 }

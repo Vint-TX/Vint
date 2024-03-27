@@ -1,5 +1,4 @@
 using Vint.Core.Battles.Player;
-using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon.Stream;
 using Vint.Core.ECS.Components.Battle.Weapon.Types;
 using Vint.Core.ECS.Entities;
@@ -12,8 +11,8 @@ public class IsisBattleItemTemplate : StreamWeaponTemplate {
     public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = base.Create("garage/weapon/isis", tank, battlePlayer);
 
-        entity.AddComponent(new IsisComponent());
-        entity.AddComponent(ConfigManager.GetComponent<StreamHitConfigComponent>("battle/weapon/isis"));
+        entity.AddComponent<IsisComponent>();
+        entity.AddComponent<StreamHitConfigComponent>("battle/weapon/isis");
         return entity;
     }
 }

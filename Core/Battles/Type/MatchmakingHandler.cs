@@ -57,7 +57,7 @@ public class MatchmakingHandler : TypeHandler {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 
-        user.AddComponent(new MatchMakingUserComponent());
+        user.AddComponent<MatchMakingUserComponent>();
 
         if (Battle.StateManager.CurrentState is not (WarmUp or Running)) return;
 

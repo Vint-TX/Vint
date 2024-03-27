@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 [ProtocolId(1496829083447)]
 public class MatchMakingUserReadyEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        connection.User.AddComponent(new MatchMakingUserReadyComponent());
+        connection.User.AddComponent<MatchMakingUserReadyComponent>();
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
 

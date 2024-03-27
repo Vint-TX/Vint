@@ -16,11 +16,11 @@ public class ReportUserByUserIdEvent : IServerEvent {
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // todo improve
         using DbConnection db = new();
-        
+
         Player? targetPlayer = db.Players.SingleOrDefault(player => player.Id == UserId);
 
         if (targetPlayer == null) return;
-        
+
         connection.Server.DiscordBot?.SendReport($"{targetPlayer.Username} has been reported", connection.Player.Username);
 
         Relation? relation = db.Relations

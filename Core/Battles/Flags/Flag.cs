@@ -103,7 +103,7 @@ public class Flag {
         StateManager.SetState(new OnPedestal(StateManager));
 
         if (returner != null) {
-            Entity.AddComponent(new TankGroupComponent(returner.Tank!.Tank));
+            Entity.AddGroupComponent<TankGroupComponent>(returner.Tank!.Tank);
 
             Vector3 carrierPedestal = ctf.Flags[LastCarrier!.TeamColor].PedestalPosition;
             Vector3 returnPosition = Position;
@@ -126,7 +126,7 @@ public class Flag {
 
         Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
         Entity.RemoveComponent<FlagGroundedStateComponent>();
-        Entity.AddComponent(new FlagHomeStateComponent());
+        Entity.AddComponent<FlagHomeStateComponent>();
 
         Refresh();
         Assists.Clear();
@@ -146,7 +146,7 @@ public class Flag {
             Battle.ModeHandler is not CTFHandler ctf) return;
 
         StateManager.SetState(new OnPedestal(StateManager));
-        Entity.AddComponent(new FlagHomeStateComponent());
+        Entity.AddComponent<FlagHomeStateComponent>();
 
         if (ctf.RedPlayers.Any(player => player.InBattleAsTank) &&
             ctf.BluePlayers.Any(player => player.InBattleAsTank)) {

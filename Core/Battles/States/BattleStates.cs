@@ -69,7 +69,7 @@ public class Starting(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override void Start() {
-        Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartingComponent());
+        Battle.LobbyEntity.AddComponent<MatchmakingLobbyStartingComponent>();
         base.Start();
     }
 
@@ -114,7 +114,7 @@ public class Starting(
             StateManager.SetState(new NotStarted(StateManager));
         else if (Battle.Timer < 0) {
             Battle.Start();
-            Battle.LobbyEntity.AddComponent(Battle.Entity.GetComponent<BattleGroupComponent>());
+            Battle.LobbyEntity.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
             StateManager.SetState(new Running(StateManager));
         }
     }
@@ -138,7 +138,7 @@ public class WarmUp(
         Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
 
-        Battle.RoundEntity.AddComponent(new RoundWarmingUpStateComponent());
+        Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
         Battle.Timer = seconds;
         base.Start();
     }

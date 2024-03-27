@@ -12,7 +12,7 @@ public class ClientLaunchEvent : IServerEvent {
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        connection.ClientSession.AddComponent(new WebIdComponent());
+        connection.ClientSession.AddComponent<WebIdComponent>();
         logger.Warning("Executed launch event");
     }
 }

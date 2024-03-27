@@ -17,7 +17,7 @@ abstract class Program {
     static Task Main() {
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        
+
         LoggerUtils.Initialize(LogEventLevel.Information);
 
         Logger = Log.Logger.ForType(typeof(Program));
@@ -38,7 +38,7 @@ abstract class Program {
 
         stopwatch.Stop();
         Logger.Information("Started in {Time}", stopwatch.Elapsed);
-        
+
         return Task.Delay(-1);
     }
 }

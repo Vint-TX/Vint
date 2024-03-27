@@ -10,7 +10,7 @@ public class GoldBonusTemplate : BonusTemplate {
     public IEntity Create(Vector3 position, IEntity regionEntity, IEntity battleEntity) {
         IEntity entity = Create("battle/bonus/gold/cry", position, regionEntity, battleEntity);
 
-        entity.AddComponent(regionEntity.GetComponent<GoldBonusRegionComponent>());
+        entity.AddComponentFrom<GoldBonusRegionComponent>(regionEntity);
         return entity;
     }
 }

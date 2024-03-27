@@ -12,38 +12,31 @@ using Vint.Core.ECS.Entities;
 namespace Vint.Core.ECS.Templates.Battle.Mode;
 
 public abstract class BattleModeTemplate : EntityTemplate {
-    protected IEntity Entity(TypeHandler typeHandler, IEntity lobby, BattleMode mode, int scoreLimit, int timeLimit, int warmUpTimeLimit) {
-        UserLimitComponent userLimitComponent = lobby.GetComponent<UserLimitComponent>();
+    protected IEntity Entity(
+        TypeHandler typeHandler,
+        IEntity lobby,
+        BattleMode mode,
+        int scoreLimit,
+        int timeLimit,
+        int userLimit,
+        int warmUpTimeLimit) => Entity(
+        $"battle/modes/{mode.ToString().ToLower()}",
+        builder => builder
+            .AddComponent<BattleComponent>()
+            .AddComponent<BattleConfiguredComponent>()
+            .AddComponent<BattleTankCollisionsComponent>()
+            .AddComponent<VisibleItemComponent>()
+            .AddComponent(new UserCountComponent(userLimit))
+            .AddComponent(new TimeLimitComponent(timeLimit, warmUpTimeLimit))
+            .AddComponent(new ScoreLimitComponent(scoreLimit))
+            .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow))
+            .AddComponentFrom<MapGroupComponent>(lobby)
+            .AddComponentFrom<GravityComponent>(lobby)
+            .AddComponentFrom<BattleModeComponent>(lobby)
+            .AddComponentFrom<UserLimitComponent>(lobby)
+            .AddGroupComponent<BattleGroupComponent>()
+            .ThenExecuteIf(_ => typeHandler is ArcadeHandler, entity => entity.AddComponent<ArcadeBattleComponent>())
+            .ThenExecuteIf(_ => typeHandler is MatchmakingHandler, entity => entity.AddComponent<RatingBattleComponent>()));
 
-        IEntity entity = Entity($"battle/modes/{mode.ToString().ToLower()}",
-            builder => {
-                builder.AddComponent(userLimitComponent)
-                    .AddComponent(lobby.GetComponent<MapGroupComponent>())
-                    .AddComponent(lobby.GetComponent<GravityComponent>())
-                    .AddComponent(lobby.GetComponent<BattleModeComponent>())
-                    .AddComponent(new BattleComponent())
-                    .AddComponent(new BattleConfiguredComponent())
-                    .AddComponent(new BattleTankCollisionsComponent())
-                    .AddComponent(new VisibleItemComponent())
-                    .AddComponent(new UserCountComponent(userLimitComponent.UserLimit))
-                    .AddComponent(new TimeLimitComponent(timeLimit, warmUpTimeLimit))
-                    .AddComponent(new ScoreLimitComponent(scoreLimit))
-                    .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow));
-            });
-
-        switch (typeHandler) {
-            case ArcadeHandler:
-                entity.AddComponent(new ArcadeBattleComponent());
-                break;
-
-            case MatchmakingHandler:
-                entity.AddComponent(new RatingBattleComponent());
-                break;
-        }
-
-        entity.AddComponent(new BattleGroupComponent(entity));
-        return entity;
-    }
-
-    public abstract IEntity Create(TypeHandler typeHandler, IEntity lobby, int scoreLimit, int timeLimit, int warmUpTimeLimit);
+    public abstract IEntity Create(TypeHandler typeHandler, IEntity lobby, int scoreLimit, int timeLimit, int userLimit, int warmUpTimeLimit);
 }

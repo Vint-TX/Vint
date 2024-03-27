@@ -27,7 +27,7 @@ public class Captured(
 ) : FlagState(stateManager) {
     public override void Start() {
         base.Start();
-        Flag.Entity.AddComponent(new TankGroupComponent(carrierTank));
+        Flag.Entity.AddGroupComponent<TankGroupComponent>(carrierTank);
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
             battlePlayer.PlayerConnection.Send(new FlagPickupEvent(), Flag.Entity);
@@ -52,7 +52,7 @@ public class OnGround(
 
         Flag.Entity.RemoveComponent<TankGroupComponent>();
         Flag.Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = position);
-        Flag.Entity.AddComponent(new FlagGroundedStateComponent());
+        Flag.Entity.AddComponent<FlagGroundedStateComponent>();
     }
 
     public override void Tick() {

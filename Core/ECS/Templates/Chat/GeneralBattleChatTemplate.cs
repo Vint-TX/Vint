@@ -9,6 +9,6 @@ public class GeneralBattleChatTemplate : EntityTemplate {
     public IEntity Create() =>
         Entity("chat/general/ru",
             builder => builder
-                .AddComponent(new ChatComponent())
-                .AddComponent(new GeneralBattleChatComponent()));
+                .AddComponent<ChatComponent>()
+                .AddComponent<GeneralBattleChatComponent>());
 }

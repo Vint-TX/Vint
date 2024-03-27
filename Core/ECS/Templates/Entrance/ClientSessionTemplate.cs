@@ -8,8 +8,7 @@ namespace Vint.Core.ECS.Templates.Entrance;
 [ProtocolId(1429771189777)]
 public class ClientSessionTemplate : EntityTemplate {
     public IEntity Create() => Entity(null,
-        builder =>
-            builder
-                .AddComponent(new ClientSessionComponent())
-                .AddComponent(new SessionSecurityPublicComponent(new Encryption().PublicKey)));
+        builder => builder
+            .AddComponent<ClientSessionComponent>()
+            .AddComponent(new SessionSecurityPublicComponent(new Encryption().PublicKey)));
 }

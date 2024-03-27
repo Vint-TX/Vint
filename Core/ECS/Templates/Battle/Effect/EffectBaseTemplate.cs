@@ -10,22 +10,18 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 
 [ProtocolId(1486041253393)]
 public abstract class EffectBaseTemplate : EntityTemplate {
-    protected IEntity Create(string configPath, BattlePlayer battlePlayer, TimeSpan duration, bool withTeam) {
-        IEntity entity = Entity(configPath,
-            builder => builder
-                .AddComponent(new EffectComponent())
-                .AddComponent(battlePlayer.Tank!.Tank.GetComponent<TankGroupComponent>()));
-
-        if (duration > TimeSpan.Zero) {
-            entity.AddComponent(new DurationConfigComponent(duration));
-            entity.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
-        }
-
-        if (withTeam && battlePlayer.Battle.ModeHandler is TeamHandler) {
-            entity.AddComponent(battlePlayer.Team!.GetComponent<TeamGroupComponent>());
-            entity.AddComponent(battlePlayer.Team!.GetComponent<TeamColorComponent>());
-        }
-
-        return entity;
-    }
+    protected IEntity Create(string configPath, BattlePlayer battlePlayer, TimeSpan duration, bool withTeam) => Entity(configPath,
+        builder => builder
+            .AddComponent<EffectComponent>()
+            .AddComponentFrom<TankGroupComponent>(battlePlayer.Tank!.Tank)
+            .ThenExecuteIf(_ => duration > TimeSpan.Zero,
+                entity => {
+                    entity.AddComponent(new DurationConfigComponent(duration));
+                    entity.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
+                })
+            .ThenExecuteIf(_ => withTeam && battlePlayer.Battle.ModeHandler is TeamHandler,
+                entity => {
+                    entity.AddComponentFrom<TeamGroupComponent>(battlePlayer.Team!);
+                    entity.AddComponentFrom<TeamColorComponent>(battlePlayer.Team!);
+                }));
 }

@@ -10,12 +10,12 @@ namespace Vint.Core.ECS.Templates.Battle.Mode;
 
 [ProtocolId(-1911920453295891173)]
 public class CTFTemplate : BattleModeTemplate {
-    public override IEntity Create(TypeHandler typeHandler, IEntity lobby, int scoreLimit, int timeLimit, int warmUpTimeLimit) {
-        IEntity entity = Entity(typeHandler, lobby, BattleMode.CTF, scoreLimit, timeLimit, warmUpTimeLimit);
+    public override IEntity Create(TypeHandler typeHandler, IEntity lobby, int scoreLimit, int timeLimit, int userLimit, int warmUpTimeLimit) {
+        IEntity entity = Entity(typeHandler, lobby, BattleMode.CTF, scoreLimit, timeLimit, userLimit, warmUpTimeLimit);
 
-        entity.AddComponent(new CTFComponent());
-        entity.AddComponent(new TeamBattleComponent());
-        entity.AddComponent(new BattleScoreComponent());
+        entity.AddComponent<CTFComponent>();
+        entity.AddComponent<TeamBattleComponent>();
+        entity.AddComponent<BattleScoreComponent>();
         return entity;
     }
 }

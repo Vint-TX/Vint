@@ -9,9 +9,8 @@ namespace Vint.Core.ECS.Templates.Notification;
 [ProtocolId(1475750208936)]
 public class UsernameChangedNotificationTemplate : EntityTemplate {
     public IEntity Create(string username, IEntity user) => Entity("notification/uidchanged",
-        builder =>
-            builder
-                .AddComponent(new UsernameChangedNotificationComponent(username))
-                .AddComponent(new NotificationComponent(NotificationPriority.Message))
-                .AddComponent(new NotificationGroupComponent(user)));
+        builder => builder
+            .AddComponent(new UsernameChangedNotificationComponent(username))
+            .AddComponent(new NotificationComponent(NotificationPriority.Message))
+            .AddGroupComponent<NotificationGroupComponent>(user));
 }

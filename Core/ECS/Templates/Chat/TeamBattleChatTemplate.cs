@@ -7,8 +7,7 @@ namespace Vint.Core.ECS.Templates.Chat;
 [ProtocolId(1450340158222)]
 public class TeamBattleChatTemplate : EntityTemplate {
     public IEntity Create() => Entity("chat/general/ru",
-        builder =>
-            builder
-                .AddComponent(new ChatComponent())
-                .AddComponent(new TeamBattleChatComponent()));
+        builder => builder
+            .AddComponent<ChatComponent>()
+            .AddComponent<TeamBattleChatComponent>());
 }

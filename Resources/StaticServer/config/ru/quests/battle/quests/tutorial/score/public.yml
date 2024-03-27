@@ -1,7 +1,0 @@
-imageItem:
-  spriteUid: 0d6f2961-bd63-4f90-92aa-0c04e2415c6e
-battleQuestTarget:
-  targetValue: 60
-battleQuestReward:
-  battleQuestReward: TURRET_EXP
-  quantity: 200

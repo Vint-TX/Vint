@@ -10,9 +10,9 @@ public class TankPaintBattleItemTemplate : EntityTemplate {
     public IEntity Create(IEntity paint, IEntity tank) => Entity(paint.TemplateAccessor!.ConfigPath,
         builder =>
             builder
-                .AddComponent(new TankPaintBattleItemComponent())
-                .AddComponent(tank.GetComponent<UserGroupComponent>())
-                .AddComponent(tank.GetComponent<BattleGroupComponent>())
-                .AddComponent(tank.GetComponent<TankGroupComponent>())
-                .AddComponent(paint.GetComponent<MarketItemGroupComponent>()));
+                .AddComponent<TankPaintBattleItemComponent>()
+                .AddComponentFrom<UserGroupComponent>(tank)
+                .AddComponentFrom<BattleGroupComponent>(tank)
+                .AddComponentFrom<TankGroupComponent>(tank)
+                .AddComponentFrom<MarketItemGroupComponent>(paint));
 }

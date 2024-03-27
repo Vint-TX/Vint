@@ -217,7 +217,7 @@ public abstract class PlayerConnection(
         User = new UserTemplate().Create(Player);
         Share(User);
 
-        ClientSession.AddComponent(User.GetComponent<UserGroupComponent>());
+        ClientSession.AddComponentFrom<UserGroupComponent>(User);
 
         if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) {
             foreach (IPlayerConnection connection in tempUser.SharedPlayers) {
@@ -279,7 +279,7 @@ public abstract class PlayerConnection(
 
         if (oldLeagueIndex != Player.League) {
             User.RemoveComponent<LeagueGroupComponent>();
-            User.AddComponent(Player.LeagueEntity.GetComponent<LeagueGroupComponent>());
+            User.AddComponentFrom<LeagueGroupComponent>(Player.LeagueEntity);
         }
 
         if (seasonStats.Reputation != oldReputation)
@@ -564,7 +564,7 @@ public abstract class PlayerConnection(
             switch (userItem.TemplateAccessor!.Template) {
                 case AvatarUserItemTemplate: {
                     this.GetEntity(Player.CurrentAvatarId)!.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
-                    userItem.AddComponent(new MountedItemComponent());
+                    userItem.AddComponent<MountedItemComponent>();
 
                     Player.CurrentAvatarId = marketItem.Id;
                     User.ChangeComponent(new UserAvatarComponent(this, Player.CurrentAvatarId));
@@ -576,7 +576,7 @@ public abstract class PlayerConnection(
                 case GraffitiUserItemTemplate: {
                     currentPreset.Graffiti.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Graffiti = marketItem;
-                    userItem.AddComponent(new MountedItemComponent());
+                    userItem.AddComponent<MountedItemComponent>();
 
                     db.Update(currentPreset);
                     break;
@@ -586,7 +586,7 @@ public abstract class PlayerConnection(
                     changeEquipment = true;
                     currentPreset.Hull.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Hull = marketItem;
-                    userItem.AddComponent(new MountedItemComponent());
+                    userItem.AddComponent<MountedItemComponent>();
                     currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetHullId(currentPreset.Hull.Id);
 
                     Hull newHull = db.Hulls
@@ -594,7 +594,10 @@ public abstract class PlayerConnection(
                         .Single(hull => hull.Id == currentPreset.Hull.Id);
 
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newHull.SkinId);
+
+                    currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.HullSkin = skin;
+                    currentPreset.HullSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
 
                     db.Update(currentPreset);
                     break;
@@ -604,7 +607,7 @@ public abstract class PlayerConnection(
                     changeEquipment = true;
                     currentPreset.Weapon.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Weapon = marketItem;
-                    userItem.AddComponent(new MountedItemComponent());
+                    userItem.AddComponent<MountedItemComponent>();
                     currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetWeaponId(currentPreset.Weapon.Id);
 
                     Weapon newWeapon = db.Weapons
@@ -614,8 +617,13 @@ public abstract class PlayerConnection(
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.SkinId);
                     IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.ShellId);
 
+                    currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.WeaponSkin = skin;
+                    currentPreset.WeaponSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+
+                    currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Shell = shell;
+                    currentPreset.Shell.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
 
                     db.Update(currentPreset);
                     break;
@@ -628,17 +636,18 @@ public abstract class PlayerConnection(
 
                     bool isCurrentHull = skin.HullId == currentPreset.Hull.Id;
 
-                    if (isCurrentHull) {
-                        currentPreset.HullSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
-                        currentPreset.HullSkin = marketItem;
-                    } else {
-                        Hull? skinHull = db.Hulls.SingleOrDefault(hull => hull.PlayerId == Player.Id && hull.Id == skin.HullId);
+                    if (!isCurrentHull) {
+                        Hull? newHull = db.Hulls.SingleOrDefault(hull => hull.PlayerId == Player.Id && hull.Id == skin.HullId);
 
-                        if (skinHull != null && skin.Id != skinHull.SkinId)
-                            this.GetEntity(skinHull.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                        if (newHull == null) return;
+
+                        IEntity newUserHull = this.GetEntity(newHull.Id)!.GetUserEntity(this);
+                        MountItem(newUserHull);
                     }
 
-                    userItem.AddComponent(new MountedItemComponent());
+                    currentPreset.HullSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    currentPreset.HullSkin = marketItem;
+                    userItem.AddComponent<MountedItemComponent>();
 
                     db.Hulls
                         .Where(hull => hull.PlayerId == Player.Id &&
@@ -657,17 +666,18 @@ public abstract class PlayerConnection(
 
                     bool isCurrentWeapon = skin.WeaponId == currentPreset.Weapon.Id;
 
-                    if (isCurrentWeapon) {
-                        currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
-                        currentPreset.WeaponSkin = marketItem;
-                    } else {
-                        Weapon? skinWeapon = db.Weapons.SingleOrDefault(weapon => weapon.PlayerId == Player.Id && weapon.Id == skin.WeaponId);
+                    if (!isCurrentWeapon) {
+                        Weapon? newWeapon = db.Weapons.SingleOrDefault(weapon => weapon.PlayerId == Player.Id && weapon.Id == skin.WeaponId);
 
-                        if (skinWeapon != null && skinWeapon.SkinId != skin.Id)
-                            this.GetEntity(skinWeapon.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                        if (newWeapon == null) return;
+
+                        IEntity newUserWeapon = this.GetEntity(newWeapon.Id)!.GetUserEntity(this);
+                        MountItem(newUserWeapon);
                     }
 
-                    userItem.AddComponent(new MountedItemComponent());
+                    currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    currentPreset.WeaponSkin = marketItem;
+                    userItem.AddComponent<MountedItemComponent>();
 
                     db.Weapons
                         .Where(weapon => weapon.PlayerId == Player.Id &&
@@ -682,7 +692,7 @@ public abstract class PlayerConnection(
                 case TankPaintUserItemTemplate: {
                     currentPreset.Paint.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Paint = marketItem;
-                    userItem.AddComponent(new MountedItemComponent());
+                    userItem.AddComponent<MountedItemComponent>();
 
                     db.Update(currentPreset);
                     break;
@@ -691,7 +701,7 @@ public abstract class PlayerConnection(
                 case WeaponPaintUserItemTemplate: {
                     currentPreset.Cover.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Cover = marketItem;
-                    userItem.AddComponent(new MountedItemComponent());
+                    userItem.AddComponent<MountedItemComponent>();
 
                     db.Update(currentPreset);
                     break;
@@ -704,17 +714,18 @@ public abstract class PlayerConnection(
 
                     bool isCurrentWeapon = shell.WeaponId == currentPreset.Weapon.Id;
 
-                    if (isCurrentWeapon) {
-                        currentPreset.Shell.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
-                        currentPreset.Shell = marketItem;
-                    } else {
-                        Weapon? shellWeapon = db.Weapons.SingleOrDefault(weapon => weapon.PlayerId == Player.Id && weapon.Id == shell.WeaponId);
+                    if (!isCurrentWeapon) {
+                        Weapon? newWeapon = db.Weapons.SingleOrDefault(weapon => weapon.PlayerId == Player.Id && weapon.Id == shell.WeaponId);
 
-                        if (shellWeapon != null && shellWeapon.ShellId != shell.Id)
-                            this.GetEntity(shellWeapon.SkinId)?.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                        if (newWeapon == null) return;
+
+                        IEntity newUserWeapon = this.GetEntity(newWeapon.Id)!.GetUserEntity(this);
+                        MountItem(newUserWeapon);
                     }
 
-                    userItem.AddComponent(new MountedItemComponent());
+                    currentPreset.Shell.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    currentPreset.Shell = marketItem;
+                    userItem.AddComponent<MountedItemComponent>();
 
                     db.Weapons
                         .Where(weapon => weapon.PlayerId == Player.Id &&
@@ -757,9 +768,9 @@ public abstract class PlayerConnection(
                              }) {
                         entity.AddComponentIfAbsent(new MountedItemComponent());
                     }
-                    
+
                     currentPreset.Entity!.RemoveComponent<MountedItemComponent>();
-                    newPreset.Entity!.AddComponent(new MountedItemComponent());
+                    newPreset.Entity!.AddComponent<MountedItemComponent>();
 
                     Player.CurrentPresetIndex = newPreset.Index;
                     db.Players
@@ -996,7 +1007,8 @@ public class SocketPlayerConnection(
                 foreach (IPlayerConnection connection in User.SharedPlayers.Where(connection => !connection.InLobby)) {
                     try {
                         connection.Unshare(User);
-                    } catch { /**/ }
+                    } catch { /**/
+                    }
                 }
 
                 try {
@@ -1026,7 +1038,8 @@ public class SocketPlayerConnection(
                 try {
                     if (entity.SharedPlayers.Count == 0 && !EntityRegistry.TryRemoveTemp(entity.Id))
                         EntityRegistry.Remove(entity.Id);
-                } catch { /**/ }
+                } catch { /**/
+                }
             }
 
             SharedEntities.Clear();

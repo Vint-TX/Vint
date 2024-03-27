@@ -49,11 +49,11 @@ public class CustomHandler(
 
         Owner = players.First();
         Battle.LobbyEntity.RemoveComponent<UserGroupComponent>();
-        Battle.LobbyEntity.AddComponent(new UserGroupComponent(Owner.User));
+        Battle.LobbyEntity.AddGroupComponent<UserGroupComponent>(Owner.User);
     }
 
     public void OpenLobby() {
         IsOpened = true;
-        Battle.LobbyEntity.AddComponent(new OpenToConnectLobbyComponent());
+        Battle.LobbyEntity.AddComponent<OpenToConnectLobbyComponent>();
     }
 }

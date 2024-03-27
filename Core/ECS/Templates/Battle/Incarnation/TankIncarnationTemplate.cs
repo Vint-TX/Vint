@@ -10,7 +10,7 @@ public class TankIncarnationTemplate : EntityTemplate {
     public IEntity Create(IEntity tank) => Entity(null,
         builder =>
             builder
-                .AddComponent(new TankIncarnationComponent())
+                .AddComponent<TankIncarnationComponent>()
                 .AddComponent(new TankIncarnationKillStatisticsComponent(0))
-                .AddComponent(tank.GetComponent<TankGroupComponent>()));
+                .AddComponentFrom<TankGroupComponent>(tank));
 }

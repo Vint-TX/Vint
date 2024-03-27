@@ -14,7 +14,7 @@ public abstract class StreamWeaponTemplate : WeaponTemplate {
         if (ConfigManager.TryGetComponent(configPath, out StreamWeaponEnergyComponent? streamWeaponEnergyComponent))
             entity.AddComponent(streamWeaponEnergyComponent);
 
-        entity.AddComponent(new StreamWeaponComponent());
+        entity.AddComponent<StreamWeaponComponent>();
         return entity;
     }
 }

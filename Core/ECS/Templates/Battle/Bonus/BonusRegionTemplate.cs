@@ -12,26 +12,21 @@ public class BonusRegionTemplate : EntityTemplate {
     public IEntity CreateRegular(BonusType type, Vector3 position) {
         IEntity entity = Create(type, position);
 
-        entity.AddComponent(new SupplyBonusRegionComponent());
+        entity.AddComponent<SupplyBonusRegionComponent>();
         return entity;
     }
 
     public IEntity CreateGold(Vector3 position) {
         IEntity entity = Create(BonusType.Gold, position);
 
-        entity.AddComponent(new GoldBonusRegionComponent());
-        entity.AddComponent(new BonusComponent());
+        entity.AddComponent<GoldBonusRegionComponent>();
+        entity.AddComponent<BonusComponent>();
         return entity;
     }
 
-    IEntity Create(BonusType type, Vector3 position) {
-        IEntity entity = Entity("battle/bonus/region",
-            builder =>
-                builder
-                    .AddComponent(new BonusRegionComponent(type))
-                    .AddComponent(new SpatialGeometryComponent(position, default)));
-
-        entity.AddComponent(new BonusRegionGroupComponent(entity));
-        return entity;
-    }
+    IEntity Create(BonusType type, Vector3 position) => Entity("battle/bonus/region",
+        builder => builder
+            .AddComponent(new BonusRegionComponent(type))
+            .AddComponent(new SpatialGeometryComponent(position, default))
+            .AddGroupComponent<BonusRegionGroupComponent>());
 }

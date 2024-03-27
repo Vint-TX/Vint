@@ -58,7 +58,6 @@ public class DamageCalculator : IDamageCalculator {
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
 
         float damage = baseDamage * weakening * splash * effects * backHit * turretHit;
-
         return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }
 

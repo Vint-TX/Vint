@@ -16,8 +16,10 @@ public class PlayerModule(
     GameServer gameServer
 ) : ApplicationCommandModule {
     [SlashCommand("profile", "Get player profile"), SlashCooldown(1, 60, SlashCooldownBucketType.User)]
-    public async Task Profile(InteractionContext ctx, 
-        [Option("username", "Username in Vint")] string username) {
+    public async Task Profile(
+        InteractionContext ctx,
+        [Option("username", "Username in Vint")]
+        string username) {
         await ctx.DeferAsync();
 
         IPlayerConnection? connection = gameServer.PlayerConnections.Values
@@ -37,14 +39,14 @@ public class PlayerModule(
                 return;
             }
         }
-        
+
         Battle? battle = connection?.BattlePlayer?.Battle;
         bool inBattle = battle != null;
 
-        string status = isOnline 
-                            ? inBattle 
-                                  ? $"In battle: {battle!.MapInfo.Name}, {battle.Properties.BattleMode}" 
-                                  : "Online" 
+        string status = isOnline
+                            ? inBattle
+                                  ? $"In battle: {battle!.MapInfo.Name}, {battle.Properties.BattleMode}"
+                                  : "Online"
                             : "Offline";
 
         DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(status, $"{username}'s profile")
@@ -58,7 +60,8 @@ public class PlayerModule(
     }
 
     [SlashCommand("statistics", "Get player statistics"), SlashCooldown(1, 60, SlashCooldownBucketType.User)]
-    public async Task Statistics(InteractionContext ctx, 
+    public async Task Statistics(
+        InteractionContext ctx,
         [Option("user", "Username in Vint")] string username) {
         await ctx.DeferAsync();
 

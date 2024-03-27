@@ -19,10 +19,10 @@ public class UserOnlineEvent : IServerEvent {
         using DbConnection db = new();
 
         Player player = connection.Player;
-        Preset preset = db.Presets.Single(preset => preset.PlayerId == player.Id && preset.Index == player.CurrentPresetIndex);
+        Preset preset = player.CurrentPreset;
 
         IEnumerable<IEntity> mountedHullSkins = db.Hulls
-            .Where(hull => hull.PlayerId == player.Id)
+            .Where(hull => hull.PlayerId == player.Id && hull.Id != preset.Hull.Id)
             .Select(hull => hull.SkinId)
             .ToList()
             .Select(connection.GetEntity)
@@ -30,7 +30,7 @@ public class UserOnlineEvent : IServerEvent {
             .Select(entity => entity!.GetUserEntity(connection));
 
         IEnumerable<IEntity> mountedWeaponSkins = db.Weapons
-            .Where(weapon => weapon.PlayerId == player.Id)
+            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id != preset.Weapon.Id)
             .Select(weapon => new { weapon.SkinId, weapon.ShellId })
             .ToList()
             .SelectMany(skins => new[] { skins.SkinId, skins.ShellId })
@@ -52,7 +52,7 @@ public class UserOnlineEvent : IServerEvent {
                      .Concat(mountedHullSkins)
                      .Concat(mountedWeaponSkins)
                      .Distinct()) {
-            entity.AddComponent(new MountedItemComponent());
+            entity.AddComponent<MountedItemComponent>();
         }
 
         connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));

@@ -10,7 +10,7 @@ public class FreezeBattleItemTemplate : StreamWeaponTemplate {
     public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = Create("garage/weapon/freeze", tank, battlePlayer);
 
-        entity.AddComponent(new FreezeComponent());
+        entity.AddComponent<FreezeComponent>();
         return entity;
     }
 }

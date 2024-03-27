@@ -30,7 +30,7 @@ public static class ConfigManager {
 
     public static IReadOnlyList<MapInfo> MapInfos { get; private set; } = null!;
     public static DiscordConfig Discord { get; private set; }
-    
+
     public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
@@ -57,16 +57,16 @@ public static class ConfigManager {
 
         Logger.Information("Map infos parsed");
     }
-    
+
     public static void InitializeDiscordConfig() {
         Logger.Information("Parsing discord config");
 
         string discordConfigPath = Path.Combine(ResourcesPath, "discord.json");
         Discord = JsonConvert.DeserializeObject<DiscordConfig>(File.ReadAllText(discordConfigPath));
-        
-        Logger.Information("Discord config parsed");    
+
+        Logger.Information("Discord config parsed");
     }
-    
+
     public static void InitializeMapModels() {
         Logger.Information("Parsing map models");
 
@@ -104,21 +104,23 @@ public static class ConfigManager {
     public static void InitializeCache() {
         Logger.Information("Generating config archives");
 
-        string configsPath = Path.Combine(ResourcesPath, "StaticServer", "config");
+        string rootPath = Path.Combine(ResourcesPath, "Configuration");
+        string configsPath = Path.Combine(rootPath, "configs");
+        string localizationsPath = Path.Combine(rootPath, "localization");
 
-        foreach (string configDir in Directory.EnumerateDirectories(configsPath)) {
-            string locale = new DirectoryInfo(configDir).Name;
+        foreach (string localeDir in Directory.EnumerateDirectories(localizationsPath)) {
+            string locale = new DirectoryInfo(localeDir).Name;
 
             Logger.Debug("Generating archive for the '{Locale}' locale", locale);
 
             using MemoryStream outStream = new();
 
             using (IWriter writer = WriterFactory.Open(outStream, ArchiveType.Tar, new GZipWriterOptions())) {
-                writer.WriteAll(configDir, "*", SearchOption.AllDirectories);
+                writer.WriteAll(configsPath, "*", SearchOption.AllDirectories);
+                writer.WriteAll(localeDir, "*", SearchOption.AllDirectories);
             }
 
             byte[] buffer = outStream.ToArray();
-
             LocaleToConfigCache[locale] = buffer;
         }
 
@@ -128,7 +130,7 @@ public static class ConfigManager {
     public static void InitializeNodes() {
         Logger.Information("Generating config nodes");
 
-        string configsPath = Path.Combine(ResourcesPath, "StaticServer", "config");
+        string configsPath = Path.Combine(ResourcesPath, "Configuration", "configs");
 
         IDeserializer deserializer = new DeserializerBuilder()
             .WithNodeDeserializer(new ComponentDeserializer())
@@ -139,10 +141,8 @@ public static class ConfigManager {
         Dictionary<string, object?> components = new();
         Dictionary<string, long?> ids = new();
 
-        string rootPath = Path.Combine(configsPath, "ru");
-
-        foreach (string filePath in Directory.EnumerateFiles(rootPath, "*.*", SearchOption.AllDirectories)) {
-            string relativePath = Path.GetRelativePath(rootPath, filePath).Replace('\\', '/');
+        foreach (string filePath in Directory.EnumerateFiles(configsPath, "*.*", SearchOption.AllDirectories)) {
+            string relativePath = Path.GetRelativePath(configsPath, filePath).Replace('\\', '/');
             string fileName = Path.GetFileName(filePath);
 
             if (string.IsNullOrEmpty(fileName)) continue;
@@ -194,8 +194,9 @@ public static class ConfigManager {
                 foreach (IComponent serverComponent in curNode.ServerComponents.Values) {
                     foreach (Type type in serverComponent
                                  .GetType()
-                                 .FindInterfaces((type, iType) => type.IsGenericType && 
-                                                                  ReferenceEquals(type.GetGenericTypeDefinition(), iType), typeof(IConvertible<>))) {
+                                 .FindInterfaces((type, iType) => type.IsGenericType &&
+                                                                  ReferenceEquals(type.GetGenericTypeDefinition(), iType),
+                                     typeof(IConvertible<>))) {
                         Type resultType = type.GenericTypeArguments[0];
 
                         curNode.Components.TryGetValue(resultType, out IComponent? component);

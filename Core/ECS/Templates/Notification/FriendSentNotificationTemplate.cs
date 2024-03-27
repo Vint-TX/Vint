@@ -9,8 +9,7 @@ namespace Vint.Core.ECS.Templates.Notification;
 [ProtocolId(1507711452261)]
 public class FriendSentNotificationTemplate : EntityTemplate {
     public IEntity Create(IEntity user) => Entity("notification/friendSent",
-        builder =>
-            builder
-                .AddComponent(new NotificationGroupComponent(user))
-                .AddComponent(new NotificationComponent(NotificationPriority.Message)));
+        builder => builder
+            .AddGroupComponent<NotificationGroupComponent>(user)
+            .AddComponent(new NotificationComponent(NotificationPriority.Message)));
 }

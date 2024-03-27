@@ -73,7 +73,7 @@ public static class GlobalEntities {
             entity.Id = EntityRegistry.FreeId;
 
             if (path == "moduleSlots") {
-                entity.AddComponent(new UserGroupComponent(user));
+                entity.AddGroupComponent<UserGroupComponent>(user);
                 yield return entity;
             }
 
@@ -86,21 +86,21 @@ public static class GlobalEntities {
             switch (path) {
                 case "avatars": {
                     if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "covers": {
                     if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "graffities": {
                     if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
@@ -109,34 +109,34 @@ public static class GlobalEntities {
                     Hull? hull = db.Hulls.FirstOrDefault(hull => hull.PlayerId == player.Id && hull.Id == entityId);
 
                     if (hull != null)
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     long xp = hull?.Xp ?? 0;
 
                     entity.AddComponent(new ExperienceItemComponent(xp));
                     entity.AddComponent(new ExperienceToLevelUpItemComponent(xp));
                     entity.AddComponent(new UpgradeLevelItemComponent(xp));
-                    entity.AddComponent(new UpgradeMaxLevelItemComponent());
+                    entity.AddComponent<UpgradeMaxLevelItemComponent>();
                     break;
                 }
 
                 case "hullSkins": {
                     if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "paints": {
                     if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "shells": {
                     if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
@@ -145,20 +145,20 @@ public static class GlobalEntities {
                     Weapon? weapon = db.Weapons.FirstOrDefault(weapon => weapon.PlayerId == player.Id && weapon.Id == entityId);
 
                     if (weapon != null)
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     long xp = weapon?.Xp ?? 0;
 
                     entity.AddComponent(new ExperienceItemComponent(xp));
                     entity.AddComponent(new ExperienceToLevelUpItemComponent(xp));
                     entity.AddComponent(new UpgradeLevelItemComponent(xp));
-                    entity.AddComponent(new UpgradeMaxLevelItemComponent());
+                    entity.AddComponent<UpgradeMaxLevelItemComponent>();
                     break;
                 }
 
                 case "weaponSkins": {
                     if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == entityId))
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
@@ -196,16 +196,16 @@ public static class GlobalEntities {
                     int moduleLevel = module?.Level ?? 0;
 
                     if (moduleLevel > 0)
-                        entity.AddComponent(new UserGroupComponent(user));
+                        entity.AddGroupComponent<UserGroupComponent>(user);
 
-                    entity.AddComponent(new ModuleGroupComponent(entity));
+                    entity.AddGroupComponent<ModuleGroupComponent>();
                     entity.AddComponent(new ModuleUpgradeLevelComponent(moduleLevel));
 
                     break;
                 }
 
                 case "misc": {
-                    entity.AddComponent(new UserGroupComponent(user));
+                    entity.AddGroupComponent<UserGroupComponent>(user);
 
                     switch (entity.TemplateAccessor.Template) {
                         case PremiumBoostUserItemTemplate:
@@ -233,7 +233,7 @@ public static class GlobalEntities {
                                 presetEntity.AddComponent(new PresetNameComponent(preset));
 
                                 if (preset.Index == player.CurrentPresetIndex)
-                                    presetEntity.AddComponent(new MountedItemComponent());
+                                    presetEntity.AddComponent<MountedItemComponent>();
 
                                 preset.Entity = presetEntity;
                                 player.UserPresets.Add(preset);
@@ -246,7 +246,7 @@ public static class GlobalEntities {
                         case GoldBonusUserItemTemplate: {
                             IEntity gold = connection.SharedEntities.Single(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
 
-                            entity.AddComponent(new ModuleGroupComponent(gold));
+                            entity.AddGroupComponent<ModuleGroupComponent>(gold);
                             entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
                             break;
                         }
@@ -256,16 +256,16 @@ public static class GlobalEntities {
                 }
 
                 case "matchmakingModes": {
-                    entity.AddComponent(new UserGroupComponent(user));
+                    entity.AddGroupComponent<UserGroupComponent>(user);
                     break;
                 }
 
                 case "containers": {
                     Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == entityId);
 
-                    entity.AddComponent(new UserGroupComponent(user));
-                    entity.AddComponent(new NotificationGroupComponent(entity));
+                    entity.AddGroupComponent<UserGroupComponent>(user);
                     entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));
+                    entity.AddGroupComponent<NotificationGroupComponent>();
                     entity.RemoveComponentIfPresent<RestrictionByUserFractionComponent>();
                     break;
                 }
@@ -276,7 +276,7 @@ public static class GlobalEntities {
                         .Where(module => module.PlayerId == player.Id)
                         .SingleOrDefault(module => module.Id == moduleId);
 
-                    entity.AddComponent(new UserGroupComponent(user));
+                    entity.AddGroupComponent<UserGroupComponent>(user);
                     entity.AddComponent(new UserItemCounterComponent(module?.Cards ?? 0));
                     break;
                 }

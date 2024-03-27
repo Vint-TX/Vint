@@ -1,3 +1,0 @@
-initUrl: http://127.0.0.1:8080/config/init.yml
-stateUrl: http://127.0.0.1:8080/state/local_state.yml
-currentClientVersion: 0

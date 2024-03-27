@@ -11,15 +11,15 @@ public abstract class DiscreteWeaponTemplate : WeaponTemplate {
     protected override IEntity Create(string configPath, IEntity tank, BattlePlayer battlePlayer) {
         IEntity entity = base.Create(configPath, tank, battlePlayer);
 
-        entity.AddComponent(new DiscreteWeaponComponent());
-        entity.AddComponent(ConfigManager.GetComponent<ImpactComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<KickbackComponent>(configPath));
+        entity.AddComponent<DiscreteWeaponComponent>();
+        entity.AddComponent<ImpactComponent>(configPath);
+        entity.AddComponent<KickbackComponent>(configPath);
 
         if (ConfigManager.TryGetComponent(configPath, out DamageWeakeningByDistanceComponent? damageWeakeningByDistanceComponent))
             entity.AddComponent(damageWeakeningByDistanceComponent);
 
         if (this is not RicochetBattleItemTemplate)
-            entity.AddComponent(ConfigManager.GetComponent<DiscreteWeaponEnergyComponent>(configPath));
+            entity.AddComponent<DiscreteWeaponEnergyComponent>(configPath);
 
         return entity;
     }

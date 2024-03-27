@@ -1,5 +1,4 @@
 using Vint.Core.Battles.Player;
-using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -12,11 +11,11 @@ public class ShaftBattleItemTemplate : DiscreteWeaponTemplate {
         const string configPath = "garage/weapon/shaft";
         IEntity entity = base.Create(configPath, tank, battlePlayer);
 
-        entity.AddComponent(new ShaftComponent());
-        entity.AddComponent(ConfigManager.GetComponent<ShaftEnergyComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<ShaftAimingSpeedComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<ShaftAimingImpactComponent>(configPath));
-        entity.AddComponent(ConfigManager.GetComponent<ShaftStateConfigComponent>(configPath.Replace("garage", "battle")));
+        entity.AddComponent<ShaftComponent>();
+        entity.AddComponent<ShaftEnergyComponent>(configPath);
+        entity.AddComponent<ShaftAimingSpeedComponent>(configPath);
+        entity.AddComponent<ShaftAimingImpactComponent>(configPath);
+        entity.AddComponent<ShaftStateConfigComponent>(configPath.Replace("garage", "battle"));
         return entity;
     }
 }

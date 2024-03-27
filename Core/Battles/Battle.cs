@@ -111,7 +111,7 @@ public class Battle {
             _ => throw new UnreachableException()
         };
 
-        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, 60);
+        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, Properties.MaxPlayers, 60);
         RoundEntity = new RoundTemplate().Create(Entity);
 
         ModeHandler = Properties.BattleMode switch {
@@ -143,7 +143,7 @@ public class Battle {
         MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
 
         LobbyEntity.RemoveComponent<MapGroupComponent>();
-        LobbyEntity.AddComponent(new MapGroupComponent(MapEntity));
+        LobbyEntity.AddGroupComponent<MapGroupComponent>(MapEntity);
 
         LobbyEntity.RemoveComponent<BattleModeComponent>();
         LobbyEntity.AddComponent(new BattleModeComponent(Properties.BattleMode));
@@ -234,7 +234,7 @@ public class Battle {
             Preset preset = connection.Player.CurrentPreset;
 
             connection.Share(LobbyEntity, LobbyChatEntity);
-            connection.User.AddComponent(new BattleLobbyGroupComponent(LobbyEntity));
+            connection.User.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
             connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
             foreach (BattlePlayer battlePlayer in Players)
@@ -265,9 +265,9 @@ public class Battle {
 
         if (user.HasComponent<BattleGroupComponent>())
             user.RemoveComponent<BattleGroupComponent>();
-        else 
+        else
             connection.Logger.Error("User does not have BattleGroupComponent (Battle#RemovePlayer)");
-        
+
         ModeHandler.PlayerExited(battlePlayer);
 
         foreach (Effect effect in Players

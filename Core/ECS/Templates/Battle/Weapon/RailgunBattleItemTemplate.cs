@@ -11,7 +11,7 @@ public class RailgunBattleItemTemplate : DiscreteWeaponTemplate {
         IEntity entity = Create("garage/weapon/railgun", tank, battlePlayer);
 
         entity.AddComponent(new RailgunChargingWeaponComponent(1f));
-        entity.AddComponent(new RailgunComponent());
+        entity.AddComponent<RailgunComponent>();
 
         return entity;
     }

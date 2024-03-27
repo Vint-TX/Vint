@@ -10,7 +10,7 @@ public class GraffitiBattleItemTemplate : EntityTemplate {
     public IEntity Create(IEntity graffiti, IEntity tank) => Entity(graffiti.TemplateAccessor!.ConfigPath,
         builder =>
             builder
-                .AddComponent(new GraffitiBattleItemComponent())
-                .AddComponent(tank.GetComponent<UserGroupComponent>())
-                .AddComponent(graffiti.GetComponent<MarketItemGroupComponent>()));
+                .AddComponent<GraffitiBattleItemComponent>()
+                .AddComponentFrom<UserGroupComponent>(tank)
+                .AddComponentFrom<MarketItemGroupComponent>(graffiti));
 }
