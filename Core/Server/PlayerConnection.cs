@@ -425,9 +425,11 @@ public abstract class PlayerConnection(
 
             case TankMarketItemTemplate: {
                 long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
+                IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId);
 
                 db.Insert(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
-                PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId), 1, 0, false, mount);
+                PurchaseItem(skin, 1, 0, false, false);
+                MountItem(skin.GetUserEntity(this));
                 break;
             }
 
@@ -435,9 +437,15 @@ public abstract class PlayerConnection(
                 long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
                 long shellId = GlobalEntities.DefaultShells[marketItem.Id];
 
+                IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId);
+                IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId);
+
                 db.Insert(new Weapon { Player = Player, Id = marketItem.Id, SkinId = skinId, ShellId = shellId });
-                PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId), 1, 0, false, mount);
-                PurchaseItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId), 1, 0, false, mount);
+                PurchaseItem(skin, 1, 0, false, false);
+                PurchaseItem(shell, 1, 0, false, false);
+                
+                MountItem(skin.GetUserEntity(this));
+                MountItem(shell.GetUserEntity(this));
                 break;
             }
 
