@@ -26,8 +26,8 @@ damageWeakeningByTargetProperty:
   initialValue: 95.000
   finalValue: 95.000
 impactProperty:
-  initialValue: 1000.000
-  finalValue: 1000.000
+  initialValue: 6.000
+  finalValue: 6.000
 kickbackProperty:
   initialValue: 2.000
   finalValue: 2.000

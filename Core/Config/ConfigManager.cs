@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
@@ -73,29 +74,30 @@ public static class ConfigManager {
         string mapModelsConfigPath = Path.Combine(ResourcesPath, "MapModels");
         Vector3 gltfToUnity = new(-1, 1, 1);
 
-        Dictionary<string, Triangle[]> mapNameToTriangles = new();
+        ConcurrentDictionary<string, Triangle[]> mapNameToTriangles = new();
 
-        foreach (string mapModelPath in Directory.EnumerateFiles(mapModelsConfigPath)) {
-            string mapName = Path.GetFileNameWithoutExtension(mapModelPath);
-            Logger.Debug("Parsing {MapName}", mapName);
+        Parallel.ForEach(Directory.EnumerateFiles(mapModelsConfigPath),
+            mapModelPath => {
+                string mapName = Path.GetFileNameWithoutExtension(mapModelPath);
+                Logger.Debug("Parsing {MapName}", mapName);
 
-            try {
-                ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
+                try {
+                    ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
 
-                Triangle[] triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
-                    .EvaluateTriangles()
-                    .Select(tuple =>
-                        new Triangle(
-                            tuple.A.GetGeometry().GetPosition() * gltfToUnity,
-                            tuple.B.GetGeometry().GetPosition() * gltfToUnity,
-                            tuple.C.GetGeometry().GetPosition() * gltfToUnity))
-                    .ToArray();
+                    Triangle[] triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
+                        .EvaluateTriangles()
+                        .Select(tuple =>
+                            new Triangle(
+                                tuple.A.GetGeometry().GetPosition() * gltfToUnity,
+                                tuple.B.GetGeometry().GetPosition() * gltfToUnity,
+                                tuple.C.GetGeometry().GetPosition() * gltfToUnity))
+                        .ToArray();
 
-                mapNameToTriangles[mapName] = triangles;
-            } catch (Exception e) {
-                Logger.Error(e, "An exception occured while generating {MapName} map model", mapName);
-            }
-        }
+                    mapNameToTriangles[mapName] = triangles;
+                } catch (Exception e) {
+                    Logger.Error(e, "An exception occured while generating {MapName} map model", mapName);
+                }
+            });
 
         MapNameToTriangles = mapNameToTriangles;
         Logger.Information("Map models parsed");

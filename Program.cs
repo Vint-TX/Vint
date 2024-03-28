@@ -14,7 +14,7 @@ abstract class Program {
 
     static ILogger Logger { get; set; } = null!;
 
-    static Task Main() {
+    static async Task Main() {
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
@@ -27,11 +27,14 @@ abstract class Program {
         StaticServer staticServer = new(IPAddress.Any, StaticServerPort);
         GameServer gameServer = new(IPAddress.Any, GameServerPort);
 
-        ConfigManager.InitializeCache();
-        ConfigManager.InitializeNodes();
-        ConfigManager.InitializeMapInfos();
-        ConfigManager.InitializeMapModels();
-        ConfigManager.InitializeGlobalEntities();
+        await Task.WhenAll(
+            Task.Run(ConfigManager.InitializeCache),
+            Task.Run(ConfigManager.InitializeMapInfos),
+            Task.Run(ConfigManager.InitializeMapModels),
+            Task.Run(() => {
+                ConfigManager.InitializeNodes();
+                ConfigManager.InitializeGlobalEntities();
+            }));
 
         new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
         new Thread(() => gameServer.Start()) { Name = "Game Server" }.Start();
@@ -39,6 +42,6 @@ abstract class Program {
         stopwatch.Stop();
         Logger.Information("Started in {Time}", stopwatch.Elapsed);
 
-        return Task.Delay(-1);
+        await Task.Delay(-1);
     }
 }
