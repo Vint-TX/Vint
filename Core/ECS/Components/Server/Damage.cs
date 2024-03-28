@@ -26,6 +26,8 @@ public class IncreaseFriendTemperaturePropertyComponent : RangedComponent;
 
 public class DeltaTemperaturePerSecondPropertyComponent : RangedComponent;
 
+public class DamageWeakeningByTargetPropertyComponent : RangedComponent;
+
 public class TemperatureLimitPropertyComponent : RangedComponent, IConvertible<VulcanWeaponComponent> {
     public void Convert(VulcanWeaponComponent component) => component.TemperatureLimit = FinalValue;
 }

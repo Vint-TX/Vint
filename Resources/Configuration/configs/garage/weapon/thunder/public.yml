@@ -72,9 +72,9 @@ visualProperties:
       finalValue: 15
       unit: m
     - name: Impact
-      initialValue: 4.5
-      finalValue: 4.5
+      initialValue: 3.5
+      finalValue: 3.5
     - name: Splash Impact
-      initialValue: 5.00
-      finalValue: 5.00
+      initialValue: 4.00
+      finalValue: 4.00
 ...

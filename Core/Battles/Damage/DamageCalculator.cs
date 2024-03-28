@@ -15,12 +15,13 @@ public interface IDamageCalculator {
         BattleTank source,
         BattleTank target,
         HitTarget hitTarget,
+        int targetHitIndex,
         bool isSplash = false,
         bool ignoreSourceEffects = false);
 }
 
 public class DamageCalculator : IDamageCalculator {
-    public const float BackHitMultiplier = 1.20f;
+    const float BackHitMultiplier = 1.2f;
     const float TurretHitMultiplier = 2f;
 
     IRandomSource RandomSource { get; } = new WyRandom();
@@ -29,15 +30,18 @@ public class DamageCalculator : IDamageCalculator {
         BattleTank source,
         BattleTank target,
         HitTarget hitTarget,
+        int targetHitIndex,
         bool isSplash = false,
         bool ignoreSourceEffects = false) {
         WeaponHandler handler = source.WeaponHandler;
         Vector3 hitPoint = hitTarget.LocalHitPoint;
         float distance = hitTarget.HitDistance;
+        bool isEnemy = source.IsEnemy(target);
 
         float baseDamage = handler switch {
             ShaftWeaponHandler shaftHandler => GetShaftDamage(shaftHandler),
-            IsisWeaponHandler isisHandler => GetIsisDamage(isisHandler, source, target),
+            IsisWeaponHandler isisHandler => GetIsisDamage(isisHandler, source, target, isEnemy),
+            RailgunWeaponHandler railgunHandler => GetRailgunDamage(railgunHandler, GetDiscreteDamage(railgunHandler), targetHitIndex),
             HammerWeaponHandler hammerHandler => hammerHandler.DamagePerPellet,
             StreamWeaponHandler streamHandler => GetStreamDamage(streamHandler),
             DiscreteWeaponHandler discreteHandler => GetDiscreteDamage(discreteHandler),
@@ -45,7 +49,7 @@ public class DamageCalculator : IDamageCalculator {
         };
 
         bool isTurretHit = handler is ShaftWeaponHandler { Aiming: true } && IsTurretHit(hitPoint, target.Tank);
-        bool isBackHit = !isTurretHit && IsBackHit(hitPoint, target.Tank);
+        bool isBackHit = !isTurretHit && (handler is not IsisWeaponHandler || isEnemy) && IsBackHit(hitPoint, target.Tank);
         bool isCritical = false;
 
         if (handler is SmokyWeaponHandler smokyHandler)
@@ -61,20 +65,23 @@ public class DamageCalculator : IDamageCalculator {
         return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }
 
-    float GetShaftDamage(ShaftWeaponHandler shaftHandler) {
-        const int magicNumber = 400;
-        float baseDamage = shaftHandler.Aiming
-                               ? (float)(shaftHandler.AimingDuration.TotalMilliseconds + magicNumber)
-                               : GetDiscreteDamage(shaftHandler);
+    static float GetShaftDamage(ShaftWeaponHandler shaftHandler) =>
+        shaftHandler.Aiming
+            ? (float)MathUtils.Map(shaftHandler.AimingDuration.TotalMilliseconds,
+                0,
+                1 / shaftHandler.EnergyDrainPerMs,
+                shaftHandler.MinDamage,
+                shaftHandler.MaxDamage)
+            : shaftHandler.MinDamage;
 
-        return MathUtils.Map(baseDamage, 0, 1 / shaftHandler.EnergyDrainPerMs + magicNumber, shaftHandler.MinDamage, shaftHandler.MaxDamage);
-    }
-
-    static float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank) => Convert.ToSingle(
-        (sourceTank == targetTank || sourceTank.IsEnemy(targetTank)
+    static float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank, bool isEnemy) => Convert.ToSingle(
+        (sourceTank == targetTank || isEnemy
              ? isisHandler.DamagePerSecond
              : isisHandler.HealPerSecond) *
         isisHandler.Cooldown.TotalSeconds);
+
+    static float GetRailgunDamage(RailgunWeaponHandler railgunHandler, float baseDamage, int targetHitIndex) => 
+        baseDamage * MathF.Pow(railgunHandler.DamageWeakeningByTargetPercent, targetHitIndex);
 
     static float GetStreamDamage(StreamWeaponHandler streamHandler) =>
         Convert.ToSingle(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);

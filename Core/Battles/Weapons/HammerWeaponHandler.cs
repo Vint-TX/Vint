@@ -35,7 +35,7 @@ public class HammerWeaponHandler : WeaponHandler {
 
     public override int MaxHitTargets => PelletCount;
 
-    public override void Fire(HitTarget target) => throw new UnreachableException();
+    public override void Fire(HitTarget target, int targetIndex) => throw new UnreachableException();
 
     public void Fire(List<HitTarget> hitTargets) {
         Battle battle = BattleTank.Battle;
@@ -46,7 +46,8 @@ public class HammerWeaponHandler : WeaponHandler {
 
         Dictionary<BattleTank, CalculatedDamage> tankToDamage = new();
 
-        foreach (HitTarget hitTarget in hitTargets) {
+        for (int i = 0; i < hitTargets.Count; i++) {
+            HitTarget hitTarget = hitTargets[i];
             BattleTank targetTank = tanks.Single(battleTank => battleTank.Incarnation == hitTarget.IncarnationEntity);
 
             bool isEnemy = BattleTank.IsEnemy(targetTank);
@@ -55,7 +56,7 @@ public class HammerWeaponHandler : WeaponHandler {
             if (targetTank.StateManager.CurrentState is not Active ||
                 (!isEnemy && !battle.Properties.FriendlyFire)) continue;
 
-            CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, hitTarget);
+            CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, hitTarget, i);
 
             if (tankToDamage.TryAdd(targetTank, damage)) continue;
 

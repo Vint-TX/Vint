@@ -31,8 +31,10 @@ public class SelfSplashHitEvent : SelfHitEvent {
             SplashTargets == null ||
             weaponHandler is not ThunderWeaponHandler thunder) return;
 
-        foreach (HitTarget target in SplashTargets)
-            thunder.SplashFire(target);
+        for (int i = 0; i < SplashTargets.Count; i++) {
+            HitTarget target = SplashTargets[i];
+            thunder.SplashFire(target, i);
+        }
 
         using DbConnection db = new();
 

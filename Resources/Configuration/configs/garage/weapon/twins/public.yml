@@ -80,7 +80,7 @@ visualProperties:
       format: 0.0
       unit: m
     - name: Impact
-      initialValue: 1.5
-      finalValue: 1.5
+      initialValue: 1.2
+      finalValue: 1.2
       format: 0.0
 ...

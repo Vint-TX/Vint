@@ -20,8 +20,8 @@ energyRechargeSpeedProperty:
   initialValue: 0.143
   finalValue: 0.143
 maxDamageDistanceProperty:
-  initialValue: 5.680
-  finalValue: 5.680
+  initialValue: 6.000
+  finalValue: 6.000
 minDamageDistanceProperty:
   initialValue: 16.000
   finalValue: 16.000
@@ -29,8 +29,8 @@ minDamagePercentProperty:
   initialValue: 80.000
   finalValue: 80.000
 deltaTemperaturePerSecondProperty:
-  initialValue: -0.400
-  finalValue: -0.400
+  initialValue: -0.550
+  finalValue: -0.550
 temperatureLimitProperty:
   initialValue: -1.000
   finalValue: -1.000
@@ -75,7 +75,7 @@ visualProperties:
       finalValue: 100
       unit: percent
     - name: FreezeTemperatureDelta
-      initialValue: 40
-      finalValue: 40
+      initialValue: 55
+      finalValue: 55
       unit: percentinsec
 ...

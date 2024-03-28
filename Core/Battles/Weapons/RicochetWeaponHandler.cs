@@ -10,7 +10,7 @@ public class RicochetWeaponHandler(
 ) : DiscreteWeaponHandler(battleTank) {
     public override int MaxHitTargets => 1;
 
-    public override void Fire(HitTarget target) {
+    public override void Fire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
@@ -22,7 +22,7 @@ public class RicochetWeaponHandler(
         if (targetTank.StateManager.CurrentState is not Active ||
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 }

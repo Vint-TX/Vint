@@ -11,11 +11,11 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 5
 damagePerSecondProperty:
-  initialValue: 461.438
-  finalValue: 461.438
+  initialValue: 400.000
+  finalValue: 400.000
 healingProperty:
-  initialValue: 415.294
-  finalValue: 415.294
+  initialValue: 330.000
+  finalValue: 330.000
 energyChargeSpeedProperty:
   initialValue: 0.125
   finalValue: 0.125
@@ -23,8 +23,8 @@ energyRechargeSpeedProperty:
   initialValue: 0.143
   finalValue: 0.143
 selfHealingProperty:
-  initialValue: 28.609
-  finalValue: 28.609
+  initialValue: 25.000
+  finalValue: 25.000
 increaseFriendTemperatureProperty:
   initialValue: 0.100
   finalValue: 0.100
@@ -47,11 +47,11 @@ visualProperties:
       initialValue: 14766
       finalValue: 14766
     - name: Damage per Second
-      initialValue: 461
-      finalValue: 461
+      initialValue: 400
+      finalValue: 400
     - name: Healing per Second
-      initialValue: 415
-      finalValue: 415
+      initialValue: 330
+      finalValue: 330
     - name: Charge Time
       initialValue: 8
       finalValue: 8
@@ -67,6 +67,6 @@ visualProperties:
       finalValue: 17
       unit: m
     - name: SelfHealingAmount
-      initialValue: 28
-      finalValue: 28
+      initialValue: 25
+      finalValue: 25
 ...

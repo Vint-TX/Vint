@@ -21,7 +21,7 @@ public class ThunderWeaponHandler : DiscreteWeaponHandler {
 
     public override int MaxHitTargets => 1;
 
-    public void SplashFire(HitTarget target) {
+    public void SplashFire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
@@ -33,7 +33,7 @@ public class ThunderWeaponHandler : DiscreteWeaponHandler {
         if (targetTank.StateManager.CurrentState is not Active ||
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, true);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex, true);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 

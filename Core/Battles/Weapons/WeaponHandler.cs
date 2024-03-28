@@ -43,7 +43,7 @@ public abstract class WeaponHandler {
     public DateTimeOffset LastHitTime { get; set; }
     public abstract int MaxHitTargets { get; }
 
-    public abstract void Fire(HitTarget target);
+    public abstract void Fire(HitTarget target, int targetIndex);
 
     public virtual void OnTankEnable() =>
         BattleEntity.AddComponent<ShootableComponent>();

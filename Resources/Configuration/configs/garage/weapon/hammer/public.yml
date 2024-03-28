@@ -11,8 +11,8 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 10
 damagePerPelletProperty:
-  initialValue: 58.431
-  finalValue: 58.431
+  initialValue: 58.000
+  finalValue: 58.000
 reloadMagazineTimeProperty:
   initialValue: 4.000
   finalValue: 4.000
@@ -40,26 +40,26 @@ kickbackProperty:
 visualProperties:
   mainProperties:
     - name: Damage
-      normalizedValue: 0.6
+      normalizedValue: 0.7
     - name: Range
       normalizedValue: 0.3
     - name: FireRate
       normalizedValue: 0.6
   properties:
     - name: DPM
-      initialValue: 15180
-      finalValue: 15180
+      initialValue: 22272
+      finalValue: 22272
     - name: Damage
-      initialValue: 817.6
-      finalValue: 817.6
-      format: 0.0
+      initialValue: 928
+      finalValue: 928
+      format: 0
     - name: Damage per Pellet
-      initialValue: 58.4
-      finalValue: 58.4
-      format: 0.0
+      initialValue: 58
+      finalValue: 58
+      format: 0
     - name: Pellets per Shot
-      initialValue: 14
-      finalValue: 14
+      initialValue: 16
+      finalValue: 16
     - name: Shot Delay Time
       initialValue: 1.9
       finalValue: 1.9
@@ -84,7 +84,7 @@ visualProperties:
       initialValue: 3
       finalValue: 3
     - name: Max Impact
-      initialValue: 12.6
-      finalValue: 12.6
-      format: 0.0
+      initialValue: 12
+      finalValue: 12
+      format: 0
 ...

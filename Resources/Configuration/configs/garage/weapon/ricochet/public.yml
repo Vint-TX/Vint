@@ -59,8 +59,9 @@ visualProperties:
       initialValue: 24480
       finalValue: 24480
     - name: Damage per Projectile
-      initialValue: 285
-      finalValue: 285
+      initialValue: 285.6
+      finalValue: 285.6
+      format: 0.0
     - name: Reload Time
       initialValue: 0.7
       finalValue: 0.7
@@ -80,7 +81,7 @@ visualProperties:
       finalValue: 110
       unit: m
     - name: Impact
-      initialValue: 2.5
-      finalValue: 2.5
-      format: 0.0
+      initialValue: 2
+      finalValue: 2
+      format: 0
 ...

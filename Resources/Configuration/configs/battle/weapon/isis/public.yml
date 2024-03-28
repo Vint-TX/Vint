@@ -17,7 +17,7 @@ distanceAndAngleTargetEvaluator:
   distanceWeight: 0.0065
   angleWeight: 0.0035
 weaponCooldown:
-  cooldownIntervalSec: 0.5
+  cooldownIntervalSec: 0.67
 reticle:
   template: 636100801360863080
   configPath: /battle/reticle

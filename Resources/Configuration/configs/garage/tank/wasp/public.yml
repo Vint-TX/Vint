@@ -18,8 +18,8 @@ damping:
   initialValue: 900.000
   finalValue: 900.000
 speed:
-  initialValue: 13.367
-  finalValue: 13.367
+  initialValue: 15.500
+  finalValue: 15.500
 acceleration:
   initialValue: 11.667
   finalValue: 11.667
@@ -60,13 +60,13 @@ visualProperties:
       format: 0.0
       unit: t
     - name: Speed
-      initialValue: 13.37
-      finalValue: 13.37
-      format: 0.00
+      initialValue: 15.5
+      finalValue: 15.5
+      format: 0.0
       unit: meters_per_sec
     - name: Acceleration
-      initialValue: 11.6
-      finalValue: 11.6
+      initialValue: 11.7
+      finalValue: 11.7
       format: 0.0
       unit: meters_per_sec
     - name: Turning Speed

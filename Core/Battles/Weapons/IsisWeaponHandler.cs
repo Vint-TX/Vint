@@ -28,7 +28,7 @@ public class IsisWeaponHandler : StreamWeaponHandler {
     public override float TemperatureLimit => 0;
     public override float TemperatureDelta => 0;
 
-    public override void Fire(HitTarget target) {
+    public override void Fire(HitTarget target, int targetIndex) {
         long incarnationId = target.IncarnationEntity.Id;
 
         if (IsCooldownActive(incarnationId)) return;
@@ -42,7 +42,7 @@ public class IsisWeaponHandler : StreamWeaponHandler {
         if (targetTank.StateManager.CurrentState is not Active) return;
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
 
         if (isEnemy) {
             CalculatedDamage heal = damage with { Value = damage.Value / 100 * SelfHealPercentage };
@@ -52,7 +52,7 @@ public class IsisWeaponHandler : StreamWeaponHandler {
         } else {
             targetTank.UpdateTemperatureAssists(BattleTank, true);
 
-            const int healScore = 1;
+            const int healScore = 2;
             if (targetTank.Health >= targetTank.MaxHealth) return;
 
             battle.DamageProcessor.Heal(BattleTank, targetTank, damage);

@@ -20,8 +20,8 @@ reloadTimeProperty:
   initialValue: 1.300
   finalValue: 1.300
 criticalDamageProperty:
-  initialValue: 600.000
-  finalValue: 600.000
+  initialValue: 325.000
+  finalValue: 325.000
 startCriticalProbabilityProperty:
   initialValue: 0.200
   finalValue: 0.200
@@ -65,8 +65,8 @@ visualProperties:
       initialValue: 325
       finalValue: 325
     - name: Critical Damage
-      initialValue: 600
-      finalValue: 600
+      initialValue: 325
+      finalValue: 325
     - name: Critical Chance
       initialValue: 30
       finalValue: 30
@@ -87,7 +87,7 @@ visualProperties:
       format: 0.0
       unit: m
     - name: Impact
-      initialValue: 3.5
-      finalValue: 3.5
+      initialValue: 2.5
+      finalValue: 2.5
       format: 0.0
 ...

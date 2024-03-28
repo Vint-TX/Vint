@@ -65,8 +65,8 @@ visualProperties:
       format: 0.00
       unit: meters_per_sec
     - name: Acceleration
-      initialValue: 14.4
-      finalValue: 14.4
+      initialValue: 14.7
+      finalValue: 14.7
       format: 0.0
       unit: meters_per_sec
     - name: Turning Speed

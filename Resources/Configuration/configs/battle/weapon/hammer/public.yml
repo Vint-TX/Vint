@@ -10,7 +10,7 @@ verticalSectorsTargeting:
 hammerPelletCone:
   horizontalConeHalfAngle: 5.5
   verticalConeHalfAngle: 5.5
-  pelletCount: 14
+  pelletCount: 16
 ctfTargetEvaluator:
   flagCarrierPriorityBonus: 1000
 distanceAndAngleTargetEvaluator:

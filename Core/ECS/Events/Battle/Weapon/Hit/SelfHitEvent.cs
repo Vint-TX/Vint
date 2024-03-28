@@ -58,8 +58,9 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             return;
         }
 
-        foreach (HitTarget target in Targets) {
-            weaponHandler.Fire(target);
+        for (int i = 0; i < Targets.Count; i++) {
+            HitTarget target = Targets[i];
+            weaponHandler.Fire(target, i);
         }
 
         using DbConnection db = new();

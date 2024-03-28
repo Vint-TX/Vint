@@ -28,7 +28,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
     public override float TemperatureDelta { get; }
     public float HeatDamage { get; }
 
-    public override void Fire(HitTarget target) {
+    public override void Fire(HitTarget target, int targetIndex) {
         long incarnationId = target.IncarnationEntity.Id;
 
         if (IsCooldownActive(incarnationId)) return;
@@ -45,10 +45,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
         if (targetTank.StateManager.CurrentState is not Active ||
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
-        if (IsOverheating)
-            targetTank.UpdateTemperatureAssists(BattleTank, false);
-
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 

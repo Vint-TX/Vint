@@ -11,8 +11,8 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 3
 damagePerSecondProperty:
-  initialValue: 517.500
-  finalValue: 517.500
+  initialValue: 518.000
+  finalValue: 518.000
 heatDamageProperty:
   initialValue: 250
   finalValue: 250
@@ -29,8 +29,8 @@ deltaTemperaturePerSecondProperty:
   initialValue: 0.200
   finalValue: 0.200
 maxDamageDistanceProperty:
-  initialValue: 5.680
-  finalValue: 5.680
+  initialValue: 6.000
+  finalValue: 6.000
 minDamageDistanceProperty:
   initialValue: 16.000
   finalValue: 16.000
@@ -51,8 +51,8 @@ visualProperties:
       finalValue: 12420
       format: 0
     - name: Damage per Second
-      initialValue: 517
-      finalValue: 517
+      initialValue: 518
+      finalValue: 518
       format: 0
     - name: Charge Time
       initialValue: 4
@@ -78,8 +78,8 @@ visualProperties:
       finalValue: 100
       unit: percent
     - name: HeatTemperatureDelta
-      initialValue: 25
-      finalValue: 25
+      initialValue: 20
+      finalValue: 20
       unit: percentinsec
     - name: HeatDamage
       initialValue: 250

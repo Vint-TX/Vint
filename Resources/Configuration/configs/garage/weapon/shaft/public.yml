@@ -11,35 +11,35 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 9
 aimingMinDamageProperty:
-  initialValue: 300.000
-  finalValue: 300.000
+  initialValue: 450.000
+  finalValue: 450.000
 aimingMaxDamageProperty:
-  initialValue: 900.000
-  finalValue: 900.000
+  initialValue: 1050.000
+  finalValue: 1050.000
 energyChargePerShotProperty:
-  initialValue: 0.400
-  finalValue: 0.400
+  initialValue: 0.429
+  finalValue: 0.429
 energyChargeSpeedProperty:
+  initialValue: 0.222
+  finalValue: 0.222
+energyRechargeSpeedProperty: # needs to find out what it affects
   initialValue: 0.120
   finalValue: 0.120
-energyRechargeSpeedProperty:
-  initialValue: 0.001
-  finalValue: 0.001
 reloadTimeProperty:
   initialValue: 2.500
   finalValue: 2.500
 aimingVerticalAccelerationProperty:
-  initialValue: 30.000
-  finalValue: 30.000
+  initialValue: 15.000
+  finalValue: 15.000
 aimingHorizontalAccelerationProperty:
-  initialValue: 30.000
-  finalValue: 30.000
+  initialValue: 20.000
+  finalValue: 20.000
 aimingVerticalSpeedProperty:
-  initialValue: 30.000
-  finalValue: 30.000
+  initialValue: 15.000
+  finalValue: 15.000
 aimingHorizontalSpeedProperty:
-  initialValue: 30.000
-  finalValue: 30.000
+  initialValue: 20.000
+  finalValue: 20.000
 impactProperty:
   initialValue: 1.000
   finalValue: 1.000
@@ -62,16 +62,16 @@ visualProperties:
       initialValue: 10800
       finalValue: 10800
     - name: Damage
-      initialValue: 300
-      finalValue: 300
+      initialValue: 450
+      finalValue: 450
       format: 0
     - name: Aiming Damage
-      initialValue: 900
-      finalValue: 900
+      initialValue: 1050
+      finalValue: 1050
       format: 0
     - name: Loading Time
-      initialValue: 8.3
-      finalValue: 8.3
+      initialValue: 4.5
+      finalValue: 4.5
       format: 0.0
       unit: sec
     - name: Reload Time
@@ -80,8 +80,8 @@ visualProperties:
       format: 0.0
       unit: sec
     - name: Aiming Speed
-      initialValue: 30
-      finalValue: 30
+      initialValue: 15
+      finalValue: 15
       format: 0
       unit: degrees_per_sec
     - name: Impact
@@ -89,7 +89,7 @@ visualProperties:
       finalValue: 1
       format: 0
     - name: Aiming Impact
-      initialValue: 8
-      finalValue: 8
+      initialValue: 6
+      finalValue: 6
       format: 0
 ...

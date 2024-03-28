@@ -11,14 +11,14 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 14
 minDamageProperty:
-  initialValue: 944.963
-  finalValue: 944.963
+  initialValue: 952.000
+  finalValue: 952.000
 maxDamageProperty:
-  initialValue: 959.037
-  finalValue: 959.037
+  initialValue: 952.000
+  finalValue: 952.000
 chargeTimeProperty:
-  initialValue: 1.100
-  finalValue: 1.100
+  initialValue: 1.000
+  finalValue: 1.000
 reloadTimeProperty:
   initialValue: 4.500
   finalValue: 4.500
@@ -41,15 +41,15 @@ visualProperties:
       normalizedValue: 0.20
   properties:
     - name: DPM
-      initialValue: 10200
-      finalValue: 10200
+      initialValue: 10385
+      finalValue: 10385
     - name: Damage
       initialValue: 952
       finalValue: 952
     - name: Charge Time
-      initialValue: 1.1
-      finalValue: 1.1
-      format: 0.0
+      initialValue: 1
+      finalValue: 1
+      format: 0
       unit: sec
     - name: Reload Time
       initialValue: 4.5

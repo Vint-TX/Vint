@@ -20,7 +20,7 @@ public abstract class StreamWeaponHandler : WeaponHandler, ITemperatureWeaponHan
     public abstract float TemperatureLimit { get; }
     public abstract float TemperatureDelta { get; }
 
-    public override void Fire(HitTarget target) {
+    public override void Fire(HitTarget target, int targetIndex) {
         long incarnationId = target.IncarnationEntity.Id;
 
         if (IsCooldownActive(incarnationId)) return;
@@ -39,7 +39,7 @@ public abstract class StreamWeaponHandler : WeaponHandler, ITemperatureWeaponHan
         if (targetTank.StateManager.CurrentState is not Active ||
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 

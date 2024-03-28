@@ -11,14 +11,14 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 8
 damagePerSecondProperty:
-  initialValue: 440.000
-  finalValue: 440.000
+  initialValue: 500.000
+  finalValue: 500.000
 heatDamageProperty:
   initialValue: 125
   finalValue: 125
 spinUpTimeProperty:
-  initialValue: 2.000
-  finalValue: 2.000
+  initialValue: 0.700
+  finalValue: 0.700
 temperatureHittingTimeProperty:
   initialValue: 5.000
   finalValue: 5.000
@@ -55,21 +55,21 @@ kickbackProperty:
 visualProperties:
   mainProperties:
     - name: Damage
-      normalizedValue: 0.3
+      normalizedValue: 0.4
     - name: Range
       normalizedValue: 0.65
     - name: FireRate
       normalizedValue: 1.00
   properties:
     - name: DPM
-      initialValue: 26400
-      finalValue: 26400
+      initialValue: 30000
+      finalValue: 30000
     - name: Damage per Second
-      initialValue: 440
-      finalValue: 440
+      initialValue: 500
+      finalValue: 500
     - name: Max Damage Distance
-      initialValue: 68.5
-      finalValue: 68.5
+      initialValue: 68.6
+      finalValue: 68.6
       format: 0.0
       unit: m
     - name: Attack Distance
@@ -78,8 +78,8 @@ visualProperties:
       format: 0.0
       unit: m
     - name: SpinUpTime
-      initialValue: 2
-      finalValue: 2
+      initialValue: 0.7
+      finalValue: 0.7
       format: 0.0
       unit: sec
     - name: Overheating Time
@@ -91,13 +91,14 @@ visualProperties:
       finalValue: 50
       unit: percent
     - name: HeatTemperatureDelta
-      initialValue: 10
-      finalValue: 10
+      initialValue: 15
+      finalValue: 15
       unit: percentinsec
     - name: HeatDamage
       initialValue: 125
       finalValue: 125
     - name: Impact
-      initialValue: 2
-      finalValue: 2
+      initialValue: 1.6
+      finalValue: 1.6
+      format: 0.0
 ...

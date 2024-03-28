@@ -55,8 +55,9 @@ visualProperties:
       initialValue: 2800
       finalValue: 2800
     - name: Weight
-      initialValue: 33
-      finalValue: 33
+      initialValue: 33.3
+      finalValue: 33.3
+      format: 0.0
       unit: t
     - name: Speed
       initialValue: 8.83

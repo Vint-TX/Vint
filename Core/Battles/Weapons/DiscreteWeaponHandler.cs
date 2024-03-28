@@ -25,7 +25,7 @@ public abstract class DiscreteWeaponHandler : WeaponHandler {
     public float MinDamage { get; }
     public float MaxDamage { get; }
 
-    public override void Fire(HitTarget target) {
+    public override void Fire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
@@ -37,7 +37,7 @@ public abstract class DiscreteWeaponHandler : WeaponHandler {
         if (targetTank.StateManager.CurrentState is not Active ||
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 }
