@@ -21,7 +21,7 @@ public class UserOnlineEvent : IServerEvent {
         Player player = connection.Player;
         Preset preset = player.CurrentPreset;
 
-        IEnumerable<IEntity> mountedHullSkins = db.Hulls
+        /*IEnumerable<IEntity> mountedHullSkins = db.Hulls
             .Where(hull => hull.PlayerId == player.Id && hull.Id != preset.Hull.Id)
             .Select(hull => hull.SkinId)
             .ToList()
@@ -36,7 +36,7 @@ public class UserOnlineEvent : IServerEvent {
             .SelectMany(skins => new[] { skins.SkinId, skins.ShellId })
             .Select(connection.GetEntity)
             .Where(entity => entity != null)
-            .Select(entity => entity!.GetUserEntity(connection));
+            .Select(entity => entity!.GetUserEntity(connection));*/
 
         foreach (IEntity entity in new[] {
                          connection.GetEntity(player.CurrentAvatarId)!.GetUserEntity(connection),
@@ -49,8 +49,8 @@ public class UserOnlineEvent : IServerEvent {
                          preset.Shell.GetUserEntity(connection),
                          preset.Graffiti.GetUserEntity(connection)
                      }
-                     .Concat(mountedHullSkins)
-                     .Concat(mountedWeaponSkins)
+                     /*.Concat(mountedHullSkins)
+                     .Concat(mountedWeaponSkins)*/
                      .Distinct()) {
             entity.AddComponent<MountedItemComponent>();
         }
