@@ -6,7 +6,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
 
-[ProtocolId(4186891190183470299)]
+[ProtocolId(4186891190183470299), ClientAddable, ClientRemovable]
 public class ShaftAimingWorkingStateComponent : IComponent {
     public float InitialEnergy { get; private set; }
     public float ExhaustedEnergy { get; private set; }

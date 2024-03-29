@@ -35,12 +35,12 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
         }
 
         if (targetPlayer == null) {
-            ChatUtils.SendMessage("Player not found", GlobalChat, [connection], null);
+            ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ChatUtils.SendMessage($"Player {Username} is admin", GlobalChat, [connection], null);
+            ChatUtils.SendMessage($"Player {Username} is admin", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
@@ -60,7 +60,7 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
 
             case "kick": {
                 if (targetConnection == null)
-                    ChatUtils.SendMessage("Player is not on the server", GlobalChat, [connection], null);
+                    ChatUtils.SendMessage("Player is not on the server", ChatUtils.GetChat(connection), [connection], null);
                 else {
                     targetConnection.Kick(Reason);
                     punishMessage = $"{targetPlayer.Username} was kicked for '{Reason}'";
@@ -70,20 +70,20 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
             }
 
             default: {
-                ChatUtils.SendMessage($"Unexpected type '{Type}'", GlobalChat, [connection], null);
+                ChatUtils.SendMessage($"Unexpected type '{Type}'", ChatUtils.GetChat(connection), [connection], null);
                 break;
             }
         }
 
         if (punishment != null) {
-            ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", GlobalChat, [connection], null);
+            ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", ChatUtils.GetChat(connection), [connection], null);
             punishMessage ??= $"{Username} was {punishment}";
         }
 
         if (punishMessage == null) return;
 
         if (notifyChat == null || notifiedConnections == null) {
-            notifyChat = GlobalChat;
+            notifyChat = ChatUtils.GlobalChat;
             notifiedConnections = connection.Server.PlayerConnections.Values.ToList();
         }
 

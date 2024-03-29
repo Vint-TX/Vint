@@ -3,7 +3,7 @@ using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Battle.Tank;
 
-[ProtocolId(1835748384321)]
+[ProtocolId(1835748384321), ClientAddable, ClientChangeable, ClientRemovable]
 public class TankJumpComponent : IComponent {
     public float StartTime { get; private set; }
     public Vector3 Velocity { get; private set; }

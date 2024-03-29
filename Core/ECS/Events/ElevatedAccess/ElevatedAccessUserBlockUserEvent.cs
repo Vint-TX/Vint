@@ -21,24 +21,20 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
         List<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
-            if (targetConnection.InLobby) {
-                Battles.Battle battle = targetConnection.BattlePlayer!.Battle;
-
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
-            }
+            notifyChat = ChatUtils.GetChat(targetConnection);
+            notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
         } else {
             using DbConnection db = new();
             targetPlayer = db.Players.SingleOrDefault(player => player.Username == Username);
         }
 
         if (targetPlayer == null) {
-            ChatUtils.SendMessage("Player not found", GlobalChat, [connection], null);
+            ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ChatUtils.SendMessage($"Player {Username} is admin", GlobalChat, [connection], null);
+            ChatUtils.SendMessage($"Player {Username} is admin", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
@@ -46,11 +42,11 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
         targetConnection?.Kick(Reason);
 
         if (notifyChat == null || notifiedConnections == null) {
-            notifyChat = GlobalChat;
+            notifyChat = ChatUtils.GlobalChat;
             notifiedConnections = connection.Server.PlayerConnections.Values.ToList();
         }
 
         ChatUtils.SendMessage($"{Username} was {punishment}", notifyChat, notifiedConnections, null);
-        ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", GlobalChat, [connection], null);
+        ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", ChatUtils.GetChat(connection), [connection], null);
     }
 }

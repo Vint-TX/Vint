@@ -6,7 +6,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.Preset;
 
-[ProtocolId(1493974995307)]
+[ProtocolId(1493974995307), ClientChangeable]
 public class PresetNameComponent( // wtf is this shit? todo refactor
     Database.Models.Preset? preset
 ) : IComponent {

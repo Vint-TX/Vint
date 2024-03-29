@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Serilog;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -15,13 +17,22 @@ public class ComponentRemoveCommand(
     [ProtocolVaried, ProtocolPosition(1)] public Type Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
+        ILogger logger = connection.Logger.ForType(GetType());
+        ClientRemovableAttribute? clientRemovable = Component.GetCustomAttribute<ClientRemovableAttribute>();
+
+        if (clientRemovable == null) {
+            logger.Error("{Component} is not in whitelist ({Entity})", Component.Name, Entity);
+            ChatUtils.SendMessage($"ClientRemovable: {Component.Name}", ChatUtils.GetChat(connection), [connection], null);
+        }
+        
         IComponent component = Entity.GetComponent(Component);
 
-        component.Removed(connection, Entity);
         Entity.RemoveComponent(Component, connection);
+        component.Removed(connection, Entity);
 
-        connection.Logger.ForType(GetType()).Warning("Removed {Component} in {Entity}", Component.Name, Entity);
+        logger.Debug("Removed {Component} from {Entity}", Component.Name, Entity);
     }
 
-    public override string ToString() => $"ComponentRemove command {{ Entity: {Entity}, Component: {Component.Name} }}";
+    public override string ToString() => 
+        $"ComponentRemove command {{ Entity: {Entity}, Component: {Component.Name} }}";
 }

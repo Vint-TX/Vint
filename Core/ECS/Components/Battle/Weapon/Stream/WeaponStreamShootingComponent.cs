@@ -5,7 +5,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
 
-[ProtocolId(6803807621463709653)]
+[ProtocolId(6803807621463709653), ClientAddable, ClientRemovable]
 public class WeaponStreamShootingComponent : IComponent {
     public DateTimeOffset? StartShootingTime { get; private set; }
     public int Time { get; private set; }

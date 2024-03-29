@@ -9,7 +9,6 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 
 [ProtocolId(1512742576673)]
 public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
-    [ProtocolIgnore] static IEntity GlobalChat { get; } = GlobalEntities.GetEntity("chats", "En");
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
@@ -27,11 +26,11 @@ public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
         }
 
         if (targetPlayer == null) {
-            ChatUtils.SendMessage("Player not found", GlobalChat, [connection], null);
+            ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
         targetPlayer.UnMute();
-        ChatUtils.SendMessage($"'{Username}' unmuted", GlobalChat, [connection], null);
+        ChatUtils.SendMessage($"'{Username}' unmuted", ChatUtils.GetChat(connection), [connection], null);
     }
 }

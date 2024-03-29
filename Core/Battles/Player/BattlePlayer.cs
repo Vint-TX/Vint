@@ -65,7 +65,7 @@ public class BattlePlayer {
     public bool InBattle { get; set; }
     public bool IsPaused { get; set; }
     public bool IsKicked { get; set; }
-    bool ReportedInChat { get; set; }
+    bool Reported { get; set; }
 
     public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(20);
     public DateTimeOffset? KickTime { get; set; }
@@ -196,17 +196,10 @@ public class BattlePlayer {
     }
 
     public void OnAntiCheatSuspected() {
-        if (ReportedInChat) return;
+        if (Reported) return;
 
         PlayerConnection.Server.DiscordBot?.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
-
-        ChatUtils.SendMessage(
-            $"{PlayerConnection.Player.Username} is suspected to be cheating. Please, report it to the moderators as soon as possible",
-            Battle.BattleChatEntity,
-            ChatUtils.GetReceivers(PlayerConnection, Battle.BattleChatEntity),
-            null);
-
-        ReportedInChat = true;
+        Reported = true;
     }
 
     public float GetBattleSeriesMultiplier() {

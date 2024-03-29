@@ -5,7 +5,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.Battle.User;
 
-[ProtocolId(1399558738794728790)]
+[ProtocolId(1399558738794728790), ClientAddable]
 public class UserReadyToBattleComponent : IComponent {
     public void Added(IPlayerConnection connection, IEntity entity) {
         TankStateManager? stateManager = connection.BattlePlayer?.Tank?.StateManager;

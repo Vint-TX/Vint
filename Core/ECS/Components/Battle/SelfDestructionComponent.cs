@@ -4,7 +4,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.Battle;
 
-[ProtocolId(-9188485263407476652)]
+[ProtocolId(-9188485263407476652), ClientAddable]
 public class SelfDestructionComponent : IComponent {
     public void Added(IPlayerConnection connection, IEntity entity) {
         if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;

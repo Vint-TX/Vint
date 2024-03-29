@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Serilog;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -15,10 +17,19 @@ public class ComponentAddCommand(
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
     public override void Execute(IPlayerConnection connection) {
+        ILogger logger = connection.Logger.ForType(GetType());
+        Type type = Component.GetType();
+        ClientAddableAttribute? clientAddable = type.GetCustomAttribute<ClientAddableAttribute>();
+
+        if (clientAddable == null) {
+            logger.Error("{Component} is not in whitelist ({Entity})", type.Name, Entity);
+            ChatUtils.SendMessage($"ClientAddable: {type.Name}", ChatUtils.GetChat(connection), [connection], null);
+        }
+        
         Entity.AddComponent(Component, connection);
         Component.Added(connection, Entity);
 
-        connection.Logger.ForType(GetType()).Warning("Added {Component} to {Entity}", Component.GetType().Name, Entity);
+        logger.Debug("Added {Component} to {Entity}", type.Name, Entity);
     }
 
     public override string ToString() =>
