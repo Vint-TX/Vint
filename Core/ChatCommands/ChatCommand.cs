@@ -78,7 +78,15 @@ public sealed class ChatCommand(
             }
 
             try {
-                parameters.Add(Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType));
+                object? param;
+
+                if (parameterInfo.ParameterType.IsEnum) {
+                    if (!Enum.TryParse(parameterInfo.ParameterType, rawParameterValue, true, out param))
+                        param = null;
+                } else
+                    param = Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType);
+                
+                parameters.Add(param);
             } catch (FormatException e) {
                 OptionAttribute option = Options[parameterInfo.Name!];
 

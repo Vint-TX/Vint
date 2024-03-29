@@ -57,19 +57,21 @@ public sealed class GoldBox(
         StateManager.SetState(new Spawned(StateManager));
     }
 
-    void Drop() {
+    public override void Drop() {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle)) {
             battlePlayer.PlayerConnection.Send(new GoldScheduleNotificationEvent(""), Battle.RoundEntity);
             battlePlayer.PlayerConnection.Share(RegionEntity!);
         }
 
-        StateManager.SetState(new Cooldown(StateManager, TimeSpan.FromSeconds(30)));
+        StateManager.SetState(new Cooldown(StateManager, TimeSpan.FromSeconds(20)));
     }
 
     public override void Tick() {
         base.Tick();
 
-        if (Battle.Timer < 120 || StateManager.CurrentState is not None) return;
+        if (Battle.Timer < 120 || 
+            Battle.StateManager.CurrentState is not Running || 
+            StateManager.CurrentState is not None) return;
 
         Ticks++;
         if (Ticks % DropCheckTicksCount != 0) return;

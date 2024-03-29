@@ -21,6 +21,8 @@ public interface IBonusProcessor {
     public void UnshareEntities(IPlayerConnection connection);
 
     public BonusBox? FindByEntity(IEntity bonusEntity);
+
+    public bool DropBonus(BonusType type);
 }
 
 public class BonusProcessor : IBonusProcessor {
@@ -100,4 +102,13 @@ public class BonusProcessor : IBonusProcessor {
 
     public BonusBox? FindByEntity(IEntity bonusEntity) =>
         Bonuses.FirstOrDefault(bonus => bonus.Entity == bonusEntity);
+
+    public bool DropBonus(BonusType type) {
+        BonusBox? bonus = Bonuses.FirstOrDefault(bonus => bonus.Type == type && bonus.StateManager.CurrentState is not Spawned);
+
+        if (bonus == null) return false;
+        
+        bonus.Drop();
+        return true;
+    }
 }

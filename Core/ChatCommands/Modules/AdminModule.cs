@@ -1,6 +1,7 @@
 using System.Text;
 using LinqToDB;
 using Vint.Core.Battles;
+using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Player;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
@@ -147,7 +148,7 @@ public class AdminModule : ChatCommandModule {
         ctx.SendPrivateResponse($"{invite}");
     }
 
-    [RequireConditions(ChatCommandConditions.InLobby), ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby")]
+    [ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby"), RequireConditions(ChatCommandConditions.InLobby)]
     public void KickAllFromBattle(ChatCommandContext ctx) {
         Battle battle = ctx.Connection.BattlePlayer!.Battle;
 
@@ -169,5 +170,19 @@ public class AdminModule : ChatCommandModule {
         builder.AppendLine($"{connections.Count} players connected, {onlineUsernames.Count} players online:");
         builder.AppendJoin(Environment.NewLine, onlineUsernames);
         ctx.SendPrivateResponse(builder.ToString());
+    }
+
+    [ChatCommand("dropBonus", "Drop bonus"), RequireConditions(ChatCommandConditions.InBattle)]
+    public void DropBonus(
+        ChatCommandContext ctx, 
+        [Option("type", "Type of the bonus")] BonusType bonusType) {
+        bool? isSuccessful = ctx.Connection.BattlePlayer?.Battle.BonusProcessor?.DropBonus(bonusType);
+
+        if (isSuccessful != true) {
+            ctx.SendPrivateResponse($"{bonusType} is not dropped");
+            return;
+        }
+        
+        ctx.SendPrivateResponse($"{bonusType} dropped");
     }
 }

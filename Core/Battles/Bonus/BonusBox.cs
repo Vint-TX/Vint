@@ -55,5 +55,7 @@ public abstract class BonusBox {
 
     public abstract void Spawn();
 
+    public virtual void Drop() => Spawn();
+
     public virtual void Tick() => StateManager.Tick();
 }

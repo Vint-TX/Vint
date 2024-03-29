@@ -31,7 +31,6 @@ public class ChatCommandProcessor : IChatCommandProcessor {
             .Where(type => type.IsSubclassOf(typeof(ChatCommandModule)))
             .ToList();
 
-        // ReSharper disable LoopCanBeConvertedToQuery
         foreach (Type commandModule in commandModules) {
             Logger.Debug("Generating {Name} group", commandModule.Name);
 
