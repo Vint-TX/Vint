@@ -557,8 +557,8 @@ public abstract class PlayerConnection(
         userItem.AddComponentIfAbsent(new UserGroupComponent(User));
 
         if (price > 0) {
-            if (forXCrystals) ChangeXCrystals(price);
-            else ChangeCrystals(price);
+            if (forXCrystals) ChangeXCrystals(-price);
+            else ChangeCrystals(-price);
         }
 
         if (userItem.HasComponent<UserItemCounterComponent>()) {
