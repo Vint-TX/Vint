@@ -22,6 +22,18 @@ public class ChatCommandProcessor : IChatCommandProcessor {
 
     public IEnumerable<ChatCommand> GetAll() => Commands.AsReadOnly();
 
+    public bool TryParseCommand(string value, out ChatCommand? chatCommand) {
+        if (!value.StartsWith('!')) {
+            chatCommand = null;
+            return false;
+        }
+
+        string commandName = value[1..].Split()[0];
+
+        chatCommand = Commands.SingleOrDefault(command => command.Info.Name == commandName);
+        return true;
+    }
+
     public void RegisterCommands() {
         Logger.Information("Generating chat commands");
 
@@ -74,17 +86,5 @@ public class ChatCommandProcessor : IChatCommandProcessor {
         }
 
         Logger.Information("Chat commands generated");
-    }
-
-    public bool TryParseCommand(string value, out ChatCommand? chatCommand) {
-        if (!value.StartsWith('!')) {
-            chatCommand = null;
-            return false;
-        }
-
-        string commandName = value[1..].Split()[0];
-
-        chatCommand = Commands.SingleOrDefault(command => command.Info.Name == commandName);
-        return true;
     }
 }

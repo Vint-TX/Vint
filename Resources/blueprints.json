@@ -1,0 +1,98 @@
+{
+  "cardsbronze": {
+    "name": "BronzeLeague",
+    "minAmount": 20,
+    "maxAmount": 40,
+    "minTier2Amount": 3,
+    "maxTier2Amount": 10,
+    "minTier3Amount": 0,
+    "maxTier3Amount": 0,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 0
+  },
+  "cardsgold": {
+    "name": "GoldLeague",
+    "minAmount": 38,
+    "maxAmount": 55,
+    "minTier2Amount": 10,
+    "maxTier2Amount": 20,
+    "minTier3Amount": 7,
+    "maxTier3Amount": 15,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 1
+  },
+  "cardsgolddonut": {
+    "name": "Smuggler",
+    "minAmount": 110,
+    "maxAmount": 160,
+    "minTier2Amount": 6,
+    "maxTier2Amount": 30,
+    "minTier3Amount": 3,
+    "maxTier3Amount": 20,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 1
+  },
+  "cardsmaster": {
+    "name": "MasterLeague",
+    "minAmount": 46,
+    "maxAmount": 70,
+    "minTier2Amount": 10,
+    "maxTier2Amount": 22,
+    "minTier3Amount": 15,
+    "maxTier3Amount": 30,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 1
+  },
+  "cardsscout": {
+    "name": "Scout",
+    "minAmount": 190,
+    "maxAmount": 250,
+    "minTier2Amount": 63,
+    "maxTier2Amount": 83,
+    "minTier3Amount": 63,
+    "maxTier3Amount": 83,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 1
+  },
+  "cardssilver": {
+    "name": "SilverLeague",
+    "minAmount": 26,
+    "maxAmount": 60,
+    "minTier2Amount": 7,
+    "maxTier2Amount": 35,
+    "minTier3Amount": 6,
+    "maxTier3Amount": 12,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 1
+  },
+  "cardssilverdonut": {
+    "name": "Hacker",
+    "minAmount": 61,
+    "maxAmount": 81,
+    "minTier2Amount": 5,
+    "maxTier2Amount": 10,
+    "minTier3Amount": 5,
+    "maxTier3Amount": 10,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 0.35
+  },
+  "cardsspydonut": {
+    "name": "Spy",
+    "minAmount": 130,
+    "maxAmount": 190,
+    "minTier2Amount": 5,
+    "maxTier2Amount": 25,
+    "minTier3Amount": 14,
+    "maxTier3Amount": 35,
+    "tier1Probability": 1,
+    "tier2Probability": 1,
+    "tier3Probability": 1
+  }
+}

@@ -1,6 +1,7 @@
 using LinqToDB;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Results;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config;
@@ -108,7 +109,11 @@ public class BattlePlayer {
         } else {
             Tank = new BattleTank(this);
 
-            // todo modules
+            if (!Battle.Properties.DisabledModules) {
+                foreach (BattleModule battleModule in Tank.Modules) {
+                    PlayerConnection.Share(battleModule.Entity, battleModule.SlotEntity);
+                }
+            }
 
             InBattle = true;
 

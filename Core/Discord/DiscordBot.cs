@@ -23,8 +23,6 @@ public class DiscordBot(
     DiscordChannel ReportsChannel { get; set; } = null!;
 
     public async Task Start() {
-        ConfigManager.InitializeDiscordConfig();
-
         Client = new DiscordClient(new DiscordConfiguration {
             Token = token,
             TokenType = TokenType.Bot,

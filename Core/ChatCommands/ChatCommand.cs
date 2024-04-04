@@ -85,7 +85,7 @@ public sealed class ChatCommand(
                         param = null;
                 } else
                     param = Convert.ChangeType(rawParameterValue, parameterInfo.ParameterType);
-                
+
                 parameters.Add(param);
             } catch (FormatException e) {
                 OptionAttribute option = Options[parameterInfo.Name!];

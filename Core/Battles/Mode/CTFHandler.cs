@@ -10,8 +10,8 @@ namespace Vint.Core.Battles.Mode;
 
 public class CTFHandler : TeamHandler {
     public CTFHandler(Battle battle) : base(battle) {
-        RedSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag.RedTeam.ToList();
-        BlueSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag.BlueTeam.ToList();
+        RedSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.RedTeam.ToList();
+        BlueSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.BlueTeam.ToList();
 
         Flags = new Dictionary<TeamColor, Flag> {
             { TeamColor.Red, new Flag(Battle, RedTeam, TeamColor.Red, Battle.MapInfo.Flags.Red) },

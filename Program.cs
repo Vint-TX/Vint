@@ -30,9 +30,10 @@ abstract class Program {
         await Task.WhenAll(
             Task.Run(ConfigManager.InitializeCache),
             Task.Run(ConfigManager.InitializeMapInfos),
-            Task.Run(ConfigManager.InitializeMapModels),
+            Task.Run(ConfigManager.InitializeMapModels), // You can comment this line to make the server starts faster
             Task.Run(() => {
                 ConfigManager.InitializeNodes();
+                ConfigManager.InitializeConfigs();
                 ConfigManager.InitializeGlobalEntities();
             }));
 

@@ -1,7 +1,6 @@
-using Vint.Core.Battles.Flags;
 using Vint.Core.StateMachine;
 
-namespace Vint.Core.Battles.States;
+namespace Vint.Core.Battles.Flags;
 
 public class FlagStateManager : StateManager<FlagState> {
     public FlagStateManager(Flag flag) {

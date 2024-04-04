@@ -1,7 +1,6 @@
-using Vint.Core.Battles.Bonus;
 using Vint.Core.StateMachine;
 
-namespace Vint.Core.Battles.States;
+namespace Vint.Core.Battles.Bonus;
 
 public class BonusStateManager : StateManager<BonusState> {
     public BonusStateManager(BonusBox bonus) {

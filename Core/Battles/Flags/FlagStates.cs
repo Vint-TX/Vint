@@ -1,5 +1,4 @@
 using System.Numerics;
-using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Battle.Flag;
 using Vint.Core.ECS.Components.Group;
@@ -7,7 +6,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Flag;
 using Vint.Core.StateMachine;
 
-namespace Vint.Core.Battles.States;
+namespace Vint.Core.Battles.Flags;
 
 public abstract class FlagState(
     FlagStateManager stateManager

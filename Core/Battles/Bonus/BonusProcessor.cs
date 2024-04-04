@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Bonus.Type;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
@@ -107,7 +106,7 @@ public class BonusProcessor : IBonusProcessor {
         BonusBox? bonus = Bonuses.FirstOrDefault(bonus => bonus.Type == type && bonus.StateManager.CurrentState is not Spawned);
 
         if (bonus == null) return false;
-        
+
         bonus.Drop();
         return true;
     }

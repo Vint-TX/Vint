@@ -8,9 +8,11 @@ namespace Vint.Core.ECS.Templates.Battle.Weapon;
 [ProtocolId(-6419489500262573655)]
 public class RailgunBattleItemTemplate : DiscreteWeaponTemplate {
     public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
-        IEntity entity = Create("garage/weapon/railgun", tank, battlePlayer);
+        const string configPath = "garage/weapon/railgun";
+        IEntity entity = Create(configPath, tank, battlePlayer);
 
         entity.AddComponent(new RailgunChargingWeaponComponent(1f));
+        entity.AddComponent<DamageWeakeningByTargetComponent>(configPath);
         entity.AddComponent<RailgunComponent>();
 
         return entity;

@@ -61,7 +61,7 @@ public class DamageCalculator : IDamageCalculator {
         float backHit = isBackHit ? BackHitMultiplier : 1;
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
 
-        float damage = baseDamage * weakening * splash * effects * backHit * turretHit;
+        float damage = baseDamage * weakening * splash * effects /* * backHit*/ * turretHit;
         return new CalculatedDamage(hitPoint, damage, isCritical, isBackHit, isTurretHit, isSplash);
     }
 
@@ -80,7 +80,7 @@ public class DamageCalculator : IDamageCalculator {
              : isisHandler.HealPerSecond) *
         isisHandler.Cooldown.TotalSeconds);
 
-    static float GetRailgunDamage(RailgunWeaponHandler railgunHandler, float baseDamage, int targetHitIndex) => 
+    static float GetRailgunDamage(RailgunWeaponHandler railgunHandler, float baseDamage, int targetHitIndex) =>
         baseDamage * MathF.Pow(railgunHandler.DamageWeakeningByTargetPercent, targetHitIndex);
 
     static float GetStreamDamage(StreamWeaponHandler streamHandler) =>

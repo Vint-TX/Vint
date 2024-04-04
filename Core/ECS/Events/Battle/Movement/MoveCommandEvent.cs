@@ -1,6 +1,5 @@
 using System.Numerics;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
 using Vint.Core.Protocol.Attributes;

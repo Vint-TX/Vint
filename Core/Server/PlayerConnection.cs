@@ -15,6 +15,7 @@ using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Preset;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.User;
@@ -22,6 +23,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.ECS.Events.Items;
+using Vint.Core.ECS.Events.Items.Module;
 using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Avatar;
 using Vint.Core.ECS.Templates.Containers;
@@ -97,13 +99,17 @@ public interface IPlayerConnection {
 
     public void MountItem(IEntity userItem);
 
+    public void AssembleModule(IEntity marketItem);
+
+    public void UpgradeModule(IEntity userItem, bool forXCrystals);
+
     public bool OwnsItem(IEntity marketItem);
 
     public void SetUsername(string username);
 
-    public void SetCrystals(long crystals);
+    public void ChangeCrystals(long delta);
 
-    public void SetXCrystals(long xCrystals);
+    public void ChangeXCrystals(long delta);
 
     public void SetGoldBoxes(int goldBoxes);
 
@@ -362,8 +368,8 @@ public abstract class PlayerConnection(
             if (createByRankConfigComponent.UserRankListToCreateItem.Contains(rankComponent.Rank))
                 PurchaseItem(GlobalEntities.GetEntity("misc", "Preset"), 1, 0, false, false);
 
-            SetCrystals(Player.Crystals + crystals);
-            SetXCrystals(Player.XCrystals + xCrystals);
+            ChangeCrystals(crystals);
+            ChangeXCrystals(xCrystals);
             Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
             BattlePlayer?.RankUp();
         }
@@ -406,13 +412,13 @@ public abstract class PlayerConnection(
             }
 
             case CrystalMarketItemTemplate: {
-                SetCrystals(Player.Crystals + amount);
+                ChangeCrystals(amount);
                 mount = false;
                 break;
             }
 
             case XCrystalMarketItemTemplate: {
-                SetXCrystals(Player.XCrystals + amount);
+                ChangeXCrystals(amount);
                 mount = false;
                 break;
             }
@@ -443,7 +449,7 @@ public abstract class PlayerConnection(
                 db.Insert(new Weapon { Player = Player, Id = marketItem.Id, SkinId = skinId, ShellId = shellId });
                 PurchaseItem(skin, 1, 0, false, false);
                 PurchaseItem(shell, 1, 0, false, false);
-                
+
                 MountItem(skin.GetUserEntity(this));
                 MountItem(shell.GetUserEntity(this));
                 break;
@@ -495,7 +501,7 @@ public abstract class PlayerConnection(
                 module ??= new Module { Player = Player, Id = moduleId };
                 module.Cards += amount;
 
-                db.Insert(module);
+                db.InsertOrReplace(module);
                 break;
             }
 
@@ -551,8 +557,8 @@ public abstract class PlayerConnection(
         userItem.AddComponentIfAbsent(new UserGroupComponent(User));
 
         if (price > 0) {
-            if (forXCrystals) SetXCrystals(Player.XCrystals - price);
-            else SetCrystals(Player.Crystals - price);
+            if (forXCrystals) ChangeXCrystals(price);
+            else ChangeCrystals(price);
         }
 
         if (userItem.HasComponent<UserItemCounterComponent>()) {
@@ -745,11 +751,19 @@ public abstract class PlayerConnection(
                     break;
                 }
 
-                case PresetUserItemTemplate: { // todo modules
+                case PresetUserItemTemplate: {
                     changeEquipment = true;
                     Preset? newPreset = Player.UserPresets.SingleOrDefault(preset => preset.Entity == userItem);
 
                     if (newPreset == null) return;
+
+                    Dictionary<IEntity, IEntity> slotToCurrentModule = currentPreset.Modules.ToDictionary(
+                        pModule => pModule.GetSlotEntity(this),
+                        pModule => pModule.Entity.GetUserModule(this));
+
+                    Dictionary<IEntity, IEntity> slotToNewModule = newPreset.Modules.ToDictionary(
+                        pModule => pModule.GetSlotEntity(this),
+                        pModule => pModule.Entity.GetUserModule(this));
 
                     foreach (IEntity entity in new[] {
                                  currentPreset.Hull.GetUserEntity(this),
@@ -759,7 +773,8 @@ public abstract class PlayerConnection(
                                  currentPreset.Cover.GetUserEntity(this),
                                  currentPreset.WeaponSkin.GetUserEntity(this),
                                  currentPreset.Shell.GetUserEntity(this),
-                                 currentPreset.Graffiti.GetUserEntity(this)
+                                 currentPreset.Graffiti.GetUserEntity(this),
+                                 currentPreset.Entity!
                              }) {
                         entity.RemoveComponentIfPresent<MountedItemComponent>();
                     }
@@ -772,13 +787,21 @@ public abstract class PlayerConnection(
                                  newPreset.Cover.GetUserEntity(this),
                                  newPreset.WeaponSkin.GetUserEntity(this),
                                  newPreset.Shell.GetUserEntity(this),
-                                 newPreset.Graffiti.GetUserEntity(this)
+                                 newPreset.Graffiti.GetUserEntity(this),
+                                 newPreset.Entity!
                              }) {
-                        entity.AddComponentIfAbsent(new MountedItemComponent());
+                        entity.AddComponentIfAbsent<MountedItemComponent>();
                     }
 
-                    currentPreset.Entity!.RemoveComponent<MountedItemComponent>();
-                    newPreset.Entity!.AddComponent<MountedItemComponent>();
+                    foreach ((IEntity slot, IEntity module) in slotToCurrentModule) {
+                        slot.RemoveComponent<ModuleGroupComponent>();
+                        module.RemoveComponent<MountedItemComponent>();
+                    }
+
+                    foreach ((IEntity slot, IEntity module) in slotToNewModule) {
+                        slot.AddGroupComponent<ModuleGroupComponent>(module);
+                        module.AddComponent<MountedItemComponent>();
+                    }
 
                     Player.CurrentPresetIndex = newPreset.Index;
                     db.Players
@@ -796,6 +819,80 @@ public abstract class PlayerConnection(
 
         User.RemoveComponent<UserEquipmentComponent>();
         User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
+    }
+
+    public void AssembleModule(IEntity marketItem) {
+        using DbConnection db = new();
+        Module? module = db.Modules.SingleOrDefault(module => module.PlayerId == Player.Id && module.Id == marketItem.Id);
+
+        if (module is not { Level: 0, Cards: > 0 }) {
+            Logger.Error("Module {Id} is not ready to assemble", marketItem.Id);
+            return;
+        }
+
+        module.Cards -= marketItem.GetComponent<ModuleCardsCompositionComponent>().CraftPrice.Cards;
+        module.Level++;
+
+        db.Update(module);
+
+        IEntity card = SharedEntities.Single(entity =>
+            entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
+            entity.GetComponent<ParentGroupComponent>().Key == marketItem.Id);
+
+        IEntity userItem = marketItem.GetUserModule(this);
+
+        card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
+        userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
+        userItem.AddGroupComponent<UserGroupComponent>(User);
+
+        Send(new ModuleAssembledEvent(), userItem);
+    }
+
+    public void UpgradeModule(IEntity userItem, bool forXCrystals) {
+        long id = userItem.GetComponent<ParentGroupComponent>().Key;
+
+        using DbConnection db = new();
+
+        Module? module = db.Modules.SingleOrDefault(module => module.PlayerId == Player.Id && module.Id == id);
+        ModuleCardsCompositionComponent compositionComponent = userItem.GetComponent<ModuleCardsCompositionComponent>();
+
+        if (module == null || module.Level > compositionComponent.UpgradePrices.Count) {
+            Logger.Error("Module {Id} is not upgradable", id);
+            return;
+        }
+
+        ModulePrice price = compositionComponent.UpgradePrices[module.Level - 1];
+
+        if (module.Cards < price.Cards) {
+            Logger.Error("Not enough cards to upgrade module {Id}", id);
+            return;
+        }
+
+        bool crystalsEnough = forXCrystals
+                                  ? price.XCrystals <= Player.XCrystals
+                                  : price.Crystals <= Player.Crystals;
+
+        if (!crystalsEnough) {
+            Logger.Error("Not enough (x)crystals to upgrade module {Id}", id);
+            return;
+        }
+
+        if (forXCrystals) ChangeXCrystals(-price.XCrystals);
+        else ChangeCrystals(-price.Crystals);
+
+        module.Cards -= price.Cards;
+        module.Level++;
+
+        db.Update(module);
+
+        IEntity card = SharedEntities.Single(entity =>
+            entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
+            entity.GetComponent<ParentGroupComponent>().Key == id);
+
+        card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
+        userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
+
+        Send(new ModuleUpgradedEvent(), userItem);
     }
 
     public bool OwnsItem(IEntity marketItem) {
@@ -833,59 +930,57 @@ public abstract class PlayerConnection(
             .Update();
     }
 
-    public void SetCrystals(long crystals) {
-        long diff = crystals - Player.Crystals;
+    public void ChangeCrystals(long delta) {
+        if (delta == 0) return;
 
         using DbConnection db = new();
         db.BeginTransaction();
 
-        if (diff > 0) {
+        if (delta > 0) {
             db.Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
-                .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)diff)
+                .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)delta)
                 .Update();
 
             db.SeasonStatistics
                 .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.SeasonNumber)
-                .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)diff)
+                .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)delta)
                 .Update();
         }
 
         db.Players
             .Where(player => player.Id == Player.Id)
-            .Set(player => player.Crystals, crystals)
+            .Set(player => player.Crystals, player => player.Crystals + delta)
             .Update();
 
         db.CommitTransaction();
-        Player.Crystals = crystals;
+        Player.Crystals += delta;
         User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
     }
 
-    public void SetXCrystals(long xCrystals) {
-        long diff = xCrystals - Player.XCrystals;
-
+    public void ChangeXCrystals(long delta) {
         using DbConnection db = new();
         db.BeginTransaction();
 
-        if (diff > 0) {
+        if (delta > 0) {
             db.Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
-                .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
+                .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)delta)
                 .Update();
 
             db.SeasonStatistics
                 .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.SeasonNumber)
-                .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)diff)
+                .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)delta)
                 .Update();
         }
 
         db.Players
             .Where(player => player.Id == Player.Id)
-            .Set(player => player.XCrystals, xCrystals)
+            .Set(player => player.XCrystals, player => player.XCrystals + delta)
             .Update();
 
         db.CommitTransaction();
-        Player.XCrystals = xCrystals;
+        Player.XCrystals += delta;
         User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
     }
 

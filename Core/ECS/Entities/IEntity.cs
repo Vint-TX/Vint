@@ -33,7 +33,7 @@ public interface IEntity {
     public void AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent;
 
     public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null);
-    
+
     public void AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
 
     public bool HasComponent(IComponent component);

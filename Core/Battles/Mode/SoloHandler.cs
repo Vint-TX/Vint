@@ -28,9 +28,10 @@ public abstract class SoloHandler(
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
         SpawnPoint spawnPoint = SpawnPoints
             .Shuffle()
-            .First(spawnPoint => spawnPoint.Number != LastSpawnPoint?.Number &&
-                                 spawnPoint.Number != battlePlayer.Tank?.SpawnPoint?.Number &&
-                                 spawnPoint.Number != battlePlayer.Tank?.PreviousSpawnPoint?.Number);
+            .FirstOrDefault(spawnPoint => spawnPoint.Number != LastSpawnPoint?.Number &&
+                                          spawnPoint.Number != battlePlayer.Tank?.SpawnPoint.Number &&
+                                          spawnPoint.Number != battlePlayer.Tank?.PreviousSpawnPoint.Number,
+                SpawnPoints.First());
 
         LastSpawnPoint = spawnPoint;
         return spawnPoint;

@@ -60,8 +60,8 @@ public abstract class TeamHandler(
             .Shuffle()
             .FirstOrDefault(spawnPoint => spawnPoint.Number != LastRedSpawnPoint?.Number &&
                                           spawnPoint.Number != LastBlueSpawnPoint?.Number &&
-                                          spawnPoint.Number != battlePlayer.Tank?.SpawnPoint?.Number &&
-                                          spawnPoint.Number != battlePlayer.Tank?.PreviousSpawnPoint?.Number,
+                                          spawnPoint.Number != battlePlayer.Tank?.SpawnPoint.Number &&
+                                          spawnPoint.Number != battlePlayer.Tank?.PreviousSpawnPoint.Number,
                 spawnPoints.First());
 
         switch (teamColor) {

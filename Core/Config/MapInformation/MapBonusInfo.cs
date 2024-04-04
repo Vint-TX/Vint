@@ -2,15 +2,15 @@ using Vint.Core.Battles;
 
 namespace Vint.Core.Config.MapInformation;
 
-public class MapBonusInfo {
-    public BonusList Deathmatch { get; set; } = null!;
-    public BonusList? TeamDeathmatch { get; set; } = null!;
-    public BonusList? CaptureTheFlag { get; set; } = null!;
-
+public readonly record struct MapBonusInfo(
+    BonusList Deathmatch,
+    BonusList? TeamDeathmatch,
+    BonusList? CaptureTheFlag
+) {
     public BonusList Get(BattleMode battleMode) => battleMode switch {
         BattleMode.DM => Deathmatch,
-        BattleMode.TDM => TeamDeathmatch ?? CaptureTheFlag!,
-        BattleMode.CTF => CaptureTheFlag ?? TeamDeathmatch!,
+        BattleMode.TDM => TeamDeathmatch ?? CaptureTheFlag!.Value,
+        BattleMode.CTF => CaptureTheFlag ?? TeamDeathmatch!.Value,
         _ => throw new ArgumentException(null, nameof(battleMode))
     };
 }

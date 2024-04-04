@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
@@ -8,7 +7,7 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 namespace Vint.Core.Battles.Weapons;
 
 public class RailgunWeaponHandler : DiscreteWeaponHandler {
-    public RailgunWeaponHandler(BattleTank battleTank) : base(battleTank) => 
+    public RailgunWeaponHandler(BattleTank battleTank) : base(battleTank) =>
         DamageWeakeningByTargetPercent = ConfigManager.GetComponent<DamageWeakeningByTargetPropertyComponent>(MarketConfigPath).FinalValue / 100;
 
     public float DamageWeakeningByTargetPercent { get; }

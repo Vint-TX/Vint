@@ -13,7 +13,7 @@ namespace Vint.Core.Utils;
 
 public static class ChatUtils {
     public static IEntity GlobalChat => GlobalEntities.GetEntity("chats", "En");
-    
+
     public static Dictionary<string, Dictionary<string, string>> Localization { get; } = new() { // hardcoded, todo parse from configs
         {
             "RU", new Dictionary<string, string> {
@@ -104,7 +104,7 @@ public static class ChatUtils {
     };
 
     public static IEntity GetChat(IPlayerConnection connection) {
-        if (!connection.InLobby) 
+        if (!connection.InLobby)
             return GlobalChat;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

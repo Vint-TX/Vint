@@ -52,10 +52,8 @@ public sealed class RepairKitEffect : Effect, ISupplyEffect, IExtendableEffect {
 
         if (isSupply) {
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
-            HpPerMs = Math.Max(HpPerMs, SupplyHealingComponent.HpPerMs);
-        }
-
-        if (newLevel >= Level && !isSupply) {
+            HpPerMs = SupplyHealingComponent.HpPerMs;
+        } else {
             Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
             InstantHp = InstantHpComponent[newLevel];
             HpPerMs = HpPerMsComponent[newLevel];

@@ -2,8 +2,8 @@ using System.Numerics;
 
 namespace Vint.Core.Config.MapInformation;
 
-public class Bonus {
-    public int Number { get; set; }
-    public bool HasParachute { get; set; }
-    public Vector3 Position { get; set; }
-}
+public readonly record struct Bonus(
+    int Number,
+    bool HasParachute,
+    Vector3 Position
+);

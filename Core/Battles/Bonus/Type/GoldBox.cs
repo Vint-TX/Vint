@@ -49,7 +49,7 @@ public sealed class GoldBox(
                 .Update();
         }
 
-        targetConnection.SetXCrystals(targetConnection.Player.XCrystals + XCrystalsReward);
+        targetConnection.ChangeXCrystals(XCrystalsReward);
     }
 
     public override void Spawn() {
@@ -69,8 +69,8 @@ public sealed class GoldBox(
     public override void Tick() {
         base.Tick();
 
-        if (Battle.Timer < 120 || 
-            Battle.StateManager.CurrentState is not Running || 
+        if (Battle.Timer < 120 ||
+            Battle.StateManager.CurrentState is not Running ||
             StateManager.CurrentState is not None) return;
 
         Ticks++;

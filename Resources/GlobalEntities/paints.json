@@ -104,11 +104,11 @@
     }
   },
   {
-    "name": "Consumed",
+    "name": "Independence",
     "id": 300183089,
     "template": [
       "TankPaintMarketItemTemplate",
-      "garage/paint/consumed"
+      "garage/paint/independence"
     ],
     "components": {
       "MarketItemGroupComponent": {

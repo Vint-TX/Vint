@@ -155,7 +155,7 @@ public class Player {
 
         using (DbConnection db = new()) {
             db.BeginTransaction();
-            
+
             db.Insert(new Hull { Player = this, SkinId = hullSkinId, Id = hullId });
             db.Insert(new HullSkin { Player = this, HullId = hullId, Id = hullSkinId });
             db.Insert(new Paint { Player = this, Id = paintId });
@@ -172,7 +172,7 @@ public class Player {
 
             db.Insert(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.SeasonNumber });
             db.Insert(new Statistics { Player = this });
-            
+
             db.CommitTransaction();
         }
 

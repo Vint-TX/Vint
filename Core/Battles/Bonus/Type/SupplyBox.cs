@@ -1,7 +1,6 @@
 using System.Numerics;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;

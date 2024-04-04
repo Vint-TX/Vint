@@ -5,6 +5,9 @@ using LinqToDB;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Modules;
+using Vint.Core.Battles.Modules.Interfaces;
+using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Results;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
@@ -21,10 +24,12 @@ using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Battle.Weapon;
+using Vint.Core.ECS.Components.Modules.Inventory;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
+using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
@@ -94,6 +99,16 @@ public class BattleTank {
         Incarnation = new TankIncarnationTemplate().Create(Tank);
         RoundUser = new RoundUserTemplate().Create(BattlePlayer, Tank);
 
+        Modules = [];
+
+        if (!Battle.Properties.DisabledModules) {
+            foreach (PresetModule presetModule in preset.Modules) {
+                BattleModule module = ModuleRegistry.Get(presetModule.Entity.Id);
+                module.Init(this, presetModule.GetSlotEntity(playerConnection), presetModule.Entity.GetUserModule(playerConnection));
+                Modules.Add(module);
+            }
+        }
+
         WeaponHandler = Weapon.TemplateAccessor!.Template switch {
             SmokyBattleItemTemplate => new SmokyWeaponHandler(this),
             TwinsBattleItemTemplate => new TwinsWeaponHandler(this),
@@ -153,9 +168,10 @@ public class BattleTank {
     public bool ForceSelfDestruct { get; set; }
     public bool FullDisabled { get; private set; }
 
-    public SpawnPoint PreviousSpawnPoint { get; private set; } = null!;
-    public SpawnPoint SpawnPoint { get; private set; } = null!;
+    public SpawnPoint PreviousSpawnPoint { get; private set; }
+    public SpawnPoint SpawnPoint { get; private set; }
 
+    public List<BattleModule> Modules { get; }
     public WeaponHandler WeaponHandler { get; }
     public BattlePlayer BattlePlayer { get; }
     public Battle Battle { get; }
@@ -183,38 +199,40 @@ public class BattleTank {
     TemperatureConfigComponent OriginalTemperatureConfigComponent { get; }
 
     public void Tick() {
+        if (BattlePlayer.IsPaused &&
+            (!BattlePlayer.KickTime.HasValue ||
+             DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
+            BattlePlayer.IsPaused = false;
+            BattlePlayer.KickTime = null;
+            //BattlePlayer.IsKicked = true;
+            BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
+            Battle.RemovePlayer(BattlePlayer);
+        }
+
         if (ForceSelfDestruct || SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow)
             SelfDestruct();
-
-        StateManager.Tick();
 
         if (CollisionsPhase == Battle.Entity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
             Tank.RemoveComponentIfPresent<TankStateTimeOutComponent>();
             Battle.Entity.ChangeComponent<BattleTankCollisionsComponent>(component =>
                 component.SemiActiveCollisionsPhase++);
 
-            StateManager.SetState(new Active(StateManager));
             SetHealth(MaxHealth);
+            StateManager.SetState(new Active(StateManager));
         }
 
-        if (BattlePlayer.IsPaused &&
-            (!BattlePlayer.KickTime.HasValue ||
-             DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
-            BattlePlayer.IsPaused = false;
-            BattlePlayer.KickTime = null;
-            BattlePlayer.IsKicked = true;
-            BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
-            Battle.RemovePlayer(BattlePlayer);
-        }
+        StateManager.Tick();
+        WeaponHandler.Tick();
+        HandleTemperature();
 
         foreach (Effect effect in Effects)
             effect.Tick();
 
-        WeaponHandler.Tick();
-        HandleTemperature();
+        foreach (BattleModule module in Modules)
+            module.Tick();
     }
 
-    public void Enable() { // todo modules
+    public void Enable() {
         if (FullDisabled) return;
 
         WeaponHandler.OnTankEnable();
@@ -225,15 +243,25 @@ public class BattleTank {
 
         SetTemperature(0);
         Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
+
+        foreach (BattleModule module in Modules)
+            module.TryUnblock();
     }
 
-    public void Disable(bool full) { // todo modules
+    public void Disable(bool full) {
         FullDisabled = full;
         TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
 
         foreach (Effect effect in Effects) {
             effect.UnScheduleAll();
             effect.Deactivate();
+        }
+
+        foreach (BattleModule module in Modules) {
+            module.TryBlock(true);
+
+            if (full)
+                module.SetAmmo(module.MaxAmmo);
         }
 
         TemperatureAssists.Clear();
@@ -251,6 +279,16 @@ public class BattleTank {
 
         Tank.RemoveComponentIfPresent<TankMovableComponent>();
         WeaponHandler.OnTankDisable();
+    }
+
+    public void UpdateModuleCooldownSpeed(float coeff, bool reset = false) {
+        BattleUser.ChangeComponent<BattleUserInventoryCooldownSpeedComponent>(component => component.SpeedCoeff = coeff);
+        BattlePlayer.PlayerConnection.Send(new BattleUserInventoryCooldownSpeedChangedEvent(), BattleUser);
+
+        foreach (BattleModule module in Modules) {
+            if (reset) module.ResetCooldownSpeed();
+            else module.UpdateCooldownSpeed(coeff);
+        }
     }
 
     public void Spawn() {
@@ -279,7 +317,8 @@ public class BattleTank {
         Tank.AddComponent(new TankMovementComponent(movement, default, 0, 0));
     }
 
-    public void SetHealth(float health) { // todo modules
+    public void SetHealth(float health) {
+        float before = Health;
         Health = Math.Clamp(health, 0, MaxHealth);
         Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = MathF.Ceiling(Health));
 
@@ -291,13 +330,20 @@ public class BattleTank {
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
             battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
+
+        foreach (IHealthModule healthModule in Modules.OfType<IHealthModule>())
+            healthModule.OnHealthChanged(before, Health, MaxHealth);
     }
 
-    public void SetTemperature(float temperature) { // todo modules
+    public void SetTemperature(float temperature) {
+        float before = Temperature;
         Temperature = Math.Clamp(temperature, TemperatureConfig.MinTemperature, TemperatureConfig.MaxTemperature);
         Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
 
         UpdateSpeed();
+
+        foreach (ITemperatureModule temperatureModule in Modules.OfType<ITemperatureModule>())
+            temperatureModule.TemperatureChanged(before, Temperature, TemperatureConfig.MaxTemperature);
     }
 
     public void HandleTemperature() {

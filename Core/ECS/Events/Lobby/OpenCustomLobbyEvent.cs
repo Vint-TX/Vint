@@ -17,7 +17,7 @@ public class OpenCustomLobbyEvent : IServerEvent {
 
         if (player.Crystals < price) return;
 
-        connection.SetCrystals(player.Crystals - price);
+        connection.ChangeCrystals(-price);
 
         if (customHandler.Owner != connection) return;
 

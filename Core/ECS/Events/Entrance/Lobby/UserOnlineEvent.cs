@@ -1,5 +1,6 @@
 ﻿using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
@@ -53,6 +54,14 @@ public class UserOnlineEvent : IServerEvent {
                      .Concat(mountedWeaponSkins)*/
                      .Distinct()) {
             entity.AddComponent<MountedItemComponent>();
+        }
+
+        foreach (PresetModule presetModule in preset.Modules) {
+            IEntity module = presetModule.Entity.GetUserModule(connection);
+            IEntity slot = presetModule.GetSlotEntity(connection);
+
+            module.AddComponent<MountedItemComponent>();
+            slot.AddGroupComponent<ModuleGroupComponent>(module);
         }
 
         connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));

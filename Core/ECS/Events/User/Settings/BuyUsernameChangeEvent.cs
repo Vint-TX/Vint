@@ -24,7 +24,7 @@ public class BuyUsernameChangeEvent : IServerEvent {
         connection.Send(new CompleteBuyUsernameChangeEvent(success), user);
         if (!success) return;
 
-        connection.SetXCrystals(connection.Player.XCrystals - truePrice);
+        connection.ChangeXCrystals(-truePrice);
         connection.SetUsername(Username);
 
         connection.Share(new UsernameChangedNotificationTemplate().Create(Username, user));

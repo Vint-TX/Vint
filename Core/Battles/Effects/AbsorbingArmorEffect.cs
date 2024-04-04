@@ -43,14 +43,12 @@ public sealed class AbsorbingArmorEffect : Effect, ISupplyEffect, IDamageEffect,
 
         bool isSupply = newLevel < 0;
 
-        if (isSupply)
+        if (isSupply) {
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
-
-        if (newLevel >= Level) {
-            if (!isSupply)
-                Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
-
-            Multiplier = isSupply ? SupplyMultiplier : MultipliersComponent[newLevel];
+            Multiplier = SupplyMultiplier;
+        } else {
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
+            Multiplier = MultipliersComponent[newLevel];
         }
 
         Level = newLevel;

@@ -31,7 +31,7 @@ public class ActivatePromoCodeEvent : IServerEvent {
         IEntity user = entities.Single();
 
         connection.PurchaseItem(item, 1, 0, false, false);
-        connection.Share(new NewItemNotificationTemplate().Create(user, item, 1));
+        connection.Share(new NewItemNotificationTemplate().CreateRegular(user, item, 1));
         connection.Send(new ShowNotificationGroupEvent(1), user);
     }
 }

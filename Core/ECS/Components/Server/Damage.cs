@@ -1,3 +1,4 @@
+using Vint.Core.ECS.Components.Battle.Weapon.Types.Railgun;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
 
 namespace Vint.Core.ECS.Components.Server;
@@ -26,8 +27,12 @@ public class IncreaseFriendTemperaturePropertyComponent : RangedComponent;
 
 public class DeltaTemperaturePerSecondPropertyComponent : RangedComponent;
 
-public class DamageWeakeningByTargetPropertyComponent : RangedComponent;
+public class DamageWeakeningByTargetPropertyComponent : RangedComponent, IConvertible<DamageWeakeningByTargetComponent> {
+    public void Convert(DamageWeakeningByTargetComponent component) =>
+        component.DamagePercent = FinalValue;
+}
 
 public class TemperatureLimitPropertyComponent : RangedComponent, IConvertible<VulcanWeaponComponent> {
-    public void Convert(VulcanWeaponComponent component) => component.TemperatureLimit = FinalValue;
+    public void Convert(VulcanWeaponComponent component) =>
+        component.TemperatureLimit = FinalValue;
 }

@@ -1,0 +1,158 @@
+{
+  "firstTier": [
+    {
+      "cards": 2,
+      "crystals": 0,
+      "xCrystals": 0
+    },
+    {
+      "cards": 5,
+      "crystals": 100,
+      "xCrystals": 5
+    },
+    {
+      "cards": 10,
+      "crystals": 640,
+      "xCrystals": 10
+    },
+    {
+      "cards": 50,
+      "crystals": 1280,
+      "xCrystals": 20
+    },
+    {
+      "cards": 100,
+      "crystals": 1600,
+      "xCrystals": 26
+    },
+    {
+      "cards": 200,
+      "crystals": 2560,
+      "xCrystals": 41
+    },
+    {
+      "cards": 500,
+      "crystals": 4160,
+      "xCrystals": 67
+    },
+    {
+      "cards": 800,
+      "crystals": 5440,
+      "xCrystals": 87
+    },
+    {
+      "cards": 1100,
+      "crystals": 6400,
+      "xCrystals": 102
+    },
+    {
+      "cards": 1400,
+      "crystals": 22400,
+      "xCrystals": 358
+    }
+  ],
+  "secondTier": [
+    {
+      "cards": 5,
+      "crystals": 0,
+      "xCrystals": 0
+    },
+    {
+      "cards": 10,
+      "crystals": 950,
+      "xCrystals": 15
+    },
+    {
+      "cards": 30,
+      "crystals": 1920,
+      "xCrystals": 31
+    },
+    {
+      "cards": 80,
+      "crystals": 3840,
+      "xCrystals": 61
+    },
+    {
+      "cards": 140,
+      "crystals": 4800,
+      "xCrystals": 77
+    },
+    {
+      "cards": 200,
+      "crystals": 7680,
+      "xCrystals": 123
+    },
+    {
+      "cards": 320,
+      "crystals": 20800,
+      "xCrystals": 333
+    },
+    {
+      "cards": 450,
+      "crystals": 27200,
+      "xCrystals": 435
+    },
+    {
+      "cards": 600,
+      "crystals": 32000,
+      "xCrystals": 512
+    },
+    {
+      "cards": 1400,
+      "crystals": 112000,
+      "xCrystals": 1792
+    }
+  ],
+  "thirdTier": [
+    {
+      "cards": 10,
+      "crystals": 0,
+      "xCrystals": 0
+    },
+    {
+      "cards": 40,
+      "crystals": 2880,
+      "xCrystals": 46
+    },
+    {
+      "cards": 80,
+      "crystals": 3840,
+      "xCrystals": 61
+    },
+    {
+      "cards": 190,
+      "crystals": 7680,
+      "xCrystals": 123
+    },
+    {
+      "cards": 250,
+      "crystals": 9600,
+      "xCrystals": 156
+    },
+    {
+      "cards": 400,
+      "crystals": 15360,
+      "xCrystals": 246
+    },
+    {
+      "cards": 500,
+      "crystals": 41600,
+      "xCrystals": 666
+    },
+    {
+      "cards": 800,
+      "crystals": 54400,
+      "xCrystals": 870
+    },
+    {
+      "cards": 1100,
+      "crystals": 64000,
+      "xCrystals": 1024
+    },
+    {
+      "cards": 3000,
+      "crystals": 224000,
+      "xCrystals": 3584
+    }
+  ]
+}

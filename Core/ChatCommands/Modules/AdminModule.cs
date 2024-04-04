@@ -174,7 +174,7 @@ public class AdminModule : ChatCommandModule {
 
     [ChatCommand("dropBonus", "Drop bonus"), RequireConditions(ChatCommandConditions.InBattle)]
     public void DropBonus(
-        ChatCommandContext ctx, 
+        ChatCommandContext ctx,
         [Option("type", "Type of the bonus")] BonusType bonusType) {
         bool? isSuccessful = ctx.Connection.BattlePlayer?.Battle.BonusProcessor?.DropBonus(bonusType);
 
@@ -182,7 +182,7 @@ public class AdminModule : ChatCommandModule {
             ctx.SendPrivateResponse($"{bonusType} is not dropped");
             return;
         }
-        
+
         ctx.SendPrivateResponse($"{bonusType} dropped");
     }
 }

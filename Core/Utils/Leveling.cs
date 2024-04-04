@@ -6,6 +6,7 @@ using Vint.Core.ECS.Components.Experience;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Components.Server.Experience;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
@@ -40,6 +41,20 @@ public static class Leveling {
 
         int levelIndex = experiencePerLevel.IndexOf(experiencePerLevel.LastOrDefault(x => x <= xp));
         return Math.Max(levelIndex + 1, 0);
+    }
+
+    public static float GetStat<T>(string configPath, int level) where T : ModuleEffectUpgradablePropertyComponent {
+        T upgradable = ConfigManager.GetComponent<T>(configPath);
+        List<float> levelToValues = upgradable.UpgradeLevel2Values;
+
+        if (levelToValues.Count == 0) return 0;
+
+        if (!upgradable.LinearInterpolation) return levelToValues[level - 1];
+
+        float minValue = levelToValues.First();
+        float maxValue = levelToValues.Last();
+
+        return MathUtils.Map(level, 1, 10, minValue, maxValue);
     }
 
     public static int GetSeasonPlace(long userId) {

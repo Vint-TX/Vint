@@ -1,4 +1,5 @@
 using System.Numerics;
+using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;

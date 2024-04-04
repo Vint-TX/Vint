@@ -24,6 +24,8 @@ public class OpenContainerEvent : IServerEvent {
 
         if (container == null || container.Count < Amount) return;
 
+        Amount = Math.Min(Amount, 100);
+
         container.Count -= Amount;
         userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);
         connection.Send(new ItemsCountChangedEvent(-Amount), userEntity);

@@ -1,5 +1,6 @@
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Modules.Inventory;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 
@@ -20,6 +21,7 @@ public class BattleUserTemplate : EntityTemplate {
             entity.AddComponentFrom<TeamGroupComponent>(team);
 
         entity.AddComponent<UserInBattleAsTankComponent>();
+        entity.AddComponent(new BattleUserInventoryCooldownSpeedComponent(1));
         return entity;
     }
 

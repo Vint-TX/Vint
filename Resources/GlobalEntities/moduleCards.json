@@ -1,6 +1,6 @@
 [
   {
-    "name": "Absorbingarmor",
+    "name": "AbsorbingArmor",
     "id": 1070497259,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "name": "Acceleratedgears",
+    "name": "AcceleratedGears",
     "id": 1379340193,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -48,7 +48,7 @@
     }
   },
   {
-    "name": "Backhitdefence",
+    "name": "BackhitDefence",
     "id": -1143816664,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -60,6 +60,22 @@
       },
       "MarketItemGroupComponent": {
         "key": -1143816664
+      }
+    }
+  },
+  {
+    "name": "BackhitIncrease",
+    "id": -1143816665,
+    "template": [
+      "ModuleCardMarketItemTemplate",
+      "garage/module/card/backhitincrease"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2075784110
+      },
+      "MarketItemGroupComponent": {
+        "key": -1143816665
       }
     }
   },
@@ -80,7 +96,7 @@
     }
   },
   {
-    "name": "Emergencyprotection",
+    "name": "EmergencyProtection",
     "id": -443509498,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -112,7 +128,7 @@
     }
   },
   {
-    "name": "Energyinjection",
+    "name": "EnergyInjection",
     "id": -1116052693,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -144,7 +160,7 @@
     }
   },
   {
-    "name": "Explosivemass",
+    "name": "ExplosiveMass",
     "id": -206369995,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -160,7 +176,7 @@
     }
   },
   {
-    "name": "Externalimpact",
+    "name": "ExternalImpact",
     "id": 1032613237,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -176,7 +192,7 @@
     }
   },
   {
-    "name": "Firering",
+    "name": "FireRing",
     "id": -627265270,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -192,7 +208,7 @@
     }
   },
   {
-    "name": "Forcefield",
+    "name": "ForceField",
     "id": 2100727840,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -208,7 +224,7 @@
     }
   },
   {
-    "name": "Icetrap",
+    "name": "IceTrap",
     "id": 1914815875,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -224,7 +240,7 @@
     }
   },
   {
-    "name": "Increaseddamage",
+    "name": "IncreasedDamage",
     "id": 465438765,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -272,7 +288,7 @@
     }
   },
   {
-    "name": "Jumpimpact",
+    "name": "JumpImpact",
     "id": -1596570946,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -304,7 +320,7 @@
     }
   },
   {
-    "name": "Lifesteal",
+    "name": "LifeSteal",
     "id": 2010921135,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -352,7 +368,7 @@
     }
   },
   {
-    "name": "Repairkit",
+    "name": "RepairKit",
     "id": -786092161,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -400,7 +416,7 @@
     }
   },
   {
-    "name": "Spidermine",
+    "name": "SpiderMine",
     "id": 709690204,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -416,7 +432,7 @@
     }
   },
   {
-    "name": "Tempblock",
+    "name": "TempBlock",
     "id": -23536107,
     "template": [
       "ModuleCardMarketItemTemplate",
@@ -432,7 +448,7 @@
     }
   },
   {
-    "name": "Turbospeed",
+    "name": "TurboSpeed",
     "id": 1378523021,
     "template": [
       "ModuleCardMarketItemTemplate",

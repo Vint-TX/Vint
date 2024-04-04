@@ -24,7 +24,7 @@ public class ComponentRemoveCommand(
             logger.Error("{Component} is not in whitelist ({Entity})", Component.Name, Entity);
             ChatUtils.SendMessage($"ClientRemovable: {Component.Name}", ChatUtils.GetChat(connection), [connection], null);
         }
-        
+
         IComponent component = Entity.GetComponent(Component);
 
         Entity.RemoveComponent(Component, connection);
@@ -33,6 +33,6 @@ public class ComponentRemoveCommand(
         logger.Debug("Removed {Component} from {Entity}", Component.Name, Entity);
     }
 
-    public override string ToString() => 
+    public override string ToString() =>
         $"ComponentRemove command {{ Entity: {Entity}, Component: {Component.Name} }}";
 }

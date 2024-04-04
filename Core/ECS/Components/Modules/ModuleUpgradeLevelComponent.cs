@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.Modules;
 public class ModuleUpgradeLevelComponent(
     long level
 ) : IComponent {
-    public long Level { get; private set; } = level;
+    public long Level { get; set; } = level;
 }

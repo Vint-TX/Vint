@@ -26,7 +26,7 @@ public class ItemsContainer(
             IEntity regularReward = GetReward(ItemsComponent.Items, connection, random, out int itemAmount, out long compensation);
             yield return SaveRewardOrCompensation(connection, regularReward, itemAmount, compensation);
 
-            if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || random.NextFloat() > 0.05) continue;
+            if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || random.NextFloat() > 0.1 /* 10% */) continue;
 
             IEntity rareReward = GetReward(ItemsComponent.RareItems, connection, random, out itemAmount, out compensation);
             yield return SaveRewardOrCompensation(connection, rareReward, itemAmount, compensation);
@@ -63,11 +63,11 @@ public class ItemsContainer(
         if (connection.OwnsItem(marketItem)) {
             marketItem = GlobalEntities.GetEntity("misc", "Crystal");
             amount = (int)compensation;
-            connection.SetCrystals(connection.Player.Crystals + compensation);
+            connection.ChangeCrystals(compensation);
         } else
             connection.PurchaseItem(marketItem, amount, 0, false, false);
 
-        return new NewItemNotificationTemplate().Create(MarketItem, marketItem, amount);
+        return new NewItemNotificationTemplate().CreateRegular(MarketItem, marketItem, amount);
     }
 
     static bool ValidateReward(IPlayerConnection connection, IEntity marketItem) {

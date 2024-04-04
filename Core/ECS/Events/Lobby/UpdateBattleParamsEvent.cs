@@ -19,7 +19,7 @@ public class UpdateBattleParamsEvent : IServerEvent {
         Battles.Battle battle = battlePlayer.Battle;
 
         if ((battle.TypeHandler is not CustomHandler customHandler ||
-             battle.StateManager.CurrentState is not NotStarted ||
+             battle.StateManager.CurrentState is not NotStarted or Ended ||
              customHandler.Owner != connection) &&
             !connection.Player.IsAdmin) return;
 

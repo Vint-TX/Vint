@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Mode;
-using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Tank;
@@ -8,7 +7,7 @@ using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.StateMachine;
 
-namespace Vint.Core.Battles.States;
+namespace Vint.Core.Battles.Player;
 
 public abstract class TankState(
     TankStateManager stateManager

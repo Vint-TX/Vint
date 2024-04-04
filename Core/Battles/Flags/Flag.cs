@@ -2,7 +2,6 @@ using System.Numerics;
 using LinqToDB;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Battle.Flag;
 using Vint.Core.ECS.Components.Group;

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using LinqToDB;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -59,6 +60,44 @@ public static class GlobalEntities {
         { GetEntity("weapons", "Thunder").Id, GetEntity("shells", "ThunderStandard").Id },
         { GetEntity("weapons", "Twins").Id, GetEntity("shells", "TwinsBlue").Id },
         { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
+    };
+
+    public static IReadOnlyList<IEntity> Tier1Modules { get; } = new List<IEntity> {
+        GetEntity("moduleCards", "Mine"),
+        GetEntity("moduleCards", "Emp"),
+        GetEntity("moduleCards", "Sonar"),
+        GetEntity("moduleCards", "Engineer"),
+        GetEntity("moduleCards", "BackhitIncrease"),
+        GetEntity("moduleCards", "Rage"),
+        GetEntity("moduleCards", "RepairKit"),
+        GetEntity("moduleCards", "AbsorbingArmor"),
+        GetEntity("moduleCards", "TurboSpeed"),
+        GetEntity("moduleCards", "TempBlock"),
+        GetEntity("moduleCards", "BackhitDefence")
+    };
+
+    public static IReadOnlyList<IEntity> Tier2Modules { get; } = new List<IEntity> {
+        GetEntity("moduleCards", "SpiderMine"),
+        GetEntity("moduleCards", "IncreasedDamage"),
+        GetEntity("moduleCards", "ExternalImpact"),
+        GetEntity("moduleCards", "Adrenaline"),
+        GetEntity("moduleCards", "Kamikadze"),
+        GetEntity("moduleCards", "ForceField"),
+        GetEntity("moduleCards", "Invisibility"),
+        GetEntity("moduleCards", "JumpImpact"),
+        GetEntity("moduleCards", "AcceleratedGears"),
+        GetEntity("moduleCards", "Sapper")
+    };
+
+    public static IReadOnlyList<IEntity> Tier3Modules { get; } = new List<IEntity> {
+        GetEntity("moduleCards", "Drone"),
+        GetEntity("moduleCards", "EnergyInjection"),
+        GetEntity("moduleCards", "ExplosiveMass"),
+        GetEntity("moduleCards", "LifeSteal"),
+        GetEntity("moduleCards", "IceTrap"),
+        GetEntity("moduleCards", "Invulnerability"),
+        GetEntity("moduleCards", "FireRing"),
+        GetEntity("moduleCards", "EmergencyProtection")
     };
 
     public static IEnumerable<IEntity> GetEntities(this IPlayerConnection connection) =>
@@ -165,7 +204,6 @@ public static class GlobalEntities {
 
                 case "modules": {
                     ModuleBehaviourType moduleBehaviourType = entity.GetComponent<ModuleBehaviourTypeComponent>().BehaviourType;
-
                     string[] configPathParts = entity.TemplateAccessor.ConfigPath!.Split('/');
 
                     switch (moduleBehaviourType) {
@@ -200,7 +238,6 @@ public static class GlobalEntities {
 
                     entity.AddGroupComponent<ModuleGroupComponent>();
                     entity.AddComponent(new ModuleUpgradeLevelComponent(moduleLevel));
-
                     break;
                 }
 
@@ -225,7 +262,9 @@ public static class GlobalEntities {
                         }
 
                         case PresetUserItemTemplate: {
-                            foreach (Preset preset in db.Presets.Where(preset => preset.PlayerId == player.Id)) {
+                            foreach (Preset preset in db.Presets
+                                         .LoadWith(preset => preset.Modules)
+                                         .Where(preset => preset.PlayerId == player.Id)) {
                                 IEntity presetEntity = entity.Clone();
                                 presetEntity.Id = EntityRegistry.FreeId;
 
@@ -290,6 +329,10 @@ public static class GlobalEntities {
         ConfigManager.GetGlobalEntity(typeName, entityName);
 
     public static IEnumerable<IEntity> GetEntities(string typeName) => ConfigManager.GetGlobalEntities(typeName);
+
+    public static IEntity GetUserModule(this IEntity marketEntity, IPlayerConnection connection) =>
+        connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
+                                                   entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
 
     public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
         predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;

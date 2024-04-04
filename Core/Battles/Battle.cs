@@ -8,6 +8,7 @@ using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
@@ -85,7 +86,7 @@ public class Battle {
 
     public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }
-    public MapInfo MapInfo { get; set; } = null!;
+    public MapInfo MapInfo { get; set; }
 
     public IEntity LobbyEntity { get; set; } = null!;
     public IEntity MapEntity { get; set; } = null!;
@@ -281,6 +282,9 @@ public class Battle {
         } else {
             foreach (BattlePlayer player in Players.Where(player => player.InBattle))
                 player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
+
+            foreach (BattleModule module in battlePlayer.Tank!.Modules)
+                connection.Unshare(module.SlotEntity, module.Entity);
 
             battlePlayer.InBattle = false;
             battlePlayer.Tank = null;

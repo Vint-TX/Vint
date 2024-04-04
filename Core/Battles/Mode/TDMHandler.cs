@@ -9,8 +9,8 @@ public class TDMHandler(
     Battle battle
 ) : TeamHandler(battle) {
     TeamColor LastDominationTeam { get; set; } = TeamColor.None;
-    protected override List<SpawnPoint> RedSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch.RedTeam.ToList();
-    protected override List<SpawnPoint> BlueSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch.BlueTeam.ToList();
+    protected override List<SpawnPoint> RedSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch!.Value.RedTeam.ToList();
+    protected override List<SpawnPoint> BlueSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch!.Value.BlueTeam.ToList();
 
     public override void Tick() { }
 

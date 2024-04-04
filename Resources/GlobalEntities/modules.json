@@ -1,6 +1,6 @@
 [
   {
-    "name": "Absorbingarmor",
+    "name": "AbsorbingArmor",
     "id": 492941809,
     "template": [
       "ModuleMarketItemTemplate",
@@ -28,7 +28,7 @@
     }
   },
   {
-    "name": "Repairkit",
+    "name": "RepairKit",
     "id": -862259125,
     "template": [
       "ModuleMarketItemTemplate",
@@ -56,7 +56,7 @@
     }
   },
   {
-    "name": "Turbospeed",
+    "name": "TurboSpeed",
     "id": -365494384,
     "template": [
       "ModuleMarketItemTemplate",
@@ -84,7 +84,7 @@
     }
   },
   {
-    "name": "Forcefield",
+    "name": "ForceField",
     "id": -1597839790,
     "template": [
       "ModuleMarketItemTemplate",
@@ -140,7 +140,7 @@
     }
   },
   {
-    "name": "Jumpimpact",
+    "name": "JumpImpact",
     "id": 1327463523,
     "template": [
       "ModuleMarketItemTemplate",
@@ -168,7 +168,7 @@
     }
   },
   {
-    "name": "Firering",
+    "name": "FireRing",
     "id": 1896579342,
     "template": [
       "ModuleMarketItemTemplate",
@@ -196,7 +196,7 @@
     }
   },
   {
-    "name": "Icetrap",
+    "name": "IceTrap",
     "id": -1177680131,
     "template": [
       "ModuleMarketItemTemplate",
@@ -252,7 +252,7 @@
     }
   },
   {
-    "name": "Backhitdefence",
+    "name": "BackhitDefence",
     "id": -1962420821,
     "template": [
       "ModuleMarketItemTemplate",
@@ -280,7 +280,35 @@
     }
   },
   {
-    "name": "Tempblock",
+    "name": "BackhitIncrease",
+    "id": -2075784110,
+    "template": [
+      "ModuleMarketItemTemplate",
+      "garage/module/module/weapon/passive/1/backhitincrease"
+    ],
+    "components": {
+      "ParentGroupComponent": {
+        "key": -2075784110
+      },
+      "MarketItemGroupComponent": {
+        "key": -2075784110
+      },
+      "ModuleTankPartComponent": {
+        "part": "WEAPON"
+      },
+      "ModuleTierComponent": {
+        "tier": 0
+      },
+      "ModuleBehaviourTypeComponent": {
+        "behaviour": "PASSIVE"
+      },
+      "ModuleCardsCompositionComponent": {
+        "tier": 0
+      }
+    }
+  },
+  {
+    "name": "TempBlock",
     "id": 596921121,
     "template": [
       "ModuleMarketItemTemplate",
@@ -308,7 +336,7 @@
     }
   },
   {
-    "name": "Acceleratedgears",
+    "name": "AcceleratedGears",
     "id": 1365914179,
     "template": [
       "ModuleMarketItemTemplate",
@@ -364,7 +392,7 @@
     }
   },
   {
-    "name": "Emergencyprotection",
+    "name": "EmergencyProtection",
     "id": -357196071,
     "template": [
       "ModuleMarketItemTemplate",
@@ -476,7 +504,7 @@
     }
   },
   {
-    "name": "Externalimpact",
+    "name": "ExternalImpact",
     "id": -1334156852,
     "template": [
       "ModuleMarketItemTemplate",
@@ -504,7 +532,7 @@
     }
   },
   {
-    "name": "Increaseddamage",
+    "name": "IncreasedDamage",
     "id": 676407818,
     "template": [
       "ModuleMarketItemTemplate",
@@ -532,7 +560,7 @@
     }
   },
   {
-    "name": "Spidermine",
+    "name": "SpiderMine",
     "id": 1458405023,
     "template": [
       "ModuleMarketItemTemplate",
@@ -588,7 +616,7 @@
     }
   },
   {
-    "name": "Energyinjection",
+    "name": "EnergyInjection",
     "id": 1128679079,
     "template": [
       "ModuleMarketItemTemplate",
@@ -616,7 +644,7 @@
     }
   },
   {
-    "name": "Explosivemass",
+    "name": "ExplosiveMass",
     "id": 393550399,
     "template": [
       "ModuleMarketItemTemplate",
@@ -756,7 +784,7 @@
     }
   },
   {
-    "name": "Lifesteal",
+    "name": "LifeSteal",
     "id": -246333323,
     "template": [
       "ModuleMarketItemTemplate",

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Immutable;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
@@ -29,20 +29,20 @@ namespace Vint.Core.Config;
 public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
 
-    public static IReadOnlyList<MapInfo> MapInfos { get; private set; } = null!;
+    public static FrozenSet<MapInfo> MapInfos { get; private set; } = FrozenSet<MapInfo>.Empty;
+    public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = FrozenDictionary<string, BlueprintChest>.Empty;
+    public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = FrozenDictionary<string, Triangle[]>.Empty;
+    public static ModulePrices ModulePrices { get; private set; }
     public static DiscordConfig Discord { get; private set; }
 
     public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
 
-    public static IReadOnlyDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = new Dictionary<string, Triangle[]>();
-
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(ConfigManager));
-    static string ResourcesPath { get; } =
-        Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+    static string ResourcesPath { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
 
-    static Dictionary<string, byte[]> LocaleToConfigCache { get; } = new(2);
+    static FrozenDictionary<string, byte[]> LocaleToConfigCache { get; set; } = FrozenDictionary<string, byte[]>.Empty;
     static ConfigNode Root { get; } = new();
 
     public static void InitializeMapInfos() {
@@ -51,21 +51,14 @@ public static class ConfigManager {
         string mapInfosConfigPath = Path.Combine(ResourcesPath, "mapInfo.json");
         Dictionary<string, MapInfo> mapInfos = JsonConvert.DeserializeObject<Dictionary<string, MapInfo>>(File.ReadAllText(mapInfosConfigPath))!;
 
-        foreach ((string mapName, MapInfo mapInfo) in mapInfos)
-            mapInfo.Name = mapName;
+        foreach ((string mapName, MapInfo mapInfo) in mapInfos) {
+            MapInfo info = mapInfo;
+            info.Name = mapName;
+            mapInfos[mapName] = info;
+        }
 
-        MapInfos = mapInfos.Values.ToImmutableList();
-
+        MapInfos = mapInfos.Values.ToFrozenSet();
         Logger.Information("Map infos parsed");
-    }
-
-    public static void InitializeDiscordConfig() {
-        Logger.Information("Parsing discord config");
-
-        string discordConfigPath = Path.Combine(ResourcesPath, "discord.json");
-        Discord = JsonConvert.DeserializeObject<DiscordConfig>(File.ReadAllText(discordConfigPath));
-
-        Logger.Information("Discord config parsed");
     }
 
     public static void InitializeMapModels() {
@@ -99,7 +92,7 @@ public static class ConfigManager {
                 }
             });
 
-        MapNameToTriangles = mapNameToTriangles;
+        MapNameToTriangles = mapNameToTriangles.ToFrozenDictionary();
         Logger.Information("Map models parsed");
     }
 
@@ -109,6 +102,8 @@ public static class ConfigManager {
         string rootPath = Path.Combine(ResourcesPath, "Configuration");
         string configsPath = Path.Combine(rootPath, "configs");
         string localizationsPath = Path.Combine(rootPath, "localization");
+
+        Dictionary<string, byte[]> localeToConfigCache = new(2);
 
         foreach (string localeDir in Directory.EnumerateDirectories(localizationsPath)) {
             string locale = new DirectoryInfo(localeDir).Name;
@@ -123,9 +118,10 @@ public static class ConfigManager {
             }
 
             byte[] buffer = outStream.ToArray();
-            LocaleToConfigCache[locale] = buffer;
+            localeToConfigCache[locale] = buffer;
         }
 
+        LocaleToConfigCache = localeToConfigCache.ToFrozenDictionary();
         Logger.Information("Cache for config archives generated");
     }
 
@@ -174,7 +170,7 @@ public static class ConfigManager {
                 ConfigNode curNode = Root;
 
                 foreach (string part in key.Split('/')) {
-                    if (curNode.Children.TryGetValue(part, out ConfigNode? child))
+                    if (curNode.Children.TryGetValue(part, out ConfigNode child))
                         curNode = child;
                     else {
                         ids.TryGetValue(key, out long? id);
@@ -294,7 +290,7 @@ public static class ConfigManager {
         foreach ((string entitiesTypeName, Dictionary<string, IEntity> entities) in globalEntities) {
             ConfigNode curNode = Root;
 
-            if (curNode.Children.TryGetValue(entitiesTypeName, out ConfigNode? child))
+            if (curNode.Children.TryGetValue(entitiesTypeName, out ConfigNode child))
                 curNode = child;
             else
                 curNode = curNode.Children[entitiesTypeName] = new ConfigNode();
@@ -306,14 +302,26 @@ public static class ConfigManager {
         Logger.Information("Global entities generated");
     }
 
+    public static void InitializeConfigs() {
+        Logger.Information("Initializing configs");
+
+        Discord = JsonConvert.DeserializeObject<DiscordConfig>(File.ReadAllText(Path.Combine(ResourcesPath, "discord.json")));
+        ModulePrices = JsonConvert.DeserializeObject<ModulePrices>(File.ReadAllText(Path.Combine(ResourcesPath, "modulePrices.json")))!;
+        Blueprints = JsonConvert
+            .DeserializeObject<Dictionary<string, BlueprintChest>>(File.ReadAllText(Path.Combine(ResourcesPath, "blueprints.json")))!
+            .ToFrozenDictionary();
+
+        Logger.Information("Configs initialized");
+    }
+
     public static IEntity GetGlobalEntity(string path, string entityName) {
-        ConfigNode node = GetNode(path)!;
+        ConfigNode node = GetNode(path)!.Value;
 
         return node.Entities[entityName].Clone();
     }
 
     public static IEnumerable<IEntity> GetGlobalEntities(string path) {
-        ConfigNode node = GetNode(path)!;
+        ConfigNode node = GetNode(path)!.Value;
 
         return node.Entities.Values.Select(entity => entity.Clone());
     }
@@ -333,10 +341,10 @@ public static class ConfigManager {
     public static T? GetComponentOrNull<T>(string path) where T : class, IComponent {
         ConfigNode? node = GetNode(path);
 
-        if (node == null) return null;
+        if (!node.HasValue) return null;
 
-        if (!node.Components.TryGetValue(typeof(T), out IComponent? component))
-            node.ServerComponents.TryGetValue(typeof(T), out component);
+        if (!node.Value.Components.TryGetValue(typeof(T), out IComponent? component))
+            node.Value.ServerComponents.TryGetValue(typeof(T), out component);
 
         return component?.Clone() as T;
     }
@@ -357,14 +365,14 @@ public static class ConfigManager {
         if (path.StartsWith('/')) path = path[1..];
 
         foreach (string part in path.Split('/'))
-            if (curNode.Children.TryGetValue(part, out ConfigNode? child))
+            if (curNode.Children.TryGetValue(part, out ConfigNode child))
                 curNode = child;
             else return null;
 
         return curNode;
     }
 
-    class ConfigNode {
+    record struct ConfigNode() {
         public long? Id { get; init; }
         public Dictionary<Type, IComponent> Components { get; } = new();
         public Dictionary<Type, IComponent> ServerComponents { get; } = new();

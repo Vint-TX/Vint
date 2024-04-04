@@ -40,19 +40,19 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect,
 
         bool isSupply = newLevel < 0;
 
-        if (isSupply)
+        float newMultiplier;
+
+        if (isSupply) {
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
-
-        if (newLevel >= Level) {
-            if (!isSupply)
-                Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
-
-            float oldMultiplier = Multiplier;
-            Multiplier = isSupply ? SupplyMultiplier : MultipliersComponent[newLevel];
-
-            float additiveMultiplier = Multiplier / oldMultiplier;
-            Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= additiveMultiplier);
+            newMultiplier = SupplyMultiplier;
+        } else {
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
+            newMultiplier = MultipliersComponent[newLevel];
         }
+
+        float additiveMultiplier = newMultiplier / Multiplier;
+        Multiplier = newMultiplier;
+        Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= additiveMultiplier);
 
         Level = newLevel;
         LastActivationTime = DateTimeOffset.UtcNow;
