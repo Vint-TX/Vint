@@ -494,13 +494,14 @@ public abstract class PlayerConnection(
 
             case ModuleCardMarketItemTemplate: {
                 long moduleId = marketItem.GetComponent<ParentGroupComponent>().Key;
-                Module? module = db.Modules
-                    .Where(module => module.PlayerId == Player.Id)
-                    .SingleOrDefault(module => module.Id == moduleId);
+                Module? module = Player.Modules.SingleOrDefault(module => module.Id == moduleId);
 
-                module ??= new Module { Player = Player, Id = moduleId };
+                if (module == null) {
+                    module = new Module { Player = Player, Id = moduleId };
+                    Player.Modules.Add(module);
+                }
+                
                 module.Cards += amount;
-
                 db.InsertOrReplace(module);
                 break;
             }
@@ -823,9 +824,9 @@ public abstract class PlayerConnection(
 
     public void AssembleModule(IEntity marketItem) {
         using DbConnection db = new();
-        Module? module = db.Modules.SingleOrDefault(module => module.PlayerId == Player.Id && module.Id == marketItem.Id);
+        Module? module = Player.Modules.SingleOrDefault(module => module.Id == marketItem.Id);
 
-        if (module is not { Level: 0, Cards: > 0 }) {
+        if (module is not { Level: -1, Cards: > 0 }) {
             Logger.Error("Module {Id} is not ready to assemble", marketItem.Id);
             return;
         }
@@ -853,15 +854,15 @@ public abstract class PlayerConnection(
 
         using DbConnection db = new();
 
-        Module? module = db.Modules.SingleOrDefault(module => module.PlayerId == Player.Id && module.Id == id);
+        Module? module = Player.Modules.SingleOrDefault(module => module.Id == id);
         ModuleCardsCompositionComponent compositionComponent = userItem.GetComponent<ModuleCardsCompositionComponent>();
 
-        if (module == null || module.Level > compositionComponent.UpgradePrices.Count) {
+        if (module == null || module.Level >= compositionComponent.UpgradePrices.Count) {
             Logger.Error("Module {Id} is not upgradable", id);
             return;
         }
 
-        ModulePrice price = compositionComponent.UpgradePrices[module.Level - 1];
+        ModulePrice price = compositionComponent.UpgradePrices[module.Level];
 
         if (module.Cards < price.Cards) {
             Logger.Error("Not enough cards to upgrade module {Id}", id);

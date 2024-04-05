@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using LinqToDB;
+using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -19,7 +20,9 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
         logger.Information("Login by email '{Email}'", Email);
 
         using DbConnection db = new();
-        Player? player = db.Players.SingleOrDefault(player => player.Email == Email);
+        Player? player = db.Players
+            .LoadWith(player => player.Modules)
+            .SingleOrDefault(player => player.Email == Email);
 
         if (player == null) {
             connection.Player = null!;

@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using LinqToDB;
+using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -21,7 +22,9 @@ public class AutoLoginUserEvent : IServerEvent {
         logger.Warning("Autologin '{Username}'", Username);
 
         using DbConnection db = new();
-        Player? player = db.Players.SingleOrDefault(player => player.Username == Username);
+        Player? player = db.Players
+            .LoadWith(player => player.Modules)
+            .SingleOrDefault(player => player.Username == Username);
 
         Punishment? ban = player?.GetBanInfo();
 

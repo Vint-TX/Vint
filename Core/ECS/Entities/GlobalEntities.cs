@@ -230,8 +230,8 @@ public static class GlobalEntities {
                         default: throw new UnreachableException();
                     }
 
-                    Module? module = db.Modules.SingleOrDefault(module => module.PlayerId == player.Id && module.Id == entityId);
-                    int moduleLevel = module?.Level ?? 0;
+                    Module? module = player.Modules.SingleOrDefault(module => module.Id == entityId);
+                    int moduleLevel = module?.Level ?? -1;
 
                     if (moduleLevel > 0)
                         entity.AddGroupComponent<UserGroupComponent>(user);
@@ -311,9 +311,7 @@ public static class GlobalEntities {
 
                 case "moduleCards": {
                     long moduleId = entity.GetComponent<ParentGroupComponent>().Key;
-                    Module? module = db.Modules
-                        .Where(module => module.PlayerId == player.Id)
-                        .SingleOrDefault(module => module.Id == moduleId);
+                    Module? module = player.Modules.SingleOrDefault(module => module.Id == moduleId);
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
                     entity.AddComponent(new UserItemCounterComponent(module?.Cards ?? 0));

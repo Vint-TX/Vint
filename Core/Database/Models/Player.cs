@@ -186,6 +186,8 @@ public class Player {
 
         if (testers.Contains(Username))
             Groups |= PlayerGroups.Tester;
+
+        Modules = [];
     }
 
     public Punishment Warn(string? reason, TimeSpan? duration) {
