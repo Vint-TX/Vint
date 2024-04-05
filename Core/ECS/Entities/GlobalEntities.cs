@@ -233,7 +233,7 @@ public static class GlobalEntities {
                     Module? module = player.Modules.SingleOrDefault(module => module.Id == entityId);
                     int moduleLevel = module?.Level ?? -1;
 
-                    if (moduleLevel > 0)
+                    if (moduleLevel >= 0)
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     entity.AddGroupComponent<ModuleGroupComponent>();
