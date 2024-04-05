@@ -23,6 +23,12 @@ public class ModuleMountEvent : IServerEvent {
             slotUserItem.HasComponent<ModuleGroupComponent>()) return;
 
         Player player = connection.Player;
+        long marketItemId = moduleUserItem.GetComponent<MarketItemGroupComponent>().Key;
+
+        Database.Models.Module? module = player.Modules.SingleOrDefault(module => module.Id == marketItemId);
+        
+        if (module == null || module.Level < 0) return;
+        
         Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
 
         using DbConnection db = new();
@@ -33,7 +39,7 @@ public class ModuleMountEvent : IServerEvent {
                                         pModule.Slot == slot);
 
         presetModule ??= new PresetModule { Player = player, Preset = player.CurrentPreset, Slot = slot };
-        presetModule.Entity = connection.GetEntity(moduleUserItem.GetComponent<MarketItemGroupComponent>().Key)!;
+        presetModule.Entity = connection.GetEntity(marketItemId)!;
 
         db.InsertOrReplace(presetModule);
 

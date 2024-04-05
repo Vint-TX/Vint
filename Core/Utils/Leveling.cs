@@ -49,12 +49,12 @@ public static class Leveling {
 
         if (levelToValues.Count == 0) return 0;
 
-        if (!upgradable.LinearInterpolation) return levelToValues[level - 1];
+        if (!upgradable.LinearInterpolation) return levelToValues[level];
 
         float minValue = levelToValues.First();
         float maxValue = levelToValues.Last();
 
-        return MathUtils.Map(level, 1, 10, minValue, maxValue);
+        return MathUtils.Map(level, 0, 9, minValue, maxValue);
     }
 
     public static int GetSeasonPlace(long userId) {
