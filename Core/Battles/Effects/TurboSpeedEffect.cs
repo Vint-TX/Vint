@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
 using Vint.Core.ECS.Components.Battle.Weapon;
@@ -82,8 +81,8 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect,
             });
             Tank.Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
         } else {
-            Tank.Tank.ChangeComponent((SpeedComponent)((IComponent)SpeedComponentWithEffect).Clone());
-            Tank.Weapon.ChangeComponent(((IComponent)Tank.WeaponHandler.OriginalWeaponRotationComponent).Clone());
+            Tank.Tank.ChangeComponent(SpeedComponentWithEffect.Clone());
+            Tank.Weapon.ChangeComponent(Tank.WeaponHandler.OriginalWeaponRotationComponent.Clone());
         }
     }
 
@@ -100,7 +99,7 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect,
 
         Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= Multiplier);
         LastActivationTime = DateTimeOffset.UtcNow;
-        SpeedComponentWithEffect = (SpeedComponent)((IComponent)Tank.Tank.GetComponent<SpeedComponent>()).Clone();
+        SpeedComponentWithEffect = Tank.Tank.GetComponent<SpeedComponent>().Clone();
 
         Schedule(Duration, Deactivate);
     }

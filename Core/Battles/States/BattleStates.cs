@@ -1,7 +1,6 @@
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Type;
-using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Group;
@@ -9,6 +8,7 @@ using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.StateMachine;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.States;
 
@@ -197,8 +197,7 @@ public class Running(
             if (dominatedTeam == TeamColor.None) return;
 
             Battle.DominationStartTime = DateTimeOffset.UtcNow;
-            Battle.StopTimeComponentBeforeDomination =
-                (RoundStopTimeComponent)((IComponent)Battle.RoundEntity.GetComponent<RoundStopTimeComponent>()).Clone();
+            Battle.StopTimeComponentBeforeDomination = Battle.RoundEntity.GetComponent<RoundStopTimeComponent>().Clone();
             DateTimeOffset battleEndTime = Battle.DominationStartTime.Value + Battle.DominationDuration;
 
             Battle.RoundEntity.AddComponent(new RoundDisbalancedComponent(dominatedTeam,

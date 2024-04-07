@@ -1,9 +1,9 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
 using Vint.Core.ECS.Components.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Weapons;
 
@@ -35,7 +35,7 @@ public class ShaftWeaponHandler : DiscreteWeaponHandler {
             Math.Clamp((DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow)).TotalMilliseconds, 0, 1 / EnergyDrainPerMs);
 
         AimingDuration = TimeSpan.FromMilliseconds(durationMs);
-        BattleEntity.ChangeComponent(((IComponent)OriginalWeaponRotationComponent).Clone());
+        BattleEntity.ChangeComponent(OriginalWeaponRotationComponent.Clone());
     }
 
     public void Reset() {

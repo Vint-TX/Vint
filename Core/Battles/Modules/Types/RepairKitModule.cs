@@ -40,9 +40,7 @@ public class RepairKitModule : ActiveBattleModule, IHealthModule {
     }
 
     public override void TryBlock(bool force = false, long blockTimeMs = 0) {
-        if (!force)
-            if (Tank.Health < Tank.MaxHealth)
-                return;
+        if (!force && Tank.Health < Tank.MaxHealth) return;
 
         base.TryBlock(force, blockTimeMs);
     }

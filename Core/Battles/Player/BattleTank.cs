@@ -16,7 +16,6 @@ using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle;
 using Vint.Core.ECS.Components.Battle.Incarnation;
 using Vint.Core.ECS.Components.Battle.Movement;
@@ -30,6 +29,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.ECS.Events.Battle.Module;
+using Vint.Core.ECS.Events.Battle.Movement;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
@@ -128,7 +128,7 @@ public class BattleTank {
         Health = MaxHealth;
 
         OriginalTemperatureConfigComponent = ConfigManager.GetComponent<TemperatureConfigComponent>(Tank.TemplateAccessor!.ConfigPath!);
-        TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
+        TemperatureConfig = OriginalTemperatureConfigComponent.Clone();
 
         Tank.ChangeComponent<HealthComponent>(component => {
             component.CurrentHealth = Health;
@@ -204,7 +204,6 @@ public class BattleTank {
              DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
             BattlePlayer.IsPaused = false;
             BattlePlayer.KickTime = null;
-            //BattlePlayer.IsKicked = true;
             BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
             Battle.RemovePlayer(BattlePlayer);
         }
@@ -238,19 +237,13 @@ public class BattleTank {
         WeaponHandler.OnTankEnable();
         Tank.AddComponent<TankMovableComponent>();
 
-        TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
-        TemperatureAssists.Clear();
-
-        SetTemperature(0);
-        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
-
         foreach (BattleModule module in Modules)
             module.TryUnblock();
     }
 
     public void Disable(bool full) {
         FullDisabled = full;
-        TemperatureConfig = (TemperatureConfigComponent)((IComponent)OriginalTemperatureConfigComponent).Clone();
+        TemperatureConfig = OriginalTemperatureConfigComponent.Clone();
 
         foreach (Effect effect in Effects) {
             effect.UnScheduleAll();
@@ -266,7 +259,8 @@ public class BattleTank {
 
         TemperatureAssists.Clear();
         SetTemperature(0);
-        Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
+        Tank.ChangeComponent(OriginalSpeedComponent.Clone());
+        BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             Tank.RemoveComponent<SelfDestructionComponent>();
@@ -347,13 +341,8 @@ public class BattleTank {
     }
 
     public void HandleTemperature() {
-        if (Battle.StateManager.CurrentState is Ended) return;
-
-        if (StateManager.CurrentState is Dead) {
-            TemperatureAssists.Clear();
-            if (Temperature != 0) SetTemperature(0);
-            return;
-        }
+        if (Battle.StateManager.CurrentState is Ended ||
+            StateManager.CurrentState is Dead) return;
 
         TimeSpan period = TimeSpan.FromMilliseconds(TemperatureConfig.TactPeriodInMs);
 
@@ -363,11 +352,7 @@ public class BattleTank {
         }
 
         foreach (TemperatureAssist assist in TemperatureAssists) {
-            if (StateManager.CurrentState is Dead) {
-                TemperatureAssists.Clear();
-                SetTemperature(0);
-                break;
-            }
+            if (StateManager.CurrentState is Dead) break;
 
             if (DateTimeOffset.UtcNow - assist.LastTick < period) continue;
 
@@ -486,8 +471,8 @@ public class BattleTank {
             });
             Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
         } else {
-            Tank.ChangeComponent(((IComponent)OriginalSpeedComponent).Clone());
-            Weapon.ChangeComponent(((IComponent)WeaponHandler.OriginalWeaponRotationComponent).Clone());
+            Tank.ChangeComponent(OriginalSpeedComponent.Clone());
+            Weapon.ChangeComponent(WeaponHandler.OriginalWeaponRotationComponent.Clone());
         }
     }
 

@@ -65,7 +65,6 @@ public class BattlePlayer {
     public bool InBattleAsTank => Tank != null;
     public bool InBattle { get; set; }
     public bool IsPaused { get; set; }
-    public bool IsKicked { get; set; }
     bool Reported { get; set; }
 
     public DateTimeOffset BattleJoinTime { get; set; } = DateTimeOffset.UtcNow.AddSeconds(20);

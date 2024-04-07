@@ -70,8 +70,7 @@ public abstract class BattleModule {
         SlotEntity.ChangeComponent<InventoryAmmunitionComponent>(component => component.CurrentCount = CurrentAmmo);
         Tank.BattlePlayer.PlayerConnection.Send(new InventoryAmmunitionChangedEvent(), SlotEntity);
 
-        if (CurrentAmmo >= 0)
-            TryUnblock();
+        TryUnblock();
 
         if (CurrentAmmo < MaxAmmo && StateManager.CurrentState is not Modules.Cooldown)
             StateManager.SetState(new Cooldown(StateManager));
@@ -98,6 +97,9 @@ public abstract class BattleModule {
     public virtual void TryBlock(bool force = false, long blockTimeMs = 0) =>
         SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent(blockTimeMs, DateTimeOffset.UtcNow));
 
-    public virtual void TryUnblock() =>
+    public virtual void TryUnblock() {
+        if (CurrentAmmo <= 0) return;
+
         SlotEntity.RemoveComponentIfPresent<InventorySlotTemporaryBlockedByServerComponent>();
+    }
 }

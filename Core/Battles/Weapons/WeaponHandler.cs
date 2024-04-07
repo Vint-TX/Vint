@@ -1,10 +1,10 @@
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Weapons;
 
@@ -21,7 +21,7 @@ public abstract class WeaponHandler {
         MinDamageDistance = damageWeakeningByDistanceComponent?.RadiusOfMinDamage ?? 0;
         MinDamagePercent = damageWeakeningByDistanceComponent?.MinDamagePercent ?? 0;
 
-        OriginalWeaponRotationComponent = (WeaponRotationComponent)((IComponent)BattleTank.Weapon.GetComponent<WeaponRotationComponent>()).Clone();
+        OriginalWeaponRotationComponent = BattleTank.Weapon.GetComponent<WeaponRotationComponent>().Clone();
         DamageCalculator = new DamageCalculator();
     }
 

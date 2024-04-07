@@ -1,6 +1,7 @@
 ﻿using System.Buffers;
 using System.Collections.Concurrent;
 using System.Reflection;
+using Vint.Core.ECS.Components;
 using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.Utils;
@@ -88,4 +89,6 @@ public static class Extensions {
             return defaultValue;
         }
     }
+
+    public static T Clone<T>(this T self) where T : IComponent => (T)self.Clone();
 }

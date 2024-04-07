@@ -237,7 +237,6 @@ CREATE TABLE `PresetModules`
     `Slot`        tinyint(3) unsigned NOT NULL,
     `Entity`      bigint(20)          NOT NULL,
     PRIMARY KEY (`PlayerId`, `PresetIndex`, `Slot`),
-    UNIQUE (`Entity`),
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE,
     FOREIGN KEY (`PlayerId`, `PresetIndex`) REFERENCES `Presets` (`PlayerId`, `Index`) ON DELETE CASCADE
 ) ENGINE = InnoDB
