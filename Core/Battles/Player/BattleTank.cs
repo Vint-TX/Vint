@@ -461,9 +461,13 @@ public class BattleTank {
         if (Temperature < 0) {
             float minTemperature = TemperatureConfig.MinTemperature;
 
-            float newSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.Speed, 0);
-            float newTurnSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.TurnSpeed, 0);
-            float newWeaponSpeed = MathUtils.Map(Temperature, 0, minTemperature, WeaponHandler.OriginalWeaponRotationComponent.Speed, 0);
+            float minSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.Speed);
+            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.TurnSpeed, 10);
+            float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(WeaponHandler.OriginalWeaponRotationComponent.Speed);
+
+            float newSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.Speed, minSpeed);
+            float newTurnSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.TurnSpeed, minTurnSpeed);
+            float newWeaponSpeed = MathUtils.Map(Temperature, 0, minTemperature, WeaponHandler.OriginalWeaponRotationComponent.Speed, minWeaponSpeed);
 
             Tank.ChangeComponent<SpeedComponent>(component => {
                 component.Speed = newSpeed;

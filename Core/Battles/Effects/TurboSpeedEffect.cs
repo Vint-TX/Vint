@@ -70,10 +70,15 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect,
 
         if (Tank.Temperature < 0) {
             float minTemperature = Tank.TemperatureConfig.MinTemperature;
+            
+            float minSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.Speed);
+            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.TurnSpeed, 10);
+            float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed);
 
-            float newSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.Speed, 0);
-            float newTurnSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.TurnSpeed, 0);
-            float newWeaponSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed, 0);
+            float newSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.Speed, minSpeed);
+            float newTurnSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.TurnSpeed, minTurnSpeed);
+            float newWeaponSpeed = 
+                MathUtils.Map(Tank.Temperature, 0, minTemperature, Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed, minWeaponSpeed);
 
             Tank.Tank.ChangeComponent<SpeedComponent>(component => {
                 component.Speed = newSpeed;

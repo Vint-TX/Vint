@@ -29,7 +29,6 @@ public interface IComponent {
         }
 
         logger.Verbose("Cloned");
-
         return component;
     }
 }

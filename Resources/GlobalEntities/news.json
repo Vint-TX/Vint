@@ -32,7 +32,7 @@
           "headerText": "YouTube",
           "tooltip": "Vint on YouTube",
           "externalUrl": "https://youtube.com/@Vint-TX",
-          "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/YouTube_Logo.png"
         }
       }
     }
@@ -51,6 +51,82 @@
           "headerText": "GitHub",
           "tooltip": "Vint on GitHub",
           "externalUrl": "https://github.com/C6OI/Vint",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/GitHub_Logo.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "TikTok",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Small",
+          "headerText": "TikTok",
+          "tooltip": "Vint on TikTok",
+          "externalUrl": "https://tiktok.com/@vint_tx",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/TikTok_Logo.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "Telegram",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Small",
+          "headerText": "Telegram",
+          "tooltip": "Vint on Telegram",
+          "externalUrl": "https://t.me/vint_tx",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Telegram_Logo.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "Discord",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Small",
+          "headerText": "Discord",
+          "tooltip": "Vint on Discord",
+          "externalUrl": "https://discord.gg/upyXe3F2Fe",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Discord_Logo.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "Site",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Small",
+          "headerText": "Site",
+          "tooltip": "Vint site",
+          "externalUrl": "https://vint-official.site",
           "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo.png"
         }
       }
@@ -67,9 +143,28 @@
       "NewsItemComponent": {
         "newsItem": {
           "layout": "Medium",
-          "headerText": "Report bug reports and suggest ideas",
+          "headerText": "Report bugs and suggest ideas!",
           "tooltip": "We appreciate your help!",
-          "externalUrl": "https://discord.gg/F9HZRSjqTE",
+          "externalUrl": "https://discord.gg/upyXe3F2Fe",
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo_Full.png"
+        }
+      }
+    }
+  },
+  {
+    "name": "StayTuned",
+    "id": 0,
+    "template": [
+      "ConfiguredNewsItemTemplate",
+      null
+    ],
+    "components": {
+      "NewsItemComponent": {
+        "newsItem": {
+          "layout": "Medium",
+          "headerText": "Stay tuned!",
+          "tooltip": "Be the first to know what's new!",
+          "externalUrl": "https://discord.gg/upyXe3F2Fe",
           "previewImageUrl": "http://vint-official.site/resources/News/Images/Vint_Logo_Full.png"
         }
       }

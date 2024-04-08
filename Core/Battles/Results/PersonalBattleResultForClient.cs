@@ -18,6 +18,10 @@ public class PersonalBattleResultForClient {
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         IEntity userHull = preset.Hull.GetUserEntity(connection);
         IEntity userWeapon = preset.Weapon.GetUserEntity(connection);
+        IEntity? reward = Leveling.GetLevelUpRewards(connection);
+
+        if (reward != null)
+            connection.Share(reward);
 
         int battleScore = battlePlayer.GetBattleUserScoreWithBonus();
         float battleSeriesMultiplier = battlePlayer.GetBattleSeriesMultiplier();
@@ -54,7 +58,7 @@ public class PersonalBattleResultForClient {
         ContainerScoreMultiplier = battleSeriesMultiplier;
 
         ItemsExpDelta = battleScore;
-        Reward = Leveling.GetLevelUpRewards(connection);
+        Reward = reward;
 
         UserTeamColor = connection.User.GetComponent<TeamColorComponent>().TeamColor;
         TeamBattleResult = battlePlayer.TeamBattleResult;
