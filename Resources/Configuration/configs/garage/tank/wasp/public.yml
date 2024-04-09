@@ -12,14 +12,14 @@ health:
   initialValue: 1700.000
   finalValue: 1700.000
 weight:
-  initialValue: 1946.667
-  finalValue: 1946.667
+  initialValue: 2000.000
+  finalValue: 2000.000
 damping:
   initialValue: 900.000
   finalValue: 900.000
 speed:
-  initialValue: 15.500
-  finalValue: 15.500
+  initialValue: 15.000
+  finalValue: 15.000
 acceleration:
   initialValue: 11.667
   finalValue: 11.667
@@ -55,14 +55,14 @@ visualProperties:
       initialValue: 1700
       finalValue: 1700
     - name: Weight
-      initialValue: 19.5
-      finalValue: 19.5
-      format: 0.0
+      initialValue: 20
+      finalValue: 20
+      format: 0
       unit: t
     - name: Speed
-      initialValue: 15.5
-      finalValue: 15.5
-      format: 0.0
+      initialValue: 15
+      finalValue: 15
+      format: 0
       unit: meters_per_sec
     - name: Acceleration
       initialValue: 11.7

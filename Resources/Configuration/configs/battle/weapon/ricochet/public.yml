@@ -3,10 +3,10 @@ unityAsset:
     assetGuid: 54c645b58f8519b49a811a1f07b5a727
 verticalTargeting:
   workDistance: 95
-  angleUp: 13
-  numRaysUp: 6
-  angleDown: 16
-  numRaysDown: 7
+  angleUp: 26
+  numRaysUp: 12
+  angleDown: 32
+  numRaysDown: 14
 ctfTargetEvaluator:
   flagCarrierPriorityBonus: 5
 distanceAndAngleTargetEvaluator:

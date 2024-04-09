@@ -16,30 +16,30 @@ aimingMinDamageProperty:
 aimingMaxDamageProperty:
   initialValue: 1050.000
   finalValue: 1050.000
-energyChargePerShotProperty:
+energyChargePerShotProperty: # UnloadEnergyPerQuickShot (value)
   initialValue: 0.429
   finalValue: 0.429
-energyChargeSpeedProperty:
+energyChargeSpeedProperty: # UnloadAimingEnergyPerSec (value), UnloadEnergyPerSec (value)
   initialValue: 0.222
   finalValue: 0.222
-energyRechargeSpeedProperty: # needs to find out what it affects
+energyRechargeSpeedProperty: # ReloadEnergyPerSec (value)
   initialValue: 0.120
   finalValue: 0.120
-reloadTimeProperty:
+reloadTimeProperty: # ReloadEnergyPerSec (1/value), CooldownIntervalSec (value) 
   initialValue: 2.500
   finalValue: 2.500
 aimingVerticalAccelerationProperty:
   initialValue: 15.000
   finalValue: 15.000
 aimingHorizontalAccelerationProperty:
-  initialValue: 20.000
-  finalValue: 20.000
+  initialValue: 30.000
+  finalValue: 30.000
 aimingVerticalSpeedProperty:
   initialValue: 15.000
   finalValue: 15.000
 aimingHorizontalSpeedProperty:
-  initialValue: 20.000
-  finalValue: 20.000
+  initialValue: 30.000
+  finalValue: 30.000
 impactProperty:
   initialValue: 1.000
   finalValue: 1.000

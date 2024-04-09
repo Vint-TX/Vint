@@ -32,7 +32,8 @@
           "headerText": "YouTube",
           "tooltip": "Vint on YouTube",
           "externalUrl": "https://youtube.com/@Vint-TX",
-          "previewImageUrl": "http://vint-official.site/resources/News/Images/YouTube_Logo.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/YouTube_Logo.png",
+          "previewImageFitInParent": true
         }
       }
     }
@@ -51,7 +52,8 @@
           "headerText": "GitHub",
           "tooltip": "Vint on GitHub",
           "externalUrl": "https://github.com/C6OI/Vint",
-          "previewImageUrl": "http://vint-official.site/resources/News/Images/GitHub_Logo.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/GitHub_Logo.png",
+          "previewImageFitInParent": true
         }
       }
     }
@@ -70,7 +72,8 @@
           "headerText": "TikTok",
           "tooltip": "Vint on TikTok",
           "externalUrl": "https://tiktok.com/@vint_tx",
-          "previewImageUrl": "http://vint-official.site/resources/News/Images/TikTok_Logo.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/TikTok_Logo.png",
+          "previewImageFitInParent": true
         }
       }
     }
@@ -89,7 +92,8 @@
           "headerText": "Telegram",
           "tooltip": "Vint on Telegram",
           "externalUrl": "https://t.me/vint_tx",
-          "previewImageUrl": "http://vint-official.site/resources/News/Images/Telegram_Logo.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Telegram_Logo.png",
+          "previewImageFitInParent": true
         }
       }
     }
@@ -108,7 +112,8 @@
           "headerText": "Discord",
           "tooltip": "Vint on Discord",
           "externalUrl": "https://discord.gg/upyXe3F2Fe",
-          "previewImageUrl": "http://vint-official.site/resources/News/Images/Discord_Logo.png"
+          "previewImageUrl": "http://vint-official.site/resources/News/Images/Discord_Logo.png",
+          "previewImageFitInParent": true
         }
       }
     }

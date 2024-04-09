@@ -320,7 +320,6 @@ public class Battle {
 
             user.RemoveComponent<UserEquipmentComponent>();
             user.RemoveComponent<BattleLobbyGroupComponent>();
-            user.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
             connection.Unshare(LobbyEntity, LobbyChatEntity);
 
             foreach (BattlePlayer player in Players) {

@@ -10,6 +10,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Group;
+using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
@@ -100,6 +101,7 @@ public class BattlePlayer {
             effect.Share(this);
 
         PlayerConnection.User.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
+        PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
         Battle.ModeHandler.PlayerEntered(this);
 
         if (IsSpectator) {
