@@ -10,21 +10,22 @@ using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponen
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class AbsorbingArmorEffect : Effect, ISupplyEffect, IDamageEffect, IExtendableEffect {
+public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamageEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/armor";
+    const string MarketConfigPath = "garage/module/upgrade/properties/absorbingarmor";
 
-    public AbsorbingArmorEffect(BattleTank tank, int level = -1) : base(tank, level) {
-        MultipliersComponent = ConfigManager.GetComponent<ModuleArmorEffectPropertyComponent>(ConfigPath);
-        DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(ConfigPath);
+    public AbsorbingArmorEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
+        MultipliersComponent = ConfigManager.GetComponent<ModuleArmorEffectPropertyComponent>(MarketConfigPath);
 
         SupplyMultiplier = ConfigManager.GetComponent<ArmorEffectComponent>(EffectConfigPath).Factor;
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
 
         Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
-        Duration = IsSupply ? TimeSpan.FromMilliseconds(SupplyDurationMs) : TimeSpan.FromMilliseconds(DurationsComponent[Level]);
-    }
 
-    public override string ConfigPath => "garage/module/upgrade/properties/absorbingarmor";
+        if (IsSupply)
+            Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
+    }
+    
     ModuleArmorEffectPropertyComponent MultipliersComponent { get; }
     public float Multiplier { get; private set; }
 
@@ -33,8 +34,6 @@ public sealed class AbsorbingArmorEffect : Effect, ISupplyEffect, IDamageEffect,
         Tank == target &&
         (source.WeaponHandler is not IsisWeaponHandler ||
          source.IsEnemy(target)) ? Multiplier : 1;
-
-    public ModuleEffectDurationPropertyComponent DurationsComponent { get; }
 
     public void Extend(int newLevel) {
         if (!IsActive) return;
@@ -69,11 +68,10 @@ public sealed class AbsorbingArmorEffect : Effect, ISupplyEffect, IDamageEffect,
 
         base.Activate();
 
-        Entities.Add(new ArmorEffectTemplate().Create(Tank.BattlePlayer, Duration));
+        Entities.Add(new ArmorEffectTemplate().Create(EffectConfigPath, Tank.BattlePlayer, Duration));
         ShareAll();
 
         LastActivationTime = DateTimeOffset.UtcNow;
-
         Schedule(Duration, Deactivate);
     }
 

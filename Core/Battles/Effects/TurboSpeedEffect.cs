@@ -12,25 +12,24 @@ using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponen
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect, ISpeedEffect {
+public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendableEffect, ISpeedEffect {
     const string EffectConfigPath = "battle/effect/turbospeed";
+    const string MarketConfigPath = "garage/module/upgrade/properties/turbospeed";
 
-    public TurboSpeedEffect(BattleTank tank, int level = -1) : base(tank, level) {
-        DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(ConfigPath);
-        MultipliersComponent = ConfigManager.GetComponent<ModuleTurbospeedEffectPropertyComponent>(ConfigPath);
+    public TurboSpeedEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
+        MultipliersComponent = ConfigManager.GetComponent<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath);
 
         SupplyMultiplier = ConfigManager.GetComponent<TurboSpeedEffectComponent>(EffectConfigPath).SpeedCoeff;
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
 
         Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
-        Duration = IsSupply ? TimeSpan.FromMilliseconds(SupplyDurationMs) : TimeSpan.FromMilliseconds(DurationsComponent[Level]);
+        
+        if (IsSupply)
+            Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
-
-    public override string ConfigPath => "garage/module/upgrade/properties/turbospeed";
+    
     ModuleTurbospeedEffectPropertyComponent MultipliersComponent { get; }
     SpeedComponent SpeedComponentWithEffect { get; set; } = null!;
-
-    public ModuleEffectDurationPropertyComponent DurationsComponent { get; }
 
     public void Extend(int newLevel) {
         if (!IsActive) return;

@@ -128,7 +128,7 @@ public class Starting(
 public class WarmUp(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    WarmUpStateManager WarmUpStateManager { get; } = new(stateManager);
+    public WarmUpStateManager WarmUpStateManager { get; } = new(stateManager);
 
     public override void Start() {
         const int seconds = 60;

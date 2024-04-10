@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.States;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Modules.Inventory;
@@ -28,11 +29,15 @@ public abstract class BattleModule {
     public TimeSpan Cooldown { get; private set; }
     TimeSpan OriginalCooldown { get; set; }
 
+    public virtual bool ActivationCondition => true;
     public bool IsBlocked => SlotEntity.HasComponent<InventorySlotTemporaryBlockedByServerComponent>();
     public bool IsEnabled => SlotEntity.HasComponent<InventoryEnabledStateComponent>();
-    public bool CanBeActivated =>
-        ActivationCondition && !IsBlocked && IsEnabled && StateManager.CurrentState is Ready or Cooldown { CanBeUsed: true };
-    public virtual bool ActivationCondition => true;
+    public bool CanBeActivated => !IsBlocked &&
+                                  IsEnabled &&
+                                  ActivationCondition &&
+                                  StateManager.CurrentState is Ready or Cooldown { CanBeUsed: true } &&
+                                  Tank.StateManager.CurrentState is Active &&
+                                  Tank.Battle.StateManager.CurrentState is Running or WarmUp { WarmUpStateManager.CurrentState: WarmingUp };
 
     public virtual void Activate() {
         SetAmmo(CurrentAmmo - 1);

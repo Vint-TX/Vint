@@ -10,13 +10,13 @@ using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponen
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class RepairKitEffect : Effect, ISupplyEffect, IExtendableEffect {
+public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/healing";
+    const string MarketConfigPath = "garage/module/upgrade/properties/repairkit";
 
-    public RepairKitEffect(BattleTank tank, int level = -1) : base(tank, level) {
-        DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(ConfigPath);
-        HpPerMsComponent = ConfigManager.GetComponent<ModuleHealingEffectHPPerMSPropertyComponent>(ConfigPath);
-        InstantHpComponent = ConfigManager.GetComponent<ModuleHealingEffectInstantHPPropertyComponent>(ConfigPath);
+    public RepairKitEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
+        HpPerMsComponent = ConfigManager.GetComponent<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath);
+        InstantHpComponent = ConfigManager.GetComponent<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath);
         SupplyHealingComponent = ConfigManager.GetComponent<HealingComponent>(EffectConfigPath);
 
         InstantHp = IsSupply ? 0 : InstantHpComponent[Level];
@@ -24,10 +24,10 @@ public sealed class RepairKitEffect : Effect, ISupplyEffect, IExtendableEffect {
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
         TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
 
-        Duration = IsSupply ? TimeSpan.FromMilliseconds(SupplyDurationMs) : TimeSpan.FromMilliseconds(DurationsComponent[Level]);
+        if (IsSupply)
+            Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
-
-    public override string ConfigPath => "garage/module/upgrade/properties/repairkit";
+    
     ModuleHealingEffectHPPerMSPropertyComponent HpPerMsComponent { get; }
     ModuleHealingEffectInstantHPPropertyComponent InstantHpComponent { get; }
     HealingComponent SupplyHealingComponent { get; }
@@ -38,8 +38,6 @@ public sealed class RepairKitEffect : Effect, ISupplyEffect, IExtendableEffect {
 
     DateTimeOffset LastTick { get; set; }
     TimeSpan TimePassedFromLastTick => DateTimeOffset.UtcNow - LastTick;
-
-    public ModuleEffectDurationPropertyComponent DurationsComponent { get; }
 
     public void Extend(int newLevel) {
         if (!IsActive) return;

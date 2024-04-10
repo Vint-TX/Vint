@@ -10,6 +10,7 @@ public static class ModuleRegistry {
         Register<AbsorbingArmorModule>("AbsorbingArmor");
         Register<IncreasedDamageModule>("IncreasedDamage");
         Register<TurboSpeedModule>("TurboSpeed");
+        Register<SonarModule>("Sonar");
     }
 
     static BattleModule Fallback => new InDevModule();

@@ -13,6 +13,7 @@ namespace Vint.Core.ECS.Events.Items;
 
 [ProtocolId(1480325268669)]
 public class OpenContainerEvent : IServerEvent {
+    const int MaxAmount = 250;
     public long Amount { get; private set; }
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
@@ -24,7 +25,7 @@ public class OpenContainerEvent : IServerEvent {
 
         if (container == null || container.Count < Amount) return;
 
-        Amount = Math.Min(Amount, 100);
+        Amount = Math.Min(Amount, MaxAmount);
 
         container.Count -= Amount;
         userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);

@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using ConcurrentCollections;
 using Vint.Core.Battles.Player;
+using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
@@ -25,8 +26,6 @@ public abstract class Effect(
 
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
 
-    public abstract string ConfigPath { get; }
-
     public virtual void Tick() {
         foreach (DelayedAction delayedAction in DelayedActions
                      .Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
@@ -39,9 +38,9 @@ public abstract class Effect(
 
     public virtual void Deactivate() => Tank.Effects.TryRemove(this);
 
-    public void Share(BattlePlayer battlePlayer) => battlePlayer.PlayerConnection.Share(Entities);
+    public virtual void Share(BattlePlayer battlePlayer) => battlePlayer.PlayerConnection.Share(Entities);
 
-    public void Unshare(BattlePlayer battlePlayer) {
+    public virtual void Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank == Tank)
             Deactivate();
 
@@ -66,6 +65,19 @@ public abstract class Effect(
     public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this), GetType().Name, Tank);
 }
 
+public abstract class DurationEffect : Effect {
+    protected DurationEffect(BattleTank tank,
+        int level,
+        string marketConfigPath) : base(tank, level) {
+        DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(marketConfigPath);
+
+        if (!IsSupply)
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent[Level]);
+    }
+
+    protected ModuleEffectDurationPropertyComponent DurationsComponent { get; }
+}
+
 public interface IMultiplierEffect {
     public float Multiplier { get; }
 }
@@ -76,8 +88,6 @@ public interface ISupplyEffect {
 }
 
 public interface IExtendableEffect {
-    ModuleEffectDurationPropertyComponent DurationsComponent { get; }
-
     public void Extend(int newLevel);
 }
 

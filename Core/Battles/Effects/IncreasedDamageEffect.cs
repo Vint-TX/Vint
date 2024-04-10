@@ -9,27 +9,26 @@ using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponen
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class IncreasedDamageEffect : Effect, ISupplyEffect, IDamageEffect, IExtendableEffect {
+public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDamageEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/damage";
+    const string MarketConfigPath = "garage/module/upgrade/properties/increaseddamage";
 
-    public IncreasedDamageEffect(BattleTank tank, int level = -1) : base(tank, level) {
-        DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(ConfigPath);
-        MultipliersComponent = ConfigManager.GetComponent<ModuleDamageEffectMaxFactorPropertyComponent>(ConfigPath);
+    public IncreasedDamageEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
+        MultipliersComponent = ConfigManager.GetComponent<ModuleDamageEffectMaxFactorPropertyComponent>(MarketConfigPath);
 
         SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath).Factor;
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
 
         Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
-        Duration = IsSupply ? TimeSpan.FromMilliseconds(SupplyDurationMs) : TimeSpan.FromMilliseconds(DurationsComponent[Level]);
+        
+        if (IsSupply)
+            Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
-
-    public override string ConfigPath => "garage/module/upgrade/properties/increaseddamage";
+    
     ModuleDamageEffectMaxFactorPropertyComponent MultipliersComponent { get; }
     public float Multiplier { get; private set; }
 
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash) => IsActive && (Tank != target || isSplash) ? Multiplier : 1;
-
-    public ModuleEffectDurationPropertyComponent DurationsComponent { get; }
 
     public void Extend(int newLevel) {
         if (!IsActive) return;
