@@ -72,7 +72,7 @@ public sealed class TurboSpeedEffect : Effect, ISupplyEffect, IExtendableEffect,
             float minTemperature = Tank.TemperatureConfig.MinTemperature;
             
             float minSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.Speed);
-            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.TurnSpeed, 10);
+            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.TurnSpeed, 5);
             float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed);
 
             float newSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.Speed, minSpeed);

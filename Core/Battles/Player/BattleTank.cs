@@ -462,7 +462,7 @@ public class BattleTank {
             float minTemperature = TemperatureConfig.MinTemperature;
 
             float minSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.Speed);
-            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.TurnSpeed, 10);
+            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.TurnSpeed, 5);
             float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(WeaponHandler.OriginalWeaponRotationComponent.Speed);
 
             float newSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.Speed, minSpeed);

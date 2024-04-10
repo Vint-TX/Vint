@@ -1,5 +1,44 @@
 ﻿[
   {
+    "name": "EEL",
+    "id": -910231605,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/eel"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -910231605
+      }
+    }
+  },
+  {
+    "name": "Jokerge",
+    "id": -910231606,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/jokerge"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -910231606
+      }
+    }
+  },
+  {
+    "name": "Vint",
+    "id": -910231607,
+    "template": [
+      "AvatarMarketItemTemplate",
+      "garage/avatar/vint"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": -910231607
+      }
+    }
+  },
+  {
     "name": "AlgheriaFlag",
     "id": -910231604,
     "template": [

@@ -1,0 +1,16 @@
+priceItem:
+  price: 1
+xPriceItem:
+  price: 1
+avatarItem:
+  id: d792d391-e665-4365-9984-209f622beeab
+imageItem:
+  spriteUid: d792d391-e665-4365-9984-209f622beeab
+order:
+  index: 0
+purchaseUpgradeLevelRestriction:
+  restrictionValue: 0
+purchaseUserRankRestriction:
+  restrictionValue: 0
+itemRarity:
+  rarityType: LEGENDARY

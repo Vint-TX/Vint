@@ -11,8 +11,8 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 8
 damagePerSecondProperty:
-  initialValue: 500.000
-  finalValue: 500.000
+  initialValue: 450.000
+  finalValue: 450.000
 heatDamageProperty:
   initialValue: 125
   finalValue: 125
