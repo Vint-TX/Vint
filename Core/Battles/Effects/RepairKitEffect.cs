@@ -13,17 +13,17 @@ namespace Vint.Core.Battles.Effects;
 public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/healing";
     const string MarketConfigPath = "garage/module/upgrade/properties/repairkit";
-
+    
     public RepairKitEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
         HpPerMsComponent = ConfigManager.GetComponent<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath);
         InstantHpComponent = ConfigManager.GetComponent<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath);
         SupplyHealingComponent = ConfigManager.GetComponent<HealingComponent>(EffectConfigPath);
-
+        
         InstantHp = IsSupply ? 0 : InstantHpComponent[Level];
         HpPerMs = IsSupply ? SupplyHealingComponent.HpPerMs : HpPerMsComponent[Level];
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
         TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
-
+        
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
@@ -31,23 +31,23 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     ModuleHealingEffectHPPerMSPropertyComponent HpPerMsComponent { get; }
     ModuleHealingEffectInstantHPPropertyComponent InstantHpComponent { get; }
     HealingComponent SupplyHealingComponent { get; }
-
+    
     float InstantHp { get; set; }
     float HpPerMs { get; set; }
     TimeSpan TickPeriod { get; }
-
+    
     DateTimeOffset LastTick { get; set; }
     TimeSpan TimePassedFromLastTick => DateTimeOffset.UtcNow - LastTick;
-
+    
     public void Extend(int newLevel) {
         if (!IsActive) return;
-
+        
         UnScheduleAll();
-
+        
         LastTick = DateTimeOffset.UtcNow.AddTicks(-TickPeriod.Ticks);
-
+        
         bool isSupply = newLevel < 0;
-
+        
         if (isSupply) {
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             HpPerMs = SupplyHealingComponent.HpPerMs;
@@ -55,67 +55,67 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
             Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
             InstantHp = InstantHpComponent[newLevel];
             HpPerMs = HpPerMsComponent[newLevel];
-
+            
             CalculatedDamage heal = new(default, InstantHp, false, false, false, false);
             Battle.DamageProcessor.Heal(Tank, heal);
         }
-
+        
         Level = newLevel;
         LastActivationTime = DateTimeOffset.UtcNow;
-
+        
         Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
         Entity!.RemoveComponent<DurationComponent>();
         Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
-
+        
         Schedule(Duration, Deactivate);
     }
-
+    
     public float SupplyMultiplier => 0;
     public float SupplyDurationMs { get; }
-
+    
     public override void Activate() {
         if (IsActive) return;
-
-        base.Activate();
-
+        
+        Tank.Effects.Add(this);
+        
         CalculatedDamage heal = new(default, InstantHp, false, false, false, false);
-
+        
         LastTick = DateTimeOffset.UtcNow.AddTicks(-TickPeriod.Ticks);
         Battle.DamageProcessor.Heal(Tank, heal);
-
+        
         Entities.Add(new HealingEffectTemplate().Create(Tank.BattlePlayer, Duration));
         ShareAll();
-
+        
         LastActivationTime = DateTimeOffset.UtcNow;
-
+        
         Schedule(Duration, Deactivate);
     }
-
+    
     public override void Deactivate() {
         if (!IsActive) return;
-
-        base.Deactivate();
-
+        
+        Tank.Effects.TryRemove(this);
+        
         UnshareAll();
         Entities.Clear();
-
+        
         LastActivationTime = default;
     }
-
+    
     public override void Tick() {
         base.Tick();
-
+        
         TimeSpan timePassed = TimePassedFromLastTick;
-
+        
         if (!IsActive || timePassed < TickPeriod) return;
-
+        
         LastTick = DateTimeOffset.UtcNow;
-
+        
         if (Tank.Health >= Tank.MaxHealth) return;
-
+        
         float healHp = Math.Min(Convert.ToSingle(timePassed.TotalMilliseconds * HpPerMs), Tank.MaxHealth - Tank.Health);
         CalculatedDamage heal = new(default, healHp, false, false, false, false);
-
+        
         Battle.DamageProcessor.Heal(Tank, heal);
     }
 }

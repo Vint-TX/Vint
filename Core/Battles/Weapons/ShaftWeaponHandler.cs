@@ -7,20 +7,20 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Weapons;
 
-public class ShaftWeaponHandler : DiscreteWeaponHandler {
+public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
     public ShaftWeaponHandler(BattleTank battleTank) : base(battleTank) {
         EnergyDrainPerMs = ConfigManager.GetComponent<EnergyChargeSpeedPropertyComponent>(MarketConfigPath).FinalValue / 1000;
         AimingSpeedComponent = BattleEntity.GetComponent<ShaftAimingSpeedComponent>();
     }
-
+    
     ShaftAimingSpeedComponent AimingSpeedComponent { get; }
     DateTimeOffset? AimingBeginTime { get; set; }
     public bool Aiming { get; private set; }
     public TimeSpan AimingDuration { get; private set; }
     public float EnergyDrainPerMs { get; private set; }
-
+    
     public override int MaxHitTargets => 1;
-
+    
     public void Aim() {
         Aiming = true;
         AimingBeginTime = DateTimeOffset.UtcNow;
@@ -29,15 +29,15 @@ public class ShaftWeaponHandler : DiscreteWeaponHandler {
             component.Acceleration = AimingSpeedComponent.HorizontalAcceleration;
         });
     }
-
+    
     public void Idle() {
         double durationMs =
             Math.Clamp((DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow)).TotalMilliseconds, 0, 1 / EnergyDrainPerMs);
-
+        
         AimingDuration = TimeSpan.FromMilliseconds(durationMs);
         BattleEntity.ChangeComponent(OriginalWeaponRotationComponent.Clone());
     }
-
+    
     public void Reset() {
         Aiming = false;
         AimingBeginTime = null;

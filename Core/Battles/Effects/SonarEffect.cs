@@ -13,7 +13,7 @@ public class SonarEffect(
     public override void Activate() {
         if (IsActive) return;
         
-        base.Activate();
+        Tank.Effects.Add(this);
         
         Entities.Add(new SonarEffectTemplate().Create(Tank.BattlePlayer, Duration));
         Share(Tank.BattlePlayer);
@@ -21,23 +21,23 @@ public class SonarEffect(
         LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
-
+    
     public override void Deactivate() {
         if (!IsActive) return;
         
-        base.Deactivate();
+        Tank.Effects.TryRemove(this);
         Unshare(Tank.BattlePlayer);
         
         Entities.Clear();
         LastActivationTime = default;
     }
-
+    
     public override void Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
         
         battlePlayer.PlayerConnection.Share(Entities);
     }
-
+    
     public override void Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
         

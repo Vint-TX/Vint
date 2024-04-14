@@ -13,7 +13,7 @@ public abstract class EffectBaseTemplate : EntityTemplate {
     protected IEntity Create(string configPath, BattlePlayer battlePlayer, TimeSpan duration, bool withTeam) => Entity(configPath,
         builder => builder
             .AddComponent<EffectComponent>()
-            .AddComponentFrom<TankGroupComponent>(battlePlayer.Tank!.Tank)
+            .AddGroupComponent<TankGroupComponent>(battlePlayer.Tank!.Tank)
             .ThenExecuteIf(_ => duration > TimeSpan.Zero,
                 entity => {
                     entity.AddComponent(new DurationConfigComponent(duration));

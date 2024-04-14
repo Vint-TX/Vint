@@ -1,4 +1,5 @@
 using LinqToDB;
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
@@ -17,87 +18,94 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         ShotId = ShotId,
         ClientTime = ClientTime
     };
-
+    
     [ProtocolIgnore] protected bool IsProceeded { get; private set; }
-
+    [ProtocolIgnore] protected IWeaponHandler WeaponHandler { get; private set; } = null!;
+    
     public virtual void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IsProceeded = true;
-
+        
         if (!connection.InLobby) {
             IsProceeded = false;
             return;
         }
-
+        
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
-
+        
         if (!battlePlayer.InBattleAsTank || !battle.Properties.DamageEnabled) {
             IsProceeded = false;
             return;
         }
-
+        
         BattleTank battleTank = battlePlayer.Tank!;
         IEntity weapon = entities.Single();
-        WeaponHandler weaponHandler = battleTank.WeaponHandler;
-
-        if (!Validate(connection, weaponHandler)) {
+        WeaponHandler = GetWeaponHandler(battleTank, weapon);
+        
+        if (!Validate(connection, WeaponHandler)) {
             IsProceeded = false;
             battlePlayer.OnAntiCheatSuspected();
             return;
         }
-
+        
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             playerConnection.Send(RemoteEvent, weapon);
-
+        
         if (Targets == null) return;
-
-        if (weaponHandler is HammerWeaponHandler hammerHandler) {
+        
+        if (WeaponHandler is HammerWeaponHandler hammerHandler) {
             hammerHandler.Fire(Targets);
             return;
         }
-
+        
         for (int i = 0; i < Targets.Count; i++) {
             HitTarget target = Targets[i];
-            weaponHandler.Fire(target, i);
+            WeaponHandler.Fire(target, i);
         }
-
+        
         using DbConnection db = new();
-
+        
         db.Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Hits, stats => stats.Hits + Targets.Count)
             .Update();
     }
-
-    bool Validate(IPlayerConnection connection, WeaponHandler weaponHandler) {
+    
+    bool Validate(IPlayerConnection connection, IWeaponHandler weaponHandler) {
         DateTimeOffset currentHitTime = DateTimeOffset.UtcNow;
         /*DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
         double timePassedMs = (currentHitTime - previousHitTime).TotalMilliseconds + connection.Ping;
-
+        
         if (weaponHandler is not StreamWeaponHandler && timePassedMs < weaponHandler.Cooldown.TotalMilliseconds) {
             connection.Logger.ForType(GetType())
                 .Warning("Suspicious behaviour: cooldown has not passed: {TimePassed} < {Cooldown} ({WeaponHandlerName})",
                     timePassedMs,
                     weaponHandler.Cooldown.TotalMilliseconds,
                     weaponHandler.GetType().Name);
-
+        
             return false;
         }*/
-
+        
         weaponHandler.LastHitTime = currentHitTime;
-
+        
         if (Targets?.Count > weaponHandler.MaxHitTargets) {
             connection.Logger.ForType(GetType())
                 .Warning("Suspicious behaviour: hit targets count is greater than max hit targets count: {Current} > {Max} ({WeaponHandlerName})",
                     Targets?.Count,
                     weaponHandler.MaxHitTargets,
                     weaponHandler.GetType().Name);
-
+            
             return false;
         }
-
+        
         return true;
+    }
+    
+    static IWeaponHandler GetWeaponHandler(BattleTank tank, IEntity weapon) {
+        IModuleWeaponEffect? module = tank.Effects.SingleOrDefault(module => module.Entities.Contains(weapon)) as IModuleWeaponEffect;
+        
+        return module?.WeaponHandler ?? tank.WeaponHandler as IWeaponHandler;
     }
 }

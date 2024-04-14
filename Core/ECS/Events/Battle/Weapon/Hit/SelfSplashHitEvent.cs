@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 [ProtocolId(196833391289212110)]
 public class SelfSplashHitEvent : SelfHitEvent {
     public List<HitTarget>? SplashTargets { get; private set; }
-
+    
     [ProtocolIgnore] protected override RemoteSplashHitEvent RemoteEvent => new() {
         SplashTargets = SplashTargets,
         ClientTime = ClientTime,
@@ -18,26 +18,25 @@ public class SelfSplashHitEvent : SelfHitEvent {
         ShotId = ShotId,
         Targets = Targets
     };
-
+    
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         base.Execute(connection, entities);
-
+        
         if (!IsProceeded) return;
-
+        
         Battles.Battle battle = connection.BattlePlayer!.Battle;
-        WeaponHandler weaponHandler = connection.BattlePlayer!.Tank!.WeaponHandler;
-
+        
         if (!battle.Properties.DamageEnabled ||
             SplashTargets == null ||
-            weaponHandler is not ThunderWeaponHandler thunder) return;
-
+            WeaponHandler is not ISplashWeaponHandler splashHandler) return;
+        
         for (int i = 0; i < SplashTargets.Count; i++) {
             HitTarget target = SplashTargets[i];
-            thunder.SplashFire(target, i);
+            splashHandler.SplashFire(target, i);
         }
-
+        
         using DbConnection db = new();
-
+        
         db.Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Hits, stats => stats.Hits + SplashTargets.Count)

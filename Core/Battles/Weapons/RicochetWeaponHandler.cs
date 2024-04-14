@@ -6,9 +6,9 @@ namespace Vint.Core.Battles.Weapons;
 
 public class RicochetWeaponHandler(
     BattleTank battleTank
-) : DiscreteWeaponHandler(battleTank) {
+) : DiscreteTankWeaponHandler(battleTank) {
     public override int MaxHitTargets => 1;
-
+    
     public override void Fire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
@@ -16,11 +16,11 @@ public class RicochetWeaponHandler(
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
-
+        
         // ReSharper disable once ArrangeRedundantParentheses
         if (targetTank.StateManager.CurrentState is not Active ||
             (!isEnemy && !battle.Properties.FriendlyFire)) return;
-
+        
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }

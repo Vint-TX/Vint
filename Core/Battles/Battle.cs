@@ -74,7 +74,8 @@ public class Battle {
 
     public long Id => Entity.Id;
     public long LobbyId => LobbyEntity.Id;
-    public bool CanAddPlayers => StateManager.CurrentState is not Ended &&
+    public bool CanAddPlayers => (TypeHandler is CustomHandler { IsOpened: true } ||
+                                  StateManager.CurrentState is not Ended) &&
                                  Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
     public bool WasPlayers { get; private set; }
     public double Timer { get; set; }
@@ -320,6 +321,7 @@ public class Battle {
 
             user.RemoveComponent<UserEquipmentComponent>();
             user.RemoveComponent<BattleLobbyGroupComponent>();
+            user.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
             connection.Unshare(LobbyEntity, LobbyChatEntity);
 
             foreach (BattlePlayer player in Players) {

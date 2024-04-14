@@ -11,21 +11,22 @@ public static class ModuleRegistry {
         Register<IncreasedDamageModule>("IncreasedDamage");
         Register<TurboSpeedModule>("TurboSpeed");
         Register<SonarModule>("Sonar");
+        Register<ExternalImpactModule>("ExternalImpact");
     }
-
+    
     static BattleModule Fallback => new InDevModule();
     static Dictionary<long, IBattleModuleBuilder> IdToBuilder { get; } = new();
-
+    
     public static BattleModule Get(long id) =>
         IdToBuilder.TryGetValue(id, out IBattleModuleBuilder? builder) ? builder.Build() : Fallback;
-
+    
     static void Register<T>(string name) where T : BattleModule, new() =>
         IdToBuilder[GlobalEntities.GetEntity("modules", name).Id] = new BattleModuleBuilder<T>();
-
+    
     class BattleModuleBuilder<T> : IBattleModuleBuilder where T : BattleModule, new() {
         public BattleModule Build() => new T();
     }
-
+    
     interface IBattleModuleBuilder {
         public BattleModule Build();
     }

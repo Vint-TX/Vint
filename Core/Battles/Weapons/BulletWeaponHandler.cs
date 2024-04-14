@@ -4,4 +4,4 @@ namespace Vint.Core.Battles.Weapons;
 
 public abstract class BulletWeaponHandler(
     BattleTank battleTank
-) : DiscreteWeaponHandler(battleTank);
+) : DiscreteTankWeaponHandler(battleTank);

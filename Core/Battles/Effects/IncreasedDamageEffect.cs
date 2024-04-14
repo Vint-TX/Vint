@@ -9,16 +9,16 @@ using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponen
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDamageEffect, IExtendableEffect {
+public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDamageMultiplierEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/damage";
     const string MarketConfigPath = "garage/module/upgrade/properties/increaseddamage";
-
+    
     public IncreasedDamageEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
         MultipliersComponent = ConfigManager.GetComponent<ModuleDamageEffectMaxFactorPropertyComponent>(MarketConfigPath);
-
+        
         SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath).Factor;
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
-
+        
         Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
         
         if (IsSupply)
@@ -27,16 +27,16 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     
     ModuleDamageEffectMaxFactorPropertyComponent MultipliersComponent { get; }
     public float Multiplier { get; private set; }
-
+    
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash) => IsActive && (Tank != target || isSplash) ? Multiplier : 1;
-
+    
     public void Extend(int newLevel) {
         if (!IsActive) return;
-
+        
         UnScheduleAll();
-
+        
         bool isSupply = newLevel < 0;
-
+        
         if (isSupply) {
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             Multiplier = SupplyMultiplier;
@@ -44,41 +44,40 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
             Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
             Multiplier = MultipliersComponent[newLevel];
         }
-
+        
         Level = newLevel;
         LastActivationTime = DateTimeOffset.UtcNow;
-
+        
         Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
         Entity!.RemoveComponent<DurationComponent>();
         Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
-
+        
         Schedule(Duration, Deactivate);
     }
-
+    
     public float SupplyMultiplier { get; }
     public float SupplyDurationMs { get; }
-
+    
     public override void Activate() {
         if (IsActive) return;
-
-        base.Activate();
-
+        
+        Tank.Effects.Add(this);
+        
         Entities.Add(new DamageEffectTemplate().Create(Tank.BattlePlayer, Duration));
         ShareAll();
-
+        
         LastActivationTime = DateTimeOffset.UtcNow;
-
         Schedule(Duration, Deactivate);
     }
-
+    
     public override void Deactivate() {
         if (!IsActive) return;
-
-        base.Deactivate();
-
+        
+        Tank.Effects.TryRemove(this);
+        
         UnshareAll();
         Entities.Clear();
-
+        
         LastActivationTime = default;
     }
 }
