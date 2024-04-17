@@ -4,7 +4,9 @@
 
 This is the first open-source server for the TankiX game
 
-Issues and pull-requests are acceptable
+# Personal Vint
+
+This is my version where i test stuff inside the server
 
 ## Building
 
