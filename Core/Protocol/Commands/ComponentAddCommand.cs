@@ -23,7 +23,8 @@ public class ComponentAddCommand(
 
         if (clientAddable == null) {
             logger.Error("{Component} is not in whitelist ({Entity})", type.Name, Entity);
-            ChatUtils.SendMessage($"ClientAddable: {type.Name}", ChatUtils.GetChat(connection), [connection], null);
+            /*ChatUtils.SendMessage($"ClientAddable: {type.Name}", ChatUtils.GetChat(connection), [connection], null);*/
+            return; // maybe disconnect
         }
 
         Entity.AddComponent(Component, connection);

@@ -21,6 +21,7 @@ public abstract class Effect(
     public int Level { get; protected set; } = level;
     public bool IsSupply => Level < 0;
     public bool IsActive => Entities.Count != 0;
+    public bool CanBeDeactivated { get; set; } = true;
     
     public DateTimeOffset LastActivationTime { get; protected set; }
     public TimeSpan Duration { get; protected set; } = TimeSpan.FromSeconds(1);
@@ -67,10 +68,7 @@ public abstract class Effect(
 }
 
 public abstract class DurationEffect : Effect {
-    protected DurationEffect(
-        BattleTank tank,
-        int level,
-        string marketConfigPath) : base(tank, level) {
+    protected DurationEffect(BattleTank tank, int level, string marketConfigPath) : base(tank, level) {
         DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(marketConfigPath);
         
         if (!IsSupply)

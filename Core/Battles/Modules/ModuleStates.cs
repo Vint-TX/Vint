@@ -55,6 +55,13 @@ public class Cooldown(
 
         Module.SlotEntity.RemoveComponent<InventoryCooldownStateComponent>();
     }
-
+    
+    public void ChangeEndTime(TimeSpan delta) {
+        Module.SlotEntity.ChangeComponent<InventoryCooldownStateComponent>(
+            component => component.CooldownTimeMs -= (int)Math.Ceiling(delta.TotalMilliseconds));
+        
+        EndTime -= delta;
+    }
+    
     public void UpdateDuration() => EndTime = StartTime + Module.Cooldown;
 }

@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Effects;
+using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
@@ -8,12 +9,12 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
-public class ExternalImpactModule : ActiveBattleModule {
-    public override string ConfigPath => "garage/module/upgrade/properties/externalimpact";
+public class KamikadzeModule : TriggerBattleModule, IDeathModule {
+    public override string ConfigPath => "garage/module/upgrade/properties/kamikadze";
     
-    public override ExternalImpactEffect GetEffect() => new(WeaponHandler, Tank, Level);
+    public override KamikadzeEffect GetEffect() => new(WeaponHandler, Tank, Level);
     
-    ExternalImpactWeaponHandler WeaponHandler { get; set; } = null!;
+    KamikadzeWeaponHandler WeaponHandler { get; set; } = null!;
     
     public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         base.Init(tank, userSlot, marketModule);
@@ -24,7 +25,7 @@ public class ExternalImpactModule : ActiveBattleModule {
         float minDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
         float maxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
         
-        WeaponHandler = new ExternalImpactWeaponHandler(Tank,
+        WeaponHandler = new KamikadzeWeaponHandler(Tank,
             Cooldown,
             MarketEntity,
             true,
@@ -40,11 +41,13 @@ public class ExternalImpactModule : ActiveBattleModule {
     public override void Activate() {
         if (!CanBeActivated) return;
         
-        ExternalImpactEffect? effect = Tank.Effects.OfType<ExternalImpactEffect>().SingleOrDefault();
+        KamikadzeEffect? effect = Tank.Effects.OfType<KamikadzeEffect>().SingleOrDefault();
         
         if (effect != null) return;
         
         base.Activate();
         GetEffect().Activate();
     }
+    
+    public void OnDeath() => Activate();
 }

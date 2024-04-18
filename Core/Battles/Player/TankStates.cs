@@ -1,5 +1,7 @@
 using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Modules.Interfaces;
+using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Tank;
@@ -40,7 +42,6 @@ public class Dead(
     DateTimeOffset TimeToNextState { get; set; }
 
     public override void Start() {
-        BattleTank.BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), BattleTank.Tank);
         BattleTank.Disable(false);
 
         base.Start();
@@ -106,5 +107,23 @@ public class Active(
 
         if (BattleTank.WeaponHandler is HammerWeaponHandler hammer)
             BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), hammer.BattleEntity);
+        
+        foreach (BattleModule module in BattleTank.Modules)
+            module.TryUnblock();
+    }
+    
+    public override void Started() {
+        base.Started();
+        
+        // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
+        foreach (BattleModule module in BattleTank.Modules.OfType<IAlwaysActiveModule>())
+            module.Activate();
+    }
+    
+    public override void Finish() {
+        base.Finish();
+        
+        foreach (BattleModule module in BattleTank.Modules)
+            module.TryBlock(true);
     }
 }

@@ -5,7 +5,7 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
 
-public class ExternalImpactWeaponHandler(
+public class KamikadzeWeaponHandler(
     BattleTank tank,
     TimeSpan cooldown,
     IEntity marketEntity,
@@ -17,7 +17,8 @@ public class ExternalImpactWeaponHandler(
     float minDamage,
     float impact,
     int maxHitTargets
-) : ModuleWeaponHandler(tank,
+) : ModuleWeaponHandler(
+    tank,
     cooldown,
     marketEntity,
     damageWeakeningByDistance,
@@ -46,7 +47,7 @@ public class ExternalImpactWeaponHandler(
         
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true, true);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
     

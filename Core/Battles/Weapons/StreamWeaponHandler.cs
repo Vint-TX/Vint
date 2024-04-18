@@ -3,6 +3,7 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
@@ -32,13 +33,11 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeapo
         
         bool isEnemy = BattleTank.IsEnemy(targetTank);
         
-        targetTank.UpdateTemperatureAssists(BattleTank, !isEnemy);
+        targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
         
-        // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active ||
-            (!isEnemy && !battle.Properties.FriendlyFire)) return;
+        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
     
@@ -53,4 +52,7 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeapo
         IncarnationIdToHitTime.Remove(targetIncarnationId);
         return false;
     }
+    
+    public virtual void Reset() =>
+        BattleTank.BattlePlayer.PlayerConnection.Send(new StreamWeaponResetStateEvent(), BattleEntity);
 }

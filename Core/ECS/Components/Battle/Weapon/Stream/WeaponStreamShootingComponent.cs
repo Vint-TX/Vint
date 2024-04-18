@@ -11,7 +11,15 @@ public class WeaponStreamShootingComponent : IComponent {
     public int Time { get; private set; }
 
     public void Added(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is VulcanWeaponHandler vulcan)
-            vulcan.ShootingStartTime ??= DateTimeOffset.UtcNow;
+        if (connection.BattlePlayer?.Tank?.WeaponHandler is not VulcanWeaponHandler vulcan) return;
+        
+        vulcan.ShootingStartTime ??= DateTimeOffset.UtcNow;
+    }
+    
+    public void Removed(IPlayerConnection connection, IEntity entity) {
+        if (connection.BattlePlayer?.Tank?.WeaponHandler is not VulcanWeaponHandler vulcan) return;
+        
+        vulcan.ShootingStartTime = null;
+        vulcan.LastOverheatingUpdate = null;
     }
 }

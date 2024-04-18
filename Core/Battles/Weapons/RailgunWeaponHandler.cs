@@ -21,11 +21,9 @@ public class RailgunWeaponHandler : DiscreteTankWeaponHandler {
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = BattleTank.IsEnemy(targetTank);
         
-        // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active ||
-            (!isEnemy && !battle.Properties.FriendlyFire)) return;
+        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 }

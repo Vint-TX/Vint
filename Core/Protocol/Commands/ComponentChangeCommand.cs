@@ -23,7 +23,8 @@ public class ComponentChangeCommand(
 
         if (clientChangeable == null) {
             logger.Error("{Component} is not in whitelist ({Entity})", type.Name, Entity);
-            ChatUtils.SendMessage($"ClientChangeable: {type.Name}", ChatUtils.GetChat(connection), [connection], null);
+            /*ChatUtils.SendMessage($"ClientChangeable: {type.Name}", ChatUtils.GetChat(connection), [connection], null);*/
+            return; // maybe disconnect
         }
 
         Entity.ChangeComponent(Component, connection);

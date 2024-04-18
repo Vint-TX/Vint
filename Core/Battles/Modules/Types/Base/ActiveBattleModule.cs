@@ -1,3 +1,3 @@
 namespace Vint.Core.Battles.Modules.Types.Base;
 
-public abstract class ActiveBattleModule : UserBattleModule;
+public abstract class ActiveBattleModule : BattleModule;

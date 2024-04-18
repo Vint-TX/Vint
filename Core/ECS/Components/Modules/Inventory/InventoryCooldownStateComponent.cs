@@ -7,6 +7,6 @@ public class InventoryCooldownStateComponent(
     int cooldownTimeMs,
     DateTimeOffset cooldownStartTime
 ) : IComponent {
-    public int CooldownTimeMs { get; } = cooldownTimeMs;
+    public int CooldownTimeMs { get; set; } = cooldownTimeMs;
     public DateTimeOffset CooldownStartTime { get; } = cooldownStartTime;
 }

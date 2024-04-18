@@ -22,7 +22,8 @@ public class ComponentRemoveCommand(
 
         if (clientRemovable == null) {
             logger.Error("{Component} is not in whitelist ({Entity})", Component.Name, Entity);
-            ChatUtils.SendMessage($"ClientRemovable: {Component.Name}", ChatUtils.GetChat(connection), [connection], null);
+            /*ChatUtils.SendMessage($"ClientRemovable: {Component.Name}", ChatUtils.GetChat(connection), [connection], null);*/
+            return; // maybe disconnect
         }
 
         IComponent component = Entity.GetComponent(Component);
