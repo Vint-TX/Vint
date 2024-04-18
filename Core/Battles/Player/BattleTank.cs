@@ -579,12 +579,12 @@ public class BattleTank {
     }
     
     void SelfKill() {
+        foreach (IDeathModule deathModule in Modules.OfType<IDeathModule>())
+            deathModule.OnDeath();
+        
         BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), Tank);
         StateManager.SetState(new Dead(StateManager));
         KillAssistants.Clear();
-        
-        foreach (IDeathModule deathModule in Modules.OfType<IDeathModule>())
-            deathModule.OnDeath();
         
         if (Battle.TypeHandler is not MatchmakingHandler) return;
         
