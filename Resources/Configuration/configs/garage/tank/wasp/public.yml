@@ -15,8 +15,8 @@ weight:
   initialValue: 2000.000
   finalValue: 2000.000
 damping:
-  initialValue: 900.000
-  finalValue: 900.000
+  initialValue: 950.000
+  finalValue: 950.000
 speed:
   initialValue: 15.000
   finalValue: 15.000

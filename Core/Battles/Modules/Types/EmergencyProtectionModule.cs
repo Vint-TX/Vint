@@ -9,7 +9,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battles.Modules;
+namespace Vint.Core.Battles.Modules.Types;
 
 public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITemperatureWeaponHandler {
     public override string ConfigPath => "garage/module/upgrade/properties/emergencyprotection";
@@ -32,6 +32,8 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
         effect = GetEffect();
         effect.Activate();
         
+        IEntity effectEntity = effect.Entity!;
+        
         base.Activate();
         
         Battle battle = Tank.Battle;
@@ -42,7 +44,7 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
         Tank.UpdateTemperatureAssists(Tank, this, false);
         
         foreach (BattlePlayer player in battle.Players.Where(player => player.InBattle))
-            player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effect.Entity!);
+            player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
     }
     
     public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

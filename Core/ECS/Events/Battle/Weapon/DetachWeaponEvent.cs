@@ -16,7 +16,8 @@ public class DetachWeaponEvent : IServerEvent {
 
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.Tank != tank) return;
+            connection.BattlePlayer.Tank!.Tank != tank ||
+            connection.BattlePlayer.Tank.StateManager.CurrentState is not Dead) return;
 
         foreach (BattlePlayer battlePlayer in connection.BattlePlayer.Battle.Players)
             battlePlayer.PlayerConnection.Send(this, tank);

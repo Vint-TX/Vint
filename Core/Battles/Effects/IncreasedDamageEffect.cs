@@ -17,9 +17,9 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
         MultipliersComponent = ConfigManager.GetComponent<ModuleDamageEffectMaxFactorPropertyComponent>(MarketConfigPath);
         
         SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath).Factor;
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
         
-        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
+        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent.UpgradeLevel2Values[Level];
         
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -28,7 +28,8 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     ModuleDamageEffectMaxFactorPropertyComponent MultipliersComponent { get; }
     public float Multiplier { get; private set; }
     
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash) => IsActive && (Tank != target || isSplash) ? Multiplier : 1;
+    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
+        IsActive && (Tank != target || isSplash) ? Multiplier : 1;
     
     public void Extend(int newLevel) {
         if (!IsActive) return;
@@ -41,12 +42,11 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             Multiplier = SupplyMultiplier;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
-            Multiplier = MultipliersComponent[newLevel];
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            Multiplier = MultipliersComponent.UpgradeLevel2Values[newLevel];
         }
         
         Level = newLevel;
-        LastActivationTime = DateTimeOffset.UtcNow;
         
         Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
         Entity!.RemoveComponent<DurationComponent>();
@@ -66,7 +66,6 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
         Entities.Add(new DamageEffectTemplate().Create(Tank.BattlePlayer, Duration));
         ShareAll();
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
     
@@ -77,7 +76,5 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
         
         UnshareAll();
         Entities.Clear();
-        
-        LastActivationTime = default;
     }
 }

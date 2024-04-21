@@ -17,7 +17,6 @@ public class RageEffect(
         Entities.Add(new RageEffectTemplate().Create(Tank.BattlePlayer, Duration, decreaseCooldownPerKill));
         Share(Tank.BattlePlayer);
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
     
@@ -28,7 +27,6 @@ public class RageEffect(
         Unshare(Tank.BattlePlayer);
         
         Entities.Clear();
-        LastActivationTime = default;
     }
     
     public override void Share(BattlePlayer battlePlayer) {

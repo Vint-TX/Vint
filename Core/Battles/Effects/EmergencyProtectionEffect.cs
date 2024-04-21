@@ -21,7 +21,6 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         Entities.Add(new EmergencyProtectionEffectTemplate().Create(Tank.BattlePlayer, Duration));
         ShareAll();
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
     
@@ -33,11 +32,9 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         
         UnshareAll();
         Entities.Clear();
-        
-        LastActivationTime = default;
     }
     
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash) => 0;
+    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) => 0;
     
     void ResetWeaponState() => (Tank.WeaponHandler as StreamWeaponHandler)?.Reset();
 }

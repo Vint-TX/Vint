@@ -25,7 +25,6 @@ public class ExternalImpactEffect(
             weaponHandler.MinDamageDistance));
         ShareAll();
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
     
@@ -36,7 +35,5 @@ public class ExternalImpactEffect(
         
         UnshareAll();
         Entities.Clear();
-        
-        LastActivationTime = default;
     }
 }

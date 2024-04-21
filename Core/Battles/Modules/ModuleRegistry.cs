@@ -16,6 +16,12 @@ public static class ModuleRegistry {
         Register<RageModule>("Rage");
         Register<TemperatureBlockModule>("TempBlock");
         Register<EmergencyProtectionModule>("EmergencyProtection");
+        Register<AcceleratedGearsModule>("AcceleratedGears");
+        Register<EngineerModule>("Engineer");
+        Register<BackhitDefenceModule>("BackhitDefence");
+        Register<BackhitIncreaseModule>("BackhitIncrease");
+        Register<AdrenalineModule>("Adrenaline");
+        Register<LifeStealModule>("LifeSteal");
     }
     
     static BattleModule Fallback => new InDevModule();

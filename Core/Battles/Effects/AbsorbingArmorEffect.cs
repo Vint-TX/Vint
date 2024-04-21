@@ -18,9 +18,9 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
         MultipliersComponent = ConfigManager.GetComponent<ModuleArmorEffectPropertyComponent>(MarketConfigPath);
         
         SupplyMultiplier = ConfigManager.GetComponent<ArmorEffectComponent>(EffectConfigPath).Factor;
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
         
-        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
+        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent.UpgradeLevel2Values[Level];
         
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -29,7 +29,7 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
     ModuleArmorEffectPropertyComponent MultipliersComponent { get; }
     public float Multiplier { get; private set; }
     
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash) =>
+    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
         IsActive &&
         Tank == target &&
         (source.WeaponHandler is not IsisWeaponHandler ||
@@ -46,12 +46,11 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             Multiplier = SupplyMultiplier;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
-            Multiplier = MultipliersComponent[newLevel];
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            Multiplier = MultipliersComponent.UpgradeLevel2Values[newLevel];
         }
         
         Level = newLevel;
-        LastActivationTime = DateTimeOffset.UtcNow;
         
         Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
         Entity!.RemoveComponent<DurationComponent>();
@@ -71,7 +70,6 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
         Entities.Add(new ArmorEffectTemplate().Create(EffectConfigPath, Tank.BattlePlayer, Duration));
         ShareAll();
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
     
@@ -82,7 +80,5 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
         
         UnshareAll();
         Entities.Clear();
-        
-        LastActivationTime = default;
     }
 }

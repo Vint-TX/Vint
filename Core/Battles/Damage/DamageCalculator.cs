@@ -58,7 +58,7 @@ public class DamageCalculator : IDamageCalculator {
         
         float weakening = !isSplash && weaponHandler.DamageWeakeningByDistance ? GetWeakeningMultiplier(weaponHandler, distance) : 1;
         float splash = isSplash && weaponHandler is ISplashWeaponHandler splashHandler ? splashHandler.GetSplashMultiplier(distance) : 1;
-        float effects = GetEffectsMultiplier(source, target, isSplash, ignoreSourceEffects);
+        float effects = GetEffectsMultiplier(source, target, isSplash, isBackHit, isTurretHit, ignoreSourceEffects);
         float backHit = /*isBackHit ? BackHitMultiplier :*/ 1;
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
         
@@ -111,14 +111,20 @@ public class DamageCalculator : IDamageCalculator {
                : MathUtils.Map(distance, minDamageDistance, maxDamageDistance, minMultiplier, 1);
     }
     
-    static float GetEffectsMultiplier(BattleTank source, BattleTank target, bool isSplash, bool ignoreSourceEffects) {
+    static float GetEffectsMultiplier(
+        BattleTank source,
+        BattleTank target,
+        bool isSplash,
+        bool isBackHit,
+        bool isTurretHit,
+        bool ignoreSourceEffects) {
         List<IDamageMultiplierEffect> effects = target.Effects.OfType<IDamageMultiplierEffect>().ToList();
         
         if (!ignoreSourceEffects && source != target)
             effects.AddRange(source.Effects.OfType<IDamageMultiplierEffect>());
         
         return effects.Aggregate<IDamageMultiplierEffect, float>(1,
-            (current, damageEffect) => current * damageEffect.GetMultiplier(source, target, isSplash));
+            (current, damageEffect) => current * damageEffect.GetMultiplier(source, target, isSplash, isBackHit, isTurretHit));
     }
     
     static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers 

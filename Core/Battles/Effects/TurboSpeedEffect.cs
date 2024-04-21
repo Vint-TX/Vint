@@ -20,9 +20,9 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         MultipliersComponent = ConfigManager.GetComponent<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath);
         
         SupplyMultiplier = ConfigManager.GetComponent<TurboSpeedEffectComponent>(EffectConfigPath).SpeedCoeff;
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration;
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
         
-        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent[Level];
+        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent.UpgradeLevel2Values[Level];
         
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -44,8 +44,8 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             newMultiplier = SupplyMultiplier;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent[newLevel]);
-            newMultiplier = MultipliersComponent[newLevel];
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            newMultiplier = MultipliersComponent.UpgradeLevel2Values[newLevel];
         }
         
         float additiveMultiplier = newMultiplier / Multiplier;
@@ -53,7 +53,6 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= additiveMultiplier);
         
         Level = newLevel;
-        LastActivationTime = DateTimeOffset.UtcNow;
         
         Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
         Entity!.RemoveComponent<DurationComponent>();
@@ -102,7 +101,6 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         ShareAll();
         
         Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= Multiplier);
-        LastActivationTime = DateTimeOffset.UtcNow;
         SpeedComponentWithEffect = Tank.Tank.GetComponent<SpeedComponent>().Clone();
         
         Schedule(Duration, Deactivate);
@@ -117,6 +115,5 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         Entities.Clear();
         
         Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed /= Multiplier);
-        LastActivationTime = default;
     }
 }

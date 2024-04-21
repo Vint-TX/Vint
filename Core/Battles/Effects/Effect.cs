@@ -23,7 +23,6 @@ public abstract class Effect(
     public bool IsActive => Entities.Count != 0;
     public bool CanBeDeactivated { get; set; } = true;
     
-    public DateTimeOffset LastActivationTime { get; protected set; }
     public TimeSpan Duration { get; protected set; } = TimeSpan.FromSeconds(1);
     
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
@@ -72,7 +71,7 @@ public abstract class DurationEffect : Effect {
         DurationsComponent = ConfigManager.GetComponent<ModuleEffectDurationPropertyComponent>(marketConfigPath);
         
         if (!IsSupply)
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent[Level]);
+            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[Level]);
     }
     
     protected ModuleEffectDurationPropertyComponent DurationsComponent { get; }
@@ -92,7 +91,7 @@ public interface IExtendableEffect {
 }
 
 public interface IDamageMultiplierEffect : IMultiplierEffect {
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash);
+    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit);
 }
 
 public interface ISpeedEffect : IMultiplierEffect {

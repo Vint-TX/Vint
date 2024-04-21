@@ -28,7 +28,6 @@ public class KamikadzeEffect(
         
         Share(Tank.BattlePlayer);
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, DeactivateInternal);
     }
     
@@ -39,7 +38,6 @@ public class KamikadzeEffect(
         Unshare(Tank.BattlePlayer);
         
         Entities.Clear();
-        LastActivationTime = default;
     }
     
     void DeactivateInternal() {

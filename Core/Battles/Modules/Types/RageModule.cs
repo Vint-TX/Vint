@@ -33,7 +33,7 @@ public class RageModule : TriggerBattleModule, IKillModule {
         foreach (BattleModule module in Tank.Modules) {
             if (module.StateManager.CurrentState is not Cooldown cooldown) continue;
             
-            cooldown.ChangeEndTime(DecreaseCooldownPerKill);
+            cooldown.AddElapsedTime(DecreaseCooldownPerKill);
         }
         
         effect = GetEffect();

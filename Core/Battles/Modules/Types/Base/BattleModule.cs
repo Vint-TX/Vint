@@ -91,20 +91,6 @@ public abstract class BattleModule {
     
     public void Tick() => StateManager.Tick();
     
-    public void UpdateCooldownSpeed(float coeff) {
-        Cooldown /= coeff;
-        
-        if (StateManager.CurrentState is Cooldown cooldown)
-            cooldown.UpdateDuration();
-    }
-    
-    public void ResetCooldownSpeed() {
-        Cooldown = OriginalCooldown;
-        
-        if (StateManager.CurrentState is Cooldown cooldown)
-            cooldown.UpdateDuration();
-    }
-    
     public virtual void TryBlock(bool force = false, long blockTimeMs = 0) =>
         SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent(blockTimeMs, DateTimeOffset.UtcNow));
     

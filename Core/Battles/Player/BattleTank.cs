@@ -140,6 +140,9 @@ public class BattleTank {
     
     public long CollisionsPhase { get; set; } = -1;
     
+    public float SupplyDurationMultiplier { get; set; } = 1;
+    public float ModuleCooldownCoeff { get; set; } = 1;
+    
     public ConcurrentHashSet<Effect> Effects { get; } = [];
     
     public DateTimeOffset BattleEnterTime { get; }
@@ -273,13 +276,11 @@ public class BattleTank {
     }
     
     public void UpdateModuleCooldownSpeed(float coeff, bool reset = false) {
+        if (reset) coeff = 1;
+        
+        ModuleCooldownCoeff = coeff;
         BattleUser.ChangeComponent<BattleUserInventoryCooldownSpeedComponent>(component => component.SpeedCoeff = coeff);
         BattlePlayer.PlayerConnection.Send(new BattleUserInventoryCooldownSpeedChangedEvent(), BattleUser);
-        
-        foreach (BattleModule module in Modules) {
-            if (reset) module.ResetCooldownSpeed();
-            else module.UpdateCooldownSpeed(coeff);
-        }
     }
     
     public void Spawn() {
@@ -582,8 +583,8 @@ public class BattleTank {
         foreach (IDeathModule deathModule in Modules.OfType<IDeathModule>())
             deathModule.OnDeath();
         
-        BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), Tank);
         StateManager.SetState(new Dead(StateManager));
+        BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), Tank);
         KillAssistants.Clear();
         
         if (Battle.TypeHandler is not MatchmakingHandler) return;
