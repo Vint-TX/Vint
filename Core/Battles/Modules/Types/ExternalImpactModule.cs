@@ -11,9 +11,9 @@ namespace Vint.Core.Battles.Modules.Types;
 public class ExternalImpactModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/externalimpact";
     
-    ExternalImpactWeaponHandler WeaponHandler { get; set; } = null!;
-    
     public override ExternalImpactEffect GetEffect() => new(WeaponHandler, Tank, Level);
+    
+    ExternalImpactWeaponHandler WeaponHandler { get; set; } = null!;
     
     public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         base.Init(tank, userSlot, marketModule);

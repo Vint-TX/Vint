@@ -44,17 +44,15 @@ public class ExternalImpactWeaponHandler(
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = BattleTank.IsEnemy(targetTank);
         
-        // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active ||
-            (!isEnemy && !battle.Properties.FriendlyFire)) return;
+        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex, true);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
     
     public float GetSplashMultiplier(float distance) {
-        if (distance <= RadiusOfMinSplashDamage) return 1;
-        if (distance >= RadiusOfMaxSplashDamage) return 0;
+        if (distance <= RadiusOfMaxSplashDamage) return 1;
+        if (distance >= RadiusOfMinSplashDamage) return 0;
         
         return 0.01f *
                (MinSplashDamagePercent +

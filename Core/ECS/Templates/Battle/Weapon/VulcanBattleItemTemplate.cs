@@ -18,7 +18,6 @@ public class VulcanBattleItemTemplate : StreamWeaponTemplate {
         entity.AddComponent<VulcanWeaponComponent>(configPath);
         entity.AddComponent<KickbackComponent>(configPath);
         entity.AddComponent<ImpactComponent>(configPath);
-
         return entity;
     }
 }

@@ -2,6 +2,7 @@ using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
@@ -41,10 +42,9 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
         // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active ||
-            (!isEnemy && !battle.Properties.FriendlyFire)) return;
+        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
 
@@ -64,10 +64,13 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
             return;
         }
 
-        BattleTank.UpdateTemperatureAssists(BattleTank, false);
+        BattleTank.UpdateTemperatureAssists(BattleTank, this, false);
         LastOverheatingUpdate = DateTimeOffset.UtcNow;
     }
-
+    
+    public override void Reset() => 
+        BattleTank.BattlePlayer.PlayerConnection.Send(new VulcanResetStateEvent(), BattleEntity);
+    
     public override void OnTankDisable() {
         base.OnTankDisable();
 

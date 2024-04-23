@@ -9,11 +9,6 @@ public class RepairKitModule : ActiveBattleModule, IHealthModule {
 
     public override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
 
-    public void OnHealthChanged(float before, float current, float max) {
-        if (current < max) TryUnblock();
-        else TryBlock(true);
-    }
-
     public override void Activate() {
         if (!CanBeActivated) return;
 
@@ -43,5 +38,10 @@ public class RepairKitModule : ActiveBattleModule, IHealthModule {
         if (!force && Tank.Health < Tank.MaxHealth) return;
 
         base.TryBlock(force, blockTimeMs);
+    }
+    
+    public void OnHealthChanged(float before, float current, float max) {
+        if (current < max) TryUnblock();
+        else TryBlock(true);
     }
 }

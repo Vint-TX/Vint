@@ -242,4 +242,14 @@ public class Ended(
         Battle.Timer = 0;
         base.Start();
     }
+    
+    public override void Started() {
+        base.Started();
+        
+        if (Battle.TypeHandler is not CustomHandler) return;
+        
+        Battle.Setup();
+        Battle.ModeHandler.TransferParameters(Battle.ModeHandler);
+        StateManager.SetState(new NotStarted(StateManager));
+    }
 }

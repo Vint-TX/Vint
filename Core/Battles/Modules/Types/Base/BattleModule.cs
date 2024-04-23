@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.ECS.Components.Group;
@@ -39,6 +40,8 @@ public abstract class BattleModule {
                                   StateManager.CurrentState is Ready or Cooldown { CanBeUsed: true } &&
                                   Tank.StateManager.CurrentState is Active &&
                                   Tank.Battle.StateManager.CurrentState is Running or WarmUp { WarmUpStateManager.CurrentState: WarmingUp };
+    
+    public abstract Effect GetEffect();
     
     public virtual void Activate() {
         SetAmmo(CurrentAmmo - 1);
@@ -82,25 +85,11 @@ public abstract class BattleModule {
         
         if (CurrentAmmo < MaxAmmo && StateManager.CurrentState is not Modules.Cooldown)
             StateManager.SetState(new Cooldown(StateManager));
-        else if (StateManager.CurrentState is not Ready)
+        else if (CurrentAmmo >= MaxAmmo && StateManager.CurrentState is not Ready)
             StateManager.SetState(new Ready(StateManager));
     }
     
     public void Tick() => StateManager.Tick();
-    
-    public void UpdateCooldownSpeed(float coeff) {
-        Cooldown /= coeff;
-        
-        if (StateManager.CurrentState is Cooldown cooldown)
-            cooldown.UpdateDuration();
-    }
-    
-    public void ResetCooldownSpeed() {
-        Cooldown = OriginalCooldown;
-        
-        if (StateManager.CurrentState is Cooldown cooldown)
-            cooldown.UpdateDuration();
-    }
     
     public virtual void TryBlock(bool force = false, long blockTimeMs = 0) =>
         SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent(blockTimeMs, DateTimeOffset.UtcNow));

@@ -1,3 +1,4 @@
+using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Group;
@@ -12,6 +13,8 @@ namespace Vint.Core.Battles.Modules.Types;
 
 public class InDevModule : BattleModule {
     public override string ConfigPath => "";
+    
+    public override Effect GetEffect() => throw new NotSupportedException();
     
     public override void Activate() {
         IPlayerConnection connection = Tank.BattlePlayer.PlayerConnection;
@@ -38,4 +41,8 @@ public class InDevModule : BattleModule {
         clone.AddComponent(new InventoryAmmunitionComponent(1));
         return clone;
     }
+    
+    public override void TryBlock(bool force = false, long blockTimeMs = 0) { }
+    
+    public override void TryUnblock() { }
 }

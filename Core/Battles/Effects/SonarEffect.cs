@@ -18,7 +18,6 @@ public class SonarEffect(
         Entities.Add(new SonarEffectTemplate().Create(Tank.BattlePlayer, Duration));
         Share(Tank.BattlePlayer);
         
-        LastActivationTime = DateTimeOffset.UtcNow;
         Schedule(Duration, Deactivate);
     }
     
@@ -29,7 +28,6 @@ public class SonarEffect(
         Unshare(Tank.BattlePlayer);
         
         Entities.Clear();
-        LastActivationTime = default;
     }
     
     public override void Share(BattlePlayer battlePlayer) {

@@ -28,11 +28,9 @@ public class ThunderWeaponHandler : DiscreteTankWeaponHandler, ISplashWeaponHand
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
         
-        // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active ||
-            (!isEnemy && !battle.Properties.FriendlyFire)) return;
+        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, target, targetIndex, true);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true);
         battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
     }
     

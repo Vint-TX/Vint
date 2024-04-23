@@ -29,7 +29,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
     public int MaximumCartridgeCount { get; }
     public int CurrentCartridgeCount { get; private set; }
     
-    DateTime? ReloadEndTime { get; set; }
+    DateTimeOffset? ReloadEndTime { get; set; }
     
     public override int MaxHitTargets => PelletCount;
     
@@ -51,10 +51,9 @@ public class HammerWeaponHandler : TankWeaponHandler {
             bool isEnemy = BattleTank.IsEnemy(targetTank);
             
             // ReSharper disable once ArrangeRedundantParentheses
-            if (targetTank.StateManager.CurrentState is not Active ||
-                (!isEnemy && !battle.Properties.FriendlyFire)) continue;
+            if (targetTank.StateManager.CurrentState is not Active || !isEnemy) continue;
             
-            CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, hitTarget, i);
+            CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, hitTarget, i);
             
             if (tankToDamage.TryAdd(targetTank, damage)) continue;
             
@@ -97,7 +96,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
         BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
         BattleEntity.AddComponentIfAbsent(new MagazineReloadStateComponent());
         
-        ReloadEndTime = DateTime.UtcNow.AddSeconds(ReloadMagazineTimeSec);
+        ReloadEndTime = DateTimeOffset.UtcNow.AddSeconds(ReloadMagazineTimeSec);
     }
     
     public void StopReload() {
@@ -119,7 +118,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
     }
     
     void TryReload() {
-        if (ReloadEndTime == null || ReloadEndTime > DateTime.UtcNow) return;
+        if (ReloadEndTime == null || ReloadEndTime > DateTimeOffset.UtcNow) return;
         
         FillMagazine();
     }
