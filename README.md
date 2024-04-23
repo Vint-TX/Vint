@@ -4,10 +4,6 @@
 
 This is the first open-source server for the TankiX game
 
-# Personal Vint
-
-This is my version where i test stuff inside the server
-
 ## Building
 
 1. Install [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
