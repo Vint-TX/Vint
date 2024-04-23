@@ -13,6 +13,8 @@ public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleW
     
     public override Effect GetEffect() => throw new NotSupportedException();
     
+    public override bool ActivationCondition => !Enabled;
+    
     public bool CanBeDeactivated { get; set; }
     bool Enabled { get; set; }
     float Multiplier { get; set; }
