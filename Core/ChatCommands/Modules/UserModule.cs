@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Text;
+using Serilog;
+using Serilog.Core;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -84,5 +86,17 @@ public class UserModule : ChatCommandModule {
         builder.AppendLine($"Gold boxes caught: {statistics.GoldBoxesCaught}");
 
         ctx.SendPrivateResponse(builder.ToString());
+    }
+
+    [ChatCommand("greet", "Greet the server!")]
+    public void Greet(ChatCommandContext ctx) {
+        using DbConnection db = new();
+
+        Statistics? statistics = db.Statistics.SingleOrDefault(stats => stats.PlayerId==ctx.Connection.Player.Id);
+
+        if (statistics is null) {
+            return;
+        }
+        ctx.SendPrivateResponse($"Hello world!");
     }
 }

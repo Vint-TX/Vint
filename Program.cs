@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Net;
 using Serilog;
 using Serilog.Events;
@@ -35,7 +35,8 @@ abstract class Program {
                 ConfigManager.InitializeNodes();
                 ConfigManager.InitializeConfigs();
                 ConfigManager.InitializeGlobalEntities();
-            }));
+            }),
+            Task.Run(ConfigManager.InitializeBadWordsDictionary));
 
         new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
         new Thread(() => gameServer.Start()) { Name = "Game Server" }.Start();
