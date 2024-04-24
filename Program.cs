@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Net;
 using Serilog;
 using Serilog.Events;
@@ -31,6 +31,7 @@ abstract class Program {
             Task.Run(ConfigManager.InitializeCache),
             Task.Run(ConfigManager.InitializeMapInfos),
             Task.Run(ConfigManager.InitializeMapModels), // You can comment this line to make the server starts faster
+            Task.Run(ConfigManager.InitializeChatCensorship),
             Task.Run(() => {
                 ConfigManager.InitializeNodes();
                 ConfigManager.InitializeConfigs();

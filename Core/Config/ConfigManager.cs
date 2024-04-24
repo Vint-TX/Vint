@@ -1,9 +1,10 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using BepuPhysics.Collidables;
 using Newtonsoft.Json;
@@ -28,10 +29,11 @@ namespace Vint.Core.Config;
 
 public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
-
-    public static FrozenSet<MapInfo> MapInfos { get; private set; } = FrozenSet<MapInfo>.Empty;
-    public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = FrozenDictionary<string, BlueprintChest>.Empty;
-    public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = FrozenDictionary<string, Triangle[]>.Empty;
+    
+    public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
+    public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;
+    public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = null!;
+    public static FrozenDictionary<string, Regex> CensorshipRegexes { get; private set; } = null!;
     public static ModulePrices ModulePrices { get; private set; }
     public static DiscordConfig Discord { get; private set; }
 
@@ -44,6 +46,43 @@ public static class ConfigManager {
 
     static FrozenDictionary<string, byte[]> LocaleToConfigCache { get; set; } = FrozenDictionary<string, byte[]>.Empty;
     static ConfigNode Root { get; } = new();
+    
+    public static void InitializeChatCensorship() {
+        if (!ChatUtils.CensorshipEnabled) return;
+        
+        Logger.Information("Initializing chat censorship");
+        
+        string rootPath = Path.Combine(ResourcesPath, "ChatCensorship");
+        string replacementsPath = Path.Combine(rootPath, "Replacements");
+        string badWordsPath = Path.Combine(rootPath, "badwords.txt");
+        
+        ConcurrentDictionary<char, string> replacements = new(Directory.EnumerateFiles(replacementsPath, "*.json", SearchOption.TopDirectoryOnly)
+            .Select(replacementPath => JsonConvert.DeserializeObject<Dictionary<char, string>>(File.ReadAllText(replacementPath))!)
+            .Aggregate(new Dictionary<char, string>(), (current, stringToRegex) => current.Concat(stringToRegex).ToDictionary()));
+        
+        string[] badWords = File.ReadAllLines(badWordsPath);
+        ConcurrentDictionary<string, Regex> regexes = new();
+        
+        Parallel.ForEach(badWords, word => {
+            Logger.Debug("Preparing {Word}", word);
+            
+            StringBuilder patternBuilder = new();
+            
+            foreach (char @char in word) {
+                if (!replacements.TryGetValue(@char, out string? pattern))
+                    patternBuilder.Append(@char);
+                else patternBuilder.Append(pattern);
+            }
+            
+            Regex regex = new(patternBuilder.ToString(), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled); 
+            
+            regexes.TryAdd(word, regex);
+            Logger.Verbose("{Word}: {Regex}", word, regex);
+        });
+        
+        CensorshipRegexes = regexes.ToFrozenDictionary();
+        Logger.Information("Chat censorship initialized");
+    }
 
     public static void InitializeMapInfos() {
         Logger.Information("Parsing map infos");

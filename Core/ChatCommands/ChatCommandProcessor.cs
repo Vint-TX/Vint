@@ -56,9 +56,10 @@ public class ChatCommandProcessor : IChatCommandProcessor {
 
             foreach (MethodInfo command in commands) {
                 Logger.Verbose("Generating {Name} command", command.Name);
+
                 ChatCommandAttribute chatCommandAttribute = command.GetCustomAttribute<ChatCommandAttribute>()!;
                 Logger.Verbose("Method name: {Method}, command name: {Command}", command.Name, chatCommandAttribute.Name);
-
+                
                 IReadOnlyDictionary<string, OptionAttribute> options = command
                     .GetParameters()
                     .Where(parameter => parameter.GetCustomAttribute<OptionAttribute>() != null)
