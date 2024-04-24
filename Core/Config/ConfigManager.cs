@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using BepuPhysics.Collidables;
 using Newtonsoft.Json;
@@ -28,45 +29,11 @@ namespace Vint.Core.Config;
 
 public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
-
-    private static readonly Dictionary<char, string> EnReplacements = new Dictionary<char, string>()
-        {
-            {'a', "[aа4]"}, // Matches both 'a' and 'а'
-            {'e', "[eе3€]"}, // Matches both 'e' and 'е'
-            {'o', "[oо0]"}, // Matches both 'o' and 'о'
-            {'c', "[cс]"}, // Matches both 'c' and 'с'
-            {'p', "[pр]"}, // Matches both 'p' and 'р'
-            {'x', "[xх]"}, // Matches both 'x' and 'х'
-            {'y', "[yу]"}, // Matches both 'y' and 'у'
-            {'h', "[hн]"}, // Matches both 'h' and 'н'
-            {'k', "[kк]"}, // Matches both 'k' and 'к'
-            {'b', "[bв]"}, // Matches both 'b' and 'в'
-            {'m', "[mм]"}, // Matches both 'm' and 'м'
-            {'d', "[dд]"},
-            {'i', "[i1]"},
-            {'s', "[s$]"}
-            // Add more substitutions as needed
-        };
-
-    private static readonly Dictionary<char,string> RuReplacements = new Dictionary<char, string>() {
-            {'а', "[aа4]"}, // Matches both 'a' and 'а'
-            {'е', "[eе3€]"}, // Matches both 'e' and 'е'
-            {'о', "[oо0]"}, // Matches both 'o' and 'о'
-            {'с', "[cс]"}, // Matches both 'c' and 'с'
-            {'р', "[pр]"}, // Matches both 'p' and 'р'
-            {'х', "[xх]"}, // Matches both 'x' and 'х'
-            {'у', "[yу]"}, // Matches both 'y' and 'у'
-            {'н', "[hн]"}, // Matches both 'h' and 'н'
-            {'к', "[kк]"}, // Matches both 'k' and 'к'
-            {'в', "[bв]"}, // Matches both 'b' and 'в'
-            {'м', "[mм]"}, // Matches both 'm' and 'м'
-            {'д', "[dд]"},
-        };
-    private static string badWordsFilePath = "badwords.txt";
-    public static Dictionary<string, string>? BadWordsPatterns;
-    public static FrozenSet<MapInfo> MapInfos { get; private set; } = FrozenSet<MapInfo>.Empty;
-    public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = FrozenDictionary<string, BlueprintChest>.Empty;
-    public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = FrozenDictionary<string, Triangle[]>.Empty;
+    
+    public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
+    public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;
+    public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = null!;
+    public static FrozenDictionary<string, Regex> CensorshipRegexes { get; private set; } = null!;
     public static ModulePrices ModulePrices { get; private set; }
     public static DiscordConfig Discord { get; private set; }
 
@@ -79,40 +46,42 @@ public static class ConfigManager {
 
     static FrozenDictionary<string, byte[]> LocaleToConfigCache { get; set; } = FrozenDictionary<string, byte[]>.Empty;
     static ConfigNode Root { get; } = new();
-
-    public static void InitializeBadWordsDictionary() {
-        Logger.Information("Initializing bad words");
-
-        string filePath = Path.Combine(ResourcesPath, badWordsFilePath);
-        BadWordsPatterns = LoadAndProcessWords(filePath);
-    }
-
-    /// <summary>
-    /// Reads from file the list of bad words and put them into dictionary with letter variations
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <returns>The dictionary with bad words as keys and letter variations as values</returns>
-    private static Dictionary<string, string> LoadAndProcessWords(string filePath) {
-        var patterns = new Dictionary<string, string>();
+    
+    public static void InitializeChatCensorship() {
+        if (!ChatUtils.CensorshipEnabled) return;
         
-        string[] words = File.ReadAllLines(filePath);
-        foreach (var word in words) {
-            string pattern = Regex.Escape(word.ToLower()); // Escape to safely use in regex
-            bool containsRussian = Regex.IsMatch(word, @"\p{IsCyrillic}");
-            if (containsRussian) {
-                foreach (var replacement in RuReplacements) {
-                    pattern = pattern.Replace(replacement.Key.ToString(), replacement.Value);
-                }
-            } else {
-                foreach (var replacement in EnReplacements) {
-                    pattern = pattern.Replace(replacement.Key.ToString(), replacement.Value);
-                }
+        Logger.Information("Initializing chat censorship");
+        
+        string rootPath = Path.Combine(ResourcesPath, "ChatCensorship");
+        string replacementsPath = Path.Combine(rootPath, "Replacements");
+        string badWordsPath = Path.Combine(rootPath, "badwords.txt");
+        
+        ConcurrentDictionary<char, string> replacements = new(Directory.EnumerateFiles(replacementsPath, "*.json", SearchOption.TopDirectoryOnly)
+            .Select(replacementPath => JsonConvert.DeserializeObject<Dictionary<char, string>>(File.ReadAllText(replacementPath))!)
+            .Aggregate(new Dictionary<char, string>(), (current, stringToRegex) => current.Concat(stringToRegex).ToDictionary()));
+        
+        string[] badWords = File.ReadAllLines(badWordsPath);
+        ConcurrentDictionary<string, Regex> regexes = new();
+        
+        Parallel.ForEach(badWords, word => {
+            Logger.Debug("Preparing {Word}", word);
+            
+            StringBuilder patternBuilder = new();
+            
+            foreach (char @char in word) {
+                if (!replacements.TryGetValue(@char, out string? pattern))
+                    patternBuilder.Append(@char);
+                else patternBuilder.Append(pattern);
             }
-            patterns.Add(word, pattern);
-            Logger.Information($"Adding {word}, with pattern: {pattern}");
-        }
-
-        return patterns;
+            
+            Regex regex = new(patternBuilder.ToString(), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled); 
+            
+            regexes.TryAdd(word, regex);
+            Logger.Verbose("{Word}: {Regex}", word, regex);
+        });
+        
+        CensorshipRegexes = regexes.ToFrozenDictionary();
+        Logger.Information("Chat censorship initialized");
     }
 
     public static void InitializeMapInfos() {

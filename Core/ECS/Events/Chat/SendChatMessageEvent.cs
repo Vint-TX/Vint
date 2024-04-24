@@ -1,4 +1,6 @@
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Text.RegularExpressions;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
@@ -36,37 +38,41 @@ public class SendChatMessageEvent : IServerEvent {
             ChatUtils.SendMessage($"You have been {mute}", chat, [sender], null);
             return;
         }
-
-        Message = Message.Trim();
-        string checkingMessage = Message;
-        if (!Validate(chat.TemplateAccessor!.ConfigPath!, ref checkingMessage)) {
-            sender.Logger.ForType(GetType()).Warning($"Message failed validation: '{Message}', using {checkingMessage}");
+        
+        if (!Validate(chat.TemplateAccessor!.ConfigPath!)) {
+            sender.Logger.ForType(GetType()).Warning("Message failed validation: '{Message}'", Message);
+            return;
         }
-        Message = checkingMessage;
+        
+        CleanupMessage();
         ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(sender, chat), sender);
     }
 
-    // todo ban-words (C6OI: I dont want to implement it, but I dont mind if someone sends a PR with it)
-    static bool Validate(string chatConfigPath, ref string message) {
+    bool Validate(string chatConfigPath) {
         ChatConfigComponent chatConfig = GetChatConfig(chatConfigPath);
-        bool isCleanMessage = true;
-
-        if (ConfigManager.BadWordsPatterns is not null) {
-            foreach (var entry in ConfigManager.BadWordsPatterns) {
-                string forbiddenWord = entry.Key;
-                string forbiddenWordPattern = entry.Value;
-
-                // Use Regex to detect the word with mixed scripts
-                if (Regex.IsMatch(message, forbiddenWordPattern, RegexOptions.IgnoreCase)) {
-                    isCleanMessage = false;
-                    string maskedWord = new string('*', forbiddenWord.Length);
-                    message = Regex.Replace(message, forbiddenWordPattern, maskedWord, RegexOptions.IgnoreCase);
-                }
-            }
-        }
-        return message.Length > 0 && message.Length <= chatConfig.MaxMessageLength && isCleanMessage;
+        
+        return !string.IsNullOrWhiteSpace(Message) && Message.Length > 0 && Message.Length <= chatConfig.MaxMessageLength;
     }
-
+    
+    void CleanupMessage() {
+        Message = Message.Trim();
+        
+        if (!ChatUtils.CensorshipEnabled) return;
+        
+        ConcurrentDictionary<string, Regex> badWords = new();
+        
+        Parallel.ForEach(ConfigManager.CensorshipRegexes, pair => {
+            (string word, Regex regex) = pair;
+            
+            if (regex.IsMatch(Message))
+                badWords.TryAdd(word, regex);
+        });
+        
+        foreach ((string word, Regex regex) in badWords) {
+            foreach (Match match in regex.Matches(word))
+                Message = regex.Replace(Message, new string('*', match.Value.Length));
+        }
+    }
 
     [SuppressMessage("ReSharper", "InvertIf")]
     static ChatConfigComponent GetChatConfig(string path) {

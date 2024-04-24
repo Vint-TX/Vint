@@ -12,6 +12,7 @@ using Vint.Core.Server;
 namespace Vint.Core.Utils;
 
 public static class ChatUtils {
+    public static bool CensorshipEnabled => true;
     public static IEntity GlobalChat => GlobalEntities.GetEntity("chats", "En");
 
     public static Dictionary<string, Dictionary<string, string>> Localization { get; } = new() { // hardcoded, todo parse from configs

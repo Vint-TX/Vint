@@ -44,7 +44,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
             .ToList();
 
         foreach (Type commandModule in commandModules) {
-            Logger.Information("Generating {Name} group", commandModule.Name);
+            Logger.Debug("Generating {Name} group", commandModule.Name);
 
             ChatCommandModule chatCommandModule = (ChatCommandModule)Activator.CreateInstance(commandModule)!;
             ChatCommandGroupAttribute? chatCommandGroupAttribute = commandModule.GetCustomAttribute<ChatCommandGroupAttribute>();
@@ -56,13 +56,10 @@ public class ChatCommandProcessor : IChatCommandProcessor {
 
             foreach (MethodInfo command in commands) {
                 Logger.Verbose("Generating {Name} command", command.Name);
-                Logger.Debug("Generating {Name} command", command.Name);
 
                 ChatCommandAttribute chatCommandAttribute = command.GetCustomAttribute<ChatCommandAttribute>()!;
                 Logger.Verbose("Method name: {Method}, command name: {Command}", command.Name, chatCommandAttribute.Name);
-                Logger.Information("Method name: {Method}, command name: {Command}", command.Name, chatCommandAttribute.Name);
-
-
+                
                 IReadOnlyDictionary<string, OptionAttribute> options = command
                     .GetParameters()
                     .Where(parameter => parameter.GetCustomAttribute<OptionAttribute>() != null)
