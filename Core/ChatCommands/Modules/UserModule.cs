@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Text;
+using Serilog;
+using Serilog.Core;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
