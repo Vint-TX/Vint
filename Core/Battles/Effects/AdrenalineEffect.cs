@@ -8,6 +8,8 @@ public class AdrenalineEffect(
     float cooldownSpeedCoeff,
     float damageMultiplier
 ) : Effect(tank, level), IDamageMultiplierEffect {
+    public event Action? Deactivated;
+    
     public override void Activate() {
         Tank.Effects.Add(this);
         
@@ -18,6 +20,7 @@ public class AdrenalineEffect(
         Tank.Effects.TryRemove(this);
         
         Tank.UpdateModuleCooldownSpeed(1, true);
+        Deactivated?.Invoke();
     }
     
     public float Multiplier { get; } = damageMultiplier;

@@ -13,8 +13,8 @@ public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
         AimingSpeedComponent = BattleEntity.GetComponent<ShaftAimingSpeedComponent>();
     }
     
-    ShaftAimingSpeedComponent AimingSpeedComponent { get; }
     DateTimeOffset? AimingBeginTime { get; set; }
+    public ShaftAimingSpeedComponent AimingSpeedComponent { get; }
     public bool Aiming { get; private set; }
     public TimeSpan AimingDuration { get; private set; }
     public float EnergyDrainPerMs { get; private set; }

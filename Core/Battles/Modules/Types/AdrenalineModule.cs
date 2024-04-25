@@ -8,7 +8,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
-public class AdrenalineModule : PassiveBattleModule, IHealthModule, IDeathModule {
+public class AdrenalineModule : PassiveBattleModule, IHealthModule {
     public override string ConfigPath => "garage/module/upgrade/properties/adrenaline";
     
     public override bool ActivationCondition => Effect == null;
@@ -25,17 +25,15 @@ public class AdrenalineModule : PassiveBattleModule, IHealthModule, IDeathModule
         if (!CanBeActivated) return;
         
         Effect = GetEffect();
+        Effect.Deactivated += Deactivated;
         Effect.Activate();
         base.Activate();
     }
     
     public void OnHealthChanged(float before, float current, float max) {
-        if (current > HpToTrigger) Deactivate();
+        if (current > HpToTrigger || current == 0) TryDeactivate();
         else Activate();
     }
-    
-    public void OnDeath() =>
-        Deactivate();
     
     public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         base.Init(tank, userSlot, marketModule);
@@ -45,8 +43,7 @@ public class AdrenalineModule : PassiveBattleModule, IHealthModule, IDeathModule
         DamageMultiplier = Leveling.GetStat<ModuleDamageEffectMaxFactorPropertyComponent>(ConfigPath, Level);
     }
     
-    void Deactivate() {
-        Effect?.Deactivate();
-        Effect = null;
-    }
+    void TryDeactivate() => Effect?.Deactivate();
+    
+    void Deactivated() => Effect = null;
 }

@@ -583,8 +583,8 @@ public class BattleTank {
         foreach (IDeathModule deathModule in Modules.OfType<IDeathModule>())
             deathModule.OnDeath();
         
-        StateManager.SetState(new Dead(StateManager));
         BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), Tank);
+        StateManager.SetState(new Dead(StateManager));
         KillAssistants.Clear();
         
         if (Battle.TypeHandler is not MatchmakingHandler) return;

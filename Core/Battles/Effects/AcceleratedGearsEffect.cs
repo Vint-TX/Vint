@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Templates.Battle.Effect;
 
 namespace Vint.Core.Battles.Effects;
@@ -20,6 +21,11 @@ public class AcceleratedGearsEffect(
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed *= turretSpeed;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Acceleration *= turretAcceleration;
         
+        if (Tank.WeaponHandler is ShaftWeaponHandler shaft) {
+            shaft.AimingSpeedComponent.MaxHorizontalSpeed *= turretSpeed;
+            shaft.AimingSpeedComponent.HorizontalAcceleration *= turretAcceleration;
+        }
+        
         Tank.UpdateSpeed();
         
         Entities.Add(new AcceleratedGearsEffectTemplate().Create(Tank.BattlePlayer, Duration));
@@ -34,6 +40,11 @@ public class AcceleratedGearsEffect(
         Tank.OriginalSpeedComponent.TurnSpeed /= hullRotation;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed /= turretSpeed;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Acceleration /= turretAcceleration;
+        
+        if (Tank.WeaponHandler is ShaftWeaponHandler shaft) {
+            shaft.AimingSpeedComponent.MaxHorizontalSpeed /= turretSpeed;
+            shaft.AimingSpeedComponent.HorizontalAcceleration /= turretAcceleration;
+        }
         
         Tank.UpdateSpeed();
         UnshareAll();

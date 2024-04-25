@@ -27,7 +27,6 @@ public class KamikadzeEffect(
             weaponHandler.MinDamageDistance));
         
         Share(Tank.BattlePlayer);
-        
         Schedule(Duration, DeactivateInternal);
     }
     
