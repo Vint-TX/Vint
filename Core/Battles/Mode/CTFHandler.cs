@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Type;
@@ -12,18 +13,18 @@ public class CTFHandler : TeamHandler {
     public CTFHandler(Battle battle) : base(battle) {
         RedSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.RedTeam.ToList();
         BlueSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.BlueTeam.ToList();
-
-        Flags = new Dictionary<TeamColor, Flag> {
-            { TeamColor.Red, new Flag(Battle, RedTeam, TeamColor.Red, Battle.MapInfo.Flags.Red) },
-            { TeamColor.Blue, new Flag(Battle, BlueTeam, TeamColor.Blue, Battle.MapInfo.Flags.Blue) }
-        };
-
+        
+        Flags = new HashSet<Flag> {
+            new(Battle, RedTeam, TeamColor.Red, Battle.MapInfo.Flags.Red),
+            new(Battle, BlueTeam, TeamColor.Blue, Battle.MapInfo.Flags.Blue)
+        }.ToFrozenSet();
+        
         CanShareFlags = Battle.TypeHandler is not MatchmakingHandler;
     }
 
     bool CanShareFlags { get; set; }
 
-    public IReadOnlyDictionary<TeamColor, Flag> Flags { get; }
+    public FrozenSet<Flag> Flags { get; }
 
     protected override List<SpawnPoint> RedSpawnPoints { get; }
     protected override List<SpawnPoint> BlueSpawnPoints { get; }
@@ -33,27 +34,30 @@ public class CTFHandler : TeamHandler {
         CanShareFlags = true;
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.PlayerConnection.Share(Flags.Values.Select(flag => flag.Entity));
+            battlePlayer.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
     }
-
-    public override void OnFinished() { }
+    
+    public override void OnFinished() {
+        foreach (Flag flag in Flags)
+            flag.Drop(false);
+    }
 
     public override void PlayerEntered(BattlePlayer player) {
         base.PlayerEntered(player);
 
-        player.PlayerConnection.Share(Flags.Values.Select(flag => flag.PedestalEntity));
+        player.PlayerConnection.Share(Flags.Select(flag => flag.PedestalEntity));
 
         if (CanShareFlags)
-            player.PlayerConnection.Share(Flags.Values.Select(flag => flag.Entity));
+            player.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
     }
 
     public override void PlayerExited(BattlePlayer player) {
         base.PlayerExited(player);
 
-        foreach (Flag flag in Flags.Values.Where(flag => flag.Carrier == player))
+        foreach (Flag flag in Flags.Where(flag => flag.Carrier == player))
             flag.Drop(false);
 
-        player.PlayerConnection.UnshareIfShared(Flags.Values.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
+        player.PlayerConnection.UnshareIfShared(Flags.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
     }
 
     public override TeamColor GetDominatedTeam() {
@@ -78,7 +82,7 @@ public class CTFHandler : TeamHandler {
     };
 
     public override void Tick() {
-        foreach (Flag flag in Flags.Values)
+        foreach (Flag flag in Flags)
             flag.StateManager.Tick();
     }
 }

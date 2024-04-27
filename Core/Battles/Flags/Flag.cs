@@ -50,7 +50,7 @@ public class Flag {
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
 
         Carrier = carrier;
-        Assists.Add(new FlagAssist(carrier.Tank!, Position));
+        Assists.Add(new FlagAssist(carrier.Tank!) { LastPickupPoint = Position });
     }
 
     public void Drop(bool isUserAction) {
@@ -76,8 +76,8 @@ public class Flag {
         }
 
         UnfrozeForLastCarrierTime = DateTimeOffset.UtcNow.AddSeconds(3);
-
-        FlagAssist assist = Assists.SingleOrDefault(assist => assist.Player == LastCarrier?.Tank);
+        
+        FlagAssist assist = Assists.First(assist => assist.Tank == LastCarrier?.Tank);
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
     }
 
@@ -88,10 +88,11 @@ public class Flag {
 
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
         Carrier = carrier;
-
-        FlagAssist assist = Assists.SingleOrDefault(assist => assist.Player == carrier.Tank!, new FlagAssist(carrier.Tank, Position));
+        
+        FlagAssist assist = Assists.FirstOrDefault(assist => assist.Tank == carrier.Tank!,
+            new FlagAssist(carrier.Tank) { LastPickupPoint = Position });
+        
         assist.LastPickupPoint = Position;
-
         Assists.Add(assist);
     }
 
@@ -104,12 +105,13 @@ public class Flag {
         if (returner != null) {
             Entity.AddGroupComponent<TankGroupComponent>(returner.Tank!.Tank);
 
-            Vector3 carrierPedestal = ctf.Flags[LastCarrier!.TeamColor].PedestalPosition;
+            Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == LastCarrier?.TeamColor).PedestalPosition;
             Vector3 returnPosition = Position;
 
             float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
-            float traveledDistance = float.Min(Vector3.Distance(PedestalPosition, returnPosition), maxDistance);
-            int score = Convert.ToInt32(Math.Round(MathUtils.Map(traveledDistance, 0, maxDistance, 5, 40)));
+            float distanceToEnemyPedestal = Vector3.Distance(returnPosition, carrierPedestal);
+            float remainingDistance = float.Min(distanceToEnemyPedestal, maxDistance);
+            int score = Convert.ToInt32(Math.Round(MathUtils.Map(remainingDistance, maxDistance, 0, 2, 50)));
             int scoreWithBonus = returner.GetScoreWithBonus(score);
 
             returner.Tank!.UpdateStatistics(0, 0, 0, score);
@@ -153,12 +155,13 @@ public class Flag {
                 player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
 
             Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
-
-            Vector3 carrierPedestal = ctf.Flags[battlePlayer.TeamColor].PedestalPosition;
-            Vector3 pickupPosition = Position;
-
+            
+            FlagAssist carrierAssist = Assists.First(assist => assist.Tank == battlePlayer.Tank);
+            Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == battlePlayer.TeamColor).PedestalPosition;
+            
             float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
-            float traveledDistance = float.Min(Vector3.Distance(pickupPosition, carrierPedestal), maxDistance);
+            float carrierDistance = carrierAssist.TraveledDistance + Vector3.Distance(carrierAssist.LastPickupPoint, carrierPedestal);
+            float traveledDistance = float.Min(carrierDistance, maxDistance);
             int score = Convert.ToInt32(Math.Round(MathUtils.Map(traveledDistance, 0, maxDistance, 10, 75)));
             int scoreWithBonus = battlePlayer.GetScoreWithBonus(score);
 
@@ -166,9 +169,11 @@ public class Flag {
             battlePlayer.Tank!.UpdateStatistics(0, 0, 0, score);
             battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
 
-            foreach ((BattleTank? assistant, _, float dist) in Assists.Where(assist => assist.Player != battlePlayer.Tank)) { // bug in calculations
-                float distance = float.Min(dist, maxDistance);
-                int assistScore = Convert.ToInt32(Math.Round(MathUtils.Map(distance, 0, maxDistance, 1, 30)));
+            foreach (FlagAssist assist in Assists.Where(assist => assist.Tank != battlePlayer.Tank)) {
+                BattleTank assistant = assist.Tank;
+                
+                float distance = float.Min(assist.TraveledDistance, maxDistance);
+                int assistScore = Convert.ToInt32(Math.Round(MathUtils.Map(distance, 0, maxDistance, 2, 75 - score)));
                 int assistScoreWithBonus = assistant.BattlePlayer.GetScoreWithBonus(assistScore);
 
                 assistant.UserResult.FlagAssists += 1;
@@ -177,7 +182,7 @@ public class Flag {
             }
         } else
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
-                player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Battle.Entity);
+                player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Entity);
 
         Entity.RemoveComponent<TankGroupComponent>();
         Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);

@@ -49,7 +49,7 @@ public class Dead(
 
         if (BattleTank.Battle.ModeHandler is not CTFHandler ctf) return;
 
-        foreach (Flag flag in ctf.Flags.Values.Where(flag => flag.Carrier == BattleTank.BattlePlayer))
+        foreach (Flag flag in ctf.Flags.Where(flag => flag.Carrier == BattleTank.BattlePlayer))
             flag.Drop(false);
     }
 

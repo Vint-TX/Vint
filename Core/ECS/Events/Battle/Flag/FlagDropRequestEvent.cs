@@ -17,7 +17,7 @@ public class FlagDropRequestEvent : IServerEvent {
 
         if (battle.ModeHandler is not CTFHandler ctf) return;
 
-        Battles.Flags.Flag? flag = ctf.Flags.Values.SingleOrDefault(flag => flag.Entity == entities.ElementAt(0));
+        Battles.Flags.Flag? flag = ctf.Flags.SingleOrDefault(flag => flag.Entity == entities.ElementAt(0));
 
         if (flag?.StateManager.CurrentState is not Captured ||
             flag.TeamColor == battlePlayer.TeamColor) return;

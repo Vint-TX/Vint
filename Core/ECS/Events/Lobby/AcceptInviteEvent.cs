@@ -16,8 +16,8 @@ public class AcceptInviteEvent : IServerEvent {
 
             if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
                 battlePlayer.Battle.RemovePlayer(battlePlayer);
-            else
-                battlePlayer.Battle.RemovePlayerFromLobby(battlePlayer);
+            
+            battlePlayer.Battle.RemovePlayerFromLobby(battlePlayer);
         }
 
         connection.Server.BattleProcessor

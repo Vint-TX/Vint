@@ -12,30 +12,22 @@ namespace Vint.Core.Battles.Modules.Types;
 public class KamikadzeModule : TriggerBattleModule, IDeathModule {
     public override string ConfigPath => "garage/module/upgrade/properties/kamikadze";
     
-    public override KamikadzeEffect GetEffect() => new(WeaponHandler, Tank, Level);
+    public override KamikadzeEffect GetEffect() => new(Cooldown, MarketEntity, Radius, MinPercent, MaxDamage, MinDamage, Impact, Tank, Level);
     
-    KamikadzeWeaponHandler WeaponHandler { get; set; } = null!;
+    float Impact { get; set; }
+    float Radius { get; set; }
+    float MinPercent { get; set; }
+    float MinDamage { get; set; }
+    float MaxDamage { get; set; }
     
     public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         base.Init(tank, userSlot, marketModule);
         
-        float impact = Leveling.GetStat<ModuleEffectImpactPropertyComponent>(ConfigPath, Level);
-        float radius = Leveling.GetStat<ModuleEffectSplashRadiusPropertyComponent>(ConfigPath, Level);
-        float minPercent = Leveling.GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>(ConfigPath, Level) * 100;
-        float minDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
-        float maxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
-        
-        WeaponHandler = new KamikadzeWeaponHandler(Tank,
-            Cooldown,
-            MarketEntity,
-            true,
-            0,
-            radius,
-            minPercent,
-            maxDamage,
-            minDamage,
-            impact,
-            int.MaxValue);
+        Impact = Leveling.GetStat<ModuleEffectImpactPropertyComponent>(ConfigPath, Level);
+        Radius = Leveling.GetStat<ModuleEffectSplashRadiusPropertyComponent>(ConfigPath, Level);
+        MinPercent = Leveling.GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>(ConfigPath, Level) * 100;
+        MinDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
+        MaxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
     }
     
     public override void Activate() {

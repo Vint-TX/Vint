@@ -4,6 +4,7 @@ using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuUtilities.Memory;
 using ConcurrentCollections;
+using Vint.Core.Battles.ArcadeMode;
 using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Effects;
@@ -122,7 +123,11 @@ public class Battle {
             BattleMode.CTF => new CTFHandler(this),
             _ => throw new UnreachableException()
         };
-
+        
+        if (TypeHandler is not ArcadeHandler { ModeHandler: WithoutDamageHandler }) {
+            Properties.DamageEnabled = true;
+        }
+        
         DamageProcessor = new DamageProcessor();
 
         if (Properties.DisabledModules) {

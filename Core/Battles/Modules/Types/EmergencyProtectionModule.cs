@@ -61,6 +61,7 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
         Activate();
     }
     
+    public IEntity BattleEntity => Entity;
     public float TemperatureLimit => -0.99f;
     public float TemperatureDelta => -0.99f;
 }

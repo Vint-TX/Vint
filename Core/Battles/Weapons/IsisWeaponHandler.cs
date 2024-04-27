@@ -46,7 +46,7 @@ public class IsisWeaponHandler : StreamWeaponHandler {
         if (isEnemy) {
             CalculatedDamage heal = damage with { Value = damage.Value / 100 * SelfHealPercentage };
 
-            battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
+            battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
             battle.DamageProcessor.Heal(BattleTank, heal);
         } else {
             targetTank.UpdateTemperatureAssists(BattleTank, this, true);

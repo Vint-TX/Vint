@@ -21,6 +21,6 @@ public class RicochetWeaponHandler(
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
+        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 }

@@ -6,7 +6,7 @@ using Vint.Core.Server;
 namespace Vint.Core.Battles.Damage;
 
 public interface IDamageProcessor {
-    public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage);
+    public void Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage);
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage);
 
@@ -16,12 +16,13 @@ public interface IDamageProcessor {
 }
 
 public class DamageProcessor : IDamageProcessor {
-    public void Damage(BattleTank source, BattleTank target, IEntity weapon, CalculatedDamage damage) {
+    public void Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage) {
         if (damage.Value <= 0) return;
 
         DamageType type = Damage(target, damage);
         IPlayerConnection sourcePlayerConnection = source.BattlePlayer.PlayerConnection;
         source.DealtDamage += damage.Value;
+        target.BattlePlayer.PlayerConnection.Send(new DamageInfoTargetEvent(), battleWeapon, target.Tank);
 
         // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
         switch (type) {
@@ -29,7 +30,7 @@ public class DamageProcessor : IDamageProcessor {
                 if (source == target)
                     target.SelfDestruct();
                 else
-                    target.KillBy(source, weapon);
+                    target.KillBy(source, marketWeapon);
                 break;
 
             case DamageType.Normal:
@@ -53,10 +54,10 @@ public class DamageProcessor : IDamageProcessor {
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage) {
         if (damage.Value <= 0) return DamageType.Normal;
-
+        
         target.SetHealth(target.Health - damage.Value);
         target.TakenDamage += damage.Value;
-
+        
         return target.Health switch {
             <= 0 => DamageType.Kill,
             _ => damage.IsCritical ? DamageType.Critical : DamageType.Normal
@@ -76,8 +77,11 @@ public class DamageProcessor : IDamageProcessor {
 
     public void Heal(BattleTank target, CalculatedDamage damage) {
         if (damage.Value <= 0) return;
+        
+        float healed = Math.Min(target.MaxHealth - target.Health, damage.Value);
 
         target.SetHealth(target.Health + damage.Value);
+        target.TotalHealth += healed;
         target.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
                 damage.Value,
                 damage.IsCritical || damage.IsBackHit || damage.IsTurretHit,

@@ -69,7 +69,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
         }
         
         foreach ((BattleTank targetTank, CalculatedDamage damage) in tankToDamage)
-            battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
+            battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
     
     public override void OnTankDisable() {

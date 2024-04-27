@@ -9,18 +9,19 @@ public class KamikadzeWeaponHandler(
     BattleTank tank,
     TimeSpan cooldown,
     IEntity marketEntity,
+    IEntity battleEntity,
     bool damageWeakeningByDistance,
     float maxDamageDistance,
     float minDamageDistance,
     float minDamagePercent,
     float maxDamage,
     float minDamage,
-    float impact,
     int maxHitTargets
 ) : ModuleWeaponHandler(
     tank,
     cooldown,
     marketEntity,
+    battleEntity,
     damageWeakeningByDistance,
     maxDamageDistance,
     minDamageDistance,
@@ -29,8 +30,6 @@ public class KamikadzeWeaponHandler(
     minDamage,
     maxHitTargets
 ), ISplashWeaponHandler, IDiscreteWeaponHandler {
-    public float Impact { get; } = impact;
-    
     public override void Fire(HitTarget target, int targetIndex) => throw new NotSupportedException();
     
     public float MinSplashDamagePercent => MinDamagePercent;
@@ -48,7 +47,7 @@ public class KamikadzeWeaponHandler(
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true, true);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
+        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
     
     public float GetSplashMultiplier(float distance) {

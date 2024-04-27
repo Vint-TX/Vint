@@ -1,16 +1,23 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
+using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Effects;
 
 public class KamikadzeEffect(
-    KamikadzeWeaponHandler weaponHandler,
+    TimeSpan cooldown,
+    IEntity marketEntity,
+    float radius,
+    float minPercent,
+    float maxDamage,
+    float minDamage,
+    float impact,
     BattleTank tank,
     int level
 ) : Effect(tank, level), IModuleWeaponEffect {
-    public ModuleWeaponHandler WeaponHandler { get; } = weaponHandler;
+    public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
     
     public override void Activate() {
         if (IsActive) return;
@@ -18,13 +25,27 @@ public class KamikadzeEffect(
         CanBeDeactivated = false;
         Tank.Effects.Add(this);
         
-        Entities.Add(new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
+        IEntity entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
-            weaponHandler.Impact,
-            weaponHandler.MinDamagePercent,
-            weaponHandler.MaxDamageDistance,
-            weaponHandler.MinDamageDistance));
+            impact,
+            minPercent,
+            maxDamage,
+            minDamage);
+        
+        WeaponHandler = new KamikadzeWeaponHandler(Tank,
+            cooldown,
+            marketEntity,
+            entity,
+            true,
+            0,
+            radius,
+            minPercent,
+            maxDamage,
+            minDamage,
+            int.MaxValue);
+        
+        Entities.Add(entity);
         
         Share(Tank.BattlePlayer);
         Schedule(Duration, DeactivateInternal);

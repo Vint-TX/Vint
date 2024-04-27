@@ -9,6 +9,7 @@ public abstract class ModuleWeaponHandler(
     BattleTank tank,
     TimeSpan cooldown,
     IEntity marketEntity,
+    IEntity battleEntity,
     bool damageWeakeningByDistance,
     float maxDamageDistance,
     float minDamageDistance,
@@ -18,6 +19,7 @@ public abstract class ModuleWeaponHandler(
     int maxHitTargets
 ) : IWeaponHandler {
     public IEntity MarketEntity { get; } = marketEntity;
+    public IEntity BattleEntity { get; } = battleEntity;
     public float MinDamage { get; } = minDamage;
     public float MaxDamage { get; } = maxDamage;
     public IDamageCalculator DamageCalculator { get; } = new DamageCalculator();

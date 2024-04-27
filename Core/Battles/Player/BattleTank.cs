@@ -114,7 +114,7 @@ public class BattleTank {
             _ => throw new UnreachableException()
         };
         
-        Health = MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
+        Health = TotalHealth = MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         TemperatureConfig = ConfigManager.GetComponent<TemperatureConfigComponent>(Tank.TemplateAccessor!.ConfigPath!);
         
         Tank.ChangeComponent<HealthComponent>(component => {
@@ -153,6 +153,7 @@ public class BattleTank {
     public float TakenDamage { get; set; }
     
     public float Health { get; private set; }
+    public float TotalHealth { get; set; }
     public float MaxHealth { get; }
     
     public TemperatureConfigComponent TemperatureConfig { get; set; }
@@ -253,6 +254,7 @@ public class BattleTank {
             moduleWithoutEffect.Deactivate();
         }
         
+        TotalHealth = MaxHealth;
         TemperatureAssists.Clear();
         SetTemperature(0);
         Tank.ChangeComponent(OriginalSpeedComponent.Clone());
@@ -360,7 +362,7 @@ public class BattleTank {
                 float value = MathF.Round(MathUtils.Map(assist.CurrentTemperature, 0, assist.Weapon.TemperatureLimit, 0, assist.MaxDamage));
                 
                 CalculatedDamage damage = new(default, value, false, false, false, false);
-                Battle.DamageProcessor.Damage(assist.Assistant, this, assist.Weapon.MarketEntity, damage);
+                Battle.DamageProcessor.Damage(assist.Assistant, this, assist.Weapon.MarketEntity, assist.Weapon.BattleEntity, damage);
             }
             
             bool wasPositive = assist.CurrentTemperature > 0;
@@ -482,7 +484,10 @@ public class BattleTank {
                                                 BattlePlayer.TeamColor == other.BattlePlayer.TeamColor;
     
     public void KillBy(BattleTank killer, IEntity weapon) {
-        Dictionary<BattleTank, float> assistants = KillAssistants.Where(assist => assist.Key != this && assist.Key != killer).ToDictionary();
+        const int baseScore = 10;
+        
+        float coeff = TotalHealth / MaxHealth;
+        Dictionary<BattleTank, float> assistants = KillAssistants.Where(assist => assist.Key != this).ToDictionary();
         SelfKill();
         
         Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
@@ -494,26 +499,30 @@ public class BattleTank {
             connection.Send(killEvent, killer.BattleUser);
         }
         
-        killer.BattlePlayer.PlayerConnection.Send(
-            new VisualScoreKillEvent(BattlePlayer.GetScoreWithBonus(10), currentPlayer.Username, currentPlayer.Rank),
-            killer.BattleUser);
-        
-        killer.UpdateStatistics(1, 0, 0, 10);
-        UpdateStatistics(0, 0, 1, 0);
-        
-        killer.UpdateKillStreak();
-        ResetKillStreak(killer);
-        
         foreach ((BattleTank assistant, float damageDealt) in assistants) {
-            int percent = Convert.ToInt32(Math.Round(damageDealt / MaxHealth * 100));
+            float damage = Math.Min(damageDealt, TotalHealth);
+            int score = Convert.ToInt32(Math.Round(MathUtils.Map(damage, 0, TotalHealth, 1, baseScore * coeff)));
             
-            if (percent < 1) continue;
-            
-            int score = MathUtils.Map(percent, 1, 100, 1, 10);
-            assistant.UpdateStatistics(0, 1, 0, score);
-            assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreAssistEvent(BattlePlayer.GetScoreWithBonus(score),
-                percent,
-                currentPlayer.Username));
+            if (assistant == killer) {
+                score += 5;
+                
+                killer.BattlePlayer.PlayerConnection.Send(
+                    new VisualScoreKillEvent(BattlePlayer.GetScoreWithBonus(score), currentPlayer.Username, currentPlayer.Rank),
+                    killer.BattleUser);
+                
+                killer.UpdateStatistics(1, 0, 0, score);
+                UpdateStatistics(0, 0, 1, 0);
+                
+                killer.UpdateKillStreak();
+                ResetKillStreak(killer);
+            } else {
+                int percent = Convert.ToInt32(Math.Round(damage / TotalHealth * 100));
+                
+                assistant.UpdateStatistics(0, 1, 0, score);
+                assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreAssistEvent(BattlePlayer.GetScoreWithBonus(score),
+                    percent,
+                    currentPlayer.Username)); 
+            }
         }
         
         foreach (IKillModule killModule in killer.Modules.OfType<IKillModule>())
@@ -575,8 +584,8 @@ public class BattleTank {
         UpdateStatistics(-1, 0, 1, -10);
         ResetKillStreak();
         
-        if (Battle.ModeHandler is TDMHandler)
-            Battle.ModeHandler.UpdateScore(BattlePlayer.Team, -1);
+        if (Battle.ModeHandler is TDMHandler tdm)
+            tdm.UpdateScore(BattlePlayer.Team, -1);
     }
     
     void SelfKill() {

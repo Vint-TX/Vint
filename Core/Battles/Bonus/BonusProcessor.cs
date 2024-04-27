@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Bonus.Type;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -29,7 +30,7 @@ public class BonusProcessor : IBonusProcessor {
         
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach ((BonusType type, IEnumerable<BonusInfo> bonusesInfo) in bonusesInfos) {
-            if (type == BonusType.Gold /* && battle.TypeHandler is not MatchmakingHandler*/) continue;
+            if (type == BonusType.Gold && battle.TypeHandler is not MatchmakingHandler) continue;
             
             IEnumerable<BonusBox> bonusBoxes = type switch {
                 BonusType.Repair => bonusesInfo.Select(bonusInfo => new RepairBox(battle, bonusInfo.Position, bonusInfo.HasParachute)),

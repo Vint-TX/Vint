@@ -12,8 +12,8 @@ public abstract class FlagState(
     FlagStateManager stateManager
 ) : State {
     public override FlagStateManager StateManager { get; } = stateManager;
-    protected Flag Flag { get; } = stateManager.Flag;
-    protected Battle Battle { get; } = stateManager.Flag.Battle;
+    protected Flag Flag => StateManager.Flag;
+    protected Battle Battle => Flag.Battle;
 }
 
 public class OnPedestal(

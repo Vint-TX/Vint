@@ -31,7 +31,7 @@ public class ThunderWeaponHandler : DiscreteTankWeaponHandler, ISplashWeaponHand
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
         
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, damage);
+        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
     
     public float GetSplashMultiplier(float distance) {
