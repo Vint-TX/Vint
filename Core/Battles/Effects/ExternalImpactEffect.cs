@@ -34,7 +34,7 @@ public class ExternalImpactEffect(
         WeaponHandler = new ExternalImpactWeaponHandler(Tank,
             cooldown,
             marketEntity,
-            Entity!,
+            entity,
             true,
             0,
             radius,

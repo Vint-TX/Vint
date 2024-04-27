@@ -124,10 +124,7 @@ public class Battle {
             _ => throw new UnreachableException()
         };
         
-        if (TypeHandler is not ArcadeHandler { ModeHandler: WithoutDamageHandler }) {
-            Properties.DamageEnabled = true;
-        }
-        
+        Properties.DamageEnabled = TypeHandler is not ArcadeHandler { ModeHandler: WithoutDamageHandler };
         DamageProcessor = new DamageProcessor();
 
         if (Properties.DisabledModules) {
@@ -213,6 +210,12 @@ public class Battle {
 
         RoundEntity.AddComponentIfAbsent(new RoundRestartingStateComponent());
         LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
+        
+        if (TypeHandler is not CustomHandler) return;
+        
+        Setup();
+        ModeHandler.TransferParameters(ModeHandler);
+        StateManager.SetState(new NotStarted(StateManager));
     }
 
     public void Tick(double deltaTime) {
