@@ -50,7 +50,7 @@ public class Flag {
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
 
         Carrier = carrier;
-        Assists.Add(new FlagAssist(carrier.Tank!) { LastPickupPoint = Position });
+        Assists.Add(new FlagAssist(carrier.Tank!, Position));
     }
 
     public void Drop(bool isUserAction) {
@@ -76,7 +76,7 @@ public class Flag {
         }
 
         UnfrozeForLastCarrierTime = DateTimeOffset.UtcNow.AddSeconds(3);
-        
+
         FlagAssist assist = Assists.First(assist => assist.Tank == LastCarrier?.Tank);
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
     }
@@ -88,10 +88,9 @@ public class Flag {
 
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
         Carrier = carrier;
-        
-        FlagAssist assist = Assists.FirstOrDefault(assist => assist.Tank == carrier.Tank!,
-            new FlagAssist(carrier.Tank) { LastPickupPoint = Position });
-        
+
+        FlagAssist assist = Assists.FirstOrDefault(assist => assist.Tank == carrier.Tank!, new FlagAssist(carrier.Tank, Position));
+
         assist.LastPickupPoint = Position;
         Assists.Add(assist);
     }
@@ -116,7 +115,7 @@ public class Flag {
 
             returner.Tank!.UpdateStatistics(0, 0, 0, score);
             returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(scoreWithBonus), returner.BattleUser);
-            returner.Tank!.UserResult.FlagReturns += 1;
+            returner.Tank!.Statistics.FlagReturns += 1;
         }
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
@@ -155,34 +154,34 @@ public class Flag {
                 player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
 
             Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
-            
+
             FlagAssist carrierAssist = Assists.First(assist => assist.Tank == battlePlayer.Tank);
             Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == battlePlayer.TeamColor).PedestalPosition;
-            
+
             float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
             float carrierDistance = carrierAssist.TraveledDistance + Vector3.Distance(carrierAssist.LastPickupPoint, carrierPedestal);
             float traveledDistance = float.Min(carrierDistance, maxDistance);
             int score = Convert.ToInt32(Math.Round(MathUtils.Map(traveledDistance, 0, maxDistance, 10, 75)));
             int scoreWithBonus = battlePlayer.GetScoreWithBonus(score);
 
-            battlePlayer.Tank!.UserResult.Flags += 1;
+            battlePlayer.Tank!.Statistics.Flags += 1;
             battlePlayer.Tank!.UpdateStatistics(0, 0, 0, score);
             battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
 
             foreach (FlagAssist assist in Assists.Where(assist => assist.Tank != battlePlayer.Tank)) {
                 BattleTank assistant = assist.Tank;
-                
+
                 float distance = float.Min(assist.TraveledDistance, maxDistance);
                 int assistScore = Convert.ToInt32(Math.Round(MathUtils.Map(distance, 0, maxDistance, 2, 75 - score)));
                 int assistScoreWithBonus = assistant.BattlePlayer.GetScoreWithBonus(assistScore);
 
-                assistant.UserResult.FlagAssists += 1;
+                assistant.Statistics.FlagAssists += 1;
                 assistant.UpdateStatistics(0, 0, 0, assistScore);
                 assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(assistScoreWithBonus), assistant.BattleUser);
             }
         } else
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
-                player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Entity);
+                player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Entity, Battle.Entity);
 
         Entity.RemoveComponent<TankGroupComponent>();
         Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);

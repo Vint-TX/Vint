@@ -11,8 +11,8 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 8
 damagePerSecondProperty:
-  initialValue: 450.000
-  finalValue: 450.000
+  initialValue: 350.000
+  finalValue: 350.000
 heatDamageProperty:
   initialValue: 125
   finalValue: 125
@@ -62,11 +62,11 @@ visualProperties:
       normalizedValue: 1.00
   properties:
     - name: DPM
-      initialValue: 30000
-      finalValue: 30000
+      initialValue: 21000
+      finalValue: 21000
     - name: Damage per Second
-      initialValue: 500
-      finalValue: 500
+      initialValue: 350
+      finalValue: 350
     - name: Max Damage Distance
       initialValue: 68.6
       finalValue: 68.6

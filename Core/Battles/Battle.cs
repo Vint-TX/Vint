@@ -123,7 +123,7 @@ public class Battle {
             BattleMode.CTF => new CTFHandler(this),
             _ => throw new UnreachableException()
         };
-        
+
         Properties.DamageEnabled = TypeHandler is not ArcadeHandler { ModeHandler: WithoutDamageHandler };
         DamageProcessor = new DamageProcessor();
 
@@ -198,24 +198,25 @@ public class Battle {
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
             BattleTank battleTank = battlePlayer.Tank!;
             battleTank.Disable(true);
+            battleTank.CreateUserResult();
         }
 
-        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => !battlePlayer.InBattle))
-            RemovePlayerFromLobby(battlePlayer);
+        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => !battlePlayer.InBattle)) {
+            try {
+                RemovePlayerFromLobby(battlePlayer);
+            } catch { /**/ }
+        }
 
-        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.OnBattleEnded();
+        foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattle)) {
+            try {
+                battlePlayer.OnBattleEnded();
+            } catch { /**/ }
+        }
 
         // todo
 
         RoundEntity.AddComponentIfAbsent(new RoundRestartingStateComponent());
         LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
-        
-        if (TypeHandler is not CustomHandler) return;
-        
-        Setup();
-        ModeHandler.TransferParameters(ModeHandler);
-        StateManager.SetState(new NotStarted(StateManager));
     }
 
     public void Tick(double deltaTime) {
@@ -265,6 +266,7 @@ public class Battle {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 
+        battlePlayer.Tank?.RoundUser.RemoveComponent<RoundUserComponent>();
         connection.Unshare(Entity, RoundEntity, BattleChatEntity);
         connection.Unshare(Players
             .Where(player => player.InBattleAsTank &&
@@ -310,6 +312,8 @@ public class Battle {
                 RemovePlayer(spectator);
             }
         }
+
+        battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
     }
 
     public void RemovePlayerFromLobby(BattlePlayer battlePlayer) {

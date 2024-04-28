@@ -105,24 +105,21 @@ public class Active(
     public override void Start() {
         base.Start();
 
-        if (BattleTank.WeaponHandler is HammerWeaponHandler hammer)
-            BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), hammer.BattleEntity);
-        
         foreach (BattleModule module in BattleTank.Modules)
             module.TryUnblock();
     }
-    
+
     public override void Started() {
         base.Started();
-        
+
         // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
         foreach (BattleModule module in BattleTank.Modules.OfType<IAlwaysActiveModule>())
             module.Activate();
     }
-    
+
     public override void Finish() {
         base.Finish();
-        
+
         foreach (BattleModule module in BattleTank.Modules)
             module.TryBlock(true);
     }

@@ -48,16 +48,16 @@ public class DamageProcessor : IDamageProcessor {
 
         sourcePlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
                 damage.Value,
-                damage.IsCritical || damage.IsBackHit || damage.IsTurretHit),
+                damage.IsCritical || damage.IsSpecial),
             target.Tank);
     }
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage) {
         if (damage.Value <= 0) return DamageType.Normal;
-        
+
         target.SetHealth(target.Health - damage.Value);
         target.TakenDamage += damage.Value;
-        
+
         return target.Health switch {
             <= 0 => DamageType.Kill,
             _ => damage.IsCritical ? DamageType.Critical : DamageType.Normal
@@ -70,21 +70,21 @@ public class DamageProcessor : IDamageProcessor {
         Heal(target, damage);
         source.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
                 damage.Value,
-                damage.IsCritical || damage.IsBackHit || damage.IsTurretHit,
+                damage.IsCritical || damage.IsSpecial,
                 true),
             target.Tank);
     }
 
     public void Heal(BattleTank target, CalculatedDamage damage) {
         if (damage.Value <= 0) return;
-        
+
         float healed = Math.Min(target.MaxHealth - target.Health, damage.Value);
 
         target.SetHealth(target.Health + damage.Value);
         target.TotalHealth += healed;
         target.BattlePlayer.PlayerConnection.Send(new DamageInfoEvent(damage.HitPoint,
                 damage.Value,
-                damage.IsCritical || damage.IsBackHit || damage.IsTurretHit,
+                damage.IsCritical || damage.IsSpecial,
                 true),
             target.Tank);
     }

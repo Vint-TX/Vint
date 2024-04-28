@@ -181,7 +181,6 @@ public class Running(
                 break;
         }
 
-
         if (Battle.Timer < 0)
             Battle.Finish();
 
@@ -241,5 +240,15 @@ public class Ended(
     public override void Start() {
         Battle.Timer = 0;
         base.Start();
+    }
+
+    public override void Finish() {
+        base.Finish();
+
+        if (Battle.TypeHandler is not CustomHandler) return;
+
+        ModeHandler prevHandler = Battle.ModeHandler;
+        Battle.Setup();
+        Battle.ModeHandler.TransferParameters(prevHandler);
     }
 }

@@ -12,7 +12,7 @@ public class DMHandler(
     public override int CalculateReputationDelta(BattlePlayer battlePlayer) {
         List<BattlePlayer> players = Battle.Players
             .Where(player => player.InBattleAsTank)
-            .OrderByDescending(player => player.Tank!.UserResult.ScoreWithoutPremium)
+            .OrderByDescending(player => player.Tank!.Result.ScoreWithoutPremium)
             .ToList();
 
         Database.Models.Player player = battlePlayer.PlayerConnection.Player;

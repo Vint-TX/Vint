@@ -12,7 +12,7 @@ using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponen
 
 namespace Vint.Core.Battles.Effects;
 
-public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendableEffect, ISpeedEffect {
+public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/turbospeed";
     const string MarketConfigPath = "garage/module/upgrade/properties/turbospeed";
     
@@ -29,7 +29,6 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
     }
     
     ModuleTurbospeedEffectPropertyComponent MultipliersComponent { get; }
-    SpeedComponent SpeedComponentWithEffect { get; set; } = null!;
     
     public void Extend(int newLevel) {
         if (!IsActive) return;
@@ -63,32 +62,6 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
     
     public float Multiplier { get; private set; }
     
-    public void UpdateTankSpeed() {
-        if (!IsActive) return;
-        
-        if (Tank.Temperature < 0) {
-            float minTemperature = Tank.TemperatureConfig.MinTemperature;
-            
-            float minSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.Speed);
-            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponentWithEffect.TurnSpeed, 5);
-            float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed);
-            
-            float newSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.Speed, minSpeed);
-            float newTurnSpeed = MathUtils.Map(Tank.Temperature, 0, minTemperature, SpeedComponentWithEffect.TurnSpeed, minTurnSpeed);
-            float newWeaponSpeed =
-                MathUtils.Map(Tank.Temperature, 0, minTemperature, Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed, minWeaponSpeed);
-            
-            Tank.Tank.ChangeComponent<SpeedComponent>(component => {
-                component.Speed = newSpeed;
-                component.TurnSpeed = newTurnSpeed;
-            });
-            Tank.Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
-        } else {
-            Tank.Tank.ChangeComponent(SpeedComponentWithEffect.Clone());
-            Tank.Weapon.ChangeComponent(Tank.WeaponHandler.OriginalWeaponRotationComponent.Clone());
-        }
-    }
-    
     public float SupplyMultiplier { get; }
     public float SupplyDurationMs { get; }
     
@@ -100,9 +73,8 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         Entities.Add(new TurboSpeedEffectTemplate().Create(Tank.BattlePlayer, Duration));
         ShareAll();
         
-        Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= Multiplier);
-        SpeedComponentWithEffect = Tank.Tank.GetComponent<SpeedComponent>().Clone();
-        
+        Tank.OriginalSpeedComponent.Speed *= Multiplier;
+        Tank.UpdateSpeed();
         Schedule(Duration, Deactivate);
     }
     
@@ -114,6 +86,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         UnshareAll();
         Entities.Clear();
         
-        Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed /= Multiplier);
+        Tank.OriginalSpeedComponent.Speed /= Multiplier;
+        Tank.UpdateSpeed();
     }
 }

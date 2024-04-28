@@ -10,50 +10,89 @@ using Vint.Core.Server;
 
 namespace Vint.Core.Battles.Results;
 
-public class UserResult(
-    BattlePlayer battlePlayer
-) {
-    [ProtocolIgnore] IPlayerConnection Connection => battlePlayer.PlayerConnection;
-    [ProtocolIgnore] Database.Models.Player Player => Connection.Player;
-    [ProtocolIgnore] Battle Battle => battlePlayer.Battle;
-    [ProtocolIgnore] Preset Preset => Player.CurrentPreset;
-    [ProtocolIgnore] BattleTank BattleTank => battlePlayer.Tank!;
-    [ProtocolIgnore] IEntity RoundUser => BattleTank.RoundUser;
+public class UserResult {
+    public UserResult(BattlePlayer battlePlayer) {
+        IPlayerConnection connection = battlePlayer.PlayerConnection;
+        Database.Models.Player player = connection.Player;
+        Battle battle = battlePlayer.Battle;
+        Preset preset = player.CurrentPreset;
+        BattleTank battleTank = battlePlayer.Tank!;
+        IEntity roundUser = battleTank.RoundUser;
+        RoundUserStatisticsComponent statisticsComponent = roundUser.GetComponent<RoundUserStatisticsComponent>();
+        BattleTankStatistics tankStatistics = battleTank.Statistics;
+        int battleUserScoreWithBonus = battlePlayer.GetBattleUserScoreWithBonus();
 
-    [ProtocolName("Uid")] public string Username => Player.Username;
-    public long UserId => Player.Id;
-    public long BattleUserId => battlePlayer.BattleUser.Id;
-    public string AvatarId => Connection.User.GetComponent<UserAvatarComponent>().Id;
-    public int Rank => Player.Rank;
-    public double ReputationInBattle => Player.Reputation;
-    public long EnterTime => BattleTank.BattleEnterTime.ToUnixTimeMilliseconds();
-    public int Place => RoundUser.GetComponent<RoundUserStatisticsComponent>().Place;
-    public int Kills => RoundUser.GetComponent<RoundUserStatisticsComponent>().Kills;
-    public int KillAssists => RoundUser.GetComponent<RoundUserStatisticsComponent>().KillAssists;
-    public int KillStrike { get; set; }
-    public int Deaths => RoundUser.GetComponent<RoundUserStatisticsComponent>().Deaths;
-    public int Damage => (int)BattleTank.DealtDamage;
-    public int Score => battlePlayer.GetScoreWithBonus(ScoreWithoutPremium);
-    public int ScoreWithoutPremium => RoundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses;
-    public int ScoreToExperience => battlePlayer.GetBattleUserScoreWithBonus();
-    public int RankExpDelta => battlePlayer.GetBattleUserScoreWithBonus();
-    public int ItemsExpDelta => battlePlayer.GetBattleUserScoreWithBonus();
-    public int Flags { get; set; }
-    public int FlagAssists { get; set; }
-    public int FlagReturns { get; set; }
-    public long WeaponId => Preset.Weapon.Id;
-    public long HullId => Preset.Hull.Id;
-    public long PaintId => Preset.Paint.Id;
-    public long CoatingId => Preset.Cover.Id;
-    public long HullSkinId => Preset.HullSkin.Id;
-    public long WeaponSkinId => Preset.WeaponSkin.Id;
-    public int BonusesTaken { get; set; }
-    public bool UnfairMatching => Battle.ModeHandler is TeamHandler teamHandler && teamHandler.BluePlayers.Count() != teamHandler.RedPlayers.Count();
-    public bool Deserted { get; set; } // todo
-    public IEntity League => Player.LeagueEntity;
-    public List<ModuleInfo> Modules => Preset.Modules
-        .Select(pModule => new ModuleInfo {
+        Username = player.Username;
+        UserId = player.Id;
+        BattleUserId = battlePlayer.BattleUser.Id;
+        AvatarId = connection.User.GetComponent<UserAvatarComponent>().Id;
+        Rank = player.Rank;
+        ReputationInBattle = player.Reputation;
+        EnterTime = battleTank.BattleEnterTime.ToUnixTimeMilliseconds();
+
+        Place = statisticsComponent.Place;
+        Kills = statisticsComponent.Kills;
+        KillAssists = statisticsComponent.KillAssists;
+        KillStrike = tankStatistics.KillStrike;
+        Deaths = statisticsComponent.Deaths;
+        Damage = (int)battleTank.DealtDamage;
+
+        ScoreWithoutPremium = statisticsComponent.ScoreWithoutBonuses;
+        Score = battlePlayer.GetScoreWithBonus(ScoreWithoutPremium);
+        ScoreToExperience = battleUserScoreWithBonus;
+        RankExpDelta = battleUserScoreWithBonus;
+        ItemsExpDelta = battleUserScoreWithBonus;
+
+        Flags = tankStatistics.Flags;
+        FlagAssists = tankStatistics.FlagAssists;
+        FlagReturns = tankStatistics.FlagReturns;
+        BonusesTaken = tankStatistics.BonusesTaken;
+
+        WeaponId = preset.Weapon.Id;
+        HullId = preset.Hull.Id;
+        PaintId = preset.Paint.Id;
+        CoatingId = preset.Cover.Id;
+        HullSkinId = preset.HullSkin.Id;
+        WeaponSkinId = preset.WeaponSkin.Id;
+
+        UnfairMatching = battle.ModeHandler is TeamHandler teamHandler && teamHandler.BluePlayers.Count() != teamHandler.RedPlayers.Count();
+        League = player.LeagueEntity;
+        Modules = preset.Modules.Select(pModule => new ModuleInfo {
             ModuleId = pModule.Entity.Id,
-            UpgradeLevel = pModule.Entity.GetUserModule(Connection).GetComponent<ModuleUpgradeLevelComponent>().Level
+            UpgradeLevel = pModule.Entity.GetUserModule(connection).GetComponent<ModuleUpgradeLevelComponent>().Level
         }).ToList();
+    }
+
+    [ProtocolName("Uid")] public string Username { get; }
+    public long UserId { get; }
+    public long BattleUserId { get; }
+    public string AvatarId { get; }
+    public int Rank { get; }
+    public double ReputationInBattle { get; }
+    public long EnterTime { get; }
+    public int Place { get; }
+    public int Kills { get; }
+    public int KillAssists { get; }
+    public int KillStrike { get; }
+    public int Deaths { get; }
+    public int Damage { get; }
+    public int Score { get; }
+    public int ScoreWithoutPremium { get; }
+    public int ScoreToExperience { get; }
+    public int RankExpDelta { get; }
+    public int ItemsExpDelta { get; }
+    public int Flags { get; }
+    public int FlagAssists { get; }
+    public int FlagReturns { get; }
+    public long WeaponId { get; }
+    public long HullId { get; }
+    public long PaintId { get; }
+    public long CoatingId { get; }
+    public long HullSkinId { get; }
+    public long WeaponSkinId { get; }
+    public int BonusesTaken { get; }
+    public bool UnfairMatching { get; }
+    public bool Deserted { get; set; } // todo
+    public IEntity League { get; }
+    public List<ModuleInfo> Modules { get; }
 }

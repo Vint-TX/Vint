@@ -11,11 +11,11 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 13
 minDamageProperty:
-  initialValue: 278.621
-  finalValue: 278.621
+  initialValue: 285.6
+  finalValue: 285.6
 maxDamageProperty:
-  initialValue: 292.579
-  finalValue: 292.579
+  initialValue: 285.6
+  finalValue: 285.6
 energyChargePerShotProperty:
   initialValue: 0.200
   finalValue: 0.200

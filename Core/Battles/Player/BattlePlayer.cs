@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using LinqToDB;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;

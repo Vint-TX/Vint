@@ -11,11 +11,11 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 6
 minDamageProperty:
-  initialValue: 627.009
-  finalValue: 627.009
+  initialValue: 634
+  finalValue: 634
 maxDamageProperty:
-  initialValue: 640.991
-  finalValue: 640.991
+  initialValue: 634
+  finalValue: 634
 reloadTimeProperty:
   initialValue: 3.000
   finalValue: 3.000

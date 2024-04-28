@@ -3,13 +3,14 @@ using Vint.Core.Battles.Player;
 
 namespace Vint.Core.Battles.Flags;
 
-public sealed record FlagAssist(
-    BattleTank Tank
+public class FlagAssist(
+    BattleTank tank,
+    Vector3 pickupPoint
 ) {
-    public bool Equals(FlagAssist? other) => Tank.Equals(other?.Tank);
-
-    public override int GetHashCode() => Tank.GetHashCode();
-    
     public float TraveledDistance { get; set; }
-    public required Vector3 LastPickupPoint { get; set; }
+    public Vector3 LastPickupPoint { get; set; } = pickupPoint;
+    public BattleTank Tank { get; } = tank;
+
+    public override bool Equals(object? obj) => obj is BattleTank other && other == Tank;
+    public override int GetHashCode() => Tank.GetHashCode();
 }

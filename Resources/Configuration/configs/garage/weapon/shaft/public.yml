@@ -20,26 +20,26 @@ energyChargePerShotProperty: # UnloadEnergyPerQuickShot (value)
   initialValue: 0.429
   finalValue: 0.429
 energyChargeSpeedProperty: # UnloadAimingEnergyPerSec (value), UnloadEnergyPerSec (value)
-  initialValue: 0.222
-  finalValue: 0.222
+  initialValue: 0.134
+  finalValue: 0.134
 energyRechargeSpeedProperty: # ReloadEnergyPerSec (value)
   initialValue: 0.120
   finalValue: 0.120
-reloadTimeProperty: # ReloadEnergyPerSec (1/value), CooldownIntervalSec (value) 
+reloadTimeProperty: # ReloadEnergyPerSec (1/value), CooldownIntervalSec (value)
   initialValue: 2.500
   finalValue: 2.500
 aimingVerticalAccelerationProperty:
-  initialValue: 15.000
-  finalValue: 15.000
+  initialValue: 20.000
+  finalValue: 20.000
 aimingHorizontalAccelerationProperty:
-  initialValue: 30.000
-  finalValue: 30.000
+  initialValue: 40.000
+  finalValue: 40.000
 aimingVerticalSpeedProperty:
-  initialValue: 15.000
-  finalValue: 15.000
+  initialValue: 20.000
+  finalValue: 20.000
 aimingHorizontalSpeedProperty:
-  initialValue: 30.000
-  finalValue: 30.000
+  initialValue: 40.000
+  finalValue: 40.000
 impactProperty:
   initialValue: 1.000
   finalValue: 1.000
@@ -70,8 +70,8 @@ visualProperties:
       finalValue: 1050
       format: 0
     - name: Loading Time
-      initialValue: 4.5
-      finalValue: 4.5
+      initialValue: 7.5
+      finalValue: 7.5
       format: 0.0
       unit: sec
     - name: Reload Time
@@ -80,8 +80,8 @@ visualProperties:
       format: 0.0
       unit: sec
     - name: Aiming Speed
-      initialValue: 15
-      finalValue: 15
+      initialValue: 20
+      finalValue: 20
       format: 0
       unit: degrees_per_sec
     - name: Impact

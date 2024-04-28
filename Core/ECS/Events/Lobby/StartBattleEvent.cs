@@ -12,13 +12,8 @@ public class StartBattleEvent : IServerEvent {
         BattleStateManager stateManager = battle.StateManager;
 
         switch (stateManager.CurrentState) {
-            case NotStarted: {
+            case NotStarted or Ended: {
                 stateManager.SetState(new Starting(stateManager));
-                break;
-            }
-
-            default: {
-                connection.BattlePlayer.Init();
                 break;
             }
         }

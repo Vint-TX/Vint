@@ -11,14 +11,26 @@ order:
 crystalsPurchaseUserRankRestriction:
   restrictionValue: 0
 minDamageProperty:
-  initialValue: 319.828
-  finalValue: 319.828
+  initialValue: 325
+  finalValue: 325
 maxDamageProperty:
-  initialValue: 330.172
-  finalValue: 330.172
+  initialValue: 325
+  finalValue: 325
 reloadTimeProperty:
   initialValue: 1.300
   finalValue: 1.300
+startDamageProgressionProperty:
+  initialValue: 330
+  finalValue: 330
+maxDamageProgressionProperty:
+  initialValue: 480
+  finalValue: 480
+damageProgressionDeltaProperty:
+  initialValue: 30
+  finalValue: 30
+damageProgressionResetTimeSecProperty:
+  initialValue: 3
+  finalValue: 3
 criticalDamageProperty:
   initialValue: 325.000
   finalValue: 325.000
@@ -44,8 +56,8 @@ minDamagePercentProperty:
   initialValue: 52.174
   finalValue: 52.174
 impactProperty:
-  initialValue: 2.500
-  finalValue: 2.500
+  initialValue: 3.000
+  finalValue: 3.000
 kickbackProperty:
   initialValue: 3.000
   finalValue: 3.000
@@ -87,7 +99,7 @@ visualProperties:
       format: 0.0
       unit: m
     - name: Impact
-      initialValue: 2.5
-      finalValue: 2.5
+      initialValue: 3.0
+      finalValue: 3.0
       format: 0.0
 ...

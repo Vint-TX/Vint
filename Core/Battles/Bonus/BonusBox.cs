@@ -47,7 +47,7 @@ public abstract class BonusBox {
             connection.Unshare(Entity);
         }
 
-        battleTank.UserResult.BonusesTaken++;
+        battleTank.Statistics.BonusesTaken++;
         Entity = null;
         CanTake = true;
     }

@@ -94,10 +94,6 @@ public interface IDamageMultiplierEffect : IMultiplierEffect {
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit);
 }
 
-public interface ISpeedEffect : IMultiplierEffect {
-    public void UpdateTankSpeed();
-}
-
 public interface IModuleWeaponEffect {
     public ModuleWeaponHandler WeaponHandler { get; }
 }
