@@ -198,8 +198,6 @@ public class BattleTank {
     public SpeedComponent OriginalSpeedComponent { get; }
 
     public void Tick() {
-        if (Battle.StateManager.CurrentState is not Running or WarmUp) return;
-
         if (BattlePlayer.IsPaused &&
             (!BattlePlayer.KickTime.HasValue ||
              DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
