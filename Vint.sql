@@ -10,6 +10,49 @@
 /*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
 
 --
+-- Table structure for table `DiscordLinks`
+--
+
+DROP TABLE IF EXISTS `DiscordLinks`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DiscordLinks`
+(
+    `DiscordId`    bigint(20) UNSIGNED NOT NULL,
+    `PlayerId`     bigint(20)          NOT NULL,
+    `Status`       tinyint(3) UNSIGNED NOT NULL,
+    `AccessToken`  text                NOT NULL,
+    `RefreshToken` text                NOT NULL,
+    `StateHash`    text                NOT NULL,
+    PRIMARY KEY (`PlayerId`, `DiscordId`),
+    FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PlayersPreferences`
+--
+
+DROP TABLE IF EXISTS `PlayersPreferences`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PlayersPreferences`
+(
+    `PlayerId`         bigint(20) NOT NULL,
+    `RememberMe`       tinyint(1) NOT NULL,
+    `Subscribed`       tinyint(1) NOT NULL,
+    `DiscordConfirmed` tinyint(1) NOT NULL,
+    `CountryCode`      text       NOT NULL,
+    PRIMARY KEY (`PlayerId`),
+    FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Avatars`
 --
 
@@ -191,33 +234,31 @@ DROP TABLE IF EXISTS `Players`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Players`
 (
-    `Id`                   bigint(20)       NOT NULL,
-    `Username`             text             NOT NULL COLLATE 'utf8mb4_bin',
-    `Email`                text             NOT NULL COLLATE 'utf8mb4_bin',
-    `RememberMe`           tinyint(1)       NOT NULL,
-    `AutoLoginToken`       varbinary(255) DEFAULT NULL,
-    `PasswordHash`         varbinary(255)   NOT NULL,
-    `HardwareFingerprint`  text             NOT NULL,
-    `Groups`               int(11)          NOT NULL,
-    `RewardedLeagues`      int(11)          NOT NULL,
-    `Subscribed`           tinyint(1)       NOT NULL,
-    `CountryCode`          text             NOT NULL,
-    `CurrentAvatarId`      bigint(20)       NOT NULL,
-    `CurrentPresetIndex`   int(11)          NOT NULL,
-    `Crystals`             bigint(20)       NOT NULL,
-    `XCrystals`            bigint(20)       NOT NULL,
-    `GoldBoxItems`         int(11)          NOT NULL,
-    `Experience`           bigint(20)       NOT NULL,
-    `FractionName`         text             NOT NULL,
-    `FractionScore`        bigint(20)       NOT NULL,
-    `RegistrationTime`     timestamp        NOT NULL,
-    `LastLoginTime`        timestamp        NOT NULL,
-    `Reputation`           int(11) UNSIGNED NOT NULL,
-    `GameplayChestScore`   bigint(20)       NOT NULL,
-    `DesertedBattlesCount` bigint(20)       NOT NULL,
-    `NeedGoodBattlesCount` int(11)          NOT NULL,
+    `Id`                   bigint(20)              NOT NULL,
+    `Username`             text                    NOT NULL COLLATE 'utf8mb4_bin',
+    `DiscordId`            bigint(20)     UNSIGNED NOT NULL,
+    `AutoLoginToken`       varbinary(255) DEFAULT  NULL,
+    `PasswordHash`         varbinary(255)          NOT NULL,
+    `HardwareFingerprint`  text                    NOT NULL,
+    `Groups`               int(11)                 NOT NULL,
+    `RewardedLeagues`      int(11)                 NOT NULL,
+    `Subscribed`           tinyint(1)              NOT NULL,
+    `CurrentAvatarId`      bigint(20)              NOT NULL,
+    `CurrentPresetIndex`   int(11)                 NOT NULL,
+    `Crystals`             bigint(20)              NOT NULL,
+    `XCrystals`            bigint(20)              NOT NULL,
+    `GoldBoxItems`         int(11)                 NOT NULL,
+    `Experience`           bigint(20)              NOT NULL,
+    `FractionName`         text                    NOT NULL,
+    `FractionScore`        bigint(20)              NOT NULL,
+    `RegistrationTime`     timestamp               NOT NULL,
+    `LastLoginTime`        timestamp               NOT NULL,
+    `Reputation`           int(11)        UNSIGNED NOT NULL,
+    `GameplayChestScore`   bigint(20)              NOT NULL,
+    `DesertedBattlesCount` bigint(20)              NOT NULL,
+    `NeedGoodBattlesCount` int(11)                 NOT NULL,
     PRIMARY KEY (`Id`),
-    UNIQUE (`Username`, `Email`)
+    UNIQUE (`Username`, `DiscordId`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;

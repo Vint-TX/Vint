@@ -5,7 +5,7 @@ b1dffc5b-0a9f-4442-9db9-ad97a8cfd532:
 2ad0eb41-7d95-4eb1-9dd0-a1084b99652f:
   'accessRecovery/continue': 'ПРОДОЛЖИТЬ'
 8c83981c-e9c5-4ba9-8006-70c217af065f:
-  'accessRecovery/email': 'Введи свой адрес электронной почты'
+  'accessRecovery/email': 'Введи своё имя пользователя в Discord'
 ec7ff56e-6fba-4947-87d0-a2a753c0974a:
   'accessRecovery/sendAgainTimer': 'Повторная отправка возможна через %seconds% секунд'
 1331ad70-36ed-4934-a12f-e581558ba692:
@@ -587,7 +587,7 @@ e98fffc4-2352-41ac-89a8-f3730a6bef31:
 699e3fc5-845b-4bb0-8dbf-f0d49251fa55:
   'lobby/garage/modules': 'МОДУЛИ'
 45ba48b5-f6a1-4635-9445-af9bc04b39b7:
-  'loginHint': 'Введите имя или адрес почты'
+  'loginHint': 'Введите имя или имя пользователя в Discord'
 d07d184f-bd49-4a9b-8bf0-4a8e62fc4662:
   'loginReward/day': 'День'
 ccdd2ee8-5987-4979-aedf-aafa4b542c39:
@@ -1023,9 +1023,9 @@ fdf69445-12c7-44af-af11-10789a9b1388:
 e5184936-a2cf-404a-a5bd-74c0703481b7:
   'main/profile/account/changeCountryTitle': 'Выберите свою страну'
 1b46842f-0f20-4cb3-8aee-5b17ae8e362d:
-  'main/profile/account/changeEmailButton': 'сменить e-mail'
+  'main/profile/account/changeEmailButton': 'сменить Discord'
 219ee2b5-bb2e-42a7-87fc-aaf58180d647:
-  'main/profile/account/email': 'e-mail'
+  'main/profile/account/email': 'Discord'
 bf4ee955-0ace-41a9-9157-4b64e0e54a92:
   'main/profile/account/forumButton': 'форум'
 9f0f2903-7571-4eb8-bb02-6e31fcc67183:
@@ -1043,17 +1043,17 @@ d11bb1b7-b0ab-4ec4-b3f3-c1424da9006e:
 73787731-0163-49e6-ad8b-cbe586efcf13:
   'main/profile/change': 'сменить'
 fa69112d-e90a-4141-82d1-dba5085a5763:
-  'main/profile/changeEmail/confirmationHint': 'На адрес электронной почты %EMAIL% отправлено письмо. Перейди по ссылке в этом письме, чтобы подтвердить новый адрес.'
+  'main/profile/changeEmail/confirmationHint': 'На аккаунт в Discord %EMAIL% отправлено сообщение. Перейди по ссылке в этом сообщении, чтобы подтвердить новый Discord аккаунт.'
 22e5a287-4cbc-459e-b7bb-6a44aa3620d9:
-  'main/profile/changeEmail/confitmEmailHint': 'Укажи адрес своей электронной почты и подтверди его, чтобы защитить аккаунт, и получи подарок!'
+  'main/profile/changeEmail/confitmEmailHint': 'Укажи имя пользователя в Discord и подтверди его, чтобы защитить аккаунт, и получи подарок!'
 00709797-bbaa-4bb7-9381-1566fd211acc:
   'main/profile/changeEmail/continue': 'Продолжить'
 147f99da-1ec0-468d-9c88-d007cea80d9c:
-  'main/profile/changeEmail/hint': 'Введи новый e-mail'
+  'main/profile/changeEmail/hint': 'Введи новое имя пользователя в Discord'
 60b92b6f-2e91-4c18-b8cc-dd52a5f06d3f:
   'main/profile/changeEmail/sendAgain': 'Отправить снова'
 ac4c58c4-1040-4622-932c-28a3fb8921d5:
-  'main/profile/changeEmail/title': 'Смена e-mail'
+  'main/profile/changeEmail/title': 'Смена Discord'
 ede2e1df-1306-42ef-8d81-c6285e0b46cc:
   'main/profile/changeNickname/cancel': 'Отмена'
 e00adf1b-fd4d-4acd-a7fb-3a20dce9c7ca:

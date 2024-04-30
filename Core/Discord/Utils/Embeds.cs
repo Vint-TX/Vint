@@ -22,11 +22,17 @@ static class Embeds {
     public static DiscordEmbedBuilder GetClosedDMsEmbed(string description) => GetErrorEmbed(
         $"{description}\n\nНажмите ПКМ по серверу, выберите \"Настройки конфиденциальности\" и включите пункт \"Личные сообщения\".");
 
+    public static DiscordEmbedBuilder GetAccountConfirmationEmbed(string username) =>
+        GetNotificationEmbed(
+            "Confirm your Discord to protect your account, and receive a gift!",
+            $"Confirm your account, {username}!",
+            $"Vint, {DateTime.Today.Year}");
+
     public static DiscordEmbedBuilder GetSuccessfulEmbed(string description, string title = "Success", string? footer = null) =>
-        GetEmbed(title, description, footer, "#44944A");
+        GetEmbed(title, description, footer, "#6495ED");
 
     public static DiscordEmbedBuilder GetNotificationEmbed(string description, string title = "Information", string? footer = null) =>
-        GetEmbed(title, description, footer, "#6495ED");
+        GetEmbed(title, description, footer, "#8DFF00");
 
     public static DiscordEmbedBuilder GetWarningEmbed(string description, string title = "Warning", string? footer = null) =>
         GetEmbed(title, description, footer, "#FFCC00");

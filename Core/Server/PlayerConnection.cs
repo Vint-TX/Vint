@@ -4,12 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using ConcurrentCollections;
+using DSharpPlus.Entities;
 using LinqToDB;
 using Serilog;
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.Discord.Utils;
 using Vint.Core.ECS.Components.Battle.Rewards;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Entrance;
@@ -74,8 +76,8 @@ public interface IPlayerConnection {
     public void Register(
         string username,
         string encryptedPasswordDigest,
-        string email,
         string hardwareFingerprint,
+        ulong discordId,
         bool subscribed,
         bool steam,
         bool quickRegistration);
@@ -164,8 +166,8 @@ public abstract class PlayerConnection(
     public void Register(
         string username,
         string encryptedPasswordDigest,
-        string email,
         string hardwareFingerprint,
+        ulong discordId,
         bool subscribed,
         bool steam,
         bool quickRegistration) {
@@ -176,25 +178,28 @@ public abstract class PlayerConnection(
         Player = new Player {
             Id = EntityRegistry.FreeId,
             Username = username,
-            Email = email,
-            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
+            DiscordId = discordId,
             HardwareFingerprint = hardwareFingerprint,
-            Subscribed = subscribed,
             RegistrationTime = DateTimeOffset.UtcNow,
             LastLoginTime = DateTimeOffset.UtcNow,
             PasswordHash = passwordHash
         };
 
         using (DbConnection db = new()) {
+            db.BeginTransaction();
             db.Insert(Player);
 
             if (Invite != null) {
                 Invite.RemainingUses--;
                 db.Update(Invite);
             }
+
+            db.CommitTransaction();
         }
 
-        Player.InitializeNew();
+        Player.InitializeNew(ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode, subscribed);
+        Server.DiscordBot?.LinkPlayer(Player);
+
         Login(true, true, hardwareFingerprint);
     }
 
@@ -204,7 +209,7 @@ public abstract class PlayerConnection(
         string hardwareFingerprint) {
         Logger = Logger.WithPlayer((SocketPlayerConnection)this);
 
-        Player.RememberMe = rememberMe;
+        Player.Preferences.RememberMe = rememberMe;
         Player.LastLoginTime = DateTimeOffset.UtcNow;
         Player.HardwareFingerprint = hardwareFingerprint;
 
@@ -220,7 +225,7 @@ public abstract class PlayerConnection(
             Send(new SaveAutoLoginTokenEvent(Player.Username, encryptedAutoLoginToken));
         }
 
-        User = new UserTemplate().Create(Player);
+        User = new UserTemplate().Create(this, Player);
         Share(User);
 
         ClientSession.AddComponentFrom<UserGroupComponent>(User);
@@ -235,7 +240,9 @@ public abstract class PlayerConnection(
         Logger.Warning("Logged in");
 
         using DbConnection db = new();
+
         db.Update(Player);
+        db.Update(Player.Preferences);
     }
 
     public void ChangePassword(string passwordDigest) {
@@ -269,13 +276,14 @@ public abstract class PlayerConnection(
         League oldLeagueIndex = Player.League;
         uint oldReputation = Player.Reputation;
 
+        uint reputation = (uint)Math.Clamp(oldReputation + delta, 0, 99999);
+
         reputationStats ??= new ReputationStatistics {
             Player = Player,
             Date = date,
-            SeasonNumber = ConfigManager.SeasonNumber
+            SeasonNumber = ConfigManager.SeasonNumber,
+            Reputation = reputation
         };
-
-        uint reputation = (uint)Math.Clamp(oldReputation + delta, 0, 99999);
 
         Player.Reputation = reputation;
         seasonStats.Reputation = reputation;
@@ -500,7 +508,7 @@ public abstract class PlayerConnection(
                     module = new Module { Player = Player, Id = moduleId };
                     Player.Modules.Add(module);
                 }
-                
+
                 module.Cards += amount;
                 db.InsertOrReplace(module);
                 break;

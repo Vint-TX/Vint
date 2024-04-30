@@ -24,6 +24,7 @@ public class AutoLoginUserEvent : IServerEvent {
         using DbConnection db = new();
         Player? player = db.Players
             .LoadWith(player => player.Modules)
+            .LoadWith(player => player.Preferences)
             .SingleOrDefault(player => player.Username == Username);
 
         Punishment? ban = player?.GetBanInfo();
@@ -32,7 +33,7 @@ public class AutoLoginUserEvent : IServerEvent {
             .Where(conn => conn.IsOnline && conn.Player.Username == Username)
             .ToList();
 
-        if (player is not { RememberMe: true } ||
+        if (player is not { Preferences.RememberMe: true } ||
             ban is { Active: true } ||
             connections.Count != 0 ||
             player.HardwareFingerprint != HardwareFingerprint ||

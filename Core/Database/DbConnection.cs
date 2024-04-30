@@ -47,4 +47,5 @@ public sealed class DbConnection() : DataConnection(Schema) {
     public ITable<PresetModule> PresetModules => this.GetTable<PresetModule>();
     public ITable<Invite> Invites => this.GetTable<Invite>();
     public ITable<Punishment> Punishments => this.GetTable<Punishment>();
+    public ITable<PlayerPreferences> PlayersPreferences => this.GetTable<PlayerPreferences>();
 }

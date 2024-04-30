@@ -22,6 +22,7 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
         using DbConnection db = new();
         Player? player = db.Players
             .LoadWith(player => player.Modules)
+            .LoadWith(player => player.Preferences)
             .SingleOrDefault(player => player.Username == Username);
 
         if (player == null) {

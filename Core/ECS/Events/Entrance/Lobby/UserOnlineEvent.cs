@@ -64,7 +64,6 @@ public class UserOnlineEvent : IServerEvent {
             slot.AddGroupComponent<ModuleGroupComponent>(module);
         }
 
-        connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
         connection.Send(new PaymentSectionLoadedEvent());
 
         IQueryable<Relation> relations = db.Relations.Where(relation => relation.SourcePlayerId == player.Id);

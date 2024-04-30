@@ -8,16 +8,14 @@ namespace Vint.Core.Database.Models;
 
 [Table("Players")]
 public class Player {
-    [PrimaryKey] public long Id { get; init; }
+    [PrimaryKey] public required long Id { get; init; }
 
-    [Column(DataType = DataType.Text)] public string Username { get; set; } = null!;
-    [Column(DataType = DataType.Text)] public string Email { get; set; } = null!;
-
-    [Column] public bool RememberMe { get; set; }
+    [Column(DataType = DataType.Text)] public required string Username { get; set; } = null!;
+    [Column] public required ulong DiscordId { get; set; }
 
     [Column] public byte[] AutoLoginToken { get; set; } = [];
-    [Column] public byte[] PasswordHash { get; set; } = [];
-    [Column(DataType = DataType.Text)] public string HardwareFingerprint { get; set; } = "";
+    [Column] public required byte[] PasswordHash { get; set; } = [];
+    [Column(DataType = DataType.Text)] public required string HardwareFingerprint { get; set; } = "";
 
     [Column] public PlayerGroups Groups { get; set; }
     [NotColumn] public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
@@ -26,9 +24,6 @@ public class Player {
     [NotColumn] public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
 
     [Column] public League RewardedLeagues { get; set; }
-
-    [Column] public bool Subscribed { get; set; }
-    [Column(DataType = DataType.Text)] public string CountryCode { get; set; } = "RU";
 
     [Column] public long CurrentAvatarId { get; set; }
     [Column] public int CurrentPresetIndex { get; set; }
@@ -83,8 +78,11 @@ public class Player {
 
     [NotColumn] public IEntity Fraction => GlobalEntities.GetEntity("fractions", FractionName);
 
-    [Column] public DateTimeOffset RegistrationTime { get; init; }
-    [Column] public DateTimeOffset LastLoginTime { get; set; }
+    [Column] public required DateTimeOffset RegistrationTime { get; init; }
+    [Column] public required DateTimeOffset LastLoginTime { get; set; }
+
+    [Association(ThisKey = nameof(Id), OtherKey = nameof(PlayerPreferences.PlayerId))]
+    public PlayerPreferences Preferences { get; private set; } = null!;
 
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Statistics.PlayerId))]
     public Statistics Stats { get; private set; } = null!;
@@ -137,7 +135,7 @@ public class Player {
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Punishment.PlayerId))]
     public List<Punishment> Punishments { get; private set; } = null!;
 
-    public void InitializeNew() {
+    public void InitializeNew(string countryCode, bool subscribed) {
         CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
         Reputation = 100;
 
@@ -172,6 +170,7 @@ public class Player {
 
             db.Insert(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.SeasonNumber });
             db.Insert(new Statistics { Player = this });
+            db.Insert(new PlayerPreferences { Player = this, CountryCode = countryCode, Subscribed = subscribed });
 
             db.CommitTransaction();
         }

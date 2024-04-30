@@ -4,13 +4,13 @@ namespace Vint.Core.Database.Models;
 
 [Table("Covers")]
 public class Cover {
-    [NotColumn] Player _player = null!;
-    [PrimaryKey(1)] public long Id { get; init; }
+    [NotColumn] readonly Player _player = null!;
+    [PrimaryKey(1)] public required long Id { get; init; }
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
-    public Player Player {
+    public required Player Player {
         get => _player;
-        set {
+        init {
             _player = value;
             PlayerId = value.Id;
         }

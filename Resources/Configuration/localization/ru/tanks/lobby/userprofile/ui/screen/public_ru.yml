@@ -1,25 +1,25 @@
 ﻿changeUserEmailScreen:
-  header: ЭЛЕКТРОННАЯ ПОЧТА
+  header: DISCORD
   sendButton: ПРОДОЛЖИТЬ
-  rightPanelHint: Укажи адрес своей электронной почты и подтверди его, чтобы защитить аккаунт, и получи подарок!
+  rightPanelHint: Укажи имя пользователя своего Discord аккаунта и подтверди его, чтобы защитить аккаунт, и получи подарок!
 confirmUserEmailScreen:
-  header: ЭЛЕКТРОННАЯ ПОЧТА
-  confirmationHint: 'На адрес электронной почты %EMAIL% отправлено письмо. Перейди по ссылке в этом письме, чтобы подтвердить новый адрес.'
+  header: DISCORD
+  confirmationHint: 'На Discord %EMAIL% отправлено сообщение. Перейди по ссылке в этом сообщении, чтобы подтвердить новый Discord аккаунт.'
   sendAgainText: Выслать повторно
-  rightPanelHint: Подтверди адрес своей электронной почты, чтобы защитить аккаунт, и получи подарок!
+  rightPanelHint: Подтверди свой Discord аккаунт, чтобы защитить аккаунт, и получи подарок!
 viewUserEmailScreen:
-  header: ЭЛЕКТРОННАЯ ПОЧТА
-  yourEmail: 'Твой адрес электронной почты: %EMAIL%'
+  header: DISCORD
+  yourEmail: 'Твой Discord аккаунт: %EMAIL%'
 enterUserEmailScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА
   continueButton: ПРОДОЛЖИТЬ
-  rightPanelHint: Если ты забыл свой электронный адрес, напиши в техподдержку с любой почты на help@tankix.com
+  rightPanelHint: Если ты забыл своё имя пользователя в Discord, напиши в техподдержку в https://discord.gg/agqBQ2Ug2W # xdd
 enterConfirmationCodeScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА
   continueButton: ПОДТВЕРДИТЬ
   sendAgainText: ВЫСЛАТЬ КОД
   confirmationCodeText: Введи полученный код
-  confirmationHint: 'На адрес %EMAIL% отправлено письмо с кодом подтверждения для восстановления доступа к аккаунту.'
+  confirmationHint: 'На Discord %EMAIL% отправлено сообщение с кодом подтверждения для восстановления доступа к аккаунту.'
   invalidCodeMessage: Введён неверный код
 enterNewPasswordScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА

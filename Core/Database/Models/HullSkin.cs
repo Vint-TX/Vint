@@ -4,15 +4,15 @@ namespace Vint.Core.Database.Models;
 
 [Table("HullSkins")]
 public class HullSkin {
-    [NotColumn] Player _player = null!;
-    [PrimaryKey(2)] public long Id { get; init; }
+    [NotColumn] readonly Player _player = null!;
+    [PrimaryKey(2)] public required long Id { get; init; }
 
-    [PrimaryKey(1)] public long HullId { get; init; }
+    [PrimaryKey(1)] public required long HullId { get; init; }
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
-    public Player Player {
+    public required Player Player {
         get => _player;
-        set {
+        init {
             _player = value;
             PlayerId = value.Id;
         }

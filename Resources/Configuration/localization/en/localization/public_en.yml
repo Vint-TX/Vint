@@ -5,7 +5,7 @@ b1dffc5b-0a9f-4442-9db9-ad97a8cfd532:
 2ad0eb41-7d95-4eb1-9dd0-a1084b99652f:
   'accessRecovery/continue': 'CONTINUE'
 8c83981c-e9c5-4ba9-8006-70c217af065f:
-  'accessRecovery/email': 'Enter your email'
+  'accessRecovery/email': 'Enter your Discord username'
 ec7ff56e-6fba-4947-87d0-a2a753c0974a:
   'accessRecovery/sendAgainTimer': 'You can repeat a request in %seconds% seconds'
 1331ad70-36ed-4934-a12f-e581558ba692:
@@ -587,7 +587,7 @@ e98fffc4-2352-41ac-89a8-f3730a6bef31:
 699e3fc5-845b-4bb0-8dbf-f0d49251fa55:
   'lobby/garage/modules': 'MODULES'
 45ba48b5-f6a1-4635-9445-af9bc04b39b7:
-  'loginHint': 'Nickname or email address'
+  'loginHint': 'Nickname or Discord username'
 d07d184f-bd49-4a9b-8bf0-4a8e62fc4662:
   'loginReward/day': 'Day'
 ccdd2ee8-5987-4979-aedf-aafa4b542c39:
@@ -1023,9 +1023,9 @@ fdf69445-12c7-44af-af11-10789a9b1388:
 e5184936-a2cf-404a-a5bd-74c0703481b7:
   'main/profile/account/changeCountryTitle': 'Select your country'
 1b46842f-0f20-4cb3-8aee-5b17ae8e362d:
-  'main/profile/account/changeEmailButton': 'change e-mail'
+  'main/profile/account/changeEmailButton': 'change Discord'
 219ee2b5-bb2e-42a7-87fc-aaf58180d647:
-  'main/profile/account/email': 'e-mail'
+  'main/profile/account/email': 'Discord username'
 bf4ee955-0ace-41a9-9157-4b64e0e54a92:
   'main/profile/account/forumButton': 'forum'
 9f0f2903-7571-4eb8-bb02-6e31fcc67183:
@@ -1035,7 +1035,7 @@ f9e45e86-73a8-4944-b315-231dbd16a213:
 eda07e0f-9355-47aa-82ce-8bc01648cfca:
   'main/profile/account/promocodeButton': 'enter promocode'
 dca36499-c974-4a54-957c-ce00be3056ca:
-  'main/profile/account/subscribe': 'Subscribe your email to receive promo-codes, special offers and news'
+  'main/profile/account/subscribe': 'Subscribe your Discord to receive promo-codes, special offers and news'
 cfecbeee-1628-4ba9-a25d-bed1382ccef6:
   'main/profile/actionsButton': 'Actions'
 d11bb1b7-b0ab-4ec4-b3f3-c1424da9006e:

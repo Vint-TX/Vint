@@ -55,13 +55,13 @@ mobilePaymentCheckoutScreen:
   aboutLabel: 'Счёт Мобильного платежа выставлен успешно. На указанный номер телефона будет выслана смс с инструкцией по подтверждению платежа.'
   rightPanelHint: 'ПОКУПКА ПОЯВИТСЯ НА ВАШЕМ АККАУНТЕ В ТЕЧЕНИЕ НЕСКОЛЬКИХ МИНУТ ПОСЛЕ ОТВЕТА НА СООБЩЕНИЕ'
 forceEnterEmailScreen:
-  header: ЭЛЕКТРОННАЯ ПОЧТА
-  rightPanelHint: 'Спасибо за платёж в Tanki X. Введите адрес электронной почты для получения чека об оплате.'
+  header: DISCORD
+  rightPanelHint: 'Спасибо за платёж в Tanki X. Введите имя пользователя в Discord для получения чека об оплате.'
   logoutButton: Выход из игры
   logoutButtonYes: Да
   logoutButtonNo: Нет
   confirmButton: Подтвердить
-  placeholder: Ваш e-mail
+  placeholder: Ваш Discord
 firstPurchaseConfirmScreen:
   header: 'Первая покупка кристаллов'
   confirmationText: 'Вы собираетесь приобрести Х-кристаллы со скидкой на первую покупку. Обратите внимание, что предложение действует только один раз. Если вы уже покупали Х-кристаллы до этого, то получите {0} Х-кристаллов.'

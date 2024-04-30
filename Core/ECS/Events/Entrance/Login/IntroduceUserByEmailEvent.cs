@@ -10,18 +10,24 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Login;
 
-[ProtocolId(1458846544326)]
-public class IntroduceUserByEmailEvent : IntroduceUserEvent {
+[ProtocolId(1458846544326), Obsolete]
+public class IntroduceUserByEmailEvent : IntroduceUserEvent { // obsolete?
     public string Email { get; private set; } = null!;
 
     public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Information("Login by email '{Email}'", Email);
+        logger.Information("Login by email '{Email}' (OBSOLETE)", Email);
 
-        using DbConnection db = new();
+        connection.Player = null!;
+        connection.Send(new DiscordInvalidEvent(Email));
+        connection.Send(new LoginFailedEvent());
+        return;
+
+        /*using DbConnection db = new();
         Player? player = db.Players
             .LoadWith(player => player.Modules)
+            .LoadWith(player => player.Preferences)
             .SingleOrDefault(player => player.Email == Email);
 
         if (player == null) {
@@ -32,6 +38,6 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
         }
 
         connection.Player = player;
-        connection.Send(new PersonalPasscodeEvent());
+        connection.Send(new PersonalPasscodeEvent());*/
     }
 }

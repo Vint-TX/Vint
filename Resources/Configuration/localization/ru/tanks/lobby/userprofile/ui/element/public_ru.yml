@@ -1,9 +1,9 @@
 emailInputField:
-  hint: Адрес электронной почты
-  emailIsInvalid: Введён неверный адрес электронной почты
-  emailIsOccupied: Введённый адрес уже зарегистрирован
-  emailIsNotConfirmed: Введённый адрес электронной почты не подтверждён
+  hint: Имя пользователя в Discord
+  emailIsInvalid: 'Введённый Discord аккаунт не состоит на сервере в Discord. Ссылка: https://discord.gg/agqBQ2Ug2W'
+  emailIsOccupied: Введённый Discord аккаунт уже зарегистрирован
+  emailIsNotConfirmed: Введённое имя пользователя в Discord не подтверждено
 changeEmailButton:
-  text: Изменить email
+  text: Изменить Discord
 helpButton:
-  url: 'https://help.tankix.com/ru/tanki-x/forms/free-request'
+  url: 'https://discord.gg/agqBQ2Ug2W'

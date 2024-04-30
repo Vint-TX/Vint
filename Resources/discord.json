@@ -1,3 +1,5 @@
 {
+  "oauth2Url": "https://discord.com/oauth2/authorize?client_id=1198304969221218417&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Fdiscord%2Fauth&scope=identify+role_connections.write+guilds.join",
+  "guildId": 1196050317607972934,
   "reportsChannelId": 1196058513693216838
 }

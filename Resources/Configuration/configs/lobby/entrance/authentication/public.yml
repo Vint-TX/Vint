@@ -4,12 +4,12 @@ entranceValidationRules:
   loginBeginingRegex: "^[a-zA-Z0-9].*$"
   loginEndingRegex: "^.*[a-zA-Z0-9]$"
   loginSpecTogetherRegex: "[-_.]{2,}"
-  emailRegex: ".+@.+\\..+"
+  emailRegex: "^(?!.*?\\.{2,})[a-z0-9_\\.]{2,32}$"
   passwordRegex: "^.*$"
   minLoginLength: 2
   maxLoginLength: 20
   minPasswordLength: 6
   maxPasswordLength: 20
-  minEmailLength: 6
-  maxEmailLength: 254
+  minEmailLength: 2
+  maxEmailLength: 32
   maxCaptchaLength: 12

@@ -5,10 +5,10 @@ using Vint.Core.ECS.Components.Server;
 namespace Vint.Core.Utils;
 
 public static class RegexUtils {
-    public static EntranceValidationRulesComponent ValidationRules { get; } =
+    static EntranceValidationRulesComponent ValidationRules { get; } =
         ConfigManager.GetComponent<EntranceValidationRulesComponent>("lobby/entrance/authentication");
 
-    static Regex EmailRegex { get; } = new(ValidationRules.EmailRegex);
+    static Regex DiscordUsernameRegex { get; } = new(ValidationRules.EmailRegex);
 
     static Regex LoginBeginingRegex { get; } = new(ValidationRules.LoginBeginingRegex);
 
@@ -22,7 +22,7 @@ public static class RegexUtils {
 
     static Regex PasswordRegex { get; } = new(ValidationRules.PasswordRegex);
 
-    public static bool IsEmailValid(string email) => EmailRegex.IsMatch(email);
+    public static bool IsDiscordUsernameValid(string email) => DiscordUsernameRegex.IsMatch(email);
 
     static bool IsLoginSymbolsValid(string login) => LoginSymbolsRegex.IsMatch(login);
 

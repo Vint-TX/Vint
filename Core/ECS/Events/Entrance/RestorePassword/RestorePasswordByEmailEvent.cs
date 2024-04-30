@@ -7,13 +7,13 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
 
 [ProtocolId(1460106433434)]
-public class RestorePasswordByEmailEvent : IServerEvent {
-    public string Email { get; private set; } = null!;
+public class RestorePasswordByDiscordEvent : IServerEvent {
+    [ProtocolName("Email")] public string Username { get; private set; } = null!;
 
     public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Warning("Restoring password '{Email}'", Email);
+        logger.Warning("Restoring password '{Username}'", Username);
 /*
         using DbConnection db = new();
         Player? player = db.Players.SingleOrDefault(player => player.Email == Email);

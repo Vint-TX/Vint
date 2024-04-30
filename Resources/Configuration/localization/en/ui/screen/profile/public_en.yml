@@ -15,7 +15,7 @@ profileScreenLocalization:
   removeFriendButtonText: UNFRIEND
   removeFriendButtonConfirmText: 'YES'
   removeFriendButtonCancelText: 'NO'
-  goToConfirmEmailScreenButtonText: Email settings
+  goToConfirmEmailScreenButtonText: Discord settings
   goToChangeUIDScreenButtonText: Change nickname
   goToPromoCodesScreenButtonText: Promo code
   enterAsSpectatorButtonText: SPECTATE

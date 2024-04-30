@@ -1,7 +1,7 @@
 ---
 entranceScreen:
   header: LOG IN
-  enterNameOrEmail: Nickname or email address
+  enterNameOrEmail: Nickname or Discord username
   enterPassword: Password
   enterSymbolsFromCaptcha: Please type the characters you see on the picture
   rememberMeCheckbox: Remember me
@@ -10,7 +10,7 @@ entranceScreen:
   incorrectPassword: Password is incorrect
   incorrectCaptcha: Incorrect. Please try again.
   incorrectLogin: User not found
-  unconfirmedEmail: Email is not registered
+  unconfirmedEmail: Discord is not registered
   loginFailed: Login failed. Please try again.
   registration: SIGN UP
 inviteScreen:

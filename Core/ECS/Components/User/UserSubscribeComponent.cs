@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.User;
 public class UserSubscribeComponent(
     bool subscribed
 ) : IComponent {
-    public bool Subscribed => subscribed;
+    public bool Subscribed { get; set; } = subscribed;
 }

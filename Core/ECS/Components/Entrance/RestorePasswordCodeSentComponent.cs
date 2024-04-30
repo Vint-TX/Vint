@@ -4,7 +4,7 @@ namespace Vint.Core.ECS.Components.Entrance;
 
 [ProtocolId(1479198715562)]
 public class RestorePasswordCodeSentComponent(
-    string email
+    string discordUsername
 ) : IComponent {
-    public string Email => email;
+    [ProtocolName("Email")] public string DiscordUsername { get; private set; } = discordUsername;
 }

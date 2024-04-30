@@ -4,13 +4,13 @@ namespace Vint.Core.Database.Models;
 
 [Table("Relations")]
 public class Relation {
-    [NotColumn] Player _sourcePlayer = null!;
-    [NotColumn] Player _targetPlayer = null!;
+    [NotColumn] readonly Player _sourcePlayer = null!;
+    [NotColumn] readonly Player _targetPlayer = null!;
 
     [Association(ThisKey = nameof(SourcePlayerId), OtherKey = nameof(Player.Id))]
-    public Player SourcePlayer {
+    public required Player SourcePlayer {
         get => _sourcePlayer;
-        set {
+        init {
             _sourcePlayer = value;
             SourcePlayerId = value.Id;
         }
@@ -19,9 +19,9 @@ public class Relation {
     [PrimaryKey(0)] public long SourcePlayerId { get; private set; }
 
     [Association(ThisKey = nameof(TargetPlayerId), OtherKey = nameof(Player.Id))]
-    public Player TargetPlayer {
+    public required Player TargetPlayer {
         get => _targetPlayer;
-        set {
+        init {
             _targetPlayer = value;
             TargetPlayerId = value.Id;
         }
@@ -29,7 +29,7 @@ public class Relation {
 
     [PrimaryKey(1)] public long TargetPlayerId { get; private set; }
 
-    [Column] public RelationTypes Types { get; set; }
+    [Column] public required RelationTypes Types { get; set; }
 }
 
 [Flags]

@@ -4,12 +4,12 @@ namespace Vint.Core.Database.Models;
 
 [Table("Statistics")]
 public class Statistics {
-    [NotColumn] Player _player = null!;
+    [NotColumn] readonly Player _player = null!;
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
-    public Player Player {
+    public required Player Player {
         get => _player;
-        set {
+        init {
             _player = value;
             PlayerId = value.Id;
         }

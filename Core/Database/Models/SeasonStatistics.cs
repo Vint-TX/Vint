@@ -5,19 +5,19 @@ namespace Vint.Core.Database.Models;
 
 [Table("SeasonStatistics")]
 public class SeasonStatistics {
-    [NotColumn] Player _player = null!;
+    [NotColumn] readonly Player _player = null!;
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
-    public Player Player {
+    public required Player Player {
         get => _player;
-        set {
+        init {
             _player = value;
             PlayerId = value.Id;
         }
     }
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
-    [PrimaryKey(1)] public uint SeasonNumber { get; init; }
+    [PrimaryKey(1)] public required uint SeasonNumber { get; init; }
 
     [Column] public uint Reputation { get; set; }
     [Column] public uint BattlesPlayed { get; set; }

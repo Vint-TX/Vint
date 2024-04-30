@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Components.User;
 public class UserCountryComponent(
     string countryCode
 ) : IComponent {
-    public string CountryCode { get; private set; } = countryCode;
+    public string CountryCode { get; set; } = countryCode;
 }

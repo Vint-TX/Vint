@@ -55,13 +55,13 @@ mobilePaymentCheckoutScreen:
   aboutLabel: Mobile payment invoice issued. Instructions on how to proceed with the payment have been sent via SMS.
   rightPanelHint: THE PURCHASE WILL BE ADDED TO YOUR ACCOUNT A FEW MINUTES AFTER YOU REPLY TO THE MESSAGE
 forceEnterEmailScreen:
-  header: EMAIL
-  rightPanelHint: 'Thank you for making a purchase in Tanki X. Please specify the email address where we can send your receipt to.'
+  header: DISCORD
+  rightPanelHint: 'Thank you for making a purchase in Tanki X. Please specify the Discord where we can send your receipt to.'
   logoutButton: Quit Game
   logoutButtonYes: Yes
   logoutButtonNo: No
   confirmButton: Verify
-  placeholder: Your e-mail
+  placeholder: Your Discord username
 firstPurchaseConfirmScreen:
   header: 'First crystals purchase'
   confirmationText: "You're about to buy X-crystals with the first purchase discount. Please be aware, that this is a one-time offer. If you've already purchased X-crystals with the first purchase discount, you can not benefit from this discount again, hence, you will receive {0} X-crystals."

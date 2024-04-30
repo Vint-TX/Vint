@@ -1,10 +1,10 @@
 ---
 emailInputField:
-  hint: Email Address
-  emailIsInvalid: The email you entered is incorrect
-  emailIsOccupied: The email you entered is already registered
-  emailIsNotConfirmed: Email is not registered
+  hint: Discord Username
+  emailIsInvalid: The Discord username you entered is incorrect
+  emailIsOccupied: The Discord username you entered is already registered
+  emailIsNotConfirmed: Discord is not registered
 changeEmailButton:
-  text: Change email
+  text: Change Discord
 helpButton:
-  url: https://help.tankix.com/ru/tanki-x/forms/free-request
+  url: https://discord.gg/agqBQ2Ug2W

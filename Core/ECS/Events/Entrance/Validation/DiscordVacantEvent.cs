@@ -3,8 +3,8 @@
 namespace Vint.Core.ECS.Events.Entrance.Validation;
 
 [ProtocolId(635906273700499964)]
-public class EmailVacantEvent(
-    string email
+public class DiscordVacantEvent(
+    string username
 ) : IEvent {
-    public string Email => email;
+    [ProtocolName("Email")] public string Username { get; private set; } = username;
 }

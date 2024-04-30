@@ -6,12 +6,12 @@ namespace Vint.Core.Database.Models;
 
 [Table("Presets")]
 public class Preset {
-    [NotColumn] Player _player = null!;
+    [NotColumn] readonly Player _player = null!;
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
-    public Player Player {
+    public required Player Player {
         get => _player;
-        set {
+        init {
             _player = value;
             PlayerId = value.Id;
         }
@@ -19,8 +19,8 @@ public class Preset {
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 
-    [PrimaryKey(1)] public int Index { get; init; }
-    [Column(DataType = DataType.Text)] public string Name { get; set; } = null!;
+    [PrimaryKey(1)] public required int Index { get; init; }
+    [Column(DataType = DataType.Text)] public required string Name { get; set; } = null!;
 
     [NotColumn] public IEntity? Entity { get; set; }
 

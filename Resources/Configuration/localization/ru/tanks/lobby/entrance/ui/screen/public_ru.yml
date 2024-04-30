@@ -1,7 +1,7 @@
 ---
 entranceScreen:
   header: ВХОД В ИГРУ
-  enterNameOrEmail: Введите имя или адрес почты
+  enterNameOrEmail: Введите имя или имя пользователя в Discord
   enterPassword: Введите пароль
   enterSymbolsFromCaptcha: Введите белые символы с картинки
   rememberMeCheckbox: Запомнить меня
@@ -10,7 +10,7 @@ entranceScreen:
   incorrectPassword: Пароль неверный
   incorrectCaptcha: Символы введены неверно
   incorrectLogin: Такого игрока не существует
-  unconfirmedEmail: Введённый адрес электронной почты не подтверждён
+  unconfirmedEmail: Введённое имя пользователя в Discord не подтверждено
   loginFailed: Ошибка входа, проверьте введённые данные
   registration: РЕГИСТРАЦИЯ
 inviteScreen:

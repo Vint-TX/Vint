@@ -43,7 +43,7 @@ public static class ChatUtils {
 
         if (isBlocked) return null;
 
-        string receiverLocale = receiver.Player.CountryCode.ToUpper() switch {
+        string receiverLocale = receiver.Player.Preferences.CountryCode.ToUpper() switch {
             "RU" => "RU",
             "EN" => "EN",
             _ => "EN"

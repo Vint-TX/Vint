@@ -1,11 +1,15 @@
-﻿using System.Net;
+﻿using System.Collections.Specialized;
+using System.Net;
 using System.Net.Sockets;
+using System.Web;
 using NetCoreServer;
 using Serilog;
 using Vint.Core.Config;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
+
+// todo remake this SHIT
 
 public class StaticServer(
     IPAddress host,
@@ -109,6 +113,11 @@ public class StaticServerSession(
                 break;
             }
 
+            case "discord" when urlParts[1] == "auth": {
+                DiscordAuth(new Uri(request.Url).Query);
+                break;
+            }
+
             default:
                 SendResponseAsync(Response.MakeErrorResponse(404));
                 break;
@@ -120,4 +129,11 @@ public class StaticServerSession(
 
     protected override void OnError(SocketError error) =>
         Logger.Error("Session caught an error: {Error}", error);
+
+    void DiscordAuth(string query) {
+        NameValueCollection queryString = HttpUtility.ParseQueryString(query);
+        string code = queryString["code"]!;
+
+
+    }
 }
