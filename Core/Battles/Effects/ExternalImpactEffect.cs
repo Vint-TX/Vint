@@ -17,20 +17,20 @@ public class ExternalImpactEffect(
     int level
 ) : Effect(tank, level), IModuleWeaponEffect {
     public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
-    
+
     public override void Activate() {
         if (IsActive) return;
-        
+
         Tank.Effects.Add(this);
-        
+
         IEntity entity = new ExternalImpactEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
             impact,
             minPercent,
-            maxDamage,
-            minDamage);
-        
+            0,
+            radius);
+
         WeaponHandler = new ExternalImpactWeaponHandler(Tank,
             cooldown,
             marketEntity,
@@ -42,18 +42,18 @@ public class ExternalImpactEffect(
             maxDamage,
             minDamage,
             int.MaxValue);
-        
+
         Entities.Add(entity);
-        
+
         ShareAll();
         Schedule(Duration, Deactivate);
     }
-    
+
     public override void Deactivate() {
         if (!IsActive) return;
-        
+
         Tank.Effects.TryRemove(this);
-        
+
         UnshareAll();
         Entities.Clear();
     }

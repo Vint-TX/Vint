@@ -18,21 +18,21 @@ public class KamikadzeEffect(
     int level
 ) : Effect(tank, level), IModuleWeaponEffect {
     public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
-    
+
     public override void Activate() {
         if (IsActive) return;
-        
+
         CanBeDeactivated = false;
         Tank.Effects.Add(this);
-        
+
         IEntity entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
             impact,
             minPercent,
-            maxDamage,
-            minDamage);
-        
+            0,
+            radius);
+
         WeaponHandler = new KamikadzeWeaponHandler(Tank,
             cooldown,
             marketEntity,
@@ -44,36 +44,36 @@ public class KamikadzeEffect(
             maxDamage,
             minDamage,
             int.MaxValue);
-        
+
         Entities.Add(entity);
-        
+
         Share(Tank.BattlePlayer);
         Schedule(Duration, DeactivateInternal);
     }
-    
+
     public override void Deactivate() {
         if (!IsActive || !CanBeDeactivated) return;
-        
+
         Tank.Effects.TryRemove(this);
         Unshare(Tank.BattlePlayer);
-        
+
         Entities.Clear();
     }
-    
+
     void DeactivateInternal() {
         CanBeDeactivated = true;
         Deactivate();
     }
-    
+
     public override void Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
-        
+
         battlePlayer.PlayerConnection.Share(Entities);
     }
-    
+
     public override void Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
-        
+
         battlePlayer.PlayerConnection.Unshare(Entities);
     }
 }
