@@ -1,7 +1,4 @@
-using Vint.Core.Battles.Weapons;
-using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
 
 namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
 

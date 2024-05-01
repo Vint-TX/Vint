@@ -8,6 +8,8 @@ namespace Vint.Core.ECS.Events.Ping;
 public class BattlePingEvent : IServerEvent {
     public float ClientSendRealTime { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) =>
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         connection.Send(new BattlePongEvent(ClientSendRealTime));
+        return Task.CompletedTask;
+    }
 }

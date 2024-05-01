@@ -15,27 +15,29 @@ namespace Vint.Core.ECS.Events.Items;
 public class OpenContainerEvent : IServerEvent {
     const int MaxAmount = 250;
     public long Amount { get; private set; }
-    
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
-        
+
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
+
         IEntity userEntity = entities.Single();
         IEntity marketEntity = userEntity.GetMarketEntity(connection);
-        Container? container = db.Containers.SingleOrDefault(cont => cont.PlayerId == connection.Player.Id && cont.Id == marketEntity.Id);
-        
+        Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id && cont.Id == marketEntity.Id);
+
         if (container == null || container.Count < Amount) return;
-        
+
         Amount = Math.Clamp(container.Count, 1, MaxAmount); /*Math.Min(Amount, MaxAmount);*/
-        
+
         container.Count -= Amount;
         userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);
         connection.Send(new ItemsCountChangedEvent(-Amount), userEntity);
-        
-        if (container.Count == 0) db.Delete(container);
-        else db.Update(container);
-        
-        List<IEntity> rewards = ContainerRegistry.GetContainer(marketEntity).Open(connection, Amount).ToList();
-        
+
+        if (container.Count == 0) await db.DeleteAsync(container);
+        else await db.UpdateAsync(container);
+
+        List<IEntity> rewards = await ContainerRegistry.GetContainer(marketEntity)
+            .Open(connection, Amount)
+            .ToListAsync();
+
         connection.Share(rewards);
         connection.Send(new ShowNotificationGroupEvent(rewards.Count), marketEntity);
     }

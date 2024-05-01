@@ -15,10 +15,10 @@ public class LoginByPasswordEvent : IServerEvent {
     public string PasswordEncipher { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
-        Punishment? ban = connection.Player.GetBanInfo();
+        Punishment? ban = await connection.Player.GetBanInfo();
 
         if (ban is { Active: true }) {
             connection.Send(new UserBlockedEvent($"You are {ban}"));
@@ -39,14 +39,14 @@ public class LoginByPasswordEvent : IServerEvent {
             .ToList();
 
         if (connections.Count != 0) {
-            using DbConnection db = new();
+            await using DbConnection db = new();
 
             foreach (IPlayerConnection oldConnection in connections) {
-                db.Update(oldConnection.Player);
+                await db.UpdateAsync(oldConnection.Player);
                 oldConnection.Kick("Login from new place");
             }
         }
 
-        connection.Login(RememberMe, RememberMe, HardwareFingerprint);
+        await connection.Login(RememberMe, RememberMe, HardwareFingerprint);
     }
 }

@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
@@ -21,16 +21,16 @@ public class ElevatedAccessUserUnbanUserEvent : IServerEvent {
         Player? targetPlayer = targetConnection?.Player;
 
         if (targetConnection == null) {
-            using DbConnection db = new();
+            await using DbConnection db = new();
             targetPlayer = db.Players.SingleOrDefault(player => player.Username == Username);
         }
 
         if (targetPlayer == null) {
-            ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
+            await ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
-        targetPlayer.UnMute();
-        ChatUtils.SendMessage($"'{Username}' unmuted", ChatUtils.GetChat(connection), [connection], null);
+        await targetPlayer.UnMute();
+        await ChatUtils.SendMessage($"'{Username}' unmuted", ChatUtils.GetChat(connection), [connection], null);
     }
 }

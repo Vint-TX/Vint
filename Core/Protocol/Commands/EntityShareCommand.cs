@@ -17,7 +17,7 @@ public class EntityShareCommand(
     [ProtocolPosition(2), ProtocolCollection(varied: true)]
     public IComponent[] Components => components;
 
-    public void Execute(IPlayerConnection connection) => throw new UnreachableException();
+    public Task Execute(IPlayerConnection connection) => throw new UnreachableException();
 
     public override string ToString() => $"EntityShare command {{ " +
                                          $"EntityId: {EntityId}, " +

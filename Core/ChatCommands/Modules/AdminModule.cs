@@ -16,7 +16,7 @@ namespace Vint.Core.ChatCommands.Modules;
 [ChatCommandGroup("admin", "Commands for admins", PlayerGroups.Admin)]
 public class AdminModule : ChatCommandModule {
     [ChatCommand("ban", "Ban a player")]
-    public void Ban(
+    public async Task Ban(
         ChatCommandContext ctx,
         [Option("username", "Username of player to ban")]
         string username,
@@ -42,43 +42,43 @@ public class AdminModule : ChatCommandModule {
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
-            ctx.SendPrivateResponse("Player not found");
+            await ctx.SendPrivateResponse("Player not found");
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ctx.SendPrivateResponse($"Player '{username}' is admin");
+            await ctx.SendPrivateResponse($"Player '{username}' is admin");
             return;
         }
 
         if (!ctx.Connection.Player.IsAdmin && targetPlayer.IsModerator) {
-            ctx.SendPrivateResponse("Moderator cannot punish other moderator");
+            await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
 
-        Punishment punishment = targetPlayer.Ban(reason, duration);
+        Punishment punishment = await targetPlayer.Ban(reason, duration);
         string punishMessage = $"{username} was {punishment}";
         targetConnection?.Kick(reason);
 
-        ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
+        await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("unban", "Remove ban from player")]
-    public void UnBan(
+    public async Task UnBan(
         ChatCommandContext ctx,
         [Option("username", "Username of player to unban")]
         string username) {
@@ -98,44 +98,44 @@ public class AdminModule : ChatCommandModule {
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
-            ctx.SendPrivateResponse("Player not found");
+            await ctx.SendPrivateResponse("Player not found");
             return;
         }
 
-        bool successful = targetPlayer.UnBan();
+        bool successful = await targetPlayer.UnBan();
 
         if (!successful) {
-            ctx.SendPrivateResponse($"'{username}' is not banned");
+            await ctx.SendPrivateResponse($"'{username}' is not banned");
             return;
         }
 
         string punishMessage = $"{username} was unbanned";
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("createInvite", "Create new invite")]
-    public void CreateInvite(
+    public async Task CreateInvite(
         ChatCommandContext ctx,
         [Option("code", "Code")] string code,
         [Option("uses", "Maximum uses")] ushort uses) {
-        using DbConnection db = new();
-        Invite? invite = db.Invites.SingleOrDefault(invite => invite.Code == code);
+        await using DbConnection db = new();
+        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
 
         if (invite != null) {
-            ctx.SendPrivateResponse($"Already exists: {invite}");
+            await ctx.SendPrivateResponse($"Already exists: {invite}");
             return;
         }
 
@@ -144,22 +144,24 @@ public class AdminModule : ChatCommandModule {
             RemainingUses = uses
         };
 
-        invite.Id = db.InsertWithInt64Identity(invite);
-        ctx.SendPrivateResponse($"{invite}");
+        invite.Id = await db.InsertWithInt64IdentityAsync(invite);
+        await ctx.SendPrivateResponse($"{invite}");
     }
 
     [ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby"), RequireConditions(ChatCommandConditions.InLobby)]
-    public void KickAllFromBattle(ChatCommandContext ctx) {
+    public Task KickAllFromBattle(ChatCommandContext ctx) {
         Battle battle = ctx.Connection.BattlePlayer!.Battle;
 
         foreach (BattlePlayer battlePlayer in battle.Players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
             battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
             battle.RemovePlayer(battlePlayer);
         }
+
+        return Task.CompletedTask;
     }
 
     [ChatCommand("usernames", "Online player usernames")]
-    public void Usernames(ChatCommandContext ctx) {
+    public async Task Usernames(ChatCommandContext ctx) {
         StringBuilder builder = new();
         List<IPlayerConnection> connections = ctx.Connection.Server.PlayerConnections.Values.ToList();
         List<string> onlineUsernames = connections
@@ -169,20 +171,20 @@ public class AdminModule : ChatCommandModule {
 
         builder.AppendLine($"{connections.Count} players connected, {onlineUsernames.Count} players online:");
         builder.AppendJoin(Environment.NewLine, onlineUsernames);
-        ctx.SendPrivateResponse(builder.ToString());
+        await ctx.SendPrivateResponse(builder.ToString());
     }
 
     [ChatCommand("dropBonus", "Drop bonus"), RequireConditions(ChatCommandConditions.InBattle)]
-    public void DropBonus(
+    public async Task DropBonus(
         ChatCommandContext ctx,
         [Option("type", "Type of the bonus")] BonusType bonusType) {
         bool? isSuccessful = ctx.Connection.BattlePlayer?.Battle.BonusProcessor?.DropBonus(bonusType);
 
         if (isSuccessful != true) {
-            ctx.SendPrivateResponse($"{bonusType} is not dropped");
+            await ctx.SendPrivateResponse($"{bonusType} is not dropped");
             return;
         }
 
-        ctx.SendPrivateResponse($"{bonusType} dropped");
+        await ctx.SendPrivateResponse($"{bonusType} dropped");
     }
 }

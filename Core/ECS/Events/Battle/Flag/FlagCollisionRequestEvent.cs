@@ -14,8 +14,8 @@ namespace Vint.Core.ECS.Events.Battle.Flag;
 
 [ProtocolId(1463741053998)]
 public class FlagCollisionRequestEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby) return Task.CompletedTask;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
@@ -23,7 +23,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
         if (!battlePlayer.InBattleAsTank ||
             battlePlayer.Tank!.StateManager.CurrentState is not Active ||
             battle.StateManager.CurrentState is not Running ||
-            battle.ModeHandler is not CTFHandler ctf) return;
+            battle.ModeHandler is not CTFHandler ctf) return Task.CompletedTask;
 
         entities = entities.ToList();
         IEntity tankEntity = entities.ElementAt(0);
@@ -38,12 +38,12 @@ public class FlagCollisionRequestEvent : IServerEvent {
 
         switch (collisionFlag.StateManager.CurrentState) {
             case OnPedestal: {
-                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.PedestalPosition) > 10) return;
+                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.PedestalPosition) > 5) return Task.CompletedTask;
 
                 if (isAllyFlag) {
                     if (oppositeFlag.StateManager.CurrentState is not Captured ||
                         !oppositeFlag.Entity.HasComponent<TankGroupComponent>() ||
-                        oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return;
+                        oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return Task.CompletedTask;
 
                     oppositeFlag.Deliver(battlePlayer);
                 } else collisionFlag.Capture(battlePlayer);
@@ -52,12 +52,15 @@ public class FlagCollisionRequestEvent : IServerEvent {
             }
 
             case OnGround: {
-                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.Position) > 10) return;
+                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.Position) > 5) return Task.CompletedTask;
 
                 if (isAllyFlag) collisionFlag.Return(battlePlayer);
                 else collisionFlag.Pickup(battlePlayer);
+
                 break;
             }
         }
+
+        return Task.CompletedTask;
     }
 }

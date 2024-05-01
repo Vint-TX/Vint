@@ -16,7 +16,7 @@ public class ComponentRemoveCommand(
 ) : EntityCommand(entity) {
     [ProtocolVaried, ProtocolPosition(1)] public Type Component { get; private set; } = component;
 
-    public override void Execute(IPlayerConnection connection) {
+    public override async Task Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
         ClientRemovableAttribute? clientRemovable = Component.GetCustomAttribute<ClientRemovableAttribute>();
 
@@ -29,7 +29,7 @@ public class ComponentRemoveCommand(
         IComponent component = Entity.GetComponent(Component);
 
         Entity.RemoveComponent(Component, connection);
-        component.Removed(connection, Entity);
+        await component.Removed(connection, Entity);
 
         logger.Debug("Removed {Component} from {Entity}", Component.Name, Entity);
     }

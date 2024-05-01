@@ -14,24 +14,25 @@ public class ReportUserByUserIdEvent : IServerEvent {
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // todo improve
-        using DbConnection db = new();
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // todo improve
+        await using DbConnection db = new();
 
-        Player? targetPlayer = db.Players.SingleOrDefault(player => player.Id == UserId);
+        Player? targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
         if (targetPlayer == null) return;
 
-        connection.Server.DiscordBot?.SendReport($"{targetPlayer.Username} has been reported", connection.Player.Username);
+        if (connection.Server.DiscordBot != null)
+            await connection.Server.DiscordBot.SendReport($"{targetPlayer.Username} has been reported", connection.Player.Username);
 
-        Relation? relation = db.Relations
-            .SingleOrDefault(relation => relation.SourcePlayerId == SourceId &&
+        Relation? relation = await db.Relations
+            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == SourceId &&
                                          relation.TargetPlayerId == UserId);
 
         if (relation == null) {
-            db.Insert(new Relation { SourcePlayer = connection.Player, TargetPlayer = targetPlayer, Types = RelationTypes.Reported });
+            await db.InsertAsync(new Relation { SourcePlayer = connection.Player, TargetPlayer = targetPlayer, Types = RelationTypes.Reported });
         } else {
             relation.Types |= RelationTypes.Reported;
-            db.Update(relation);
+            await db.UpdateAsync(relation);
         }
     }
 }

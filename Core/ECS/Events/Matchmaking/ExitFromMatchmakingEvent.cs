@@ -10,8 +10,8 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 public class ExitFromMatchmakingEvent : IServerEvent {
     public bool InBattle { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby) return Task.CompletedTask;
 
         IEntity lobby = entities.Single();
         Battles.Battle battle = connection.BattlePlayer!.Battle;
@@ -32,5 +32,7 @@ public class ExitFromMatchmakingEvent : IServerEvent {
                 connection.Logger.ForType(GetType()).Error("Unexpected type handler: {Handler}", battle.TypeHandler.GetType().Name);
                 break;
         }
+
+        return Task.CompletedTask;
     }
 }

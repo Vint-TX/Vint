@@ -14,10 +14,10 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 
 [ProtocolId(1507022246767)]
 public class UserOnlineEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         connection.Share(connection.GetEntities());
 
-        using DbConnection db = new();
+        await using DbConnection db = new();
 
         Player player = connection.Player;
         Preset preset = player.CurrentPreset;

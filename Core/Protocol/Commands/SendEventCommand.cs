@@ -16,7 +16,7 @@ public class SendEventCommand(
     [ProtocolVaried, ProtocolPosition(0)] public IEvent Event { get; private set; } = @event;
     [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
 
-    public void Execute(IPlayerConnection connection) {
+    public async Task Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         if (Event is not IServerEvent serverEvent) {
@@ -25,7 +25,7 @@ public class SendEventCommand(
         }
 
         logger.Debug("Executing event {Name} with {Count} entities", serverEvent.GetType().Name, Entities.Length);
-        serverEvent.Execute(connection, Entities);
+        await serverEvent.Execute(connection, Entities);
     }
 
     public override string ToString() => $"SendEvent command {{ " +

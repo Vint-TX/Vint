@@ -137,7 +137,7 @@ public class Player {
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Punishment.PlayerId))]
     public List<Punishment> Punishments { get; private set; } = null!;
 
-    public void InitializeNew() {
+    public async Task InitializeNew() {
         CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
         Reputation = 100;
 
@@ -153,27 +153,27 @@ public class Player {
 
         long graffitiId = GlobalEntities.GetEntity("graffities", "Logo").Id;
 
-        using (DbConnection db = new()) {
-            db.BeginTransaction();
+        await using (DbConnection db = new()) {
+            await db.BeginTransactionAsync();
 
-            db.Insert(new Hull { Player = this, SkinId = hullSkinId, Id = hullId });
-            db.Insert(new HullSkin { Player = this, HullId = hullId, Id = hullSkinId });
-            db.Insert(new Paint { Player = this, Id = paintId });
+            await db.InsertAsync(new Hull { Player = this, SkinId = hullSkinId, Id = hullId });
+            await db.InsertAsync(new HullSkin { Player = this, HullId = hullId, Id = hullSkinId });
+            await db.InsertAsync(new Paint { Player = this, Id = paintId });
 
-            db.Insert(new Weapon { Player = this, Id = weaponId, SkinId = weaponSkinId, ShellId = shellId });
-            db.Insert(new WeaponSkin { Player = this, WeaponId = weaponId, Id = weaponSkinId });
-            db.Insert(new Cover { Player = this, Id = coverId });
-            db.Insert(new Shell { Player = this, Id = shellId, WeaponId = weaponId });
+            await db.InsertAsync(new Weapon { Player = this, Id = weaponId, SkinId = weaponSkinId, ShellId = shellId });
+            await db.InsertAsync(new WeaponSkin { Player = this, WeaponId = weaponId, Id = weaponSkinId });
+            await db.InsertAsync(new Cover { Player = this, Id = coverId });
+            await db.InsertAsync(new Shell { Player = this, Id = shellId, WeaponId = weaponId });
 
-            db.Insert(new Avatar { Player = this, Id = CurrentAvatarId });
-            db.Insert(new Graffiti { Player = this, Id = graffitiId });
+            await db.InsertAsync(new Avatar { Player = this, Id = CurrentAvatarId });
+            await db.InsertAsync(new Graffiti { Player = this, Id = graffitiId });
 
-            db.Insert(new Preset { Player = this, Index = 0, Name = "Preset 1" });
+            await db.InsertAsync(new Preset { Player = this, Index = 0, Name = "Preset 1" });
 
-            db.Insert(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.SeasonNumber });
-            db.Insert(new Statistics { Player = this });
+            await db.InsertAsync(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.SeasonNumber });
+            await db.InsertAsync(new Statistics { Player = this });
 
-            db.CommitTransaction();
+            await db.CommitTransactionAsync();
         }
 
         List<string> admins = ["C6OI"];
@@ -190,7 +190,7 @@ public class Player {
         Modules = [];
     }
 
-    public Punishment Warn(string? reason, TimeSpan? duration) {
+    public async Task<Punishment> Warn(string? reason, TimeSpan? duration) {
         Punishment punishment = new() {
             Player = this,
             PunishTime = DateTimeOffset.UtcNow,
@@ -200,14 +200,14 @@ public class Player {
             Type = PunishmentType.Warn
         };
 
-        using DbConnection db = new();
+        await using DbConnection db = new();
 
-        punishment.Id = db.InsertWithInt64Identity(punishment);
+        punishment.Id = await db.InsertWithInt64IdentityAsync(punishment);
         return punishment;
     }
 
-    public Punishment Mute(string? reason, TimeSpan? duration) {
-        UnMute();
+    public async Task<Punishment> Mute(string? reason, TimeSpan? duration) {
+        await UnMute();
 
         Punishment punishment = new() {
             Player = this,
@@ -218,14 +218,14 @@ public class Player {
             Type = PunishmentType.Mute
         };
 
-        using DbConnection db = new();
+        await using DbConnection db = new();
 
-        punishment.Id = db.InsertWithInt64Identity(punishment);
+        punishment.Id = await db.InsertWithInt64IdentityAsync(punishment);
         return punishment;
     }
 
-    public Punishment Ban(string? reason, TimeSpan? duration) {
-        UnBan();
+    public async Task<Punishment> Ban(string? reason, TimeSpan? duration) {
+        await UnBan();
 
         Punishment punishment = new() {
             Player = this,
@@ -236,90 +236,90 @@ public class Player {
             Type = PunishmentType.Ban
         };
 
-        using DbConnection db = new();
+        await using DbConnection db = new();
 
-        punishment.Id = db.InsertWithInt64Identity(punishment);
+        punishment.Id = await db.InsertWithInt64IdentityAsync(punishment);
         return punishment;
     }
 
-    public bool UnWarn(long warnId) {
-        using DbConnection db = new();
+    public async Task<bool> UnWarn(long warnId) {
+        await using DbConnection db = new();
 
-        Punishment? punishment = db.Punishments
+        Punishment? punishment = await db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Warn)
-            .SingleOrDefault(punishment => punishment.Id == warnId);
+            .SingleOrDefaultAsync(punishment => punishment.Id == warnId);
 
         if (punishment == null) return false;
 
         punishment.Active = false;
-        db.Update(punishment);
+        await db.UpdateAsync(punishment);
         return true;
     }
 
-    public bool UnMute() {
-        using DbConnection db = new();
+    public async Task<bool> UnMute() {
+        await using DbConnection db = new();
 
-        Punishment? punishment = db.Punishments
+        Punishment? punishment = await db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Mute &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (punishment == null) return false;
 
         punishment.Active = false;
-        db.Update(punishment);
+        await db.UpdateAsync(punishment);
         return true;
     }
 
-    public bool UnBan() {
-        using DbConnection db = new();
+    public async Task<bool> UnBan() {
+        await using DbConnection db = new();
 
-        Punishment? punishment = db.Punishments
+        Punishment? punishment = await db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (punishment == null) return false;
 
         punishment.Active = false;
-        db.Update(punishment);
+        await db.UpdateAsync(punishment);
         return true;
     }
 
-    public Punishment? GetBanInfo() {
-        RefreshPunishments();
+    public async Task<Punishment?> GetBanInfo() {
+        await RefreshPunishments();
 
-        using DbConnection db = new();
-        return db.Punishments
+        await using DbConnection db = new();
+        return await db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
     }
 
-    public Punishment? GetMuteInfo() {
-        RefreshPunishments();
+    public async Task<Punishment?> GetMuteInfo() {
+        await RefreshPunishments();
 
-        using DbConnection db = new();
-        return db.Punishments
+        await using DbConnection db = new();
+        return await db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
                                  punishment.Type == PunishmentType.Mute &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
     }
 
-    void RefreshPunishments() {
-        using DbConnection db = new();
+    async Task RefreshPunishments() {
+        await using DbConnection db = new();
 
         try {
-            db.BeginTransaction();
+            await db.BeginTransactionAsync();
 
             foreach (Punishment punishment in db.Punishments
                          .Where(punishment => punishment.PlayerId == Id &&
@@ -327,15 +327,15 @@ public class Player {
                          .ToList()
                          .Where(punishment => punishment.EndTime <= DateTimeOffset.UtcNow)) {
                 punishment.Active = false;
-                db.Update(punishment);
+                await db.UpdateAsync(punishment);
             }
 
-            db.CommitTransaction();
+            await db.CommitTransactionAsync();
         } catch {
-            db.RollbackTransaction();
+            await db.RollbackTransactionAsync();
             throw;
         } finally {
-            db.DisposeTransaction();
+            await db.DisposeTransactionAsync();
         }
     }
 }

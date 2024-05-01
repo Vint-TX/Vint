@@ -9,28 +9,28 @@ namespace Vint.Core.ECS.Events.User.Friends;
 
 [ProtocolId(1450263956353)]
 public class RevokeFriendEvent : FriendBaseEvent, IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
-        Player? player = db.Players.SingleOrDefault(player => player.Id == User.Id);
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
+        Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == User.Id);
 
         if (player == null) return;
 
-        db.BeginTransaction();
-        db.Relations
+        await db.BeginTransactionAsync();
+        await db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id &&
                                relation.TargetPlayerId == player.Id)
             .Set(relation => relation.Types,
                 relation => relation.Types & ~(RelationTypes.Friend | RelationTypes.OutgoingRequest))
-            .Update();
+            .UpdateAsync();
 
-        db.Relations
+        await db.Relations
             .Where(relation => relation.SourcePlayerId == player.Id &&
                                relation.TargetPlayerId == connection.Player.Id)
             .Set(relation => relation.Types,
                 relation => relation.Types & ~(RelationTypes.Friend | RelationTypes.IncomingRequest))
-            .Update();
+            .UpdateAsync();
 
-        db.CommitTransaction();
+        await db.CommitTransactionAsync();
         connection.Send(new OutgoingFriendRemovedEvent(player.Id), connection.User);
         connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)

@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 public abstract class IntroduceUserEvent : IServerEvent {
     public string? Captcha { get; protected set; }
 
-    public abstract void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities);
+    public abstract Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities);
 }

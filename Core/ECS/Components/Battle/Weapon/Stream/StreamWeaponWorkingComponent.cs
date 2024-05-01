@@ -9,6 +9,8 @@ namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
 public class StreamWeaponWorkingComponent : IComponent { // todo modules
     public int Time { get; private set; }
 
-    public void Removed(IPlayerConnection connection, IEntity entity) =>
+    public Task Removed(IPlayerConnection connection, IEntity entity) {
         (connection.BattlePlayer?.Tank?.WeaponHandler as StreamWeaponHandler)?.IncarnationIdToHitTime.Clear();
+        return Task.CompletedTask;
+    }
 }

@@ -91,4 +91,13 @@ public static class Extensions {
     }
 
     public static T Clone<T>(this T self) where T : IComponent => (T)self.Clone();
+
+    public static async Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> enumerable) {
+        List<T> list = [];
+
+        await foreach (T element in enumerable)
+            list.Add(element);
+
+        return list;
+    }
 }

@@ -16,12 +16,10 @@ public class SelfHammerShotEvent : SelfShotEvent {
         ClientTime = ClientTime
     };
 
-    public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.WeaponHandler is not HammerWeaponHandler weaponHandler) return;
+    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.BattlePlayer?.Tank?.WeaponHandler is not HammerWeaponHandler weaponHandler) return;
 
+        await base.Execute(connection, entities);
         weaponHandler.SetCurrentCartridgeCount(weaponHandler.CurrentCartridgeCount - 1);
-        base.Execute(connection, entities);
     }
 }

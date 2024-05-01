@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -11,7 +12,7 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent {
     public string Type { get; private set; } = null!;
 
-    public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
@@ -30,17 +31,17 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == Username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == Username);
         }
 
         if (targetPlayer == null) {
-            ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
+            await ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ChatUtils.SendMessage($"Player {Username} is admin", ChatUtils.GetChat(connection), [connection], null);
+            await ChatUtils.SendMessage($"Player {Username} is admin", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
@@ -49,18 +50,18 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
 
         switch (Type.ToLower()) {
             case "warn": {
-                punishment = targetPlayer.Warn(Reason, null);
+                punishment = await targetPlayer.Warn(Reason, null);
                 break;
             }
 
             case "mute": {
-                punishment = targetPlayer.Mute(Reason, null);
+                punishment = await targetPlayer.Mute(Reason, null);
                 break;
             }
 
             case "kick": {
                 if (targetConnection == null)
-                    ChatUtils.SendMessage("Player is not on the server", ChatUtils.GetChat(connection), [connection], null);
+                    await ChatUtils.SendMessage("Player is not on the server", ChatUtils.GetChat(connection), [connection], null);
                 else {
                     targetConnection.Kick(Reason);
                     punishMessage = $"{targetPlayer.Username} was kicked for '{Reason}'";
@@ -70,13 +71,13 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
             }
 
             default: {
-                ChatUtils.SendMessage($"Unexpected type '{Type}'", ChatUtils.GetChat(connection), [connection], null);
+                await ChatUtils.SendMessage($"Unexpected type '{Type}'", ChatUtils.GetChat(connection), [connection], null);
                 break;
             }
         }
 
         if (punishment != null) {
-            ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", ChatUtils.GetChat(connection), [connection], null);
+            await ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", ChatUtils.GetChat(connection), [connection], null);
             punishMessage ??= $"{Username} was {punishment}";
         }
 
@@ -87,6 +88,6 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
             notifiedConnections = connection.Server.PlayerConnections.Values.ToList();
         }
 
-        ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
+        await ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
     }
 }

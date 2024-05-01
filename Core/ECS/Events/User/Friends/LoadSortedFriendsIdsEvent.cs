@@ -9,8 +9,8 @@ namespace Vint.Core.ECS.Events.User.Friends;
 
 [ProtocolId(1450243543232)]
 public class LoadSortedFriendsIdsEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
         List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values.ToList();
 
         var relations = db.Relations

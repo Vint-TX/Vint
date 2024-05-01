@@ -359,7 +359,7 @@ public static class GlobalEntities {
     public static IEntity? GetEntity(this IPlayerConnection connection, long entityId) =>
         connection.SharedEntities.SingleOrDefault(entity => entity.Id == entityId);
 
-    public static bool ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
+    public static async Task<bool> ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
         string configPath = item.TemplateAccessor!.ConfigPath!;
         int? configPrice = null;
 
@@ -383,8 +383,8 @@ public static class GlobalEntities {
         if (item.TemplateAccessor?.Template is PresetMarketItemTemplate) {
             ItemsBuyCountLimitComponent buyCountLimitComponent = ConfigManager.GetComponent<ItemsBuyCountLimitComponent>(configPath);
 
-            using DbConnection db = new();
-            int count = db.Presets.Count(preset => preset.PlayerId == connection.Player.Id);
+            await using DbConnection db = new();
+            int count = await db.Presets.CountAsync(preset => preset.PlayerId == connection.Player.Id);
 
             if (count >= buyCountLimitComponent.Limit) return false;
 

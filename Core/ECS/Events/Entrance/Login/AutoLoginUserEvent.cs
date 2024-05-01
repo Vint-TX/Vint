@@ -15,34 +15,41 @@ public class AutoLoginUserEvent : IServerEvent {
     public byte[] EncryptedToken { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
         ILogger logger = connection.Logger.ForType(GetType());
         logger.Warning("Autologin '{Username}'", Username);
 
-        using DbConnection db = new();
-        Player? player = db.Players
+        await using DbConnection db = new();
+        Player? player = await db.Players
             .LoadWith(player => player.Modules)
-            .SingleOrDefault(player => player.Username == Username);
+            .SingleOrDefaultAsync(player => player.Username == Username);
 
-        Punishment? ban = player?.GetBanInfo();
+        if (player == null) {
+            Fail(connection);
+            return;
+        }
 
-        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline && conn.Player.Username == Username)
-            .ToList();
+        Punishment? ban = await player.GetBanInfo();
+        int connections = connection.Server.PlayerConnections.Values
+            .Count(conn => conn.IsOnline && conn.Player.Username == Username);
 
-        if (player is not { RememberMe: true } ||
+        if (!player.RememberMe ||
+            connections != 0 ||
             ban is { Active: true } ||
-            connections.Count != 0 ||
             player.HardwareFingerprint != HardwareFingerprint ||
             !player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
-            connection.Player = null!;
-            connection.Send(new AutoLoginFailedEvent());
+            Fail(connection);
             return;
         }
 
         connection.Player = player;
-        connection.Login(false, true, HardwareFingerprint);
+        await connection.Login(false, true, HardwareFingerprint);
+    }
+
+    static void Fail(IPlayerConnection connection) {
+        connection.Player = null!;
+        connection.Send(new AutoLoginFailedEvent());
     }
 }

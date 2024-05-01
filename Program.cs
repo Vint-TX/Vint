@@ -39,7 +39,7 @@ abstract class Program {
             }));
 
         new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
-        new Thread(() => gameServer.Start()) { Name = "Game Server" }.Start();
+        _ = Task.Factory.StartNew(gameServer.Start, TaskCreationOptions.LongRunning).Catch();
 
         stopwatch.Stop();
         Logger.Information("Started in {Time}", stopwatch.Elapsed);

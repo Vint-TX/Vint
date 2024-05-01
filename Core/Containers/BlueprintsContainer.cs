@@ -23,7 +23,7 @@ public class BlueprintsContainer : Container {
     BlueprintChest Info { get; }
     List<IEntity>? TargetTierItemList { get; }
 
-    public override IEnumerable<IEntity> Open(IPlayerConnection connection, long amount) {
+    public override IAsyncEnumerable<IEntity> Open(IPlayerConnection connection, long amount) {
         Dictionary<IEntity, int> entityToAmount = new();
         int blueprintsAmount = 0;
 
@@ -69,9 +69,9 @@ public class BlueprintsContainer : Container {
         return SaveRewards(connection, entityToAmount);
     }
 
-    public IEnumerable<IEntity> SaveRewards(IPlayerConnection connection, Dictionary<IEntity, int> entityToAmount) {
+    async IAsyncEnumerable<IEntity> SaveRewards(IPlayerConnection connection, Dictionary<IEntity, int> entityToAmount) {
         foreach ((IEntity marketItem, int amount) in entityToAmount.ToList().Shuffle()) {
-            connection.PurchaseItem(marketItem, amount, 0, false, false);
+            await connection.PurchaseItem(marketItem, amount, 0, false, false);
             yield return new NewItemNotificationTemplate().CreateCard(MarketItem, marketItem, amount);
         }
     }

@@ -12,5 +12,5 @@ public abstract class EntityCommand(
 ) : ICommand {
     [ProtocolPosition(0)] public IEntity Entity { get; protected set; } = entity;
 
-    public virtual void Execute(IPlayerConnection connection) => throw new UnreachableException();
+    public virtual Task Execute(IPlayerConnection connection) => throw new UnreachableException();
 }

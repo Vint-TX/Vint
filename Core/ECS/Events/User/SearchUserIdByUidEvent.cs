@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -10,21 +11,21 @@ namespace Vint.Core.ECS.Events.User;
 public class SearchUserIdByUidEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
 
         Player searcherPlayer = connection.Player;
-        Player? searchedPlayer = db.Players.SingleOrDefault(player => player.Username == Username);
+        Player? searchedPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == Username);
 
         if (searchedPlayer == null) {
             connection.Send(new SearchUserIdByUidResultEvent(false, 0));
             return;
         }
 
-        bool noRelations = db.Relations
+        bool noRelations = await db.Relations
             .Where(relation => relation.SourcePlayerId == searchedPlayer.Id &&
                                relation.TargetPlayerId == searcherPlayer.Id)
-            .All(relation => (relation.Types & RelationTypes.Friend) != RelationTypes.Friend &&
+            .AllAsync(relation => (relation.Types & RelationTypes.Friend) != RelationTypes.Friend &&
                              (relation.Types & RelationTypes.Blocked) != RelationTypes.Blocked &&
                              (relation.Types & RelationTypes.IncomingRequest) != RelationTypes.IncomingRequest &&
                              (relation.Types & RelationTypes.OutgoingRequest) != RelationTypes.OutgoingRequest);

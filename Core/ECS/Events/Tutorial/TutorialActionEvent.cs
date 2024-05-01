@@ -6,12 +6,10 @@ using Vint.Core.Server;
 namespace Vint.Core.ECS.Events.Tutorial;
 
 [ProtocolId(1506070003266)]
-public class TutorialActionEvent : IServerEvent {
+public class TutorialActionEvent : IServerEvent { // todo
     public long TutorialId { get; private set; }
     public long StepId { get; private set; }
     public TutorialAction Action { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        // todo
-    }
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) => Task.CompletedTask;
 }

@@ -2,11 +2,8 @@ using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
-using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Battle.Tank;
-using Vint.Core.ECS.Events.Battle.Damage;
-using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battles.Player;
@@ -53,9 +50,11 @@ public class Dead(
             flag.Drop(false);
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         if (!BattleTank.BattlePlayer.IsPaused && DateTimeOffset.UtcNow >= TimeToNextState)
             StateManager.SetState(new Spawn(StateManager));
+
+        await base.Tick();
     }
 }
 
@@ -72,9 +71,11 @@ public class Spawn(
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1.75);
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         if (DateTimeOffset.UtcNow >= TimeToNextState)
             StateManager.SetState(new SemiActive(StateManager));
+
+        await base.Tick();
     }
 }
 
@@ -91,9 +92,11 @@ public class SemiActive(
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1);
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         if (DateTimeOffset.UtcNow >= TimeToNextState)
             BattleTank.Tank.AddComponentIfAbsent(new TankStateTimeOutComponent());
+
+        await base.Tick();
     }
 }
 

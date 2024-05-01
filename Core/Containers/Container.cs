@@ -8,5 +8,5 @@ public abstract class Container(
 ) {
     protected IEntity MarketItem { get; } = marketItem;
 
-    public abstract IEnumerable<IEntity> Open(IPlayerConnection connection, long amount);
+    public abstract IAsyncEnumerable<IEntity> Open(IPlayerConnection connection, long amount);
 }

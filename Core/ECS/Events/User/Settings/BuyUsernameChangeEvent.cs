@@ -14,7 +14,7 @@ public class BuyUsernameChangeEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public long Price { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!RegexUtils.IsLoginValid(Username)) return;
 
         IEntity user = entities.Single();
@@ -24,8 +24,8 @@ public class BuyUsernameChangeEvent : IServerEvent {
         connection.Send(new CompleteBuyUsernameChangeEvent(success), user);
         if (!success) return;
 
-        connection.ChangeXCrystals(-truePrice);
-        connection.SetUsername(Username);
+        await connection.ChangeXCrystals(-truePrice);
+        await connection.SetUsername(Username);
 
         connection.Share(new UsernameChangedNotificationTemplate().Create(Username, user));
         connection.Send(new ShowNotificationGroupEvent(1), user);

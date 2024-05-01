@@ -6,8 +6,8 @@ using Vint.Core.Server;
 namespace Vint.Core.ECS.Events.Battle;
 
 [ProtocolId(1470658766256)]
-public class SendPerfomanceStatisticDataEvent : IServerEvent { // todo: what the fuck am i supposed to do with this information?
+public class SendPerformanceStatisticDataEvent : IServerEvent { // todo: what the fuck am i supposed to do with this information?
     public PerformanceStatisticData Data { get; set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { }
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) => Task.CompletedTask;
 }

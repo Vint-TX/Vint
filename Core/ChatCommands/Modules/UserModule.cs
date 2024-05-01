@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text;
-using Serilog;
-using Serilog.Core;
+using LinqToDB;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -11,7 +10,7 @@ namespace Vint.Core.ChatCommands.Modules;
 [ChatCommandGroup("user", "Commands for all players", PlayerGroups.None)]
 public class UserModule : ChatCommandModule {
     [ChatCommand("help", "Show list of commands or usage of specified command")]
-    public void Help(
+    public async Task Help(
         ChatCommandContext ctx,
         [Option("command", "Name of command to get help", true)]
         string commandName = "") {
@@ -26,11 +25,11 @@ public class UserModule : ChatCommandModule {
                 (ctx.Connection.Player.Groups & requirePermissionsAttribute.Permissions) != requirePermissionsAttribute.Permissions ||
                 chatCommandGroupAttribute != null &&
                 (ctx.Connection.Player.Groups & chatCommandGroupAttribute.Permissions) != chatCommandGroupAttribute.Permissions) {
-                ctx.SendPrivateResponse($"Command '{commandName}' not found");
+                await ctx.SendPrivateResponse($"Command '{commandName}' not found");
                 return;
             }
 
-            ctx.SendPrivateResponse(command.ToString());
+            await ctx.SendPrivateResponse(command.ToString());
         } else {
             IEnumerable<string> commands = ctx.ChatCommandProcessor.GetAll()
                 .Where(command => {
@@ -49,26 +48,26 @@ public class UserModule : ChatCommandModule {
                 .Select(command => command.Info.ToString());
 
             string response = string.Join("\n", commands);
-            ctx.SendPrivateResponse(response);
+            await ctx.SendPrivateResponse(response);
         }
     }
 
     [ChatCommand("players", "Show online players count")]
-    public void Players(ChatCommandContext ctx) =>
-        ctx.SendPrivateResponse($"{ctx.Connection.Server.PlayerConnections.Count} players online");
+    public async Task Players(ChatCommandContext ctx) =>
+        await ctx.SendPrivateResponse($"{ctx.Connection.Server.PlayerConnections.Count} players online");
 
     [ChatCommand("battles", "Show current battles count")]
-    public void Battles(ChatCommandContext ctx) =>
-        ctx.SendPrivateResponse($"{ctx.Connection.Server.BattleProcessor.BattlesCount} battles");
+    public async Task Battles(ChatCommandContext ctx) =>
+        await ctx.SendPrivateResponse($"{ctx.Connection.Server.BattleProcessor.BattlesCount} battles");
 
     [ChatCommand("ping", "Show ping")]
-    public void Ping(ChatCommandContext ctx) =>
-        ctx.SendPrivateResponse($"Ping: {ctx.Connection.Ping}ms");
+    public async Task Ping(ChatCommandContext ctx) =>
+        await ctx.SendPrivateResponse($"Ping: {ctx.Connection.Ping}ms");
 
     [ChatCommand("stats", "Get statistics")]
-    public void Stats(ChatCommandContext ctx) {
-        using DbConnection db = new();
-        Statistics? statistics = db.Statistics.SingleOrDefault(stats => stats.PlayerId == ctx.Connection.Player.Id);
+    public async Task Stats(ChatCommandContext ctx) {
+        await using DbConnection db = new();
+        Statistics? statistics = await db.Statistics.SingleOrDefaultAsync(stats => stats.PlayerId == ctx.Connection.Player.Id);
 
         if (statistics == null) return;
 
@@ -85,6 +84,6 @@ public class UserModule : ChatCommandModule {
         builder.AppendLine($"Flags returned: {statistics.FlagsReturned}");
         builder.AppendLine($"Gold boxes caught: {statistics.GoldBoxesCaught}");
 
-        ctx.SendPrivateResponse(builder.ToString());
+        await ctx.SendPrivateResponse(builder.ToString());
     }
 }

@@ -1,5 +1,4 @@
 using System.Numerics;
-using Vint.Core.ECS.Components.Battle.Bonus;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 

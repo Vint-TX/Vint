@@ -51,6 +51,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
 
             List<MethodInfo> commands = commandModule
                 .GetMethods()
+                .Where(method => method.ReturnType == typeof(Task))
                 .Where(method => method.GetCustomAttribute<ChatCommandAttribute>() != null)
                 .ToList();
 
@@ -59,7 +60,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
 
                 ChatCommandAttribute chatCommandAttribute = command.GetCustomAttribute<ChatCommandAttribute>()!;
                 Logger.Verbose("Method name: {Method}, command name: {Command}", command.Name, chatCommandAttribute.Name);
-                
+
                 IReadOnlyDictionary<string, OptionAttribute> options = command
                     .GetParameters()
                     .Where(parameter => parameter.GetCustomAttribute<OptionAttribute>() != null)

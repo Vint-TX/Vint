@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -9,7 +10,7 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 
 [ProtocolId(1503470140938)]
 public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEvent {
-    public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
@@ -24,21 +25,21 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
             notifyChat = ChatUtils.GetChat(targetConnection);
             notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == Username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == Username);
         }
 
         if (targetPlayer == null) {
-            ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
+            await ChatUtils.SendMessage("Player not found", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ChatUtils.SendMessage($"Player {Username} is admin", ChatUtils.GetChat(connection), [connection], null);
+            await ChatUtils.SendMessage($"Player {Username} is admin", ChatUtils.GetChat(connection), [connection], null);
             return;
         }
 
-        Punishment punishment = targetPlayer.Ban(Reason, null);
+        Punishment punishment = await targetPlayer.Ban(Reason, null);
         targetConnection?.Kick(Reason);
 
         if (notifyChat == null || notifiedConnections == null) {
@@ -46,7 +47,7 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
             notifiedConnections = connection.Server.PlayerConnections.Values.ToList();
         }
 
-        ChatUtils.SendMessage($"{Username} was {punishment}", notifyChat, notifiedConnections, null);
-        ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", ChatUtils.GetChat(connection), [connection], null);
+        await ChatUtils.SendMessage($"{Username} was {punishment}", notifyChat, notifiedConnections, null);
+        await ChatUtils.SendMessage($"Punishment Id: {punishment.Id}", ChatUtils.GetChat(connection), [connection], null);
     }
 }

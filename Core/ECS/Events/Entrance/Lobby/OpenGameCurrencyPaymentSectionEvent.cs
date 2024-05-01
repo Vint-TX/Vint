@@ -6,7 +6,8 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 
 [ProtocolId(1455283639698)]
 public class OpenGameCurrencyPaymentSectionEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         // TODO
+        return Task.CompletedTask;
     }
 }

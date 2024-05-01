@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
 public class RestorePasswordByEmailEvent : IServerEvent {
     public string Email { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Warning("Restoring password '{Email}'", Email);
@@ -25,5 +25,7 @@ public class RestorePasswordByEmailEvent : IServerEvent {
         //todo
 
         connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(Email));*/
+
+        return Task.CompletedTask;
     }
 }

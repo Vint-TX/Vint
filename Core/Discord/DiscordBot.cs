@@ -58,16 +58,16 @@ public class DiscordBot(
         ReportsChannel = await Client.GetChannelAsync(ConfigManager.Discord.ReportsChannelId);
     }
 
-    public void SetPlayersCount(int count) {
+    public async Task SetPlayersCount(int count) {
         if (Client is not { IsConnected: true } || LastPlayersCount == count) return;
 
-        Task.Run(async () => await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), ActivityType.Competing)));
+        await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), ActivityType.Competing));
         LastPlayersCount = count;
     }
 
-    public void SendReport(string message, string reporter) {
+    public async Task SendReport(string message, string reporter) {
         DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(message, "New report submitted", $"Reported by **{reporter}**");
 
-        Task.Run(async () => await ReportsChannel.SendMessageAsync(embed));
+        await ReportsChannel.SendMessageAsync(embed);
     }
 }

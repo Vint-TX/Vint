@@ -54,8 +54,8 @@ public class OnGround(
         Flag.Entity.AddComponent<FlagGroundedStateComponent>();
     }
 
-    public override void Tick() {
-        base.Tick();
+    public override async Task Tick() {
+        await base.Tick();
 
         if (DateTimeOffset.UtcNow < ReturnAtTime) return;
 

@@ -7,13 +7,15 @@ namespace Vint.Core.ECS.Events.Battle;
 
 [ProtocolId(-4669704207166218448)]
 public class ExitBattleEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattle) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattle) return Task.CompletedTask;
 
         BattlePlayer battlePlayer = connection.BattlePlayer;
         Battles.Battle battle = battlePlayer.Battle;
 
         if (battlePlayer.IsSpectator || battlePlayer.InBattleAsTank)
             battle.RemovePlayer(battlePlayer);
+
+        return Task.CompletedTask;
     }
 }

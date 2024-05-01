@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -10,19 +11,19 @@ namespace Vint.Core.ECS.Events.User;
 public class UserInteractionDataRequestEvent : IServerEvent {
     public long UserId { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
-        Player? player = db.Players.SingleOrDefault(player => player.Id == UserId);
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
+        Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
         if (player == null) return;
 
-        Relation? thisToTargetRelation = db.Relations
-            .SingleOrDefault(relation => relation.SourcePlayerId == connection.Player.Id &&
-                                         relation.TargetPlayerId == player.Id);
+        Relation? thisToTargetRelation = await db.Relations
+            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == connection.Player.Id &&
+                                              relation.TargetPlayerId == player.Id);
 
-        Relation? targetToThisRelation = db.Relations
-            .SingleOrDefault(relation => relation.SourcePlayerId == player.Id &&
-                                         relation.TargetPlayerId == connection.Player.Id);
+        Relation? targetToThisRelation = await db.Relations
+            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == player.Id &&
+                                              relation.TargetPlayerId == connection.Player.Id);
 
         bool noRelations = !IsFriend(thisToTargetRelation) &&
                            !IsBlocked(thisToTargetRelation) &&

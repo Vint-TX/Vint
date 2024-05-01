@@ -6,6 +6,6 @@ namespace Vint.Core.ECS.Events.Entrance.Invite;
 
 [ProtocolId(1444892358143)]
 public class ReleaseInviteReservationEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) =>
-        connection.Invite = null;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) =>
+        Task.FromResult(connection.Invite = null);
 }

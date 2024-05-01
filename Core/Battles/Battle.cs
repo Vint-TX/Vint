@@ -187,7 +187,7 @@ public class Battle {
         BonusProcessor?.Start();
     }
 
-    public void Finish() {
+    public async Task Finish() {
         if (StateManager.CurrentState is Ended) return;
 
         StateManager.SetState(new Ended(StateManager));
@@ -209,7 +209,7 @@ public class Battle {
 
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattle)) {
             try {
-                battlePlayer.OnBattleEnded();
+                await battlePlayer.OnBattleEnded();
             } catch { /**/ }
         }
 

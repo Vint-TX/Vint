@@ -10,8 +10,9 @@ namespace Vint.Core.ECS.Events.Screen;
 public class EnterScreenEvent : IServerEvent {
     public string Screen { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
         logger.Information("Entered screen {Screen}", Screen);
+        return Task.CompletedTask;
     }
 }

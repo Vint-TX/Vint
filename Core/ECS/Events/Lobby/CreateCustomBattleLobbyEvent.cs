@@ -9,8 +9,11 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class CreateCustomBattleLobbyEvent : IServerEvent {
     public BattleProperties Properties { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.InLobby) return Task.CompletedTask;
+
         Battles.Battle battle = connection.Server.BattleProcessor.CreateCustomBattle(Properties, connection);
         battle.AddPlayer(connection);
+        return Task.CompletedTask;
     }
 }

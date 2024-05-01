@@ -13,7 +13,7 @@ namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(1485777098598)]
 public class ModuleMountEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         entities = (IEntity[])entities;
 
         IEntity moduleUserItem = entities.ElementAt(0);
@@ -26,22 +26,22 @@ public class ModuleMountEvent : IServerEvent {
         long marketItemId = moduleUserItem.GetComponent<MarketItemGroupComponent>().Key;
 
         Database.Models.Module? module = player.Modules.SingleOrDefault(module => module.Id == marketItemId);
-        
+
         if (module == null || module.Level < 0) return;
-        
+
         Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
 
-        using DbConnection db = new();
+        await using DbConnection db = new();
 
-        PresetModule? presetModule = db.PresetModules
-            .SingleOrDefault(pModule => pModule.PlayerId == player.Id &&
+        PresetModule? presetModule = await db.PresetModules
+            .SingleOrDefaultAsync(pModule => pModule.PlayerId == player.Id &&
                                         pModule.PresetIndex == player.CurrentPresetIndex &&
                                         pModule.Slot == slot);
 
         presetModule ??= new PresetModule { Player = player, Preset = player.CurrentPreset, Slot = slot };
         presetModule.Entity = connection.GetEntity(marketItemId)!;
 
-        db.InsertOrReplace(presetModule);
+        await db.InsertOrReplaceAsync(presetModule);
 
         player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
         player.CurrentPreset.Modules.Add(presetModule);

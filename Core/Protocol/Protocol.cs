@@ -70,7 +70,7 @@ public class Protocol {
 
     Dictionary<long, Type> Types { get; } = new();
     Dictionary<ICodecInfo, ICodec> Codecs { get; } = new();
-    List<ICodecFactory> Factories { get; } = new();
+    List<ICodecFactory> Factories { get; } = [];
 
     public void Register(Type type, Codec codec) => InitAndRegister(new TypeCodecInfo(type), codec);
 

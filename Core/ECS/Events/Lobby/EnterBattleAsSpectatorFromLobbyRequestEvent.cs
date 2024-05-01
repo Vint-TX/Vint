@@ -8,11 +8,12 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class EnterBattleAsSpectatorFromLobbyRequestEvent : IServerEvent {
     public long BattleId { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         Battles.Battle? battle = connection.Server.BattleProcessor.FindByBattleId(BattleId);
 
-        if (connection.InLobby || battle == null) return;
+        if (connection.InLobby || battle == null) return Task.CompletedTask;
 
         battle.AddPlayer(connection, true);
+        return Task.CompletedTask;
     }
 }

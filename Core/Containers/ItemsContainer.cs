@@ -17,30 +17,30 @@ public class ItemsContainer(
     ItemsContainerItemComponent ItemsComponent { get; } =
         ConfigManager.GetComponent<ItemsContainerItemComponent>(marketItem.TemplateAccessor!.ConfigPath!);
 
-    public override IEnumerable<IEntity> Open(IPlayerConnection connection, long amount) {
+    public override async IAsyncEnumerable<IEntity> Open(IPlayerConnection connection, long amount) {
         WyRandom random = new();
 
         while (amount > 0) {
             amount--;
 
-            IEntity regularReward = GetReward(ItemsComponent.Items, connection, random, out int itemAmount, out long compensation);
-            yield return SaveRewardOrCompensation(connection, regularReward, itemAmount, compensation);
+            (IEntity regularReward, int itemAmount, long compensation) = await GetReward(ItemsComponent.Items, connection, random);
+            yield return await SaveRewardOrCompensation(connection, regularReward, itemAmount, compensation);
 
             if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || random.NextFloat() > 0.1 /* 10% */) continue;
 
-            IEntity rareReward = GetReward(ItemsComponent.RareItems, connection, random, out itemAmount, out compensation);
-            yield return SaveRewardOrCompensation(connection, rareReward, itemAmount, compensation);
+            (IEntity rareReward, itemAmount, compensation) = await GetReward(ItemsComponent.RareItems, connection, random);
+            yield return await SaveRewardOrCompensation(connection, rareReward, itemAmount, compensation);
         }
     }
 
-    static IEntity GetReward(
+    static async Task<(IEntity, int, long)> GetReward(
         IReadOnlyList<ContainerItem> rewards,
         IPlayerConnection connection,
-        IRandomSource random,
-        out int amount,
-        out long compensation) {
+        IRandomSource random) {
         int rollCountLeft = 10;
         IEntity reward;
+        int amount;
+        long compensation;
 
         do {
             ContainerItem item = rewards[random.Next(rewards.Count)];
@@ -50,37 +50,36 @@ public class ItemsContainer(
             amount = random.Next(bundle.Amount, bundle.Max + 1);
             reward = connection.SharedEntities.Single(entity => entity.Id == bundle.MarketItem);
             rollCountLeft--;
-        } while (rollCountLeft >= 0 && !ValidateReward(connection, reward));
+        } while (rollCountLeft >= 0 && !await ValidateReward(connection, reward));
 
-        if (rollCountLeft >= 0 || ValidateReward(connection, reward)) return reward;
-
-        reward = GlobalEntities.GetEntity("misc", "Crystal");
-        amount = (int)compensation;
-        return reward;
+        return rollCountLeft >= 0 || await ValidateReward(connection, reward)
+            ? (reward, amount, compensation)
+            : (GlobalEntities.GetEntity("misc", "Crystal"), (int)compensation, compensation);
     }
 
-    IEntity SaveRewardOrCompensation(IPlayerConnection connection, IEntity marketItem, int amount, long compensation) {
-        if (connection.OwnsItem(marketItem)) {
+    async Task<IEntity> SaveRewardOrCompensation(IPlayerConnection connection, IEntity marketItem, int amount, long compensation) {
+        if (await connection.OwnsItem(marketItem)) {
             marketItem = GlobalEntities.GetEntity("misc", "Crystal");
             amount = (int)compensation;
-            connection.ChangeCrystals(compensation);
+            await connection.ChangeCrystals(compensation);
         } else
-            connection.PurchaseItem(marketItem, amount, 0, false, false);
+            await connection.PurchaseItem(marketItem, amount, 0, false, false);
 
         return new NewItemNotificationTemplate().CreateRegular(MarketItem, marketItem, amount);
     }
 
-    static bool ValidateReward(IPlayerConnection connection, IEntity marketItem) {
+    static async Task<bool> ValidateReward(IPlayerConnection connection, IEntity marketItem) {
         if (!marketItem.HasComponent<ParentGroupComponent>()) return true;
 
         EntityTemplate? template = marketItem.TemplateAccessor?.Template;
 
         if (template == null) return false;
 
-        return template is not
-                   (HullSkinMarketItemTemplate or WeaponSkinMarketItemTemplate or ShellMarketItemTemplate) ||
-               connection.OwnsItem(GlobalEntities.AllMarketTemplateEntities
-                   .Single(entity =>
-                       entity.Id == marketItem.GetComponent<ParentGroupComponent>().Key));
+        return template is not (
+                   HullSkinMarketItemTemplate or
+                   WeaponSkinMarketItemTemplate or
+                   ShellMarketItemTemplate) ||
+               await connection.OwnsItem(GlobalEntities.AllMarketTemplateEntities.Single(entity =>
+                   entity.Id == marketItem.GetComponent<ParentGroupComponent>().Key));
     }
 }

@@ -8,9 +8,10 @@ namespace Vint.Core.ECS.Events.Battle;
 public class ActivateTankEvent : IServerEvent {
     public long Phase { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (connection.BattlePlayer is not { InBattleAsTank: true }) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.BattlePlayer is not { InBattleAsTank: true }) return Task.CompletedTask;
 
         connection.BattlePlayer.Tank!.CollisionsPhase = Phase;
+        return Task.CompletedTask;
     }
 }

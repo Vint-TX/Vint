@@ -1,4 +1,5 @@
-﻿using Vint.Core.Battles;
+﻿using LinqToDB;
+using Vint.Core.Battles;
 using Vint.Core.Battles.Player;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -31,14 +32,15 @@ public static class ChatUtils {
         }
     };
 
-    public static ChatMessageReceivedEvent? CreateMessageEvent(string message, IPlayerConnection receiver, IPlayerConnection? sender) {
+    public static async Task<ChatMessageReceivedEvent?> CreateMessageEvent(string message, IPlayerConnection receiver, IPlayerConnection? sender) {
         bool isSystem = sender == null;
 
-        using DbConnection db = new();
+        await using DbConnection db = new();
+
         bool isBlocked = !isSystem &&
-                         db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == receiver.Player.Id &&
-                                                                  relation.TargetPlayerId == sender!.Player.Id &&
-                                                                  (relation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) !=
+                         await db.Relations.SingleOrDefaultAsync(relation => relation.SourcePlayerId == receiver.Player.Id &&
+                                                                             relation.TargetPlayerId == sender!.Player.Id &&
+                                                                             (relation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) !=
                          null;
 
         if (isBlocked) return null;
@@ -63,9 +65,9 @@ public static class ChatUtils {
         return new ChatMessageReceivedEvent(username, message, userId, avatarId, isSystem);
     }
 
-    public static void SendMessage(string message, IEntity chat, IEnumerable<IPlayerConnection> receivers, IPlayerConnection? sender) {
+    public static async Task SendMessage(string message, IEntity chat, IEnumerable<IPlayerConnection> receivers, IPlayerConnection? sender) {
         foreach (IPlayerConnection receiver in receivers) {
-            ChatMessageReceivedEvent? messageEvent = CreateMessageEvent(message, receiver, sender);
+            ChatMessageReceivedEvent? messageEvent = await CreateMessageEvent(message, receiver, sender);
 
             if (messageEvent == null) continue;
 

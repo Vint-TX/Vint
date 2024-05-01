@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using LinqToDB;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
@@ -130,7 +129,7 @@ public class BattlePlayer {
             .SelectMany(player => player.Tank!.Entities));
     }
 
-    public void OnBattleEnded() {
+    public async Task OnBattleEnded() {
         Database.Models.Player player = PlayerConnection.Player;
 
         if (IsSpectator) {
@@ -142,70 +141,74 @@ public class BattlePlayer {
         Preset preset = player.CurrentPreset;
         IEntity previousLeague = player.LeagueEntity;
         int reputationDelta;
-        using DbConnection db = new();
+        await using DbConnection db = new();
 
-        db.BeginTransaction();
-        db.SeasonStatistics
+        await db.BeginTransactionAsync();
+        await db.SeasonStatistics
             .Where(stats => stats.PlayerId == player.Id &&
                             stats.SeasonNumber == ConfigManager.SeasonNumber)
             .Set(stats => stats.BattlesPlayed, stats => stats.BattlesPlayed + 1)
-            .Update();
+            .UpdateAsync();
 
-        db.Hulls
+        await db.Hulls
             .Where(hull => hull.PlayerId == player.Id &&
                            hull.Id == preset.Hull.Id)
             .Set(hull => hull.BattlesPlayed, hull => hull.BattlesPlayed + 1)
-            .Update();
+            .UpdateAsync();
 
-        db.Weapons
+        await db.Weapons
             .Where(weapon => weapon.PlayerId == player.Id &&
                              weapon.Id == preset.Weapon.Id)
             .Set(weapon => weapon.BattlesPlayed, weapon => weapon.BattlesPlayed + 1)
-            .Update();
+            .UpdateAsync();
 
         if (Battle.TypeHandler is not MatchmakingHandler) {
-            db.Statistics
+            await db.Statistics
                 .Where(stats => stats.PlayerId == player.Id)
                 .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
                 .Set(stats => stats.AllCustomBattlesParticipated, stats => stats.AllCustomBattlesParticipated + 1)
-                .Update();
+                .UpdateAsync();
 
-            db.CommitTransaction();
+            await db.CommitTransactionAsync();
             reputationDelta = 0;
         } else {
-            db.Statistics
+            await db.Statistics
                 .Where(stats => stats.PlayerId == player.Id)
                 .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
                 .Set(stats => stats.BattlesParticipated, stats => stats.BattlesParticipated + 1)
                 .Set(stats => stats.Defeats, stats => stats.Defeats + (TeamBattleResult == TeamBattleResult.Defeat ? 1 : 0))
                 .Set(stats => stats.Victories, stats => stats.Victories + (TeamBattleResult == TeamBattleResult.Win ? 1 : 0))
-                .Update();
+                .UpdateAsync();
 
-            db.CommitTransaction();
+            await db.CommitTransactionAsync();
 
             if (player.DesertedBattlesCount == 0)
                 PlayerConnection.BattleSeries++;
 
             int score = GetBattleUserScoreWithBonus();
 
-            Leveling.UpdateItemXp(preset.Hull, PlayerConnection, score);
-            Leveling.UpdateItemXp(preset.Weapon, PlayerConnection, score);
+            await Leveling.UpdateItemXp(preset.Hull, PlayerConnection, score);
+            await Leveling.UpdateItemXp(preset.Weapon, PlayerConnection, score);
 
             reputationDelta = Battle.ModeHandler.CalculateReputationDelta(this);
-            PlayerConnection.ChangeReputation(reputationDelta);
-            PlayerConnection.ChangeGameplayChestScore(score);
+            await PlayerConnection.ChangeReputation(reputationDelta);
+            await PlayerConnection.ChangeGameplayChestScore(score);
         }
 
-        PersonalBattleResultForClient personalBattleResult = new(PlayerConnection, previousLeague, reputationDelta);
+        PersonalBattleResultForClient personalBattleResult = new();
+        await personalBattleResult.Init(PlayerConnection, previousLeague, reputationDelta);
+
         BattleResultForClient battleResult = new(Battle, IsSpectator, personalBattleResult);
 
         PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.User);
     }
 
-    public void OnAntiCheatSuspected() {
+    public async Task OnAntiCheatSuspected() {
         if (Reported) return;
 
-        PlayerConnection.Server.DiscordBot?.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
+        if (PlayerConnection.Server.DiscordBot != null)
+            await PlayerConnection.Server.DiscordBot.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
+
         Reported = true;
     }
 

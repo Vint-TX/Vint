@@ -1,4 +1,5 @@
-﻿using Vint.Core.Database;
+﻿using LinqToDB;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -18,27 +19,20 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool Steam { get; private set; }
     public bool QuickRegistration { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!RegexUtils.IsLoginValid(Username) || !RegexUtils.IsEmailValid(Email)) {
             connection.Send(new RegistrationFailedEvent());
             return;
         }
 
-        using (DbConnection db = new()) {
-            if (db.Players.Any(player => player.Username == Username) ||
-                db.Players.Count(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
+        await using (DbConnection db = new()) {
+            if (await db.Players.AnyAsync(player => player.Username == Username) ||
+                await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
                 connection.Send(new RegistrationFailedEvent());
                 return;
             }
         }
 
-        connection.Register(
-            Username,
-            EncryptedPasswordDigest,
-            Email,
-            HardwareFingerprint,
-            Subscribed,
-            Steam,
-            QuickRegistration);
+        await connection.Register(Username, EncryptedPasswordDigest, Email, HardwareFingerprint, Subscribed, Steam, QuickRegistration);
     }
 }

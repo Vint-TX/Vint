@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -12,7 +13,7 @@ public class LoadUsersEvent : IServerEvent {
     public long RequestEntityId { get; private set; }
     public HashSet<long> UsersId { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
         List<IPlayerConnection> playerConnections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .ToList();
@@ -35,9 +36,9 @@ public class LoadUsersEvent : IServerEvent {
             } else if (user != null) { // player is online
                 connection.ShareIfUnshared(user);
             } else { // player is offline
-                using DbConnection db = new();
+                await using DbConnection db = new();
 
-                Player? player = db.Players.SingleOrDefault(player => player.Id == userId);
+                Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == userId);
 
                 if (player == null) continue;
 

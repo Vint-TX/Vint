@@ -9,10 +9,10 @@ using Vint.Core.Server;
 namespace Vint.Core.ECS.Events.User.PromoCode;
 
 [ProtocolId(1490877430206)]
-public class ActivatePromoCodeEvent : IServerEvent {
+public class ActivatePromoCodeEvent : IServerEvent { // todo
     public string Code { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         string[] parts = Code.Split('/');
 
         if (parts.Length > 2) return;
@@ -30,7 +30,7 @@ public class ActivatePromoCodeEvent : IServerEvent {
 
         IEntity user = entities.Single();
 
-        connection.PurchaseItem(item, 1, 0, false, false);
+        await connection.PurchaseItem(item, 1, 0, false, false);
         connection.Share(new NewItemNotificationTemplate().CreateRegular(user, item, 1));
         connection.Send(new ShowNotificationGroupEvent(1), user);
     }

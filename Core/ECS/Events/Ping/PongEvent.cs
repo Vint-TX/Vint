@@ -9,11 +9,12 @@ public class PongEvent : IServerEvent {
     public float PongCommandClientRealTime { get; private set; }
     public sbyte CommandId { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         DateTimeOffset receiveTime = DateTimeOffset.UtcNow;
         float ping = receiveTime.ToUnixTimeMilliseconds() - PongCommandClientRealTime;
 
         connection.Send(new PingResultEvent(receiveTime, ping));
         connection.PongReceiveTime = receiveTime;
+        return Task.CompletedTask;
     }
 }

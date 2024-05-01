@@ -10,8 +10,8 @@ namespace Vint.Core.ECS.Events.Chat;
 public class CreatePrivateChatEvent : IServerEvent {
     [ProtocolName("UserUid")] public string Username { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (connection.Player.Username == Username) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.Player.Username == Username) return Task.CompletedTask;
 
         IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .Where(playerConnection => playerConnection.IsOnline)
@@ -19,7 +19,7 @@ public class CreatePrivateChatEvent : IServerEvent {
 
         if (targetConnection == null) {
             connection.DisplayMessage($"{Username} is offline");
-            return;
+            return Task.CompletedTask;
         }
 
         IEntity? chat = connection.User.GetComponent<PersonalChatOwnerComponent>().Chats
@@ -38,5 +38,6 @@ public class CreatePrivateChatEvent : IServerEvent {
 
         connection.User.ChangeComponent<PersonalChatOwnerComponent>(component => component.Chats.Add(chat));
         connection.Share(chat);
+        return Task.CompletedTask;
     }
 }

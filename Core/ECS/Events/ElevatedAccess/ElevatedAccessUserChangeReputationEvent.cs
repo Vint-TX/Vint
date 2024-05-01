@@ -8,9 +8,9 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 public class ElevatedAccessUserChangeReputationEvent : IServerEvent {
     public int Count { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
-        connection.ChangeReputation(Count);
+        await connection.ChangeReputation(Count);
     }
 }

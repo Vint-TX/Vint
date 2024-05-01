@@ -9,7 +9,6 @@ using Vint.Core.Battles.Modules;
 using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Results;
-using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
@@ -147,7 +146,7 @@ public class BattleTank {
 
     public DateTimeOffset BattleEnterTime { get; }
     public BattleTankStatistics Statistics { get; }
-    public UserResult Result { get; private set; }
+    public UserResult Result { get; private set; } = null!;
     public Dictionary<BattleTank, float> KillAssistants { get; } = new();
     public ConcurrentHashSet<TemperatureAssist> TemperatureAssists { get; } = [];
     public float DealtDamage { get; set; }

@@ -25,7 +25,7 @@ public sealed class ChatCommand(
     public MethodInfo Method { get; } = method;
     public List<ParameterInfo> Parameters { get; } = parameters;
 
-    public void Execute(IPlayerConnection connection, IEntity chat, string rawCommand) {
+    public async Task Execute(IPlayerConnection connection, IEntity chat, string rawCommand) {
         ChatCommandContext context = new(Processor, connection, chat, Info);
         bool shouldExecute = Module.BeforeCommandExecution(context);
 
@@ -34,14 +34,14 @@ public sealed class ChatCommand(
         foreach (BaseCheckAttribute checkAttribute in Method.GetCustomAttributes<BaseCheckAttribute>()) {
             if (checkAttribute.Check(context)) continue;
 
-            context.SendPrivateResponse(checkAttribute.CheckFailedMessage);
+            await context.SendPrivateResponse(checkAttribute.CheckFailedMessage);
             return;
         }
 
         if (Method.GetCustomAttribute<RequirePermissionsAttribute>() == null &&
             ChatCommandGroupAttribute != null &&
             (context.Connection.Player.Groups & ChatCommandGroupAttribute.Permissions) != ChatCommandGroupAttribute.Permissions) {
-            context.SendPrivateResponse("Not enough permissions to execute command");
+            await context.SendPrivateResponse("Not enough permissions to execute command");
             return;
         }
 
@@ -53,7 +53,7 @@ public sealed class ChatCommand(
 
         if (rawParameterValues.Count > Parameters.Count &&
             Parameters.All(param => param.GetCustomAttribute<WaitingForTextAttribute>() == null)) {
-            context.SendPrivateResponse($"Too much parameters. Expected: {Parameters.Count}, got: {rawParameterValues.Count}");
+            await context.SendPrivateResponse($"Too much parameters. Expected: {Parameters.Count}, got: {rawParameterValues.Count}");
             return;
         }
 
@@ -64,7 +64,7 @@ public sealed class ChatCommand(
             if (rawParameterValue == null) {
                 if (!parameterInfo.IsOptional) {
                     OptionAttribute optionAttribute = Options[parameterInfo.Name!];
-                    context.SendPrivateResponse($"Parameter '{optionAttribute.Name}' not found");
+                    await context.SendPrivateResponse($"Parameter '{optionAttribute.Name}' not found");
                     return;
                 }
 
@@ -94,23 +94,23 @@ public sealed class ChatCommand(
                     object? minValue = parameterInfo.ParameterType.GetField("MinValue")?.GetValue(null);
                     object? maxValue = parameterInfo.ParameterType.GetField("MaxValue")?.GetValue(null);
 
-                    context.SendPrivateResponse($"'{option}' must be in range from '{minValue}' to '{maxValue}'");
+                    await context.SendPrivateResponse($"'{option}' must be in range from '{minValue}' to '{maxValue}'");
                     return;
                 }
 
-                context.SendPrivateResponse($"Unexpected '{option}' parameter type. Expected: {parameterInfo.ParameterType.Name}");
+                await context.SendPrivateResponse($"Unexpected '{option}' parameter type. Expected: {parameterInfo.ParameterType.Name}");
                 return;
             }
         }
 
         try {
-            Method.Invoke(Module, parameters.ToArray());
+            await (Task)Method.Invoke(Module, parameters.ToArray())!;
             Module.AfterCommandExecution(context);
         } catch (TargetParameterCountException) {
-            context.SendPrivateResponse($"Too few parameters. Expected: {Parameters.Count}, got: {parameters.Count - 1}");
+            await context.SendPrivateResponse($"Too few parameters. Expected: {Parameters.Count}, got: {parameters.Count - 1}");
         } catch (TargetInvocationException invocationException) {
             if (invocationException.InnerException is NotImplementedException)
-                context.SendPrivateResponse($"Handler for '{Info.Name}' command is not implemented yet");
+                await context.SendPrivateResponse($"Handler for '{Info.Name}' command is not implemented yet");
             else throw;
         }
     }

@@ -5,9 +5,9 @@ using Vint.Core.Server;
 namespace Vint.Core.ECS.Events.Ping;
 
 [ProtocolId(1480333679186)]
-public class BattlePingResultEvent : IServerEvent {
+public class BattlePingResultEvent : IServerEvent { // todo ??
     public float ClientSendRealTime { get; private set; }
     public float ClientReceiveRealTime { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { } // todo
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) => Task.CompletedTask;
 }

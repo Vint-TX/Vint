@@ -8,8 +8,8 @@ namespace Vint.Core.ECS.Events.Battle.Pause;
 
 [ProtocolId(-1316093147997460626)]
 public class PauseEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank || connection.BattlePlayer.IsPaused) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank || connection.BattlePlayer.IsPaused) return Task.CompletedTask;
 
         IEntity user = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer;
@@ -20,5 +20,6 @@ public class PauseEvent : IServerEvent {
         user.AddComponent<PauseComponent>();
         user.AddComponent(new IdleCounterComponent(0));
         connection.Send(new IdleBeginTimeSyncEvent(DateTimeOffset.UtcNow), user);
+        return Task.CompletedTask;
     }
 }

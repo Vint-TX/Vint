@@ -14,21 +14,21 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
-        Player? targetPlayer = db.Players.SingleOrDefault(player => player.Id == UserId);
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
+        Player? targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
         if (targetPlayer == null) return;
 
-        Relation? thisToTargetRelation = db.Relations
-            .SingleOrDefault(relation => relation.SourcePlayerId == connection.User.Id &&
+        Relation? thisToTargetRelation = await db.Relations
+            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == connection.User.Id &&
                                          relation.TargetPlayerId == UserId);
 
-        db.BeginTransaction();
+        await db.BeginTransactionAsync();
 
         if (thisToTargetRelation == null) { // no relation to target; block
             thisToTargetRelation = new Relation { SourcePlayer = connection.Player, TargetPlayer = targetPlayer, Types = RelationTypes.Blocked };
-            db.Insert(thisToTargetRelation);
+            await db.InsertAsync(thisToTargetRelation);
         } else { // change the state of relations
             if ((thisToTargetRelation.Types & RelationTypes.Blocked) == RelationTypes.Blocked) { // player already blocked target player; unblock
                 thisToTargetRelation.Types &= ~(RelationTypes.Blocked |
@@ -38,7 +38,7 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
             } else { // target player is not blocked; block
                 thisToTargetRelation.Types |= RelationTypes.Blocked;
 
-                Relation? targetToThisRelation = db.Relations.SingleOrDefault(relation => relation.SourcePlayerId == UserId &&
+                Relation? targetToThisRelation = await db.Relations.SingleOrDefaultAsync(relation => relation.SourcePlayerId == UserId &&
                                                                                           relation.TargetPlayerId == connection.User.Id);
 
                 if (targetToThisRelation != null) {
@@ -46,13 +46,13 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
                                                     RelationTypes.IncomingRequest |
                                                     RelationTypes.OutgoingRequest);
 
-                    db.Update(targetToThisRelation);
+                    await db.UpdateAsync(targetToThisRelation);
                 }
             }
 
-            db.Update(thisToTargetRelation);
+            await db.UpdateAsync(thisToTargetRelation);
         }
 
-        db.CommitTransaction();
+        await db.CommitTransactionAsync();
     }
 }

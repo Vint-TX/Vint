@@ -8,7 +8,7 @@ public class CloseCommand(
 ) : ICommand {
     public string Reason => reason;
 
-    public void Execute(IPlayerConnection connection) => throw new UnreachableException();
+    public Task Execute(IPlayerConnection connection) => throw new UnreachableException();
 
     public override string ToString() => $"Close command {{ Reason: '{Reason}' }}";
 }

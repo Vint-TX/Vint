@@ -16,7 +16,7 @@ public class ComponentAddCommand(
 ) : EntityCommand(entity) {
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
-    public override void Execute(IPlayerConnection connection) {
+    public override async Task Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
         Type type = Component.GetType();
         ClientAddableAttribute? clientAddable = type.GetCustomAttribute<ClientAddableAttribute>();
@@ -28,7 +28,7 @@ public class ComponentAddCommand(
         }
 
         Entity.AddComponent(Component, connection);
-        Component.Added(connection, Entity);
+        await Component.Added(connection, Entity);
 
         logger.Debug("Added {Component} to {Entity}", type.Name, Entity);
     }

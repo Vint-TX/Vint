@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -11,7 +12,7 @@ namespace Vint.Core.ECS.Events.User;
 public class RequestLoadUserProfileEvent : IServerEvent {
     public long UserId { get; private set; }
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IEntity? user = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == UserId)?.User;
@@ -32,8 +33,8 @@ public class RequestLoadUserProfileEvent : IServerEvent {
         } else if (user != null) { // player is online
             connection.ShareIfUnshared(user);
         } else { // player is offline
-            using DbConnection db = new();
-            Player? player = db.Players.SingleOrDefault(player => player.Id == UserId);
+            await using DbConnection db = new();
+            Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
             if (player == null) return;
 

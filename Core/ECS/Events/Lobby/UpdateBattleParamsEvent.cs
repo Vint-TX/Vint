@@ -12,8 +12,8 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class UpdateBattleParamsEvent : IServerEvent {
     public BattleProperties Params { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby) return Task.CompletedTask;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
@@ -21,8 +21,9 @@ public class UpdateBattleParamsEvent : IServerEvent {
         if ((battle.TypeHandler is not CustomHandler customHandler ||
              battle.StateManager.CurrentState is not NotStarted and not Ended ||
              customHandler.Owner != connection) &&
-            !connection.Player.IsAdmin) return;
+            !connection.Player.IsAdmin) return Task.CompletedTask;
 
         battle.UpdateProperties(Params);
+        return Task.CompletedTask;
     }
 }

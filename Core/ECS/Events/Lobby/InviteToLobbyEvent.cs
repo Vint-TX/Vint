@@ -8,8 +8,8 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class InviteToLobbyEvent : IServerEvent {
     public long[] InvitedUsersIds { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby) return Task.CompletedTask;
 
         List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
@@ -17,5 +17,7 @@ public class InviteToLobbyEvent : IServerEvent {
 
         foreach (IPlayerConnection? receiver in InvitedUsersIds.Select(userId => connections.SingleOrDefault(conn => conn.Player.Id == userId)))
             receiver?.Send(new InvitedToLobbyEvent(connection.Player.Username, connection.BattlePlayer!.Battle.LobbyId), receiver.User);
+
+        return Task.CompletedTask;
     }
 }

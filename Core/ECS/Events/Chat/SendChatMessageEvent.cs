@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Text.RegularExpressions;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
@@ -10,7 +9,6 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
-using YamlDotNet.Core;
 
 namespace Vint.Core.ECS.Events.Chat;
 
@@ -20,54 +18,54 @@ public class SendChatMessageEvent : IServerEvent {
 
     public string Message { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
         IEntity chat = entities.Single();
 
         if (sender.Server.ChatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
             if (chatCommand == null)
-                ChatUtils.SendMessage("Unknown command", chat, [sender], null);
+                await ChatUtils.SendMessage("Unknown command", chat, [sender], null);
             else
-                chatCommand.Execute(sender, chat, Message);
+                await chatCommand.Execute(sender, chat, Message);
 
             return;
         }
 
-        Punishment? mute = sender.Player.GetMuteInfo();
+        Punishment? mute = await sender.Player.GetMuteInfo();
 
         if (mute is { Active: true }) {
-            ChatUtils.SendMessage($"You have been {mute}", chat, [sender], null);
+            await ChatUtils.SendMessage($"You have been {mute}", chat, [sender], null);
             return;
         }
-        
+
         if (!Validate(chat.TemplateAccessor!.ConfigPath!)) {
             sender.Logger.ForType(GetType()).Warning("Message failed validation: '{Message}'", Message);
             return;
         }
-        
+
         CleanupMessage();
-        ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(sender, chat), sender);
+        await ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(sender, chat), sender);
     }
 
     bool Validate(string chatConfigPath) {
         ChatConfigComponent chatConfig = GetChatConfig(chatConfigPath);
-        
+
         return !string.IsNullOrWhiteSpace(Message) && Message.Length > 0 && Message.Length <= chatConfig.MaxMessageLength;
     }
-    
+
     void CleanupMessage() {
         Message = Message.Trim();
-        
+
         if (!ChatUtils.CensorshipEnabled) return;
-        
+
         ConcurrentDictionary<string, Regex> badWords = new();
-        
+
         Parallel.ForEach(ConfigManager.CensorshipRegexes, pair => {
             (string word, Regex regex) = pair;
-            
+
             if (regex.IsMatch(Message))
                 badWords.TryAdd(word, regex);
         });
-        
+
         foreach ((string word, Regex regex) in badWords) {
             foreach (Match match in regex.Matches(word))
                 Message = regex.Replace(Message, new string('*', match.Value.Length));

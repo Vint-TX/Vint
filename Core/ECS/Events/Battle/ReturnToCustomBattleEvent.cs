@@ -6,9 +6,10 @@ namespace Vint.Core.ECS.Events.Battle;
 
 [ProtocolId(1498743823980)]
 public class ReturnToCustomBattleEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || connection.BattlePlayer!.InBattle) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby || connection.BattlePlayer!.InBattle) return Task.CompletedTask;
 
         connection.BattlePlayer.Init();
+        return Task.CompletedTask;
     }
 }

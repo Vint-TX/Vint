@@ -7,10 +7,10 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.MuzzlePoint;
 
 [ProtocolId(-2650671245931951659)]
 public class MuzzlePointSwitchEvent : MuzzlePointEvent, IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.WeaponHandler is not TwinsWeaponHandler) return;
+            connection.BattlePlayer.Tank!.WeaponHandler is not TwinsWeaponHandler) return Task.CompletedTask;
 
         IEntity weapon = entities.Single();
         Battles.Battle battle = connection.BattlePlayer.Battle;
@@ -21,5 +21,7 @@ public class MuzzlePointSwitchEvent : MuzzlePointEvent, IServerEvent {
                      .Where(player => player != connection.BattlePlayer)
                      .Select(player => player.PlayerConnection))
             playerConnection.Send(serverEvent, weapon);
+
+        return Task.CompletedTask;
     }
 }

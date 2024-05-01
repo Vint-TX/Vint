@@ -57,8 +57,8 @@ public static class Leveling {
         return MathUtils.Map(level, 0, 9, minValue, maxValue);
     }
 
-    public static int GetSeasonPlace(long userId) {
-        using DbConnection db = new();
+    public static async Task<int> GetSeasonPlace(long userId) {
+        await using DbConnection db = new();
 
         return db.SeasonStatistics
                    .Select(seasonStats => new { Id = seasonStats.PlayerId, seasonStats.Reputation })
@@ -70,21 +70,21 @@ public static class Leveling {
                1;
     }
 
-    public static IEntity? GetLevelUpRewards(IPlayerConnection connection) {
-        using DbConnection db = new();
-
+    public static async Task<IEntity?> GetLevelUpRewards(IPlayerConnection connection) {
         List<IEntity> rewards = [];
         List<IEntity> entities = connection.SharedEntities.ToList();
         Player player = connection.Player;
 
-        var hulls = db.Hulls.Where(hull => hull.PlayerId == player.Id).Select(hull => new { hull.Id, hull.Xp }).ToList();
-        var weapons = db.Weapons.Where(weapon => weapon.PlayerId == player.Id).Select(weapon => new { weapon.Id, weapon.Xp }).ToList();
+        await using DbConnection db = new();
+
+        var hulls = await db.Hulls.Where(hull => hull.PlayerId == player.Id).Select(hull => new { hull.Id, hull.Xp }).ToListAsync();
+        var weapons = await db.Weapons.Where(weapon => weapon.PlayerId == player.Id).Select(weapon => new { weapon.Id, weapon.Xp }).ToListAsync();
 
         foreach (IEntity child in entities.Where(entity => entity.TemplateAccessor?.Template
                                                                is ChildGraffitiMarketItemTemplate
                                                                or HullSkinMarketItemTemplate
                                                                or WeaponSkinMarketItemTemplate)) {
-            if (connection.OwnsItem(child)) continue;
+            if (await connection.OwnsItem(child)) continue;
 
             int rewardLevel = ConfigManager.GetComponent<MountUpgradeLevelRestrictionComponent>(child.TemplateAccessor!.ConfigPath!).RestrictionValue;
 
@@ -100,14 +100,14 @@ public static class Leveling {
 
             if (parentLevel < rewardLevel) continue;
 
-            connection.PurchaseItem(child, 1, 0, false, false);
+            await connection.PurchaseItem(child, 1, 0, false, false);
             rewards.Add(child);
         }
 
         return rewards.Count == 0 ? null : new LevelUpUnlockBattleRewardTemplate().Create(rewards);
     }
 
-    public static void UpdateItemXp(IEntity marketItem, IPlayerConnection connection, long delta) {
+    public static async Task UpdateItemXp(IEntity marketItem, IPlayerConnection connection, long delta) {
         IEntity userItem = marketItem.GetUserEntity(connection);
 
         if (!userItem.HasComponent<UserGroupComponent>()) return;
@@ -116,20 +116,20 @@ public static class Leveling {
         long playerId = userItem.GetComponent<UserGroupComponent>().Key;
         long xp = 0;
 
-        using (DbConnection db = new())
+        await using (DbConnection db = new())
             switch (template) {
                 case TankMarketItemTemplate:
-                    db.Hulls
+                    await db.Hulls
                         .Where(hull => hull.PlayerId == playerId && hull.Id == marketItem.Id)
                         .Set(hull => hull.Xp, hull => hull.Xp + delta)
-                        .Update();
+                        .UpdateAsync();
                     break;
 
                 case WeaponMarketItemTemplate:
-                    db.Weapons
+                    await db.Weapons
                         .Where(weapon => weapon.PlayerId == playerId && weapon.Id == marketItem.Id)
                         .Set(weapon => weapon.Xp, weapon => weapon.Xp + delta)
-                        .Update();
+                        .UpdateAsync();
                     break;
             }
 

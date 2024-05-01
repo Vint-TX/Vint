@@ -5,14 +5,14 @@ public abstract class State {
     public bool IsFinished { get; protected set; }
 
     public virtual void Start() => IsFinished = false;
-    
+
     public virtual void Started() { }
 
-    public virtual void Tick() { }
+    public virtual Task Tick() => Task.CompletedTask;
 
     public virtual void Finish() => IsFinished = true;
-    
+
     public virtual void Finished() { }
-    
+
     public override string ToString() => GetType().Name;
 }

@@ -27,7 +27,7 @@ public class Cooldown(
         base.Start();
 
         LastTickTime = StartTime = DateTimeOffset.UtcNow;
-        
+
         int cooldownMs = (int)Math.Ceiling(Module.Cooldown.TotalMilliseconds);
         Module.SlotEntity.AddComponent(new InventoryCooldownStateComponent(cooldownMs, StartTime));
 
@@ -35,13 +35,15 @@ public class Cooldown(
             Module.TryBlock(true, cooldownMs);
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         DateTimeOffset tickTime = DateTimeOffset.UtcNow;
         TimeSpan deltaTime = tickTime - LastTickTime;
-        
+
         Elapsed += deltaTime * Module.Tank.ModuleCooldownCoeff;
         CheckForCooldownEnd();
         LastTickTime = tickTime;
+
+        await base.Tick();
     }
 
     public override void Finish() {
@@ -49,15 +51,15 @@ public class Cooldown(
 
         Module.SlotEntity.RemoveComponent<InventoryCooldownStateComponent>();
     }
-    
+
     public void AddElapsedTime(TimeSpan delta) =>
         Elapsed += delta;
-    
+
     void CheckForCooldownEnd() {
         if (Elapsed < Module.Cooldown) return;
-        
+
         Module.SetAmmo(Module.CurrentAmmo + 1);
-        
+
         if (Module.CurrentAmmo >= Module.MaxAmmo)
             StateManager.SetState(new Ready(StateManager));
         else

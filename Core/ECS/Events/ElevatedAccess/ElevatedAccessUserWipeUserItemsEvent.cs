@@ -6,9 +6,10 @@ namespace Vint.Core.ECS.Events.ElevatedAccess;
 
 [ProtocolId(1515481976775)]
 public class ElevatedAccessUserWipeUserItemsEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.Player.IsAdmin || !connection.InLobby) return;
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.Player.IsAdmin || !connection.InLobby) return Task.CompletedTask;
 
-        // todo modules        
+        // todo modules
+        return Task.CompletedTask;
     }
 }

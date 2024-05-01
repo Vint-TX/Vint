@@ -8,8 +8,9 @@ namespace Vint.Core.ECS.Events.User.Friends;
 
 [ProtocolId(1507708322833)]
 public class FriendRequestSentEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         connection.Share(new FriendSentNotificationTemplate().Create(entities.Single()));
         connection.Send(new ShowNotificationGroupEvent(1));
+        return Task.CompletedTask;
     }
 }

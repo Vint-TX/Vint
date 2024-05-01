@@ -1,3 +1,4 @@
+using LinqToDB;
 using Vint.Core.Battles;
 using Vint.Core.Battles.Player;
 using Vint.Core.ChatCommands.Attributes;
@@ -12,7 +13,7 @@ namespace Vint.Core.ChatCommands.Modules;
 [ChatCommandGroup("moderator", "Commands for moderators", PlayerGroups.Moderator)]
 public class ModeratorModule : ChatCommandModule {
     [ChatCommand("warn", "Warn a player")]
-    public void Warn(
+    public async Task Warn(
         ChatCommandContext ctx,
         [Option("username", "Username of player to warn")]
         string username,
@@ -38,42 +39,42 @@ public class ModeratorModule : ChatCommandModule {
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
-            ctx.SendPrivateResponse("Player not found");
+            await ctx.SendPrivateResponse("Player not found");
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ctx.SendPrivateResponse($"Player '{username}' is admin");
+            await ctx.SendPrivateResponse($"Player '{username}' is admin");
             return;
         }
 
         if (!ctx.Connection.Player.IsAdmin && targetPlayer.IsModerator) {
-            ctx.SendPrivateResponse("Moderator cannot punish other moderator");
+            await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
 
-        Punishment punishment = targetPlayer.Warn(reason, duration);
+        Punishment punishment = await targetPlayer.Warn(reason, duration);
         string punishMessage = $"{username} was {punishment}";
 
-        ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
+        await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("mute", "Mute a player")]
-    public void Mute(
+    public async Task Mute(
         ChatCommandContext ctx,
         [Option("username", "Username of player to mute")]
         string username,
@@ -99,42 +100,42 @@ public class ModeratorModule : ChatCommandModule {
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
-            ctx.SendPrivateResponse("Player not found");
+            await ctx.SendPrivateResponse("Player not found");
             return;
         }
 
         if (targetPlayer.IsAdmin) {
-            ctx.SendPrivateResponse($"Player '{username}' is admin");
+            await ctx.SendPrivateResponse($"Player '{username}' is admin");
             return;
         }
 
         if (!ctx.Connection.Player.IsAdmin && targetPlayer.IsModerator) {
-            ctx.SendPrivateResponse("Moderator cannot punish other moderator");
+            await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
 
-        Punishment punishment = targetPlayer.Mute(reason, duration);
+        Punishment punishment = await targetPlayer.Mute(reason, duration);
         string punishMessage = $"{username} was {punishment}";
 
-        ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
+        await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("unwarn", "Remove warn from player")]
-    public void UnWarn(
+    public async Task UnWarn(
         ChatCommandContext ctx,
         [Option("username", "Username of player to unwarn")]
         string username,
@@ -155,36 +156,36 @@ public class ModeratorModule : ChatCommandModule {
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
-            ctx.SendPrivateResponse("Player not found");
+            await ctx.SendPrivateResponse("Player not found");
             return;
         }
 
-        bool successful = targetPlayer.UnWarn(id);
+        bool successful = await targetPlayer.UnWarn(id);
 
         if (!successful) {
-            ctx.SendPrivateResponse($"Cannot find warn with id {id} from '{username}'");
+            await ctx.SendPrivateResponse($"Cannot find warn with id {id} from '{username}'");
             return;
         }
 
         string punishMessage = $"{username} was unwarned";
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("unmute", "Remove mute from player")]
-    public void UnMute(
+    public async Task UnMute(
         ChatCommandContext ctx,
         [Option("username", "Username of player to unmute")]
         string username) {
@@ -204,36 +205,36 @@ public class ModeratorModule : ChatCommandModule {
                 notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
             }
         } else {
-            using DbConnection db = new();
-            targetPlayer = db.Players.SingleOrDefault(player => player.Username == username);
+            await using DbConnection db = new();
+            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
-            ctx.SendPrivateResponse("Player not found");
+            await ctx.SendPrivateResponse("Player not found");
             return;
         }
 
-        bool successful = targetPlayer.UnMute();
+        bool successful = await targetPlayer.UnMute();
 
         if (!successful) {
-            ctx.SendPrivateResponse($"'{username}' is not muted");
+            await ctx.SendPrivateResponse($"'{username}' is not muted");
             return;
         }
 
         string punishMessage = $"{username} was unmuted";
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("kick", "Kick player from server")]
-    public void Kick(
+    public async Task Kick(
         ChatCommandContext ctx,
         [Option("username", "Username of player to kick")]
         string username,
@@ -247,17 +248,17 @@ public class ModeratorModule : ChatCommandModule {
         List<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection == null) {
-            ctx.SendPrivateResponse("Player is not on the server");
+            await ctx.SendPrivateResponse("Player is not on the server");
             return;
         }
 
         if (targetConnection.Player.IsAdmin) {
-            ctx.SendPrivateResponse($"Player '{username}' is admin");
+            await ctx.SendPrivateResponse($"Player '{username}' is admin");
             return;
         }
 
         if (!ctx.Connection.Player.IsAdmin && targetConnection.Player.IsModerator) {
-            ctx.SendPrivateResponse("Moderator cannot punish other moderator");
+            await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
 
@@ -272,17 +273,17 @@ public class ModeratorModule : ChatCommandModule {
         string punishMessage = $"{username} was kicked for '{reason}'";
 
         if (notifyChat == null || notifiedConnections == null)
-            ctx.SendPublicResponse(punishMessage);
+            await ctx.SendPublicResponse(punishMessage);
         else {
-            ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
+            await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
 
             if (ctx.Chat != notifyChat)
-                ctx.SendPrivateResponse(punishMessage);
+                await ctx.SendPrivateResponse(punishMessage);
         }
     }
 
     [ChatCommand("dmsg", "Displays a message on player screen")]
-    public void DisplayMessage(
+    public async Task DisplayMessage(
         ChatCommandContext ctx,
         [Option("username", "Username of player (@a for broadcast, @b for broadcast in battle)")]
         string username,
@@ -308,7 +309,7 @@ public class ModeratorModule : ChatCommandModule {
                     .SingleOrDefault(conn => conn.Player.Username == username);
 
                 if (target == null) {
-                    ctx.SendPrivateResponse($"Player '{username}' not found");
+                    await ctx.SendPrivateResponse($"Player '{username}' not found");
                     return;
                 }
 
@@ -317,6 +318,6 @@ public class ModeratorModule : ChatCommandModule {
             }
         }
 
-        ctx.SendPrivateResponse("Message displayed");
+        await ctx.SendPrivateResponse("Message displayed");
     }
 }

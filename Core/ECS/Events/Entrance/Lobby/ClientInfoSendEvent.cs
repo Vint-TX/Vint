@@ -10,9 +10,10 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 public class ClientInfoSendEvent : IServerEvent {
     public string Settings { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Information("Client settings: {Settings}", Settings);
+        return Task.CompletedTask;
     }
 }

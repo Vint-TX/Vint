@@ -13,7 +13,7 @@ namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(1485777830853)]
 public class UnmountModuleFromSlotEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         entities = (IEntity[])entities;
 
         IEntity moduleUserItem = entities.ElementAt(0);
@@ -25,13 +25,12 @@ public class UnmountModuleFromSlotEvent : IServerEvent {
         Player player = connection.Player;
         Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
 
-        using DbConnection db = new();
-
-        db.PresetModules
+        await using DbConnection db = new();
+        await db.PresetModules
             .Where(pModule => pModule.PlayerId == player.Id &&
                               pModule.PresetIndex == player.CurrentPresetIndex &&
                               pModule.Slot == slot)
-            .Delete();
+            .DeleteAsync();
 
         player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
 

@@ -1,4 +1,5 @@
-﻿using Vint.Core.Database;
+﻿using LinqToDB;
+using Vint.Core.Database;
 using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Registration;
@@ -9,7 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.Invite;
 
 [ProtocolId(1439810001590)]
 public class InviteEnteredEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         string? code = connection.ClientSession.GetComponent<InviteComponent>().InviteCode;
 
         if (string.IsNullOrWhiteSpace(code)) {
@@ -17,8 +18,8 @@ public class InviteEnteredEvent : IServerEvent {
             return;
         }
 
-        using DbConnection db = new();
-        Database.Models.Invite? invite = db.Invites.SingleOrDefault(invite => invite.Code == code);
+        await using DbConnection db = new();
+        Database.Models.Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
 
         if (invite is not { RemainingUses: > 0 }) {
             connection.Send(new InviteDoesNotExistEvent());

@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1547630520757)]
 public class OpenCustomLobbyEvent : IServerEvent {
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             connection.BattlePlayer!.Battle.TypeHandler is not CustomHandler customHandler) return;
 
@@ -17,7 +17,7 @@ public class OpenCustomLobbyEvent : IServerEvent {
 
         if (player.Crystals < price) return;
 
-        connection.ChangeCrystals(-price);
+        await connection.ChangeCrystals(-price);
 
         if (customHandler.Owner != connection) return;
 

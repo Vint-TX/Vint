@@ -8,5 +8,5 @@ public abstract class ElevatedAccessUserBasePunishEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; protected set; } = null!;
     public string Reason { get; protected set; } = null!;
 
-    public abstract void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities);
+    public abstract Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities);
 }

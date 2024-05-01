@@ -10,9 +10,9 @@ namespace Vint.Core.ECS.Events.User.Settings;
 public class ConfirmUserCountryEvent : IServerEvent {
     public string CountryCode { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        using DbConnection db = new();
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await using DbConnection db = new();
         connection.Player.CountryCode = CountryCode;
-        db.Update(connection.Player);
+        await db.UpdateAsync(connection.Player);
     }
 }

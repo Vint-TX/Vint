@@ -16,14 +16,14 @@ public sealed class ChatCommandContext(
     public IEntity Chat { get; } = chat;
     public ChatCommandAttribute CommandInfo { get; } = commandInfo;
 
-    public void SendPrivateResponse(string response) =>
-        SendResponse(response, Chat, [Connection]);
+    public async Task SendPrivateResponse(string response) =>
+        await SendResponse(response, Chat, [Connection]);
 
-    public void SendPublicResponse(string response) =>
-        SendResponse(response, Chat, ChatUtils.GetReceivers(Connection, Chat));
+    public async Task SendPublicResponse(string response) =>
+        await SendResponse(response, Chat, ChatUtils.GetReceivers(Connection, Chat));
 
-    public void SendResponse(string response, IEntity chat, IEnumerable<IPlayerConnection> receivers) =>
-        ChatUtils.SendMessage(response, chat, receivers, null);
+    public async Task SendResponse(string response, IEntity chat, IEnumerable<IPlayerConnection> receivers) =>
+        await ChatUtils.SendMessage(response, chat, receivers, null);
 
     public void DisplayMessage(string message) => Connection.DisplayMessage(message);
 }

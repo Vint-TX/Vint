@@ -22,11 +22,11 @@ public abstract class BattleState(
 public class NotEnoughPlayers(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override void Tick() {
+    public override async Task Tick() {
         if (Battle.Players.Count > 0)
             StateManager.SetState(new Countdown(StateManager));
 
-        base.Tick();
+        await base.Tick();
     }
 }
 
@@ -50,13 +50,13 @@ public class Countdown(
         base.Start();
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         if (Battle.Players.Count <= 0)
             StateManager.SetState(new NotEnoughPlayers(StateManager));
         else if (Battle.Timer < 0)
             StateManager.SetState(new Starting(StateManager));
 
-        base.Tick();
+        await base.Tick();
     }
 
     public override void Finish() {
@@ -73,7 +73,7 @@ public class Starting(
         base.Start();
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         switch (Battle.TypeHandler) {
             case MatchmakingHandler:
                 MatchmakingBattleTick();
@@ -88,7 +88,7 @@ public class Starting(
                 break;
         }
 
-        base.Tick();
+        await base.Tick();
     }
 
     void MatchmakingBattleTick() {
@@ -143,9 +143,9 @@ public class WarmUp(
         base.Start();
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         WarmUpStateManager.Tick();
-        base.Tick();
+        await base.Tick();
     }
 
     public override void Finish() {
@@ -169,7 +169,7 @@ public class Running(
         base.Start();
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         switch (Battle.TypeHandler) {
             case CustomHandler:
                 CustomBattleTick();
@@ -177,17 +177,17 @@ public class Running(
 
             case ArcadeHandler:
             case MatchmakingHandler:
-                NonCustomBattleTick();
+                await NonCustomBattleTick();
                 break;
         }
 
         if (Battle.Timer < 0)
-            Battle.Finish();
+            await Battle.Finish();
 
-        base.Tick();
+        await base.Tick();
     }
 
-    void NonCustomBattleTick() {
+    async Task NonCustomBattleTick() {
         if (Battle.ModeHandler is not TeamHandler teamHandler) return;
 
         if (Battle is { DominationCanBegin: true }) {
@@ -211,7 +211,7 @@ public class Running(
                 if (Battle.DominationStartTime.Value + Battle.DominationDuration > DateTimeOffset.UtcNow) return;
 
                 Battle.DominationStartTime = null;
-                Battle.Finish();
+                await Battle.Finish();
                 return;
             }
 

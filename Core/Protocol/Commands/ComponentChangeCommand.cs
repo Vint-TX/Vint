@@ -16,7 +16,7 @@ public class ComponentChangeCommand(
 ) : EntityCommand(entity) {
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
-    public override void Execute(IPlayerConnection connection) {
+    public override async Task Execute(IPlayerConnection connection) {
         ILogger logger = connection.Logger.ForType(GetType());
         Type type = Component.GetType();
         ClientChangeableAttribute? clientChangeable = type.GetCustomAttribute<ClientChangeableAttribute>();
@@ -28,7 +28,7 @@ public class ComponentChangeCommand(
         }
 
         Entity.ChangeComponent(Component, connection);
-        Component.Changed(connection, Entity);
+        await Component.Changed(connection, Entity);
 
         logger.Debug("Changed {Component} in {Entity}", type.Name, Entity);
     }

@@ -4,6 +4,8 @@ using Vint.Core.ECS.Events.Entrance.Login;
 
 namespace Vint.Core.Utils;
 
+// todo what the fuck...
+
 public class Encryption : IDisposable {
     const string Modulus =
         "rDYJNjOxCUPCHSrbmkvG57oyQyx8jrN9KLdfOsuvJtDIkkwDB91vohoGBSAdr6xRQa2urgbgIca5/s2nOrR9zK0CZQvZTsgRjrMiTf37EXbOiaZG6VJZHz+LmxCjRJ2pQoHl7sbonxNY7rLZ1wVSsW8PcIhCenR5y2A9alPXcI4zVmwdPP1g40kL9Nz/bb2SBL4O7O8nEW+2bIsdj/0QJFxqQAtD5cYmiqN34DIwC4w4n3P5+HveGjWcYxIy3lHOtdO5ForatexhNBma1gtW30tA4PW+EXdy6xmWdXKg6XDFCv3EnbrWXYoYeWciQSY9x7D5/ysh4/noWvWiQ3ArmNbmo9WyYcM3CHmiotNiGFC3ZwVToRURyobE0vKGp5CUo8AGBVbRBIjGiYQVa+OoajQhnEqidCexDJIlb2YAy61Ln8bNgpmEymiUUBztLSrHYgoQuY9ZRYU/ZFuQmIFedcMktneFrqVjiqX5LTEAD4AXx6NG3EWzy0XxUaeBcuvFjOlPFEKZaE21aTca3/3GlTxUlMZHY+7uToqALQwIU3qmZ8AINw/rbSy9Z1s7vOMUdz8a5QS3P3JanYwN9RDBat3bkBtx2CHEL3zot6xuXL3zMTVjNEjuKuiR56igWJD1Omrj3+YXuEKvV8WWFNdj2CoObqiyuE1RL9Jha9U+Foc=";

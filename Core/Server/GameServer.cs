@@ -31,18 +31,18 @@ public class GameServer(
     public bool IsStarted { get; private set; }
     public bool IsAccepting { get; private set; }
 
-    public void Start() {
+    public async Task Start() {
         if (IsStarted) return;
 
         Listener.Start();
         IsStarted = true;
-        OnStarted();
+        await OnStarted();
 
         IsAccepting = true;
-        Task.Run(async () => await Accept());
+        await Accept();
     }
 
-    public void OnStarted() {
+    async Task OnStarted() {
         Logger.Information("Started");
 
         ChatCommandProcessor chatCommandProcessor = new();
@@ -61,14 +61,15 @@ public class GameServer(
         new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
         new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
         new Thread(BattleProcessor.StartTicking) { Name = "Battle ticker" }.Start();
-        new Thread(PingLoop) { Name = "Ping loop" }.Start();
+        _ = Task.Factory.StartNew(PingLoop, TaskCreationOptions.LongRunning).Catch();
 
-        Task.Factory.StartNew(() => DiscordBot?.Start(), TaskCreationOptions.LongRunning).Catch();
+        if (DiscordBot != null)
+            await DiscordBot.Start();
 
         chatCommandProcessor.RegisterCommands();
     }
 
-    public void OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
+    static void OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
 
     async Task Accept() {
         while (IsAccepting) {
@@ -91,7 +92,7 @@ public class GameServer(
 
     public void RemovePlayer(Guid id) => PlayerConnections.Remove(id, out _);
 
-    void PingLoop() {
+    async Task PingLoop() {
         while (true) {
             if (!IsStarted) return;
 
@@ -111,7 +112,9 @@ public class GameServer(
                 }
             }
 
-            DiscordBot?.SetPlayersCount(PlayerConnections.Count);
+            if (DiscordBot != null)
+                await DiscordBot.SetPlayersCount(PlayerConnections.Count);
+
             Thread.Sleep(5000);
         }
     }

@@ -9,8 +9,8 @@ public class RequestChangePasswordEvent : IServerEvent {
     public string PasswordDigest { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        connection.ChangePassword(PasswordDigest);
-        connection.Login(true, true, HardwareFingerprint);
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        await connection.ChangePassword(PasswordDigest);
+        await connection.Login(true, true, HardwareFingerprint);
     }
 }

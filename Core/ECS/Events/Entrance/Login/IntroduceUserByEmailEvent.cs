@@ -14,15 +14,15 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 public class IntroduceUserByEmailEvent : IntroduceUserEvent {
     public string Email { get; private set; } = null!;
 
-    public override void Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Information("Login by email '{Email}'", Email);
 
-        using DbConnection db = new();
-        Player? player = db.Players
+        await using DbConnection db = new();
+        Player? player = await db.Players
             .LoadWith(player => player.Modules)
-            .SingleOrDefault(player => player.Email == Email);
+            .SingleOrDefaultAsync(player => player.Email == Email);
 
         if (player == null) {
             connection.Player = null!;
