@@ -60,6 +60,9 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             return;
         }
 
+        if (WeaponHandler is SmokyWeaponHandler smokyHandler)
+            smokyHandler.OnHit(ShotId, StaticHit != null);
+
         for (int i = 0; i < Targets.Count; i++) {
             HitTarget target = Targets[i];
             WeaponHandler.Fire(target, i);

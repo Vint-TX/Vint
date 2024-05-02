@@ -153,7 +153,7 @@ public abstract class PlayerConnection(
     public DateTimeOffset PingSendTime { get; set; }
 
     public DateTimeOffset PongReceiveTime {
-        set => Ping = (value - PingSendTime).Milliseconds;
+        set => Ping = (long)(value - PingSendTime).TotalMilliseconds;
     }
 
     public long Ping { get; private set; }

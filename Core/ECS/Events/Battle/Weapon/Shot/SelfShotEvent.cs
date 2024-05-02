@@ -1,5 +1,6 @@
 using LinqToDB;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -26,6 +27,9 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             playerConnection.Send(RemoteEvent, tank);
+
+        if (battlePlayer.Tank?.WeaponHandler is SmokyWeaponHandler smokyHandler)
+            smokyHandler.OnShot(ShotId);
 
         await using DbConnection db = new();
         await db.Statistics

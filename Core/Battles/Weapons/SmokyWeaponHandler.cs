@@ -40,10 +40,15 @@ public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
     long LastIncarnationId { get; set; }
     float CurrentDamage { get; set; }
 
+    bool ShouldResetDamage { get; set; }
+    int PrevShotId { get; set; }
+    int PrevHitId { get; set; }
+
     public override int MaxHitTargets => 1;
 
     public float GetProgressedDamage(long incarnationId, out bool isBig) {
-        if (DateTimeOffset.UtcNow - LastHit > DamageProgressionReset ||
+        if (ShouldResetDamage ||
+            DateTimeOffset.UtcNow - LastHit > DamageProgressionReset ||
             incarnationId != LastIncarnationId)
             CurrentDamage = StartDamageProgression;
         else
@@ -52,6 +57,7 @@ public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
         CurrentDamage = Math.Min(CurrentDamage, MaxDamageProgression);
         LastIncarnationId = incarnationId;
         LastHit = DateTimeOffset.UtcNow;
+        ShouldResetDamage = false;
 
         isBig = CurrentDamage >= DamageProgressionMiddle;
         return CurrentDamage;
@@ -68,6 +74,20 @@ public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
             Math.Clamp(CurrentCriticalProbability + CriticalProbabilityDelta, AfterCriticalProbability, MaxCriticalProbability);
 
         return false;
+    }
+
+    public void OnShot(int id) {
+        if (PrevShotId != PrevHitId)
+            ShouldResetDamage = true;
+
+        PrevShotId = id;
+    }
+
+    public void OnHit(int id, bool isStatic) {
+        if (isStatic)
+            ShouldResetDamage = true;
+
+        PrevHitId = id;
     }
 
     public override void OnTankEnable() {

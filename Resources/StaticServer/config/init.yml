@@ -1,7 +1,7 @@
 ﻿host: *ip*
 acceptorPort: 5050
-configVersion: Vint-7
-bundleDbVersion: Vint-7
+configVersion: Vint-8
+bundleDbVersion: Vint-8
 resourcesUrl: http://*host*/resources
 configsUrl: http://*host*/config
 updateConfigUrl: http://*host*/update/{BuildTarget}.yml

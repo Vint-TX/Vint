@@ -20,14 +20,14 @@ reloadTimeProperty:
   initialValue: 1.300
   finalValue: 1.300
 startDamageProgressionProperty:
-  initialValue: 330
-  finalValue: 330
+  initialValue: 300
+  finalValue: 300
 maxDamageProgressionProperty:
   initialValue: 480
   finalValue: 480
 damageProgressionDeltaProperty:
-  initialValue: 30
-  finalValue: 30
+  initialValue: 25
+  finalValue: 25
 damageProgressionResetTimeSecProperty:
   initialValue: 3
   finalValue: 3
