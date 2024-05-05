@@ -5,6 +5,7 @@ using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Templates.Battle.Effect;
+using Vint.Core.Utils;
 using DurationComponent = Vint.Core.ECS.Components.Battle.Effect.DurationComponent;
 using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponent;
 
@@ -15,12 +16,10 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     const string MarketConfigPath = "garage/module/upgrade/properties/repairkit";
 
     public RepairKitEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        HpPerMsComponent = ConfigManager.GetComponent<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath);
-        InstantHpComponent = ConfigManager.GetComponent<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath);
         SupplyHealingComponent = ConfigManager.GetComponent<HealingComponent>(EffectConfigPath);
 
-        InstantHp = IsSupply ? 0 : InstantHpComponent.UpgradeLevel2Values[Level];
-        HpPerMs = IsSupply ? SupplyHealingComponent.HpPerMs : HpPerMsComponent.UpgradeLevel2Values[Level];
+        InstantHp = IsSupply ? 0 : Leveling.GetStat<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath, Level);
+        HpPerMs = IsSupply ? SupplyHealingComponent.HpPerMs : Leveling.GetStat<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath, Level);
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
         TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
 
@@ -28,8 +27,6 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
 
-    ModuleHealingEffectHPPerMSPropertyComponent HpPerMsComponent { get; }
-    ModuleHealingEffectInstantHPPropertyComponent InstantHpComponent { get; }
     HealingComponent SupplyHealingComponent { get; }
 
     float InstantHp { get; set; }
@@ -53,8 +50,8 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
             HpPerMs = SupplyHealingComponent.HpPerMs;
         } else {
             Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
-            InstantHp = InstantHpComponent.UpgradeLevel2Values[newLevel];
-            HpPerMs = HpPerMsComponent.UpgradeLevel2Values[newLevel];
+            InstantHp = Leveling.GetStat<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath, newLevel);
+            HpPerMs = Leveling.GetStat<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath, newLevel);
 
             CalculatedDamage heal = new(default, InstantHp, false, false);
             Battle.DamageProcessor.Heal(Tank, heal);

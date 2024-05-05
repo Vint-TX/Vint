@@ -5,6 +5,7 @@ using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Templates.Battle.Effect;
+using Vint.Core.Utils;
 using DurationComponent = Vint.Core.ECS.Components.Battle.Effect.DurationComponent;
 using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponent;
 
@@ -15,18 +16,14 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
     const string MarketConfigPath = "garage/module/upgrade/properties/turbospeed";
 
     public TurboSpeedEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        MultipliersComponent = ConfigManager.GetComponent<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath);
-
         SupplyMultiplier = ConfigManager.GetComponent<TurboSpeedEffectComponent>(EffectConfigPath).SpeedCoeff;
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
 
-        Multiplier = IsSupply ? SupplyMultiplier : MultipliersComponent.UpgradeLevel2Values[Level];
+        Multiplier = IsSupply ? SupplyMultiplier : Leveling.GetStat<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath, Level);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
-
-    ModuleTurbospeedEffectPropertyComponent MultipliersComponent { get; }
 
     public void Extend(int newLevel) {
         if (!IsActive) return;
@@ -42,7 +39,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
             newMultiplier = SupplyMultiplier;
         } else {
             Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
-            newMultiplier = MultipliersComponent.UpgradeLevel2Values[newLevel];
+            newMultiplier = Leveling.GetStat<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath, newLevel);
         }
 
         float additiveMultiplier = newMultiplier / Multiplier;
