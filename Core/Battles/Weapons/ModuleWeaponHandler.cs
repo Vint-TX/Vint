@@ -31,12 +31,12 @@ public abstract class ModuleWeaponHandler(
     public float MinDamagePercent { get; } = minDamagePercent;
     public int MaxHitTargets { get; } = maxHitTargets;
     public DateTimeOffset LastHitTime { get; set; }
-    
-    public abstract void Fire(HitTarget target, int targetIndex);
-    
+
+    public abstract Task Fire(HitTarget target, int targetIndex);
+
     public virtual void OnTankEnable() { }
-    
+
     public virtual void OnTankDisable() { }
-    
+
     public virtual void Tick() { }
 }

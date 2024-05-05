@@ -10,7 +10,7 @@ namespace Vint.Core.Battles;
 public interface IBattleProcessor {
     public int BattlesCount { get; }
 
-    public void StartTicking();
+    public Task StartTicking();
 
     public void PutPlayerFromMatchmaking(IPlayerConnection connection);
 
@@ -40,7 +40,7 @@ public class BattleProcessor : IBattleProcessor {
 
     public int BattlesCount => Battles.Count;
 
-    public void StartTicking() {
+    public async Task StartTicking() {
         const double battleTickDurationMs = 10;
 
         try {
@@ -51,7 +51,7 @@ public class BattleProcessor : IBattleProcessor {
                 stopwatch.Restart();
 
                 foreach (Battle battle in Battles) {
-                    battle.Tick(lastBattleTickDurationSec);
+                    await battle.Tick(lastBattleTickDurationSec);
 
                     if (battle is { WasPlayers: true, Players.Count: 0 }) {
                         Logger.Warning("Removing battle {Id}", battle.LobbyId);

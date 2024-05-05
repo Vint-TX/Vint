@@ -6,7 +6,7 @@ using Vint.Core.Server;
 namespace Vint.Core.Battles.Damage;
 
 public interface IDamageProcessor {
-    public void Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage);
+    public Task Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage);
 
     public DamageType Damage(BattleTank target, CalculatedDamage damage);
 
@@ -16,7 +16,7 @@ public interface IDamageProcessor {
 }
 
 public class DamageProcessor : IDamageProcessor {
-    public void Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage) {
+    public async Task Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage) {
         if (damage.Value <= 0) return;
 
         DamageType type = Damage(target, damage);
@@ -28,9 +28,9 @@ public class DamageProcessor : IDamageProcessor {
         switch (type) {
             case DamageType.Kill:
                 if (source == target)
-                    target.SelfDestruct();
+                    await target.SelfDestruct();
                 else
-                    target.KillBy(source, marketWeapon);
+                    await target.KillBy(source, marketWeapon);
                 break;
 
             case DamageType.Normal:

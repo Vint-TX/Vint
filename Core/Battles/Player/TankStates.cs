@@ -15,9 +15,9 @@ public abstract class TankState(
     public override TankStateManager StateManager { get; } = stateManager;
     protected BattleTank BattleTank => StateManager.BattleTank;
 
-    public override void Start() {
+    public override async Task Start() {
         BattleTank.Tank.AddComponent(StateComponent);
-        base.Start();
+        await base.Start();
     }
 
     public override void Finish() {
@@ -38,16 +38,16 @@ public class Dead(
     public override IComponent StateComponent => new TankDeadStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
-    public override void Start() {
+    public override async Task Start() {
         BattleTank.Disable(false);
 
-        base.Start();
+        await base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(3);
 
         if (BattleTank.Battle.ModeHandler is not CTFHandler ctf) return;
 
         foreach (Flag flag in ctf.Flags.Where(flag => flag.Carrier == BattleTank.BattlePlayer))
-            flag.Drop(false);
+            await flag.Drop(false);
     }
 
     public override async Task Tick() {
@@ -64,10 +64,10 @@ public class Spawn(
     public override IComponent StateComponent { get; } = new TankSpawnStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
-    public override void Start() {
+    public override async Task Start() {
         BattleTank.Disable(false);
         BattleTank.Spawn();
-        base.Start();
+        await base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1.75);
     }
 
@@ -85,10 +85,10 @@ public class SemiActive(
     public override IComponent StateComponent { get; } = new TankSemiActiveStateComponent();
     DateTimeOffset TimeToNextState { get; set; }
 
-    public override void Start() {
+    public override async Task Start() {
         BattleTank.Enable();
         BattleTank.Tank.AddComponent<TankVisibleStateComponent>();
-        base.Start();
+        await base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1);
     }
 
@@ -105,8 +105,8 @@ public class Active(
 ) : TankState(stateManager) {
     public override IComponent StateComponent { get; } = new TankActiveStateComponent();
 
-    public override void Start() {
-        base.Start();
+    public override async Task Start() {
+        await base.Start();
 
         foreach (BattleModule module in BattleTank.Modules)
             module.TryUnblock();

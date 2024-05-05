@@ -15,8 +15,8 @@ public abstract class SupplyBox<T>(
 ) : SupplyBox(battle, regionPosition, hasParachute) where T : Effect, ISupplyEffect {
     protected abstract T GetEffect(BattleTank battleTank);
 
-    public override void Take(BattleTank battleTank) {
-        base.Take(battleTank);
+    public override async Task Take(BattleTank battleTank) {
+        await base.Take(battleTank);
 
         if (!CanTake) return;
 

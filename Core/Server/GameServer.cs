@@ -60,7 +60,7 @@ public class GameServer(
 
         new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
         new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
-        new Thread(BattleProcessor.StartTicking) { Name = "Battle ticker" }.Start();
+        _ = Task.Factory.StartNew(BattleProcessor.StartTicking).Catch();
         _ = Task.Factory.StartNew(PingLoop, TaskCreationOptions.LongRunning).Catch();
 
         if (DiscordBot != null)

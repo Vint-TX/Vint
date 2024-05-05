@@ -30,30 +30,30 @@ public class KamikadzeWeaponHandler(
     minDamage,
     maxHitTargets
 ), ISplashWeaponHandler, IDiscreteWeaponHandler {
-    public override void Fire(HitTarget target, int targetIndex) => throw new NotSupportedException();
-    
+    public override Task Fire(HitTarget target, int targetIndex) => throw new NotSupportedException();
+
     public float MinSplashDamagePercent => MinDamagePercent;
     public float RadiusOfMaxSplashDamage => MaxDamageDistance;
     public float RadiusOfMinSplashDamage => MinDamageDistance;
-    
-    public void SplashFire(HitTarget target, int targetIndex) {
+
+    public async Task SplashFire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = BattleTank.IsEnemy(targetTank);
-        
+
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
-        
+
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true, true);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
+        await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
-    
+
     public float GetSplashMultiplier(float distance) {
         if (distance <= RadiusOfMaxSplashDamage) return 1;
         if (distance >= RadiusOfMinSplashDamage) return 0;
-        
+
         return 0.01f *
                (MinSplashDamagePercent +
                 (RadiusOfMinSplashDamage - distance) *

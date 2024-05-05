@@ -7,22 +7,22 @@ namespace Vint.Core.Battles.Weapons;
 public interface IWeaponHandler {
     public IDamageCalculator DamageCalculator { get; }
     public BattleTank BattleTank { get; }
-    
+
     public TimeSpan Cooldown { get; }
-    
+
     public bool DamageWeakeningByDistance { get; }
     public float MaxDamageDistance { get; }
     public float MinDamageDistance { get; }
     public float MinDamagePercent { get; }
-    
+
     public DateTimeOffset LastHitTime { get; set; }
     public int MaxHitTargets { get; }
-    
-    public void Fire(HitTarget target, int targetIndex);
-    
+
+    public Task Fire(HitTarget target, int targetIndex);
+
     public void OnTankEnable();
-    
+
     public void OnTankDisable();
-    
+
     public void Tick();
 }

@@ -33,9 +33,9 @@ public class HammerWeaponHandler : TankWeaponHandler {
 
     public override int MaxHitTargets => PelletCount;
 
-    public override void Fire(HitTarget target, int targetIndex) => throw new NotSupportedException();
+    public override Task Fire(HitTarget target, int targetIndex) => throw new NotSupportedException();
 
-    public void Fire(List<HitTarget> hitTargets) {
+    public async Task Fire(List<HitTarget> hitTargets) {
         Battle battle = BattleTank.Battle;
         List<BattleTank> tanks = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
@@ -69,7 +69,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
         }
 
         foreach ((BattleTank targetTank, CalculatedDamage damage) in tankToDamage)
-            battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
+            await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 
     public override void OnTankEnable() {

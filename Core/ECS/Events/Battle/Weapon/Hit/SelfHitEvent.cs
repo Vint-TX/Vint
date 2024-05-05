@@ -55,17 +55,19 @@ public class SelfHitEvent : HitEvent, IServerEvent {
 
         if (Targets == null) return;
 
-        if (WeaponHandler is HammerWeaponHandler hammerHandler) {
-            hammerHandler.Fire(Targets);
-            return;
-        }
+        switch (WeaponHandler) {
+            case HammerWeaponHandler hammerHandler:
+                await hammerHandler.Fire(Targets);
+                return;
 
-        if (WeaponHandler is SmokyWeaponHandler smokyHandler)
-            smokyHandler.OnHit(ShotId, StaticHit != null);
+            case SmokyWeaponHandler smokyHandler:
+                smokyHandler.OnHit(ShotId, StaticHit != null);
+                break;
+        }
 
         for (int i = 0; i < Targets.Count; i++) {
             HitTarget target = Targets[i];
-            WeaponHandler.Fire(target, i);
+            await WeaponHandler.Fire(target, i);
         }
 
         await using DbConnection db = new();

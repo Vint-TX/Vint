@@ -17,24 +17,24 @@ public abstract class DiscreteTankWeaponHandler : TankWeaponHandler, IDiscreteWe
             MinDamage = ConfigManager.GetComponent<AimingMinDamagePropertyComponent>(MarketConfigPath).FinalValue;
             MaxDamage = ConfigManager.GetComponent<AimingMaxDamagePropertyComponent>(MarketConfigPath).FinalValue;
         }
-        
+
         Cooldown = TimeSpan.FromSeconds(ConfigManager.GetComponent<WeaponCooldownComponent>(MarketConfigPath).CooldownIntervalSec);
     }
-    
+
     public float MinDamage { get; }
     public float MaxDamage { get; }
-    
-    public override void Fire(HitTarget target, int targetIndex) {
+
+    public override async Task Fire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = BattleTank.IsEnemy(targetTank);
-        
+
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
-        
+
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
-        battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
+        await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 }

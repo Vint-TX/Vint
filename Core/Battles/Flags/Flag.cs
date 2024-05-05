@@ -53,7 +53,7 @@ public class Flag {
         Assists.Add(new FlagAssist(carrier.Tank!, Position));
     }
 
-    public void Drop(bool isUserAction) {
+    public async Task Drop(bool isUserAction) {
         if (StateManager.CurrentState is not Captured) return;
 
         LastCarrier = Carrier;
@@ -71,7 +71,7 @@ public class Flag {
         StateManager.SetState(new OnGround(StateManager, newPosition, isUserAction));
 
         if (PhysicsUtils.IsOutsideMap(Battle.MapInfo.PuntativeGeoms, newPosition, Vector3.Zero, Battle.Properties.KillZoneEnabled)) {
-            Return();
+            await Return();
             return;
         }
 
@@ -95,7 +95,7 @@ public class Flag {
         Assists.Add(assist);
     }
 
-    public void Return(BattlePlayer? returner = null) {
+    public async Task Return(BattlePlayer? returner = null) {
         if (StateManager.CurrentState is not OnGround ||
             Battle.ModeHandler is not CTFHandler ctf) return;
 
@@ -113,9 +113,13 @@ public class Flag {
             int score = Convert.ToInt32(Math.Round(MathUtils.Map(remainingDistance, maxDistance, 0, 2, 50)));
             int scoreWithBonus = returner.GetScoreWithBonus(score);
 
-            returner.Tank!.UpdateStatistics(0, 0, 0, score);
+            BattleTank returnerTank = returner.Tank!;
+
+            returnerTank.AddScore(score);
+            returnerTank.CommitStatistics();
+
             returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(scoreWithBonus), returner.BattleUser);
-            returner.Tank!.Statistics.FlagReturns += 1;
+            returnerTank.Statistics.FlagReturns += 1;
         }
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
@@ -134,14 +138,14 @@ public class Flag {
 
         if (returner == null) return;
 
-        using DbConnection db = new();
-        db.Statistics
+        await using DbConnection db = new();
+        await db.Statistics
             .Where(stats => stats.PlayerId == returner.PlayerConnection.Player.Id)
             .Set(stats => stats.FlagsReturned, stats => stats.FlagsReturned + 1)
-            .Update();
+            .UpdateAsync();
     }
 
-    public void Deliver(BattlePlayer battlePlayer) {
+    public async Task Deliver(BattlePlayer battlePlayer) {
         if (StateManager.CurrentState is not Captured ||
             Battle.ModeHandler is not CTFHandler ctf) return;
 
@@ -155,7 +159,8 @@ public class Flag {
 
             Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
 
-            FlagAssist carrierAssist = Assists.First(assist => assist.Tank == battlePlayer.Tank);
+            BattleTank tank = battlePlayer.Tank!;
+            FlagAssist carrierAssist = Assists.First(assist => assist.Tank == tank);
             Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == battlePlayer.TeamColor).PedestalPosition;
 
             float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
@@ -164,11 +169,13 @@ public class Flag {
             int score = Convert.ToInt32(Math.Round(MathUtils.Map(traveledDistance, 0, maxDistance, 10, 75)));
             int scoreWithBonus = battlePlayer.GetScoreWithBonus(score);
 
-            battlePlayer.Tank!.Statistics.Flags += 1;
-            battlePlayer.Tank!.UpdateStatistics(0, 0, 0, score);
+            tank.Statistics.Flags += 1;
+            tank.AddScore(score);
+            tank.CommitStatistics();
+
             battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
 
-            foreach (FlagAssist assist in Assists.Where(assist => assist.Tank != battlePlayer.Tank)) {
+            foreach (FlagAssist assist in Assists.Where(assist => assist.Tank != tank)) {
                 BattleTank assistant = assist.Tank;
 
                 float distance = float.Min(assist.TraveledDistance, maxDistance);
@@ -176,7 +183,9 @@ public class Flag {
                 int assistScoreWithBonus = assistant.BattlePlayer.GetScoreWithBonus(assistScore);
 
                 assistant.Statistics.FlagAssists += 1;
-                assistant.UpdateStatistics(0, 0, 0, assistScore);
+                assistant.AddScore(assistScore);
+                assistant.CommitStatistics();
+
                 assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(assistScoreWithBonus), assistant.BattleUser);
             }
         } else
@@ -191,11 +200,11 @@ public class Flag {
         Carrier = null;
         LastCarrier = null;
 
-        using DbConnection db = new();
-        db.Statistics
+        await using DbConnection db = new();
+        await db.Statistics
             .Where(stats => stats.PlayerId == battlePlayer.PlayerConnection.Player.Id)
             .Set(stats => stats.FlagsDelivered, stats => stats.FlagsDelivered + 1)
-            .Update();
+            .UpdateAsync();
     }
 
     void Refresh() {

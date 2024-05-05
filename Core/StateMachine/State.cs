@@ -4,7 +4,7 @@ public abstract class State {
     public abstract IStateManager StateManager { get; }
     public bool IsFinished { get; protected set; }
 
-    public virtual void Start() => IsFinished = false;
+    public virtual Task Start() => Task.FromResult(IsFinished = false);
 
     public virtual void Started() { }
 

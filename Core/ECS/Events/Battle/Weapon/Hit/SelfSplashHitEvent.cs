@@ -32,7 +32,7 @@ public class SelfSplashHitEvent : SelfHitEvent {
 
         for (int i = 0; i < SplashTargets.Count; i++) {
             HitTarget target = SplashTargets[i];
-            splashHandler.SplashFire(target, i);
+            await splashHandler.SplashFire(target, i);
         }
 
         await using DbConnection db = new();

@@ -103,8 +103,10 @@ public abstract class TeamHandler(
     public override void PlayerEntered(BattlePlayer player) =>
         player.PlayerConnection.Share(TeamChat, RedTeam, BlueTeam);
 
-    public override void PlayerExited(BattlePlayer player) =>
+    public override Task PlayerExited(BattlePlayer player) {
         player.PlayerConnection.Unshare(TeamChat, RedTeam, BlueTeam);
+        return Task.CompletedTask;
+    }
 
     public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
         IEntity team = RedPlayers.Count() < BluePlayers.Count() ? RedTeam : BlueTeam;

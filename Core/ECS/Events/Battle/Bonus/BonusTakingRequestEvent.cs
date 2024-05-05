@@ -10,17 +10,17 @@ namespace Vint.Core.ECS.Events.Battle.Bonus;
 
 [ProtocolId(-4179984519411113540)]
 public class BonusTakingRequestEvent : IServerEvent {
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         BattlePlayer? battlePlayer = connection.BattlePlayer;
         IBonusProcessor? bonusProcessor = battlePlayer?.Battle.BonusProcessor;
 
-        if (battlePlayer is not { InBattleAsTank: true } || bonusProcessor == null) return Task.CompletedTask;
+        if (battlePlayer is not { InBattleAsTank: true } || bonusProcessor == null) return;
 
         BattleTank battleTank = battlePlayer.Tank!;
         IEntity bonus = entities.First();
         BonusBox? bonusBox = bonusProcessor.FindByEntity(bonus);
 
-        if (bonusBox?.StateManager.CurrentState is not Spawned spawned) return Task.CompletedTask;
+        if (bonusBox?.StateManager.CurrentState is not Spawned spawned) return;
 
         float bonusHeight = CalculateHeight(bonusBox.SpawnPosition.Y,
             bonusBox.RegionPosition.Y,
@@ -29,10 +29,9 @@ public class BonusTakingRequestEvent : IServerEvent {
         Vector3 tankPosition = battleTank.Position;
         Vector3 bonusPosition = bonusBox.RegionPosition with { Y = bonusHeight };
 
-        if (Vector3.Distance(tankPosition, bonusPosition) > 10) return Task.CompletedTask;
+        if (Vector3.Distance(tankPosition, bonusPosition) > 10) return;
 
-        bonusProcessor.Take(bonusBox, battleTank);
-        return Task.CompletedTask;
+        await bonusProcessor.Take(bonusBox, battleTank);
     }
 
     static float CalculateHeight(float spawnHeight, float regionHeight, float fallSpeed, DateTimeOffset spawnTime) {

@@ -234,7 +234,11 @@ public class BattlePlayer {
             battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
     }
 
-    public void Tick() => Tank?.Tick();
+    public async Task Tick() {
+        if (!InBattleAsTank) return;
+
+        await Tank!.Tick();
+    }
 
     public override int GetHashCode() => PlayerConnection.GetHashCode();
 }

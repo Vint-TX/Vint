@@ -13,12 +13,12 @@ public class CTFHandler : TeamHandler {
     public CTFHandler(Battle battle) : base(battle) {
         RedSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.RedTeam.ToList();
         BlueSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.BlueTeam.ToList();
-        
+
         Flags = new HashSet<Flag> {
             new(Battle, RedTeam, TeamColor.Red, Battle.MapInfo.Flags.Red),
             new(Battle, BlueTeam, TeamColor.Blue, Battle.MapInfo.Flags.Blue)
         }.ToFrozenSet();
-        
+
         CanShareFlags = Battle.TypeHandler is not MatchmakingHandler;
     }
 
@@ -36,10 +36,10 @@ public class CTFHandler : TeamHandler {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
             battlePlayer.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
     }
-    
-    public override void OnFinished() {
+
+    public override async Task OnFinished() {
         foreach (Flag flag in Flags)
-            flag.Drop(false);
+            await flag.Drop(false);
     }
 
     public override void PlayerEntered(BattlePlayer player) {
@@ -51,11 +51,11 @@ public class CTFHandler : TeamHandler {
             player.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
     }
 
-    public override void PlayerExited(BattlePlayer player) {
-        base.PlayerExited(player);
+    public override async Task PlayerExited(BattlePlayer player) {
+        await base.PlayerExited(player);
 
         foreach (Flag flag in Flags.Where(flag => flag.Carrier == player))
-            flag.Drop(false);
+            await flag.Drop(false);
 
         player.PlayerConnection.UnshareIfShared(Flags.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
     }

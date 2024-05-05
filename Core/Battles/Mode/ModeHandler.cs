@@ -39,7 +39,7 @@ public abstract class ModeHandler(
 
     public abstract void OnWarmUpCompleted();
 
-    public abstract void OnFinished();
+    public abstract Task OnFinished();
 
     public abstract void TransferParameters(ModeHandler previousHandler);
 
@@ -50,7 +50,7 @@ public abstract class ModeHandler(
 
     public abstract void PlayerEntered(BattlePlayer player);
 
-    public abstract void PlayerExited(BattlePlayer player);
+    public abstract Task PlayerExited(BattlePlayer player);
 
     public abstract int CalculateReputationDelta(BattlePlayer player);
 }

@@ -24,8 +24,8 @@ public class Captured(
     FlagStateManager stateManager,
     IEntity carrierTank
 ) : FlagState(stateManager) {
-    public override void Start() {
-        base.Start();
+    public override async Task Start() {
+        await base.Start();
         Flag.Entity.AddGroupComponent<TankGroupComponent>(carrierTank);
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
@@ -43,8 +43,8 @@ public class OnGround(
 ) : FlagState(stateManager) {
     DateTimeOffset ReturnAtTime { get; } = DateTimeOffset.UtcNow.AddMinutes(1);
 
-    public override void Start() {
-        base.Start();
+    public override async Task Start() {
+        await base.Start();
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
             battlePlayer.PlayerConnection.Send(new FlagDropEvent(isUserAction), Flag.Entity);
@@ -59,6 +59,6 @@ public class OnGround(
 
         if (DateTimeOffset.UtcNow < ReturnAtTime) return;
 
-        Flag.Return();
+        await Flag.Return();
     }
 }

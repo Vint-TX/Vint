@@ -34,10 +34,10 @@ public abstract class BonusBox {
     public Vector3 RegionPosition { get; }
     public Vector3 SpawnPosition => RegionPosition with { Y = RegionPosition.Y + SpawnHeight };
 
-    public virtual void Take(BattleTank battleTank) {
+    public virtual Task Take(BattleTank battleTank) {
         if (Entity == null) {
             Logger.Error("{Connection} wanted to take nonexistent bonus", battleTank.BattlePlayer.PlayerConnection);
-            return;
+            return Task.CompletedTask;
         }
 
         foreach (IPlayerConnection connection in Battle.Players
@@ -50,6 +50,7 @@ public abstract class BonusBox {
         battleTank.Statistics.BonusesTaken++;
         Entity = null;
         CanTake = true;
+        return Task.CompletedTask;
     }
 
     public abstract void Spawn();

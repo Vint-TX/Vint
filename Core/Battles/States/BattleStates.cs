@@ -33,21 +33,21 @@ public class NotEnoughPlayers(
 public class NotStarted(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override void Start() {
+    public override async Task Start() {
         Battle.Timer = 0;
-        base.Start();
+        await base.Start();
     }
 }
 
 public class Countdown(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override void Start() {
+    public override async Task Start() {
         const int seconds = 20;
 
         Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
         Battle.Timer = seconds;
-        base.Start();
+        await base.Start();
     }
 
     public override async Task Tick() {
@@ -68,9 +68,9 @@ public class Countdown(
 public class Starting(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override void Start() {
+    public override async Task Start() {
         Battle.LobbyEntity.AddComponent<MatchmakingLobbyStartingComponent>();
-        base.Start();
+        await base.Start();
     }
 
     public override async Task Tick() {
@@ -130,7 +130,7 @@ public class WarmUp(
 ) : BattleState(stateManager) {
     public WarmUpStateManager WarmUpStateManager { get; } = new(stateManager);
 
-    public override void Start() {
+    public override async Task Start() {
         const int seconds = 60;
         Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow.AddSeconds(seconds));
@@ -140,7 +140,7 @@ public class WarmUp(
 
         Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
         Battle.Timer = seconds;
-        base.Start();
+        await base.Start();
     }
 
     public override async Task Tick() {
@@ -158,7 +158,7 @@ public class WarmUp(
 public class Running(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override void Start() {
+    public override async Task Start() {
         Battle.Timer = Battle.Properties.TimeLimit * 60;
 
         Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
@@ -166,7 +166,7 @@ public class Running(
 
         Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
-        base.Start();
+        await base.Start();
     }
 
     public override async Task Tick() {
@@ -237,9 +237,9 @@ public class Running(
 public class Ended(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override void Start() {
+    public override async Task Start() {
         Battle.Timer = 0;
-        base.Start();
+        await base.Start();
     }
 
     public override void Finish() {

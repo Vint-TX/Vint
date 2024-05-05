@@ -31,7 +31,7 @@ public class TDMHandler(
         return LastDominationTeam;
     }
 
-    public override void OnFinished() { }
+    public override Task OnFinished() => Task.CompletedTask;
 
     public override int CalculateReputationDelta(BattlePlayer player) => player.TeamBattleResult switch { // todo calculate by K/D
         TeamBattleResult.Win => player.PlayerConnection.Player.MaxReputationDelta,

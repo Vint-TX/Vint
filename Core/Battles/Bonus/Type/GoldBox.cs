@@ -26,8 +26,8 @@ public sealed class GoldBox(
 
     int Ticks { get; set; }
 
-    public override void Take(BattleTank battleTank) {
-        base.Take(battleTank);
+    public override async Task Take(BattleTank battleTank) {
+        await base.Take(battleTank);
 
         if (!CanTake) return;
 
@@ -42,14 +42,16 @@ public sealed class GoldBox(
 
         IPlayerConnection targetConnection = battleTank.BattlePlayer.PlayerConnection;
 
-        using (DbConnection db = new()) {
-            db.Statistics
+        await targetConnection.ChangeXCrystals(XCrystalsReward);
+
+        await using (DbConnection db = new()) {
+            await db.Statistics
                 .Where(stats => stats.PlayerId == targetConnection.Player.Id)
                 .Set(stats => stats.GoldBoxesCaught, stats => stats.GoldBoxesCaught + 1)
-                .Update();
+                .UpdateAsync();
         }
 
-        targetConnection.ChangeXCrystals(XCrystalsReward);
+        await battleTank.SelfDestruct();
     }
 
     public override void Spawn() {

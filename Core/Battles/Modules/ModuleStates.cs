@@ -23,8 +23,8 @@ public class Cooldown(
     DateTimeOffset LastTickTime { get; set; }
     TimeSpan Elapsed { get; set; } = TimeSpan.Zero;
 
-    public override void Start() {
-        base.Start();
+    public override async Task Start() {
+        await base.Start();
 
         LastTickTime = StartTime = DateTimeOffset.UtcNow;
 

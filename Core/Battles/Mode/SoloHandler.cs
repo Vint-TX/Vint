@@ -41,7 +41,7 @@ public abstract class SoloHandler(
 
     public override void OnWarmUpCompleted() { }
 
-    public override void OnFinished() { }
+    public override Task OnFinished() => Task.CompletedTask;
 
     public override void TransferParameters(ModeHandler previousHandler) {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => !battlePlayer.IsSpectator))
@@ -55,5 +55,8 @@ public abstract class SoloHandler(
 
     public override void PlayerEntered(BattlePlayer player) { }
 
-    public override void PlayerExited(BattlePlayer player) => UpdateScore(null, 0);
+    public override Task PlayerExited(BattlePlayer player) {
+        UpdateScore(null, 0);
+        return Task.CompletedTask;
+    }
 }

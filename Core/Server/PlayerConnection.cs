@@ -89,7 +89,7 @@ public interface IPlayerConnection {
 
     public Task ChangeReputation(int delta);
 
-    public Task CheckRank();
+    public Task CheckRankUp();
 
     public Task ChangeExperience(int delta);
 
@@ -350,7 +350,7 @@ public abstract class PlayerConnection(
         User.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
     }
 
-    public async Task CheckRank() {
+    public async Task CheckRankUp() {
         UserRankComponent rankComponent = User.GetComponent<UserRankComponent>();
 
         while (rankComponent.Rank < Player.Rank) {

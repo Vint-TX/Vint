@@ -191,7 +191,7 @@ public class Battle {
         if (StateManager.CurrentState is Ended) return;
 
         StateManager.SetState(new Ended(StateManager));
-        ModeHandler.OnFinished();
+        await ModeHandler.OnFinished();
 
         List<BattlePlayer> players = Players.ToList();
 
@@ -219,7 +219,7 @@ public class Battle {
         LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
     }
 
-    public void Tick(double deltaTime) {
+    public async Task Tick(double deltaTime) {
         Timer -= deltaTime;
 
         ModeHandler.Tick();
@@ -228,7 +228,7 @@ public class Battle {
         BonusProcessor?.Tick();
 
         foreach (BattlePlayer battlePlayer in Players)
-            battlePlayer.Tick();
+            await battlePlayer.Tick();
     }
 
     public void AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads

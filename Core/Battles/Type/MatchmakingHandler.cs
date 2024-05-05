@@ -74,7 +74,7 @@ public class MatchmakingHandler : TypeHandler {
         bool hasEnemies = Battle.Players.Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));
         bool bigBattleSeries = battlePlayer.PlayerConnection.BattleSeries >= 3;
 
-        battlePlayer.PlayerConnection.User.ChangeComponent<BattleLeaveCounterComponent>(component => {
+        battlePlayer.PlayerConnection.User.ChangeComponent<BattleLeaveCounterComponent>(component => { // todo not working
             long lefts = component.Value;
             int needGoodBattles = component.NeedGoodBattles;
 
