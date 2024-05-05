@@ -11,13 +11,13 @@ moduleAmmunitionProperty:
 moduleBackhitModificatorEffectProperty:
   linearInterpolation: true
   upgradeLevel2Values:
-    - 1.17
-    - 1.25
+    - 1.053
+    - 1.334
 moduleVisualProperties:
   properties:
     - name: BackhitDamage
       linearInterpolation: true
       upgradeLevel2Values:
-        - 17
-        - 25
+        - 5.3
+        - 33.4
       unit: percent

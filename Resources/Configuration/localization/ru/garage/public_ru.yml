@@ -41,6 +41,8 @@ localizedVisualProperties:
     "Overheating Time": Время до нагрева
     "Impact": Сила импульса
     "Max Impact": Максимальная сила импульса
+    DamageProgression: Прогрессия урона
+    ProgressionDelta: Прирост урона
     Cooldown: Перезарядка
     CooldownSpeed: Время перезарядки
     Duration: Время действия

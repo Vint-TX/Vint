@@ -9,17 +9,9 @@ moduleAmmunitionProperty:
     - 1
     - 1
 moduleBackhitModificatorEffectProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 0.95
-    - 0.93
-    - 0.91
-    - 0.88
-    - 0.86
-    - 0.84
-    - 0.82
-    - 0.79
-    - 0.77
     - 0.75
 moduleVisualProperties:
   properties:

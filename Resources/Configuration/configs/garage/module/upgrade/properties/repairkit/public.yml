@@ -51,16 +51,8 @@ moduleHealingEffectInstantHPProperty:
     - 722
     - 750
 moduleHealingEffectHPPerMSProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 0.08
-    - 0.08
-    - 0.09
-    - 0.09
-    - 0.10
-    - 0.10
-    - 0.11
-    - 0.11
-    - 0.12
     - 0.12
 ...

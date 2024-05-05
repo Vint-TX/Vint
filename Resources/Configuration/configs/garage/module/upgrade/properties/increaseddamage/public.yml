@@ -53,16 +53,8 @@ moduleDamageEffectMinFactorProperty:
 moduleDamageEffectMaxFactorProperty:
   linearInterpolation: false
   upgradeLevel2Values:
-    - 1.15
-    - 1.18
-    - 1.22
-    - 1.25
-    - 1.28
-    - 1.32
-    - 1.35
-    - 1.38
-    - 1.42
-    - 1.45
+    - 1.17
+    - 1.5
 moduleVisualProperties:
   properties:
     - name: Cooldown
@@ -76,8 +68,8 @@ moduleVisualProperties:
     - name: Damage
       linearInterpolation: true
       upgradeLevel2Values:
-        - 15
-        - 45
+        - 17
+        - 50
       unit: percent
       format: 0
       spriteUID: 5538887f-b208-4fb4-ac4a-12223cb09fd3

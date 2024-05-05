@@ -71,18 +71,21 @@ visualProperties:
       normalizedValue: 0.80
   properties:
     - name: DPM
-      initialValue: 15000
-      finalValue: 15000
+      initialValue: 22300
+      finalValue: 22300
     - name: Damage
-      initialValue: 325
-      finalValue: 325
-    - name: Critical Damage
-      initialValue: 325
-      finalValue: 325
-    - name: Critical Chance
-      initialValue: 30
-      finalValue: 30
-      unit: percent
+      initialValue: 300
+      finalValue: 300
+    - name: MaxDamage
+      initialValue: 480
+      finalValue: 480
+    - name: ProgressionDelta
+      initialValue: 25
+      finalValue: 25
+    - name: Duration
+      initialValue: 3
+      finalValue: 3
+      unit: sec
     - name: Reload Time
       initialValue: 1.3
       finalValue: 1.3

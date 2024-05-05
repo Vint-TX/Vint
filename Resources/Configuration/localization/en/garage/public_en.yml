@@ -41,6 +41,8 @@ localizedVisualProperties:
     "Overheating Time": Overheating Time
     "Impact": Impact Force
     "Max Impact": Max Impact
+    DamageProgression: Damage progression
+    ProgressionDelta: Damage increase
     Cooldown: Cooldown
     CooldownSpeed: Cooldown Speed
     Duration: Duration

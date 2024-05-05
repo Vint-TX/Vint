@@ -38,18 +38,10 @@ moduleEffectDurationProperty:
     - 10111
     - 10500
 moduleArmorEffectProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 0.85
-    - 0.82
-    - 0.79
-    - 0.77
-    - 0.74
-    - 0.71
-    - 0.68
-    - 0.66
-    - 0.63
-    - 0.60
+    - 0.86
+    - 0.67
 moduleVisualProperties:
   properties:
     - name: Cooldown
@@ -71,8 +63,8 @@ moduleVisualProperties:
     - name: DamageReduction
       linearInterpolation: true
       upgradeLevel2Values:
-        - 15
-        - 40
+        - 14
+        - 33
       unit: percent
       format: 0
       spriteUID: ef31e149-aafc-419b-8a53-7e6393399092

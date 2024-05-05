@@ -57,7 +57,7 @@ public class DamageCalculator : IDamageCalculator {
         float weakening = !isSplash && weaponHandler.DamageWeakeningByDistance ? GetWeakeningMultiplier(weaponHandler, distance) : 1;
         float splash = isSplash && weaponHandler is ISplashWeaponHandler splashHandler ? splashHandler.GetSplashMultiplier(distance) : 1;
         float effects = GetEffectsMultiplier(source, target, isSplash, isBackHit, isTurretHit, ignoreSourceEffects);
-        float backHit = /*isBackHit ? BackHitMultiplier :*/ 1;
+        float backHit = isBackHit ? BackHitMultiplier : 1;
         float turretHit = isTurretHit ? TurretHitMultiplier : 1;
 
         float damage = baseDamage * weakening * splash * effects * backHit * turretHit;
