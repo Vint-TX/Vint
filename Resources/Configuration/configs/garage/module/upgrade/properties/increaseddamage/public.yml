@@ -51,7 +51,7 @@ moduleDamageEffectMinFactorProperty:
     - 1.42
     - 1.45
 moduleDamageEffectMaxFactorProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 1.17
     - 1.5
