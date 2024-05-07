@@ -31,10 +31,8 @@ public class LifeStealModule : BattleModule, IKillModule {
         effect = GetEffect();
         effect.Activate();
 
-        IEntity effectEntity = effect.Entity!;
-
         base.Activate();
-
+        IEntity effectEntity = effect.Entity!;
         Battle battle = Tank.Battle;
 
         float stolenHp = KilledTank.MaxHealth * HpPercent;

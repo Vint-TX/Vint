@@ -1,6 +1,7 @@
 using System.Numerics;
 using LinqToDB;
 using Vint.Core.Battles.Mode;
+using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Player;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Battle.Flag;
@@ -44,13 +45,16 @@ public class Flag {
     public DateTimeOffset UnfrozeForLastCarrierTime { get; private set; }
     public HashSet<FlagAssist> Assists { get; } = [];
 
-    public void Capture(BattlePlayer carrier) { // todo modules
+    public void Capture(BattlePlayer carrier) {
         if (StateManager.CurrentState is not OnPedestal) return;
 
         StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
 
         Carrier = carrier;
         Assists.Add(new FlagAssist(carrier.Tank!, Position));
+
+        foreach (IFlagModule flagModule in carrier.Tank.Modules.OfType<IFlagModule>())
+            flagModule.OnFlagAction(FlagAction.Capture);
     }
 
     public async Task Drop(bool isUserAction) {
@@ -70,6 +74,9 @@ public class Flag {
 
         StateManager.SetState(new OnGround(StateManager, newPosition, isUserAction));
 
+        foreach (IFlagModule flagModule in LastCarrier.Tank.Modules.OfType<IFlagModule>())
+            flagModule.OnFlagAction(FlagAction.Drop);
+
         if (PhysicsUtils.IsOutsideMap(Battle.MapInfo.PuntativeGeoms, newPosition, Vector3.Zero, Battle.Properties.KillZoneEnabled)) {
             await Return();
             return;
@@ -81,7 +88,7 @@ public class Flag {
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
     }
 
-    public void Pickup(BattlePlayer carrier) { // todo modules
+    public void Pickup(BattlePlayer carrier) {
         if (StateManager.CurrentState is not OnGround ||
             LastCarrier == carrier &&
             UnfrozeForLastCarrierTime > DateTimeOffset.UtcNow) return;
@@ -93,6 +100,9 @@ public class Flag {
 
         assist.LastPickupPoint = Position;
         Assists.Add(assist);
+
+        foreach (IFlagModule flagModule in carrier.Tank.Modules.OfType<IFlagModule>())
+            flagModule.OnFlagAction(FlagAction.Capture);
     }
 
     public async Task Return(BattlePlayer? returner = null) {
@@ -135,6 +145,11 @@ public class Flag {
         Refresh();
         Assists.Clear();
         LastCarrier = null;
+
+        if (returner != null) {
+            foreach (IFlagModule flagModule in returner.Tank!.Modules.OfType<IFlagModule>())
+                flagModule.OnFlagAction(FlagAction.Return);
+        }
 
         if (returner == null) return;
 
@@ -199,6 +214,9 @@ public class Flag {
         Assists.Clear();
         Carrier = null;
         LastCarrier = null;
+
+        foreach (IFlagModule flagModule in battlePlayer.Tank!.Modules.OfType<IFlagModule>())
+            flagModule.OnFlagAction(FlagAction.Deliver);
 
         await using DbConnection db = new();
         await db.Statistics

@@ -1,4 +1,5 @@
 using LinqToDB;
+using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
@@ -31,12 +32,13 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         if (battlePlayer.Tank?.WeaponHandler is SmokyWeaponHandler smokyHandler)
             smokyHandler.OnShot(ShotId);
 
+        foreach (IShotModule shotModule in battlePlayer.Tank!.Modules.OfType<IShotModule>())
+            shotModule.OnShot();
+
         await using DbConnection db = new();
         await db.Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Shots, stats => stats.Shots + 1)
             .UpdateAsync();
-
-        // todo modules
     }
 }

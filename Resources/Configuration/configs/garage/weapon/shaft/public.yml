@@ -26,8 +26,8 @@ energyRechargeSpeedProperty: # ReloadEnergyPerSec (value)
   initialValue: 0.120
   finalValue: 0.120
 reloadTimeProperty: # ReloadEnergyPerSec (1/value), CooldownIntervalSec (value)
-  initialValue: 2.500
-  finalValue: 2.500
+  initialValue: 3.500
+  finalValue: 3.500
 aimingVerticalAccelerationProperty:
   initialValue: 20.000
   finalValue: 20.000

@@ -330,10 +330,17 @@ public class BattleTank {
     }
 
     public void SetTemperature(float temperature) {
-        Temperature = Math.Clamp(temperature, TemperatureConfig.MinTemperature, TemperatureConfig.MaxTemperature);
+        float before = Temperature;
+        float min = TemperatureConfig.MinTemperature;
+        float max = TemperatureConfig.MaxTemperature;
+
+        Temperature = Math.Clamp(temperature, min, max);
         Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
 
         UpdateSpeed();
+
+        foreach (ITemperatureModule temperatureModule in Modules.OfType<ITemperatureModule>())
+            temperatureModule.OnTemperatureChanged(before, Temperature, min, max);
     }
 
     public async Task HandleTemperature() {
@@ -379,7 +386,7 @@ public class BattleTank {
         }
     }
 
-    public void UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) { // todo modules
+    public void UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) {
         float maxHeatDamage = (weaponHandler as IHeatWeaponHandler)?.HeatDamage ?? 0;
         float temperatureDelta = weaponHandler switch {
             IsisWeaponHandler isis => Temperature switch {

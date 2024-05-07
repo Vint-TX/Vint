@@ -19,7 +19,7 @@ distanceAndAngleTargetEvaluator:
 weaponCooldown:
   cooldownIntervalSec: 0.1
 weaponGyroscope:
-  forceMult: 0.25
+  forceMult: 0
 reticle:
   template: 636100801360863080
   configPath: /battle/reticle

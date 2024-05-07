@@ -114,7 +114,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
         StopReload();
     }
 
-    public void FillMagazine() { // todo modules
+    public void FillMagazine() {
         StopReload();
         SetCurrentCartridgeCount(MaximumCartridgeCount);
 
