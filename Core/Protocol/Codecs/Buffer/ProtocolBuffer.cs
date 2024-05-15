@@ -47,7 +47,13 @@ public class ProtocolBuffer(
         reader.BaseStream.CopyTo(Stream, limit: dataSize);
         Stream.Seek(0, SeekOrigin.Begin);
 
-        Connection.Logger.Verbose("Unwrapped {Size} bytes ({Hex})", Stream.Length, Convert.ToHexString(Stream.ToArray()));
+        byte[] array = Stream.ToArray();
+        List<byte> bytes = new((int)(OptionalMap.Length + Stream.Length));
+
+        bytes.AddRange(OptionalMap.GetBytes());
+        bytes.AddRange(array);
+
+        Connection.Logger.Verbose("Unwrapped {Size} bytes ({Hex})", bytes.Count, Convert.ToHexString(bytes.ToArray()));
         return true;
     }
 

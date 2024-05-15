@@ -5,7 +5,6 @@ using Serilog;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Commands;
 using Vint.Core.Server;
@@ -77,11 +76,6 @@ public class Entity(
     public void RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null) {
         if (HasComponent(type))
             RemoveComponent(type, excluded);
-    }
-
-    public void Send(IEvent @event) {
-        foreach (IPlayerConnection playerConnection in SharedPlayers)
-            playerConnection.Send(@event, this);
     }
 
     public IEntity Clone() => new Entity(Id,

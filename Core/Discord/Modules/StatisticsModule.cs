@@ -1,18 +1,17 @@
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
-using DSharpPlus.SlashCommands;
-using DSharpPlus.SlashCommands.Attributes;
 using Vint.Core.Discord.Utils;
 using Vint.Core.Server;
 
 namespace Vint.Core.Discord.Modules;
 
-[SlashCommandGroup("statistics", "Some sort of statistics")]
+[Command("statistics")]
 public class StatisticsModule(
     GameServer gameServer
-) : ApplicationCommandModule {
-    [SlashCommand("count", "Get current players and battles count"), SlashCooldown(1, 60, SlashCooldownBucketType.Channel)]
-    public async Task Count(InteractionContext ctx) {
-        await ctx.DeferAsync();
+) {
+    [Command("count")]
+    public async Task Count(CommandContext ctx) {
+        await ctx.DeferResponseAsync();
 
         int players = gameServer.PlayerConnections.Count;
         int battles = gameServer.BattleProcessor.BattlesCount;
@@ -21,6 +20,6 @@ public class StatisticsModule(
             .AddField("Players", $"{players}", true)
             .AddField("Battles", $"{battles}", true);
 
-        await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
+        await ctx.EditResponseAsync(embed);
     }
 }

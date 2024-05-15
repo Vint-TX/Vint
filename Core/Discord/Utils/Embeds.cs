@@ -1,12 +1,11 @@
-﻿using DSharpPlus;
-using DSharpPlus.Entities;
+﻿using DSharpPlus.Entities;
 
 namespace Vint.Core.Discord.Utils;
 
 static class Embeds {
     public static async Task SendEmbed(this DiscordInteraction interaction, DiscordEmbed embed, bool ephemeral = true) =>
         await interaction.CreateResponseAsync(
-            InteractionResponseType.ChannelMessageWithSource,
+            DiscordInteractionResponseType.ChannelMessageWithSource,
             new DiscordInteractionResponseBuilder()
                 .AddEmbed(embed)
                 .AsEphemeral(ephemeral)
@@ -23,7 +22,7 @@ static class Embeds {
         $"{description}\n\nНажмите ПКМ по серверу, выберите \"Настройки конфиденциальности\" и включите пункт \"Личные сообщения\".");
 
     public static DiscordEmbedBuilder GetSuccessfulEmbed(string description, string title = "Success", string? footer = null) =>
-        GetEmbed(title, description, footer, "#44944A");
+        GetEmbed(title, description, footer, "#B6FF16");
 
     public static DiscordEmbedBuilder GetNotificationEmbed(string description, string title = "Information", string? footer = null) =>
         GetEmbed(title, description, footer, "#6495ED");

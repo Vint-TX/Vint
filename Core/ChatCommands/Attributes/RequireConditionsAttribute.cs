@@ -22,6 +22,8 @@ public class RequireConditionsAttribute(
 
             if ((Conditions & condition) == condition) {
                 returnValue &= condition switch {
+                    ChatCommandConditions.InGarage => !connection.InLobby,
+
                     ChatCommandConditions.InLobby => connection.InLobby,
 
                     ChatCommandConditions.InBattle => connection.InLobby && connection.BattlePlayer!.InBattle,

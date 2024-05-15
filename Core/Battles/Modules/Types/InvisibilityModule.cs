@@ -1,4 +1,3 @@
-using System.Numerics;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;

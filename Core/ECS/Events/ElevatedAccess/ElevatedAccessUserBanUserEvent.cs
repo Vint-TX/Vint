@@ -8,7 +8,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.ElevatedAccess;
 
-[ProtocolId(1503470104769)]
+[ProtocolId(1503470104769), Obsolete]
 public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent {
     public string Type { get; private set; } = null!;
 
@@ -50,12 +50,12 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
 
         switch (Type.ToLower()) {
             case "warn": {
-                punishment = await targetPlayer.Warn(Reason, null);
+                punishment = await targetPlayer.Warn(((SocketPlayerConnection)targetConnection!).EndPoint.Address.ToString(), Reason, null);
                 break;
             }
 
             case "mute": {
-                punishment = await targetPlayer.Mute(Reason, null);
+                punishment = await targetPlayer.Mute(((SocketPlayerConnection)targetConnection!).EndPoint.Address.ToString(), Reason, null);
                 break;
             }
 

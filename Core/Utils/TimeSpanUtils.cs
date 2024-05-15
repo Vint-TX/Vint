@@ -5,7 +5,7 @@ namespace Vint.Core.Utils;
 
 public static class TimeSpanUtils {
     static Dictionary<string, TimeSpan> TimeSpanInfos { get; } = new() {
-        { "year", TimeSpan.FromDays(365) },
+        { "year", FromYears(1) },
         { "month", TimeSpan.FromDays(30) },
         { "week", TimeSpan.FromDays(7) },
         { "day", TimeSpan.FromDays(1) },
@@ -35,5 +35,17 @@ public static class TimeSpanUtils {
 
         duration = result;
         return true;
+    }
+
+    public static TimeSpan FromYears(double value) {
+        int leapCounter = 0;
+        double years = value;
+
+        while (years >= 4) {
+            leapCounter++;
+            years -= 4;
+        }
+
+        return TimeSpan.FromDays(value * 365 + leapCounter);
     }
 }

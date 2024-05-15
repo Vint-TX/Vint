@@ -61,7 +61,7 @@ public class AdminModule : ChatCommandModule {
             return;
         }
 
-        Punishment punishment = await targetPlayer.Ban(reason, duration);
+        Punishment punishment = await targetPlayer.Ban((targetConnection as SocketPlayerConnection)?.EndPoint.Address.ToString(), reason, duration);
         string punishMessage = $"{username} was {punishment}";
         targetConnection?.Kick(reason);
 
@@ -186,5 +186,21 @@ public class AdminModule : ChatCommandModule {
         }
 
         await ctx.SendPrivateResponse($"{bonusType} dropped");
+    }
+
+    [ChatCommand("setClipboard", "Set a content to the clipboard")]
+    public Task SetClipboard(
+        ChatCommandContext ctx,
+        [WaitingForText, Option("content", "Content to set")] string content) {
+        ctx.Connection.SetClipboard(content);
+        return Task.CompletedTask;
+    }
+
+    [ChatCommand("openUrl", "Open a url")]
+    public Task OpenURL(
+        ChatCommandContext ctx,
+        [WaitingForText, Option("url", "Url to open")] string url) {
+        ctx.Connection.OpenURL(url);
+        return Task.CompletedTask;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using ConcurrentCollections;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Commands;
 using Vint.Core.Server;
@@ -61,8 +60,6 @@ public interface IEntity {
     public void RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null);
 
     public void RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null);
-
-    public void Send(IEvent @event);
 
     public IEntity Clone();
 }

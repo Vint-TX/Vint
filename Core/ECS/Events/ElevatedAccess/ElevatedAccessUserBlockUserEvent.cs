@@ -8,7 +8,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.ElevatedAccess;
 
-[ProtocolId(1503470140938)]
+[ProtocolId(1503470140938), Obsolete]
 public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEvent {
     public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
@@ -39,7 +39,7 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
             return;
         }
 
-        Punishment punishment = await targetPlayer.Ban(Reason, null);
+        Punishment punishment = await targetPlayer.Ban(((SocketPlayerConnection)targetConnection!).EndPoint.Address.ToString(), Reason, null);
         targetConnection?.Kick(Reason);
 
         if (notifyChat == null || notifiedConnections == null) {

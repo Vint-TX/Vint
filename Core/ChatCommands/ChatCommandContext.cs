@@ -15,6 +15,7 @@ public sealed class ChatCommandContext(
     public IPlayerConnection Connection { get; } = connection;
     public IEntity Chat { get; } = chat;
     public ChatCommandAttribute CommandInfo { get; } = commandInfo;
+    public GameServer GameServer => Connection.Server;
 
     public async Task SendPrivateResponse(string response) =>
         await SendResponse(response, Chat, [Connection]);

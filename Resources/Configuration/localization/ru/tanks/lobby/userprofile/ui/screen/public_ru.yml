@@ -13,13 +13,13 @@ viewUserEmailScreen:
 enterUserEmailScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА
   continueButton: ПРОДОЛЖИТЬ
-  rightPanelHint: Если ты забыл свой электронный адрес, напиши в техподдержку с любой почты на help@tankix.com
+  rightPanelHint: "Если у тебя возникли какие-то проблемы, напиши администраторам проекта на Discord сервере Vint: https://discord.gg/6WzrtVSs6G"
 enterConfirmationCodeScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА
   continueButton: ПОДТВЕРДИТЬ
   sendAgainText: ВЫСЛАТЬ КОД
   confirmationCodeText: Введи полученный код
-  confirmationHint: 'На адрес %EMAIL% отправлено письмо с кодом подтверждения для восстановления доступа к аккаунту.'
+  confirmationHint: "Мы создали код подтверждения для аккаунта %DISCORD%. Получи его через Discord используя команду '/player restore_password_code'"
   invalidCodeMessage: Введён неверный код
 enterNewPasswordScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА

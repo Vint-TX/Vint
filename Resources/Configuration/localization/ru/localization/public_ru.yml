@@ -5,7 +5,7 @@ b1dffc5b-0a9f-4442-9db9-ad97a8cfd532:
 2ad0eb41-7d95-4eb1-9dd0-a1084b99652f:
   'accessRecovery/continue': 'ПРОДОЛЖИТЬ'
 8c83981c-e9c5-4ba9-8006-70c217af065f:
-  'accessRecovery/email': 'Введи свой адрес электронной почты'
+  'accessRecovery/email': 'Введи id своего аккаунта Discord'
 ec7ff56e-6fba-4947-87d0-a2a753c0974a:
   'accessRecovery/sendAgainTimer': 'Повторная отправка возможна через %seconds% секунд'
 1331ad70-36ed-4934-a12f-e581558ba692:

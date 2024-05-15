@@ -6,7 +6,7 @@ namespace Vint.Core.ECS.Templates.Notification;
 
 [ProtocolId(1493196797791)]
 public class SimpleTextNotificationTemplate : NotificationTemplate {
-    public new IEntity Create(string message) {
+    public IEntity Create(string message) {
         IEntity entity = base.Create("notification/simpletext");
 
         entity.AddComponent(new ServerNotificationMessageComponent(message));

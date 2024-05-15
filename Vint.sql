@@ -65,6 +65,27 @@ CREATE TABLE `Covers`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `DiscordLinks`
+--
+
+DROP TABLE IF EXISTS `DiscordLinks`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DiscordLinks`
+(
+    `PlayerId`            bigint(20)          NOT NULL,
+    `UserId`              bigint(20) unsigned NOT NULL,
+    `TokenExpirationDate` timestamp           NOT NULL,
+    `AccessToken`         text                NOT NULL COLLATE 'utf8mb4_bin',
+    `RefreshToken`        text                NOT NULL COLLATE 'utf8mb4_bin',
+    PRIMARY KEY (`PlayerId`, `UserId`),
+    FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Graffities`
 --
 
@@ -194,12 +215,15 @@ CREATE TABLE `Players`
     `Id`                   bigint(20)       NOT NULL,
     `Username`             text             NOT NULL COLLATE 'utf8mb4_bin',
     `Email`                text             NOT NULL COLLATE 'utf8mb4_bin',
+    `DiscordUserId`        bigint(20) UNSIGNED NOT NULL,
     `RememberMe`           tinyint(1)       NOT NULL,
     `AutoLoginToken`       varbinary(255) DEFAULT NULL,
     `PasswordHash`         varbinary(255)   NOT NULL,
     `HardwareFingerprint`  text             NOT NULL,
     `Groups`               int(11)          NOT NULL,
     `RewardedLeagues`      int(11)          NOT NULL,
+    `DiscordLinkRewarded`  tinyint(1)       NOT NULL,
+    `DiscordLinked`        tinyint(1)       NOT NULL,
     `Subscribed`           tinyint(1)       NOT NULL,
     `CountryCode`          text             NOT NULL,
     `CurrentAvatarId`      bigint(20)       NOT NULL,
@@ -289,13 +313,15 @@ DROP TABLE IF EXISTS `Punishments`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Punishments`
 (
-    `PlayerId`   bigint(20) NOT NULL,
-    `Id`         bigint(20) NOT NULL AUTO_INCREMENT,
-    `Type`       int(11)    NOT NULL,
-    `PunishTime` timestamp  NOT NULL,
-    `Duration`   bigint(20) DEFAULT NULL,
-    `Reason`     text       DEFAULT NULL,
-    `Active`     tinyint(1) NOT NULL,
+    `PlayerId`            bigint(20) NOT NULL,
+    `Id`                  bigint(20) NOT NULL AUTO_INCREMENT,
+    `IPAddress`           text       DEFAULT NULL,
+    `HardwareFingerprint` text       NOT NULL,
+    `Type`                int(11)    NOT NULL,
+    `PunishTime`          timestamp  NOT NULL,
+    `Duration`            bigint(20) DEFAULT NULL,
+    `Reason`              text       DEFAULT NULL,
+    `Active`              tinyint(1) NOT NULL,
     PRIMARY KEY (`PlayerId`, `Id`),
     UNIQUE KEY `Id` (`Id`),
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE

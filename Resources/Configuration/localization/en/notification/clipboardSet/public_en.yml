@@ -1,0 +1,3 @@
+---
+clipboardSetNotificationText:
+  messageTemplate: "<b><color=#3AC4E9FF>Copied to clipboard</color></b>"

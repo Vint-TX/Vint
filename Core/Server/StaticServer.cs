@@ -1,8 +1,11 @@
-﻿using System.Net;
+﻿using System.Collections.Specialized;
+using System.Net;
 using System.Net.Sockets;
+using System.Web;
 using NetCoreServer;
 using Serilog;
 using Vint.Core.Config;
+using Vint.Core.Discord;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
@@ -106,6 +109,31 @@ public class StaticServerSession(
                                       ? Response.MakeGetResponse(File.ReadAllBytes(requestedEntry))
                                       : Response.MakeErrorResponse(404));
 
+                break;
+            }
+
+            case "discord" when urlParts[1] == "auth": {
+                NameValueCollection query = HttpUtility.ParseQueryString(request.Url.Split('?').Last());
+
+                string? state = query["state"];
+                string? code = query["code"];
+                DiscordLinkRequest linkRequest = ConfigManager.DiscordLinkRequests.SingleOrDefault(req => req.State == state);
+
+                if (state == null || code == null || linkRequest == default) {
+                    SendResponseAsync(Response.MakeErrorResponse(400));
+                    return;
+                }
+
+                ConfigManager.DiscordLinkRequests.TryRemove(linkRequest);
+
+                /*SendResponseAsync(new HttpResponse().SetBegin(301).SetHeader("Location", "https://vint-official.site/"));
+                Disconnect();*/
+
+                bool? result = ConfigManager.NewLinkRequest?.Invoke(code, linkRequest.UserId).GetAwaiter().GetResult();
+
+                SendResponseAsync(result == true
+                    ? Response.MakeGetResponse("Your Discord account is successfully linked!")
+                    : Response.MakeErrorResponse(400, "Account is not linked, contact the administrators for support"));
                 break;
             }
 

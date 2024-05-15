@@ -4,7 +4,10 @@ emailInputField:
   emailIsInvalid: The email you entered is incorrect
   emailIsOccupied: The email you entered is already registered
   emailIsNotConfirmed: Email is not registered
+  discordIsInvalid: The Discord id you entered is incorrect
+  discordIsOccupied: The Discord id you entered is already registered
+  discordIsNotConfirmed: Discord id is not registered
 changeEmailButton:
   text: Change email
 helpButton:
-  url: https://help.tankix.com/ru/tanki-x/forms/free-request
+  url: https://vint-official.site/

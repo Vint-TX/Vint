@@ -18,7 +18,7 @@ public class LoginByPasswordEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
-        Punishment? ban = await connection.Player.GetBanInfo();
+        Punishment? ban = await connection.Player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
 
         if (ban is { Active: true }) {
             connection.Send(new UserBlockedEvent($"You are {ban}"));

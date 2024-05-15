@@ -1,4 +1,6 @@
-﻿using Vint.Core.ECS.Entities;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 
@@ -8,10 +10,16 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class CheckRestorePasswordCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
 
-    //todo
     public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (Code == "valid") connection.Send(new RestorePasswordCodeValidEvent(Code));
-        else connection.Send(new RestorePasswordCodeInvalidEvent(Code));
+        if (connection.RestorePasswordCode == null) return Task.CompletedTask;
+
+        if (CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(Code), Encoding.UTF8.GetBytes(connection.RestorePasswordCode))) {
+            connection.RestorePasswordCodeValid = true;
+            connection.Send(new RestorePasswordCodeValidEvent(Code));
+        } else {
+            connection.RestorePasswordCodeValid = false;
+            connection.Send(new RestorePasswordCodeInvalidEvent(Code));
+        }
 
         return Task.CompletedTask;
     }

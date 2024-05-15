@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using BepuPhysics.Collidables;
+using ConcurrentCollections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -15,6 +16,7 @@ using SharpCompress.Writers;
 using SharpCompress.Writers.GZip;
 using SharpGLTF.Schema2;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
@@ -29,6 +31,9 @@ namespace Vint.Core.Config;
 
 public static class ConfigManager {
     public static uint SeasonNumber => 1; // todo do something with this;
+
+    public static Func<string, long, Task<bool>>? NewLinkRequest { get; set; }
+    public static ConcurrentHashSet<DiscordLinkRequest> DiscordLinkRequests { get; } = [];
 
     public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
     public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;

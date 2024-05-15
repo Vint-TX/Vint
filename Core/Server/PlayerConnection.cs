@@ -10,6 +10,7 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Components.Battle.Rewards;
 using Vint.Core.ECS.Components.Battle.User;
 using Vint.Core.ECS.Components.Entrance;
@@ -21,6 +22,7 @@ using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.ECS.Events.Actions;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.ECS.Events.Items;
 using Vint.Core.ECS.Events.Items.Module;
@@ -65,6 +67,9 @@ public interface IPlayerConnection {
     public DateTimeOffset PongReceiveTime { set; }
     public long Ping { get; }
     public Invite? Invite { get; set; }
+
+    public string? RestorePasswordCode { get; set; }
+    public bool RestorePasswordCodeValid { get; set; }
 
     public int BattleSeries { get; set; }
 
@@ -113,7 +118,11 @@ public interface IPlayerConnection {
 
     public Task SetGoldBoxes(int goldBoxes);
 
-    public void DisplayMessage(string message);
+    public void DisplayMessage(string message, TimeSpan? closeTime = null);
+
+    public void SetClipboard(string content);
+
+    public void OpenURL(string url);
 
     public void Kick(string? reason);
 
@@ -147,6 +156,9 @@ public abstract class PlayerConnection(
     public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
     public ConcurrentHashSet<IEntity> SharedEntities { get; private set; } = [];
+
+    public string? RestorePasswordCode { get; set; }
+    public bool RestorePasswordCodeValid { get; set; }
 
     public abstract bool IsOnline { get; }
     public bool InLobby => BattlePlayer != null;
@@ -225,7 +237,7 @@ public abstract class PlayerConnection(
 
         ClientSession.AddComponentFrom<UserGroupComponent>(User);
 
-        if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) {
+        if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) { // todo bugs
             foreach (IPlayerConnection connection in tempUser.SharedPlayers) {
                 connection.Unshare(tempUser);
                 connection.Share(User);
@@ -239,9 +251,7 @@ public abstract class PlayerConnection(
     }
 
     public async Task ChangePassword(string passwordDigest) {
-        Encryption encryption = new();
-
-        byte[] passwordHash = encryption.RsaDecrypt(Convert.FromBase64String(passwordDigest));
+        byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(passwordDigest));
         Player.PasswordHash = passwordHash;
 
         await using DbConnection db = new();
@@ -921,7 +931,6 @@ public abstract class PlayerConnection(
         User.ChangeComponent<UserUidComponent>(component => component.Username = username);
 
         await using DbConnection db = new();
-
         await db.Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.Username, username)
@@ -993,18 +1002,25 @@ public abstract class PlayerConnection(
         Player.GoldBoxItems = goldBoxes;
     }
 
-    public void DisplayMessage(string message) {
+    public void DisplayMessage(string message, TimeSpan? closeTime = null) {
         IEntity notification = new SimpleTextNotificationTemplate().Create(message);
 
         Share(notification);
-        Notifications.Add(new Notification(notification, DateTimeOffset.UtcNow + TimeSpan.FromSeconds(20)));
+        Notifications.Add(new Notification(notification, DateTimeOffset.UtcNow + (closeTime ?? TimeSpan.FromSeconds(15))));
     }
+
+    public void SetClipboard(string content) {
+        Send(new SetClipboardEvent(content));
+        Share(new ClipboardSetNotificationTemplate().Create(User));
+    }
+
+    public void OpenURL(string url) => Send(new OpenURLEvent(url));
 
     public abstract void Kick(string? reason);
 
     public abstract void Send(ICommand command);
 
-    public void Send(IEvent @event) => ClientSession.Send(@event);
+    public void Send(IEvent @event) => Send(@event, ClientSession);
 
     public void Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
 
@@ -1108,14 +1124,19 @@ public class SocketPlayerConnection(
                 foreach (IPlayerConnection connection in User.SharedPlayers.Where(connection => !connection.InLobby)) {
                     try {
                         connection.Unshare(User);
-                    } catch { /**/
-                    }
+                    } catch { /**/ }
                 }
 
                 try {
                     EntityRegistry.Remove(User.Id);
                 } catch (Exception e) {
                     Logger.Error(e, "User is already removed from registry");
+                }
+
+                foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == User.Id)) {
+                    try {
+                        ConfigManager.DiscordLinkRequests.TryRemove(request);
+                    } catch { /**/ }
                 }
             }
 
@@ -1139,8 +1160,7 @@ public class SocketPlayerConnection(
                 try {
                     if (entity.SharedPlayers.Count == 0 && !EntityRegistry.TryRemoveTemp(entity.Id))
                         EntityRegistry.Remove(entity.Id);
-                } catch { /**/
-                }
+                } catch { /**/ }
             }
 
             SharedEntities.Clear();

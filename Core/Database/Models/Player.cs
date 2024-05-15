@@ -8,16 +8,17 @@ namespace Vint.Core.Database.Models;
 
 [Table("Players")]
 public class Player {
-    [PrimaryKey] public long Id { get; init; }
+    [PrimaryKey] public required long Id { get; init; }
 
-    [Column(DataType = DataType.Text)] public string Username { get; set; } = null!;
-    [Column(DataType = DataType.Text)] public string Email { get; set; } = null!;
+    [Column(DataType = DataType.Text)] public required string Username { get; set; } = null!;
+    [Column(DataType = DataType.Text)] public required string Email { get; set; } = null!;
+    [Column] public ulong DiscordUserId { get; set; }
 
     [Column] public bool RememberMe { get; set; }
 
     [Column] public byte[] AutoLoginToken { get; set; } = [];
-    [Column] public byte[] PasswordHash { get; set; } = [];
-    [Column(DataType = DataType.Text)] public string HardwareFingerprint { get; set; } = "";
+    [Column] public required byte[] PasswordHash { get; set; } = [];
+    [Column(DataType = DataType.Text)] public required string HardwareFingerprint { get; set; } = "";
 
     [Column] public PlayerGroups Groups { get; set; }
     [NotColumn] public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
@@ -27,8 +28,10 @@ public class Player {
 
     [Column] public League RewardedLeagues { get; set; }
 
-    [Column] public bool Subscribed { get; set; }
-    [Column(DataType = DataType.Text)] public string CountryCode { get; set; } = "RU";
+    [Column] public bool DiscordLinkRewarded { get; set; }
+    [Column] public bool DiscordLinked { get; set; }
+    [Column] public required bool Subscribed { get; set; }
+    [Column(DataType = DataType.Text)] public required string CountryCode { get; set; } = "RU";
 
     [Column] public long CurrentAvatarId { get; set; }
     [Column] public int CurrentPresetIndex { get; set; }
@@ -83,8 +86,13 @@ public class Player {
 
     [NotColumn] public IEntity Fraction => GlobalEntities.GetEntity("fractions", FractionName);
 
-    [Column] public DateTimeOffset RegistrationTime { get; init; }
-    [Column] public DateTimeOffset LastLoginTime { get; set; }
+    [Column] public required DateTimeOffset RegistrationTime { get; init; }
+    [Column] public required DateTimeOffset LastLoginTime { get; set; }
+
+    [Association(
+        ThisKey = $"{nameof(Id)},{nameof(DiscordUserId)}",
+        OtherKey = $"{nameof(Models.DiscordLink.PlayerId)},{nameof(Models.DiscordLink.UserId)}")]
+    public DiscordLink DiscordLink { get; set; } = null!;
 
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Statistics.PlayerId))]
     public Statistics Stats { get; private set; } = null!;
@@ -190,14 +198,16 @@ public class Player {
         Modules = [];
     }
 
-    public async Task<Punishment> Warn(string? reason, TimeSpan? duration) {
+    public async Task<Punishment> Warn(string? ipAddress, string? reason, TimeSpan? duration) {
         Punishment punishment = new() {
             Player = this,
             PunishTime = DateTimeOffset.UtcNow,
             Active = true,
             Duration = duration?.Duration(),
             Reason = reason,
-            Type = PunishmentType.Warn
+            Type = PunishmentType.Warn,
+            HardwareFingerprint = HardwareFingerprint,
+            IPAddress = ipAddress
         };
 
         await using DbConnection db = new();
@@ -206,7 +216,7 @@ public class Player {
         return punishment;
     }
 
-    public async Task<Punishment> Mute(string? reason, TimeSpan? duration) {
+    public async Task<Punishment> Mute(string? ipAddress, string? reason, TimeSpan? duration) {
         await UnMute();
 
         Punishment punishment = new() {
@@ -215,7 +225,9 @@ public class Player {
             Active = true,
             Duration = duration?.Duration(),
             Reason = reason,
-            Type = PunishmentType.Mute
+            Type = PunishmentType.Mute,
+            HardwareFingerprint = HardwareFingerprint,
+            IPAddress = ipAddress
         };
 
         await using DbConnection db = new();
@@ -224,7 +236,7 @@ public class Player {
         return punishment;
     }
 
-    public async Task<Punishment> Ban(string? reason, TimeSpan? duration) {
+    public async Task<Punishment> Ban(string? ipAddress, string? reason, TimeSpan? duration) {
         await UnBan();
 
         Punishment punishment = new() {
@@ -233,7 +245,9 @@ public class Player {
             Active = true,
             Duration = duration?.Duration(),
             Reason = reason,
-            Type = PunishmentType.Ban
+            Type = PunishmentType.Ban,
+            HardwareFingerprint = HardwareFingerprint,
+            IPAddress = ipAddress
         };
 
         await using DbConnection db = new();
@@ -278,7 +292,8 @@ public class Player {
         await using DbConnection db = new();
 
         Punishment? punishment = await db.Punishments
-            .Where(punishment => punishment.PlayerId == Id &&
+            .Where(punishment => (punishment.PlayerId == Id ||
+                                  punishment.HardwareFingerprint == HardwareFingerprint) &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
@@ -291,12 +306,14 @@ public class Player {
         return true;
     }
 
-    public async Task<Punishment?> GetBanInfo() {
+    public async Task<Punishment?> GetBanInfo(string hardwareFingerprint, string? ipAddress) {
         await RefreshPunishments();
 
         await using DbConnection db = new();
         return await db.Punishments
-            .Where(punishment => punishment.PlayerId == Id &&
+            .Where(punishment => (punishment.PlayerId == Id ||
+                                  punishment.HardwareFingerprint == hardwareFingerprint ||
+                                  ipAddress != null && punishment.IPAddress == ipAddress) &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)

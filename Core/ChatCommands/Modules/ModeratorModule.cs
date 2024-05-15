@@ -58,7 +58,7 @@ public class ModeratorModule : ChatCommandModule {
             return;
         }
 
-        Punishment punishment = await targetPlayer.Warn(reason, duration);
+        Punishment punishment = await targetPlayer.Warn((targetConnection as SocketPlayerConnection)?.EndPoint.Address.ToString(), reason, duration);
         string punishMessage = $"{username} was {punishment}";
 
         await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
@@ -119,7 +119,7 @@ public class ModeratorModule : ChatCommandModule {
             return;
         }
 
-        Punishment punishment = await targetPlayer.Mute(reason, duration);
+        Punishment punishment = await targetPlayer.Mute((targetConnection as SocketPlayerConnection)?.EndPoint.Address.ToString(), reason, duration);
         string punishMessage = $"{username} was {punishment}";
 
         await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");

@@ -517,9 +517,9 @@ public class BattleTank {
                 assistant.AddScore(score);
                 assistant.CommitStatistics();
 
-                assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreAssistEvent(BattlePlayer.GetScoreWithBonus(score),
-                    percent,
-                    currentPlayer.Username));
+                assistant.BattlePlayer.PlayerConnection.Send(
+                    new VisualScoreAssistEvent(BattlePlayer.GetScoreWithBonus(score), percent, currentPlayer.Username),
+                    assistant.BattleUser);
             }
         }
 

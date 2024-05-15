@@ -36,13 +36,13 @@ public class GameServer(
 
         Listener.Start();
         IsStarted = true;
-        await OnStarted();
+        OnStarted();
 
         IsAccepting = true;
         await Accept();
     }
 
-    async Task OnStarted() {
+    void OnStarted() {
         Logger.Information("Started");
 
         ChatCommandProcessor chatCommandProcessor = new();
@@ -60,11 +60,11 @@ public class GameServer(
 
         new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
         new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
-        _ = Task.Factory.StartNew(BattleProcessor.StartTicking).Catch();
+        _ = Task.Factory.StartNew(BattleProcessor.StartTicking, TaskCreationOptions.LongRunning).Catch();
         _ = Task.Factory.StartNew(PingLoop, TaskCreationOptions.LongRunning).Catch();
 
         if (DiscordBot != null)
-            await DiscordBot.Start();
+            _ = Task.Factory.StartNew(DiscordBot.Start, TaskCreationOptions.LongRunning).Catch();
 
         chatCommandProcessor.RegisterCommands();
     }

@@ -1,0 +1,3 @@
+---
+clipboardSetNotificationText:
+  messageTemplate: "<b><color=#3AC4E9FF>Скопировано в буфер обмена</color></b>"
