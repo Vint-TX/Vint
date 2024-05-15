@@ -52,7 +52,11 @@ public class DiscordBot(
             .AddSingleton(gameServer)
             .BuildServiceProvider();
 
-        CommandsExtension commands = Client.UseCommands(new CommandsConfiguration { ServiceProvider = serviceProvider });
+        CommandsExtension commands = Client.UseCommands(new CommandsConfiguration {
+            ServiceProvider = serviceProvider,
+            RegisterDefaultCommandProcessors = false
+        });
+
         SlashCommandProcessor slashCommandProcessor = new();
 
         await commands.AddProcessorAsync(slashCommandProcessor);
