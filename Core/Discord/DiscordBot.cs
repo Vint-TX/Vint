@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Text;
 using DSharpPlus;
 using DSharpPlus.Commands;
-using DSharpPlus.Commands.Converters;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
@@ -101,14 +100,20 @@ public class DiscordBot(
 
         if (member! == null!) return;
 
-        await member.GrantRoleAsync(LinkedRole);
+        try {
+            await member.GrantRoleAsync(LinkedRole);
+        } catch (Exception e) {
+            Logger.Error(e, "Caught an exception while granting the linked role");
+        }
     }
 
     public async Task RevokeLinkedRole(ulong userId) {
         try {
             DiscordMember member = await Guild.GetMemberAsync(userId);
             await member.RevokeRoleAsync(LinkedRole);
-        } catch { /**/ }
+        } catch (Exception e) {
+            Logger.Error(e, "Caught an exception while revoking the linked role");
+        }
     }
 
     public async Task<DiscordMember?> AddToOrGetFromGuild(DiscordUser user, string username, string accessToken) {
@@ -116,6 +121,9 @@ public class DiscordBot(
             return await Guild.AddMemberWithRolesAsync(user, accessToken, [LinkedRole], username) ??
                    await Guild.GetMemberAsync(user.Id);
         } catch (NotFoundException) {
+            return null;
+        } catch (UnauthorizedException e) {
+            Logger.Error(e, "Caught an exception while adding/getting the member");
             return null;
         }
     }
