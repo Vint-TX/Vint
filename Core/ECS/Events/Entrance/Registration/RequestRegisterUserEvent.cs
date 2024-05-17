@@ -1,5 +1,6 @@
 ﻿using LinqToDB;
 using Vint.Core.Database;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -26,6 +27,27 @@ public class RequestRegisterUserEvent : IServerEvent {
         }
 
         await using (DbConnection db = new()) {
+            List<Punishment> punishments = await db.Punishments
+                .Where(punishment => punishment.Active &&
+                                     punishment.Type == PunishmentType.Ban &&
+                                     punishment.HardwareFingerprint == HardwareFingerprint)
+                .ToListAsync();
+
+            bool banned = false;
+
+            foreach (Punishment punishment in punishments) {
+                if (punishment.EndTime <= DateTimeOffset.UtcNow) {
+                    punishment.Active = false;
+                    await db.UpdateAsync(punishment);
+                } else
+                    banned = true;
+            }
+
+            if (banned) {
+                connection.Send(new RegistrationFailedEvent());
+                return;
+            }
+
             if (await db.Players.AnyAsync(player => player.Username == Username) ||
                 await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
                 connection.Send(new RegistrationFailedEvent());

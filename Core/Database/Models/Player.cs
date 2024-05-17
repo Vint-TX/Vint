@@ -311,11 +311,11 @@ public class Player {
 
         await using DbConnection db = new();
         return await db.Punishments
-            .Where(punishment => (punishment.PlayerId == Id ||
-                                  punishment.HardwareFingerprint == hardwareFingerprint ||
-                                  ipAddress != null && punishment.IPAddress == ipAddress) &&
+            .Where(punishment => punishment.Active &&
                                  punishment.Type == PunishmentType.Ban &&
-                                 punishment.Active)
+                                 (punishment.PlayerId == Id ||
+                                  punishment.HardwareFingerprint == hardwareFingerprint ||
+                                  ipAddress != null && punishment.IPAddress == ipAddress))
             .OrderByDescending(punishment => punishment.PunishTime)
             .FirstOrDefaultAsync();
     }
