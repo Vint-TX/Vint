@@ -55,7 +55,7 @@ public class UserResult {
         HullSkinId = preset.HullSkin.Id;
         WeaponSkinId = preset.WeaponSkin.Id;
 
-        UnfairMatching = battle.ModeHandler is TeamHandler teamHandler && teamHandler.BluePlayers.Count() != teamHandler.RedPlayers.Count();
+        UnfairMatching = false; /*battle.ModeHandler is TeamHandler teamHandler && teamHandler.BluePlayers.Count() != teamHandler.RedPlayers.Count();*/
         League = player.LeagueEntity;
         Modules = preset.Modules.Select(pModule => new ModuleInfo {
             ModuleId = pModule.Entity.Id,

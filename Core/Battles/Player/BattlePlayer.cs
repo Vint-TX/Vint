@@ -146,7 +146,7 @@ public class BattlePlayer {
         await db.BeginTransactionAsync();
         await db.SeasonStatistics
             .Where(stats => stats.PlayerId == player.Id &&
-                            stats.SeasonNumber == ConfigManager.SeasonNumber)
+                            stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.BattlesPlayed, stats => stats.BattlesPlayed + 1)
             .UpdateAsync();
 
@@ -193,6 +193,8 @@ public class BattlePlayer {
             reputationDelta = Battle.ModeHandler.CalculateReputationDelta(this);
             await PlayerConnection.ChangeReputation(reputationDelta);
             await PlayerConnection.ChangeGameplayChestScore(score);
+
+            await PlayerConnection.Server.QuestManager.BattleFinished(PlayerConnection);
         }
 
         PersonalBattleResultForClient personalBattleResult = new();

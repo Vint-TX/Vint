@@ -1,6 +1,6 @@
 using Vint.Core.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Actions;
+namespace Vint.Core.ECS.Events.Action;
 
 [ProtocolId(31217)]
 public class SetClipboardEvent(

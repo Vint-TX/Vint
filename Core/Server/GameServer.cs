@@ -6,6 +6,7 @@ using Vint.Core.Battles;
 using Vint.Core.ChatCommands;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Events.Ping;
+using Vint.Core.Quests;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
@@ -22,6 +23,7 @@ public class GameServer(
     IEnumerable<SocketPlayerConnection> SocketPlayerConnections => PlayerConnections.Values.Cast<SocketPlayerConnection>();
 
     public ConcurrentDictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();
+    public QuestManager QuestManager { get; private set; } = null!;
     public IBattleProcessor BattleProcessor { get; private set; } = null!;
     public IMatchmakingProcessor MatchmakingProcessor { get; private set; } = null!;
     public IArcadeProcessor ArcadeProcessor { get; private set; } = null!;
@@ -53,6 +55,7 @@ public class GameServer(
         if (!string.IsNullOrWhiteSpace(discordBotToken))
             DiscordBot = new DiscordBot(discordBotToken, this);
 
+        QuestManager = new QuestManager(this);
         BattleProcessor = new BattleProcessor();
         MatchmakingProcessor = new MatchmakingProcessor(BattleProcessor);
         ArcadeProcessor = new ArcadeProcessor(BattleProcessor);
@@ -61,7 +64,8 @@ public class GameServer(
         new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
         new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
         _ = Task.Factory.StartNew(BattleProcessor.StartTicking, TaskCreationOptions.LongRunning).Catch();
-        _ = Task.Factory.StartNew(PingLoop, TaskCreationOptions.LongRunning).Catch();
+        _ = Task.Factory.StartNew(QuestManager.Loop, TaskCreationOptions.LongRunning).Catch();
+        _ = Task.Factory.StartNew(Loop, TaskCreationOptions.LongRunning).Catch();
 
         if (DiscordBot != null)
             _ = Task.Factory.StartNew(DiscordBot.Start, TaskCreationOptions.LongRunning).Catch();
@@ -92,7 +96,7 @@ public class GameServer(
 
     public void RemovePlayer(Guid id) => PlayerConnections.Remove(id, out _);
 
-    async Task PingLoop() {
+    async Task Loop() {
         while (true) {
             if (!IsStarted) return;
 
@@ -106,9 +110,9 @@ public class GameServer(
                     playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
                     playerConnection.PingSendTime = DateTimeOffset.UtcNow;
 
-                    playerConnection.Tick();
+                    await playerConnection.Tick();
                 } catch (Exception e) {
-                    Logger.Error(e, "Socket caught an exception while sending ping event");
+                    Logger.Error(e, "Socket caught an exception in the players loop");
                 }
             }
 

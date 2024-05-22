@@ -86,8 +86,13 @@ public class Player {
 
     [NotColumn] public IEntity Fraction => GlobalEntities.GetEntity("fractions", FractionName);
 
+    [Column] public int QuestChanges { get; set; }
+    [NotColumn] public int MaxQuestChanges => IsPremium ? 2 : 1;
+
     [Column] public required DateTimeOffset RegistrationTime { get; init; }
     [Column] public required DateTimeOffset LastLoginTime { get; set; }
+    [Column] public required DateTimeOffset LastQuestUpdateTime { get; set; }
+    [Column] public DateTimeOffset? QuestChangesResetTime { get; set; }
 
     [Association(
         ThisKey = $"{nameof(Id)},{nameof(DiscordUserId)}",
@@ -178,7 +183,7 @@ public class Player {
 
             await db.InsertAsync(new Preset { Player = this, Index = 0, Name = "Preset 1" });
 
-            await db.InsertAsync(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.SeasonNumber });
+            await db.InsertAsync(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.ServerConfig.SeasonNumber });
             await db.InsertAsync(new Statistics { Player = this });
 
             await db.CommitTransactionAsync();

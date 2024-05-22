@@ -22,7 +22,7 @@ using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
-using Vint.Core.ECS.Events.Actions;
+using Vint.Core.ECS.Events.Action;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.ECS.Events.Items;
 using Vint.Core.ECS.Events.Items.Module;
@@ -140,7 +140,15 @@ public interface IPlayerConnection {
 
     public void UnshareIfShared(IEntity entity);
 
-    public void Tick();
+    public void Schedule(TimeSpan delay, Action action);
+
+    public void Schedule(DateTimeOffset time, Action action);
+
+    public void Schedule(TimeSpan delay, Func<Task> action);
+
+    public void Schedule(DateTimeOffset time, Func<Task> action);
+
+    public Task Tick();
 }
 
 public abstract class PlayerConnection(
@@ -155,7 +163,9 @@ public abstract class PlayerConnection(
     public IEntity ClientSession { get; protected set; } = null!;
     public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
-    public ConcurrentHashSet<IEntity> SharedEntities { get; private set; } = [];
+    public ConcurrentHashSet<IEntity> SharedEntities { get; } = [];
+    ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
+    ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
     public string? RestorePasswordCode { get; set; }
     public bool RestorePasswordCodeValid { get; set; }
@@ -194,6 +204,7 @@ public abstract class PlayerConnection(
             Subscribed = subscribed,
             RegistrationTime = DateTimeOffset.UtcNow,
             LastLoginTime = DateTimeOffset.UtcNow,
+            LastQuestUpdateTime = DateTimeOffset.UtcNow,
             PasswordHash = passwordHash
         };
 
@@ -269,7 +280,7 @@ public abstract class PlayerConnection(
 
         SeasonStatistics seasonStats = await db.SeasonStatistics
             .SingleAsync(stats => stats.PlayerId == Player.Id &&
-                                  stats.SeasonNumber == ConfigManager.SeasonNumber);
+                                  stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber);
 
         ReputationStatistics? reputationStats = await db.ReputationStatistics
             .SingleOrDefaultAsync(repStats => repStats.PlayerId == Player.Id &&
@@ -281,7 +292,7 @@ public abstract class PlayerConnection(
         reputationStats ??= new ReputationStatistics {
             Player = Player,
             Date = date,
-            SeasonNumber = ConfigManager.SeasonNumber
+            SeasonNumber = ConfigManager.ServerConfig.SeasonNumber
         };
 
         uint reputation = (uint)Math.Clamp(oldReputation + delta, 0, 99999);
@@ -329,7 +340,7 @@ public abstract class PlayerConnection(
 
         await db.SeasonStatistics
             .Where(stats => stats.PlayerId == Player.Id &&
-                            stats.SeasonNumber == ConfigManager.SeasonNumber)
+                            stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.ExperienceEarned, stats => stats.ExperienceEarned + delta)
             .UpdateAsync();
 
@@ -950,7 +961,7 @@ public abstract class PlayerConnection(
                 .UpdateAsync();
 
             await db.SeasonStatistics
-                .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.SeasonNumber)
+                .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
                 .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)delta)
                 .UpdateAsync();
         }
@@ -976,7 +987,7 @@ public abstract class PlayerConnection(
                 .UpdateAsync();
 
             await db.SeasonStatistics
-                .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.SeasonNumber)
+                .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
                 .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)delta)
                 .UpdateAsync();
         }
@@ -1038,8 +1049,30 @@ public abstract class PlayerConnection(
             Unshare(entity);
     }
 
-    public void Tick() {
-        foreach (Notification notification in Notifications.Where(notification => notification.CloseTime < DateTimeOffset.UtcNow)) {
+    public void Schedule(TimeSpan delay, Action action) =>
+        DelayedActions.Add(new DelayedAction(DateTimeOffset.UtcNow + delay, action));
+
+    public void Schedule(DateTimeOffset time, Action action) =>
+        DelayedActions.Add(new DelayedAction(time, action));
+
+    public void Schedule(TimeSpan delay, Func<Task> action) =>
+        DelayedTasks.Add(new DelayedTask(DateTimeOffset.UtcNow + delay, action));
+
+    public void Schedule(DateTimeOffset time, Func<Task> action) =>
+        DelayedTasks.Add(new DelayedTask(time, action));
+
+    public async Task Tick() {
+        foreach (DelayedAction delayedAction in DelayedActions.Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+            delayedAction.Action();
+            DelayedActions.TryRemove(delayedAction);
+        }
+
+        foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+            await delayedTask.Task();
+            DelayedTasks.TryRemove(delayedTask);
+        }
+
+        foreach (Notification notification in Notifications.Where(notification => notification.CloseTime <= DateTimeOffset.UtcNow)) {
             UnshareIfShared(notification.Entity);
             Notifications.TryRemove(notification);
         }

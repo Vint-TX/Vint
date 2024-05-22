@@ -41,11 +41,11 @@ public class BlueprintsContainer : Container {
             int tier1Amount = 0;
 
             for (int i = 0; i < amount; i++) {
-                tier3Amount += Random.NextFloat() < Info.Tier3Probability ? Random.Next(Info.MinTier3Amount, Info.MaxTier3Amount) : 0;
-                tier2Amount += Random.NextFloat() < Info.Tier2Probability ? Random.Next(Info.MinTier2Amount, Info.MaxTier2Amount) : 0;
+                tier3Amount += MathUtils.RollTheDice(Info.Tier3Probability, Random) ? Random.Next(Info.MinTier3Amount, Info.MaxTier3Amount) : 0;
+                tier2Amount += MathUtils.RollTheDice(Info.Tier2Probability, Random) ? Random.Next(Info.MinTier2Amount, Info.MaxTier2Amount) : 0;
             }
 
-            tier1Amount += Random.NextFloat() < Info.Tier1Probability ? Math.Max(0, blueprintsAmount - (tier3Amount + tier2Amount)) : 0;
+            tier1Amount += MathUtils.RollTheDice(Info.Tier1Probability, Random) ? Math.Max(0, blueprintsAmount - (tier3Amount + tier2Amount)) : 0;
 
             while (blueprintsAmount > 0) {
                 IReadOnlyCollection<IEntity> pool;

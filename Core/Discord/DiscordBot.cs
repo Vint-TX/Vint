@@ -87,7 +87,7 @@ public class DiscordBot(
     }
 
     public async Task SetPlayersCount(int count) {
-        if (Client is not { IsConnected: true } || LastPlayersCount == count) return;
+        if (LastPlayersCount == count || Client is not { IsConnected: true }) return;
 
         await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), DiscordActivityType.Competing));
         LastPlayersCount = count;
@@ -105,7 +105,7 @@ public class DiscordBot(
         if (member! == null!) return;
 
         try {
-            await member.GrantRoleAsync(LinkedRole);
+            await member.GrantRoleAsync(LinkedRole, $"Linked account {username}");
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while granting the linked role");
         }

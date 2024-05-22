@@ -8,6 +8,7 @@ using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.ECS.Templates.Shells;
 using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Containers;
 
@@ -26,7 +27,7 @@ public class ItemsContainer(
             (IEntity regularReward, int itemAmount, long compensation) = await GetReward(ItemsComponent.Items, connection, random);
             yield return await SaveRewardOrCompensation(connection, regularReward, itemAmount, compensation);
 
-            if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || random.NextFloat() > 0.1 /* 10% */) continue;
+            if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || !MathUtils.RollTheDice(0.1, random) /* 10% */) continue;
 
             (IEntity rareReward, itemAmount, compensation) = await GetReward(ItemsComponent.RareItems, connection, random);
             yield return await SaveRewardOrCompensation(connection, rareReward, itemAmount, compensation);

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using Vint.Core.ECS.Components;
+using Vint.Core.Exceptions;
 using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.Utils;
@@ -9,7 +10,9 @@ namespace Vint.Core.Utils;
 public static class Extensions {
     static ConcurrentDictionary<PropertyInfo, bool> NullabilityPool { get; } = new();
 
-    public static ProtocolIdAttribute GetProtocolId(this Type type) => type.GetCustomAttribute<ProtocolIdAttribute>()!;
+    public static ProtocolIdAttribute GetProtocolId(this Type type) =>
+        type.GetCustomAttribute<ProtocolIdAttribute>() ??
+        throw new ProtocolIdNotFoundException(type);
 
     public static List<Type> DumpInterfaces(this Type type) {
         if (!type.IsClass)

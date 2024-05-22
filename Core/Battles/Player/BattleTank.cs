@@ -565,7 +565,7 @@ public class BattleTank {
 
         await db.SeasonStatistics
             .Where(stats => stats.PlayerId == player.Id)
-            .Where(stats => stats.SeasonNumber == ConfigManager.SeasonNumber)
+            .Where(stats => stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.Kills, stats => stats.Kills + 1)
             .UpdateAsync();
 

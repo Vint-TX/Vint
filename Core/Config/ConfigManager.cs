@@ -15,6 +15,7 @@ using SharpCompress.Common;
 using SharpCompress.Writers;
 using SharpCompress.Writers.GZip;
 using SharpGLTF.Schema2;
+using Vint.Core.Config.JsonConverters;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Components;
@@ -30,24 +31,24 @@ using YamlDotNet.Serialization;
 namespace Vint.Core.Config;
 
 public static class ConfigManager {
-    public static uint SeasonNumber => 1; // todo do something with this;
-
     public static Func<string, long, Task<bool>>? NewLinkRequest { get; set; }
     public static ConcurrentHashSet<DiscordLinkRequest> DiscordLinkRequests { get; } = [];
 
+    public static ServerConfig ServerConfig { get; private set; } = null!;
     public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
     public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;
     public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = null!;
     public static FrozenDictionary<string, Regex> CensorshipRegexes { get; private set; } = null!;
     public static ModulePrices ModulePrices { get; private set; }
     public static DiscordConfig Discord { get; private set; }
+    public static QuestsInfo QuestsInfo { get; private set; }
 
     public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
 
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(ConfigManager));
-    static string ResourcesPath { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+    public static string ResourcesPath { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
 
     static FrozenDictionary<string, byte[]> LocaleToConfigCache { get; set; } = FrozenDictionary<string, byte[]>.Empty;
     static ConfigNode Root { get; } = new();
@@ -349,8 +350,10 @@ public static class ConfigManager {
     public static void InitializeConfigs() {
         Logger.Information("Initializing configs");
 
+        ServerConfig = JsonConvert.DeserializeObject<ServerConfig>(File.ReadAllText(ServerConfig.FilePath))!;
         Discord = JsonConvert.DeserializeObject<DiscordConfig>(File.ReadAllText(Path.Combine(ResourcesPath, "discord.json")));
         ModulePrices = JsonConvert.DeserializeObject<ModulePrices>(File.ReadAllText(Path.Combine(ResourcesPath, "modulePrices.json")));
+        QuestsInfo = JsonConvert.DeserializeObject<QuestsInfo>(File.ReadAllText(Path.Combine(ResourcesPath, "quests.json")), new TimeOnlyConverter());
         Blueprints = JsonConvert
             .DeserializeObject<Dictionary<string, BlueprintChest>>(File.ReadAllText(Path.Combine(ResourcesPath, "blueprints.json")))!
             .ToFrozenDictionary();

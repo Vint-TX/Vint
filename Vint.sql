@@ -160,7 +160,6 @@ CREATE TABLE `Invites`
     PRIMARY KEY (`Id`),
     UNIQUE (`Code`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 3
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -212,34 +211,37 @@ DROP TABLE IF EXISTS `Players`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Players`
 (
-    `Id`                   bigint(20)       NOT NULL,
-    `Username`             text             NOT NULL COLLATE 'utf8mb4_bin',
-    `Email`                text             NOT NULL COLLATE 'utf8mb4_bin',
-    `DiscordUserId`        bigint(20) UNSIGNED NOT NULL,
-    `RememberMe`           tinyint(1)       NOT NULL,
-    `AutoLoginToken`       varbinary(255) DEFAULT NULL,
-    `PasswordHash`         varbinary(255)   NOT NULL,
-    `HardwareFingerprint`  text             NOT NULL,
-    `Groups`               int(11)          NOT NULL,
-    `RewardedLeagues`      int(11)          NOT NULL,
-    `DiscordLinkRewarded`  tinyint(1)       NOT NULL,
-    `DiscordLinked`        tinyint(1)       NOT NULL,
-    `Subscribed`           tinyint(1)       NOT NULL,
-    `CountryCode`          text             NOT NULL,
-    `CurrentAvatarId`      bigint(20)       NOT NULL,
-    `CurrentPresetIndex`   int(11)          NOT NULL,
-    `Crystals`             bigint(20)       NOT NULL,
-    `XCrystals`            bigint(20)       NOT NULL,
-    `GoldBoxItems`         int(11)          NOT NULL,
-    `Experience`           bigint(20)       NOT NULL,
-    `FractionName`         text             NOT NULL,
-    `FractionScore`        bigint(20)       NOT NULL,
-    `RegistrationTime`     timestamp        NOT NULL,
-    `LastLoginTime`        timestamp        NOT NULL,
-    `Reputation`           int(11) UNSIGNED NOT NULL,
-    `GameplayChestScore`   bigint(20)       NOT NULL,
-    `DesertedBattlesCount` bigint(20)       NOT NULL,
-    `NeedGoodBattlesCount` int(11)          NOT NULL,
+    `Id`                    bigint(20)       NOT NULL,
+    `Username`              text             NOT NULL COLLATE 'utf8mb4_bin',
+    `Email`                 text             NOT NULL COLLATE 'utf8mb4_bin',
+    `DiscordUserId`         bigint(20) UNSIGNED NOT NULL,
+    `RememberMe`            tinyint(1)       NOT NULL,
+    `AutoLoginToken`        varbinary(255) DEFAULT NULL,
+    `PasswordHash`          varbinary(255)   NOT NULL,
+    `HardwareFingerprint`   text             NOT NULL,
+    `Groups`                int(11)          NOT NULL,
+    `RewardedLeagues`       int(11)          NOT NULL,
+    `DiscordLinkRewarded`   tinyint(1)       NOT NULL,
+    `DiscordLinked`         tinyint(1)       NOT NULL,
+    `Subscribed`            tinyint(1)       NOT NULL,
+    `CountryCode`           text             NOT NULL,
+    `CurrentAvatarId`       bigint(20)       NOT NULL,
+    `CurrentPresetIndex`    int(11)          NOT NULL,
+    `Crystals`              bigint(20)       NOT NULL,
+    `XCrystals`             bigint(20)       NOT NULL,
+    `GoldBoxItems`          int(11)          NOT NULL,
+    `Experience`            bigint(20)       NOT NULL,
+    `FractionName`          text             NOT NULL,
+    `FractionScore`         bigint(20)       NOT NULL,
+    `RegistrationTime`      timestamp        NOT NULL,
+    `LastLoginTime`         timestamp        NOT NULL,
+    `LastQuestUpdateTime`   timestamp        NOT NULL,
+    `QuestChangesResetTime` timestamp        DEFAULT NULL,
+    `QuestChanges`          int(11)          NOT NULL,
+    `Reputation`            int(11) UNSIGNED NOT NULL,
+    `GameplayChestScore`    bigint(20)       NOT NULL,
+    `DesertedBattlesCount`  bigint(20)       NOT NULL,
+    `NeedGoodBattlesCount`  int(11)          NOT NULL,
     PRIMARY KEY (`Id`),
     UNIQUE (`Username`, `Email`)
 ) ENGINE = InnoDB
@@ -264,7 +266,6 @@ CREATE TABLE `PresetModules`
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE,
     FOREIGN KEY (`PlayerId`, `PresetIndex`) REFERENCES `Presets` (`PlayerId`, `Index`) ON DELETE CASCADE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 24
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -326,7 +327,33 @@ CREATE TABLE `Punishments`
     UNIQUE KEY `Id` (`Id`),
     FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 24
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Quests`
+--
+
+DROP TABLE IF EXISTS `Quests`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Quests`
+(
+    `PlayerId`        bigint(20)          NOT NULL,
+    `Index`           int(11)             NOT NULL,
+    `Type`            int(11)             NOT NULL,
+    `ProgressCurrent` int(11)             NOT NULL,
+    `ProgressTarget`  int(11)             NOT NULL,
+    `RewardEntity`    bigint(20)          NOT NULL,
+    `RewardAmount`    int(11)             NOT NULL,
+    `Rarity`          tinyint(1) UNSIGNED NOT NULL,
+    `CompletionDate`  timestamp           DEFAULT NULL,
+    `Condition`       tinyint(1) UNSIGNED DEFAULT NULL,
+    `ConditionValue`  bigint(20)          NOT NULL,
+    PRIMARY KEY (`PlayerId`, `Index`),
+    FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
+) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

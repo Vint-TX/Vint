@@ -1,7 +1,7 @@
 ---
 questConditionDescription:
   condition:
-    format: 'Capture {0} {1}'
+    format: 'Deliver {0} {1}'
     cases:
       DEFAULT: 'flags'
       ONE: 'flag'

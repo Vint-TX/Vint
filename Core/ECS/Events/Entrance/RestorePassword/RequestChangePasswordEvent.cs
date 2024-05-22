@@ -1,5 +1,4 @@
-﻿using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Entrance;
+﻿using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.Protocol.Attributes;

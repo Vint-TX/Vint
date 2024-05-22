@@ -1,3 +1,5 @@
+using Redzen.Random;
+
 namespace Vint.Core.Utils;
 
 public static class MathUtils {
@@ -15,4 +17,8 @@ public static class MathUtils {
 
     public static decimal Map(decimal value, decimal inMin, decimal inMax, decimal outMin, decimal outMax) =>
         (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+
+    public static bool RollTheDice(double chance, Random? random = null) => (random ?? Random.Shared).NextDouble() <= chance;
+
+    public static bool RollTheDice(double chance, IRandomSource random) => random.NextDouble() <= chance;
 }

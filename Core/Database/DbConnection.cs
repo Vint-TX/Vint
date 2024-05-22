@@ -48,4 +48,5 @@ public sealed class DbConnection() : DataConnection(Schema) {
     public ITable<Invite> Invites => this.GetTable<Invite>();
     public ITable<Punishment> Punishments => this.GetTable<Punishment>();
     public ITable<DiscordLink> DiscordLinks => this.GetTable<DiscordLink>();
+    public ITable<Quest> Quests => this.GetTable<Quest>();
 }

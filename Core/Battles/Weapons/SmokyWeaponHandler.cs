@@ -1,6 +1,7 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Weapons;
 
@@ -64,7 +65,7 @@ public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
     }
 
     public bool TryCalculateCriticalDamage(ref float damage) {
-        if (Random.NextSingle() < CurrentCriticalProbability) {
+        if (MathUtils.RollTheDice(CurrentCriticalProbability, Random)) {
             damage += CriticalDamage;
             CurrentCriticalProbability = AfterCriticalProbability;
             return true;

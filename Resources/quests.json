@@ -1,0 +1,104 @@
+{
+  "conditionChance": 0.05,
+  "rareChance": 0.15,
+  "types": {
+    "battles": {
+      "minCommonValue": 3,
+      "maxCommonValue": 7,
+      "minRareValue": 8,
+      "maxRareValue": 10,
+      "conditionValue": 13
+    },
+    "flags": {
+      "minCommonValue": 3,
+      "maxCommonValue": 6,
+      "minRareValue": 7,
+      "maxRareValue": 10,
+      "conditionValue": 15
+    },
+    "frags": {
+      "minCommonValue": 20,
+      "maxCommonValue": 34,
+      "minRareValue": 35,
+      "maxRareValue": 50,
+      "conditionValue": 100
+    },
+    "scores": {
+      "minCommonValue": 500,
+      "maxCommonValue": 999,
+      "minRareValue": 1000,
+      "maxRareValue": 1500,
+      "conditionValue": 2000
+    },
+    "supply": {
+      "minCommonValue": 12,
+      "maxCommonValue": 21,
+      "minRareValue": 22,
+      "maxRareValue": 30,
+      "conditionValue": 50
+    },
+    "victories": {
+      "minCommonValue": 1,
+      "maxCommonValue": 4,
+      "minRareValue": 5,
+      "maxRareValue": 7,
+      "conditionValue": 12
+    }
+  },
+  "rewards": {
+    "common": [
+      {
+        "typeName": "misc",
+        "entityName": "Crystal",
+        "minAmount": 100,
+        "maxAmount": 500
+      }
+    ],
+    "rare": [
+      {
+        "typeName": "containers",
+        "entityName": "Rubber",
+        "minAmount": 1,
+        "maxAmount": 1
+      },
+      {
+        "typeName": "containers",
+        "entityName": "Gold",
+        "minAmount": 1,
+        "maxAmount": 1
+      },
+      {
+        "typeName": "containers",
+        "entityName": "Steel",
+        "minAmount": 1,
+        "maxAmount": 1
+      },
+      {
+        "typeName": "containers",
+        "entityName": "Camouflage",
+        "minAmount": 1,
+        "maxAmount": 1
+      },
+      {
+        "typeName": "containers",
+        "entityName": "Cover",
+        "minAmount": 1,
+        "maxAmount": 1
+      }
+    ],
+    "condition": [
+      {
+        "typeName": "misc",
+        "entityName": "XCrystal",
+        "minAmount": 70,
+        "maxAmount": 70
+      }
+    ]
+  },
+  "updates": {
+    "completedQuestDuration": "22:00",
+    "times": [
+      "0:00"
+    ]
+  }
+}

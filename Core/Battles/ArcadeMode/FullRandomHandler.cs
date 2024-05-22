@@ -37,11 +37,7 @@ public class FullRandomHandler(
         _ => throw new UnreachableException()
     };
 
-    static bool GetRandomBool() => Random.Shared.NextDouble() switch {
-        < 0.5 => false,
-        < 1 => true,
-        _ => throw new UnreachableException()
-    };
+    static bool GetRandomBool() => MathUtils.RollTheDice(0.5);
 
     static int GetRandomMaxPlayers() {
         int max = Random.Shared.Next(8, 21);

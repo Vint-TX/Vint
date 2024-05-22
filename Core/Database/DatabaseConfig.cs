@@ -42,7 +42,6 @@ public readonly record struct DatabaseConfig(
 
             Console.ReadLine();
             Environment.Exit(0);
-
             return default;
         }
 

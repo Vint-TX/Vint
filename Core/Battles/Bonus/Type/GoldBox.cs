@@ -9,6 +9,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Bonus;
 using Vint.Core.ECS.Templates.Battle.Bonus;
 using Vint.Core.Server;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Bonus.Type;
 
@@ -81,7 +82,7 @@ public sealed class GoldBox(
         Ticks = 0;
         float probability = Battle.MapInfo.GoldProbability;
 
-        if (Random.Shared.NextDouble() <= probability)
+        if (MathUtils.RollTheDice(probability))
             Drop();
     }
 }

@@ -5,6 +5,7 @@ using Serilog;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates;
+using Vint.Core.Exceptions;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Protocol.Codecs;
 using Vint.Core.Protocol.Codecs.Factories;
@@ -100,7 +101,7 @@ public class Protocol {
     public Type GetTypeById(long id) {
         if (Types.TryGetValue(id, out Type? type)) return type;
 
-        throw new KeyNotFoundException($"Type with id '{id}' is not registered");
+        throw new TypeNotRegisteredException(id);
     }
 
     [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
