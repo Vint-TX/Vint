@@ -6,10 +6,13 @@ using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Matchmaking;
+using Vint.Core.ECS.Components.Notification;
+using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Matchmaking;
 using Vint.Core.ECS.Templates.Lobby;
+using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -66,13 +69,16 @@ public class MatchmakingHandler : TypeHandler {
     }
 
     public override async Task PlayerExited(BattlePlayer battlePlayer) {
+        bool battleEnded = Battle.StateManager.CurrentState is Ended;
+
         WaitingPlayers.TryRemove(battlePlayer);
         battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
 
-        await UpdateDeserterStatus(battlePlayer);
+        await UpdateDeserterStatus(battlePlayer, battleEnded);
+        await CheckLoginReward(battlePlayer, battleEnded);
     }
 
-    async Task UpdateDeserterStatus(BattlePlayer battlePlayer) {
+    async Task UpdateDeserterStatus(BattlePlayer battlePlayer, bool battleEnded) {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         Database.Models.Player player = connection.Player;
         IEntity user = connection.User;
@@ -80,8 +86,6 @@ public class MatchmakingHandler : TypeHandler {
         BattleLeaveCounterComponent battleLeaveCounter = user.GetComponent<BattleLeaveCounterComponent>();
         long lefts = battleLeaveCounter.Value;
         int needGoodBattles = battleLeaveCounter.NeedGoodBattles;
-
-        bool battleEnded = Battle.StateManager.CurrentState is Ended;
 
         if (battleEnded) {
             if (needGoodBattles > 0)
@@ -115,5 +119,46 @@ public class MatchmakingHandler : TypeHandler {
             .UpdateAsync();
 
         user.ChangeComponent(battleLeaveCounter);
+    }
+
+    async Task CheckLoginReward(BattlePlayer battlePlayer, bool battleEnded) {
+        if (!battleEnded) return;
+
+        IPlayerConnection connection = battlePlayer.PlayerConnection;
+        Database.Models.Player player = connection.Player;
+        LoginRewardsComponent loginRewardsComponent = ConfigManager.GetComponent<LoginRewardsComponent>("login_rewards");
+
+        await using DbConnection db = new();
+        long battles = await db.Statistics
+            .Where(stats => stats.PlayerId == player.Id)
+            .Select(stats => stats.BattlesParticipated)
+            .SingleOrDefaultAsync();
+
+        if (player.NextLoginRewardTime > DateTimeOffset.UtcNow ||
+            player.LastLoginRewardDay >= loginRewardsComponent.MaxDay ||
+            battles < loginRewardsComponent.BattleCountToUnlock) return;
+
+        int day = player.LastLoginRewardDay + 1;
+        List<LoginRewardItem> loginRewards = Leveling.GetLoginRewards(day).ToList();
+
+        foreach (LoginRewardItem reward in loginRewards) {
+            IEntity? entity = connection.GetEntity(reward.MarketItemEntity);
+
+            if (entity == null) continue;
+
+            await connection.PurchaseItem(entity, reward.Amount, 0, false, false);
+        }
+
+        player.LastLoginRewardDay = day;
+        player.LastLoginRewardTime = DateTimeOffset.UtcNow;
+
+        await db.Players
+            .Where(p => p.Id == player.Id)
+            .Set(p => p.LastLoginRewardDay, player.LastLoginRewardDay)
+            .Set(p => p.LastLoginRewardTime, player.LastLoginRewardTime)
+            .UpdateAsync();
+
+        IEntity notification = new LoginRewardNotificationTemplate().Create(loginRewards, loginRewardsComponent.Rewards, day);
+        connection.Share(notification);
     }
 }

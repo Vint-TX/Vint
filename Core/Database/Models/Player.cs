@@ -1,6 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 using Vint.Core.Config;
+using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
@@ -90,9 +91,14 @@ public class Player {
     [Column] public int QuestChanges { get; set; }
     [NotColumn] public int MaxQuestChanges => IsPremium ? 2 : 1;
 
+    [Column] public int LastLoginRewardDay { get; set; }
+    [NotColumn] public DateTimeOffset NextLoginRewardTime =>
+        LastLoginRewardTime.AddSeconds(ConfigManager.GetComponent<LoginRewardsComponent>("login_rewards").IntervalInSeconds);
+
     [Column] public required DateTimeOffset RegistrationTime { get; init; }
     [Column] public required DateTimeOffset LastLoginTime { get; set; }
     [Column] public required DateTimeOffset LastQuestUpdateTime { get; set; }
+    [Column] public DateTimeOffset LastLoginRewardTime { get; set; }
     [Column] public DateTimeOffset? QuestChangesResetTime { get; set; }
 
     [Association(

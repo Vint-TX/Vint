@@ -316,13 +316,15 @@ public abstract class PlayerConnection(
         if ((Player.RewardedLeagues & Player.League) != Player.League) {
             Dictionary<IEntity, int> rewards = Leveling.GetFirstLeagueEntranceReward(Player.League);
 
-            foreach ((IEntity entity, int amount) in rewards)
-                await PurchaseItem(entity, amount, 0, false, false);
+            if (rewards.Count != 0) {
+                foreach ((IEntity entity, int amount) in rewards)
+                    await PurchaseItem(entity, amount, 0, false, false);
+
+                IEntity rewardNotification = new LeagueFirstEntranceRewardPersistentNotificationTemplate().Create(rewards);
+                Share(rewardNotification);
+            }
 
             Player.RewardedLeagues |= Player.League;
-
-            IEntity rewardNotification = new LeagueFirstEntranceRewardPersistentNotificationTemplate().Create(rewards);
-            Share(rewardNotification);
         }
 
         await db.UpdateAsync(Player);

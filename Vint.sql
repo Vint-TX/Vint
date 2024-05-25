@@ -238,6 +238,8 @@ CREATE TABLE `Players`
     `LastQuestUpdateTime`   timestamp        NOT NULL,
     `QuestChangesResetTime` timestamp        DEFAULT NULL,
     `QuestChanges`          int(11)          NOT NULL,
+    `LastLoginRewardTime`   timestamp        NOT NULL DEFAULT '2024-01-01 00:00:00',
+    `LastLoginRewardDay`    int(11)          NOT NULL,
     `Reputation`            int(11) UNSIGNED NOT NULL,
     `GameplayChestScore`    bigint(20)       NOT NULL,
     `DesertedBattlesCount`  bigint(20)       NOT NULL,

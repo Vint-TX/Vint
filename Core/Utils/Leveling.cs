@@ -5,6 +5,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Experience;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Components.Server.Experience;
@@ -141,11 +142,15 @@ public static class Leveling {
     }
 
     public static Dictionary<IEntity, int> GetFirstLeagueEntranceReward(League league) => league switch {
-        League.Training => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsbronze"), 1 } },
         League.Bronze => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsbronze"), 5 } },
         League.Silver => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardssilver"), 5 } },
         League.Gold => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsgold"), 5 } },
         League.Master => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsmaster"), 5 } },
         _ => new Dictionary<IEntity, int>()
     };
+
+    public static IEnumerable<LoginRewardItem> GetLoginRewards(int day) =>
+        ConfigManager.GetComponent<LoginRewardsComponent>("login_rewards")
+            .Rewards
+            .Where(reward => reward.Day == day);
 }

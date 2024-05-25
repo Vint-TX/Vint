@@ -1,0 +1,55 @@
+loginRewards:
+  intervalInSeconds: 86400
+  battleCountToUnlock: 1
+  rewards:
+    - MarketItemEntity: 947348559 # x-crystals
+      Amount: 49
+      Day: 1
+    - MarketItemEntity: 1317350822 # crystals
+      Amount: 500
+      Day: 2
+    - MarketItemEntity: 1317350822 # crystals
+      Amount: 750
+      Day: 3
+    - MarketItemEntity: 947348559 # x-crystals
+      Amount: 99
+      Day: 4
+    - MarketItemEntity: 1317350822 # crystals
+      Amount: 850
+      Day: 5
+    - MarketItemEntity: -1308563288 # hacker's blueprints
+      Amount: 1
+      Day: 6
+    - MarketItemEntity: 1317350822 # crystals
+      Amount: 1500
+      Day: 7
+    - MarketItemEntity: 1317350822 # crystals
+      Amount: 1800
+      Day: 8
+    - MarketItemEntity: 1798212322 # champion paint
+      Amount: 1
+      Day: 8
+    - MarketItemEntity: -1816745725 # premium boost
+      Amount: 5 # 5 days
+      Day: 9
+    - MarketItemEntity: 947348559 # x-crystals
+      Amount: 150
+      Day: 10
+    - MarketItemEntity: -172577710 # coal cover
+      Amount: 1
+      Day: 10
+    - MarketItemEntity: 1317350822 # crystals
+      Amount: 3500
+      Day: 11
+    - MarketItemEntity: -1667426315 # smuggler's blueprints
+      Amount: 2
+      Day: 12
+    - MarketItemEntity: 459979771 # steel container
+      Amount: 1
+      Day: 13
+    - MarketItemEntity: -1816745725 # premium boost
+      Amount: 7 # 7 days
+      Day: 14
+    - MarketItemEntity: 742065458 # xt container
+      Amount: 1
+      Day: 15
