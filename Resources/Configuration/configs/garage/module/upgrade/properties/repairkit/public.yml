@@ -1,58 +1,82 @@
 moduleCooldownProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 81000
-    - 78000
-    - 75000
-    - 72000
-    - 69000
-    - 66000
-    - 63000
-    - 60000
-    - 57000
     - 54000
 moduleAmmunitionProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
     - 1
     - 1
 moduleEffectDurationProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 4000
-    - 4000
-    - 4000
-    - 5000
-    - 5000
-    - 5000
-    - 5000
-    - 6000
-    - 6000
     - 6000
 moduleHealingEffectInstantHPProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 500
-    - 528
-    - 556
-    - 583
-    - 611
-    - 639
-    - 667
-    - 694
-    - 722
     - 750
 moduleHealingEffectHPPerMSProperty:
   linearInterpolation: true
   upgradeLevel2Values:
     - 0.08
     - 0.12
+moduleHealingEffectPercentProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 0.15
+    - 0.3
+moduleHealingEffectFirstTickMsProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleHealingEffectPeriodicTickProperty:
+  linearInterpolation: true
+  upgradeLevel2Values:
+    - 1
+    - 1
+moduleVisualProperties:
+  properties:
+    - name: Cooldown
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 81
+        - 54
+      unit: sec
+      format: 0.0
+      spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
+    - name: InstantHealing
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 500
+        - 750
+      unit: hp
+      format: 0
+      spriteUID: cfd2830e-ab56-4774-bba3-9465a37a1478
+    - name: AddHealingDuration
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 4
+        - 6
+      unit: sec
+      format: 0
+      spriteUID: b96547e2-3a61-4cc9-b494-29dc48eea542
+    - name: HealingAmountPercent
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 15
+        - 30
+      unit: percent
+      format: 0
+      spriteUID: cfd2830e-ab56-4774-bba3-9465a37a1478
+    - name: Reserve
+      linearInterpolation: true
+      upgradeLevel2Values:
+        - 1
+        - 1
+      format: 0
+      spriteUID: 85ecaf68-fb3d-4cec-b8a9-e2b5b6cf8602
 ...

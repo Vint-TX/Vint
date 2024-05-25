@@ -19,9 +19,12 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         SupplyHealingComponent = ConfigManager.GetComponent<HealingComponent>(EffectConfigPath);
 
         InstantHp = IsSupply ? 0 : Leveling.GetStat<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath, Level);
-        HpPerMs = IsSupply ? SupplyHealingComponent.HpPerMs : Leveling.GetStat<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath, Level);
+        Percent = IsSupply ? SupplyHealingComponent.Percent : Leveling.GetStat<ModuleHealingEffectPercentPropertyComponent>(MarketConfigPath, Level);
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
         TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
+
+        Heal = HealLeft = Tank.MaxHealth * Percent;
+        HealPerMs = (float)(Heal / Duration.TotalMilliseconds);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -30,11 +33,15 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     HealingComponent SupplyHealingComponent { get; }
 
     float InstantHp { get; set; }
-    float HpPerMs { get; set; }
+    float Percent { get; set; }
     TimeSpan TickPeriod { get; }
 
     DateTimeOffset LastTick { get; set; }
     TimeSpan TimePassedFromLastTick => DateTimeOffset.UtcNow - LastTick;
+
+    float Heal { get; set; }
+    float HealLeft { get; set; }
+    float HealPerMs { get; set; }
 
     public void Extend(int newLevel) {
         if (!IsActive) return;
@@ -47,17 +54,20 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         if (isSupply) {
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
-            HpPerMs = SupplyHealingComponent.HpPerMs;
+            Percent = SupplyHealingComponent.Percent;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(MarketConfigPath, newLevel));
             InstantHp = Leveling.GetStat<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath, newLevel);
-            HpPerMs = Leveling.GetStat<ModuleHealingEffectHPPerMSPropertyComponent>(MarketConfigPath, newLevel);
+            Percent = Leveling.GetStat<ModuleHealingEffectPercentPropertyComponent>(MarketConfigPath, newLevel);
 
             CalculatedDamage heal = new(default, InstantHp, false, false);
             Battle.DamageProcessor.Heal(Tank, heal);
         }
 
         Level = newLevel;
+
+        Heal = HealLeft = Tank.MaxHealth * Percent;
+        HealPerMs = (float)(Heal / Duration.TotalMilliseconds);
 
         Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
         Entity!.RemoveComponent<DurationComponent>();
@@ -92,6 +102,11 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         UnshareAll();
         Entities.Clear();
+
+        if (HealLeft <= 0 || Tank.Health >= Tank.MaxHealth) return;
+
+        CalculatedDamage heal = new(default, HealLeft, false, false);
+        Battle.DamageProcessor.Heal(Tank, heal);
     }
 
     public override void Tick() {
@@ -99,15 +114,16 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         TimeSpan timePassed = TimePassedFromLastTick;
 
-        if (!IsActive || timePassed < TickPeriod) return;
+        if (!IsActive || HealLeft <= 0 || timePassed < TickPeriod) return;
 
         LastTick = DateTimeOffset.UtcNow;
 
+        float healHp = Math.Min(Math.Min(Convert.ToSingle(timePassed.TotalMilliseconds * HealPerMs), Tank.MaxHealth - Tank.Health), HealLeft);
+        HealLeft -= healHp;
+
         if (Tank.Health >= Tank.MaxHealth) return;
 
-        float healHp = Math.Min(Convert.ToSingle(timePassed.TotalMilliseconds * HpPerMs), Tank.MaxHealth - Tank.Health);
         CalculatedDamage heal = new(default, healHp, false, false);
-
         Battle.DamageProcessor.Heal(Tank, heal);
     }
 }

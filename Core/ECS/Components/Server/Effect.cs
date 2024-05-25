@@ -13,6 +13,7 @@ public class TickComponent : IComponent {
 }
 
 public class HealingComponent : IComponent {
+    public float Percent { get; private set; }
     public float HpPerMs { get; private set; }
 }
 

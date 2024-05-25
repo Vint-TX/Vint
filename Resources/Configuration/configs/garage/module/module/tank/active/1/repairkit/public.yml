@@ -1,6 +1,6 @@
 moduleUpgradePropertiesInfo:
   template: 636352947010929322
-  path: garage/module/upgrade/properties/recharging
+  path: garage/module/upgrade/properties/repairkit
 itemIcon:
   spriteUid: e847e71e-95a8-47e2-91d8-e19474d32d3f
 itemBigIcon:

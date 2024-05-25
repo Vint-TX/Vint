@@ -40,7 +40,7 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             Multiplier = SupplyMultiplier;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(MarketConfigPath, newLevel));
             Multiplier = Leveling.GetStat<ModuleDamageEffectMaxFactorPropertyComponent>(MarketConfigPath, newLevel);
         }
 

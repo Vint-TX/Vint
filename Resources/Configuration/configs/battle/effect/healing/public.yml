@@ -1,4 +1,5 @@
 healing:
+  percent: 0.76
   hpPerMs: 0.633
 duration:
   duration: 3000

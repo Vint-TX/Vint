@@ -44,7 +44,7 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             Multiplier = SupplyMultiplier;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(MarketConfigPath, newLevel));
             Multiplier = Leveling.GetStat<ModuleArmorEffectPropertyComponent>(MarketConfigPath, newLevel);
         }
 

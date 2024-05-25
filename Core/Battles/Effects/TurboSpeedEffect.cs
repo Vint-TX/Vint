@@ -38,7 +38,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
             newMultiplier = SupplyMultiplier;
         } else {
-            Duration = TimeSpan.FromMilliseconds(DurationsComponent.UpgradeLevel2Values[newLevel]);
+            Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(MarketConfigPath, newLevel));
             newMultiplier = Leveling.GetStat<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath, newLevel);
         }
 
