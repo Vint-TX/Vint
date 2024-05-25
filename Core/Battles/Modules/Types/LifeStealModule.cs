@@ -15,9 +15,10 @@ public class LifeStealModule : BattleModule, IKillModule {
 
     public override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
 
-    BattleTank KilledTank { get; set; } = null!;
     float FixedHeal { get; set; }
     float HpPercent { get; set; }
+    float HpFromCurrentTank { get; set; }
+    float Heal { get; set; }
 
     public override LifeStealEffect GetEffect() => new(Tank, Level);
 
@@ -35,9 +36,7 @@ public class LifeStealModule : BattleModule, IKillModule {
         IEntity effectEntity = effect.Entity!;
         Battle battle = Tank.Battle;
 
-        float stolenHp = KilledTank.MaxHealth * HpPercent;
-        CalculatedDamage heal = new(default, FixedHeal + stolenHp, false, false);
-
+        CalculatedDamage heal = new(default, Heal, false, false);
         battle.DamageProcessor.Heal(Tank, heal);
 
         foreach (BattlePlayer player in battle.Players.Where(player => player.InBattle))
@@ -49,11 +48,9 @@ public class LifeStealModule : BattleModule, IKillModule {
 
         FixedHeal = Leveling.GetStat<ModuleLifestealEffectFixedHPPropertyComponent>(ConfigPath, Level);
         HpPercent = Leveling.GetStat<ModuleLifestealEffectAdditiveHPFactorPropertyComponent>(ConfigPath, Level);
+        HpFromCurrentTank = Tank.MaxHealth * HpPercent;
+        Heal = FixedHeal + HpFromCurrentTank;
     }
 
-    public void OnKill(BattleTank target) {
-        KilledTank = target;
-        Activate();
-        KilledTank = null!;
-    }
+    public void OnKill(BattleTank target) => Activate();
 }
