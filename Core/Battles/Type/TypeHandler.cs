@@ -14,7 +14,7 @@ public abstract class TypeHandler(
 
     public abstract void PlayerEntered(BattlePlayer battlePlayer);
 
-    public abstract void PlayerExited(BattlePlayer battlePlayer);
+    public abstract Task PlayerExited(BattlePlayer battlePlayer);
 
     protected static BattleMode GetRandomMode() => Random.Shared.NextDouble() switch {
         < 0.45 => BattleMode.CTF,

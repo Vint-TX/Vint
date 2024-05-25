@@ -51,6 +51,7 @@ public class Player {
     [Column] public long GameplayChestScore { get; set; }
     [Column] public long DesertedBattlesCount { get; set; }
     [Column] public int NeedGoodBattlesCount { get; set; }
+    [NotColumn] public bool IsDeserter => NeedGoodBattlesCount > 0;
 
     [NotColumn] public League League => Reputation switch {
         < 139 => League.Training,

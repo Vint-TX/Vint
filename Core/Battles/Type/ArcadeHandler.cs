@@ -47,11 +47,12 @@ public class ArcadeHandler : TypeHandler {
         WaitingPlayers.Add(battlePlayer);
     }
 
-    public override void PlayerExited(BattlePlayer battlePlayer) {
+    public override Task PlayerExited(BattlePlayer battlePlayer) {
         ModeHandler.PlayerExited(battlePlayer);
 
         WaitingPlayers.TryRemove(battlePlayer);
         battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
+        return Task.CompletedTask;
     }
 
     static ArcadeModeHandler GetHandlerByType(Battle battle, ArcadeModeType modeType) => modeType switch {

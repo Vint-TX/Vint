@@ -65,43 +65,55 @@ public class MatchmakingHandler : TypeHandler {
         WaitingPlayers.Add(battlePlayer);
     }
 
-    public override void PlayerExited(BattlePlayer battlePlayer) {
+    public override async Task PlayerExited(BattlePlayer battlePlayer) {
         WaitingPlayers.TryRemove(battlePlayer);
         battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
-        battlePlayer.PlayerConnection.BattleSeries = 0;
+
+        await UpdateDeserterStatus(battlePlayer);
+    }
+
+    async Task UpdateDeserterStatus(BattlePlayer battlePlayer) {
+        IPlayerConnection connection = battlePlayer.PlayerConnection;
+        Database.Models.Player player = connection.Player;
+        IEntity user = connection.User;
+
+        BattleLeaveCounterComponent battleLeaveCounter = user.GetComponent<BattleLeaveCounterComponent>();
+        long lefts = battleLeaveCounter.Value;
+        int needGoodBattles = battleLeaveCounter.NeedGoodBattles;
 
         bool battleEnded = Battle.StateManager.CurrentState is Ended;
-        bool hasEnemies = Battle.Players.Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));
-        bool bigBattleSeries = battlePlayer.PlayerConnection.BattleSeries >= 3;
 
-        battlePlayer.PlayerConnection.User.ChangeComponent<BattleLeaveCounterComponent>(component => { // todo not working
-            long lefts = component.Value;
-            int needGoodBattles = component.NeedGoodBattles;
+        if (battleEnded) {
+            if (needGoodBattles > 0)
+                needGoodBattles--;
 
-            if (battleEnded) {
-                if (needGoodBattles > 0)
-                    lefts = --needGoodBattles == 0 ? 0 : lefts;
-                else if (lefts > 0 && bigBattleSeries)
-                    lefts--;
-            } else if (hasEnemies) {
-                battlePlayer.PlayerConnection.BattleSeries = 0;
+            if (needGoodBattles == 0)
+                lefts = 0;
+        } else {
+            bool hasEnemies = Battle.Players.Any(other => other.InBattleAsTank && other.Tank!.IsEnemy(battlePlayer.Tank!));
+
+            if (hasEnemies) {
+                connection.BattleSeries = 0;
                 lefts++;
 
-                if (lefts >= 3) {
-                    if (needGoodBattles > 0) needGoodBattles += (int)lefts / 2;
-                    else needGoodBattles = 3;
-                }
+                if (lefts >= 2)
+                    needGoodBattles = needGoodBattles > 0 ? (int)lefts / 2 : 2;
             }
+        }
 
-            component.Value = lefts;
-            component.NeedGoodBattles = needGoodBattles;
+        battleLeaveCounter.Value = lefts;
+        battleLeaveCounter.NeedGoodBattles = needGoodBattles;
 
-            Database.Models.Player player = battlePlayer.PlayerConnection.Player;
-            player.DesertedBattlesCount = lefts;
-            player.NeedGoodBattlesCount = needGoodBattles;
+        player.DesertedBattlesCount = battleLeaveCounter.Value;
+        player.NeedGoodBattlesCount = battleLeaveCounter.NeedGoodBattles;
 
-            using DbConnection db = new();
-            db.Update(player);
-        });
+        await using DbConnection db = new();
+        await db.Players
+            .Where(p => p.Id == player.Id)
+            .Set(p => p.DesertedBattlesCount, player.DesertedBattlesCount)
+            .Set(p => p.NeedGoodBattlesCount, player.NeedGoodBattlesCount)
+            .UpdateAsync();
+
+        user.ChangeComponent(battleLeaveCounter);
     }
 }

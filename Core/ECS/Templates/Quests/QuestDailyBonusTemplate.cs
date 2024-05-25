@@ -9,6 +9,7 @@ namespace Vint.Core.ECS.Templates.Quests;
 public class QuestDailyBonusTemplate : EntityTemplate {
     public IEntity Create(IEntity user, bool isTaken) => Entity(null,
         builder => builder
+            .AddComponent<QuestsEnabledComponent>()
             .AddGroupComponent<UserGroupComponent>(user)
             .ThenExecuteIf(_ => isTaken, entity => entity.AddComponent<TakenBonusComponent>()));
 }

@@ -129,7 +129,7 @@ public class BattlePlayer {
             .SelectMany(player => player.Tank!.Entities));
     }
 
-    public async Task OnBattleEnded() {
+    public async Task OnBattleEnded(bool hasEnemies) {
         Database.Models.Player player = PlayerConnection.Player;
 
         if (IsSpectator) {
@@ -182,7 +182,7 @@ public class BattlePlayer {
 
             await db.CommitTransactionAsync();
 
-            if (player.DesertedBattlesCount == 0)
+            if (!player.IsDeserter)
                 PlayerConnection.BattleSeries++;
 
             int score = GetBattleUserScoreWithBonus();
@@ -194,7 +194,7 @@ public class BattlePlayer {
             await PlayerConnection.ChangeReputation(reputationDelta);
             await PlayerConnection.ChangeGameplayChestScore(score);
 
-            await PlayerConnection.Server.QuestManager.BattleFinished(PlayerConnection);
+            await PlayerConnection.Server.QuestManager.BattleFinished(PlayerConnection, hasEnemies);
         }
 
         PersonalBattleResultForClient personalBattleResult = new();
@@ -228,7 +228,7 @@ public class BattlePlayer {
         int scoreWithBonus = GetScoreWithBonus(scoreWithoutBonuses);
         float battleSeriesMultiplier = GetBattleSeriesMultiplier() / 100;
 
-        return (int)Math.Round(scoreWithBonus + scoreWithoutBonuses * battleSeriesMultiplier);
+        return (int)Math.Round(scoreWithBonus * battleSeriesMultiplier);
     }
 
     public void RankUp() {

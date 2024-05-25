@@ -52,6 +52,5 @@ public class UserQuestReadyEvent : IServerEvent { // todo premium
         }
 
         connection.Share(new QuestDailyBonusTemplate().Create(connection.User, noChanges));
-        connection.User.AddComponent<QuestsEnabledComponent>();
     }
 }

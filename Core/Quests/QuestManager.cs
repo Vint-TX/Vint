@@ -91,8 +91,9 @@ public class QuestManager(
         }
     }
 
-    public async Task BattleFinished(IPlayerConnection connection) {
-        if (!connection.InLobby ||
+    public async Task BattleFinished(IPlayerConnection connection, bool hasEnemies) {
+        if (!hasEnemies ||
+            !connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Battle.TypeHandler is not MatchmakingHandler) return;
 

@@ -36,8 +36,8 @@ public class CustomHandler(
 
     public override void PlayerEntered(BattlePlayer battlePlayer) { }
 
-    public override void PlayerExited(BattlePlayer battlePlayer) {
-        if (battlePlayer.PlayerConnection != Owner) return;
+    public override Task PlayerExited(BattlePlayer battlePlayer) {
+        if (battlePlayer.PlayerConnection != Owner) return Task.CompletedTask;
 
         List<IPlayerConnection> players = Battle.Players
             .Where(player => !player.IsSpectator && player != battlePlayer)
@@ -45,11 +45,12 @@ public class CustomHandler(
             .ToList()
             .Shuffle();
 
-        if (players.Count == 0) return;
+        if (players.Count == 0) return Task.CompletedTask;
 
         Owner = players.First();
         Battle.LobbyEntity.RemoveComponent<UserGroupComponent>();
         Battle.LobbyEntity.AddGroupComponent<UserGroupComponent>(Owner.User);
+        return Task.CompletedTask;
     }
 
     public void OpenLobby() {

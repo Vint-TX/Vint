@@ -194,6 +194,12 @@ public class Battle {
         await ModeHandler.OnFinished();
 
         List<BattlePlayer> players = Players.ToList();
+        List<BattlePlayer> tankPlayers = players.Where(player => player.InBattleAsTank).ToList();
+
+        bool hasEnemies = ModeHandler is TeamHandler teamHandler &&
+                          teamHandler.BluePlayers.Any() &&
+                          teamHandler.RedPlayers.Any() ||
+                          tankPlayers.Count > 1;
 
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
             BattleTank battleTank = battlePlayer.Tank!;
@@ -209,7 +215,7 @@ public class Battle {
 
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattle)) {
             try {
-                await battlePlayer.OnBattleEnded();
+                await battlePlayer.OnBattleEnded(hasEnemies);
             } catch { /**/ }
         }
 
@@ -298,10 +304,11 @@ public class Battle {
                 connection.Unshare(module.SlotEntity, module.Entity);
 
             battlePlayer.InBattle = false;
-            battlePlayer.Tank = null;
 
             if (TypeHandler is not CustomHandler || !battlePlayer.PlayerConnection.IsOnline)
                 RemovePlayerFromLobby(battlePlayer);
+
+            battlePlayer.Tank = null;
 
             ModeHandler.SortPlayers();
 
