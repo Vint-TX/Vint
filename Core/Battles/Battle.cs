@@ -83,7 +83,7 @@ public class Battle {
 
     public RoundStopTimeComponent? StopTimeComponentBeforeDomination { get; set; }
     public DateTimeOffset? DominationStartTime { get; set; }
-    public TimeSpan DominationDuration { get; } = TimeSpan.FromSeconds(45);
+    public TimeSpan DominationDuration { get; } = TimeSpan.FromSeconds(30);
     public bool DominationCanBegin => !DominationStartTime.HasValue && Timer > 120 && Timer < Properties.TimeLimit * 60 - 60;
 
     public BattleStateManager StateManager { get; }
@@ -358,6 +358,11 @@ public class Battle {
 
         connection.BattlePlayer = null;
     }
+
+    public bool IsUnfair() =>
+        Players.Count <= 3 ||
+        ModeHandler is TeamHandler teamHandler &&
+        Math.Abs(teamHandler.RedPlayers.Count() - teamHandler.BluePlayers.Count()) >= 2;
 
     public override int GetHashCode() => LobbyId.GetHashCode();
 }

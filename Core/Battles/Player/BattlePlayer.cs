@@ -191,6 +191,10 @@ public class BattlePlayer {
             await Leveling.UpdateItemXp(preset.Weapon, PlayerConnection, score);
 
             reputationDelta = Battle.ModeHandler.CalculateReputationDelta(this);
+
+            if (Tank!.Result.UnfairMatching)
+                reputationDelta /= 2;
+
             await PlayerConnection.ChangeReputation(reputationDelta);
             await PlayerConnection.ChangeGameplayChestScore(score);
 

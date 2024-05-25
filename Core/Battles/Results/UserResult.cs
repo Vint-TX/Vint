@@ -1,4 +1,3 @@
-using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.Round;
@@ -55,7 +54,7 @@ public class UserResult {
         HullSkinId = preset.HullSkin.Id;
         WeaponSkinId = preset.WeaponSkin.Id;
 
-        UnfairMatching = false; /*battle.ModeHandler is TeamHandler teamHandler && teamHandler.BluePlayers.Count() != teamHandler.RedPlayers.Count();*/
+        UnfairMatching = battle.IsUnfair();
         League = player.LeagueEntity;
         Modules = preset.Modules.Select(pModule => new ModuleInfo {
             ModuleId = pModule.Entity.Id,
