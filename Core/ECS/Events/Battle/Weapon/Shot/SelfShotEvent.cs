@@ -27,13 +27,13 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
-            playerConnection.Send(RemoteEvent, tank);
+            await playerConnection.Send(RemoteEvent, tank);
 
         if (battlePlayer.Tank?.WeaponHandler is SmokyWeaponHandler smokyHandler)
             smokyHandler.OnShot(ShotId);
 
         foreach (IShotModule shotModule in battlePlayer.Tank!.Modules.OfType<IShotModule>())
-            shotModule.OnShot();
+            await shotModule.OnShot();
 
         await using DbConnection db = new();
         await db.Statistics

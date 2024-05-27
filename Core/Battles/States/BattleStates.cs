@@ -24,7 +24,7 @@ public class NotEnoughPlayers(
 ) : BattleState(stateManager) {
     public override async Task Tick() {
         if (Battle.Players.Count > 0)
-            StateManager.SetState(new Countdown(StateManager));
+            await StateManager.SetState(new Countdown(StateManager));
 
         await base.Tick();
     }
@@ -45,23 +45,23 @@ public class Countdown(
     public override async Task Start() {
         const int seconds = 20;
 
-        Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
+        await Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
         Battle.Timer = seconds;
         await base.Start();
     }
 
     public override async Task Tick() {
         if (Battle.Players.Count <= 0)
-            StateManager.SetState(new NotEnoughPlayers(StateManager));
+            await StateManager.SetState(new NotEnoughPlayers(StateManager));
         else if (Battle.Timer < 0)
-            StateManager.SetState(new Starting(StateManager));
+            await StateManager.SetState(new Starting(StateManager));
 
         await base.Tick();
     }
 
-    public override void Finish() {
-        Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartTimeComponent>();
-        base.Finish();
+    public override async Task Finish() {
+        await Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartTimeComponent>();
+        await base.Finish();
     }
 }
 
@@ -69,59 +69,59 @@ public class Starting(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override async Task Start() {
-        Battle.LobbyEntity.AddComponent<MatchmakingLobbyStartingComponent>();
+        await Battle.LobbyEntity.AddComponent<MatchmakingLobbyStartingComponent>();
         await base.Start();
     }
 
     public override async Task Tick() {
         switch (Battle.TypeHandler) {
             case MatchmakingHandler:
-                MatchmakingBattleTick();
+                await MatchmakingBattleTick();
                 break;
 
             case ArcadeHandler:
-                ArcadeBattleTick();
+                await ArcadeBattleTick();
                 break;
 
             case CustomHandler:
-                CustomBattleTick();
+                await CustomBattleTick();
                 break;
         }
 
         await base.Tick();
     }
 
-    void MatchmakingBattleTick() {
+    async Task MatchmakingBattleTick() {
         if (Battle.Players.Count <= 0) {
-            StateManager.SetState(new NotEnoughPlayers(StateManager));
+            await StateManager.SetState(new NotEnoughPlayers(StateManager));
         } else if (Battle.Timer < 0) {
-            Battle.Start();
-            StateManager.SetState(new WarmUp(StateManager));
+            await Battle.Start();
+            await StateManager.SetState(new WarmUp(StateManager));
         }
     }
 
-    void ArcadeBattleTick() {
+    async Task ArcadeBattleTick() {
         if (Battle.Players.Count <= 0) {
-            StateManager.SetState(new NotEnoughPlayers(StateManager));
+            await StateManager.SetState(new NotEnoughPlayers(StateManager));
         } else if (Battle.Timer < 0) {
-            Battle.Start();
-            StateManager.SetState(new Running(StateManager));
+            await Battle.Start();
+            await StateManager.SetState(new Running(StateManager));
         }
     }
 
-    void CustomBattleTick() {
+    async Task CustomBattleTick() {
         if (Battle.Players.Count == 0)
-            StateManager.SetState(new NotStarted(StateManager));
+            await StateManager.SetState(new NotStarted(StateManager));
         else if (Battle.Timer < 0) {
-            Battle.Start();
-            Battle.LobbyEntity.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
-            StateManager.SetState(new Running(StateManager));
+            await Battle.Start();
+            await Battle.LobbyEntity.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
+            await StateManager.SetState(new Running(StateManager));
         }
     }
 
-    public override void Finish() {
-        Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartingComponent>();
-        base.Finish();
+    public override async Task Finish() {
+        await Battle.LobbyEntity.RemoveComponent<MatchmakingLobbyStartingComponent>();
+        await base.Finish();
     }
 }
 
@@ -132,26 +132,26 @@ public class WarmUp(
 
     public override async Task Start() {
         const int seconds = 60;
-        Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
+        await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow.AddSeconds(seconds));
 
-        Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
+        await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
 
-        Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
+        await Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
         Battle.Timer = seconds;
         await base.Start();
     }
 
     public override async Task Tick() {
-        WarmUpStateManager.Tick();
+        await WarmUpStateManager.Tick();
         await base.Tick();
     }
 
-    public override void Finish() {
-        Battle.RoundEntity.RemoveComponent<RoundWarmingUpStateComponent>();
-        base.Finish();
-        Battle.ModeHandler.OnWarmUpCompleted();
+    public override async Task Finish() {
+        await Battle.RoundEntity.RemoveComponent<RoundWarmingUpStateComponent>();
+        await base.Finish();
+        await Battle.ModeHandler.OnWarmUpCompleted();
     }
 }
 
@@ -161,10 +161,10 @@ public class Running(
     public override async Task Start() {
         Battle.Timer = Battle.Properties.TimeLimit * 60;
 
-        Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
+        await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = DateTimeOffset.UtcNow);
 
-        Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
+        await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
         await base.Start();
     }
@@ -172,7 +172,7 @@ public class Running(
     public override async Task Tick() {
         switch (Battle.TypeHandler) {
             case CustomHandler:
-                CustomBattleTick();
+                await CustomBattleTick();
                 break;
 
             case ArcadeHandler:
@@ -199,11 +199,11 @@ public class Running(
             Battle.StopTimeComponentBeforeDomination = Battle.RoundEntity.GetComponent<RoundStopTimeComponent>().Clone();
             DateTimeOffset battleEndTime = Battle.DominationStartTime.Value + Battle.DominationDuration;
 
-            Battle.RoundEntity.AddComponent(new RoundDisbalancedComponent(dominatedTeam,
+            await Battle.RoundEntity.AddComponent(new RoundDisbalancedComponent(dominatedTeam,
                 Convert.ToInt32(Battle.DominationDuration.TotalSeconds),
                 battleEndTime));
 
-            Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component => component.StopTime = battleEndTime);
+            await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component => component.StopTime = battleEndTime);
         } else if (Battle.DominationStartTime.HasValue) {
             TeamColor dominatedTeam = teamHandler.GetDominatedTeam();
 
@@ -216,21 +216,21 @@ public class Running(
             }
 
             Battle.DominationStartTime = null;
-            Battle.RoundEntity.ChangeComponent(Battle.StopTimeComponentBeforeDomination!);
+            await Battle.RoundEntity.ChangeComponent(Battle.StopTimeComponentBeforeDomination!);
             Battle.StopTimeComponentBeforeDomination = null;
 
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
-                battlePlayer.PlayerConnection.Send(new RoundBalanceRestoredEvent(), Battle.RoundEntity);
+                await battlePlayer.PlayerConnection.Send(new RoundBalanceRestoredEvent(), Battle.RoundEntity);
 
-            Battle.RoundEntity.RemoveComponent<RoundDisbalancedComponent>();
+            await Battle.RoundEntity.RemoveComponent<RoundDisbalancedComponent>();
         }
     }
 
-    void CustomBattleTick() {
+    async Task CustomBattleTick() {
         if (Battle.Players.Any(player => player.InBattleAsTank)) return;
 
-        Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
-        StateManager.SetState(new Ended(StateManager));
+        await Battle.LobbyEntity.RemoveComponent<BattleGroupComponent>();
+        await StateManager.SetState(new Ended(StateManager));
     }
 }
 
@@ -242,8 +242,8 @@ public class Ended(
         await base.Start();
     }
 
-    public override void Finish() {
-        base.Finish();
+    public override async Task Finish() {
+        await base.Finish();
 
         if (Battle.TypeHandler is not CustomHandler) return;
 

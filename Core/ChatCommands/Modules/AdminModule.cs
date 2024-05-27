@@ -149,15 +149,13 @@ public class AdminModule : ChatCommandModule {
     }
 
     [ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby"), RequireConditions(ChatCommandConditions.InLobby)]
-    public Task KickAllFromBattle(ChatCommandContext ctx) {
+    public async Task KickAllFromBattle(ChatCommandContext ctx) {
         Battle battle = ctx.Connection.BattlePlayer!.Battle;
 
         foreach (BattlePlayer battlePlayer in battle.Players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
-            battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
-            battle.RemovePlayer(battlePlayer);
+            await battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
+            await battle.RemovePlayer(battlePlayer);
         }
-
-        return Task.CompletedTask;
     }
 
     [ChatCommand("usernames", "Online player usernames")]
@@ -178,7 +176,7 @@ public class AdminModule : ChatCommandModule {
     public async Task DropBonus(
         ChatCommandContext ctx,
         [Option("type", "Type of the bonus")] BonusType bonusType) {
-        bool? isSuccessful = ctx.Connection.BattlePlayer?.Battle.BonusProcessor?.DropBonus(bonusType);
+        bool? isSuccessful = await (ctx.Connection.BattlePlayer?.Battle.BonusProcessor?.DropBonus(bonusType) ?? Task.FromResult(false));
 
         if (isSuccessful != true) {
             await ctx.SendPrivateResponse($"{bonusType} is not dropped");
@@ -186,21 +184,5 @@ public class AdminModule : ChatCommandModule {
         }
 
         await ctx.SendPrivateResponse($"{bonusType} dropped");
-    }
-
-    [ChatCommand("setClipboard", "Set a content to the clipboard")]
-    public Task SetClipboard(
-        ChatCommandContext ctx,
-        [WaitingForText, Option("content", "Content to set")] string content) {
-        ctx.Connection.SetClipboard(content);
-        return Task.CompletedTask;
-    }
-
-    [ChatCommand("openUrl", "Open a url")]
-    public Task OpenURL(
-        ChatCommandContext ctx,
-        [WaitingForText, Option("url", "Url to open")] string url) {
-        ctx.Connection.OpenURL(url);
-        return Task.CompletedTask;
     }
 }

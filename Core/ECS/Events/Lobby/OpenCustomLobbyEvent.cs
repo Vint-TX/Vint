@@ -21,6 +21,6 @@ public class OpenCustomLobbyEvent : IServerEvent {
 
         if (customHandler.Owner != connection) return;
 
-        customHandler.OpenLobby();
+        await customHandler.OpenLobby();
     }
 }

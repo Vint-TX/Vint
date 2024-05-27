@@ -29,22 +29,22 @@ public abstract class TeamHandler(
     protected abstract List<SpawnPoint> RedSpawnPoints { get; }
     protected abstract List<SpawnPoint> BlueSpawnPoints { get; }
 
-    public override void SortPlayers() {
-        SortPlayers(RedPlayers);
-        SortPlayers(BluePlayers);
+    public override async Task SortPlayers() {
+        await SortPlayers(RedPlayers);
+        await SortPlayers(BluePlayers);
     }
 
-    public override void UpdateScore(IEntity? team, int score) {
+    public override async Task UpdateScore(IEntity? team, int score) {
         if (team == null) return;
 
-        team.ChangeComponent<TeamScoreComponent>(component => component.Score = Math.Max(0, component.Score + score));
+        await team.ChangeComponent<TeamScoreComponent>(component => component.Score = Math.Max(0, component.Score + score));
         foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
-            connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
+            await connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
     }
 
-    public override void OnWarmUpCompleted() {
-        UpdateScore(RedTeam, int.MinValue);
-        UpdateScore(BlueTeam, int.MinValue);
+    public override async Task OnWarmUpCompleted() {
+        await UpdateScore(RedTeam, int.MinValue);
+        await UpdateScore(BlueTeam, int.MinValue);
     }
 
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
@@ -100,13 +100,11 @@ public abstract class TeamHandler(
         }
     }
 
-    public override void PlayerEntered(BattlePlayer player) =>
-        player.PlayerConnection.Share(TeamChat, RedTeam, BlueTeam);
+    public override async Task PlayerEntered(BattlePlayer player) =>
+        await player.PlayerConnection.Share(TeamChat, RedTeam, BlueTeam);
 
-    public override Task PlayerExited(BattlePlayer player) {
-        player.PlayerConnection.Unshare(TeamChat, RedTeam, BlueTeam);
-        return Task.CompletedTask;
-    }
+    public override async Task PlayerExited(BattlePlayer player) =>
+        await player.PlayerConnection.Unshare(TeamChat, RedTeam, BlueTeam);
 
     public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
         IEntity team = RedPlayers.Count() < BluePlayers.Count() ? RedTeam : BlueTeam;

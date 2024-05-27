@@ -30,24 +30,24 @@ public class ClientGarageFirstLoadEvent : IServerEvent {
                         .Set(p => p.DiscordUserId, default(ulong))
                         .UpdateAsync();
 
-                connection.DisplayMessage("Your Discord account has been deauthorized");
+                await connection.DisplayMessage("Your Discord account has been deauthorized");
             } else {
                 (_, bool? isAuthorized) = await player.DiscordLink.GetClient(connection, discordBot);
 
                 switch (isAuthorized) {
                     case false:
-                        connection.DisplayMessage("Your Discord account has been deauthorized");
+                        await connection.DisplayMessage("Your Discord account has been deauthorized");
                         break;
 
                     case null:
-                        connection.DisplayMessage("Cannot check Discord authorization. Something went wrong");
+                        await connection.DisplayMessage("Cannot check Discord authorization. Something went wrong");
                         break;
                 }
             }
         }
 
         if (!player.DiscordLinked)
-            connection.DisplayMessage(
+            await connection.DisplayMessage(
                 "Your Discord account is not linked! Secure your account by typing <color=orange><size=48>!link</size></color> in the chat",
                 TimeSpanUtils.FromYears(40));
     }

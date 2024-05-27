@@ -31,10 +31,13 @@ public class BreakOffFriendEvent : FriendBaseEvent, IServerEvent {
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
-        connection.Send(new AcceptedFriendRemovedEvent(player.Id), connection.User);
-        connection.Server.PlayerConnections.Values
+        await connection.Send(new AcceptedFriendRemovedEvent(player.Id), connection.User);
+
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Id == player.Id)?
-            .Send(new AcceptedFriendRemovedEvent(connection.Player.Id), User);
+            .SingleOrDefault(conn => conn.Player.Id == player.Id);
+
+        if (targetConnection != null)
+            await targetConnection.Send(new AcceptedFriendRemovedEvent(connection.Player.Id), User);
     }
 }

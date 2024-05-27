@@ -12,9 +12,9 @@ public interface IBattleProcessor {
 
     public Task StartTicking();
 
-    public void PutPlayerFromMatchmaking(IPlayerConnection connection);
+    public Task PutPlayerFromMatchmaking(IPlayerConnection connection);
 
-    public void PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode);
+    public Task PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode);
 
     public Battle? SingleOrDefault(Func<Battle, bool> predicate);
 
@@ -76,19 +76,19 @@ public class BattleProcessor : IBattleProcessor {
         }
     }
 
-    public void PutPlayerFromMatchmaking(IPlayerConnection connection) {
+    public async Task PutPlayerFromMatchmaking(IPlayerConnection connection) {
         Battle battle = FirstOrDefault(battle => battle is { TypeHandler: MatchmakingHandler, CanAddPlayers: true }) ?? CreateMatchmakingBattle();
 
-        battle.AddPlayer(connection);
+        await battle.AddPlayer(connection);
     }
 
-    public void PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode) {
+    public async Task PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode) {
         Battle battle =
             FirstOrDefault(battle => battle is { TypeHandler: ArcadeHandler arcadeHandler, CanAddPlayers: true } &&
                                      arcadeHandler.Mode == mode) ??
             CreateArcadeBattle(mode);
 
-        battle.AddPlayer(connection);
+        await battle.AddPlayer(connection);
     }
 
     public Battle? SingleOrDefault(Func<Battle, bool> predicate) => Battles.SingleOrDefault(predicate);

@@ -18,7 +18,7 @@ public class SearchUserIdByUidEvent : IServerEvent {
         Player? searchedPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == Username);
 
         if (searchedPlayer == null) {
-            connection.Send(new SearchUserIdByUidResultEvent(false, 0));
+            await connection.Send(new SearchUserIdByUidResultEvent(false, 0));
             return;
         }
 
@@ -32,6 +32,6 @@ public class SearchUserIdByUidEvent : IServerEvent {
 
         bool canRequestFriend = searcherPlayer.Id != searchedPlayer.Id && noRelations;
 
-        connection.Send(new SearchUserIdByUidResultEvent(canRequestFriend, searchedPlayer.Id));
+        await connection.Send(new SearchUserIdByUidResultEvent(canRequestFriend, searchedPlayer.Id));
     }
 }

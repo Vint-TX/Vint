@@ -28,7 +28,7 @@ public class ComponentRemoveCommand(
 
         IComponent component = Entity.GetComponent(Component);
 
-        Entity.RemoveComponent(Component, connection);
+        await Entity.RemoveComponent(Component, connection);
         await component.Removed(connection, Entity);
 
         logger.Debug("Removed {Component} from {Entity}", Component.Name, Entity);

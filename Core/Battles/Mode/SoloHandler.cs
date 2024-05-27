@@ -14,15 +14,15 @@ public abstract class SoloHandler(
     protected abstract List<SpawnPoint> SpawnPoints { get; }
     protected SpawnPoint? LastSpawnPoint { get; set; }
 
-    public override void Tick() { }
+    public override Task Tick() => Task.CompletedTask;
 
-    public override void UpdateScore(IEntity? team, int score) {
+    public override async Task UpdateScore(IEntity? team, int score) {
         int maxScore = Battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Max(battlePlayer => battlePlayer.Tank!.RoundUser
                 .GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses);
 
-        Battle.Entity.ChangeComponent<ScoreLimitComponent>(component => component.ScoreLimit = maxScore);
+        await Battle.Entity.ChangeComponent<ScoreLimitComponent>(component => component.ScoreLimit = maxScore);
     }
 
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {
@@ -37,9 +37,9 @@ public abstract class SoloHandler(
         return spawnPoint;
     }
 
-    public override void SortPlayers() => SortPlayers(Battle.Players);
+    public override Task SortPlayers() => SortPlayers(Battle.Players);
 
-    public override void OnWarmUpCompleted() { }
+    public override Task OnWarmUpCompleted() => Task.CompletedTask;
 
     public override Task OnFinished() => Task.CompletedTask;
 
@@ -53,10 +53,8 @@ public abstract class SoloHandler(
         return tankPlayer;
     }
 
-    public override void PlayerEntered(BattlePlayer player) { }
+    public override Task PlayerEntered(BattlePlayer player) => Task.CompletedTask;
 
-    public override Task PlayerExited(BattlePlayer player) {
-        UpdateScore(null, 0);
-        return Task.CompletedTask;
-    }
+    public override async Task PlayerExited(BattlePlayer player) =>
+        await UpdateScore(null, 0);
 }

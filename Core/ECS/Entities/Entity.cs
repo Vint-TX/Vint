@@ -34,7 +34,7 @@ public class Entity(
 
     public EntityUnshareCommand ToUnshareCommand() => new(this);
 
-    public void Share(IPlayerConnection connection) {
+    public async Task Share(IPlayerConnection connection) {
         Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
 
         if (!SharedPlayers.Add(connection)) {
@@ -42,11 +42,11 @@ public class Entity(
             Debugger.Break();
         }
 
-        connection.Send(ToShareCommand());
+        await connection.Send(ToShareCommand());
         connection.SharedEntities.Add(this);
     }
 
-    public void Unshare(IPlayerConnection connection) {
+    public async Task Unshare(IPlayerConnection connection) {
         Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
 
         if (!SharedPlayers.TryRemove(connection)) {
@@ -55,7 +55,7 @@ public class Entity(
         }
 
         connection.SharedEntities.TryRemove(this);
-        connection.Send(ToUnshareCommand());
+        await connection.Send(ToUnshareCommand());
     }
 
     public T GetComponent<T>() where T : class, IComponent => (T)GetComponent(typeof(T));
@@ -67,15 +67,15 @@ public class Entity(
         throw new ArgumentException($"{this} does not have component {type}");
     }
 
-    public void RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent =>
+    public Task RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent =>
         RemoveComponentIfPresent(typeof(T), excluded);
 
-    public void RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null) =>
+    public Task RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null) =>
         RemoveComponentIfPresent(component.GetType(), excluded);
 
-    public void RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null) {
+    public async Task RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null) {
         if (HasComponent(type))
-            RemoveComponent(type, excluded);
+            await RemoveComponent(type, excluded);
     }
 
     public IEntity Clone() => new Entity(Id,
@@ -83,7 +83,7 @@ public class Entity(
             : new TemplateAccessor(TemplateAccessor.Template, TemplateAccessor.ConfigPath),
         Components.ToHashSet());
 
-    public void AddComponent(IComponent component, IPlayerConnection? excluded = null) {
+    public async Task AddComponent(IComponent component, IPlayerConnection? excluded = null) {
         Type type = component.GetType();
 
         if (!TypeToComponent.TryAdd(type, component))
@@ -92,28 +92,28 @@ public class Entity(
         Logger.Debug("Added {Name} component to the {Entity}", type.Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            playerConnection.Send(new ComponentAddCommand(this, component));
+            await playerConnection.Send(new ComponentAddCommand(this, component));
     }
 
-    public void AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() => AddComponent(new T(), excluded);
+    public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() => AddComponent(new T(), excluded);
 
-    public void AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent =>
+    public Task AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent =>
         AddComponent(ConfigManager.GetComponent<T>(configPath), excluded);
 
-    public void AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent =>
+    public Task AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent =>
         AddComponent((T)Activator.CreateInstance(typeof(T), entity ?? this)!, excluded);
 
-    public void AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent =>
+    public Task AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent =>
         AddComponent(entity.GetComponent<T>(), excluded);
 
-    public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null) {
+    public async Task AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null) {
         if (!HasComponent(component))
-            AddComponent(component, excluded);
+            await AddComponent(component, excluded);
     }
 
-    public void AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() {
+    public async Task AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() {
         if (!HasComponent<T>())
-            AddComponent<T>(excluded);
+            await AddComponent<T>(excluded);
     }
 
     public bool HasComponent<T>() where T : class, IComponent =>
@@ -124,14 +124,21 @@ public class Entity(
 
     public bool HasComponent(Type type) => TypeToComponent.TryGetValue(type, out _);
 
-    public void ChangeComponent<T>(Action<T> action) where T : class, IComponent {
+    public async Task ChangeComponent<T>(Func<T, Task> func) where T : class, IComponent {
+        T component = GetComponent<T>();
+
+        await func(component);
+        await ChangeComponent(component, null);
+    }
+
+    public async Task ChangeComponent<T>(Action<T> action) where T : class, IComponent {
         T component = GetComponent<T>();
 
         action(component);
-        ChangeComponent(component, null);
+        await ChangeComponent(component, null);
     }
 
-    public void ChangeComponent(IComponent component, IPlayerConnection? excluded) {
+    public async Task ChangeComponent(IComponent component, IPlayerConnection? excluded) {
         Type type = component.GetType();
 
         if (!TypeToComponent.ContainsKey(type))
@@ -142,23 +149,23 @@ public class Entity(
         Logger.Debug("Changed {Name} component in the {Entity}", type.Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            playerConnection.Send(new ComponentChangeCommand(this, component));
+            await playerConnection.Send(new ComponentChangeCommand(this, component));
     }
 
-    public void RemoveComponent<T>(IPlayerConnection? excluded) where T : class, IComponent =>
+    public Task RemoveComponent<T>(IPlayerConnection? excluded) where T : class, IComponent =>
         RemoveComponent(typeof(T), excluded);
 
-    public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null) =>
+    public Task RemoveComponent(IComponent component, IPlayerConnection? excluded = null) =>
         RemoveComponent(component.GetType(), excluded);
 
-    public void RemoveComponent(Type type, IPlayerConnection? excluded = null) {
+    public async Task RemoveComponent(Type type, IPlayerConnection? excluded = null) {
         if (!TypeToComponent.TryRemove(type, out _))
             throw new ArgumentException($"{this} does not have component {type}");
 
         Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            playerConnection.Send(new ComponentRemoveCommand(this, type));
+            await playerConnection.Send(new ComponentRemoveCommand(this, type));
     }
 
     public override string ToString() => $"Entity {{ " +

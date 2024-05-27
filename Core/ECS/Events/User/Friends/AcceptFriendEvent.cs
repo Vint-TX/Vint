@@ -31,8 +31,8 @@ public class AcceptFriendEvent : FriendBaseEvent, IServerEvent {
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
-        connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.User);
-        connection.Send(new AcceptedFriendAddedEvent(player.Id), connection.User);
+        await connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.User);
+        await connection.Send(new AcceptedFriendAddedEvent(player.Id), connection.User);
 
         IPlayerConnection? playerConnection = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
@@ -40,7 +40,7 @@ public class AcceptFriendEvent : FriendBaseEvent, IServerEvent {
 
         if (playerConnection == null) return;
 
-        playerConnection.Send(new OutgoingFriendRemovedEvent(connection.Player.Id), User);
-        playerConnection.Send(new AcceptedFriendAddedEvent(connection.Player.Id), User);
+        await playerConnection.Send(new OutgoingFriendRemovedEvent(connection.Player.Id), User);
+        await playerConnection.Send(new AcceptedFriendAddedEvent(connection.Player.Id), User);
     }
 }

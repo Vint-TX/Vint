@@ -28,6 +28,6 @@ public class LoadSortedFriendsIdsWithNicknamesEvent : IServerEvent {
             .ThenBy(player => player.Username)
             .ToDictionary(relation => relation.Id, relation => relation.Username);
 
-        connection.Send(new SortedFriendsIdsWithNicknamesLoadedEvent(friends));
+        await connection.Send(new SortedFriendsIdsWithNicknamesLoadedEvent(friends));
     }
 }

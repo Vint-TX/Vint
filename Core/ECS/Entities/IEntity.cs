@@ -17,23 +17,23 @@ public interface IEntity {
 
     protected EntityUnshareCommand ToUnshareCommand();
 
-    public void Share(IPlayerConnection connection);
+    public Task Share(IPlayerConnection connection);
 
-    public void Unshare(IPlayerConnection connection);
+    public Task Unshare(IPlayerConnection connection);
 
-    public void AddComponent(IComponent component, IPlayerConnection? excluded = null);
+    public Task AddComponent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
+    public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
 
-    public void AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent;
+    public Task AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent;
 
-    public void AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent;
+    public Task AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent;
 
-    public void AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent;
+    public Task AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent;
 
-    public void AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null);
+    public Task AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
+    public Task AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new();
 
     public bool HasComponent(IComponent component);
 
@@ -45,21 +45,23 @@ public interface IEntity {
 
     public IComponent GetComponent(Type type);
 
-    public void ChangeComponent<T>(Action<T> action) where T : class, IComponent;
+    public Task ChangeComponent<T>(Func<T, Task> func) where T : class, IComponent;
 
-    public void ChangeComponent(IComponent component, IPlayerConnection? excluded = null);
+    public Task ChangeComponent<T>(Action<T> action) where T : class, IComponent;
 
-    public void RemoveComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent;
+    public Task ChangeComponent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void RemoveComponent(IComponent component, IPlayerConnection? excluded = null);
+    public Task RemoveComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent;
 
-    public void RemoveComponent(Type type, IPlayerConnection? excluded = null);
+    public Task RemoveComponent(IComponent component, IPlayerConnection? excluded = null);
 
-    public void RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent;
+    public Task RemoveComponent(Type type, IPlayerConnection? excluded = null);
 
-    public void RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null);
+    public Task RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent;
 
-    public void RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null);
+    public Task RemoveComponentIfPresent(IComponent component, IPlayerConnection? excluded = null);
+
+    public Task RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null);
 
     public IEntity Clone();
 }

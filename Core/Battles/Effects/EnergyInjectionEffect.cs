@@ -8,23 +8,23 @@ public class EnergyInjectionEffect(
     int level,
     float reloadPercent
 ) : Effect(tank, level) {
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
         Entities.Add(new EnergyInjectionEffectTemplate().Create(Tank.BattlePlayer, Duration, reloadPercent));
-        ShareAll();
+        await ShareAll();
 
         Schedule(Duration, Deactivate);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
-        UnshareAll();
+        await UnshareAll();
         Entities.Clear();
     }
 }

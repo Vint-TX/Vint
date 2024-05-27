@@ -17,7 +17,7 @@ public class EnergyInjectionModule : ActiveBattleModule {
 
     float ReloadEnergyPercent { get; set; }
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
         EnergyInjectionEffect? effect = Tank.Effects.OfType<EnergyInjectionEffect>().SingleOrDefault();
@@ -25,25 +25,25 @@ public class EnergyInjectionModule : ActiveBattleModule {
         if (effect != null) return;
 
         effect = GetEffect();
-        effect.Activate();
+        await effect.Activate();
 
-        base.Activate();
+        await base.Activate();
         IEntity effectEntity = effect.Entity!;
         IEntity weaponEntity = Tank.Weapon;
 
-        ReloadWeapon();
-        Tank.BattlePlayer.PlayerConnection.Send(new ExecuteEnergyInjectionEvent(), effectEntity, weaponEntity);
+        await ReloadWeapon();
+        await Tank.BattlePlayer.PlayerConnection.Send(new ExecuteEnergyInjectionEvent(), effectEntity, weaponEntity);
     }
 
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        base.Init(tank, userSlot, marketModule);
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
 
         ReloadEnergyPercent = Leveling.GetStat<ModuleEnergyInjectionEffectReloadPercentPropertyComponent>(ConfigPath, Level);
-        SlotEntity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent)); // component for module on slot entity?
+        await SlotEntity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent)); // component for module on slot entity?
     }
 
-    void ReloadWeapon() {
+    async Task ReloadWeapon() {
         if (Tank.WeaponHandler is HammerWeaponHandler hammer)
-            hammer.FillMagazine();
+            await hammer.FillMagazine();
     }
 }

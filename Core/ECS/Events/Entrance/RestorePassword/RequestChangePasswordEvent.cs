@@ -21,12 +21,12 @@ public class RequestChangePasswordEvent : IServerEvent {
 
         connection.RestorePasswordCode = null;
         connection.RestorePasswordCodeValid = false;
-        connection.ClientSession.RemoveComponent<RestorePasswordCodeSentComponent>();
+        await connection.ClientSession.RemoveComponent<RestorePasswordCodeSentComponent>();
 
         await connection.ChangePassword(PasswordDigest);
 
         connection.Player = null!;
-        connection.Send(new LoginFailedEvent());
-        connection.Send(new AutoLoginFailedEvent());
+        await connection.Send(new LoginFailedEvent());
+        await connection.Send(new AutoLoginFailedEvent());
     }
 }

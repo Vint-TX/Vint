@@ -21,13 +21,13 @@ public class BuyUsernameChangeEvent : IServerEvent {
         long truePrice = ConfigManager.GetComponent<GoodsXPriceComponent>("payment/payable/changeuid").Price;
         bool success = Price == truePrice && connection.Player.Crystals >= truePrice;
 
-        connection.Send(new CompleteBuyUsernameChangeEvent(success), user);
+        await connection.Send(new CompleteBuyUsernameChangeEvent(success), user);
         if (!success) return;
 
         await connection.ChangeXCrystals(-truePrice);
         await connection.SetUsername(Username);
 
-        connection.Share(new UsernameChangedNotificationTemplate().Create(Username, user));
-        connection.Send(new ShowNotificationGroupEvent(1), user);
+        await connection.Share(new UsernameChangedNotificationTemplate().Create(Username, user));
+        await connection.Send(new ShowNotificationGroupEvent(1), user);
     }
 }

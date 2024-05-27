@@ -19,11 +19,11 @@ public class WarmingUp(
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
                 BattleTank tank = battlePlayer.Tank!;
 
-                tank.Disable(true);
-                tank.Tank.RemoveComponentIfPresent(tank.StateManager.CurrentState.StateComponent);
+                await tank.Disable(true);
+                await tank.Tank.RemoveComponentIfPresent(tank.StateManager.CurrentState.StateComponent);
             }
 
-            StateManager.SetState(new PreparingToFight(StateManager));
+            await StateManager.SetState(new PreparingToFight(StateManager));
         }
 
         await base.Tick();
@@ -37,11 +37,11 @@ public class PreparingToFight(
         if (Battle.Timer <= 0) {
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
                 TankStateManager tankStateManager = battlePlayer.Tank!.StateManager;
-                tankStateManager.SetState(new Spawn(tankStateManager));
+                await tankStateManager.SetState(new Spawn(tankStateManager));
             }
 
             Battle.Timer = 1;
-            StateManager.SetState(new Respawning(StateManager));
+            await StateManager.SetState(new Respawning(StateManager));
         }
 
         await base.Tick();
@@ -53,7 +53,7 @@ public class Respawning(
 ) : WarmUpState(stateManager) {
     public override async Task Tick() {
         if (Battle.Timer <= 0)
-            BattleStateManager.SetState(new Running(BattleStateManager));
+            await BattleStateManager.SetState(new Running(BattleStateManager));
 
         await base.Tick();
     }

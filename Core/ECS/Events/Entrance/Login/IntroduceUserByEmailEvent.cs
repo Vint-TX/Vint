@@ -27,12 +27,12 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
 
         if (player == null) {
             connection.Player = null!;
-            connection.Send(new EmailInvalidEvent(Email));
-            connection.Send(new LoginFailedEvent());
+            await connection.Send(new EmailInvalidEvent(Email));
+            await connection.Send(new LoginFailedEvent());
             return;
         }
 
         connection.Player = player;
-        connection.Send(new PersonalPasscodeEvent());
+        await connection.Send(new PersonalPasscodeEvent());
     }
 }

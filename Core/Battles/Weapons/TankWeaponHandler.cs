@@ -46,11 +46,11 @@ public abstract class TankWeaponHandler : IWeaponHandler {
 
     public abstract Task Fire(HitTarget target, int targetIndex);
 
-    public virtual void OnTankEnable() =>
-        BattleEntity.AddComponent<ShootableComponent>();
+    public virtual async Task OnTankEnable() =>
+        await BattleEntity.AddComponent<ShootableComponent>();
 
-    public virtual void OnTankDisable() =>
-        BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
+    public virtual async Task OnTankDisable() =>
+        await BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
 
-    public virtual void Tick() { }
+    public virtual Task Tick() => Task.CompletedTask;
 }

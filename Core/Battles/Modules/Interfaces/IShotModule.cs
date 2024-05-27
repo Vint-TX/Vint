@@ -1,5 +1,5 @@
 namespace Vint.Core.Battles.Modules.Interfaces;
 
 public interface IShotModule {
-    public void OnShot();
+    public Task OnShot();
 }

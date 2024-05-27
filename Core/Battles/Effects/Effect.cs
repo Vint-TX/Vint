@@ -26,42 +26,55 @@ public abstract class Effect(
     public TimeSpan Duration { get; protected set; } = TimeSpan.FromSeconds(1);
 
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
+    ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
-    public virtual void Tick() {
+    public virtual async Task Tick() {
         foreach (DelayedAction delayedAction in DelayedActions
                      .Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             DelayedActions.TryRemove(delayedAction);
             delayedAction.Action();
         }
+
+        foreach (DelayedTask delayedTask in DelayedTasks
+                     .Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+            DelayedTasks.TryRemove(delayedTask);
+            await delayedTask.Task();
+        }
     }
 
-    public abstract void Activate();
+    public abstract Task Activate();
 
-    public abstract void Deactivate();
+    public abstract Task Deactivate();
 
-    public virtual void Share(BattlePlayer battlePlayer) => battlePlayer.PlayerConnection.Share(Entities);
+    public virtual Task Share(BattlePlayer battlePlayer) => battlePlayer.PlayerConnection.Share(Entities);
 
-    public virtual void Unshare(BattlePlayer battlePlayer) {
+    public virtual async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank == Tank)
-            Deactivate();
+            await Deactivate();
 
-        battlePlayer.PlayerConnection.Unshare(Entities);
+        await battlePlayer.PlayerConnection.Unshare(Entities);
     }
 
-    protected void ShareAll() {
+    protected async Task ShareAll() {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.PlayerConnection.Share(Entities);
+            await battlePlayer.PlayerConnection.Share(Entities);
     }
 
-    protected void UnshareAll() {
+    protected async Task UnshareAll() {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.PlayerConnection.Unshare(Entities);
+            await battlePlayer.PlayerConnection.Unshare(Entities);
     }
 
     protected void Schedule(TimeSpan delay, Action action) =>
         DelayedActions.Add(new DelayedAction(DateTimeOffset.UtcNow + delay, action));
 
-    public void UnScheduleAll() => DelayedActions.Clear();
+    protected void Schedule(TimeSpan delay, Func<Task> task) =>
+        DelayedTasks.Add(new DelayedTask(DateTimeOffset.UtcNow + delay, task));
+
+    public void UnScheduleAll() {
+        DelayedActions.Clear();
+        DelayedTasks.Clear();
+    }
 
     public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this), GetType().Name, Tank);
 }
@@ -83,7 +96,7 @@ public interface ISupplyEffect {
 }
 
 public interface IExtendableEffect {
-    public void Extend(int newLevel);
+    public Task Extend(int newLevel);
 }
 
 public interface IDamageMultiplierEffect : IMultiplierEffect {

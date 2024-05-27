@@ -10,17 +10,15 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class CheckRestorePasswordCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (connection.RestorePasswordCode == null) return Task.CompletedTask;
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.RestorePasswordCode == null) return;
 
         if (CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(Code), Encoding.UTF8.GetBytes(connection.RestorePasswordCode))) {
             connection.RestorePasswordCodeValid = true;
-            connection.Send(new RestorePasswordCodeValidEvent(Code));
+            await connection.Send(new RestorePasswordCodeValidEvent(Code));
         } else {
             connection.RestorePasswordCodeValid = false;
-            connection.Send(new RestorePasswordCodeInvalidEvent(Code));
+            await connection.Send(new RestorePasswordCodeInvalidEvent(Code));
         }
-
-        return Task.CompletedTask;
     }
 }

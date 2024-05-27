@@ -20,7 +20,7 @@ public class ModModule(
         switch (username) {
             case "@a": {
                 foreach (IPlayerConnection connection in gameServer.PlayerConnections.Values)
-                    connection.DisplayMessage(message);
+                    await connection.DisplayMessage(message);
                 break;
             }
 
@@ -35,7 +35,7 @@ public class ModModule(
                     return;
                 }
 
-                target.DisplayMessage(message);
+                await target.DisplayMessage(message);
                 break;
             }
         }

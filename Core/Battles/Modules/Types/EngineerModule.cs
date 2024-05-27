@@ -10,34 +10,36 @@ namespace Vint.Core.Battles.Modules.Types;
 
 public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect {
     public override string ConfigPath => "garage/module/upgrade/properties/engineer";
-    
+
     public override Effect GetEffect() => throw new NotSupportedException();
-    
+
     public override bool ActivationCondition => !Enabled;
-    
+
     public bool CanBeDeactivated { get; set; }
     bool Enabled { get; set; }
     float Multiplier { get; set; }
-    
-    public override void Activate() {
-        if (!CanBeActivated) return;
-        
+
+    public override Task Activate() {
+        if (!CanBeActivated) return Task.CompletedTask;
+
         Enabled = true;
         CanBeDeactivated = false;
-        
+
         Tank.SupplyDurationMultiplier *= Multiplier;
+        return Task.CompletedTask;
     }
-    
-    public void Deactivate() {
-        if (!Enabled || !CanBeDeactivated) return;
-        
+
+    public Task Deactivate() {
+        if (!Enabled || !CanBeDeactivated) return Task.CompletedTask;
+
         Enabled = false;
         Tank.SupplyDurationMultiplier /= Multiplier;
+        return Task.CompletedTask;
     }
-    
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        base.Init(tank, userSlot, marketModule);
-        
+
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
+
         Multiplier = Leveling.GetStat<ModuleEngineerEffectDurationFactorPropertyComponent>(ConfigPath, Level);
     }
 }

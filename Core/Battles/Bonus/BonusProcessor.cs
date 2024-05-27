@@ -9,19 +9,19 @@ using BonusInfo = Vint.Core.Config.MapInformation.Bonus;
 namespace Vint.Core.Battles.Bonus;
 
 public interface IBonusProcessor {
-    public void Start();
+    public Task Start();
 
-    public void Tick();
+    public Task Tick();
 
     public Task Take(BonusBox bonus, BattleTank tank);
 
-    public void ShareEntities(IPlayerConnection connection);
+    public Task ShareEntities(IPlayerConnection connection);
 
-    public void UnshareEntities(IPlayerConnection connection);
+    public Task UnshareEntities(IPlayerConnection connection);
 
     public BonusBox? FindByEntity(IEntity bonusEntity);
 
-    public bool DropBonus(BonusType type);
+    public Task<bool> DropBonus(BonusType type);
 }
 
 public class BonusProcessor : IBonusProcessor {
@@ -49,17 +49,17 @@ public class BonusProcessor : IBonusProcessor {
 
     IReadOnlyList<BonusBox> Bonuses { get; }
 
-    public void Start() {
+    public async Task Start() {
         foreach (SupplyBox supply in Bonuses.OfType<SupplyBox>()) {
-            supply.ShareRegion();
-            supply.StateManager.SetState(
+            await supply.ShareRegion();
+            await supply.StateManager.SetState(
                 new Cooldown(supply.StateManager, TimeSpan.FromSeconds(Random.Shared.Next(60))));
         }
     }
 
-    public void Tick() {
+    public async Task Tick() {
         foreach (BonusBox bonus in Bonuses)
-            bonus.Tick();
+            await bonus.Tick();
     }
 
     public async Task Take(BonusBox bonus, BattleTank tank) {
@@ -68,7 +68,7 @@ public class BonusProcessor : IBonusProcessor {
         // todo smth
     }
 
-    public void ShareEntities(IPlayerConnection connection) {
+    public async Task ShareEntities(IPlayerConnection connection) {
         List<IEntity> entities = new(Bonuses.Count * 2);
 
         foreach (BonusBox bonus in Bonuses) {
@@ -80,10 +80,10 @@ public class BonusProcessor : IBonusProcessor {
                 entities.Add(bonus.Entity);
         }
 
-        connection.ShareIfUnshared(entities);
+        await connection.ShareIfUnshared(entities);
     }
 
-    public void UnshareEntities(IPlayerConnection connection) {
+    public async Task UnshareEntities(IPlayerConnection connection) {
         List<IEntity> entities = new(Bonuses.Count * 2);
 
         foreach (BonusBox bonus in Bonuses) {
@@ -94,18 +94,18 @@ public class BonusProcessor : IBonusProcessor {
                 entities.Add(bonus.Entity);
         }
 
-        connection.UnshareIfShared(entities);
+        await connection.UnshareIfShared(entities);
     }
 
     public BonusBox? FindByEntity(IEntity bonusEntity) =>
         Bonuses.FirstOrDefault(bonus => bonus.Entity == bonusEntity);
 
-    public bool DropBonus(BonusType type) {
+    public async Task<bool> DropBonus(BonusType type) {
         BonusBox? bonus = Bonuses.FirstOrDefault(bonus => bonus.Type == type && bonus.StateManager.CurrentState is not Spawned);
 
         if (bonus == null) return false;
 
-        bonus.Drop();
+        await bonus.Drop();
         return true;
     }
 }

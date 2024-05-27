@@ -9,33 +9,33 @@ namespace Vint.Core.Battles.Modules.Types;
 
 public class ExternalImpactModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/externalimpact";
-    
+
     public override ExternalImpactEffect GetEffect() => new(Cooldown, MarketEntity, Radius, MinPercent, MaxDamage, MinDamage, Impact, Tank, Level);
-    
+
     float Impact { get; set; }
     float Radius { get; set; }
     float MinPercent { get; set; }
     float MaxDamage { get; set; }
     float MinDamage { get; set; }
-    
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        base.Init(tank, userSlot, marketModule);
-        
+
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
+
         Impact = Leveling.GetStat<ModuleEffectImpactPropertyComponent>(ConfigPath, Level);
         Radius = Leveling.GetStat<ModuleEffectSplashRadiusPropertyComponent>(ConfigPath, Level);
         MinPercent = Leveling.GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>(ConfigPath, Level) * 100;
         MaxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
         MinDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
     }
-    
-    public override void Activate() {
+
+    public override async Task Activate() {
         if (!CanBeActivated) return;
-        
+
         ExternalImpactEffect? effect = Tank.Effects.OfType<ExternalImpactEffect>().SingleOrDefault();
-        
+
         if (effect != null) return;
-        
-        base.Activate();
-        GetEffect().Activate();
+
+        await base.Activate();
+        await GetEffect().Activate();
     }
 }

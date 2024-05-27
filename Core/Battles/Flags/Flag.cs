@@ -45,16 +45,16 @@ public class Flag {
     public DateTimeOffset UnfrozeForLastCarrierTime { get; private set; }
     public HashSet<FlagAssist> Assists { get; } = [];
 
-    public void Capture(BattlePlayer carrier) {
+    public async Task Capture(BattlePlayer carrier) {
         if (StateManager.CurrentState is not OnPedestal) return;
 
-        StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
+        await StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
 
         Carrier = carrier;
         Assists.Add(new FlagAssist(carrier.Tank!, Position));
 
         foreach (IFlagModule flagModule in carrier.Tank.Modules.OfType<IFlagModule>())
-            flagModule.OnFlagAction(FlagAction.Capture);
+            await flagModule.OnFlagAction(FlagAction.Capture);
     }
 
     public async Task Drop(bool isUserAction) {
@@ -72,10 +72,10 @@ public class Flag {
         else if (!hitHandler.ClosestHit.HasValue) newPosition = Vector3.UnitY * 1000;
         else newPosition = hitHandler.ClosestHit.Value;
 
-        StateManager.SetState(new OnGround(StateManager, newPosition, isUserAction));
+        await StateManager.SetState(new OnGround(StateManager, newPosition, isUserAction));
 
         foreach (IFlagModule flagModule in LastCarrier.Tank.Modules.OfType<IFlagModule>())
-            flagModule.OnFlagAction(FlagAction.Drop);
+            await flagModule.OnFlagAction(FlagAction.Drop);
 
         if (PhysicsUtils.IsOutsideMap(Battle.MapInfo.PuntativeGeoms, newPosition, Vector3.Zero, Battle.Properties.KillZoneEnabled)) {
             await Return();
@@ -88,12 +88,12 @@ public class Flag {
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);
     }
 
-    public void Pickup(BattlePlayer carrier) {
+    public async Task Pickup(BattlePlayer carrier) {
         if (StateManager.CurrentState is not OnGround ||
             LastCarrier == carrier &&
             UnfrozeForLastCarrierTime > DateTimeOffset.UtcNow) return;
 
-        StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
+        await StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
         Carrier = carrier;
 
         FlagAssist assist = Assists.FirstOrDefault(assist => assist.Tank == carrier.Tank!, new FlagAssist(carrier.Tank, Position));
@@ -102,17 +102,17 @@ public class Flag {
         Assists.Add(assist);
 
         foreach (IFlagModule flagModule in carrier.Tank.Modules.OfType<IFlagModule>())
-            flagModule.OnFlagAction(FlagAction.Capture);
+            await flagModule.OnFlagAction(FlagAction.Capture);
     }
 
     public async Task Return(BattlePlayer? returner = null) {
         if (StateManager.CurrentState is not OnGround ||
             Battle.ModeHandler is not CTFHandler ctf) return;
 
-        StateManager.SetState(new OnPedestal(StateManager));
+        await StateManager.SetState(new OnPedestal(StateManager));
 
         if (returner != null) {
-            Entity.AddGroupComponent<TankGroupComponent>(returner.Tank!.Tank);
+            await Entity.AddGroupComponent<TankGroupComponent>(returner.Tank!.Tank);
 
             Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == LastCarrier?.TeamColor).PedestalPosition;
             Vector3 returnPosition = Position;
@@ -125,30 +125,30 @@ public class Flag {
 
             BattleTank returnerTank = returner.Tank!;
 
-            returnerTank.AddScore(score);
-            returnerTank.CommitStatistics();
+            await returnerTank.AddScore(score);
+            await returnerTank.CommitStatistics();
 
-            returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(scoreWithBonus), returner.BattleUser);
+            await returner.PlayerConnection.Send(new VisualScoreFlagReturnEvent(scoreWithBonus), returner.BattleUser);
             returnerTank.Statistics.FlagReturns += 1;
         }
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
-            battlePlayer.PlayerConnection.Send(new FlagReturnEvent(), Entity);
+            await battlePlayer.PlayerConnection.Send(new FlagReturnEvent(), Entity);
 
         if (returner != null)
-            Entity.RemoveComponent<TankGroupComponent>();
+            await Entity.RemoveComponent<TankGroupComponent>();
 
-        Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
-        Entity.RemoveComponent<FlagGroundedStateComponent>();
-        Entity.AddComponent<FlagHomeStateComponent>();
+        await Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
+        await Entity.RemoveComponent<FlagGroundedStateComponent>();
+        await Entity.AddComponent<FlagHomeStateComponent>();
 
-        Refresh();
+        await Refresh();
         Assists.Clear();
         LastCarrier = null;
 
         if (returner != null) {
             foreach (IFlagModule flagModule in returner.Tank!.Modules.OfType<IFlagModule>())
-                flagModule.OnFlagAction(FlagAction.Return);
+                await flagModule.OnFlagAction(FlagAction.Return);
         }
 
         if (returner == null) return;
@@ -164,15 +164,15 @@ public class Flag {
         if (StateManager.CurrentState is not Captured ||
             Battle.ModeHandler is not CTFHandler ctf) return;
 
-        StateManager.SetState(new OnPedestal(StateManager));
-        Entity.AddComponent<FlagHomeStateComponent>();
+        await StateManager.SetState(new OnPedestal(StateManager));
+        await Entity.AddComponent<FlagHomeStateComponent>();
 
         if (ctf.RedPlayers.Any(player => player.InBattleAsTank) &&
             ctf.BluePlayers.Any(player => player.InBattleAsTank)) {
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
-                player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
+                await player.PlayerConnection.Send(new FlagDeliveryEvent(), Entity);
 
-            Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
+            await Battle.ModeHandler.UpdateScore(battlePlayer.Team, 1);
 
             BattleTank tank = battlePlayer.Tank!;
             FlagAssist carrierAssist = Assists.First(assist => assist.Tank == tank);
@@ -185,10 +185,10 @@ public class Flag {
             int scoreWithBonus = battlePlayer.GetScoreWithBonus(score);
 
             tank.Statistics.Flags += 1;
-            tank.AddScore(score);
-            tank.CommitStatistics();
+            await tank.AddScore(score);
+            await tank.CommitStatistics();
 
-            battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
+            await battlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(scoreWithBonus), battlePlayer.BattleUser);
 
             foreach (FlagAssist assist in Assists.Where(assist => assist.Tank != tank)) {
                 BattleTank assistant = assist.Tank;
@@ -198,25 +198,25 @@ public class Flag {
                 int assistScoreWithBonus = assistant.BattlePlayer.GetScoreWithBonus(assistScore);
 
                 assistant.Statistics.FlagAssists += 1;
-                assistant.AddScore(assistScore);
-                assistant.CommitStatistics();
+                await assistant.AddScore(assistScore);
+                await assistant.CommitStatistics();
 
-                assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(assistScoreWithBonus), assistant.BattleUser);
+                await assistant.BattlePlayer.PlayerConnection.Send(new VisualScoreFlagDeliverEvent(assistScoreWithBonus), assistant.BattleUser);
             }
         } else
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
-                player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Entity, Battle.Entity);
+                await player.PlayerConnection.Send(new FlagNotCountedDeliveryEvent(), Entity, Battle.Entity);
 
-        Entity.RemoveComponent<TankGroupComponent>();
-        Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
+        await Entity.RemoveComponent<TankGroupComponent>();
+        await Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = PedestalPosition);
 
-        Refresh();
+        await Refresh();
         Assists.Clear();
         Carrier = null;
         LastCarrier = null;
 
         foreach (IFlagModule flagModule in battlePlayer.Tank!.Modules.OfType<IFlagModule>())
-            flagModule.OnFlagAction(FlagAction.Deliver);
+            await flagModule.OnFlagAction(FlagAction.Deliver);
 
         await using DbConnection db = new();
         await db.Statistics
@@ -225,10 +225,10 @@ public class Flag {
             .UpdateAsync();
     }
 
-    void Refresh() {
+    async Task Refresh() {
         foreach (IPlayerConnection playerConnection in Entity.SharedPlayers) {
-            playerConnection.Unshare(Entity);
-            playerConnection.Share(Entity);
+            await playerConnection.Unshare(Entity);
+            await playerConnection.Share(Entity);
         }
     }
 }

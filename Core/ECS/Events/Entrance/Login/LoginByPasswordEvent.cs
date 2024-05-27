@@ -21,16 +21,16 @@ public class LoginByPasswordEvent : IServerEvent {
         Punishment? ban = await connection.Player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
 
         if (ban is { Active: true }) {
-            connection.Send(new UserBlockedEvent($"You are {ban}"));
-            connection.Send(new LoginFailedEvent());
+            await connection.Send(new UserBlockedEvent($"You are {ban}"));
+            await connection.Send(new LoginFailedEvent());
             return;
         }
 
         if (!new Encryption()
                 .GetLoginPasswordHash(connection.Player.PasswordHash)
                 .SequenceEqual(Convert.FromBase64String(PasswordEncipher))) {
-            connection.Send(new InvalidPasswordEvent());
-            connection.Send(new LoginFailedEvent());
+            await connection.Send(new InvalidPasswordEvent());
+            await connection.Send(new LoginFailedEvent());
             return;
         }
 
@@ -43,7 +43,7 @@ public class LoginByPasswordEvent : IServerEvent {
 
             foreach (IPlayerConnection oldConnection in connections) {
                 await db.UpdateAsync(oldConnection.Player);
-                oldConnection.Kick("Login from new place");
+                await oldConnection.Kick("Login from new place");
             }
         }
 

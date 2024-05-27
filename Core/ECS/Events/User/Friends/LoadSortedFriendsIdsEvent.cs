@@ -42,6 +42,6 @@ public class LoadSortedFriendsIdsEvent : IServerEvent {
             .Where(player => (player.RelationTypes & RelationTypes.OutgoingRequest) == RelationTypes.OutgoingRequest)
             .ToDictionary(player => player.Id, player => player.Username);
 
-        connection.Send(new SortedFriendsIdsLoadedEvent(friends, incoming, outgoing));
+        await connection.Send(new SortedFriendsIdsLoadedEvent(friends, incoming, outgoing));
     }
 }

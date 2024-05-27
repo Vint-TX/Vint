@@ -22,7 +22,7 @@ public class PersonalBattleResultForClient {
         IEntity? reward = await Leveling.GetLevelUpRewards(connection);
 
         if (reward != null)
-            connection.Share(reward);
+            await connection.Share(reward);
 
         int battleScore = battlePlayer.GetBattleUserScoreWithBonus();
         float battleSeriesMultiplier = battlePlayer.GetBattleSeriesMultiplier();

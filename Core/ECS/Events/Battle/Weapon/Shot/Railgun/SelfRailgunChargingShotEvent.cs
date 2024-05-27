@@ -7,10 +7,11 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Shot.Railgun;
 
 [ProtocolId(4963057750170414217)]
 public class SelfRailgunChargingShotEvent : RailgunChargingShotEvent, IServerEvent {
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.WeaponHandler is not RailgunWeaponHandler) return Task.CompletedTask;
+            connection.BattlePlayer.Tank!.WeaponHandler is not RailgunWeaponHandler)
+            return;
 
         IEntity weapon = entities.Single();
         Battles.Battle battle = connection.BattlePlayer.Battle;
@@ -20,8 +21,6 @@ public class SelfRailgunChargingShotEvent : RailgunChargingShotEvent, IServerEve
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != connection.BattlePlayer)
                      .Select(player => player.PlayerConnection))
-            playerConnection.Send(serverEvent, weapon);
-
-        return Task.CompletedTask;
+            await playerConnection.Send(serverEvent, weapon);
     }
 }

@@ -29,12 +29,12 @@ public class CTFHandler : TeamHandler {
     protected override List<SpawnPoint> RedSpawnPoints { get; }
     protected override List<SpawnPoint> BlueSpawnPoints { get; }
 
-    public override void OnWarmUpCompleted() {
-        base.OnWarmUpCompleted();
+    public override async Task OnWarmUpCompleted() {
+        await base.OnWarmUpCompleted();
         CanShareFlags = true;
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
+            await battlePlayer.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
     }
 
     public override async Task OnFinished() {
@@ -42,13 +42,13 @@ public class CTFHandler : TeamHandler {
             await flag.Drop(false);
     }
 
-    public override void PlayerEntered(BattlePlayer player) {
-        base.PlayerEntered(player);
+    public override async Task PlayerEntered(BattlePlayer player) {
+        await base.PlayerEntered(player);
 
-        player.PlayerConnection.Share(Flags.Select(flag => flag.PedestalEntity));
+        await player.PlayerConnection.Share(Flags.Select(flag => flag.PedestalEntity));
 
         if (CanShareFlags)
-            player.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
+            await player.PlayerConnection.Share(Flags.Select(flag => flag.Entity));
     }
 
     public override async Task PlayerExited(BattlePlayer player) {
@@ -57,7 +57,7 @@ public class CTFHandler : TeamHandler {
         foreach (Flag flag in Flags.Where(flag => flag.Carrier == player))
             await flag.Drop(false);
 
-        player.PlayerConnection.UnshareIfShared(Flags.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
+        await player.PlayerConnection.UnshareIfShared(Flags.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
     }
 
     public override TeamColor GetDominatedTeam() {
@@ -81,8 +81,8 @@ public class CTFHandler : TeamHandler {
         _ => -99999
     };
 
-    public override void Tick() {
+    public override async Task Tick() {
         foreach (Flag flag in Flags)
-            flag.StateManager.Tick();
+            await flag.StateManager.Tick();
     }
 }

@@ -139,35 +139,35 @@ public class Battle {
         BonusProcessor = new BonusProcessor(this, bonuses);
     }
 
-    public void UpdateProperties(BattleProperties properties) {
+    public async Task UpdateProperties(BattleProperties properties) {
         ModeHandler previousHandler = ModeHandler;
 
         Properties = properties;
         MapInfo = ConfigManager.MapInfos.Single(map => map.Id == Properties.MapId);
         MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
 
-        LobbyEntity.RemoveComponent<MapGroupComponent>();
-        LobbyEntity.AddGroupComponent<MapGroupComponent>(MapEntity);
+        await LobbyEntity.RemoveComponent<MapGroupComponent>();
+        await LobbyEntity.AddGroupComponent<MapGroupComponent>(MapEntity);
 
-        LobbyEntity.RemoveComponent<BattleModeComponent>();
-        LobbyEntity.AddComponent(new BattleModeComponent(Properties.BattleMode));
+        await LobbyEntity.RemoveComponent<BattleModeComponent>();
+        await LobbyEntity.AddComponent(new BattleModeComponent(Properties.BattleMode));
 
-        LobbyEntity.RemoveComponent<UserLimitComponent>();
-        LobbyEntity.AddComponent(new UserLimitComponent(Properties.MaxPlayers));
+        await LobbyEntity.RemoveComponent<UserLimitComponent>();
+        await LobbyEntity.AddComponent(new UserLimitComponent(Properties.MaxPlayers));
 
-        LobbyEntity.RemoveComponent<GravityComponent>();
-        LobbyEntity.AddComponent(new GravityComponent(Properties.Gravity));
+        await LobbyEntity.RemoveComponent<GravityComponent>();
+        await LobbyEntity.AddComponent(new GravityComponent(Properties.Gravity));
 
         if (TypeHandler is CustomHandler) {
-            LobbyEntity.RemoveComponent<ClientBattleParamsComponent>();
-            LobbyEntity.AddComponent(new ClientBattleParamsComponent(Properties));
+            await LobbyEntity.RemoveComponent<ClientBattleParamsComponent>();
+            await LobbyEntity.AddComponent(new ClientBattleParamsComponent(Properties));
         }
 
         Setup();
         ModeHandler.TransferParameters(previousHandler);
     }
 
-    public void Start() {
+    public async Task Start() {
         if (ConfigManager.MapNameToTriangles.TryGetValue(MapInfo.Name, out Triangle[]? triangles)) {
             Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
             Simulation.BufferPool.Take(triangles.Length, out Buffer<Triangle> buffer);
@@ -182,7 +182,7 @@ public class Battle {
         }
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
-            battlePlayer.Init();
+            await battlePlayer.Init();
 
         BonusProcessor?.Start();
     }
@@ -190,7 +190,7 @@ public class Battle {
     public async Task Finish() {
         if (StateManager.CurrentState is Ended) return;
 
-        StateManager.SetState(new Ended(StateManager));
+        await StateManager.SetState(new Ended(StateManager));
         await ModeHandler.OnFinished();
 
         List<BattlePlayer> players = Players.ToList();
@@ -203,13 +203,13 @@ public class Battle {
 
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
             BattleTank battleTank = battlePlayer.Tank!;
-            battleTank.Disable(true);
+            await battleTank.Disable(true);
             battleTank.CreateUserResult();
         }
 
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => !battlePlayer.InBattle)) {
             try {
-                RemovePlayerFromLobby(battlePlayer);
+                await RemovePlayerFromLobby(battlePlayer);
             } catch { /**/ }
         }
 
@@ -221,60 +221,64 @@ public class Battle {
 
         // todo
 
-        RoundEntity.AddComponentIfAbsent(new RoundRestartingStateComponent());
-        LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
+        await RoundEntity.AddComponentIfAbsent(new RoundRestartingStateComponent());
+        await LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
     }
 
     public async Task Tick(double deltaTime) {
         Timer -= deltaTime;
 
-        ModeHandler.Tick();
-        TypeHandler.Tick();
-        StateManager.Tick();
-        BonusProcessor?.Tick();
+        await ModeHandler.Tick();
+        await TypeHandler.Tick();
+        await StateManager.Tick();
+
+        if (BonusProcessor != null)
+            await BonusProcessor.Tick();
 
         foreach (BattlePlayer battlePlayer in Players)
             await battlePlayer.Tick();
     }
 
-    public void AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads
+    public async Task AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads
         if (connection.InLobby || !spectator && !CanAddPlayers) return;
 
         connection.Logger.Warning("Joining battle {Id} (spectator: {Bool})", LobbyId, spectator);
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
-            connection.ShareIfUnshared(battlePlayer.PlayerConnection.User);
+            await connection.ShareIfUnshared(battlePlayer.PlayerConnection.User);
 
         if (spectator) {
             connection.BattlePlayer = new BattlePlayer(connection, this, null, true);
         } else {
             Preset preset = connection.Player.CurrentPreset;
 
-            connection.Share(LobbyEntity, LobbyChatEntity);
-            connection.User.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
-            connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
+            await connection.Share(LobbyEntity, LobbyChatEntity);
+            await connection.User.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
+            await connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
             foreach (BattlePlayer battlePlayer in Players)
-                battlePlayer.PlayerConnection.ShareIfUnshared(connection.User);
+                await battlePlayer.PlayerConnection.ShareIfUnshared(connection.User);
 
             connection.BattlePlayer = ModeHandler.SetupBattlePlayer(connection);
-            TypeHandler.PlayerEntered(connection.BattlePlayer);
+            await TypeHandler.PlayerEntered(connection.BattlePlayer);
         }
 
         Players.Add(connection.BattlePlayer);
         WasPlayers = true;
 
         if (spectator)
-            connection.BattlePlayer.Init();
+            await connection.BattlePlayer.Init();
     }
 
-    public void RemovePlayer(BattlePlayer battlePlayer) { // todo squads
+    public async Task RemovePlayer(BattlePlayer battlePlayer) { // todo squads
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 
-        battlePlayer.Tank?.RoundUser.RemoveComponent<RoundUserComponent>();
-        connection.Unshare(Entity, RoundEntity, BattleChatEntity);
-        connection.Unshare(Players
+        if (battlePlayer.InBattleAsTank)
+            await battlePlayer.Tank!.RoundUser.RemoveComponent<RoundUserComponent>();
+
+        await connection.Unshare(Entity, RoundEntity, BattleChatEntity);
+        await connection.Unshare(Players
             .Where(player => player.InBattleAsTank &&
                              player != battlePlayer)
             .SelectMany(player => player.Tank!.Entities));
@@ -282,48 +286,48 @@ public class Battle {
         BonusProcessor?.UnshareEntities(connection);
 
         if (user.HasComponent<BattleGroupComponent>())
-            user.RemoveComponent<BattleGroupComponent>();
+            await user.RemoveComponent<BattleGroupComponent>();
         else
             connection.Logger.Error("User does not have BattleGroupComponent (Battle#RemovePlayer)");
 
-        ModeHandler.PlayerExited(battlePlayer);
+        await ModeHandler.PlayerExited(battlePlayer);
 
         foreach (Effect effect in Players
                      .Where(player => player.InBattleAsTank)
                      .SelectMany(player => player.Tank!.Effects))
-            effect.Unshare(battlePlayer);
+            await effect.Unshare(battlePlayer);
 
         if (battlePlayer.IsSpectator) {
-            connection.Unshare(battlePlayer.BattleUser);
-            RemovePlayerFromLobby(battlePlayer);
+            await connection.Unshare(battlePlayer.BattleUser);
+            await RemovePlayerFromLobby(battlePlayer);
         } else {
             foreach (BattlePlayer player in Players.Where(player => player.InBattle))
-                player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
+                await player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
 
             foreach (BattleModule module in battlePlayer.Tank!.Modules)
-                connection.Unshare(module.SlotEntity, module.Entity);
+                await connection.Unshare(module.SlotEntity, module.Entity);
 
             battlePlayer.InBattle = false;
 
             if (TypeHandler is not CustomHandler || !battlePlayer.PlayerConnection.IsOnline)
-                RemovePlayerFromLobby(battlePlayer);
+                await RemovePlayerFromLobby(battlePlayer);
 
             battlePlayer.Tank = null;
 
-            ModeHandler.SortPlayers();
+            await ModeHandler.SortPlayers();
 
             if (!Players.All(player => player.IsSpectator)) return;
 
             foreach (BattlePlayer spectator in Players.Where(player => player.IsSpectator)) {
-                spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
-                RemovePlayer(spectator);
+                await spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
+                await RemovePlayer(spectator);
             }
         }
 
-        battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
+        await battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
     }
 
-    public void RemovePlayerFromLobby(BattlePlayer battlePlayer) {
+    public async Task RemovePlayerFromLobby(BattlePlayer battlePlayer) {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         connection.Logger.Warning("Leaving battle {Id}", LobbyId);
 
@@ -331,27 +335,27 @@ public class Battle {
 
         if (battlePlayer.IsSpectator) {
             foreach (BattlePlayer player in Players.Where(player => !player.IsSpectator))
-                connection.Unshare(player.PlayerConnection.User);
+                await connection.Unshare(player.PlayerConnection.User);
         } else {
             IEntity user = connection.User;
 
-            TypeHandler.PlayerExited(battlePlayer);
-            ModeHandler.RemoveBattlePlayer(battlePlayer);
+            await TypeHandler.PlayerExited(battlePlayer);
+            await ModeHandler.RemoveBattlePlayer(battlePlayer);
 
-            user.RemoveComponent<UserEquipmentComponent>();
-            user.RemoveComponent<BattleLobbyGroupComponent>();
-            user.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
-            connection.Unshare(LobbyEntity, LobbyChatEntity);
+            await user.RemoveComponent<UserEquipmentComponent>();
+            await user.RemoveComponent<BattleLobbyGroupComponent>();
+            await user.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
+            await connection.Unshare(LobbyEntity, LobbyChatEntity);
 
             foreach (BattlePlayer player in Players) {
-                player.PlayerConnection.Unshare(user);
-                connection.UnshareIfShared(player.PlayerConnection.User);
+                await player.PlayerConnection.Unshare(user);
+                await connection.UnshareIfShared(player.PlayerConnection.User);
             }
 
             if (Players.All(player => player.IsSpectator)) {
                 foreach (BattlePlayer spectator in Players) {
-                    spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
-                    RemovePlayer(spectator);
+                    await spectator.PlayerConnection.Send(new KickFromBattleEvent(), spectator.BattleUser);
+                    await RemovePlayer(spectator);
                 }
             }
         }

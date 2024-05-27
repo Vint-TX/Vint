@@ -31,7 +31,7 @@ public class ActivatePromoCodeEvent : IServerEvent { // todo
         IEntity user = entities.Single();
 
         await connection.PurchaseItem(item, 1, 0, false, false);
-        connection.Share(new NewItemNotificationTemplate().CreateRegular(user, item, 1));
-        connection.Send(new ShowNotificationGroupEvent(1), user);
+        await connection.Share(new NewItemNotificationTemplate().CreateRegular(user, item, 1));
+        await connection.Send(new ShowNotificationGroupEvent(1), user);
     }
 }

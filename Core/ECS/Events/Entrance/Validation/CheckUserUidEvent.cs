@@ -14,7 +14,7 @@ public class CheckUserUidEvent : IServerEvent {
         await using DbConnection db = new();
 
         if (await db.Players.AnyAsync(player => player.Username == Username))
-            connection.Send(new UserUidOccupiedEvent(Username));
-        else connection.Send(new UserUidVacantEvent(Username));
+            await connection.Send(new UserUidOccupiedEvent(Username));
+        else await connection.Send(new UserUidVacantEvent(Username));
     }
 }

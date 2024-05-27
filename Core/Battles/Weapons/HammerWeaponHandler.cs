@@ -19,7 +19,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
         MaximumCartridgeCount = magazineWeaponComponent.MaxCartridgeCount;
 
         BattleEntity.AddComponent(new MagazineStorageComponent(MaximumCartridgeCount));
-        SetCurrentCartridgeCount(MaximumCartridgeCount);
+        SetCurrentCartridgeCount(MaximumCartridgeCount).GetAwaiter().GetResult();
     }
 
     public float ReloadMagazineTimeSec { get; }
@@ -72,59 +72,59 @@ public class HammerWeaponHandler : TankWeaponHandler {
             await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 
-    public override void OnTankEnable() {
-        base.OnTankEnable();
-        BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
+    public override async Task OnTankEnable() {
+        await base.OnTankEnable();
+        await BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
     }
 
-    public override void OnTankDisable() {
-        base.OnTankDisable();
-        ResetMagazine();
+    public override async Task OnTankDisable() {
+        await base.OnTankDisable();
+        await ResetMagazine();
     }
 
-    public override void Tick() {
-        base.Tick();
-        TryReload();
+    public override async Task Tick() {
+        await base.Tick();
+        await TryReload();
     }
 
-    public void SetCurrentCartridgeCount(int count) {
+    public async Task SetCurrentCartridgeCount(int count) {
         if (count > MaximumCartridgeCount) return;
 
         CurrentCartridgeCount = count;
-        BattleEntity.ChangeComponent<MagazineStorageComponent>(component => component.CurrentCartridgeCount = CurrentCartridgeCount);
+        await BattleEntity.ChangeComponent<MagazineStorageComponent>(component => component.CurrentCartridgeCount = CurrentCartridgeCount);
 
         if (CurrentCartridgeCount == 0)
-            StartReload();
+            await StartReload();
     }
 
-    public void StartReload() {
-        BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
-        BattleEntity.AddComponentIfAbsent(new MagazineReloadStateComponent());
+    public async Task StartReload() {
+        await BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
+        await BattleEntity.AddComponentIfAbsent(new MagazineReloadStateComponent());
 
         ReloadEndTime = DateTimeOffset.UtcNow.AddSeconds(ReloadMagazineTimeSec);
     }
 
-    public void StopReload() {
+    public async Task StopReload() {
         ReloadEndTime = null;
-        BattleEntity.RemoveComponentIfPresent<MagazineReloadStateComponent>();
+        await BattleEntity.RemoveComponentIfPresent<MagazineReloadStateComponent>();
     }
 
-    public void ResetMagazine() {
-        SetCurrentCartridgeCount(MaximumCartridgeCount);
-        StopReload();
+    public async Task ResetMagazine() {
+        await SetCurrentCartridgeCount(MaximumCartridgeCount);
+        await StopReload();
     }
 
-    public void FillMagazine() {
-        StopReload();
-        SetCurrentCartridgeCount(MaximumCartridgeCount);
+    public async Task FillMagazine() {
+        await StopReload();
+        await SetCurrentCartridgeCount(MaximumCartridgeCount);
 
-        BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
-        BattleEntity.AddComponentIfAbsent(new ShootableComponent());
+        await BattleTank.BattlePlayer.PlayerConnection.Send(new SetMagazineReadyEvent(), BattleEntity);
+        await BattleEntity.AddComponentIfAbsent(new ShootableComponent());
     }
 
-    void TryReload() {
+    async Task TryReload() {
         if (ReloadEndTime == null || ReloadEndTime > DateTimeOffset.UtcNow) return;
 
-        FillMagazine();
+        await FillMagazine();
     }
 }

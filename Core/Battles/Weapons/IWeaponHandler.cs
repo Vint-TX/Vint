@@ -20,9 +20,9 @@ public interface IWeaponHandler {
 
     public Task Fire(HitTarget target, int targetIndex);
 
-    public void OnTankEnable();
+    public Task OnTankEnable();
 
-    public void OnTankDisable();
+    public Task OnTankDisable();
 
-    public void Tick();
+    public Task Tick();
 }

@@ -8,10 +8,11 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 [ProtocolId(1430210549752)]
 public class SelfUpdateStreamHitEvent : UpdateStreamHitEvent, IServerEvent {
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.WeaponHandler is not StreamWeaponHandler) return Task.CompletedTask;
+            connection.BattlePlayer.Tank!.WeaponHandler is not StreamWeaponHandler)
+            return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer;
         IEntity weapon = entities.Single();
@@ -25,8 +26,6 @@ public class SelfUpdateStreamHitEvent : UpdateStreamHitEvent, IServerEvent {
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
-            playerConnection.Send(serverEvent, weapon);
-
-        return Task.CompletedTask;
+            await playerConnection.Send(serverEvent, weapon);
     }
 }

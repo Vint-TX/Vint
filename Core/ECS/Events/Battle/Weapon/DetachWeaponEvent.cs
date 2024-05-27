@@ -11,17 +11,16 @@ public class DetachWeaponEvent : IServerEvent {
     public Vector3 AngularVelocity { get; private set; }
     public Vector3 Velocity { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IEntity tank = entities.Single();
 
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Tank!.Tank != tank ||
-            connection.BattlePlayer.Tank.StateManager.CurrentState is not Dead) return Task.CompletedTask;
+            connection.BattlePlayer.Tank.StateManager.CurrentState is not Dead)
+            return;
 
         foreach (BattlePlayer battlePlayer in connection.BattlePlayer.Battle.Players)
-            battlePlayer.PlayerConnection.Send(this, tank);
-
-        return Task.CompletedTask;
+            await battlePlayer.PlayerConnection.Send(this, tank);
     }
 }

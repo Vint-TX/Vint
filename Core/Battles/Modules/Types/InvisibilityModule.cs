@@ -19,29 +19,32 @@ public class InvisibilityModule : ActiveBattleModule, IFlagModule, IShotModule {
 
     InvisibilityEffect? Effect { get; set; }
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
         Effect = GetEffect();
         Effect.Deactivated += Deactivated;
-        Effect.Activate();
-        base.Activate();
+        await Effect.Activate();
+        await base.Activate();
     }
 
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        base.Init(tank, userSlot, marketModule);
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
 
         Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(ConfigPath, Level));
     }
 
-    public void OnFlagAction(FlagAction action) {
+    public async Task OnFlagAction(FlagAction action) {
         if (action == FlagAction.Capture)
-            TryDeactivate();
+            await TryDeactivate();
     }
 
-    public void OnShot() => TryDeactivate();
+    public Task OnShot() => TryDeactivate();
 
-    void TryDeactivate() => Effect?.Deactivate();
+    Task TryDeactivate() =>
+        Effect == null
+            ? Task.CompletedTask
+            : Effect.Deactivate();
 
     void Deactivated() => Effect = null;
 }

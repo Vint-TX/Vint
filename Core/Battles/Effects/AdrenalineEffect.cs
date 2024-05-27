@@ -9,22 +9,22 @@ public class AdrenalineEffect(
     float damageMultiplier
 ) : Effect(tank, level), IDamageMultiplierEffect {
     public event Action? Deactivated;
-    
-    public override void Activate() {
+
+    public override async Task Activate() {
         Tank.Effects.Add(this);
-        
-        Tank.UpdateModuleCooldownSpeed(cooldownSpeedCoeff);
+
+        await Tank.UpdateModuleCooldownSpeed(cooldownSpeedCoeff);
     }
-    
-    public override void Deactivate() {
+
+    public override async Task Deactivate() {
         Tank.Effects.TryRemove(this);
-        
-        Tank.UpdateModuleCooldownSpeed(1, true);
+
+        await Tank.UpdateModuleCooldownSpeed(1, true);
         Deactivated?.Invoke();
     }
-    
+
     public float Multiplier { get; } = damageMultiplier;
-    
+
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
         source == Tank ? Multiplier : 1;
 }

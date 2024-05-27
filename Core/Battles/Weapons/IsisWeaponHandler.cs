@@ -47,20 +47,20 @@ public class IsisWeaponHandler : StreamWeaponHandler {
             CalculatedDamage heal = damage with { Value = damage.Value / 100 * SelfHealPercentage };
 
             await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
-            battle.DamageProcessor.Heal(BattleTank, heal);
+            await battle.DamageProcessor.Heal(BattleTank, heal);
         } else {
-            targetTank.UpdateTemperatureAssists(BattleTank, this, true);
+            await targetTank.UpdateTemperatureAssists(BattleTank, this, true);
 
             const int healScore = 2;
             if (targetTank.Health >= targetTank.MaxHealth) return;
 
-            battle.DamageProcessor.Heal(BattleTank, targetTank, damage);
+            await battle.DamageProcessor.Heal(BattleTank, targetTank, damage);
 
             int scoreWithBonus = BattleTank.BattlePlayer.GetScoreWithBonus(healScore);
 
-            BattleTank.AddScore(healScore);
-            BattleTank.CommitStatistics();
-            BattleTank.BattlePlayer.PlayerConnection.Send(new VisualScoreHealEvent(scoreWithBonus), BattleTank.BattleUser);
+            await BattleTank.AddScore(healScore);
+            await BattleTank.CommitStatistics();
+            await BattleTank.BattlePlayer.PlayerConnection.Send(new VisualScoreHealEvent(scoreWithBonus), BattleTank.BattleUser);
         }
     }
 }

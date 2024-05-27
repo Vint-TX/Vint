@@ -43,14 +43,14 @@ public abstract class BattleModule {
 
     public abstract Effect GetEffect();
 
-    public virtual void Activate() {
-        SetAmmo(CurrentAmmo - 1);
+    public virtual async Task Activate() {
+        await SetAmmo(CurrentAmmo - 1);
 
         if (StateManager.CurrentState is not Modules.Cooldown)
-            StateManager.SetState(new Cooldown(StateManager));
+            await StateManager.SetState(new Cooldown(StateManager));
     }
 
-    public virtual void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+    public virtual async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         IEntity userModule = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
         MarketEntity = marketModule;
         Tank = tank;
@@ -58,45 +58,44 @@ public abstract class BattleModule {
         Level = (int)userModule.GetComponent<ModuleUpgradeLevelComponent>().Level;
         CurrentAmmo = MaxAmmo = (int)Leveling.GetStat<ModuleAmmunitionPropertyComponent>(ConfigPath, Level);
         OriginalCooldown = Cooldown = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleCooldownPropertyComponent>(ConfigPath, Level));
-        SlotEntity = CreateBattleSlot(Tank, userSlot);
+        SlotEntity = await CreateBattleSlot(Tank, userSlot);
         Entity = new ModuleUserItemTemplate().Create(Tank, userModule);
     }
 
-    protected virtual IEntity CreateBattleSlot(BattleTank tank, IEntity userSlot) {
+    protected virtual async Task<IEntity> CreateBattleSlot(BattleTank tank, IEntity userSlot) {
         IEntity clone = userSlot.Clone();
         clone.Id = EntityRegistry.FreeId;
 
-        clone.AddGroupComponent<TankGroupComponent>(tank.Tank);
-        clone.AddComponent<InventoryEnabledStateComponent>();
-        clone.AddComponent(new InventoryAmmunitionComponent(MaxAmmo));
-        clone.RemoveComponent<SlotTankPartComponent>();
-        clone.RemoveComponent<MarketItemGroupComponent>();
+        await clone.AddGroupComponent<TankGroupComponent>(tank.Tank);
+        await clone.AddComponent<InventoryEnabledStateComponent>();
+        await clone.AddComponent(new InventoryAmmunitionComponent(MaxAmmo));
+        await clone.RemoveComponent<SlotTankPartComponent>();
+        await clone.RemoveComponent<MarketItemGroupComponent>();
         return clone;
     }
 
-    public void SetAmmo(int value) {
+    public async Task SetAmmo(int value) {
         if (value < 0 || value > MaxAmmo) return;
 
         CurrentAmmo = value;
-        SlotEntity.ChangeComponent<InventoryAmmunitionComponent>(component => component.CurrentCount = CurrentAmmo);
-        Tank.BattlePlayer.PlayerConnection.Send(new InventoryAmmunitionChangedEvent(), SlotEntity);
+        await SlotEntity.ChangeComponent<InventoryAmmunitionComponent>(component => component.CurrentCount = CurrentAmmo);
+        await Tank.BattlePlayer.PlayerConnection.Send(new InventoryAmmunitionChangedEvent(), SlotEntity);
 
-        TryUnblock();
+        await TryUnblock();
 
         if (CurrentAmmo < MaxAmmo && StateManager.CurrentState is not Modules.Cooldown)
-            StateManager.SetState(new Cooldown(StateManager));
+            await StateManager.SetState(new Cooldown(StateManager));
         else if (CurrentAmmo >= MaxAmmo && StateManager.CurrentState is not Ready)
-            StateManager.SetState(new Ready(StateManager));
+            await StateManager.SetState(new Ready(StateManager));
     }
 
-    public void Tick() => StateManager.Tick();
+    public Task Tick() => StateManager.Tick();
 
-    public virtual void TryBlock(bool force = false, long blockTimeMs = 0) =>
+    public virtual Task TryBlock(bool force = false, long blockTimeMs = 0) =>
         SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent(blockTimeMs, DateTimeOffset.UtcNow));
 
-    public virtual void TryUnblock() {
-        if (CurrentAmmo <= 0) return;
-
-        SlotEntity.RemoveComponentIfPresent<InventorySlotTemporaryBlockedByServerComponent>();
-    }
+    public virtual Task TryUnblock() =>
+        CurrentAmmo <= 0
+            ? Task.CompletedTask
+            : SlotEntity.RemoveComponentIfPresent<InventorySlotTemporaryBlockedByServerComponent>();
 }

@@ -63,7 +63,7 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
                 if (targetConnection == null)
                     await ChatUtils.SendMessage("Player is not on the server", ChatUtils.GetChat(connection), [connection], null);
                 else {
-                    targetConnection.Kick(Reason);
+                    await targetConnection.Kick(Reason);
                     punishMessage = $"{targetPlayer.Username} was kicked for '{Reason}'";
                 }
 

@@ -30,7 +30,7 @@ public class Cooldown(
 
     public override async Task Tick() {
         if (DateTimeOffset.UtcNow >= TimeToSpawn)
-            Bonus.Spawn();
+            await Bonus.Spawn();
 
         await base.Tick();
     }
@@ -45,7 +45,7 @@ public class Spawned(
         await base.Start();
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
-            battlePlayer.PlayerConnection.Share(Bonus.Entity!);
+            await battlePlayer.PlayerConnection.Share(Bonus.Entity!);
 
         SpawnTime = DateTimeOffset.UtcNow;
     }

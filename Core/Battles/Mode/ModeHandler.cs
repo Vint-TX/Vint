@@ -13,11 +13,11 @@ public abstract class ModeHandler(
 ) {
     protected Battle Battle { get; } = battle;
 
-    public abstract void Tick();
+    public abstract Task Tick();
 
     public abstract SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer);
 
-    protected void SortPlayers(IEnumerable<BattlePlayer> players) {
+    protected async Task SortPlayers(IEnumerable<BattlePlayer> players) {
         foreach (var roundUserToPlace in players
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .Select(battlePlayer => battlePlayer.Tank!.RoundUser)
@@ -26,18 +26,18 @@ public abstract class ModeHandler(
                      .Where(roundUserToPlace =>
                          roundUserToPlace.RoundUser.GetComponent<RoundUserStatisticsComponent>().Place != roundUserToPlace.Place)) {
             SetScoreTablePositionEvent @event = new(roundUserToPlace.Place);
-            roundUserToPlace.RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Place = roundUserToPlace.Place);
+            await roundUserToPlace.RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Place = roundUserToPlace.Place);
 
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-                battlePlayer.PlayerConnection.Send(@event, roundUserToPlace.RoundUser);
+                await battlePlayer.PlayerConnection.Send(@event, roundUserToPlace.RoundUser);
         }
     }
 
-    public abstract void SortPlayers();
+    public abstract Task SortPlayers();
 
-    public abstract void UpdateScore(IEntity? team, int score);
+    public abstract Task UpdateScore(IEntity? team, int score);
 
-    public abstract void OnWarmUpCompleted();
+    public abstract Task OnWarmUpCompleted();
 
     public abstract Task OnFinished();
 
@@ -45,10 +45,10 @@ public abstract class ModeHandler(
 
     public abstract BattlePlayer SetupBattlePlayer(IPlayerConnection player);
 
-    public virtual void RemoveBattlePlayer(BattlePlayer player) =>
-        player.PlayerConnection.User.RemoveComponent<TeamColorComponent>();
+    public virtual async Task RemoveBattlePlayer(BattlePlayer player) =>
+        await player.PlayerConnection.User.RemoveComponent<TeamColorComponent>();
 
-    public abstract void PlayerEntered(BattlePlayer player);
+    public abstract Task PlayerEntered(BattlePlayer player);
 
     public abstract Task PlayerExited(BattlePlayer player);
 

@@ -73,21 +73,21 @@ public class GameServer(
         chatCommandProcessor.RegisterCommands();
     }
 
-    static void OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
+    static Task OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
 
     async Task Accept() {
         while (IsAccepting) {
             try {
                 Socket socket = await Listener.AcceptSocketAsync();
                 SocketPlayerConnection connection = new(this, socket, Protocol);
-                OnConnected(connection);
+                await OnConnected(connection);
 
                 bool tryAdd = PlayerConnections.TryAdd(connection.Id, connection);
 
                 if (tryAdd) continue;
 
                 Logger.Error("Cannot add {Connection}", connection);
-                connection.Kick("Internal error");
+                await connection.Kick("Internal error");
             } catch (Exception e) {
                 Logger.Error(e, "");
             }
@@ -103,11 +103,11 @@ public class GameServer(
             foreach (SocketPlayerConnection playerConnection in SocketPlayerConnections) {
                 try {
                     if (!playerConnection.IsSocketConnected) {
-                        playerConnection.Kick("Zombie");
+                        await playerConnection.Kick("Zombie");
                         continue;
                     }
 
-                    playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
+                    await playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
                     playerConnection.PingSendTime = DateTimeOffset.UtcNow;
 
                     await playerConnection.Tick();

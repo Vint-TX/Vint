@@ -46,7 +46,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
                         oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return;
 
                     await oppositeFlag.Deliver(battlePlayer);
-                } else collisionFlag.Capture(battlePlayer);
+                } else await collisionFlag.Capture(battlePlayer);
 
                 break;
             }
@@ -55,7 +55,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
                 if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.Position) > 5) return;
 
                 if (isAllyFlag) await collisionFlag.Return(battlePlayer);
-                else collisionFlag.Pickup(battlePlayer);
+                else await collisionFlag.Pickup(battlePlayer);
 
                 break;
             }

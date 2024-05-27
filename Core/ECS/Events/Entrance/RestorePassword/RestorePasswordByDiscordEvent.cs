@@ -40,7 +40,7 @@ public class RestorePasswordByDiscordEvent : IServerEvent {
         (DiscordClient? client, bool? isAuthorized) = await discordLink.GetClient(connection, discordBot);
 
         if (isAuthorized != true || client == null) {
-            connection.Send(new DiscordInvalidEvent(DiscordID));
+            await connection.Send(new DiscordInvalidEvent(DiscordID));
             return;
         }
 
@@ -54,6 +54,6 @@ public class RestorePasswordByDiscordEvent : IServerEvent {
 
         connection.RestorePasswordCode = code;
         connection.Player = player;
-        connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(client.CurrentUser.Username));
+        await connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(client.CurrentUser.Username));
     }
 }

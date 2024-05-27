@@ -1,8 +1,8 @@
 ﻿using System.Buffers;
-using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Channels;
 using ConcurrentCollections;
 using LinqToDB;
 using Serilog;
@@ -118,27 +118,27 @@ public interface IPlayerConnection {
 
     public Task SetGoldBoxes(int goldBoxes);
 
-    public void DisplayMessage(string message, TimeSpan? closeTime = null);
+    public Task DisplayMessage(string message, TimeSpan? closeTime = null);
 
-    public void SetClipboard(string content);
+    public Task SetClipboard(string content);
 
-    public void OpenURL(string url);
+    public ValueTask OpenURL(string url);
 
-    public void Kick(string? reason);
+    public Task Kick(string? reason);
 
-    public void Send(ICommand command);
+    public ValueTask Send(ICommand command);
 
-    public void Send(IEvent @event);
+    public ValueTask Send(IEvent @event);
 
-    public void Send(IEvent @event, params IEntity[] entities);
+    public ValueTask Send(IEvent @event, params IEntity[] entities);
 
-    public void Share(IEntity entity);
+    public Task Share(IEntity entity);
 
-    public void ShareIfUnshared(IEntity entity);
+    public Task ShareIfUnshared(IEntity entity);
 
-    public void Unshare(IEntity entity);
+    public Task Unshare(IEntity entity);
 
-    public void UnshareIfShared(IEntity entity);
+    public Task UnshareIfShared(IEntity entity);
 
     public void Schedule(TimeSpan delay, Action action);
 
@@ -240,18 +240,18 @@ public abstract class PlayerConnection(
             byte[] encryptedAutoLoginToken = encryption.EncryptAutoLoginToken(autoLoginToken, Player.PasswordHash);
 
             Player.AutoLoginToken = autoLoginToken;
-            Send(new SaveAutoLoginTokenEvent(Player.Username, encryptedAutoLoginToken));
+            await Send(new SaveAutoLoginTokenEvent(Player.Username, encryptedAutoLoginToken));
         }
 
         User = new UserTemplate().Create(Player);
-        Share(User);
+        await Share(User);
 
-        ClientSession.AddComponentFrom<UserGroupComponent>(User);
+        await ClientSession.AddComponentFrom<UserGroupComponent>(User);
 
         if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) { // todo bugs
             foreach (IPlayerConnection connection in tempUser.SharedPlayers) {
-                connection.Unshare(tempUser);
-                connection.Share(User);
+                await connection.Unshare(tempUser);
+                await connection.Share(User);
             }
         }
 
@@ -301,11 +301,11 @@ public abstract class PlayerConnection(
         seasonStats.Reputation = reputation;
         reputationStats.Reputation = reputation;
 
-        User.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
+        await User.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
 
         if (oldLeagueIndex != Player.League) {
-            User.RemoveComponent<LeagueGroupComponent>();
-            User.AddComponentFrom<LeagueGroupComponent>(Player.LeagueEntity);
+            await User.RemoveComponent<LeagueGroupComponent>();
+            await User.AddComponentFrom<LeagueGroupComponent>(Player.LeagueEntity);
         }
 
         if (seasonStats.Reputation != oldReputation)
@@ -321,7 +321,7 @@ public abstract class PlayerConnection(
                     await PurchaseItem(entity, amount, 0, false, false);
 
                 IEntity rewardNotification = new LeagueFirstEntranceRewardPersistentNotificationTemplate().Create(rewards);
-                Share(rewardNotification);
+                await Share(rewardNotification);
             }
 
             Player.RewardedLeagues |= Player.League;
@@ -348,7 +348,7 @@ public abstract class PlayerConnection(
 
         await db.CommitTransactionAsync();
         Player.Experience += delta;
-        User.ChangeComponent<UserExperienceComponent>(component => component.Experience = Player.Experience);
+        await User.ChangeComponent<UserExperienceComponent>(component => component.Experience = Player.Experience);
     }
 
     public async Task ChangeGameplayChestScore(int delta) {
@@ -370,7 +370,7 @@ public abstract class PlayerConnection(
             return;
         }
 
-        User.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
+        await User.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
     }
 
     public async Task CheckRankUp() {
@@ -378,7 +378,7 @@ public abstract class PlayerConnection(
 
         while (rankComponent.Rank < Player.Rank) {
             rankComponent.Rank++;
-            User.ChangeComponent(rankComponent);
+            await User.ChangeComponent(rankComponent);
 
             int rankIndex = rankComponent.Rank - 1;
             int crystals = CalculateCrystals(rankIndex);
@@ -391,7 +391,7 @@ public abstract class PlayerConnection(
 
             await ChangeCrystals(crystals);
             await ChangeXCrystals(xCrystals);
-            Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
+            await Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
             BattlePlayer?.RankUp();
         }
 
@@ -558,14 +558,14 @@ public abstract class PlayerConnection(
                 userItem.TemplateAccessor!.Template = ((MarketEntityTemplate)userItem.TemplateAccessor.Template).UserTemplate;
                 userItem.Id = EntityRegistry.FreeId;
 
-                userItem.AddComponent(new PresetEquipmentComponent(preset));
-                userItem.AddComponent(new PresetNameComponent(preset));
+                await userItem.AddComponent(new PresetEquipmentComponent(preset));
+                await userItem.AddComponent(new PresetNameComponent(preset));
 
                 preset.Entity = userItem;
                 Player.UserPresets.Add(preset);
 
                 await db.InsertAsync(preset);
-                Share(userItem);
+                await Share(userItem);
                 break;
             }
 
@@ -575,7 +575,7 @@ public abstract class PlayerConnection(
         }
 
         userItem ??= marketItem.GetUserEntity(this);
-        userItem.AddComponentIfAbsent(new UserGroupComponent(User));
+        await userItem.AddComponentIfAbsent(new UserGroupComponent(User));
 
         if (price > 0) {
             if (forXCrystals) await ChangeXCrystals(-price);
@@ -583,8 +583,8 @@ public abstract class PlayerConnection(
         }
 
         if (userItem.HasComponent<UserItemCounterComponent>()) {
-            userItem.ChangeComponent<UserItemCounterComponent>(component => component.Count += amount);
-            Send(new ItemsCountChangedEvent(amount), userItem);
+            await userItem.ChangeComponent<UserItemCounterComponent>(component => component.Count += amount);
+            await Send(new ItemsCountChangedEvent(amount), userItem);
         }
 
         if (mount) await MountItem(userItem);
@@ -598,20 +598,20 @@ public abstract class PlayerConnection(
         await using (DbConnection db = new()) {
             switch (userItem.TemplateAccessor!.Template) {
                 case AvatarUserItemTemplate: {
-                    this.GetEntity(Player.CurrentAvatarId)!.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
-                    userItem.AddComponent<MountedItemComponent>();
+                    await this.GetEntity(Player.CurrentAvatarId)!.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     Player.CurrentAvatarId = marketItem.Id;
-                    User.ChangeComponent(new UserAvatarComponent(this, Player.CurrentAvatarId));
+                    await User.ChangeComponent(new UserAvatarComponent(this, Player.CurrentAvatarId));
 
                     await db.UpdateAsync(Player);
                     break;
                 }
 
                 case GraffitiUserItemTemplate: {
-                    currentPreset.Graffiti.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.Graffiti.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Graffiti = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
@@ -619,9 +619,9 @@ public abstract class PlayerConnection(
 
                 case TankUserItemTemplate: {
                     changeEquipment = true;
-                    currentPreset.Hull.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.Hull.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Hull = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
                     currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetHullId(currentPreset.Hull.Id);
 
                     Hull newHull = await db.Hulls
@@ -630,9 +630,9 @@ public abstract class PlayerConnection(
 
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newHull.SkinId);
 
-                    currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.HullSkin = skin;
-                    currentPreset.HullSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+                    await currentPreset.HullSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
@@ -640,9 +640,9 @@ public abstract class PlayerConnection(
 
                 case WeaponUserItemTemplate: {
                     changeEquipment = true;
-                    currentPreset.Weapon.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.Weapon.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Weapon = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
                     currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetWeaponId(currentPreset.Weapon.Id);
 
                     Weapon newWeapon = await db.Weapons
@@ -652,13 +652,13 @@ public abstract class PlayerConnection(
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.SkinId);
                     IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.ShellId);
 
-                    currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.WeaponSkin = skin;
-                    currentPreset.WeaponSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+                    await currentPreset.WeaponSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
 
-                    currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Shell = shell;
-                    currentPreset.Shell.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+                    await currentPreset.Shell.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
@@ -680,9 +680,9 @@ public abstract class PlayerConnection(
                         await MountItem(newUserHull);
                     }
 
-                    currentPreset.HullSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    await currentPreset.HullSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
                     currentPreset.HullSkin = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     await db.Hulls
                         .Where(hull => hull.PlayerId == Player.Id &&
@@ -710,9 +710,9 @@ public abstract class PlayerConnection(
                         await MountItem(newUserWeapon);
                     }
 
-                    currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    await currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
                     currentPreset.WeaponSkin = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     await db.Weapons
                         .Where(weapon => weapon.PlayerId == Player.Id &&
@@ -725,18 +725,18 @@ public abstract class PlayerConnection(
                 }
 
                 case TankPaintUserItemTemplate: {
-                    currentPreset.Paint.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.Paint.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Paint = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
                 }
 
                 case WeaponPaintUserItemTemplate: {
-                    currentPreset.Cover.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset.Cover.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
                     currentPreset.Cover = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
@@ -758,9 +758,9 @@ public abstract class PlayerConnection(
                         await MountItem(newUserWeapon);
                     }
 
-                    currentPreset.Shell.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    await currentPreset.Shell.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
                     currentPreset.Shell = marketItem;
-                    userItem.AddComponent<MountedItemComponent>();
+                    await userItem.AddComponent<MountedItemComponent>();
 
                     await db.Weapons
                         .Where(weapon => weapon.PlayerId == Player.Id &&
@@ -797,7 +797,7 @@ public abstract class PlayerConnection(
                                  currentPreset.Graffiti.GetUserEntity(this),
                                  currentPreset.Entity!
                              }) {
-                        entity.RemoveComponentIfPresent<MountedItemComponent>();
+                        await entity.RemoveComponentIfPresent<MountedItemComponent>();
                     }
 
                     foreach (IEntity entity in new[] {
@@ -811,17 +811,17 @@ public abstract class PlayerConnection(
                                  newPreset.Graffiti.GetUserEntity(this),
                                  newPreset.Entity!
                              }) {
-                        entity.AddComponentIfAbsent<MountedItemComponent>();
+                        await entity.AddComponentIfAbsent<MountedItemComponent>();
                     }
 
                     foreach ((IEntity slot, IEntity module) in slotToCurrentModule) {
-                        slot.RemoveComponent<ModuleGroupComponent>();
-                        module.RemoveComponent<MountedItemComponent>();
+                        await slot.RemoveComponent<ModuleGroupComponent>();
+                        await module.RemoveComponent<MountedItemComponent>();
                     }
 
                     foreach ((IEntity slot, IEntity module) in slotToNewModule) {
-                        slot.AddGroupComponent<ModuleGroupComponent>(module);
-                        module.AddComponent<MountedItemComponent>();
+                        await slot.AddGroupComponent<ModuleGroupComponent>(module);
+                        await module.AddComponent<MountedItemComponent>();
                     }
 
                     Player.CurrentPresetIndex = newPreset.Index;
@@ -838,8 +838,8 @@ public abstract class PlayerConnection(
 
         if (!changeEquipment || !User.HasComponent<UserEquipmentComponent>()) return;
 
-        User.RemoveComponent<UserEquipmentComponent>();
-        User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
+        await User.RemoveComponent<UserEquipmentComponent>();
+        await User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
     }
 
     public async Task AssembleModule(IEntity marketItem) {
@@ -862,11 +862,11 @@ public abstract class PlayerConnection(
 
         IEntity userItem = marketItem.GetUserModule(this);
 
-        card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
-        userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
-        userItem.AddGroupComponent<UserGroupComponent>(User);
+        await card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
+        await userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
+        await userItem.AddGroupComponent<UserGroupComponent>(User);
 
-        Send(new ModuleAssembledEvent(), userItem);
+        await Send(new ModuleAssembledEvent(), userItem);
     }
 
     public async Task UpgradeModule(IEntity userItem, bool forXCrystals) {
@@ -910,10 +910,10 @@ public abstract class PlayerConnection(
             entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
             entity.GetComponent<ParentGroupComponent>().Key == id);
 
-        card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
-        userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
+        await card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
+        await userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
 
-        Send(new ModuleUpgradedEvent(), userItem);
+        await Send(new ModuleUpgradedEvent(), userItem);
     }
 
     public async Task<bool> OwnsItem(IEntity marketItem) {
@@ -941,7 +941,7 @@ public abstract class PlayerConnection(
     public virtual async Task SetUsername(string username) {
         Logger.Warning("Changed username => '{New}'", username);
         Player.Username = username;
-        User.ChangeComponent<UserUidComponent>(component => component.Username = username);
+        await User.ChangeComponent<UserUidComponent>(component => component.Username = username);
 
         await using DbConnection db = new();
         await db.Players
@@ -975,7 +975,7 @@ public abstract class PlayerConnection(
 
         await db.CommitTransactionAsync();
         Player.Crystals += delta;
-        User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
+        await User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
     }
 
     public async Task ChangeXCrystals(long delta) {
@@ -1001,7 +1001,7 @@ public abstract class PlayerConnection(
 
         await db.CommitTransactionAsync();
         Player.XCrystals += delta;
-        User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
+        await User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
     }
 
     public async Task SetGoldBoxes(int goldBoxes) {
@@ -1015,40 +1015,40 @@ public abstract class PlayerConnection(
         Player.GoldBoxItems = goldBoxes;
     }
 
-    public void DisplayMessage(string message, TimeSpan? closeTime = null) {
+    public async Task DisplayMessage(string message, TimeSpan? closeTime = null) {
         IEntity notification = new SimpleTextNotificationTemplate().Create(message);
 
-        Share(notification);
+        await Share(notification);
         Notifications.Add(new Notification(notification, DateTimeOffset.UtcNow + (closeTime ?? TimeSpan.FromSeconds(15))));
     }
 
-    public void SetClipboard(string content) {
-        Send(new SetClipboardEvent(content));
-        Share(new ClipboardSetNotificationTemplate().Create(User));
+    public async Task SetClipboard(string content) {
+        await Send(new SetClipboardEvent(content));
+        await Share(new ClipboardSetNotificationTemplate().Create(User));
     }
 
-    public void OpenURL(string url) => Send(new OpenURLEvent(url));
+    public ValueTask OpenURL(string url) => Send(new OpenURLEvent(url));
 
-    public abstract void Kick(string? reason);
+    public abstract Task Kick(string? reason);
 
-    public abstract void Send(ICommand command);
+    public abstract ValueTask Send(ICommand command);
 
-    public void Send(IEvent @event) => Send(@event, ClientSession);
+    public ValueTask Send(IEvent @event) => Send(@event, ClientSession);
 
-    public void Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
+    public ValueTask Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
 
-    public void Share(IEntity entity) => entity.Share(this);
+    public Task Share(IEntity entity) => entity.Share(this);
 
-    public void ShareIfUnshared(IEntity entity) {
+    public async Task ShareIfUnshared(IEntity entity) {
         if (!SharedEntities.Contains(entity))
-            Share(entity);
+            await Share(entity);
     }
 
-    public void Unshare(IEntity entity) => entity.Unshare(this);
+    public Task Unshare(IEntity entity) => entity.Unshare(this);
 
-    public void UnshareIfShared(IEntity entity) {
+    public async Task UnshareIfShared(IEntity entity) {
         if (SharedEntities.Contains(entity))
-            Unshare(entity);
+            await Unshare(entity);
     }
 
     public void Schedule(TimeSpan delay, Action action) =>
@@ -1075,7 +1075,7 @@ public abstract class PlayerConnection(
         }
 
         foreach (Notification notification in Notifications.Where(notification => notification.CloseTime <= DateTimeOffset.UtcNow)) {
-            UnshareIfShared(notification.Entity);
+            await UnshareIfShared(notification.Entity);
             Notifications.TryRemove(notification);
         }
     }
@@ -1101,54 +1101,64 @@ public class SocketPlayerConnection(
 
     Socket Socket { get; } = socket;
     Protocol.Protocol Protocol { get; } = protocol;
-    BlockingCollection<ICommand> ExecuteBuffer { get; } = new();
-    BlockingCollection<ICommand> SendBuffer { get; } = new();
+
+    Channel<ICommand> ExecuteChannel { get; } =
+        Channel.CreateUnbounded<ICommand>(new UnboundedChannelOptions {
+            SingleReader = true,
+            SingleWriter = true
+        });
+
+    Channel<ICommand> SendChannel { get; } =
+        Channel.CreateUnbounded<ICommand>(new UnboundedChannelOptions {
+            SingleReader = true,
+            SingleWriter = true
+        });
 
     public override async Task SetUsername(string username) {
         await base.SetUsername(username);
         Logger = Logger.WithPlayer(this);
     }
 
-    public override void Kick(string? reason) {
+    public override async Task Kick(string? reason) {
         Logger.Warning("Player kicked (reason: '{Reason}')", reason);
-        Disconnect();
+        await Disconnect();
     }
 
-    public void OnConnected() {
+    public async Task OnConnected() {
         Logger = Logger.WithEndPoint(EndPoint);
 
         ClientSession = new ClientSessionTemplate().Create();
         Logger.Information("New socket connected");
 
-        Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
-        Share(ClientSession);
+        await Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
+        await Share(ClientSession);
 
-        Task.Factory.StartNew(ReceiveLoop, TaskCreationOptions.LongRunning).Catch();
-        Task.Factory.StartNew(SendLoop, TaskCreationOptions.LongRunning).Catch();
-        Task.Factory.StartNew(ExecuteLoop, TaskCreationOptions.LongRunning).Catch();
+        _ = Task.Factory.StartNew(ReceiveLoop, TaskCreationOptions.LongRunning).Catch();
+        _ = Task.Factory.StartNew(SendLoop, TaskCreationOptions.LongRunning).Catch();
+        _ = Task.Factory.StartNew(ExecuteLoop, TaskCreationOptions.LongRunning).Catch();
 
         IsConnected = true;
     }
 
-    public override void Send(ICommand command) {
-        if (!IsSocketConnected || SendBuffer.IsAddingCompleted) return;
+    public override ValueTask Send(ICommand command) {
+        if (!IsSocketConnected) return ValueTask.CompletedTask;
 
         Logger.Debug("Queueing for sending {Command}", command);
-        SendBuffer.Add(command);
+        return SendChannel.Writer.WriteAsync(command);
     }
 
-    public void Disconnect() {
+    async Task Disconnect() {
         if (!IsConnected) return;
 
         try {
             Socket.Shutdown(SocketShutdown.Both);
         } finally {
             Socket.Close();
-            OnDisconnected();
+            await OnDisconnected();
         }
     }
 
-    void OnDisconnected() {
+    async Task OnDisconnected() {
         if (!IsConnected) return;
 
         IsConnected = false;
@@ -1158,7 +1168,7 @@ public class SocketPlayerConnection(
             if (User != null!) {
                 foreach (IPlayerConnection connection in User.SharedPlayers.Where(connection => !connection.InLobby)) {
                     try {
-                        connection.Unshare(User);
+                        await connection.Unshare(User);
                     } catch { /**/ }
                 }
 
@@ -1178,16 +1188,16 @@ public class SocketPlayerConnection(
             if (!InLobby) return;
 
             if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
-                BattlePlayer.Battle.RemovePlayer(BattlePlayer);
+                await BattlePlayer.Battle.RemovePlayer(BattlePlayer);
             else
-                BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
+                await BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
         } finally {
             Server.RemovePlayer(Id);
 
-            SendBuffer.CompleteAdding();
-            ExecuteBuffer.CompleteAdding();
+            SendChannel.Writer.TryComplete();
+            ExecuteChannel.Writer.TryComplete();
 
             foreach (IEntity entity in SharedEntities) {
                 entity.SharedPlayers.TryRemove(this);
@@ -1199,8 +1209,6 @@ public class SocketPlayerConnection(
             }
 
             SharedEntities.Clear();
-            SendBuffer.Dispose();
-            ExecuteBuffer.Dispose();
         }
     }
 
@@ -1224,55 +1232,16 @@ public class SocketPlayerConnection(
                     ICommand command = (ICommand)Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
 
                     Logger.Debug("Queueing for executing: {Command}", command);
-                    ExecuteBuffer.Add(command);
+                    await ExecuteChannel.Writer.WriteAsync(command);
 
                     availableForRead = buffer.Stream.Length - buffer.Stream.Position;
                 }
 
                 Array.Clear(bytes);
             }
-        } catch (IOException ioEx) {
-            if (ioEx.InnerException is SocketException sEx) {
-                switch (sEx.SocketErrorCode) {
-                    case SocketError.Shutdown:
-                    case SocketError.OperationAborted:
-                    case SocketError.ConnectionReset:
-                    case SocketError.ConnectionRefused:
-                    case SocketError.ConnectionAborted: {
-                        Socket.Close();
-                        OnDisconnected();
-                        break;
-                    }
-
-                    default:
-                        Logger.Error(sEx, "Socket caught an exception while receiving data");
-                        Disconnect();
-                        break;
-                }
-            } else {
-                Logger.Error(ioEx, "Socket caught an exception while receiving data");
-                Disconnect();
-            }
-        } catch (SocketException sEx) { // wtf??? sex??????????
-            switch (sEx.SocketErrorCode) {
-                case SocketError.Shutdown:
-                case SocketError.OperationAborted:
-                case SocketError.ConnectionReset:
-                case SocketError.ConnectionRefused:
-                case SocketError.ConnectionAborted: {
-                    Socket.Close();
-                    OnDisconnected();
-                    break;
-                }
-
-                default:
-                    Logger.Error(sEx, "Socket caught an exception while receiving data");
-                    Disconnect();
-                    break;
-            }
-        } catch (Exception ex) {
-            Logger.Error(ex, "Socket caught an exception while receiving data");
-            Disconnect();
+        } catch (Exception e) {
+            Logger.Error(e, "Socket caught an exception in ReceiveLoop");
+            await Disconnect();
         } finally {
             ArrayPool<byte>.Shared.Return(bytes);
         }
@@ -1280,8 +1249,8 @@ public class SocketPlayerConnection(
 
     async Task SendLoop() {
         try {
-            while (IsSocketConnected && !SendBuffer.IsCompleted) {
-                ICommand command = SendBuffer.Take();
+            while (IsSocketConnected) {
+                ICommand command = await SendChannel.Reader.ReadAsync();
 
                 try {
                     ProtocolBuffer buffer = new(new OptionalMap(), this);
@@ -1304,8 +1273,8 @@ public class SocketPlayerConnection(
 
     async Task ExecuteLoop() {
         try {
-            while (!ExecuteBuffer.IsCompleted) {
-                ICommand command = ExecuteBuffer.Take();
+            while (true) {
+                ICommand command = await ExecuteChannel.Reader.ReadAsync();
 
                 try {
                     await command.Execute(this);
@@ -1313,7 +1282,9 @@ public class SocketPlayerConnection(
                     Logger.Error(e, "Failed to execute {Command}", command);
                 }
             }
-        } catch (InvalidOperationException) { }
+        } catch (Exception e) {
+            Logger.Error(e, "Socket caught an exception in ExecuteLoop");
+        }
     }
 }
 

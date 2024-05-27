@@ -29,7 +29,7 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
         IsActive && (Tank != target || isSplash) ? Multiplier : 1;
 
-    public void Extend(int newLevel) {
+    public async Task Extend(int newLevel) {
         if (!IsActive) return;
 
         UnScheduleAll();
@@ -46,9 +46,9 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
 
         Level = newLevel;
 
-        Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
-        Entity!.RemoveComponent<DurationComponent>();
-        Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
+        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
+        await Entity!.RemoveComponent<DurationComponent>();
+        await Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
 
         Schedule(Duration, Deactivate);
     }
@@ -56,23 +56,23 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     public float SupplyMultiplier { get; }
     public float SupplyDurationMs { get; }
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
         Entities.Add(new DamageEffectTemplate().Create(Tank.BattlePlayer, Duration));
-        ShareAll();
+        await ShareAll();
 
         Schedule(Duration, Deactivate);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
-        UnshareAll();
+        await UnshareAll();
         Entities.Clear();
     }
 }

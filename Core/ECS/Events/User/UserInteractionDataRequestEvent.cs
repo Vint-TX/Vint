@@ -34,7 +34,7 @@ public class UserInteractionDataRequestEvent : IServerEvent {
                                 noRelations &&
                                 (targetToThisRelation?.Types & RelationTypes.Blocked) != RelationTypes.Blocked;
 
-        connection.Send(new UserInteractionDataResponseEvent(UserId,
+        await connection.Send(new UserInteractionDataResponseEvent(UserId,
                 player.Username,
                 canRequestFriend,
                 !noRelations && IsOutgoing(thisToTargetRelation),

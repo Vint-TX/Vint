@@ -27,7 +27,7 @@ public class RequestChangeQuestEvent : IServerEvent {
 
         if (player.QuestChanges >= player.MaxQuestChanges) {
             player.QuestChangesResetTime = DateTimeOffset.UtcNow.AddDays(1);
-            bonus.AddComponentIfAbsent<TakenBonusComponent>();
+            await bonus.AddComponentIfAbsent<TakenBonusComponent>();
 
             await db.Players
                 .Where(p => p.Id == player.Id)
@@ -45,7 +45,7 @@ public class RequestChangeQuestEvent : IServerEvent {
 
         if (player.QuestChanges >= player.MaxQuestChanges) {
             player.QuestChangesResetTime = DateTimeOffset.UtcNow.AddDays(1);
-            bonus.AddComponentIfAbsent<TakenBonusComponent>();
+            await bonus.AddComponentIfAbsent<TakenBonusComponent>();
 
             query = query.Set(p => p.QuestChangesResetTime, player.QuestChangesResetTime);
             connection.Schedule(player.QuestChangesResetTime.Value, async () => await questManager.ResetQuestChanges(connection));

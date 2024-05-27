@@ -46,7 +46,7 @@ public class ModuleMountEvent : IServerEvent {
         player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
         player.CurrentPreset.Modules.Add(presetModule);
 
-        slotUserItem.AddGroupComponent<ModuleGroupComponent>(moduleUserItem);
-        moduleUserItem.AddComponent<MountedItemComponent>();
+        await slotUserItem.AddGroupComponent<ModuleGroupComponent>(moduleUserItem);
+        await moduleUserItem.AddComponent<MountedItemComponent>();
     }
 }

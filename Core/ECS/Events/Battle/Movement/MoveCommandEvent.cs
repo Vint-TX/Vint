@@ -12,8 +12,10 @@ namespace Vint.Core.ECS.Events.Battle.Movement;
 public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return Task.CompletedTask;
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank)
+            return;
 
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;
@@ -25,9 +27,11 @@ public class MoveCommandEvent : IServerEvent {
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
-            playerConnection.Send(serverEvent, tank);
+            await playerConnection.Send(serverEvent, tank);
 
-        if (!MoveCommand.Movement.HasValue || battleTank.StateManager.CurrentState is Dead) return Task.CompletedTask;
+        if (!MoveCommand.Movement.HasValue ||
+            battleTank.StateManager.CurrentState is Dead)
+            return;
 
         ECS.Movement.Movement movement = MoveCommand.Movement.Value;
 
@@ -43,7 +47,5 @@ public class MoveCommandEvent : IServerEvent {
         battleTank.Orientation = movement.Orientation;
         battleTank.ForceSelfDestruct =
             PhysicsUtils.IsOutsideMap(battle.MapInfo.PuntativeGeoms, battleTank.Position, velocity, battle.Properties.KillZoneEnabled);
-
-        return Task.CompletedTask;
     }
 }

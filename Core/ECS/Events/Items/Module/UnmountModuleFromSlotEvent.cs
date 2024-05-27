@@ -34,7 +34,7 @@ public class UnmountModuleFromSlotEvent : IServerEvent {
 
         player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
 
-        slotUserItem.RemoveComponent<ModuleGroupComponent>();
-        moduleUserItem.RemoveComponent<MountedItemComponent>();
+        await slotUserItem.RemoveComponent<ModuleGroupComponent>();
+        await moduleUserItem.RemoveComponent<MountedItemComponent>();
     }
 }

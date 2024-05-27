@@ -193,15 +193,15 @@ public class DiscordBot(
                 if (await connection.OwnsItem(linkReward.MarketEntity)) continue;
 
                 await connection.PurchaseItem(linkReward.MarketEntity, linkReward.Amount, 0, false, false);
-                connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.User, linkReward.MarketEntity, linkReward.Amount));
+                await connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.User, linkReward.MarketEntity, linkReward.Amount));
             }
 
             foreach (Notification notification in connection.Notifications) {
-                connection.UnshareIfShared(notification.Entity);
+                await connection.UnshareIfShared(notification.Entity);
                 connection.Notifications.TryRemove(notification);
             }
 
-            connection.Send(new ShowNotificationGroupEvent(ConfigManager.Discord.LinkRewards.Count), connection.User);
+            await connection.Send(new ShowNotificationGroupEvent(ConfigManager.Discord.LinkRewards.Count), connection.User);
 
             await db.Players.Where(player => player.Id == playerId)
                 .Set(player => player.DiscordLinkRewarded, true)

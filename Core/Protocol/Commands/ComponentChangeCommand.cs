@@ -27,7 +27,7 @@ public class ComponentChangeCommand(
             return; // maybe disconnect
         }
 
-        Entity.ChangeComponent(Component, connection);
+        await Entity.ChangeComponent(Component, connection);
         await Component.Changed(connection, Entity);
 
         logger.Debug("Changed {Component} in {Entity}", type.Name, Entity);

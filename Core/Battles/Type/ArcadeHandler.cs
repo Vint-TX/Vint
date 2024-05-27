@@ -24,35 +24,34 @@ public class ArcadeHandler : TypeHandler {
     public IReadOnlyList<MapInfo> Maps { get; }
     ConcurrentHashSet<BattlePlayer> WaitingPlayers { get; } = [];
 
-    public override void Setup() => ModeHandler.Setup();
+    public override Task Setup() => ModeHandler.Setup();
 
-    public override void Tick() {
+    public override async Task Tick() {
         foreach (BattlePlayer battlePlayer in WaitingPlayers.Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
-            battlePlayer.Init();
+            await battlePlayer.Init();
             WaitingPlayers.TryRemove(battlePlayer);
         }
     }
 
-    public override void PlayerEntered(BattlePlayer battlePlayer) {
-        ModeHandler.PlayerEntered(battlePlayer);
+    public override async Task PlayerEntered(BattlePlayer battlePlayer) {
+        await ModeHandler.PlayerEntered(battlePlayer);
 
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 
-        user.AddComponent<MatchMakingUserComponent>();
+        await user.AddComponent<MatchMakingUserComponent>();
 
         if (Battle.StateManager.CurrentState is not Running) return;
 
-        connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), user);
+        await connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), user);
         WaitingPlayers.Add(battlePlayer);
     }
 
-    public override Task PlayerExited(BattlePlayer battlePlayer) {
-        ModeHandler.PlayerExited(battlePlayer);
+    public override async Task PlayerExited(BattlePlayer battlePlayer) {
+        await ModeHandler.PlayerExited(battlePlayer);
 
         WaitingPlayers.TryRemove(battlePlayer);
-        battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
-        return Task.CompletedTask;
+        await battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
     }
 
     static ArcadeModeHandler GetHandlerByType(Battle battle, ArcadeModeType modeType) => modeType switch {

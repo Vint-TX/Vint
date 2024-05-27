@@ -18,7 +18,7 @@ public class CustomHandler(
 
     public bool IsOpened { get; private set; }
 
-    public override void Setup() {
+    public override async Task Setup() {
         Battle.MapInfo = ConfigManager.MapInfos.Single(map => map.Id == Battle.Properties.MapId);
         Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Battle.Properties.MapId);
         Battle.LobbyEntity = new CustomBattleLobbyTemplate().Create(
@@ -26,18 +26,18 @@ public class CustomHandler(
             Battle.MapEntity,
             Owner);
 
-        Battle.StateManager.SetState(new NotStarted(Battle.StateManager));
+        await Battle.StateManager.SetState(new NotStarted(Battle.StateManager));
 
         if (!Battle.MapInfo.HasSpawnPoints(Battle.Properties.BattleMode))
             Battle.MapInfo.InitializeDefaultSpawnPoints(Battle.Properties.BattleMode);
     }
 
-    public override void Tick() { }
+    public override Task Tick() => Task.CompletedTask;
 
-    public override void PlayerEntered(BattlePlayer battlePlayer) { }
+    public override Task PlayerEntered(BattlePlayer battlePlayer) => Task.CompletedTask;
 
-    public override Task PlayerExited(BattlePlayer battlePlayer) {
-        if (battlePlayer.PlayerConnection != Owner) return Task.CompletedTask;
+    public override async Task PlayerExited(BattlePlayer battlePlayer) {
+        if (battlePlayer.PlayerConnection != Owner) return;
 
         List<IPlayerConnection> players = Battle.Players
             .Where(player => !player.IsSpectator && player != battlePlayer)
@@ -45,16 +45,15 @@ public class CustomHandler(
             .ToList()
             .Shuffle();
 
-        if (players.Count == 0) return Task.CompletedTask;
+        if (players.Count == 0) return;
 
         Owner = players.First();
-        Battle.LobbyEntity.RemoveComponent<UserGroupComponent>();
-        Battle.LobbyEntity.AddGroupComponent<UserGroupComponent>(Owner.User);
-        return Task.CompletedTask;
+        await Battle.LobbyEntity.RemoveComponent<UserGroupComponent>();
+        await Battle.LobbyEntity.AddGroupComponent<UserGroupComponent>(Owner.User);
     }
 
-    public void OpenLobby() {
+    public async Task OpenLobby() {
         IsOpened = true;
-        Battle.LobbyEntity.AddComponent<OpenToConnectLobbyComponent>();
+        await Battle.LobbyEntity.AddComponent<OpenToConnectLobbyComponent>();
     }
 }

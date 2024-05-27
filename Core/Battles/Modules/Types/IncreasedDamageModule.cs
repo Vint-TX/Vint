@@ -6,19 +6,19 @@ namespace Vint.Core.Battles.Modules.Types;
 public class IncreasedDamageModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/increaseddamage";
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        base.Activate();
+        await base.Activate();
         IncreasedDamageEffect? effect = Tank.Effects.OfType<IncreasedDamageEffect>().SingleOrDefault();
 
         switch (effect) {
             case null:
-                GetEffect().Activate();
+                await GetEffect().Activate();
                 break;
 
             case IExtendableEffect extendableEffect:
-                extendableEffect.Extend(Level);
+                await extendableEffect.Extend(Level);
                 break;
         }
     }

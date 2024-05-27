@@ -19,7 +19,7 @@ public class KamikadzeEffect(
 ) : Effect(tank, level), IModuleWeaponEffect {
     public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         CanBeDeactivated = false;
@@ -47,33 +47,33 @@ public class KamikadzeEffect(
 
         Entities.Add(entity);
 
-        Share(Tank.BattlePlayer);
+        await Share(Tank.BattlePlayer);
         Schedule(Duration, DeactivateInternal);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive || !CanBeDeactivated) return;
 
         Tank.Effects.TryRemove(this);
-        Unshare(Tank.BattlePlayer);
+        await Unshare(Tank.BattlePlayer);
 
         Entities.Clear();
     }
 
-    void DeactivateInternal() {
+    async Task DeactivateInternal() {
         CanBeDeactivated = true;
-        Deactivate();
+        await Deactivate();
     }
 
-    public override void Share(BattlePlayer battlePlayer) {
+    public override async Task Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        battlePlayer.PlayerConnection.Share(Entities);
+        await battlePlayer.PlayerConnection.Share(Entities);
     }
 
-    public override void Unshare(BattlePlayer battlePlayer) {
+    public override async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        battlePlayer.PlayerConnection.Unshare(Entities);
+        await battlePlayer.PlayerConnection.Unshare(Entities);
     }
 }

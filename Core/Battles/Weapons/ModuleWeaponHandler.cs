@@ -34,9 +34,9 @@ public abstract class ModuleWeaponHandler(
 
     public abstract Task Fire(HitTarget target, int targetIndex);
 
-    public virtual void OnTankEnable() { }
+    public virtual Task OnTankEnable() => Task.CompletedTask;
 
-    public virtual void OnTankDisable() { }
+    public virtual Task OnTankDisable() => Task.CompletedTask;
 
-    public virtual void Tick() { }
+    public virtual Task Tick() => Task.CompletedTask;
 }

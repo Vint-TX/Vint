@@ -134,11 +134,11 @@ public static class Leveling {
                     break;
             }
 
-        userItem.ChangeComponent<ExperienceItemComponent>(component => xp = component.Experience += delta);
-        userItem.RemoveComponent<ExperienceToLevelUpItemComponent>();
-        userItem.RemoveComponent<UpgradeLevelItemComponent>();
-        userItem.AddComponent(new ExperienceToLevelUpItemComponent(xp));
-        userItem.AddComponent(new UpgradeLevelItemComponent(xp));
+        await userItem.ChangeComponent<ExperienceItemComponent>(component => xp = component.Experience += delta);
+        await userItem.RemoveComponent<ExperienceToLevelUpItemComponent>();
+        await userItem.RemoveComponent<UpgradeLevelItemComponent>();
+        await userItem.AddComponent(new ExperienceToLevelUpItemComponent(xp));
+        await userItem.AddComponent(new UpgradeLevelItemComponent(xp));
     }
 
     public static Dictionary<IEntity, int> GetFirstLeagueEntranceReward(League league) => league switch {

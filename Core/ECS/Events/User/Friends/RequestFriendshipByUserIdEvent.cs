@@ -65,6 +65,7 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 
-        targetConnection?.Send(new IncomingFriendAddedEvent(connection.Player.Id), targetConnection.User);
+        if (targetConnection != null)
+            await targetConnection.Send(new IncomingFriendAddedEvent(connection.Player.Id), targetConnection.User);
     }
 }

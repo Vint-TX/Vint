@@ -8,11 +8,11 @@ public abstract class TypeHandler(
 ) {
     public Battle Battle { get; } = battle;
 
-    public abstract void Setup();
+    public abstract Task Setup();
 
-    public abstract void Tick();
+    public abstract Task Tick();
 
-    public abstract void PlayerEntered(BattlePlayer battlePlayer);
+    public abstract Task PlayerEntered(BattlePlayer battlePlayer);
 
     public abstract Task PlayerExited(BattlePlayer battlePlayer);
 

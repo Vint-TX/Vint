@@ -13,7 +13,7 @@ public interface IMatchmakingProcessor {
 
     public void AddPlayerToQueue(IPlayerConnection connection);
 
-    public void RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction);
+    public Task RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction);
 }
 
 public class MatchmakingProcessor(
@@ -46,18 +46,18 @@ public class MatchmakingProcessor(
     public void AddPlayerToQueue(IPlayerConnection connection) =>
         PlayerQueue.Add(connection);
 
-    public void RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction) {
+    public async Task RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction) {
         if (lobby != null)
-            connection.Send(new ExitedFromMatchmakingEvent(selfAction), lobby);
+            await connection.Send(new ExitedFromMatchmakingEvent(selfAction), lobby);
 
         if (connection.InLobby) {
             BattlePlayer battlePlayer = connection.BattlePlayer!;
             Battle battle = battlePlayer.Battle;
 
             if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
-                battle.RemovePlayer(battlePlayer);
+                await battle.RemovePlayer(battlePlayer);
             else
-                battle.RemovePlayerFromLobby(battlePlayer);
+                await battle.RemovePlayerFromLobby(battlePlayer);
         }
 
         PlayerQueue.TryRemove(connection);

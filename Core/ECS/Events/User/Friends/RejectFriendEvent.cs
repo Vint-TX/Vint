@@ -31,10 +31,13 @@ public class RejectFriendEvent : FriendBaseEvent, IServerEvent {
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
-        connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.User);
-        connection.Server.PlayerConnections.Values
+        await connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.User);
+
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Id == player.Id)?
-            .Send(new OutgoingFriendRemovedEvent(connection.Player.Id), User);
+            .SingleOrDefault(conn => conn.Player.Id == player.Id);
+
+        if (targetConnection != null)
+            await targetConnection.Send(new OutgoingFriendRemovedEvent(connection.Player.Id), User);
     }
 }

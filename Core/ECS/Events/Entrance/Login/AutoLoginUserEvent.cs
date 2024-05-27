@@ -28,7 +28,7 @@ public class AutoLoginUserEvent : IServerEvent {
             .SingleOrDefaultAsync(player => player.Username == Username);
 
         if (player == null) {
-            Fail(connection);
+            await Fail(connection);
             return;
         }
 
@@ -41,7 +41,7 @@ public class AutoLoginUserEvent : IServerEvent {
             ban is { Active: true } ||
             player.HardwareFingerprint != HardwareFingerprint ||
             !player.AutoLoginToken.SequenceEqual(new Encryption().RsaDecrypt(EncryptedToken))) {
-            Fail(connection);
+            await Fail(connection);
             return;
         }
 
@@ -49,8 +49,8 @@ public class AutoLoginUserEvent : IServerEvent {
         await connection.Login(false, true, HardwareFingerprint);
     }
 
-    static void Fail(IPlayerConnection connection) {
+    static async Task Fail(IPlayerConnection connection) {
         connection.Player = null!;
-        connection.Send(new AutoLoginFailedEvent());
+        await connection.Send(new AutoLoginFailedEvent());
     }
 }

@@ -34,28 +34,27 @@ public abstract class BonusBox {
     public Vector3 RegionPosition { get; }
     public Vector3 SpawnPosition => RegionPosition with { Y = RegionPosition.Y + SpawnHeight };
 
-    public virtual Task Take(BattleTank battleTank) {
+    public virtual async Task Take(BattleTank battleTank) {
         if (Entity == null) {
             Logger.Error("{Connection} wanted to take nonexistent bonus", battleTank.BattlePlayer.PlayerConnection);
-            return Task.CompletedTask;
+            return;
         }
 
         foreach (IPlayerConnection connection in Battle.Players
                      .Where(battlePlayer => battlePlayer.InBattle)
                      .Select(battlePlayer => battlePlayer.PlayerConnection)) {
-            connection.Send(new BonusTakenEvent(), Entity);
-            connection.Unshare(Entity);
+            await connection.Send(new BonusTakenEvent(), Entity);
+            await connection.Unshare(Entity);
         }
 
         battleTank.Statistics.BonusesTaken++;
         Entity = null;
         CanTake = true;
-        return Task.CompletedTask;
     }
 
-    public abstract void Spawn();
+    public abstract Task Spawn();
 
-    public virtual void Drop() => Spawn();
+    public virtual Task Drop() => Spawn();
 
-    public virtual void Tick() => StateManager.Tick();
+    public virtual Task Tick() => StateManager.Tick();
 }

@@ -8,12 +8,11 @@ namespace Vint.Core.ECS.Events.Battle;
 public class RequestLoadBattleInfoEvent : IServerEvent {
     public long BattleId { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         Battles.Battle? battle = connection.Server.BattleProcessor.FindByBattleId(BattleId);
 
-        if (battle == null) return Task.CompletedTask;
+        if (battle == null) return;
 
-        connection.Send(new BattleInfoForLabelLoadedEvent(battle.MapEntity, battle.Id, battle.Properties.BattleMode), entities.Single());
-        return Task.CompletedTask;
+        await connection.Send(new BattleInfoForLabelLoadedEvent(battle.MapEntity, battle.Id, battle.Properties.BattleMode), entities.Single());
     }
 }

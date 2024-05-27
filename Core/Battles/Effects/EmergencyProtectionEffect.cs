@@ -6,35 +6,38 @@ using Vint.Core.ECS.Templates.Battle.Effect;
 namespace Vint.Core.Battles.Effects;
 
 public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
-    public EmergencyProtectionEffect(TimeSpan duration, BattleTank tank, int level) : base(tank, level) => 
+    public EmergencyProtectionEffect(TimeSpan duration, BattleTank tank, int level) : base(tank, level) =>
         Duration = duration;
-    
+
     public float Multiplier => 1;
-    
-    public override void Activate() {
+
+    public override async Task Activate() {
         if (IsActive) return;
-        
+
         Tank.Effects.Add(this);
-        Tank.Weapon.RemoveComponentIfPresent<ShootableComponent>();
-        ResetWeaponState();
-        
+        await Tank.Weapon.RemoveComponentIfPresent<ShootableComponent>();
+        await ResetWeaponState();
+
         Entities.Add(new EmergencyProtectionEffectTemplate().Create(Tank.BattlePlayer, Duration));
-        ShareAll();
-        
+        await ShareAll();
+
         Schedule(Duration, Deactivate);
     }
-    
-    public override void Deactivate() {
+
+    public override async Task Deactivate() {
         if (!IsActive) return;
-        
+
         Tank.Effects.TryRemove(this);
-        Tank.Weapon.AddComponentIfAbsent<ShootableComponent>();
-        
-        UnshareAll();
+        await Tank.Weapon.AddComponentIfAbsent<ShootableComponent>();
+
+        await UnshareAll();
         Entities.Clear();
     }
-    
+
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) => 0;
-    
-    void ResetWeaponState() => (Tank.WeaponHandler as StreamWeaponHandler)?.Reset();
+
+    ValueTask ResetWeaponState() =>
+        Tank.WeaponHandler is StreamWeaponHandler streamWeapon
+            ? streamWeapon.Reset()
+            : ValueTask.CompletedTask;
 }

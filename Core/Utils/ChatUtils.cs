@@ -71,7 +71,7 @@ public static class ChatUtils {
 
             if (messageEvent == null) continue;
 
-            receiver.Send(messageEvent, chat);
+            await receiver.Send(messageEvent, chat);
         }
     }
 

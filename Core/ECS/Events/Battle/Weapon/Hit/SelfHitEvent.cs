@@ -51,7 +51,7 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         foreach (IPlayerConnection playerConnection in battle.Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
-            playerConnection.Send(RemoteEvent, weapon);
+            await playerConnection.Send(RemoteEvent, weapon);
 
         if (Targets == null) return;
 

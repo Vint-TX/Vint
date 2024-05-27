@@ -7,23 +7,23 @@ public class LifeStealEffect(
     BattleTank tank,
     int level
 ) : Effect(tank, level) {
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
-        
+
         Tank.Effects.Add(this);
-        
+
         Entities.Add(new LifestealEffectTemplate().Create(Tank.BattlePlayer, Duration));
-        ShareAll();
-        
+        await ShareAll();
+
         Schedule(Duration, Deactivate);
     }
-    
-    public override void Deactivate() {
+
+    public override async Task Deactivate() {
         if (!IsActive) return;
-        
+
         Tank.Effects.TryRemove(this);
-        
-        UnshareAll();
+
+        await UnshareAll();
         Entities.Clear();
     }
 }

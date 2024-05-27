@@ -9,39 +9,39 @@ public class RepairKitModule : ActiveBattleModule, IHealthModule {
 
     public override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        base.Activate();
+        await base.Activate();
         RepairKitEffect? effect = Tank.Effects.OfType<RepairKitEffect>().SingleOrDefault();
 
         switch (effect) {
             case null:
-                GetEffect().Activate();
+                await GetEffect().Activate();
                 break;
 
             case IExtendableEffect extendableEffect:
-                extendableEffect.Extend(Level);
+                await extendableEffect.Extend(Level);
                 break;
         }
     }
 
     public override RepairKitEffect GetEffect() => new(Tank, Level);
 
-    public override void TryUnblock() {
+    public override async Task TryUnblock() {
         if (Tank.Health >= Tank.MaxHealth) return;
 
-        base.TryUnblock();
+        await base.TryUnblock();
     }
 
-    public override void TryBlock(bool force = false, long blockTimeMs = 0) {
+    public override async Task TryBlock(bool force = false, long blockTimeMs = 0) {
         if (!force && Tank.Health < Tank.MaxHealth) return;
 
-        base.TryBlock(force, blockTimeMs);
+        await base.TryBlock(force, blockTimeMs);
     }
-    
-    public void OnHealthChanged(float before, float current, float max) {
-        if (current < max) TryUnblock();
-        else TryBlock(true);
+
+    public async Task OnHealthChanged(float before, float current, float max) {
+        if (current < max) await TryUnblock();
+        else await TryBlock(true);
     }
 }

@@ -26,13 +26,13 @@ public class Captured(
 ) : FlagState(stateManager) {
     public override async Task Start() {
         await base.Start();
-        Flag.Entity.AddGroupComponent<TankGroupComponent>(carrierTank);
+        await Flag.Entity.AddGroupComponent<TankGroupComponent>(carrierTank);
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
-            battlePlayer.PlayerConnection.Send(new FlagPickupEvent(), Flag.Entity);
+            await battlePlayer.PlayerConnection.Send(new FlagPickupEvent(), Flag.Entity);
 
-        Flag.Entity.RemoveComponentIfPresent<FlagHomeStateComponent>();
-        Flag.Entity.RemoveComponentIfPresent<FlagGroundedStateComponent>();
+        await Flag.Entity.RemoveComponentIfPresent<FlagHomeStateComponent>();
+        await Flag.Entity.RemoveComponentIfPresent<FlagGroundedStateComponent>();
     }
 }
 
@@ -47,11 +47,11 @@ public class OnGround(
         await base.Start();
 
         foreach (BattlePlayer battlePlayer in Battle.Players)
-            battlePlayer.PlayerConnection.Send(new FlagDropEvent(isUserAction), Flag.Entity);
+            await battlePlayer.PlayerConnection.Send(new FlagDropEvent(isUserAction), Flag.Entity);
 
-        Flag.Entity.RemoveComponent<TankGroupComponent>();
-        Flag.Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = position);
-        Flag.Entity.AddComponent<FlagGroundedStateComponent>();
+        await Flag.Entity.RemoveComponent<TankGroupComponent>();
+        await Flag.Entity.ChangeComponent<FlagPositionComponent>(component => component.Position = position);
+        await Flag.Entity.AddComponent<FlagGroundedStateComponent>();
     }
 
     public override async Task Tick() {

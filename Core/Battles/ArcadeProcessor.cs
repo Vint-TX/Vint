@@ -14,7 +14,7 @@ public interface IArcadeProcessor {
 
     public void AddPlayerToQueue(IPlayerConnection connection, ArcadeModeType mode);
 
-    public void RemoveArcadePlayer(IPlayerConnection connection, IEntity? lobby, bool selfAction);
+    public Task RemoveArcadePlayer(IPlayerConnection connection, IEntity? lobby, bool selfAction);
 }
 
 public class ArcadeProcessor(
@@ -48,18 +48,18 @@ public class ArcadeProcessor(
     public void AddPlayerToQueue(IPlayerConnection connection, ArcadeModeType mode) =>
         PlayerQueue.AddOrUpdate(connection, mode, (_, _) => mode);
 
-    public void RemoveArcadePlayer(IPlayerConnection connection, IEntity? lobby, bool selfAction) {
+    public async Task RemoveArcadePlayer(IPlayerConnection connection, IEntity? lobby, bool selfAction) {
         if (lobby != null)
-            connection.Send(new ExitedFromMatchmakingEvent(selfAction), lobby);
+            await connection.Send(new ExitedFromMatchmakingEvent(selfAction), lobby);
 
         if (connection.InLobby) {
             BattlePlayer battlePlayer = connection.BattlePlayer!;
             Battle battle = battlePlayer.Battle;
 
             if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
-                battle.RemovePlayer(battlePlayer);
+                await battle.RemovePlayer(battlePlayer);
             else
-                battle.RemovePlayerFromLobby(battlePlayer);
+                await battle.RemovePlayerFromLobby(battlePlayer);
         }
 
         PlayerQueue.TryRemove(connection, out _);

@@ -9,7 +9,7 @@ namespace Vint.Core.Battles.ArcadeMode;
 public class FullRandomHandler(
     Battle battle
 ) : ArcadeModeHandler(battle) {
-    public override void Setup() {
+    public override Task Setup() {
         MapInfo mapInfo = TypeHandler.Maps.ToList().Shuffle().First();
 
         Battle.Properties = new BattleProperties(
@@ -27,6 +27,7 @@ public class FullRandomHandler(
         Battle.MapInfo = mapInfo;
         Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.Id);
         Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(Battle.Properties, Battle.MapEntity);
+        return Task.CompletedTask;
     }
 
     static GravityType GetRandomGravity() => Random.Shared.NextDouble() switch {

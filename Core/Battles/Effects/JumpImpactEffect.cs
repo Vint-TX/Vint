@@ -8,23 +8,23 @@ public class JumpImpactEffect(
     int level,
     float force
 ) : Effect(tank, level) {
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
         Entities.Add(new JumpEffectTemplate().Create(Tank.BattlePlayer, Duration, force));
-        ShareAll();
+        await ShareAll();
 
         Schedule(Duration, Deactivate);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
-        UnshareAll();
+        await UnshareAll();
         Entities.Clear();
     }
 }

@@ -30,8 +30,8 @@ public class QuestManager(
             .DistinctBy(entity => quests.Any(quest => quest.Index == entity.GetComponent<SlotIndexComponent>().Index))
             .ToList();
 
-        connection.Unshare(removedEntities);
-        connection.Share(quests.Select(quest => GetQuestEntity(connection.User, quest)));
+        await connection.Unshare(removedEntities);
+        await connection.Share(quests.Select(quest => GetQuestEntity(connection.User, quest)));
 
         while (quests.Count < MaxQuests) {
             int index = 0;
@@ -128,7 +128,7 @@ public class QuestManager(
             if (progressDelta == 0) continue;
 
             quest.AddProgress(progressDelta);
-            entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentValue = quest.ProgressCurrent);
+            await entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentValue = quest.ProgressCurrent);
 
             if (quest.IsCompleted)
                 await QuestCompleted(connection, quest, entity);
@@ -148,7 +148,7 @@ public class QuestManager(
         bool canBeRare = quests.All(q => q.Rarity != QuestRarityType.Rare);
         bool canBeCondition = quests.All(q => q.Rarity != QuestRarityType.Condition);
 
-        connection.Unshare(questEntity);
+        await connection.Unshare(questEntity);
         await db.DeleteAsync(quest);
         await CreateSaveAndShareQuest(connection, quest.Index, canBeRare, canBeCondition, quests.Select(q => q.Type));
     }
@@ -167,7 +167,10 @@ public class QuestManager(
             .UpdateAsync();
 
         IEntity? bonus = connection.SharedEntities.SingleOrDefault(entity => entity.TemplateAccessor?.Template is QuestDailyBonusTemplate);
-        bonus?.RemoveComponentIfPresent<TakenBonusComponent>();
+
+        if (bonus == null) return;
+
+        await bonus.RemoveComponentIfPresent<TakenBonusComponent>();
     }
 
     async Task QuestCompleted(IPlayerConnection connection, Quest quest, IEntity entity) {
@@ -178,8 +181,8 @@ public class QuestManager(
         await using DbConnection db = new();
         await db.UpdateAsync(quest);
 
-        entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentComplete = true);
-        entity.ChangeComponent<QuestExpireDateComponent>(component => component.Date = quest.CompletedQuestChangeTime!.Value);
+        await entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentComplete = true);
+        await entity.ChangeComponent<QuestExpireDateComponent>(component => component.Date = quest.CompletedQuestChangeTime!.Value);
         connection.Schedule(quest.CompletedQuestChangeTime!.Value, async () => await ChangeQuest(connection, entity));
     }
 
@@ -195,7 +198,7 @@ public class QuestManager(
         await using DbConnection db = new();
         await db.InsertAsync(quest);
 
-        connection.Share(questEntity);
+        await connection.Share(questEntity);
         return quest;
     }
 

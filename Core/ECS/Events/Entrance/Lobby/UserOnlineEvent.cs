@@ -15,7 +15,7 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 [ProtocolId(1507022246767)]
 public class UserOnlineEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        connection.Share(connection.GetEntities());
+        await connection.Share(connection.GetEntities());
 
         await using DbConnection db = new();
 
@@ -53,19 +53,19 @@ public class UserOnlineEvent : IServerEvent {
                      /*.Concat(mountedHullSkins)
                      .Concat(mountedWeaponSkins)*/
                      .Distinct()) {
-            entity.AddComponent<MountedItemComponent>();
+            await entity.AddComponent<MountedItemComponent>();
         }
 
         foreach (PresetModule presetModule in preset.Modules) {
             IEntity module = presetModule.Entity.GetUserModule(connection);
             IEntity slot = presetModule.GetSlotEntity(connection);
 
-            module.AddComponent<MountedItemComponent>();
-            slot.AddGroupComponent<ModuleGroupComponent>(module);
+            await module.AddComponent<MountedItemComponent>();
+            await slot.AddGroupComponent<ModuleGroupComponent>(module);
         }
 
-        connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
-        connection.Send(new PaymentSectionLoadedEvent());
+        await connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
+        await connection.Send(new PaymentSectionLoadedEvent());
 
         IQueryable<Relation> relations = db.Relations.Where(relation => relation.SourcePlayerId == player.Id);
 
@@ -84,6 +84,6 @@ public class UserOnlineEvent : IServerEvent {
             .Select(relation => relation.TargetPlayerId)
             .ToHashSet();
 
-        connection.Send(new FriendsLoadedEvent(friendIds, incomingIds, outgoingIds));
+        await connection.Send(new FriendsLoadedEvent(friendIds, incomingIds, outgoingIds));
     }
 }

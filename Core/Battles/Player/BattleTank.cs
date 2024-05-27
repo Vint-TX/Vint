@@ -116,15 +116,10 @@ public class BattleTank {
         Health = TotalHealth = MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         TemperatureConfig = ConfigManager.GetComponent<TemperatureConfigComponent>(Tank.TemplateAccessor!.ConfigPath!);
 
-        Tank.ChangeComponent<HealthComponent>(component => {
-            component.CurrentHealth = Health;
-            component.MaxHealth = MaxHealth;
-        });
-
         if (!Battle.Properties.DisabledModules) {
             foreach (PresetModule presetModule in preset.Modules) {
                 BattleModule module = ModuleRegistry.Get(presetModule.Entity.Id);
-                module.Init(this, presetModule.GetSlotEntity(playerConnection), presetModule.Entity);
+                module.Init(this, presetModule.GetSlotEntity(playerConnection), presetModule.Entity).GetAwaiter().GetResult();
                 Modules.Add(module);
             }
         }
@@ -202,41 +197,41 @@ public class BattleTank {
              DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
             BattlePlayer.IsPaused = false;
             BattlePlayer.KickTime = null;
-            BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
-            Battle.RemovePlayer(BattlePlayer);
+            await BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
+            await Battle.RemovePlayer(BattlePlayer);
         }
 
         if (ForceSelfDestruct || SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow)
             await SelfDestruct();
 
         if (CollisionsPhase == Battle.Entity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
-            Tank.RemoveComponentIfPresent<TankStateTimeOutComponent>();
-            Battle.Entity.ChangeComponent<BattleTankCollisionsComponent>(component =>
+            await Tank.RemoveComponentIfPresent<TankStateTimeOutComponent>();
+            await Battle.Entity.ChangeComponent<BattleTankCollisionsComponent>(component =>
                 component.SemiActiveCollisionsPhase++);
 
-            StateManager.SetState(new Active(StateManager));
-            SetHealth(MaxHealth);
+            await StateManager.SetState(new Active(StateManager));
+            await SetHealth(MaxHealth);
         }
 
-        StateManager.Tick();
-        WeaponHandler.Tick();
+        await StateManager.Tick();
+        await WeaponHandler.Tick();
         await HandleTemperature();
 
         foreach (Effect effect in Effects)
-            effect.Tick();
+            await effect.Tick();
 
         foreach (BattleModule module in Modules)
-            module.Tick();
+            await module.Tick();
     }
 
-    public void Enable() {
+    public async Task Enable() {
         if (FullDisabled) return;
 
-        WeaponHandler.OnTankEnable();
-        Tank.AddComponent<TankMovableComponent>();
+        await WeaponHandler.OnTankEnable();
+        await Tank.AddComponent<TankMovableComponent>();
     }
 
-    public void Disable(bool full) {
+    public async Task Disable(bool full) {
         FullDisabled = full;
 
         foreach (Effect effect in Effects) {
@@ -244,59 +239,59 @@ public class BattleTank {
             else if (!effect.CanBeDeactivated) continue;
 
             effect.UnScheduleAll();
-            effect.Deactivate();
+            await effect.Deactivate();
         }
 
         foreach (IModuleWithoutEffect moduleWithoutEffect in Modules.OfType<IModuleWithoutEffect>()) {
             if (full) moduleWithoutEffect.CanBeDeactivated = true;
             else if (!moduleWithoutEffect.CanBeDeactivated) continue;
 
-            moduleWithoutEffect.Deactivate();
+            await moduleWithoutEffect.Deactivate();
         }
 
         TotalHealth = MaxHealth;
         TemperatureAssists.Clear();
-        SetTemperature(0);
-        //Tank.ChangeComponent(OriginalSpeedComponent.Clone());
-        BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
+        await SetTemperature(0);
+        //await Tank.ChangeComponent(OriginalSpeedComponent.Clone());
+        await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
-            Tank.RemoveComponent<SelfDestructionComponent>();
+            await Tank.RemoveComponent<SelfDestructionComponent>();
             SelfDestructTime = null;
             ForceSelfDestruct = false;
         }
 
         if (full) {
-            Tank.RemoveComponentIfPresent(StateManager.CurrentState.StateComponent);
+            await Tank.RemoveComponentIfPresent(StateManager.CurrentState.StateComponent);
 
             foreach (BattleModule module in Modules)
-                module.SetAmmo(module.MaxAmmo);
+                await module.SetAmmo(module.MaxAmmo);
         }
 
-        Tank.RemoveComponentIfPresent<TankMovableComponent>();
-        WeaponHandler.OnTankDisable();
+        await Tank.RemoveComponentIfPresent<TankMovableComponent>();
+        await WeaponHandler.OnTankDisable();
     }
 
-    public void UpdateModuleCooldownSpeed(float coeff, bool reset = false) {
+    public async Task UpdateModuleCooldownSpeed(float coeff, bool reset = false) {
         if (reset) coeff = 1;
 
         ModuleCooldownCoeff = coeff;
-        BattleUser.ChangeComponent<BattleUserInventoryCooldownSpeedComponent>(component => component.SpeedCoeff = coeff);
-        BattlePlayer.PlayerConnection.Send(new BattleUserInventoryCooldownSpeedChangedEvent(), BattleUser);
+        await BattleUser.ChangeComponent<BattleUserInventoryCooldownSpeedComponent>(component => component.SpeedCoeff = coeff);
+        await BattlePlayer.PlayerConnection.Send(new BattleUserInventoryCooldownSpeedChangedEvent(), BattleUser);
     }
 
-    public void Spawn() {
-        Tank.RemoveComponentIfPresent<TankVisibleStateComponent>();
+    public async Task Spawn() {
+        await Tank.RemoveComponentIfPresent<TankVisibleStateComponent>();
 
         if (Tank.HasComponent<TankMovementComponent>()) {
-            Tank.RemoveComponent<TankMovementComponent>();
+            await Tank.RemoveComponent<TankMovementComponent>();
 
             IEntity incarnation = Incarnation;
             Incarnation = new TankIncarnationTemplate().Create(this);
 
             foreach (IPlayerConnection playerConnection in incarnation.SharedPlayers) {
-                playerConnection.Unshare(incarnation);
-                playerConnection.Share(Incarnation);
+                await playerConnection.Unshare(incarnation);
+                await playerConnection.Share(Incarnation);
             }
         }
 
@@ -308,39 +303,39 @@ public class BattleTank {
             Orientation = SpawnPoint.Rotation
         };
 
-        Tank.AddComponent(new TankMovementComponent(movement, default, 0, 0));
+        await Tank.AddComponent(new TankMovementComponent(movement, default, 0, 0));
     }
 
-    public void SetHealth(float health) {
+    public async Task SetHealth(float health) {
         float before = Health;
         Health = Math.Clamp(health, 0, MaxHealth);
-        Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = MathF.Ceiling(Health));
+        await Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = MathF.Ceiling(Health));
 
         /*HealthComponent healthComponent = Tank.GetComponent<HealthComponent>();
         healthComponent.CurrentHealth = MathF.Ceiling(Health);
 
-        Tank.RemoveComponent<HealthComponent>();
-        Tank.AddComponent(healthComponent);*/
+        await Tank.RemoveComponent<HealthComponent>();
+        await Tank.AddComponent(healthComponent);*/
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
-            battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
+            await battlePlayer.PlayerConnection.Send(new HealthChangedEvent(), Tank);
 
         foreach (IHealthModule healthModule in Modules.OfType<IHealthModule>())
-            healthModule.OnHealthChanged(before, Health, MaxHealth);
+            await healthModule.OnHealthChanged(before, Health, MaxHealth);
     }
 
-    public void SetTemperature(float temperature) {
+    public async Task SetTemperature(float temperature) {
         float before = Temperature;
         float min = TemperatureConfig.MinTemperature;
         float max = TemperatureConfig.MaxTemperature;
 
         Temperature = Math.Clamp(temperature, min, max);
-        Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
+        await Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
 
-        UpdateSpeed();
+        await UpdateSpeed();
 
         foreach (ITemperatureModule temperatureModule in Modules.OfType<ITemperatureModule>())
-            temperatureModule.OnTemperatureChanged(before, Temperature, min, max);
+            await temperatureModule.OnTemperatureChanged(before, Temperature, min, max);
     }
 
     public async Task HandleTemperature() {
@@ -350,7 +345,7 @@ public class BattleTank {
 
         if (TemperatureAssists.Count > 0) {
             float newTemperature = TemperatureAssists.Sum(ass => ass.CurrentTemperature);
-            SetTemperature(newTemperature);
+            await SetTemperature(newTemperature);
         }
 
         foreach (TemperatureAssist assist in TemperatureAssists) {
@@ -379,14 +374,14 @@ public class BattleTank {
                 TemperatureAssists.TryRemove(assist);
 
                 if (TemperatureAssists.Count == 0)
-                    SetTemperature(0);
+                    await SetTemperature(0);
             }
 
             assist.LastTick = DateTimeOffset.UtcNow;
         }
     }
 
-    public void UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) {
+    public async Task UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) {
         float maxHeatDamage = (weaponHandler as IHeatWeaponHandler)?.HeatDamage ?? 0;
         float temperatureDelta = weaponHandler switch {
             IsisWeaponHandler isis => Temperature switch {
@@ -424,7 +419,7 @@ public class BattleTank {
             }
 
             if (TemperatureAssists.Count == 0)
-                SetTemperature(0);
+                await SetTemperature(0);
         }
 
         if (temperatureDelta == 0 || normalizeOnly) return;
@@ -448,7 +443,7 @@ public class BattleTank {
         }
     }
 
-    public void UpdateSpeed() {
+    public async Task UpdateSpeed() {
         if (Temperature < 0) {
             float minTemperature = TemperatureConfig.MinTemperature;
 
@@ -460,14 +455,14 @@ public class BattleTank {
             float newTurnSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.TurnSpeed, minTurnSpeed);
             float newWeaponSpeed = MathUtils.Map(Temperature, 0, minTemperature, WeaponHandler.OriginalWeaponRotationComponent.Speed, minWeaponSpeed);
 
-            Tank.ChangeComponent<SpeedComponent>(component => {
+            await Tank.ChangeComponent<SpeedComponent>(component => {
                 component.Speed = newSpeed;
                 component.TurnSpeed = newTurnSpeed;
             });
-            Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
+            await Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
         } else {
-            Tank.ChangeComponent(OriginalSpeedComponent.Clone());
-            Weapon.ChangeComponent(WeaponHandler.OriginalWeaponRotationComponent.Clone());
+            await Tank.ChangeComponent(OriginalSpeedComponent.Clone());
+            await Weapon.ChangeComponent(WeaponHandler.OriginalWeaponRotationComponent.Clone());
         }
     }
 
@@ -493,11 +488,11 @@ public class BattleTank {
         foreach (IPlayerConnection connection in Battle.Players
                      .Where(battlePlayer => battlePlayer.InBattle)
                      .Select(battlePlayer => battlePlayer.PlayerConnection)) {
-            connection.Send(killEvent, killer.BattleUser);
+            await connection.Send(killEvent, killer.BattleUser);
         }
 
-        killer.AddKills(1);
-        AddDeaths(1, killer);
+        await killer.AddKills(1);
+        await AddDeaths(1, killer);
 
         foreach ((BattleTank assistant, float damageDealt) in assistants) {
             float damage = Math.Min(damageDealt, TotalHealth);
@@ -506,36 +501,36 @@ public class BattleTank {
             if (assistant == killer) {
                 score += 5;
 
-                killer.AddScore(score);
-                killer.BattlePlayer.PlayerConnection.Send(
+                await killer.AddScore(score);
+                await killer.BattlePlayer.PlayerConnection.Send(
                     new VisualScoreKillEvent(BattlePlayer.GetScoreWithBonus(score), currentPlayer.Username, currentPlayer.Rank),
                     killer.BattleUser);
             } else {
                 int percent = Convert.ToInt32(Math.Round(damage / TotalHealth * 100));
 
-                assistant.AddAssists(1);
-                assistant.AddScore(score);
-                assistant.CommitStatistics();
+                await assistant.AddAssists(1);
+                await assistant.AddScore(score);
+                await assistant.CommitStatistics();
 
-                assistant.BattlePlayer.PlayerConnection.Send(
+                await assistant.BattlePlayer.PlayerConnection.Send(
                     new VisualScoreAssistEvent(BattlePlayer.GetScoreWithBonus(score), percent, currentPlayer.Username),
                     assistant.BattleUser);
             }
         }
 
-        killer.CommitStatistics();
-        CommitStatistics();
+        await killer.CommitStatistics();
+        await CommitStatistics();
 
         foreach (IKillModule killModule in killer.Modules.OfType<IKillModule>())
-            killModule.OnKill(this);
+            await killModule.OnKill(this);
 
         switch (Battle.ModeHandler) {
             case TDMHandler tdm:
-                tdm.UpdateScore(killer.BattlePlayer.Team, 1);
+                await tdm.UpdateScore(killer.BattlePlayer.Team, 1);
                 break;
 
             case SoloHandler dm:
-                dm.UpdateScore(null, 0);
+                await dm.UpdateScore(null, 0);
                 break;
         }
 
@@ -580,23 +575,23 @@ public class BattleTank {
         SelfDestructionBattleUserEvent selfDestructionEvent = new();
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.PlayerConnection.Send(selfDestructionEvent, BattleUser);
+            await battlePlayer.PlayerConnection.Send(selfDestructionEvent, BattleUser);
 
-        AddKills(-1);
-        AddScore(-10);
-        AddDeaths(1, null);
-        CommitStatistics();
+        await AddKills(-1);
+        await AddScore(-10);
+        await AddDeaths(1, null);
+        await CommitStatistics();
 
         if (Battle.ModeHandler is TDMHandler tdm)
-            tdm.UpdateScore(BattlePlayer.Team, -1);
+            await tdm.UpdateScore(BattlePlayer.Team, -1);
     }
 
     async Task SelfKill() {
         foreach (IDeathModule deathModule in Modules.OfType<IDeathModule>())
-            deathModule.OnDeath();
+            await deathModule.OnDeath();
 
-        BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), Tank);
-        StateManager.SetState(new Dead(StateManager));
+        await BattlePlayer.PlayerConnection.Send(new SelfTankExplosionEvent(), Tank);
+        await StateManager.SetState(new Dead(StateManager));
         KillAssistants.Clear();
 
         if (Battle.TypeHandler is not MatchmakingHandler) return;
@@ -608,26 +603,26 @@ public class BattleTank {
             .UpdateAsync();
     }
 
-    public void AddKills(int delta) {
-        RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Kills = Math.Max(0, component.Kills + delta));
+    public async Task AddKills(int delta) {
+        await RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Kills = Math.Max(0, component.Kills + delta));
 
         if (delta > 0)
-            Incarnation.ChangeComponent<TankIncarnationKillStatisticsComponent>(component => component.Kills += delta);
+            await Incarnation.ChangeComponent<TankIncarnationKillStatisticsComponent>(component => component.Kills += delta);
 
-        UpdateKillStreak();
+        await UpdateKillStreak();
     }
 
-    public void AddAssists(int delta) =>
+    public Task AddAssists(int delta) =>
         RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.KillAssists = Math.Max(0, component.KillAssists + delta));
 
-    public void AddDeaths(int delta, BattleTank? killer) {
-        RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Deaths = Math.Max(0, component.Deaths + delta));
+    public async Task AddDeaths(int delta, BattleTank? killer) {
+        await RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Deaths = Math.Max(0, component.Deaths + delta));
 
-        ResetKillStreak(killer);
+        await ResetKillStreak(killer);
     }
 
-    public void AddScore(int deltaWithoutBonus) {
-        RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component =>
+    public async Task AddScore(int deltaWithoutBonus) {
+        await RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component =>
             component.ScoreWithoutBonuses = Math.Max(0, component.ScoreWithoutBonuses + deltaWithoutBonus));
 
         if (deltaWithoutBonus <= 0 || Battle.TypeHandler is not MatchmakingHandler) return;
@@ -635,18 +630,18 @@ public class BattleTank {
         int deltaWithBonus = BattlePlayer.GetScoreWithBonus(deltaWithoutBonus);
         IPlayerConnection connection = BattlePlayer.PlayerConnection;
 
-        connection.ChangeExperience(deltaWithBonus);
-        connection.CheckRankUp();
+        await connection.ChangeExperience(deltaWithBonus);
+        await connection.CheckRankUp();
     }
 
-    public void CommitStatistics() {
+    public async Task CommitStatistics() {
         foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
-            connection.Send(new RoundUserStatisticsUpdatedEvent(), RoundUser);
+            await connection.Send(new RoundUserStatisticsUpdatedEvent(), RoundUser);
 
-        Battle.ModeHandler.SortPlayers();
+        await Battle.ModeHandler.SortPlayers();
     }
 
-    void UpdateKillStreak() {
+    async Task UpdateKillStreak() {
         int killStreak = Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>().Kills;
         int newStreak = Math.Max(Statistics.KillStrike, killStreak);
 
@@ -658,24 +653,24 @@ public class BattleTank {
 
         int score = KillStreakToScore.GetValueOrDefault(killStreak, killStreak);
 
-        RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.ScoreWithoutBonuses += score);
-        BattlePlayer.PlayerConnection.Send(new VisualScoreStreakEvent(BattlePlayer.GetScoreWithBonus(score)), BattleUser);
+        await RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.ScoreWithoutBonuses += score);
+        await BattlePlayer.PlayerConnection.Send(new VisualScoreStreakEvent(BattlePlayer.GetScoreWithBonus(score)), BattleUser);
 
         if (killStreak < 5 || killStreak % 5 == 0)
-            BattlePlayer.PlayerConnection.Send(new KillStreakEvent(score), Incarnation);
+            await BattlePlayer.PlayerConnection.Send(new KillStreakEvent(score), Incarnation);
     }
 
-    void ResetKillStreak(BattleTank? killer = null) {
+    async Task ResetKillStreak(BattleTank? killer = null) {
         TankIncarnationKillStatisticsComponent incarnationStatisticsComponent =
             Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>();
 
         if (incarnationStatisticsComponent.Kills >= 2 && killer != null)
-            killer.BattlePlayer.PlayerConnection.Send(
+            await killer.BattlePlayer.PlayerConnection.Send(
                 new StreakTerminationEvent(BattlePlayer.PlayerConnection.Player.Username),
                 killer.BattleUser);
 
         incarnationStatisticsComponent.Kills = 0;
-        Incarnation.ChangeComponent(incarnationStatisticsComponent);
+        await Incarnation.ChangeComponent(incarnationStatisticsComponent);
     }
 
     public void CreateUserResult() =>

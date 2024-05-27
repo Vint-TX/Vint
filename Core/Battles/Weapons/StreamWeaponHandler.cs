@@ -33,7 +33,7 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeapo
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
+        await targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 
@@ -53,6 +53,6 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeapo
         return false;
     }
 
-    public virtual void Reset() =>
+    public virtual ValueTask Reset() =>
         BattleTank.BattlePlayer.PlayerConnection.Send(new StreamWeaponResetStateEvent(), BattleEntity);
 }

@@ -6,13 +6,13 @@ public abstract class State {
 
     public virtual Task Start() => Task.FromResult(IsFinished = false);
 
-    public virtual void Started() { }
+    public virtual Task Started() => Task.CompletedTask;
 
     public virtual Task Tick() => Task.CompletedTask;
 
-    public virtual void Finish() => IsFinished = true;
+    public virtual Task Finish() => Task.FromResult(IsFinished = true);
 
-    public virtual void Finished() { }
+    public virtual Task Finished() => Task.CompletedTask;
 
     public override string ToString() => GetType().Name;
 }

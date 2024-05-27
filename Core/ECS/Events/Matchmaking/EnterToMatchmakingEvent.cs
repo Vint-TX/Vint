@@ -9,26 +9,25 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 public class EnterToMatchmakingEvent : IServerEvent {
     static IEnumerable<IEntity> Modes { get; } = GlobalEntities.GetEntities("matchmakingModes").ToList();
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (connection.InLobby) return Task.CompletedTask;
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+        if (connection.InLobby) return;
 
         IEntity selectedMode = entities.Single();
 
-        if (Modes.All(mode => mode.Id != selectedMode.Id)) return Task.CompletedTask;
+        if (Modes.All(mode => mode.Id != selectedMode.Id)) return;
 
         string[]? configPathParts = selectedMode.TemplateAccessor?.ConfigPath?.Split('/');
 
-        if (configPathParts == null) return Task.CompletedTask;
+        if (configPathParts == null) return;
 
         if (configPathParts[1] == "arcade") {
-            if (!Enum.TryParse(configPathParts[3], true, out ArcadeModeType mode)) return Task.CompletedTask;
+            if (!Enum.TryParse(configPathParts[3], true, out ArcadeModeType mode)) return;
 
             connection.Server.ArcadeProcessor.AddPlayerToQueue(connection, mode);
         } else {
             connection.Server.MatchmakingProcessor.AddPlayerToQueue(connection);
         }
 
-        connection.Send(new EnteredToMatchmakingEvent(), selectedMode);
-        return Task.CompletedTask;
+        await connection.Send(new EnteredToMatchmakingEvent(), selectedMode);
     }
 }

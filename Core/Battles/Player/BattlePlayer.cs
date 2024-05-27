@@ -63,7 +63,7 @@ public class BattlePlayer {
     }
 
     public bool IsSpectator { get; }
-    public bool InBattleAsTank => Tank != null;
+    public bool InBattleAsTank => InBattle && Tank != null;
     public bool InBattle { get; set; }
     public bool IsPaused { get; set; }
     bool Reported { get; set; }
@@ -91,40 +91,40 @@ public class BattlePlayer {
         }
     }
 
-    public void Init() {
-        PlayerConnection.Share(Battle.Entity, Battle.RoundEntity, Battle.BattleChatEntity);
+    public async Task Init() {
+        await PlayerConnection.Share(Battle.Entity, Battle.RoundEntity, Battle.BattleChatEntity);
         Battle.BonusProcessor?.ShareEntities(PlayerConnection);
 
         foreach (Effect effect in Battle.Players
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .SelectMany(battlePlayer => battlePlayer.Tank!.Effects))
-            effect.Share(this);
+            await effect.Share(this);
 
-        PlayerConnection.User.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
-        PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
-        Battle.ModeHandler.PlayerEntered(this);
+        await PlayerConnection.User.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
+        await PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
+        await Battle.ModeHandler.PlayerEntered(this);
 
         if (IsSpectator) {
-            PlayerConnection.Share(BattleUser);
+            await PlayerConnection.Share(BattleUser);
             InBattle = true;
         } else {
             Tank = new BattleTank(this);
 
             if (!Battle.Properties.DisabledModules) {
                 foreach (BattleModule battleModule in Tank.Modules) {
-                    PlayerConnection.Share(battleModule.Entity, battleModule.SlotEntity);
+                    await PlayerConnection.Share(battleModule.Entity, battleModule.SlotEntity);
                 }
             }
 
             InBattle = true;
 
             foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
-                player.PlayerConnection.Share(Tank.Entities); // Share this player entities to players in battle
+                await player.PlayerConnection.Share(Tank.Entities); // Share this player entities to players in battle
 
-            Battle.ModeHandler.SortPlayers();
+            await Battle.ModeHandler.SortPlayers();
         }
 
-        PlayerConnection.Share(Battle.Players
+        await PlayerConnection.Share(Battle.Players
             .Where(player => player != this && player.InBattleAsTank)
             .SelectMany(player => player.Tank!.Entities));
     }
@@ -134,7 +134,7 @@ public class BattlePlayer {
 
         if (IsSpectator) {
             BattleResultForClient specResult = new(Battle, IsSpectator, null);
-            PlayerConnection.Send(new BattleResultForClientEvent(specResult), PlayerConnection.User);
+            await PlayerConnection.Send(new BattleResultForClientEvent(specResult), PlayerConnection.User);
             return;
         }
 
@@ -206,7 +206,7 @@ public class BattlePlayer {
 
         BattleResultForClient battleResult = new(Battle, IsSpectator, personalBattleResult);
 
-        PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.User);
+        await PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.User);
     }
 
     public async Task OnAntiCheatSuspected() {
@@ -235,9 +235,9 @@ public class BattlePlayer {
         return (int)Math.Round(scoreWithBonus * battleSeriesMultiplier);
     }
 
-    public void RankUp() {
+    public async Task RankUp() {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
-            battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
+            await battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
     }
 
     public async Task Tick() {

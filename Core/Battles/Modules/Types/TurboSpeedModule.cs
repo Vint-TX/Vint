@@ -6,19 +6,19 @@ namespace Vint.Core.Battles.Modules.Types;
 public class TurboSpeedModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/turbospeed";
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        base.Activate();
+        await base.Activate();
         TurboSpeedEffect? effect = Tank.Effects.OfType<TurboSpeedEffect>().SingleOrDefault();
 
         switch (effect) {
             case null:
-                GetEffect().Activate();
+                await GetEffect().Activate();
                 break;
 
             case IExtendableEffect extendableEffect:
-                extendableEffect.Extend(Level);
+                await extendableEffect.Extend(Level);
                 break;
         }
     }

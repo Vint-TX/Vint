@@ -14,15 +14,15 @@ public class CheckDiscordEvent : IServerEvent {
         if (connection.Server.DiscordBot == null ||
             DiscordID.Length is < 17 or > 18 ||
             !ulong.TryParse(DiscordID, out ulong discordId)) {
-            connection.Send(new DiscordInvalidEvent(DiscordID));
+            await connection.Send(new DiscordInvalidEvent(DiscordID));
             return;
         }
 
         await using DbConnection db = new();
 
         if (await db.DiscordLinks.AnyAsync(dLink => dLink.UserId == discordId))
-            connection.Send(new DiscordOccupiedEvent(DiscordID));
+            await connection.Send(new DiscordOccupiedEvent(DiscordID));
         else
-            connection.Send(new DiscordVacantEvent(DiscordID));
+            await connection.Send(new DiscordVacantEvent(DiscordID));
     }
 }

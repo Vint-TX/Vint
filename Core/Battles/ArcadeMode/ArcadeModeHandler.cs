@@ -9,9 +9,9 @@ public abstract class ArcadeModeHandler(
     public Battle Battle { get; } = battle;
     public ArcadeHandler TypeHandler => (ArcadeHandler)Battle.TypeHandler;
 
-    public abstract void Setup();
+    public abstract Task Setup();
 
-    public virtual void PlayerEntered(BattlePlayer battlePlayer) { }
+    public virtual Task PlayerEntered(BattlePlayer battlePlayer) => Task.CompletedTask;
 
-    public virtual void PlayerExited(BattlePlayer battlePlayer) { }
+    public virtual Task PlayerExited(BattlePlayer battlePlayer) => Task.CompletedTask;
 }

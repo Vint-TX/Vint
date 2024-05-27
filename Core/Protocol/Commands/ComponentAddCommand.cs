@@ -27,7 +27,7 @@ public class ComponentAddCommand(
             return; // maybe disconnect
         }
 
-        Entity.AddComponent(Component, connection);
+        await Entity.AddComponent(Component, connection);
         await Component.Added(connection, Entity);
 
         logger.Debug("Added {Component} to {Entity}", type.Name, Entity);

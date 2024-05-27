@@ -8,14 +8,14 @@ public class SonarModule : ActiveBattleModule {
 
     public override SonarEffect GetEffect() => new(Tank, Level);
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
         SonarEffect? effect = Tank.Effects.OfType<SonarEffect>().SingleOrDefault();
 
         if (effect != null) return;
 
-        base.Activate();
-        GetEffect().Activate();
+        await base.Activate();
+        await GetEffect().Activate();
     }
 }

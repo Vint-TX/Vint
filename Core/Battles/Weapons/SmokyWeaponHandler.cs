@@ -91,8 +91,8 @@ public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
         PrevHitId = id;
     }
 
-    public override void OnTankEnable() {
-        base.OnTankEnable();
+    public override async Task OnTankEnable() {
+        await base.OnTankEnable();
         CurrentDamage = StartDamageProgression;
         CurrentCriticalProbability = StartCriticalProbability;
     }

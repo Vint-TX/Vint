@@ -16,13 +16,13 @@ public abstract class TankState(
     protected BattleTank BattleTank => StateManager.BattleTank;
 
     public override async Task Start() {
-        BattleTank.Tank.AddComponent(StateComponent);
+        await BattleTank.Tank.AddComponent(StateComponent);
         await base.Start();
     }
 
-    public override void Finish() {
-        BattleTank.Tank.RemoveComponentIfPresent(StateComponent);
-        base.Finish();
+    public override async Task Finish() {
+        await BattleTank.Tank.RemoveComponentIfPresent(StateComponent);
+        await base.Finish();
     }
 }
 
@@ -39,7 +39,7 @@ public class Dead(
     DateTimeOffset TimeToNextState { get; set; }
 
     public override async Task Start() {
-        BattleTank.Disable(false);
+        await BattleTank.Disable(false);
 
         await base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(3);
@@ -52,7 +52,7 @@ public class Dead(
 
     public override async Task Tick() {
         if (!BattleTank.BattlePlayer.IsPaused && DateTimeOffset.UtcNow >= TimeToNextState)
-            StateManager.SetState(new Spawn(StateManager));
+            await StateManager.SetState(new Spawn(StateManager));
 
         await base.Tick();
     }
@@ -65,15 +65,15 @@ public class Spawn(
     DateTimeOffset TimeToNextState { get; set; }
 
     public override async Task Start() {
-        BattleTank.Disable(false);
-        BattleTank.Spawn();
+        await BattleTank.Disable(false);
+        await BattleTank.Spawn();
         await base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1.75);
     }
 
     public override async Task Tick() {
         if (DateTimeOffset.UtcNow >= TimeToNextState)
-            StateManager.SetState(new SemiActive(StateManager));
+            await StateManager.SetState(new SemiActive(StateManager));
 
         await base.Tick();
     }
@@ -86,15 +86,15 @@ public class SemiActive(
     DateTimeOffset TimeToNextState { get; set; }
 
     public override async Task Start() {
-        BattleTank.Enable();
-        BattleTank.Tank.AddComponent<TankVisibleStateComponent>();
+        await BattleTank.Enable();
+        await BattleTank.Tank.AddComponent<TankVisibleStateComponent>();
         await base.Start();
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1);
     }
 
     public override async Task Tick() {
         if (DateTimeOffset.UtcNow >= TimeToNextState)
-            BattleTank.Tank.AddComponentIfAbsent(new TankStateTimeOutComponent());
+            await BattleTank.Tank.AddComponentIfAbsent(new TankStateTimeOutComponent());
 
         await base.Tick();
     }
@@ -109,21 +109,21 @@ public class Active(
         await base.Start();
 
         foreach (BattleModule module in BattleTank.Modules)
-            module.TryUnblock();
+            await module.TryUnblock();
     }
 
-    public override void Started() {
-        base.Started();
+    public override async Task Started() {
+        await base.Started();
 
         // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
         foreach (BattleModule module in BattleTank.Modules.OfType<IAlwaysActiveModule>())
-            module.Activate();
+            await module.Activate();
     }
 
-    public override void Finish() {
-        base.Finish();
+    public override async Task Finish() {
+        await base.Finish();
 
         foreach (BattleModule module in BattleTank.Modules)
-            module.TryBlock(true);
+            await module.TryBlock(true);
     }
 }

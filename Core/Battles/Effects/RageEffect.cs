@@ -9,35 +9,35 @@ public class RageEffect(
     BattleTank tank,
     int level
 ) : Effect(tank, level) {
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
-        
+
         Tank.Effects.Add(this);
-        
+
         Entities.Add(new RageEffectTemplate().Create(Tank.BattlePlayer, Duration, decreaseCooldownPerKill));
-        Share(Tank.BattlePlayer);
-        
+        await Share(Tank.BattlePlayer);
+
         Schedule(Duration, Deactivate);
     }
-    
-    public override void Deactivate() {
+
+    public override async Task Deactivate() {
         if (!IsActive) return;
-        
+
         Tank.Effects.TryRemove(this);
-        Unshare(Tank.BattlePlayer);
-        
+        await Unshare(Tank.BattlePlayer);
+
         Entities.Clear();
     }
-    
-    public override void Share(BattlePlayer battlePlayer) {
+
+    public override async Task Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
-        
-        battlePlayer.PlayerConnection.Share(Entities);
+
+        await battlePlayer.PlayerConnection.Share(Entities);
     }
-    
-    public override void Unshare(BattlePlayer battlePlayer) {
+
+    public override async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
-        
-        battlePlayer.PlayerConnection.Unshare(Entities);
+
+        await battlePlayer.PlayerConnection.Unshare(Entities);
     }
 }

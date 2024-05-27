@@ -11,14 +11,14 @@ namespace Vint.Core.ECS.Events.User.PromoCode;
 public class CheckPromoCodeEvent : IServerEvent { // todo
     public string Code { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         string[] parts = Code.Split('/');
 
         IEntity user = entities.Single();
 
         if (parts.Length != 2) {
-            connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
-            return Task.CompletedTask;
+            await connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
+            return;
         }
 
         try {
@@ -26,15 +26,14 @@ public class CheckPromoCodeEvent : IServerEvent { // todo
 
             if (item.TemplateAccessor?.Template is not MarketEntityTemplate ||
                 item.GetUserEntity(connection).HasComponent<UserGroupComponent>()) {
-                connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
-                return Task.CompletedTask;
+                await connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
+                return;
             }
         } catch {
-            connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
-            return Task.CompletedTask;
+            await connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
+            return;
         }
 
-        connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Valid), user);
-        return Task.CompletedTask;
+        await connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Valid), user);
     }
 }

@@ -27,7 +27,7 @@ public class MatchmakingHandler : TypeHandler {
     ConcurrentHashSet<BattlePlayer> WaitingPlayers { get; } = [];
     List<MapInfo> Maps { get; }
 
-    public override void Setup() {
+    public override Task Setup() {
         MapInfo mapInfo = Maps.Shuffle().First();
 
         Battle.Properties = new BattleProperties(
@@ -47,24 +47,26 @@ public class MatchmakingHandler : TypeHandler {
         Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(
             Battle.Properties,
             Battle.MapEntity);
+
+        return Task.CompletedTask;
     }
 
-    public override void Tick() {
+    public override async Task Tick() {
         foreach (BattlePlayer battlePlayer in WaitingPlayers.Where(player => DateTimeOffset.UtcNow >= player.BattleJoinTime)) {
-            battlePlayer.Init();
+            await battlePlayer.Init();
             WaitingPlayers.TryRemove(battlePlayer);
         }
     }
 
-    public override void PlayerEntered(BattlePlayer battlePlayer) {
+    public override async Task PlayerEntered(BattlePlayer battlePlayer) {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         IEntity user = connection.User;
 
-        user.AddComponent<MatchMakingUserComponent>();
+        await user.AddComponent<MatchMakingUserComponent>();
 
         if (Battle.StateManager.CurrentState is not (WarmUp or Running)) return;
 
-        connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), user);
+        await connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), user);
         WaitingPlayers.Add(battlePlayer);
     }
 
@@ -72,7 +74,7 @@ public class MatchmakingHandler : TypeHandler {
         bool battleEnded = Battle.StateManager.CurrentState is Ended;
 
         WaitingPlayers.TryRemove(battlePlayer);
-        battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
+        await battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
 
         await UpdateDeserterStatus(battlePlayer, battleEnded);
         await CheckLoginReward(battlePlayer, battleEnded);
@@ -118,7 +120,7 @@ public class MatchmakingHandler : TypeHandler {
             .Set(p => p.NeedGoodBattlesCount, player.NeedGoodBattlesCount)
             .UpdateAsync();
 
-        user.ChangeComponent(battleLeaveCounter);
+        await user.ChangeComponent(battleLeaveCounter);
     }
 
     async Task CheckLoginReward(BattlePlayer battlePlayer, bool battleEnded) {
@@ -159,6 +161,6 @@ public class MatchmakingHandler : TypeHandler {
             .UpdateAsync();
 
         IEntity notification = new LoginRewardNotificationTemplate().Create(loginRewards, loginRewardsComponent.Rewards, day);
-        connection.Share(notification);
+        await connection.Share(notification);
     }
 }

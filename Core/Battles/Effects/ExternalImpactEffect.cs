@@ -18,7 +18,7 @@ public class ExternalImpactEffect(
 ) : Effect(tank, level), IModuleWeaponEffect {
     public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
@@ -45,16 +45,16 @@ public class ExternalImpactEffect(
 
         Entities.Add(entity);
 
-        ShareAll();
+        await ShareAll();
         Schedule(Duration, Deactivate);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
-        UnshareAll();
+        await UnshareAll();
         Entities.Clear();
     }
 }

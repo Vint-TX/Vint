@@ -269,7 +269,7 @@ public class ModeratorModule : ChatCommandModule {
             notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
         }
 
-        targetConnection.Kick(reason);
+        await targetConnection.Kick(reason);
         string punishMessage = $"{username} was kicked for '{reason}'";
 
         if (notifyChat == null || notifiedConnections == null)
@@ -292,7 +292,7 @@ public class ModeratorModule : ChatCommandModule {
         switch (username) {
             case "@a": {
                 foreach (IPlayerConnection connection in ctx.Connection.Server.PlayerConnections.Values)
-                    connection.DisplayMessage(message);
+                    await connection.DisplayMessage(message);
                 break;
             }
 
@@ -300,7 +300,7 @@ public class ModeratorModule : ChatCommandModule {
                 if (!ctx.Connection.InLobby || !ctx.Connection.BattlePlayer!.InBattle) return;
 
                 foreach (BattlePlayer battlePlayer in ctx.Connection.BattlePlayer.Battle.Players.Where(player => player.InBattleAsTank))
-                    battlePlayer.PlayerConnection.DisplayMessage(message);
+                    await battlePlayer.PlayerConnection.DisplayMessage(message);
                 break;
 
             default: {
@@ -313,7 +313,7 @@ public class ModeratorModule : ChatCommandModule {
                     return;
                 }
 
-                target.DisplayMessage(message);
+                await target.DisplayMessage(message);
                 break;
             }
         }

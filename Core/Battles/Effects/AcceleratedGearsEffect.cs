@@ -11,44 +11,44 @@ public class AcceleratedGearsEffect(
     float turretAcceleration,
     float hullRotation
 ) : Effect(tank, level) {
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
-        
+
         Tank.Effects.Add(this);
         CanBeDeactivated = false;
-        
+
         Tank.OriginalSpeedComponent.TurnSpeed *= hullRotation;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed *= turretSpeed;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Acceleration *= turretAcceleration;
-        
+
         if (Tank.WeaponHandler is ShaftWeaponHandler shaft) {
             shaft.AimingSpeedComponent.MaxHorizontalSpeed *= turretSpeed;
             shaft.AimingSpeedComponent.HorizontalAcceleration *= turretAcceleration;
         }
-        
-        Tank.UpdateSpeed();
-        
+
+        await Tank.UpdateSpeed();
+
         Entities.Add(new AcceleratedGearsEffectTemplate().Create(Tank.BattlePlayer, Duration));
-        ShareAll();
+        await ShareAll();
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!CanBeDeactivated || !IsActive) return;
-        
+
         Tank.Effects.TryRemove(this);
-        
+
         Tank.OriginalSpeedComponent.TurnSpeed /= hullRotation;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed /= turretSpeed;
         Tank.WeaponHandler.OriginalWeaponRotationComponent.Acceleration /= turretAcceleration;
-        
+
         if (Tank.WeaponHandler is ShaftWeaponHandler shaft) {
             shaft.AimingSpeedComponent.MaxHorizontalSpeed /= turretSpeed;
             shaft.AimingSpeedComponent.HorizontalAcceleration /= turretAcceleration;
         }
-        
-        Tank.UpdateSpeed();
-        UnshareAll();
-        
+
+        await Tank.UpdateSpeed();
+        await UnshareAll();
+
         Entities.Clear();
     }
 }

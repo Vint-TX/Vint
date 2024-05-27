@@ -134,7 +134,7 @@ public class UserModule : ChatCommandModule {
             Uri uri = discordBot.GetOAuth2Uri(config.OAuth2Redirect, req.State, config.OAuth2Scopes);
 
             await ctx.SendPrivateResponse("Authorization page will be opened in your browser soon");
-            ctx.Connection.OpenURL(uri.ToString());
+            await ctx.Connection.OpenURL(uri.ToString());
         }
     }
 

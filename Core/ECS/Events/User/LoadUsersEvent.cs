@@ -24,17 +24,17 @@ public class LoadUsersEvent : IServerEvent {
             if (EntityRegistry.TryGetTemp(userId, out IEntity? tempUser)) { // temp user exists..
                 if (user != null) { // ..but player is online
                     foreach (IPlayerConnection shared in tempUser.SharedPlayers) {
-                        shared.Unshare(tempUser);
-                        shared.Share(user);
+                        await shared.Unshare(tempUser);
+                        await shared.Share(user);
                     }
 
-                    connection.ShareIfUnshared(user);
+                    await connection.ShareIfUnshared(user);
                     EntityRegistry.TryRemoveTemp(userId);
                 } else { // ..and player is offline
-                    connection.ShareIfUnshared(tempUser);
+                    await connection.ShareIfUnshared(tempUser);
                 }
             } else if (user != null) { // player is online
-                connection.ShareIfUnshared(user);
+                await connection.ShareIfUnshared(user);
             } else { // player is offline
                 await using DbConnection db = new();
 
@@ -43,10 +43,10 @@ public class LoadUsersEvent : IServerEvent {
                 if (player == null) continue;
 
                 user = new UserTemplate().CreateFake(connection, player);
-                connection.Share(user);
+                await connection.Share(user);
             }
         }
 
-        connection.Send(new UsersLoadedEvent(RequestEntityId));
+        await connection.Send(new UsersLoadedEvent(RequestEntityId));
     }
 }

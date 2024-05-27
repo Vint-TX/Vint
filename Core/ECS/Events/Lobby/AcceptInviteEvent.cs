@@ -10,20 +10,19 @@ public class AcceptInviteEvent : IServerEvent {
     [ProtocolName("lobbyId")] public long LobbyId { get; private set; }
     [ProtocolName("engineId")] public long EngineId { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         if (connection.InLobby) {
             BattlePlayer battlePlayer = connection.BattlePlayer!;
 
             if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
-                battlePlayer.Battle.RemovePlayer(battlePlayer);
+                await battlePlayer.Battle.RemovePlayer(battlePlayer);
 
-            battlePlayer.Battle.RemovePlayerFromLobby(battlePlayer);
+            await battlePlayer.Battle.RemovePlayerFromLobby(battlePlayer);
         }
 
-        connection.Server.BattleProcessor
-            .FindByLobbyId(LobbyId)?
-            .AddPlayer(connection);
+        Battles.Battle? battle = connection.Server.BattleProcessor.FindByLobbyId(LobbyId);
 
-        return Task.CompletedTask;
+        if (battle != null)
+            await battle.AddPlayer(connection);
     }
 }

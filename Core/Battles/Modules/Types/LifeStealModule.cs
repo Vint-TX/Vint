@@ -22,7 +22,7 @@ public class LifeStealModule : BattleModule, IKillModule {
 
     public override LifeStealEffect GetEffect() => new(Tank, Level);
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
         LifeStealEffect? effect = Tank.Effects.OfType<LifeStealEffect>().SingleOrDefault();
@@ -30,21 +30,21 @@ public class LifeStealModule : BattleModule, IKillModule {
         if (effect != null) return;
 
         effect = GetEffect();
-        effect.Activate();
+        await effect.Activate();
 
-        base.Activate();
+        await base.Activate();
         IEntity effectEntity = effect.Entity!;
         Battle battle = Tank.Battle;
 
         CalculatedDamage heal = new(default, Heal, false, false);
-        battle.DamageProcessor.Heal(Tank, heal);
+        await battle.DamageProcessor.Heal(Tank, heal);
 
         foreach (BattlePlayer player in battle.Players.Where(player => player.InBattle))
-            player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
+            await player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
     }
 
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        base.Init(tank, userSlot, marketModule);
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
 
         FixedHeal = Leveling.GetStat<ModuleLifestealEffectFixedHPPropertyComponent>(ConfigPath, Level);
         HpPercent = Leveling.GetStat<ModuleLifestealEffectAdditiveHPFactorPropertyComponent>(ConfigPath, Level);
@@ -52,5 +52,5 @@ public class LifeStealModule : BattleModule, IKillModule {
         Heal = FixedHeal + HpFromCurrentTank;
     }
 
-    public void OnKill(BattleTank target) => Activate();
+    public Task OnKill(BattleTank target) => Activate();
 }

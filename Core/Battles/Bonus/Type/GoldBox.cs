@@ -35,11 +35,11 @@ public sealed class GoldBox(
         foreach (IPlayerConnection connection in Battle.Players
                      .Where(battlePlayer => battlePlayer.InBattle)
                      .Select(battlePlayer => battlePlayer.PlayerConnection)) {
-            connection.Send(new GoldTakenNotificationEvent(), battleTank.BattleUser);
-            connection.Unshare(RegionEntity!);
+            await connection.Send(new GoldTakenNotificationEvent(), battleTank.BattleUser);
+            await connection.Unshare(RegionEntity!);
         }
 
-        StateManager.SetState(new None(StateManager));
+        await StateManager.SetState(new None(StateManager));
 
         IPlayerConnection targetConnection = battleTank.BattlePlayer.PlayerConnection;
 
@@ -55,22 +55,22 @@ public sealed class GoldBox(
         await battleTank.SelfDestruct();
     }
 
-    public override void Spawn() {
+    public override async Task Spawn() {
         Entity = new GoldBonusTemplate().Create(SpawnPosition, RegionEntity!, Battle.Entity);
-        StateManager.SetState(new Spawned(StateManager));
+        await StateManager.SetState(new Spawned(StateManager));
     }
 
-    public override void Drop() {
+    public override async Task Drop() {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle)) {
-            battlePlayer.PlayerConnection.Send(new GoldScheduleNotificationEvent(""), Battle.RoundEntity);
-            battlePlayer.PlayerConnection.Share(RegionEntity!);
+            await battlePlayer.PlayerConnection.Send(new GoldScheduleNotificationEvent(""), Battle.RoundEntity);
+            await battlePlayer.PlayerConnection.Share(RegionEntity!);
         }
 
-        StateManager.SetState(new Cooldown(StateManager, TimeSpan.FromSeconds(20)));
+        await StateManager.SetState(new Cooldown(StateManager, TimeSpan.FromSeconds(20)));
     }
 
-    public override void Tick() {
-        base.Tick();
+    public override async Task Tick() {
+        await base.Tick();
 
         if (Battle.Timer < 120 ||
             Battle.StateManager.CurrentState is not Running ||
@@ -83,6 +83,6 @@ public sealed class GoldBox(
         float probability = Battle.MapInfo.GoldProbability;
 
         if (MathUtils.RollTheDice(probability))
-            Drop();
+            await Drop();
     }
 }

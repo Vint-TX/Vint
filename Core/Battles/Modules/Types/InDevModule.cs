@@ -16,33 +16,33 @@ public class InDevModule : BattleModule {
 
     public override Effect GetEffect() => throw new NotSupportedException();
 
-    public override void Activate() {
+    public override async Task Activate() {
         IPlayerConnection connection = Tank.BattlePlayer.PlayerConnection;
 
-        Task.Run(async () => await ChatUtils.SendMessage("This module is not implemented yet", ChatUtils.GetChat(connection), [connection], null));
+        await ChatUtils.SendMessage("This module is not implemented yet", ChatUtils.GetChat(connection), [connection], null);
     }
 
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         IEntity userModule = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
         MarketEntity = marketModule;
         Tank = tank;
 
         Level = (int)userModule.GetComponent<ModuleUpgradeLevelComponent>().Level;
-        SlotEntity = CreateBattleSlot(Tank, userSlot);
+        SlotEntity = await CreateBattleSlot(Tank, userSlot);
         Entity = new ModuleUserItemTemplate().Create(Tank, userModule);
     }
 
-    protected override IEntity CreateBattleSlot(BattleTank tank, IEntity userSlot) {
+    protected override async Task<IEntity> CreateBattleSlot(BattleTank tank, IEntity userSlot) {
         IEntity clone = userSlot.Clone();
         clone.Id = EntityRegistry.FreeId;
 
-        clone.AddGroupComponent<TankGroupComponent>(Tank.Tank);
-        clone.AddComponent(new InventorySlotTemporaryBlockedByServerComponent(9999999, DateTimeOffset.UtcNow));
-        clone.AddComponent(new InventoryAmmunitionComponent(1));
+        await clone.AddGroupComponent<TankGroupComponent>(Tank.Tank);
+        await clone.AddComponent(new InventorySlotTemporaryBlockedByServerComponent(9999999, DateTimeOffset.UtcNow));
+        await clone.AddComponent(new InventoryAmmunitionComponent(1));
         return clone;
     }
 
-    public override void TryBlock(bool force = false, long blockTimeMs = 0) { }
+    public override Task TryBlock(bool force = false, long blockTimeMs = 0) => Task.CompletedTask;
 
-    public override void TryUnblock() { }
+    public override Task TryUnblock() => Task.CompletedTask;
 }

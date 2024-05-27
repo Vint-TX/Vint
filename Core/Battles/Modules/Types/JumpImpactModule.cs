@@ -18,38 +18,38 @@ public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
     float Force { get; set; }
     float WorkingTemperature { get; set; }
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (!CanBeActivated) return;
 
         JumpImpactEffect? effect = Tank.Effects.OfType<JumpImpactEffect>().SingleOrDefault();
 
         if (effect != null) return;
 
-        base.Activate();
-        GetEffect().Activate();
+        await base.Activate();
+        await GetEffect().Activate();
     }
 
-    public override void Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        base.Init(tank, userSlot, marketModule);
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
 
         Force = Leveling.GetStat<JumpImpactForceMultPropertyComponent>(ConfigPath, Level);
         WorkingTemperature = -Leveling.GetStat<JumpImpactWorkingTemperaturePropertyComponent>(ConfigPath, Level);
     }
 
-    public override void TryUnblock() {
+    public override async Task TryUnblock() {
         if (Tank.Temperature < WorkingTemperature) return;
 
-        base.TryUnblock();
+        await base.TryUnblock();
     }
 
-    public override void TryBlock(bool force = false, long blockTimeMs = 0) {
+    public override async Task TryBlock(bool force = false, long blockTimeMs = 0) {
         if (!force && Tank.Temperature >= WorkingTemperature) return;
 
-        base.TryBlock(force, blockTimeMs);
+        await base.TryBlock(force, blockTimeMs);
     }
 
-    public void OnTemperatureChanged(float before, float current, float min, float max) {
-        if (current >= WorkingTemperature) TryUnblock();
-        else TryBlock(true);
+    public async Task OnTemperatureChanged(float before, float current, float min, float max) {
+        if (current >= WorkingTemperature) await TryUnblock();
+        else await TryBlock(true);
     }
 }

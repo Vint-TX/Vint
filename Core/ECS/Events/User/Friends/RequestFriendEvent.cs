@@ -56,11 +56,15 @@ public class RequestFriendEvent : FriendBaseEvent, IServerEvent {
 
         await db.CommitTransactionAsync();
 
-        connection.Unshare(User);
-        connection.Send(new OutgoingFriendAddedEvent(player.Id), connection.User);
-        connection.Server.PlayerConnections.Values
+        await connection.Unshare(User);
+        await connection.Send(new OutgoingFriendAddedEvent(player.Id), connection.User);
+
+
+        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Id == player.Id)?
-            .Send(new IncomingFriendAddedEvent(connection.Player.Id), User);
+            .SingleOrDefault(conn => conn.Player.Id == player.Id);
+
+        if (targetConnection != null)
+            await targetConnection.Send(new IncomingFriendAddedEvent(connection.Player.Id), User);
     }
 }

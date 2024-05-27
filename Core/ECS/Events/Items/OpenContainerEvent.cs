@@ -28,8 +28,8 @@ public class OpenContainerEvent : IServerEvent {
         Amount = Math.Clamp(container.Count, 1, MaxAmount); /*Math.Min(Amount, MaxAmount);*/
 
         container.Count -= Amount;
-        userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);
-        connection.Send(new ItemsCountChangedEvent(-Amount), userEntity);
+        await userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);
+        await connection.Send(new ItemsCountChangedEvent(-Amount), userEntity);
 
         if (container.Count == 0) await db.DeleteAsync(container);
         else await db.UpdateAsync(container);
@@ -38,7 +38,7 @@ public class OpenContainerEvent : IServerEvent {
             .Open(connection, Amount)
             .ToListAsync();
 
-        connection.Share(rewards);
-        connection.Send(new ShowNotificationGroupEvent(rewards.Count), marketEntity);
+        await connection.Share(rewards);
+        await connection.Send(new ShowNotificationGroupEvent(rewards.Count), marketEntity);
     }
 }

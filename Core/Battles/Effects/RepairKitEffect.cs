@@ -43,7 +43,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     float HealLeft { get; set; }
     float HealPerMs { get; set; }
 
-    public void Extend(int newLevel) {
+    public async Task Extend(int newLevel) {
         if (!IsActive) return;
 
         UnScheduleAll();
@@ -61,7 +61,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
             Percent = Leveling.GetStat<ModuleHealingEffectPercentPropertyComponent>(MarketConfigPath, newLevel);
 
             CalculatedDamage heal = new(default, InstantHp, false, false);
-            Battle.DamageProcessor.Heal(Tank, heal);
+            await Battle.DamageProcessor.Heal(Tank, heal);
         }
 
         Level = newLevel;
@@ -69,9 +69,9 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         Heal = HealLeft = Tank.MaxHealth * Percent;
         HealPerMs = (float)(Heal / Duration.TotalMilliseconds);
 
-        Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
-        Entity!.RemoveComponent<DurationComponent>();
-        Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
+        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
+        await Entity!.RemoveComponent<DurationComponent>();
+        await Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
 
         Schedule(Duration, Deactivate);
     }
@@ -79,7 +79,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     public float SupplyMultiplier => 0;
     public float SupplyDurationMs { get; }
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
@@ -87,30 +87,30 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         CalculatedDamage heal = new(default, InstantHp, false, false);
 
         LastTick = DateTimeOffset.UtcNow.AddTicks(-TickPeriod.Ticks);
-        Battle.DamageProcessor.Heal(Tank, heal);
+        await Battle.DamageProcessor.Heal(Tank, heal);
 
         Entities.Add(new HealingEffectTemplate().Create(Tank.BattlePlayer, Duration));
-        ShareAll();
+        await ShareAll();
 
         Schedule(Duration, Deactivate);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
-        UnshareAll();
+        await UnshareAll();
         Entities.Clear();
 
         if (HealLeft <= 0 || Tank.Health >= Tank.MaxHealth) return;
 
         CalculatedDamage heal = new(default, HealLeft, false, false);
-        Battle.DamageProcessor.Heal(Tank, heal);
+        await Battle.DamageProcessor.Heal(Tank, heal);
     }
 
-    public override void Tick() {
-        base.Tick();
+    public override async Task Tick() {
+        await base.Tick();
 
         TimeSpan timePassed = TimePassedFromLastTick;
 
@@ -124,6 +124,6 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         if (Tank.Health >= Tank.MaxHealth) return;
 
         CalculatedDamage heal = new(default, healHp, false, false);
-        Battle.DamageProcessor.Heal(Tank, heal);
+        await Battle.DamageProcessor.Heal(Tank, heal);
     }
 }

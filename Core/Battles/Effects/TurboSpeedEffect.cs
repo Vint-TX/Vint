@@ -25,7 +25,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
 
-    public void Extend(int newLevel) {
+    public async Task Extend(int newLevel) {
         if (!IsActive) return;
 
         UnScheduleAll();
@@ -44,13 +44,13 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
 
         float additiveMultiplier = newMultiplier / Multiplier;
         Multiplier = newMultiplier;
-        Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= additiveMultiplier);
+        await Tank.Tank.ChangeComponent<SpeedComponent>(component => component.Speed *= additiveMultiplier);
 
         Level = newLevel;
 
-        Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
-        Entity!.RemoveComponent<DurationComponent>();
-        Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
+        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
+        await Entity!.RemoveComponent<DurationComponent>();
+        await Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
 
         Schedule(Duration, Deactivate);
     }
@@ -60,28 +60,28 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
     public float SupplyMultiplier { get; }
     public float SupplyDurationMs { get; }
 
-    public override void Activate() {
+    public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
         Entities.Add(new TurboSpeedEffectTemplate().Create(Tank.BattlePlayer, Duration));
-        ShareAll();
+        await ShareAll();
 
         Tank.OriginalSpeedComponent.Speed *= Multiplier;
-        Tank.UpdateSpeed();
+        await Tank.UpdateSpeed();
         Schedule(Duration, Deactivate);
     }
 
-    public override void Deactivate() {
+    public override async Task Deactivate() {
         if (!IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
-        UnshareAll();
+        await UnshareAll();
         Entities.Clear();
 
         Tank.OriginalSpeedComponent.Speed /= Multiplier;
-        Tank.UpdateSpeed();
+        await Tank.UpdateSpeed();
     }
 }

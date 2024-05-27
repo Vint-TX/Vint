@@ -19,10 +19,10 @@ public class CheckEmailEvent : IServerEvent {
             await using DbConnection db = new();
 
             if (await db.Players.AnyAsync(player => player.Email == email.Address))
-                connection.Send(new EmailOccupiedEvent(Email));
-            else connection.Send(new EmailVacantEvent(Email));
+                await connection.Send(new EmailOccupiedEvent(Email));
+            else await connection.Send(new EmailVacantEvent(Email));
         } catch {
-            connection.Send(new EmailInvalidEvent(Email));
+            await connection.Send(new EmailInvalidEvent(Email));
         }
     }
 }

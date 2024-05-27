@@ -13,21 +13,21 @@ public abstract class StateManager<T> : IStateManager where T : State {
 
     public T CurrentState { get; protected set; } = null!;
 
-    public virtual void Tick() {
+    public virtual async Task Tick() {
         if (!CurrentState.IsFinished)
-            CurrentState.Tick();
+            await CurrentState.Tick();
     }
 
-    public virtual void SetState(T state) {
+    public virtual async Task SetState(T state) {
         Logger.Debug("Set state from {Current} to {Next}", CurrentState, state);
-        
+
         T prevState = CurrentState;
-        
-        prevState.Finish();
-        state.Start();
+
+        await prevState.Finish();
+        await state.Start();
         CurrentState = state;
-        state.Started();
-        prevState.Finished();
+        await state.Started();
+        await prevState.Finished();
     }
 
     public override string ToString() => $"{GetType().Name}: {CurrentState}";

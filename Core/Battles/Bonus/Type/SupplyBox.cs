@@ -20,17 +20,17 @@ public abstract class SupplyBox<T>(
 
         if (!CanTake) return;
 
-        StateManager.SetState(new Cooldown(StateManager));
+        await StateManager.SetState(new Cooldown(StateManager));
 
         T? effect = battleTank.Effects.OfType<T>().SingleOrDefault();
 
         switch (effect) {
             case null:
-                GetEffect(battleTank).Activate();
+                await GetEffect(battleTank).Activate();
                 break;
 
             case IExtendableEffect extendableEffect:
-                extendableEffect.Extend(-1);
+                await extendableEffect.Extend(-1);
                 break;
         }
     }
@@ -48,15 +48,15 @@ public abstract class SupplyBox : BonusBox {
     public override IEntity? RegionEntity { get; protected set; }
     public override IEntity? Entity { get; protected set; }
 
-    public override void Spawn() {
+    public override async Task Spawn() {
         Entity = new SupplyBonusTemplate().Create(Type, SpawnPosition, RegionEntity!, Battle.Entity);
-        StateManager.SetState(new Spawned(StateManager));
+        await StateManager.SetState(new Spawned(StateManager));
     }
 
-    public void ShareRegion() {
+    public async Task ShareRegion() {
         RegionEntity ??= new BonusRegionTemplate().CreateRegular(Type, RegionPosition);
 
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            battlePlayer.PlayerConnection.ShareIfUnshared(RegionEntity);
+            await battlePlayer.PlayerConnection.ShareIfUnshared(RegionEntity);
     }
 }
