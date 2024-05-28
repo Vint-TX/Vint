@@ -205,6 +205,7 @@ public abstract class PlayerConnection(
             RegistrationTime = DateTimeOffset.UtcNow,
             LastLoginTime = DateTimeOffset.UtcNow,
             LastQuestUpdateTime = DateTimeOffset.UtcNow,
+            LastLoginRewardTime = DateTimeOffset.Parse("2024-01-01 00:00:00"),
             PasswordHash = passwordHash
         };
 
