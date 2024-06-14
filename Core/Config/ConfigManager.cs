@@ -181,9 +181,6 @@ public static class ConfigManager {
             .IgnoreUnmatchedProperties()
             .Build();
 
-        Dictionary<string, object?> components = new();
-        Dictionary<string, long?> ids = new();
-
         foreach (string filePath in Directory.EnumerateFiles(configsPath, "*.*", SearchOption.AllDirectories)) {
             string relativePath = Path.GetRelativePath(configsPath, filePath).Replace('\\', '/');
             string fileName = Path.GetFileName(filePath);
@@ -191,6 +188,9 @@ public static class ConfigManager {
             if (string.IsNullOrEmpty(fileName)) continue;
 
             Logger.Verbose("Parsing {File}", relativePath);
+
+            Dictionary<string, List<IComponent>> components = new();
+            Dictionary<string, long?> ids = new();
 
             switch (fileName) {
                 case "id.yml": {
@@ -202,16 +202,13 @@ public static class ConfigManager {
                 }
 
                 case "public.yml": {
-                    components[relativePath[..^11]] = deserializer.Deserialize(File.ReadAllText(filePath));
+                    if (deserializer.Deserialize(File.ReadAllText(filePath)) is Dictionary<object, object> dict)
+                        components[relativePath[..^11]] = dict.Values.OfType<IComponent>().ToList();
                     break;
                 }
             }
 
-            foreach ((string key, object? value) in components) {
-                if (value is not Dictionary<object, object> dict ||
-                    dict.Values.All(v => v is not IComponent))
-                    continue;
-
+            foreach ((string key, List<IComponent> comps) in components) {
                 ConfigNode curNode = Root;
 
                 foreach (string part in key.Split('/')) {
@@ -223,9 +220,7 @@ public static class ConfigManager {
                     }
                 }
 
-                foreach (object obj in dict.Values) {
-                    if (obj is not IComponent component) continue;
-
+                foreach (IComponent component in comps) {
                     Type componentType = component.GetType();
 
                     if (componentType.IsDefined(typeof(ProtocolIdAttribute)))

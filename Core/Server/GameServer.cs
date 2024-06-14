@@ -82,9 +82,7 @@ public class GameServer(
                 SocketPlayerConnection connection = new(this, socket, Protocol);
                 await OnConnected(connection);
 
-                bool tryAdd = PlayerConnections.TryAdd(connection.Id, connection);
-
-                if (tryAdd) continue;
+                if (PlayerConnections.TryAdd(connection.Id, connection)) continue;
 
                 Logger.Error("Cannot add {Connection}", connection);
                 await connection.Kick("Internal error");
