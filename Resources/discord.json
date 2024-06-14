@@ -1,7 +1,7 @@
 {
   "guildId": 1196050317607972934,
   "reportsChannelId": 1196058513693216838,
-  "oAuth2Redirect": "http://vint-official.site/discord/auth",
+  "oAuth2Redirect": "http://prod.vint-official.site/discord/auth",
   "oAuth2Scopes": [
     "identify",
     "guilds.join",
