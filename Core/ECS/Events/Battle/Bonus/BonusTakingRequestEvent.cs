@@ -29,7 +29,7 @@ public class BonusTakingRequestEvent : IServerEvent {
         Vector3 tankPosition = battleTank.Position;
         Vector3 bonusPosition = bonusBox.RegionPosition with { Y = bonusHeight };
 
-        if (Vector3.Distance(tankPosition, bonusPosition) > 3) return;
+        if (Vector3.Distance(tankPosition, bonusPosition) > 10) return; // broken??
 
         await bonusProcessor.Take(bonusBox, battleTank);
     }
