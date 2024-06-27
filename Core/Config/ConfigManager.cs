@@ -181,7 +181,7 @@ public static class ConfigManager {
             .IgnoreUnmatchedProperties()
             .Build();
 
-        foreach (string filePath in Directory.EnumerateFiles(configsPath, "*.*", SearchOption.AllDirectories)) {
+        foreach (string filePath in Directory.EnumerateFiles(configsPath, "*.*", SearchOption.AllDirectories).OrderBy(x => x)) {
             string relativePath = Path.GetRelativePath(configsPath, filePath).Replace('\\', '/');
             string fileName = Path.GetFileName(filePath);
 
