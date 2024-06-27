@@ -1134,9 +1134,9 @@ public class SocketPlayerConnection(
         await Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         await Share(ClientSession);
 
-        _ = Task.Factory.StartNew(ReceiveLoop, TaskCreationOptions.LongRunning).Catch();
-        _ = Task.Factory.StartNew(SendLoop, TaskCreationOptions.LongRunning).Catch();
-        _ = Task.Factory.StartNew(ExecuteLoop, TaskCreationOptions.LongRunning).Catch();
+        Extensions.RunTaskInBackground(ReceiveLoop, OnException, true);
+        Extensions.RunTaskInBackground(SendLoop, OnException, true);
+        Extensions.RunTaskInBackground(ExecuteLoop, OnException, true);
 
         IsConnected = true;
     }
@@ -1286,6 +1286,11 @@ public class SocketPlayerConnection(
         } catch (Exception e) {
             Logger.Error(e, "Socket caught an exception in ExecuteLoop");
         }
+    }
+
+    async Task OnException(Exception e) {
+        Logger.Error(e, "");
+        await Disconnect();
     }
 }
 

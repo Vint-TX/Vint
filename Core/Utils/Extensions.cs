@@ -103,4 +103,26 @@ public static class Extensions {
 
         return list;
     }
+
+    public static void RunTaskInBackground(Func<Task> task, Func<Exception, Task> @catch, bool longRunning = false) {
+        Task.Factory.StartNew(async () => {
+            try {
+                await task();
+            } catch (Exception e) {
+                await @catch(e);
+                throw;
+            }
+        }, longRunning ? TaskCreationOptions.LongRunning : TaskCreationOptions.None);
+    }
+
+    public static void RunTaskInBackground(Func<Task> task, Action<Exception> @catch, bool longRunning = false) {
+        Task.Factory.StartNew(async () => {
+            try {
+                await task();
+            } catch (Exception e) {
+                @catch(e);
+                throw;
+            }
+        }, longRunning ? TaskCreationOptions.LongRunning : TaskCreationOptions.None);
+    }
 }

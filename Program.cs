@@ -39,7 +39,11 @@ abstract class Program {
             }));
 
         new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
-        _ = Task.Factory.StartNew(gameServer.Start, TaskCreationOptions.LongRunning).Catch();
+
+        Extensions.RunTaskInBackground(gameServer.Start, e => {
+            Logger.Fatal(e, "");
+            Environment.Exit(e.HResult);
+        }, true);
 
         stopwatch.Stop();
         Logger.Information("Started in {Time}", stopwatch.Elapsed);

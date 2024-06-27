@@ -63,14 +63,20 @@ public class GameServer(
 
         new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
         new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
-        _ = Task.Factory.StartNew(BattleProcessor.StartTicking, TaskCreationOptions.LongRunning).Catch();
-        _ = Task.Factory.StartNew(QuestManager.Loop, TaskCreationOptions.LongRunning).Catch();
-        _ = Task.Factory.StartNew(Loop, TaskCreationOptions.LongRunning).Catch();
+
+        Extensions.RunTaskInBackground(BattleProcessor.StartTicking, OnException, true);
+        Extensions.RunTaskInBackground(QuestManager.Loop, OnException, true);
+        Extensions.RunTaskInBackground(Loop, OnException, true);
 
         if (DiscordBot != null)
-            _ = Task.Factory.StartNew(DiscordBot.Start, TaskCreationOptions.LongRunning).Catch();
+            Extensions.RunTaskInBackground(DiscordBot.Start, OnException, true);
 
         chatCommandProcessor.RegisterCommands();
+    }
+
+    void OnException(Exception e) {
+        Logger.Fatal(e, "");
+        Environment.Exit(e.HResult);
     }
 
     static Task OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
