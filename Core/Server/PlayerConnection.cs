@@ -1142,7 +1142,8 @@ public class SocketPlayerConnection(
     }
 
     public override ValueTask Send(ICommand command) {
-        if (!IsSocketConnected) return ValueTask.CompletedTask;
+        if (!IsSocketConnected)
+            return ValueTask.CompletedTask;
 
         Logger.Debug("Queueing for sending {Command}", command);
         return SendChannel.Writer.WriteAsync(command);
@@ -1254,6 +1255,8 @@ public class SocketPlayerConnection(
                 ICommand command = await SendChannel.Reader.ReadAsync();
 
                 try {
+                    Logger.Verbose("Encoding {Command}", command);
+
                     ProtocolBuffer buffer = new(new OptionalMap(), this);
                     Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
 

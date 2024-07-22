@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Components.Modules;
 public class ModuleTankPartComponent(
     TankPartModuleType part
 ) : IComponent {
-    public TankPartModuleType Part { get; private set; } = part;
+    public TankPartModuleType Part { get; } = part;
 }

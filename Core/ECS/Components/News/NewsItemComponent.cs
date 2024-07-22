@@ -32,6 +32,4 @@ public class NewsItem(
     public string? InternalUrl { get; set; } = internalUrl;
     public DateTimeOffset? Date { get; set; } = date;
     public NewsItemLayout Layout { get; set; } = layout;
-    public string? ShortText => null; // not used
-    public string? LongText => null; // not used
 }

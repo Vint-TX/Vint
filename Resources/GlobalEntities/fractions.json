@@ -23,9 +23,7 @@
       "FractionGroupComponent": {
         "key": -1650120701
       },
-      "FractionComponent": {
-        "name": "antaeus"
-      }
+      "FractionComponent": { }
     }
   },
   {
@@ -39,9 +37,7 @@
       "FractionGroupComponent": {
         "key": -372139284
       },
-      "FractionComponent": {
-        "name": "frontier"
-      }
+      "FractionComponent": { }
     }
   }
 ]

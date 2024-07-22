@@ -146,7 +146,7 @@ public class MatchmakingHandler : TypeHandler {
         foreach (LoginRewardItem reward in loginRewards) {
             IEntity? entity = connection.GetEntity(reward.MarketItemEntity);
 
-            if (entity == null) continue;
+            if (entity == null || await connection.OwnsItem(entity)) continue;
 
             await connection.PurchaseItem(entity, reward.Amount, 0, false, false);
         }

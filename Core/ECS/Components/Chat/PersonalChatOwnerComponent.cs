@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Components.Chat;
 public class PersonalChatOwnerComponent(
     params IEntity[] chats
 ) : IComponent {
-    [ProtocolName("ChatIs")] public List<IEntity> Chats { get; private set; } = chats.ToList();
+    public List<IEntity> Chats { get; private set; } = chats.ToList();
 }

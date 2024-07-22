@@ -51,29 +51,13 @@ moduleEffectTargetingDistanceProperty:
     - 28.89
     - 30.00
 moduleAmmunitionProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
     - 1
     - 1
 moduleEffectActivationTimeProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 3000
-    - 3000
-    - 3000
-    - 3000
-    - 3000
-    - 3000
-    - 3000
-    - 3000
     - 3000
     - 3000
 moduleVisualProperties:

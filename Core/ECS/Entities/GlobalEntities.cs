@@ -24,7 +24,7 @@ public static class GlobalEntities {
     static GlobalEntities() =>
         AllMarketTemplateEntities = ConfigManager.GetGlobalEntities().ToList();
 
-    public static List<IEntity> AllMarketTemplateEntities { get; private set; }
+    public static List<IEntity> AllMarketTemplateEntities { get; }
 
     public static IReadOnlyDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
         { GetEntity("weapons", "Flamethrower").Id, GetEntity("weaponSkins", "FlamethrowerM0").Id },
@@ -245,12 +245,6 @@ public static class GlobalEntities {
                     entity.AddGroupComponent<UserGroupComponent>(user);
 
                     switch (entity.TemplateAccessor.Template) {
-                        case PremiumBoostUserItemTemplate:
-                        case PremiumQuestUserItemTemplate: {
-                            entity.AddComponent(new DurationUserItemComponent());
-                            break;
-                        }
-
                         case CrystalUserItemTemplate: {
                             entity.AddComponent(new UserItemCounterComponent(player.Crystals));
                             break;
@@ -294,11 +288,6 @@ public static class GlobalEntities {
                     break;
                 }
 
-                case "matchmakingModes": {
-                    entity.AddGroupComponent<UserGroupComponent>(user);
-                    break;
-                }
-
                 case "containers": {
                     Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == entityId);
 
@@ -326,7 +315,8 @@ public static class GlobalEntities {
     public static IEntity GetEntity(string typeName, string entityName) =>
         ConfigManager.GetGlobalEntity(typeName, entityName);
 
-    public static IEnumerable<IEntity> GetEntities(string typeName) => ConfigManager.GetGlobalEntities(typeName);
+    public static IEnumerable<IEntity> GetEntities(string typeName) =>
+        ConfigManager.GetGlobalEntities(typeName);
 
     public static IEntity GetUserModule(this IEntity marketEntity, IPlayerConnection connection) =>
         connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&

@@ -27,6 +27,7 @@ public static class ModuleRegistry {
         Register<InvulnerabilityModule>("Invulnerability");
         Register<ForceFieldModule>("ForceField");
         Register<InvisibilityModule>("Invisibility");
+        Register<ExplosiveMassModule>("ExplosiveMass");
     }
 
     static BattleModule Fallback => new InDevModule();

@@ -111,7 +111,7 @@ public class Protocol {
 
             if (codec == null) continue;
 
-            //Logger.Verbose("Created {Codec} with {Factory} for {Info}", codec, codecFactory, codecInfo);
+            Logger.Verbose("Created {Codec} with {Factory} for {Info}", codec, codecFactory.GetType().Name, codecInfo);
 
             codec.Init(this);
 
