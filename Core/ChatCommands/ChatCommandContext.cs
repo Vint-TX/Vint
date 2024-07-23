@@ -25,6 +25,4 @@ public sealed class ChatCommandContext(
 
     public async Task SendResponse(string response, IEntity chat, IEnumerable<IPlayerConnection> receivers) =>
         await ChatUtils.SendMessage(response, chat, receivers, null);
-
-    public void DisplayMessage(string message) => Connection.DisplayMessage(message);
 }

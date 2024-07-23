@@ -2,4 +2,4 @@
   locales:
     - locale/ru
     - locale/en
-    - locale/tr
+    #- locale/tr
