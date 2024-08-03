@@ -38,9 +38,12 @@ public class StaticServer(
         while (Listener.IsListening) {
             try {
                 HttpListenerContext context = await Listener.GetContextAsync();
-
                 ILogger oldLogger = Logger;
-                Logger = Logger.WithEndPoint(context.Request.RemoteEndPoint);
+
+                string? ip = context.Request.Headers["X-Real-IP"];
+
+                if (!string.IsNullOrWhiteSpace(ip) && IPEndPoint.TryParse(ip, out IPEndPoint? ipAddress))
+                    Logger = Logger.WithEndPoint(ipAddress);
 
                 await ProcessRequest(context);
 
