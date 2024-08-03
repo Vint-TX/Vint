@@ -1,11 +1,6 @@
-﻿using System.Collections.Specialized;
-using System.Net;
-using System.Net.Sockets;
-using System.Web;
-using NetCoreServer;
+﻿using System.Net;
 using Serilog;
 using Vint.Core.Config;
-using Vint.Core.Discord;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
@@ -13,139 +8,141 @@ namespace Vint.Core.Server;
 public class StaticServer(
     IPAddress host,
     ushort port
-) : HttpServer(host, port) {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(StaticServer));
+) {
+    ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServer));
+    HttpListener Listener { get; } = new();
 
-    protected override StaticServerSession CreateSession() => new(this);
+    bool IsStarted { get; set; }
+    bool IsAccepting { get; set; }
 
-    protected override void OnStarted() => Logger.Information("Started");
+    string Resources { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
 
-    protected override void OnError(SocketError error) => Logger.Error("Static server caught an error: {Error}", error);
-}
+    public async Task Start() {
+        if (IsStarted) return;
 
-public class StaticServerSession(
-    HttpServer server
-) : HttpSession(server) {
-    string Host { get; set; } = null!;
-    string Root { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "StaticServer");
-    ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServerSession));
+        Listener.Prefixes.Add($"http://{(Equals(host, IPAddress.Any) ? "*" : host)}:{port}/");
 
-    protected override void OnConnecting() =>
-        Logger = Logger.WithEndPoint((IPEndPoint)Socket.RemoteEndPoint!);
+        Listener.Start();
+        IsStarted = true;
 
-    protected override void OnReceivedRequestHeader(HttpRequest request) {
-        for (int i = 0; i < request.Headers; i++) {
-            (string header, string value) = request.Header(i);
+        OnStarted();
+        await Accept();
 
-            switch (header) {
-                case "X-Real-IP": // nginx proxying
-                    Logger = Logger.WithEndPoint(IPEndPoint.Parse(value));
-                    break;
-
-                case "Host":
-                    Host = value;
-                    break;
-            }
-        }
+        IsStarted = false;
     }
 
-    protected override void OnReceivedRequest(HttpRequest request) {
-        Logger.Information("{Method} {Url}", request.Method, request.Url);
+    async Task Accept() {
+        if (IsAccepting) return;
 
-        if (request.Method != "GET") {
-            SendResponseAsync(Response.MakeErrorResponse(400));
+        IsAccepting = true;
+        while (Listener.IsListening) {
+            try {
+                HttpListenerContext context = await Listener.GetContextAsync();
+
+                ILogger oldLogger = Logger;
+                Logger = Logger.WithEndPoint(context.Request.RemoteEndPoint);
+
+                await ProcessRequest(context);
+
+                Logger = oldLogger;
+            } catch (Exception e) {
+                Logger.Error(e, "");
+            }
+        }
+
+        IsAccepting = false;
+    }
+
+    async Task ProcessRequest(HttpListenerContext context) {
+        HttpListenerRequest request = context.Request;
+        HttpListenerResponse response = context.Response;
+        Uri? url = request.Url;
+
+        Logger.Information("{Method} {Url}", request.HttpMethod, request.RawUrl);
+
+        if (request.HttpMethod != "GET" || url == null) {
+            SendError(response, 400);
             return;
         }
 
-        string[] urlParts = request.Url.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        string[] urlParts = url.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         if (urlParts.Length == 0) {
-            SendResponseAsync(Response.MakeErrorResponse(400));
+            SendError(response, 400);
             return;
         }
 
-        if (urlParts.Last().Contains('?'))
-            urlParts[^1] = urlParts[^1][..urlParts[^1].IndexOf('?')];
-
-        string requestedEntry = Path.Combine(Root, string.Join('/', urlParts));
+        string requestedEntry = Path.Join(Resources, url.AbsolutePath);
 
         switch (urlParts[0]) {
+            case "state": {
+                await SendResponse(response, "state: 0");
+                break;
+            }
+
             case "config": {
-                if (requestedEntry.EndsWith("init.yml")) {
-                    SendResponseAsync(File.Exists(requestedEntry)
-                                          ? Response.MakeGetResponse(File.ReadAllText(requestedEntry)
-                                              .Replace("*host*", Host)
-                                              .Replace("*ip*", Host.Split(':')[0]))
-                                          : Response.MakeErrorResponse(404));
-                } else if (requestedEntry.EndsWith("config.tar.gz")) {
-                    string locale = urlParts[^2];
-
-                    locale = locale.ToLower() switch {
-                        "ru" => "ru",
-                        "en" => "en",
-                        _ => "en"
-                    };
-
-                    SendResponseAsync(ConfigManager.TryGetConfig(locale, out byte[]? config)
-                                          ? Response.MakeGetResponse(config)
-                                          : Response.MakeErrorResponse(404));
-                } else SendResponseAsync(Response.MakeErrorResponse(404));
-
+                await ProcessConfigRequest(response, urlParts);
                 break;
             }
 
-            case "state":
-            case "update": {
-                SendResponseAsync(File.Exists(requestedEntry)
-                                      ? Response.MakeGetResponse(File.ReadAllText(requestedEntry)
-                                          .Replace("*host*", Host))
-                                      : Response.MakeErrorResponse(404));
-
+            case "init.yml": {
+                await ProcessTextRequest(response, requestedEntry);
                 break;
             }
 
-            case "resources": {
-                SendResponseAsync(File.Exists(requestedEntry)
-                                      ? Response.MakeGetResponse(File.ReadAllBytes(requestedEntry))
-                                      : Response.MakeErrorResponse(404));
-
+            default: {
+                SendError(response, 404);
                 break;
             }
-
-            case "discord" when urlParts[1] == "auth": {
-                NameValueCollection query = HttpUtility.ParseQueryString(request.Url.Split('?').Last());
-
-                string? state = query["state"];
-                string? code = query["code"];
-                DiscordLinkRequest linkRequest = ConfigManager.DiscordLinkRequests.SingleOrDefault(req => req.State == state);
-
-                if (state == null || code == null || linkRequest == default) {
-                    SendResponseAsync(Response.MakeErrorResponse(400));
-                    return;
-                }
-
-                ConfigManager.DiscordLinkRequests.TryRemove(linkRequest);
-
-                /*SendResponseAsync(new HttpResponse().SetBegin(301).SetHeader("Location", "https://vint-official.site/"));
-                Disconnect();*/
-
-                bool? result = ConfigManager.NewLinkRequest?.Invoke(code, linkRequest.UserId).GetAwaiter().GetResult();
-
-                SendResponseAsync(result == true
-                    ? Response.MakeGetResponse("Your Discord account is successfully linked!")
-                    : Response.MakeErrorResponse(400, "Account is not linked, contact the administrators for support"));
-                break;
-            }
-
-            default:
-                SendResponseAsync(Response.MakeErrorResponse(404));
-                break;
         }
     }
 
-    protected override void OnReceivedRequestError(HttpRequest request, string error) =>
-        Logger.Error("{Method} {Url} failed with error: {Error}", request.Method, request.Url, error);
+    void OnStarted() =>
+        Logger.Information("Started");
 
-    protected override void OnError(SocketError error) =>
-        Logger.Error("Session caught an error: {Error}", error);
+    static async Task ProcessConfigRequest(HttpListenerResponse response, string[] urlParts) {
+        if (urlParts.Length < 2) {
+            SendError(response, 400);
+            return;
+        }
+
+        string locale = urlParts[^2].ToLower() switch {
+            "ru" => "ru",
+            "en" => "en",
+            _ => "en"
+        };
+
+        if (ConfigManager.TryGetConfig(locale, out byte[]? config))
+            await SendResponse(response, config);
+        else SendError(response, 404);
+    }
+
+    static async Task ProcessTextRequest(HttpListenerResponse response, string requestedEntry) {
+        if (!File.Exists(requestedEntry)) {
+            SendError(response, 404);
+            return;
+        }
+
+        await SendResponse(response, await File.ReadAllTextAsync(requestedEntry));
+    }
+
+    static void SendError(HttpListenerResponse response, int statusCode) {
+        response.StatusCode = statusCode;
+        response.Close();
+    }
+
+    static async Task SendResponse(HttpListenerResponse response, string content) {
+        await using (Stream output = response.OutputStream)
+        await using (StreamWriter outputWriter = new(output))
+            await outputWriter.WriteAsync(content);
+
+        response.Close();
+    }
+
+    static async Task SendResponse(HttpListenerResponse response, byte[] content) {
+        await using (Stream output = response.OutputStream)
+            await output.WriteAsync(content);
+
+        response.Close();
+    }
 }

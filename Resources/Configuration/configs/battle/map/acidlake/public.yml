@@ -9,3 +9,8 @@ mapModeRestriction:
   availableModes:
     - DM
     - CTF
+discordConfig:
+  largeImage: sandbox
+  smallImage: logo
+  largeText: Acid Lake
+  smallText: Vint

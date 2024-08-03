@@ -1,12 +1,14 @@
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Type;
+using Vint.Core.ECS.Components.Battle.Limit;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Time;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
+using Vint.Core.Server;
 using Vint.Core.StateMachine;
 using Vint.Core.Utils;
 
@@ -131,15 +133,21 @@ public class WarmUp(
     public WarmUpStateManager WarmUpStateManager { get; } = new(stateManager);
 
     public override async Task Start() {
-        const int seconds = 60;
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+
+        long warmUpSeconds = Battle.Entity.GetComponent<TimeLimitComponent>().WarmingUpTimeLimitSec;
+
         await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
-            component.RoundStartTime = DateTimeOffset.UtcNow.AddSeconds(seconds));
+            component.RoundStartTime = now.AddSeconds(warmUpSeconds));
 
         await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
-            component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
+            component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
+
+        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+            await connection.Send(new BattleTimerUpdatedEvent(), Battle.Entity, Battle.RoundEntity);
 
         await Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
-        Battle.Timer = seconds;
+        Battle.Timer = warmUpSeconds;
         await base.Start();
     }
 
@@ -159,13 +167,15 @@ public class Running(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override async Task Start() {
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+
         Battle.Timer = Battle.Properties.TimeLimit * 60;
 
         await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
-            component.RoundStartTime = DateTimeOffset.UtcNow);
+            component.RoundStartTime = now);
 
         await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
-            component.StopTime = DateTimeOffset.UtcNow.AddMinutes(Battle.Properties.TimeLimit));
+            component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
         await base.Start();
     }
 

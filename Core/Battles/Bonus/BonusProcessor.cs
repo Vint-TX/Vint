@@ -25,7 +25,7 @@ public interface IBonusProcessor {
 }
 
 public class BonusProcessor : IBonusProcessor {
-    public BonusProcessor(Battle battle, IDictionary<BonusType, IEnumerable<BonusInfo>> bonusesInfos) {
+    public BonusProcessor(Battle battle, Dictionary<BonusType, IEnumerable<BonusInfo>> bonusesInfos) {
         List<BonusBox> bonuses = [];
 
         // ReSharper disable once LoopCanBeConvertedToQuery

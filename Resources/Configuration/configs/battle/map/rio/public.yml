@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: rio
+  smallImage: logo
+  largeText: Rio
+  smallText: Vint

@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: west-prime
+  smallImage: logo
+  largeText: West Prime
+  smallText: Vint

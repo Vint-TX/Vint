@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: massacre
+  smallImage: logo
+  largeText: Massacre
+  smallText: Vint

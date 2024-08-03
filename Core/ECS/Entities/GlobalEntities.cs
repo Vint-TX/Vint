@@ -14,7 +14,6 @@ using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Gold;
 using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.ECS.Templates.Money;
-using Vint.Core.ECS.Templates.Premium;
 using Vint.Core.ECS.Templates.Preset;
 using Vint.Core.Server;
 

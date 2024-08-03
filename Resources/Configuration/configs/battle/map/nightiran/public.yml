@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: night_iran
+  smallImage: logo
+  largeText: Arabian Night
+  smallText: Vint

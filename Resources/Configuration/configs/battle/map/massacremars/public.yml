@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: ares
+  smallImage: logo
+  largeText: Ares
+  smallText: Vint

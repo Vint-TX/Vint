@@ -114,7 +114,7 @@ public class Battle {
             _ => throw new UnreachableException()
         };
 
-        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.ScoreLimit, Properties.TimeLimit * 60, Properties.MaxPlayers, 60);
+        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.TimeLimit * 60, Properties.MaxPlayers, 60);
         RoundEntity = new RoundTemplate().Create(Entity);
 
         ModeHandler = Properties.BattleMode switch {
@@ -132,7 +132,7 @@ public class Battle {
             return;
         }
 
-        IDictionary<BonusType, IEnumerable<Config.MapInformation.Bonus>> bonuses = MapInfo.BonusRegions
+        Dictionary<BonusType, IEnumerable<Config.MapInformation.Bonus>> bonuses = MapInfo.BonusRegions
             .Get(Properties.BattleMode)
             .ToDictionary();
 
@@ -253,7 +253,7 @@ public class Battle {
             Preset preset = connection.Player.CurrentPreset;
 
             await connection.Share(LobbyEntity, LobbyChatEntity);
-            await connection.User.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
+            await connection.User.AddComponentFrom<BattleLobbyGroupComponent>(LobbyEntity);
             await connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
             foreach (BattlePlayer battlePlayer in Players)

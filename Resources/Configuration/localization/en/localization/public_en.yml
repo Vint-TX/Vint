@@ -49,17 +49,17 @@ a32d83a4-a8e7-4d79-ad8f-0a22a15ba60b:
 d81ac72b-397c-4d57-92a8-ee1a5fc1c2d8:
   'avatar/name': 'avatar {0}'
 793b2f97-041d-4d8a-8e1f-2bd442546bba:
-  'battle/hud/assist/assist': '<alpha=#88>Kill assist<alpha=#FF> {killer} <alpha=#88>{percent}%<alpha=#FF> <color="orange">+{scoreValule}</color>'
+  'battle/hud/assist/assist': '<alpha=#88>Kill assist<alpha=#FF> {killer} <alpha=#88>{percent}%<alpha=#FF> <color="orange">+{scoreValue}</color>'
 dc85aa38-628f-4141-a4d3-d804b3ca7c78:
-  'battle/hud/assist/flagDelivery': 'Flag delivery <color="orange">+{scoreValule}</color>'
+  'battle/hud/assist/flagDelivery': 'Flag delivery <color="orange">+{scoreValue}</color>'
 9c5494c8-7757-47c9-8022-b299d13c4712:
-  'battle/hud/assist/flagReturn': 'Flag return <color="orange">+{scoreValule}</color>'
+  'battle/hud/assist/flagReturn': 'Flag return <color="orange">+{scoreValue}</color>'
 9d1907be-4219-40d8-bc5e-d1b365f5250c:
-  'battle/hud/assist/heal': '<alpha=#FF>Healing of an ally<alpha=#FF> <color="orange">+{scoreValule}</color>'
+  'battle/hud/assist/heal': '<alpha=#FF>Healing of an ally<alpha=#FF> <color="orange">+{scoreValue}</color>'
 60ccdf70-63bf-419e-8d52-a4d675ea64b8:
-  'battle/hud/assist/kill': '{killer} <color="orange">+{scoreValule}</color>'
+  'battle/hud/assist/kill': '{killer} <color="orange">+{scoreValue}</color>'
 c4431729-3d44-4776-94dd-589153edfeb7:
-  'battle/hud/assist/streak': 'Kill Streak <color="orange">+{scoreValule}</color>'
+  'battle/hud/assist/streak': 'Kill Streak <color="orange">+{scoreValue}</color>'
 d756044e-0570-4d31-a75e-a9a7eb47c90b:
   'battle/hud/ctf/enemy_base': 'Enemy base'
 154c5f4c-9c3f-4b00-a639-3f8c94399548:
@@ -122,6 +122,8 @@ e4dcc848-c8ad-4061-a40f-e673403d1d5b:
   'battle/matchDetails/turretHader': 'Turret'
 2ee454d9-5641-4fd6-85ec-028e7c0c0c7f:
   'battle/results/arcade': 'Arcade battle'
+2ee454d9-5641-4fd6-85ec-028e7c0c0c80:
+  'battle/results/custom': 'Custom battle'
 61a53e50-3093-44ec-9d5b-897a8d60b24b:
   'battle/results/armor': 'Armor:'
 ccfdd1bc-23d2-44a0-9601-dfc78b8278c2:

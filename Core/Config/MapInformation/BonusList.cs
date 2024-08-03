@@ -9,7 +9,7 @@ public readonly record struct BonusList(
     List<Bonus> Speed,
     List<Bonus> Gold
 ) {
-    public IDictionary<BonusType, IEnumerable<Bonus>> ToDictionary() => new Dictionary<BonusType, IEnumerable<Bonus>> {
+    public Dictionary<BonusType, IEnumerable<Bonus>> ToDictionary() => new() {
         { BonusType.Repair, Repair },
         { BonusType.Armor, Armor },
         { BonusType.Damage, Damage },

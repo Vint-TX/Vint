@@ -16,7 +16,6 @@ public abstract class BattleModeTemplate : EntityTemplate {
         TypeHandler typeHandler,
         IEntity lobby,
         BattleMode mode,
-        int scoreLimit,
         int timeLimit,
         int userLimit,
         int warmUpTimeLimit) => Entity(
@@ -28,15 +27,16 @@ public abstract class BattleModeTemplate : EntityTemplate {
             .AddComponent<VisibleItemComponent>()
             .AddComponent(new UserCountComponent(userLimit))
             .AddComponent(new TimeLimitComponent(timeLimit, warmUpTimeLimit))
-            .AddComponent(new ScoreLimitComponent(scoreLimit))
-            .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow))
+            .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(warmUpTimeLimit)))
             .AddComponentFrom<MapGroupComponent>(lobby)
+            .AddComponentFrom<BattleLobbyGroupComponent>(lobby)
             .AddComponentFrom<GravityComponent>(lobby)
             .AddComponentFrom<BattleModeComponent>(lobby)
             .AddComponentFrom<UserLimitComponent>(lobby)
             .AddGroupComponent<BattleGroupComponent>()
             .ThenExecuteIf(_ => typeHandler is ArcadeHandler, entity => entity.AddComponent<ArcadeBattleComponent>())
-            .ThenExecuteIf(_ => typeHandler is MatchmakingHandler, entity => entity.AddComponent<RatingBattleComponent>()));
+            .ThenExecuteIf(_ => typeHandler is MatchmakingHandler, entity => entity.AddComponent<RatingBattleComponent>())
+            .ThenExecuteIf(_ => typeHandler is CustomHandler, entity => entity.AddComponent<CustomBattleComponent>()));
 
-    public abstract IEntity Create(TypeHandler typeHandler, IEntity lobby, int scoreLimit, int timeLimit, int userLimit, int warmUpTimeLimit);
+    public abstract IEntity Create(TypeHandler typeHandler, IEntity lobby, int timeLimit, int userLimit, int warmUpTimeLimit);
 }

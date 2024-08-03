@@ -1,0 +1,7 @@
+﻿host: 127.0.0.1
+acceptorPort: 5050
+bundleDbVersion: Vint-14
+resourcesUrl: https://cdn.vint-official.site/resources
+configsUrl: http://127.0.0.1:8080/config
+updateConfigUrl: https://cdn.vint-official.site/update/{BuildTarget}.yml
+discordRpcResourcesUrl: https://cdn.vint-official.site/resources/discord

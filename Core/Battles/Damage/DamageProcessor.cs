@@ -27,6 +27,9 @@ public class DamageProcessor : IDamageProcessor {
         // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
         switch (type) {
             case DamageType.Kill:
+                if (!target.KillAssistants.TryAdd(source, damage.Value))
+                    target.KillAssistants[source] += damage.Value;
+
                 if (source == target)
                     await target.SelfDestruct();
                 else
@@ -53,7 +56,8 @@ public class DamageProcessor : IDamageProcessor {
     }
 
     public async Task<DamageType> Damage(BattleTank target, CalculatedDamage damage) {
-        if (damage.Value <= 0) return DamageType.Normal;
+        if (damage.Value <= 0)
+            return DamageType.Normal;
 
         await target.SetHealth(target.Health - damage.Value);
         target.TakenDamage += damage.Value;

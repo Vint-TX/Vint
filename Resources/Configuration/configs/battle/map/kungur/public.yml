@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: kungur
+  smallImage: logo
+  largeText: Kungur
+  smallText: Vint

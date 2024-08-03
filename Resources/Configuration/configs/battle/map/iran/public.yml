@@ -10,3 +10,8 @@ mapModeRestriction:
     - TDM
     - DM
     - CTF
+discordConfig:
+  largeImage: iran
+  smallImage: logo
+  largeText: Iran
+  smallText: Vint

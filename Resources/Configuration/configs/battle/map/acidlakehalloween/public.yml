@@ -9,3 +9,8 @@ mapModeRestriction:
   availableModes:
     - DM
     - CTF
+discordConfig:
+  largeImage: hell_lake
+  smallImage: logo
+  largeText: Lake Hell
+  smallText: Vint

@@ -1,0 +1,6 @@
+using Vint.Core.Protocol.Attributes;
+
+namespace Vint.Core.ECS.Events.Battle;
+
+[ProtocolId(12346)]
+public class BattleTimerUpdatedEvent : IEvent;

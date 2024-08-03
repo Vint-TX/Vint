@@ -28,7 +28,7 @@ public class BattleUserTemplate : EntityTemplate {
     public IEntity CreateAsSpectator(IEntity user, IEntity battle) {
         IEntity entity = Create(user, battle);
 
-        entity.AddComponent(new UserInBattleAsSpectatorComponent(battle.Id));
+        entity.AddComponent<UserInBattleAsSpectatorComponent>();
         return entity;
     }
 }

@@ -3,6 +3,7 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Battle.Limit;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -23,6 +24,8 @@ public abstract class SoloHandler(
                 .GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses);
 
         await Battle.Entity.ChangeComponent<ScoreLimitComponent>(component => component.ScoreLimit = maxScore);
+        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+            await connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
     }
 
     public override SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer) {

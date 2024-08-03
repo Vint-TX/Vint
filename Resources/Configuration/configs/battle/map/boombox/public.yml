@@ -10,3 +10,8 @@ mapModeRestriction:
     - CTF
     - TDM
     - DM
+discordConfig:
+  largeImage: area-159
+  smallImage: logo
+  largeText: Old School
+  smallText: Vint
