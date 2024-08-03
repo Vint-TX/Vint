@@ -13,7 +13,7 @@
           "headerText": "Invite your friends!",
           "tooltip": "Vint is the first custom open-source TX server",
           "externalUrl": "https://discord.gg/upyXe3F2Fe",
-          "previewImageUrl": "http://prod.vint-official.site/resources/News/Images/Vint_Wallpaper.png"
+          "previewImageUrl": "https://cdn.vint-official.site/resources/News/Images/Vint_Wallpaper.png"
         }
       }
     }
@@ -32,7 +32,7 @@
           "headerText": "New video!",
           "tooltip": "How to build a good preset?",
           "externalUrl": "https://youtu.be/xcJevuHeCLo",
-          "previewImageUrl": "http://prod.vint-official.site/resources/News/Images/Video_Preview.png",
+          "previewImageUrl": "https://cdn.vint-official.site/resources/News/Images/Video_Preview.png",
           "date": "2024-05-14T17:20:00Z"
         }
       }
@@ -52,7 +52,7 @@
           "headerText": "Site",
           "tooltip": "Vint site",
           "externalUrl": "https://vint-official.site",
-          "previewImageUrl": "http://prod.vint-official.site/resources/News/Images/Vint_Logo.png"
+          "previewImageUrl": "https://cdn.vint-official.site/resources/News/Images/Vint_Logo.png"
         }
       }
     }
@@ -71,7 +71,7 @@
           "headerText": "Report bugs and suggest ideas!",
           "tooltip": "We appreciate your help!",
           "externalUrl": "https://discord.gg/upyXe3F2Fe",
-          "previewImageUrl": "http://prod.vint-official.site/resources/News/Images/Vint_Logo_Full.png"
+          "previewImageUrl": "https://cdn.vint-official.site/resources/News/Images/Vint_Logo_Full.png"
         }
       }
     }
@@ -90,7 +90,7 @@
           "headerText": "Stay tuned!",
           "tooltip": "Be the first to know what's new!",
           "externalUrl": "https://discord.gg/upyXe3F2Fe",
-          "previewImageUrl": "http://prod.vint-official.site/resources/News/Images/Vint_Logo_Full.png"
+          "previewImageUrl": "https://cdn.vint-official.site/resources/News/Images/Vint_Logo_Full.png"
         }
       }
     }

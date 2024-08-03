@@ -81,12 +81,10 @@ public class StaticServer(
             }
 
             case "config": {
-                await ProcessConfigRequest(response, urlParts);
-                break;
-            }
-
-            case "init.yml": {
-                await ProcessTextRequest(response, requestedEntry);
+                if (urlParts[1] == "init.yml")
+                    await ProcessTextRequest(response, requestedEntry);
+                else
+                    await ProcessConfigRequest(response, urlParts);
                 break;
             }
 
