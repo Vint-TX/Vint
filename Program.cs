@@ -38,7 +38,10 @@ abstract class Program {
                 ConfigManager.InitializeGlobalEntities();
             }));
 
-        new Thread(() => staticServer.Start()) { Name = "Static Server" }.Start();
+        Extensions.RunTaskInBackground(staticServer.Start, e => {
+            Logger.Fatal(e, "");
+            Environment.Exit(e.HResult);
+        }, true);
 
         Extensions.RunTaskInBackground(gameServer.Start, e => {
             Logger.Fatal(e, "");
