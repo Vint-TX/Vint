@@ -13,7 +13,7 @@ public abstract class SoloHandler(
     Battle battle
 ) : ModeHandler(battle) {
     protected abstract List<SpawnPoint> SpawnPoints { get; }
-    protected SpawnPoint? LastSpawnPoint { get; set; }
+    SpawnPoint? LastSpawnPoint { get; set; }
 
     public override Task Tick() => Task.CompletedTask;
 

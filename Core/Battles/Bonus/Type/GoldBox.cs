@@ -3,6 +3,7 @@ using LinqToDB;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.Config;
+using Vint.Core.Config.MapInformation;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
@@ -18,14 +19,12 @@ public sealed class GoldBox(
     Vector3 regionPosition,
     bool hasParachute
 ) : BonusBox(battle, regionPosition, hasParachute) {
-    const int XCrystalsReward = 100;
-    const int DropCheckTicksCount = 1000;
     public override BonusType Type => BonusType.Gold;
     public override IEntity? Entity { get; protected set; }
     public override IEntity? RegionEntity { get; protected set; } = new BonusRegionTemplate().CreateGold(regionPosition);
     public override BonusConfigComponent ConfigComponent { get; } = ConfigManager.GetComponent<BonusConfigComponent>("battle/bonus/gold/cry");
 
-    int Ticks { get; set; }
+    static GoldMapInfo Info => ConfigManager.CommonMapInfo.Gold;
 
     public override async Task Take(BattleTank battleTank) {
         await base.Take(battleTank);
@@ -43,7 +42,7 @@ public sealed class GoldBox(
 
         IPlayerConnection targetConnection = battleTank.BattlePlayer.PlayerConnection;
 
-        await targetConnection.ChangeXCrystals(XCrystalsReward);
+        await targetConnection.PurchaseItem(Info.Reward.GetEntity(), Info.Reward.Amount, 0, false, false);
 
         await using (DbConnection db = new()) {
             await db.Statistics
@@ -76,13 +75,7 @@ public sealed class GoldBox(
             Battle.StateManager.CurrentState is not Running ||
             StateManager.CurrentState is not None) return;
 
-        Ticks++;
-        if (Ticks % DropCheckTicksCount != 0) return;
-
-        Ticks = 0;
-        float probability = Battle.MapInfo.GoldProbability;
-
-        if (MathUtils.RollTheDice(probability))
+        if (MathUtils.RollTheDice(Info.Probability))
             await Drop();
     }
 }

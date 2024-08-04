@@ -20,12 +20,12 @@ namespace Vint.Core.Battles.Type;
 
 public class MatchmakingHandler : TypeHandler {
     public MatchmakingHandler(Battle battle) : base(battle) =>
-        Maps = ConfigManager.MapInfos.Where(map => map.MatchMaking && map.HasSpawnPoints(BattleMode)).ToList();
+        Maps = ConfigManager.MapInfos.Where(map => map.Matchmaking && map.HasSpawnPoints(BattleMode)).ToArray();
 
-    public BattleMode BattleMode { get; } = GetRandomMode();
+    BattleMode BattleMode { get; } = GetRandomMode();
 
     ConcurrentHashSet<BattlePlayer> WaitingPlayers { get; } = [];
-    List<MapInfo> Maps { get; }
+    MapInfo[] Maps { get; }
 
     public override Task Setup() {
         MapInfo mapInfo = Maps.Shuffle().First();

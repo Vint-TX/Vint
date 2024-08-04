@@ -1,3 +1,4 @@
+using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
@@ -15,6 +16,9 @@ public class ExitFromMatchmakingEvent : IServerEvent {
 
         IEntity lobby = entities.Single();
         Battles.Battle battle = connection.BattlePlayer!.Battle;
+
+        if (battle.StateManager.CurrentState is Starting)
+            return Task.CompletedTask;
 
         switch (battle.TypeHandler) {
             case MatchmakingHandler:

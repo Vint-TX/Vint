@@ -1,0 +1,686 @@
+{
+  "id": 458045295,
+  "maxPlayers": 8,
+  "matchmaking": false,
+  "flags": {
+    "red": {
+      "x": -48.36,
+      "y": 0.0,
+      "z": 17.86
+    },
+    "blue": {
+      "x": 39.11,
+      "y": 0.0,
+      "z": -27.50001
+    }
+  },
+  "puntativeGeoms": [
+    {
+      "number": 0,
+      "position": {
+        "x": 91.15658,
+        "y": -9.839791,
+        "z": -12.9545708
+      },
+      "size": {
+        "x": 73.8,
+        "y": 100.0,
+        "z": 162.1
+      }
+    },
+    {
+      "number": 1,
+      "position": {
+        "x": -101.843414,
+        "y": -9.839789,
+        "z": -12.954565
+      },
+      "size": {
+        "x": 73.8,
+        "y": 100.0,
+        "z": 162.1
+      }
+    },
+    {
+      "number": 2,
+      "position": {
+        "x": -5.04342461,
+        "y": -9.83978748,
+        "z": 69.64542
+      },
+      "size": {
+        "x": 138.5,
+        "y": 100.0,
+        "z": 31.0
+      }
+    },
+    {
+      "number": 3,
+      "position": {
+        "x": -5.0434227,
+        "y": -9.839791,
+        "z": -79.3545761
+      },
+      "size": {
+        "x": 138.5,
+        "y": 100.0,
+        "z": 31.0
+      }
+    }
+  ],
+  "spawnPoints": {
+    "deathmatch": [
+      {
+        "number": 0,
+        "position": {
+          "x": 15.6,
+          "y": 1.0,
+          "z": 43.0
+        },
+        "rotation": {
+          "w": -1.629207E-07,
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0
+        }
+      },
+      {
+        "number": 1,
+        "position": {
+          "x": 29.6,
+          "y": 1.0,
+          "z": 39.7
+        },
+        "rotation": {
+          "w": 0.3865423,
+          "x": 0.0,
+          "y": -0.9222717,
+          "z": 0.0
+        }
+      }
+    ],
+    "teamDeathmatch": {
+      "redTeam": [
+        {
+          "number": 0,
+          "position": {
+            "x": 7.4,
+            "y": 1.0,
+            "z": 43.5
+          },
+          "rotation": {
+            "w": 0.2927889,
+            "x": 0.0,
+            "y": 0.9561771,
+            "z": 0.0
+          }
+        }
+      ],
+      "blueTeam": [
+        {
+          "number": 0,
+          "position": {
+            "x": 18.7,
+            "y": 1.0,
+            "z": 41.0
+          },
+          "rotation": {
+            "w": -0.07387042,
+            "x": 0.0,
+            "y": 0.9972679,
+            "z": 0.0
+          }
+        }
+      ]
+    },
+    "captureTheFlag": {
+      "redTeam": [
+        {
+          "number": 0,
+          "position": {
+            "x": 7.4,
+            "y": 1.0,
+            "z": 43.5
+          },
+          "rotation": {
+            "w": 0.2927889,
+            "x": 0.0,
+            "y": 0.9561771,
+            "z": 0.0
+          }
+        }
+      ],
+      "blueTeam": [
+        {
+          "number": 0,
+          "position": {
+            "x": 18.7,
+            "y": 1.0,
+            "z": 41.0
+          },
+          "rotation": {
+            "w": -0.07387042,
+            "x": 0.0,
+            "y": 0.9972679,
+            "z": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "teleportPoints": [
+    {
+      "name": "hangar",
+      "position": {
+        "x": -128.8,
+        "y": 9.65,
+        "z": 27.75
+      },
+      "rotation": {
+        "w": 0.577,
+        "x": 0,
+        "y": 0.8166,
+        "z": 0
+      }
+    },
+    {
+      "name": "middle",
+      "position": {
+        "x": -4.66,
+        "y": 3.77,
+        "z": -4.94
+      },
+      "rotation": {
+        "w": 1.0,
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "brokenTower",
+      "position": {
+        "x": -30.5,
+        "y": 15.6,
+        "z": 20.4
+      },
+      "rotation": {
+        "w": 0.4629,
+        "x": 0,
+        "y": 0.8857,
+        "z": 0.034
+      }
+    },
+    {
+      "name": "waterTower",
+      "position": {
+        "x": -22.7,
+        "y": 32.57,
+        "z": -124.323
+      },
+      "rotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "name": "platform",
+      "position": {
+        "x": 41.74,
+        "y": 15.8,
+        "z": -30.45
+      },
+      "rotation": {
+        "w": 0.7118,
+        "x": 0,
+        "y": -0.7034,
+        "z": 0
+      }
+    }
+  ],
+  "bonusRegions": {
+    "deathmatch": {
+      "repair": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": -27.84,
+            "y": 3.0,
+            "z": 6.71
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": 16.8,
+            "y": 3.0,
+            "z": -13.9
+          }
+        }
+      ],
+      "armor": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299995,
+            "y": 0.0,
+            "z": 46.1
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299999,
+            "y": 0.0,
+            "z": -54.1
+          }
+        }
+      ],
+      "damage": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": 15.8,
+            "y": 3.0,
+            "z": 15.2
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -26.2,
+            "y": 3.0,
+            "z": -27.2
+          }
+        }
+      ],
+      "speed": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": -55.8,
+            "y": 0.0,
+            "z": 16.24
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -55.8,
+            "y": 0.0,
+            "z": -23.3
+          }
+        },
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": 46.7,
+            "y": 0.0,
+            "z": -23.3
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": 42.0,
+            "y": 3.0,
+            "z": 15.1
+          }
+        }
+      ],
+      "gold": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": 33.38,
+            "y": 0.0,
+            "z": -5.220001
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -43.25,
+            "y": 0.0,
+            "z": -5.220003
+          }
+        },
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": -5.199999,
+            "y": 0.0,
+            "z": -43.3
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": -5.300004,
+            "y": 0.0,
+            "z": 33.1
+          }
+        },
+        {
+          "number": 4,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299998,
+            "y": 3.0,
+            "z": -5.099999
+          }
+        }
+      ]
+    },
+    "teamDeathmatch": {
+      "repair": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": -27.84,
+            "y": 3.0,
+            "z": 6.71
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": 16.8,
+            "y": 3.0,
+            "z": -13.9
+          }
+        }
+      ],
+      "armor": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299995,
+            "y": 0.0,
+            "z": 46.1
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299999,
+            "y": 0.0,
+            "z": -54.1
+          }
+        }
+      ],
+      "damage": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": 15.8,
+            "y": 3.0,
+            "z": 15.2
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -26.2,
+            "y": 3.0,
+            "z": -27.2
+          }
+        }
+      ],
+      "speed": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": -54.4,
+            "y": 0.0,
+            "z": 18.69
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -53.27,
+            "y": 0.0,
+            "z": -27.76
+          }
+        },
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": 46.98,
+            "y": 0.0,
+            "z": -27.68
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": 42.0,
+            "y": 3.0,
+            "z": 15.1
+          }
+        }
+      ],
+      "gold": [
+        {
+          "number": 0,
+          "hasParachute": true,
+          "position": {
+            "x": 33.29,
+            "y": 0.0,
+            "z": -5.219999
+          }
+        },
+        {
+          "number": 1,
+          "hasParachute": true,
+          "position": {
+            "x": -43.25,
+            "y": 0.0,
+            "z": -5.220003
+          }
+        },
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": -5.2,
+            "y": 0.0,
+            "z": -43.3
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": -5.300004,
+            "y": 0.0,
+            "z": 33.1
+          }
+        },
+        {
+          "number": 4,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299998,
+            "y": 3.0,
+            "z": -5.099999
+          }
+        }
+      ]
+    },
+    "captureTheFlag": {
+      "repair": [
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": -27.84001,
+            "y": 3.0,
+            "z": 6.710004
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": 16.81,
+            "y": 3.0,
+            "z": -13.86
+          }
+        }
+      ],
+      "armor": [
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": -5.3,
+            "y": 0.0,
+            "z": 46.12
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299993,
+            "y": 0.0,
+            "z": -54.3
+          }
+        }
+      ],
+      "damage": [
+        {
+          "number": 2,
+          "hasParachute": true,
+          "position": {
+            "x": 15.8,
+            "y": 3.0,
+            "z": 15.19999
+          }
+        },
+        {
+          "number": 3,
+          "hasParachute": true,
+          "position": {
+            "x": -26.25,
+            "y": 3.0,
+            "z": -27.2
+          }
+        }
+      ],
+      "speed": [
+        {
+          "number": 4,
+          "hasParachute": true,
+          "position": {
+            "x": -54.39,
+            "y": 0.0,
+            "z": 18.69
+          }
+        },
+        {
+          "number": 5,
+          "hasParachute": true,
+          "position": {
+            "x": -53.33,
+            "y": 0.0,
+            "z": -27.85
+          }
+        },
+        {
+          "number": 6,
+          "hasParachute": true,
+          "position": {
+            "x": 47.0,
+            "y": 0.0,
+            "z": -27.8
+          }
+        },
+        {
+          "number": 7,
+          "hasParachute": true,
+          "position": {
+            "x": 42.0,
+            "y": 3.0,
+            "z": 15.14
+          }
+        }
+      ],
+      "gold": [
+        {
+          "number": 5,
+          "hasParachute": true,
+          "position": {
+            "x": -5.299997,
+            "y": 3.0,
+            "z": -5.099999
+          }
+        },
+        {
+          "number": 6,
+          "hasParachute": true,
+          "position": {
+            "x": -43.25,
+            "y": 0.0,
+            "z": -5.219995
+          }
+        },
+        {
+          "number": 7,
+          "hasParachute": true,
+          "position": {
+            "x": -5.199995,
+            "y": 0.0,
+            "z": -43.29999
+          }
+        },
+        {
+          "number": 8,
+          "hasParachute": true,
+          "position": {
+            "x": 33.38001,
+            "y": 0.0,
+            "z": -5.220005
+          }
+        },
+        {
+          "number": 9,
+          "hasParachute": true,
+          "position": {
+            "x": -5.300007,
+            "y": 0.0,
+            "z": 33.09999
+          }
+        }
+      ]
+    }
+  }
+}

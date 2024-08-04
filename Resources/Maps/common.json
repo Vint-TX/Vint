@@ -1,0 +1,9 @@
+{
+  "gold": {
+    "probability": 0.01,
+    "reward": {
+      "id": 947348559,
+      "amount": 100
+    }
+  }
+}

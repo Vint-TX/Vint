@@ -29,13 +29,12 @@ abstract class Program {
 
         await Task.WhenAll(
             Task.Run(ConfigManager.InitializeCache),
-            Task.Run(ConfigManager.InitializeMapInfos),
-            Task.Run(ConfigManager.InitializeMapModels), // You can comment this line to make the server starts faster
-            Task.Run(ConfigManager.InitializeChatCensorship),
-            Task.Run(() => {
-                ConfigManager.InitializeNodes();
-                ConfigManager.InitializeConfigs();
-                ConfigManager.InitializeGlobalEntities();
+            ConfigManager.InitializeMapInfos(),
+            ConfigManager.InitializeChatCensorship(),
+            Task.Run(async () => {
+                await ConfigManager.InitializeNodes();
+                await ConfigManager.InitializeConfigs();
+                await ConfigManager.InitializeGlobalEntities();
             }));
 
         Extensions.RunTaskInBackground(staticServer.Start, e => {

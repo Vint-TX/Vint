@@ -32,7 +32,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles;
 
-public class Battle {
+public sealed class Battle : IDisposable {
     public Battle() { // Matchmaking battle
         Properties = null!;
 
@@ -102,7 +102,7 @@ public class Battle {
     public ModeHandler ModeHandler { get; private set; } = null!;
     public IDamageProcessor DamageProcessor { get; private set; } = null!;
     public IBonusProcessor? BonusProcessor { get; private set; }
-    public Simulation? Simulation { get; private set; }
+    public Simulation Simulation { get; private set; } = null!;
 
     public ConcurrentHashSet<BattlePlayer> Players { get; } = [];
 
@@ -140,6 +140,9 @@ public class Battle {
     }
 
     public async Task UpdateProperties(BattleProperties properties) {
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+        Simulation?.Dispose();
+
         ModeHandler previousHandler = ModeHandler;
 
         Properties = properties;
@@ -168,18 +171,18 @@ public class Battle {
     }
 
     public async Task Start() {
-        if (ConfigManager.MapNameToTriangles.TryGetValue(MapInfo.Name, out Triangle[]? triangles)) {
-            Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
-            Simulation.BufferPool.Take(triangles.Length, out Buffer<Triangle> buffer);
+        Triangle[] triangles = MapInfo.GetTriangles();
 
-            for (int i = 0; i < triangles.Length; i++)
-                buffer[i] = triangles[i];
+        Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
+        Simulation.BufferPool.Take(triangles.Length, out Buffer<Triangle> buffer);
 
-            Simulation.Statics.Add(
-                new StaticDescription(Vector3.Zero,
-                    Simulation.Shapes.Add(
-                        new Mesh(buffer, Vector3.One, Simulation.BufferPool))));
-        }
+        for (int i = 0; i < triangles.Length; i++)
+            buffer[i] = triangles[i];
+
+        Simulation.Statics.Add(
+            new StaticDescription(Vector3.Zero,
+                Simulation.Shapes.Add(
+                    new Mesh(buffer, Vector3.One, Simulation.BufferPool))));
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
             await battlePlayer.Init();
@@ -369,4 +372,10 @@ public class Battle {
         Math.Abs(teamHandler.RedPlayers.Count() - teamHandler.BluePlayers.Count()) >= 2;
 
     public override int GetHashCode() => LobbyId.GetHashCode();
+
+    public void Dispose() {
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+        Simulation?.Dispose();
+        Players.Clear();
+    }
 }

@@ -37,11 +37,11 @@ public static class ConfigManager {
     public static ServerConfig ServerConfig { get; private set; } = null!;
     public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
     public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;
-    public static FrozenDictionary<string, Triangle[]> MapNameToTriangles { get; private set; } = null!;
     public static FrozenDictionary<string, Regex> CensorshipRegexes { get; private set; } = null!;
     public static ModulePrices ModulePrices { get; private set; }
     public static DiscordConfig Discord { get; private set; }
     public static QuestsInfo QuestsInfo { get; private set; }
+    public static CommonMapInfo CommonMapInfo { get; private set; }
 
     public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
@@ -53,7 +53,7 @@ public static class ConfigManager {
     static FrozenDictionary<string, byte[]> LocaleToConfigCache { get; set; } = FrozenDictionary<string, byte[]>.Empty;
     static ConfigNode Root { get; } = new();
 
-    public static void InitializeChatCensorship() {
+    public static async Task InitializeChatCensorship() {
         if (!ChatUtils.CensorshipEnabled) return;
 
         Logger.Information("Initializing chat censorship");
@@ -66,7 +66,7 @@ public static class ConfigManager {
             .Select(replacementPath => JsonConvert.DeserializeObject<Dictionary<char, string>>(File.ReadAllText(replacementPath))!)
             .Aggregate(new Dictionary<char, string>(), (current, stringToRegex) => current.Concat(stringToRegex).ToDictionary()));
 
-        string[] badWords = File.ReadAllLines(badWordsPath);
+        string[] badWords = await File.ReadAllLinesAsync(badWordsPath);
         ConcurrentDictionary<string, Regex> regexes = new();
 
         Parallel.ForEach(badWords, word => {
@@ -90,55 +90,30 @@ public static class ConfigManager {
         Logger.Information("Chat censorship initialized");
     }
 
-    public static void InitializeMapInfos() {
+    public static async Task InitializeMapInfos() {
         Logger.Information("Parsing map infos");
 
-        string mapInfosConfigPath = Path.Combine(ResourcesPath, "mapInfo.json");
-        Dictionary<string, MapInfo> mapInfos = JsonConvert.DeserializeObject<Dictionary<string, MapInfo>>(File.ReadAllText(mapInfosConfigPath))!;
+        string mapsPath = Path.Combine(ResourcesPath, "Maps");
+        string commonMapInfoPath = Path.Combine(mapsPath, "common.json");
 
-        foreach ((string mapName, MapInfo mapInfo) in mapInfos) {
-            MapInfo info = mapInfo;
-            info.Name = mapName;
-            mapInfos[mapName] = info;
+        CommonMapInfo = JsonConvert.DeserializeObject<CommonMapInfo>(await File.ReadAllTextAsync(commonMapInfoPath));
+
+        HashSet<MapInfo> mapInfos = [];
+
+        foreach (string map in Directory.EnumerateDirectories(mapsPath)) {
+            string mapName = Path.GetFileName(map);
+            string mapInfoPath = Path.Combine(map, "info.json");
+
+            MapInfo mapInfo = JsonConvert.DeserializeObject<MapInfo>(await File.ReadAllTextAsync(mapInfoPath));
+            mapInfo.Name = mapName;
+
+            mapInfo.Init();
+
+            mapInfos.Add(mapInfo);
         }
 
-        MapInfos = mapInfos.Values.ToFrozenSet();
+        MapInfos = mapInfos.ToFrozenSet();
         Logger.Information("Map infos parsed");
-    }
-
-    public static void InitializeMapModels() {
-        Logger.Information("Parsing map models");
-
-        string mapModelsConfigPath = Path.Combine(ResourcesPath, "MapModels");
-        Vector3 gltfToUnity = new(-1, 1, 1);
-
-        ConcurrentDictionary<string, Triangle[]> mapNameToTriangles = new();
-
-        Parallel.ForEach(Directory.EnumerateFiles(mapModelsConfigPath),
-            mapModelPath => {
-                string mapName = Path.GetFileNameWithoutExtension(mapModelPath);
-                Logger.Debug("Parsing {MapName}", mapName);
-
-                try {
-                    ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
-
-                    Triangle[] triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
-                        .EvaluateTriangles()
-                        .Select(tuple =>
-                            new Triangle(
-                                tuple.A.GetGeometry().GetPosition() * gltfToUnity,
-                                tuple.B.GetGeometry().GetPosition() * gltfToUnity,
-                                tuple.C.GetGeometry().GetPosition() * gltfToUnity))
-                        .ToArray();
-
-                    mapNameToTriangles[mapName] = triangles;
-                } catch (Exception e) {
-                    Logger.Error(e, "An exception occured while generating {MapName} map model", mapName);
-                }
-            });
-
-        MapNameToTriangles = mapNameToTriangles.ToFrozenDictionary();
-        Logger.Information("Map models parsed");
     }
 
     public static void InitializeCache() {
@@ -170,7 +145,7 @@ public static class ConfigManager {
         Logger.Information("Cache for config archives generated");
     }
 
-    public static void InitializeNodes() {
+    public static async Task InitializeNodes() {
         Logger.Information("Generating config nodes");
 
         string configsPath = Path.Combine(ResourcesPath, "Configuration", "configs");
@@ -195,14 +170,14 @@ public static class ConfigManager {
             switch (fileName) {
                 case "id.yml": {
                     Dictionary<string, long> obj =
-                        new Deserializer().Deserialize<Dictionary<string, long>>(File.ReadAllText(filePath));
+                        new Deserializer().Deserialize<Dictionary<string, long>>(await File.ReadAllTextAsync(filePath));
 
                     ids[relativePath[..^7]] = obj["id"];
                     break;
                 }
 
                 case "public.yml": {
-                    if (deserializer.Deserialize(File.ReadAllText(filePath)) is Dictionary<object, object> dict)
+                    if (deserializer.Deserialize(await File.ReadAllTextAsync(filePath)) is Dictionary<object, object> dict)
                         components[relativePath[..^11]] = dict.Values.OfType<IComponent>().ToList();
                     break;
                 }
@@ -250,7 +225,7 @@ public static class ConfigManager {
         Logger.Information("Config nodes generated");
     }
 
-    public static void InitializeGlobalEntities() {
+    public static async Task InitializeGlobalEntities() {
         Logger.Information("Generating global entities");
 
         List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
@@ -258,7 +233,8 @@ public static class ConfigManager {
 
         Dictionary<string, Dictionary<string, IEntity>> globalEntities = new();
 
-        List<string> typesToLoad = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(Path.Combine(rootPath, "typesToLoad.json")))!;
+        List<string> typesToLoad =
+            JsonConvert.DeserializeObject<List<string>>(await File.ReadAllTextAsync(Path.Combine(rootPath, "typesToLoad.json")))!;
 
         foreach (string filePath in typesToLoad.Select(type => Path.Combine(rootPath, $"{type}.json"))) {
             string relativePath = Path.GetRelativePath(rootPath, filePath).Replace('\\', '/');
@@ -266,7 +242,7 @@ public static class ConfigManager {
 
             Logger.Verbose("Parsing {File}", relativePath);
 
-            JArray jArray = JArray.Parse(File.ReadAllText(filePath));
+            JArray jArray = JArray.Parse(await File.ReadAllTextAsync(filePath));
 
             Dictionary<string, IEntity> entities = new(jArray.Count);
 
@@ -342,15 +318,18 @@ public static class ConfigManager {
         Logger.Information("Global entities generated");
     }
 
-    public static void InitializeConfigs() {
+    public static async Task InitializeConfigs() {
         Logger.Information("Initializing configs");
 
-        ServerConfig = JsonConvert.DeserializeObject<ServerConfig>(File.ReadAllText(ServerConfig.FilePath))!;
-        Discord = JsonConvert.DeserializeObject<DiscordConfig>(File.ReadAllText(Path.Combine(ResourcesPath, "discord.json")));
-        ModulePrices = JsonConvert.DeserializeObject<ModulePrices>(File.ReadAllText(Path.Combine(ResourcesPath, "modulePrices.json")));
-        QuestsInfo = JsonConvert.DeserializeObject<QuestsInfo>(File.ReadAllText(Path.Combine(ResourcesPath, "quests.json")), new TimeOnlyConverter());
+        ServerConfig = JsonConvert.DeserializeObject<ServerConfig>(await File.ReadAllTextAsync(ServerConfig.FilePath))!;
+        Discord = JsonConvert.DeserializeObject<DiscordConfig>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "discord.json")));
+        ModulePrices = JsonConvert.DeserializeObject<ModulePrices>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "modulePrices.json")));
+
+        QuestsInfo = JsonConvert.DeserializeObject<QuestsInfo>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "quests.json")),
+            new TimeOnlyConverter());
+
         Blueprints = JsonConvert
-            .DeserializeObject<Dictionary<string, BlueprintChest>>(File.ReadAllText(Path.Combine(ResourcesPath, "blueprints.json")))!
+            .DeserializeObject<Dictionary<string, BlueprintChest>>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "blueprints.json")))!
             .ToFrozenDictionary();
 
         Logger.Information("Configs initialized");

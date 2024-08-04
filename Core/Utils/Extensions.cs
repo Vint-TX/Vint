@@ -51,6 +51,18 @@ public static class Extensions {
         return list;
     }
 
+    public static T[] Shuffle<T>(this T[] list) {
+        int n = list.Length;
+
+        while (n > 1) {
+            n--;
+            int k = Random.Shared.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+
+        return list;
+    }
+
     public static bool IsNullable(this PropertyInfo property) {
         if (NullabilityPool.TryGetValue(property, out bool isNullable))
             return isNullable;
