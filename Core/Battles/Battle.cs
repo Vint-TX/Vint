@@ -142,6 +142,7 @@ public sealed class Battle : IDisposable {
     public async Task UpdateProperties(BattleProperties properties) {
         // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         Simulation?.Dispose();
+        Simulation = null!;
 
         ModeHandler previousHandler = ModeHandler;
 
