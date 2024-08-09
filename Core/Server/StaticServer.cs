@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System.Collections.Specialized;
+using System.Net;
 using Serilog;
 using Vint.Core.Config;
+using Vint.Core.Discord;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server;
@@ -91,6 +93,28 @@ public class StaticServer(
                 break;
             }
 
+            case "discord" when urlParts[1] == "auth": {
+                NameValueCollection query = request.QueryString;
+
+                string? state = query["state"];
+                string? code = query["code"];
+                DiscordLinkRequest linkRequest = ConfigManager.DiscordLinkRequests.SingleOrDefault(req => req.State == state);
+
+                if (state == null || code == null || linkRequest == default) {
+                    SendError(response, 400);
+                    return;
+                }
+
+                ConfigManager.DiscordLinkRequests.TryRemove(linkRequest);
+                bool? result = ConfigManager.NewLinkRequest?.Invoke(code, linkRequest.UserId).GetAwaiter().GetResult();
+
+                if (result == true)
+                    await SendResponse(response, "Your Discord account is successfully linked!");
+                else
+                    await SendResponse(response, "Account is not linked, contact the administrators for support", 400);
+                break;
+            }
+
             default: {
                 SendError(response, 404);
                 break;
@@ -132,11 +156,12 @@ public class StaticServer(
         response.Close();
     }
 
-    static async Task SendResponse(HttpListenerResponse response, string content) {
+    static async Task SendResponse(HttpListenerResponse response, string content, int statusCode = 200) {
         await using (Stream output = response.OutputStream)
         await using (StreamWriter outputWriter = new(output))
             await outputWriter.WriteAsync(content);
 
+        response.StatusCode = statusCode;
         response.Close();
     }
 

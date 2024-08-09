@@ -10,6 +10,6 @@ namespace Vint.Core.ECS.Events.User.Friends;
 public class FriendRequestSentEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         await connection.Share(new FriendSentNotificationTemplate().Create(entities.Single()));
-        await connection.Send(new ShowNotificationGroupEvent(1));
+        await connection.Send(new ShowNotificationGroupEvent());
     }
 }

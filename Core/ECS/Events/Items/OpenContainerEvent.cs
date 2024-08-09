@@ -39,6 +39,6 @@ public class OpenContainerEvent : IServerEvent {
             .ToListAsync();
 
         await connection.Share(rewards);
-        await connection.Send(new ShowNotificationGroupEvent(rewards.Count), marketEntity);
+        await connection.Send(new ShowNotificationGroupEvent(), marketEntity);
     }
 }

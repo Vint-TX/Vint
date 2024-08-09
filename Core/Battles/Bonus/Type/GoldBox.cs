@@ -44,14 +44,11 @@ public sealed class GoldBox(
 
         await targetConnection.PurchaseItem(Info.Reward.GetEntity(), Info.Reward.Amount, 0, false, false);
 
-        await using (DbConnection db = new()) {
-            await db.Statistics
-                .Where(stats => stats.PlayerId == targetConnection.Player.Id)
-                .Set(stats => stats.GoldBoxesCaught, stats => stats.GoldBoxesCaught + 1)
-                .UpdateAsync();
-        }
-
-        await battleTank.SelfDestruct();
+        await using DbConnection db = new();
+        await db.Statistics
+            .Where(stats => stats.PlayerId == targetConnection.Player.Id)
+            .Set(stats => stats.GoldBoxesCaught, stats => stats.GoldBoxesCaught + 1)
+            .UpdateAsync();
     }
 
     public override async Task Spawn() {
@@ -71,11 +68,11 @@ public sealed class GoldBox(
     public override async Task Tick() {
         await base.Tick();
 
-        if (Battle.Timer < 120 ||
+        if (Battle.Timer.TotalSeconds < 120 ||
             Battle.StateManager.CurrentState is not Running ||
             StateManager.CurrentState is not None) return;
 
-        if (MathUtils.RollTheDice(Info.Probability))
+        if (MathUtils.RollTheDice(Info.ProbabilityInTick))
             await Drop();
     }
 }

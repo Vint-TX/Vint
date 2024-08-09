@@ -48,4 +48,21 @@ public static class TimeSpanUtils {
 
         return TimeSpan.FromDays(value * 365 + leapCounter);
     }
+
+    public static TimeSpan Min(TimeSpan left, TimeSpan right) =>
+        left <= right ? left : right;
+
+    public static TimeSpan Max(TimeSpan left, TimeSpan right) =>
+        left >= right ? left : right;
+
+    public static TimeSpan Max(TimeSpan value, TimeSpan min, TimeSpan max) {
+        if (min > max)
+            throw new ArgumentException("min should not be bigger than max");
+
+        return value < min
+            ? min
+            : value > max
+                ? max
+                : value;
+    }
 }

@@ -15,7 +15,7 @@ public class WarmingUp(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
     public override async Task Tick() {
-        if (Battle.Timer <= 5) {
+        if (Battle.Timer.TotalSeconds <= 5) {
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
                 BattleTank tank = battlePlayer.Tank!;
 
@@ -34,13 +34,13 @@ public class PreparingToFight(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
     public override async Task Tick() {
-        if (Battle.Timer <= 0) {
+        if (Battle.Timer <= TimeSpan.Zero) {
             foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
                 TankStateManager tankStateManager = battlePlayer.Tank!.StateManager;
                 await tankStateManager.SetState(new Spawn(tankStateManager));
             }
 
-            Battle.Timer = 1;
+            //Battle.Timer = TimeSpan.FromSeconds(1);
             await StateManager.SetState(new Respawning(StateManager));
         }
 
@@ -52,7 +52,7 @@ public class Respawning(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
     public override async Task Tick() {
-        if (Battle.Timer <= 0)
+        if (Battle.Timer <= TimeSpan.Zero)
             await BattleStateManager.SetState(new Running(BattleStateManager));
 
         await base.Tick();

@@ -9,7 +9,7 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IMatchmakingProcessor {
-    public void StartTicking();
+    public void Tick(TimeSpan deltaTime);
 
     public void AddPlayerToQueue(IPlayerConnection connection);
 
@@ -22,24 +22,19 @@ public class MatchmakingProcessor(
     ILogger Logger { get; } = Log.Logger.ForType(typeof(MatchmakingProcessor));
     ConcurrentHashSet<IPlayerConnection> PlayerQueue { get; } = [];
 
-    public void StartTicking() {
-        try {
-            while (true) {
-                foreach (IPlayerConnection connection in PlayerQueue) {
-                    if (!connection.IsOnline) {
-                        PlayerQueue.TryRemove(connection);
-                        continue;
-                    }
-
-                    battleProcessor.PutPlayerFromMatchmaking(connection);
+    public void Tick(TimeSpan deltaTime) {
+        foreach (IPlayerConnection connection in PlayerQueue) {
+            try {
+                if (!connection.IsOnline) {
                     PlayerQueue.TryRemove(connection);
+                    continue;
                 }
 
-                Thread.Sleep(10);
+                battleProcessor.PutPlayerFromMatchmaking(connection);
+                PlayerQueue.TryRemove(connection);
+            } catch (Exception e) {
+                Logger.Error(e, "Caught an exception in matchmaking loop");
             }
-        } catch (Exception e) {
-            Logger.Fatal(e, "Fatal error happened in matchmaking tick loop");
-            throw;
         }
     }
 

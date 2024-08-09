@@ -15,12 +15,18 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Quests;
 
-public class QuestManager(
-    GameServer gameServer
-) {
+public class QuestManager {
+    public QuestManager(GameServer gameServer) {
+        GameServer = gameServer;
+        UpdateNextTime();
+    }
+
     const int MaxQuests = 4;
     static QuestsInfo QuestsInfo => ConfigManager.QuestsInfo;
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(QuestManager));
+
+    GameServer GameServer { get; }
+    DateTimeOffset NextUpdate { get; set; }
 
     public async Task<List<Quest>> SetupQuests(IPlayerConnection connection, bool deleteAllUncompleted) {
         List<Quest> quests = await GetCurrentQuests(connection.Player.Id, deleteAllUncompleted);
@@ -50,45 +56,39 @@ public class QuestManager(
         return quests;
     }
 
-    // ReSharper disable once FunctionNeverReturns
-    public async Task Loop() {
-        while (true) {
-            TimeOnly currentTime = TimeOnly.FromDateTime(DateTimeOffset.UtcNow.UtcDateTime);
-            TimeOnly nextTime = QuestsInfo.Updates.GetNextUpdate();
-            TimeSpan duration = (nextTime - currentTime).Duration();
+    public async Task Tick() {
+        if (NextUpdate > DateTimeOffset.UtcNow)
+            return;
 
-            Logger.Warning("Quests will be updated in {Duration}", duration);
+        Logger.Warning("Updating quests...");
 
-            await Task.Delay(duration);
+        ConfigManager.ServerConfig.LastQuestsUpdate = DateTimeOffset.UtcNow;
+        await ConfigManager.ServerConfig.Save();
 
-            Logger.Warning("Updating quests...");
+        await using DbConnection db = new();
+        await db.BeginTransactionAsync();
 
-            ConfigManager.ServerConfig.LastQuestsUpdate = DateTimeOffset.UtcNow;
-            await ConfigManager.ServerConfig.Save();
+        foreach (IPlayerConnection connection in GameServer.PlayerConnections.Values.Where(conn => conn.IsOnline)) {
+            try {
+                await SetupQuests(connection, true);
 
-            await using DbConnection db = new();
-            await db.BeginTransactionAsync();
+                DateTimeOffset now = DateTimeOffset.UtcNow;
 
-            foreach (IPlayerConnection connection in gameServer.PlayerConnections.Values.Where(conn => conn.IsOnline)) {
-                try {
-                    await SetupQuests(connection, true);
+                await db.Players
+                    .Where(player => player.Id == connection.Player.Id)
+                    .Set(player => player.LastQuestUpdateTime, now)
+                    .UpdateAsync();
 
-                    DateTimeOffset now = DateTimeOffset.UtcNow;
-
-                    await db.Players
-                        .Where(player => player.Id == connection.Player.Id)
-                        .Set(player => player.LastQuestUpdateTime, now)
-                        .UpdateAsync();
-
-                    connection.Player.LastQuestUpdateTime = now;
-                } catch (Exception e) {
-                    connection.Logger.Error(e, "Caught an error while updating the quests");
-                }
+                connection.Player.LastQuestUpdateTime = now;
+            } catch (Exception e) {
+                connection.Logger.Error(e, "Caught an error while updating the quests");
             }
-
-            await db.CommitTransactionAsync();
-            Logger.Warning("Quests have been updated");
         }
+
+        await db.CommitTransactionAsync();
+        UpdateNextTime();
+
+        Logger.Warning("Quests have been updated");
     }
 
     public async Task BattleFinished(IPlayerConnection connection, bool hasEnemies) {
@@ -184,6 +184,12 @@ public class QuestManager(
         await entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentComplete = true);
         await entity.ChangeComponent<QuestExpireDateComponent>(component => component.Date = quest.CompletedQuestChangeTime!.Value);
         connection.Schedule(quest.CompletedQuestChangeTime!.Value, async () => await ChangeQuest(connection, entity));
+    }
+
+    void UpdateNextTime() {
+        NextUpdate = DateTimeOffset.UtcNow + QuestsInfo.Updates.GetDurationToNextUpdate();
+
+        Logger.Information("Quests will be updated on {Time}", NextUpdate);
     }
 
     static async Task<Quest> CreateSaveAndShareQuest(

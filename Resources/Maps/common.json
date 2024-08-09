@@ -1,6 +1,6 @@
 {
   "gold": {
-    "probability": 0.01,
+    "probabilityInTick": 0.0000045144045183,
     "reward": {
       "id": 947348559,
       "amount": 100

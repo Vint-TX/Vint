@@ -79,12 +79,15 @@ public sealed class Battle : IDisposable {
                                   StateManager.CurrentState is not Ended) &&
                                  Players.Count(battlePlayer => !battlePlayer.IsSpectator) < Properties.MaxPlayers;
     public bool WasPlayers { get; private set; }
-    public double Timer { get; set; }
+    public TimeSpan Timer { get; set; }
 
     public RoundStopTimeComponent? StopTimeComponentBeforeDomination { get; set; }
     public DateTimeOffset? DominationStartTime { get; set; }
     public TimeSpan DominationDuration { get; } = TimeSpan.FromSeconds(30);
-    public bool DominationCanBegin => !DominationStartTime.HasValue && Timer > 120 && Timer < Properties.TimeLimit * 60 - 60;
+    public bool DominationCanBegin =>
+        !DominationStartTime.HasValue &&
+        Timer.TotalSeconds > 120 &&
+        Timer.TotalSeconds < Properties.TimeLimit * 60 - 60;
 
     public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }
@@ -229,7 +232,7 @@ public sealed class Battle : IDisposable {
         await LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
     }
 
-    public async Task Tick(double deltaTime) {
+    public async Task Tick(TimeSpan deltaTime) {
         Timer -= deltaTime;
 
         await ModeHandler.Tick();

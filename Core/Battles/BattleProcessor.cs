@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Battles.Type;
@@ -10,7 +9,7 @@ namespace Vint.Core.Battles;
 public interface IBattleProcessor {
     public int BattlesCount { get; }
 
-    public Task StartTicking();
+    public Task Tick(TimeSpan deltaTime);
 
     public Task PutPlayerFromMatchmaking(IPlayerConnection connection);
 
@@ -40,39 +39,19 @@ public class BattleProcessor : IBattleProcessor {
 
     public int BattlesCount => Battles.Count;
 
-    public async Task StartTicking() {
-        const double battleTickDurationMs = 10;
+    public async Task Tick(TimeSpan deltaTime) {
+        foreach (Battle battle in Battles) {
+            try {
+                await battle.Tick(deltaTime);
 
-        try {
-            Stopwatch stopwatch = new();
-            double lastBattleTickDurationSec = 0;
-
-            while (true) {
-                stopwatch.Restart();
-
-                foreach (Battle battle in Battles) {
-                    await battle.Tick(lastBattleTickDurationSec);
-
-                    if (battle is { WasPlayers: true, Players.Count: 0 }) {
-                        Logger.Warning("Removing battle {Id}", battle.LobbyId);
-                        Battles.TryRemove(battle);
-                        battle.Dispose();
-                    }
+                if (battle is { WasPlayers: true, Players.Count: 0 }) {
+                    Logger.Warning("Removing battle {Id}", battle.LobbyId);
+                    Battles.TryRemove(battle);
+                    battle.Dispose();
                 }
-
-                stopwatch.Stop();
-                TimeSpan elapsed = stopwatch.Elapsed;
-                stopwatch.Start();
-
-                if (elapsed.TotalMilliseconds < battleTickDurationMs)
-                    Thread.Sleep(TimeSpan.FromMilliseconds(battleTickDurationMs) - elapsed);
-
-                stopwatch.Stop();
-                lastBattleTickDurationSec = stopwatch.Elapsed.TotalSeconds;
+            } catch (Exception e) {
+                Logger.Error(e, "Caught an exception in battles loop");
             }
-        } catch (Exception e) {
-            Logger.Fatal(e, "Fatal error happened in battles tick loop");
-            throw;
         }
     }
 

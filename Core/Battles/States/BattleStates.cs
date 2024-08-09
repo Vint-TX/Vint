@@ -36,7 +36,7 @@ public class NotStarted(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override async Task Start() {
-        Battle.Timer = 0;
+        Battle.Timer = TimeSpan.Zero;
         await base.Start();
     }
 }
@@ -45,17 +45,17 @@ public class Countdown(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override async Task Start() {
-        const int seconds = 20;
+        TimeSpan startDuration = TimeSpan.FromSeconds(20);
 
-        await Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow.AddSeconds(seconds)));
-        Battle.Timer = seconds;
+        await Battle.LobbyEntity.AddComponent(new MatchmakingLobbyStartTimeComponent(DateTimeOffset.UtcNow + startDuration));
+        Battle.Timer = startDuration;
         await base.Start();
     }
 
     public override async Task Tick() {
         if (Battle.Players.Count <= 0)
             await StateManager.SetState(new NotEnoughPlayers(StateManager));
-        else if (Battle.Timer < 0)
+        else if (Battle.Timer < TimeSpan.Zero)
             await StateManager.SetState(new Starting(StateManager));
 
         await base.Tick();
@@ -96,7 +96,7 @@ public class Starting(
     async Task MatchmakingBattleTick() {
         if (Battle.Players.Count <= 0) {
             await StateManager.SetState(new NotEnoughPlayers(StateManager));
-        } else if (Battle.Timer < 0) {
+        } else if (Battle.Timer < TimeSpan.Zero) {
             await Battle.Start();
             await StateManager.SetState(new WarmUp(StateManager));
         }
@@ -105,7 +105,7 @@ public class Starting(
     async Task ArcadeBattleTick() {
         if (Battle.Players.Count <= 0) {
             await StateManager.SetState(new NotEnoughPlayers(StateManager));
-        } else if (Battle.Timer < 0) {
+        } else if (Battle.Timer < TimeSpan.Zero) {
             await Battle.Start();
             await StateManager.SetState(new Running(StateManager));
         }
@@ -114,7 +114,7 @@ public class Starting(
     async Task CustomBattleTick() {
         if (Battle.Players.Count == 0)
             await StateManager.SetState(new NotStarted(StateManager));
-        else if (Battle.Timer < 0) {
+        else if (Battle.Timer < TimeSpan.Zero) {
             await Battle.Start();
             await Battle.LobbyEntity.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
             await StateManager.SetState(new Running(StateManager));
@@ -135,10 +135,10 @@ public class WarmUp(
     public override async Task Start() {
         DateTimeOffset now = DateTimeOffset.UtcNow;
 
-        long warmUpSeconds = Battle.Entity.GetComponent<TimeLimitComponent>().WarmingUpTimeLimitSec;
+        TimeSpan warmUp = TimeSpan.FromSeconds(Battle.Entity.GetComponent<TimeLimitComponent>().WarmingUpTimeLimitSec);
 
         await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
-            component.RoundStartTime = now.AddSeconds(warmUpSeconds));
+            component.RoundStartTime = now + warmUp);
 
         await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
             component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
@@ -147,7 +147,7 @@ public class WarmUp(
             await connection.Send(new BattleTimerUpdatedEvent(), Battle.Entity, Battle.RoundEntity);
 
         await Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
-        Battle.Timer = warmUpSeconds;
+        Battle.Timer = warmUp;
         await base.Start();
     }
 
@@ -169,7 +169,7 @@ public class Running(
     public override async Task Start() {
         DateTimeOffset now = DateTimeOffset.UtcNow;
 
-        Battle.Timer = Battle.Properties.TimeLimit * 60;
+        Battle.Timer = TimeSpan.FromMinutes(Battle.Properties.TimeLimit);
 
         await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
             component.RoundStartTime = now);
@@ -191,7 +191,7 @@ public class Running(
                 break;
         }
 
-        if (Battle.Timer < 0)
+        if (Battle.Timer < TimeSpan.Zero)
             await Battle.Finish();
 
         await base.Tick();
@@ -248,7 +248,7 @@ public class Ended(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
     public override async Task Start() {
-        Battle.Timer = 0;
+        Battle.Timer = TimeSpan.Zero;
         await base.Start();
     }
 

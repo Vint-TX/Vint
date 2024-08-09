@@ -3,7 +3,7 @@ using Vint.Core.ECS.Entities;
 namespace Vint.Core.Config.MapInformation;
 
 public readonly record struct GoldMapInfo(
-    double Probability,
+    double ProbabilityInTick,
     Reward Reward
 );
 

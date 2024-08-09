@@ -11,7 +11,7 @@ mapModeRestriction:
     - TDM
     - DM
 discordConfig:
-  largeImage: area-159
+  largeImage: old_school
   smallImage: logo
   largeText: Old School
   smallText: Vint

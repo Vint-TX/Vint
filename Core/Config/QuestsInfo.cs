@@ -36,11 +36,12 @@ public readonly record struct UpdatesInfo(
     TimeSpan CompletedQuestDuration,
     List<TimeOnly> Times
 ) {
-    public TimeOnly GetNextUpdate() {
+    public TimeSpan GetDurationToNextUpdate() {
         TimeOnly now = TimeOnly.FromDateTime(DateTimeOffset.UtcNow.UtcDateTime);
         TimeOnly closestTime = Times.MinBy(time => Math.Abs((time - now).Ticks));
+        TimeSpan duration = (closestTime - now).Duration();
 
-        return closestTime;
+        return duration;
     }
 }
 

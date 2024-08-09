@@ -13,7 +13,6 @@ using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
-using Vint.Core.ECS.Events.Notification;
 using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -144,7 +143,10 @@ public class DiscordBot(
         using HttpClient httpClient = new();
         HttpResponseMessage response = await httpClient.PostAsync("https://discord.com/api/v10/oauth2/token", new FormUrlEncodedContent(data));
 
-        if (!response.IsSuccessStatusCode) return false;
+        if (!response.IsSuccessStatusCode) {
+            Logger.Error("Invalid link request for {PlayerId}: {Error}", playerId, await response.Content.ReadAsStringAsync());
+            return false;
+        }
 
         OAuth2Data oAuth2Data = (await response.Content.ReadFromJsonAsync<OAuth2Data>())!;
         DateTimeOffset tokenExpirationDate = DateTimeOffset.UtcNow.AddSeconds(oAuth2Data.ExpiresIn - 300);
@@ -195,13 +197,6 @@ public class DiscordBot(
                 await connection.PurchaseItem(linkReward.MarketEntity, linkReward.Amount, 0, false, false);
                 await connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.User, linkReward.MarketEntity, linkReward.Amount));
             }
-
-            foreach (Notification notification in connection.Notifications) {
-                await connection.UnshareIfShared(notification.Entity);
-                connection.Notifications.TryRemove(notification);
-            }
-
-            await connection.Send(new ShowNotificationGroupEvent(ConfigManager.Discord.LinkRewards.Count), connection.User);
 
             await db.Players.Where(player => player.Id == playerId)
                 .Set(player => player.DiscordLinkRewarded, true)

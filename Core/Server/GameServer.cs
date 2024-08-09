@@ -1,11 +1,11 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using Serilog;
 using Vint.Core.Battles;
 using Vint.Core.ChatCommands;
 using Vint.Core.Discord;
-using Vint.Core.ECS.Events.Ping;
 using Vint.Core.Quests;
 using Vint.Core.Utils;
 
@@ -30,8 +30,8 @@ public class GameServer(
     public IChatCommandProcessor ChatCommandProcessor { get; private set; } = null!;
     public DiscordBot? DiscordBot { get; private set; }
 
-    public bool IsStarted { get; private set; }
-    public bool IsAccepting { get; private set; }
+    bool IsStarted { get; set; }
+    bool IsAccepting { get; set; }
 
     public async Task Start() {
         if (IsStarted) return;
@@ -61,12 +61,7 @@ public class GameServer(
         ArcadeProcessor = new ArcadeProcessor(BattleProcessor);
         ChatCommandProcessor = chatCommandProcessor;
 
-        new Thread(MatchmakingProcessor.StartTicking) { Name = "Matchmaking ticker" }.Start();
-        new Thread(ArcadeProcessor.StartTicking) { Name = "Arcade ticker" }.Start();
-
-        Extensions.RunTaskInBackground(BattleProcessor.StartTicking, OnException, true);
-        Extensions.RunTaskInBackground(QuestManager.Loop, OnException, true);
-        Extensions.RunTaskInBackground(Loop, OnException, true);
+        Extensions.RunTaskInBackground(TickLoop, OnException, true);
 
         if (DiscordBot != null)
             Extensions.RunTaskInBackground(DiscordBot.Start, OnException, true);
@@ -100,30 +95,57 @@ public class GameServer(
 
     public void RemovePlayer(Guid id) => PlayerConnections.Remove(id, out _);
 
-    async Task Loop() {
-        while (true) {
-            if (!IsStarted) return;
+    async Task TickPlayers() {
+        foreach (SocketPlayerConnection playerConnection in SocketPlayerConnections) {
+            try {
+                await playerConnection.Tick();
+            } catch (Exception e) {
+                Logger.Error(e, "Socket caught an exception in the players loop");
+            }
+        }
 
-            foreach (SocketPlayerConnection playerConnection in SocketPlayerConnections) {
-                try {
-                    if (!playerConnection.IsSocketConnected) {
-                        await playerConnection.Kick("Zombie");
-                        continue;
-                    }
+        if (DiscordBot != null)
+            await DiscordBot.SetPlayersCount(PlayerConnections.Count);
+    }
 
-                    await playerConnection.Send(new PingEvent(DateTimeOffset.UtcNow));
-                    playerConnection.PingSendTime = DateTimeOffset.UtcNow;
+    async Task Update(TimeSpan deltaTime) {
+        MatchmakingProcessor.Tick(deltaTime);
+        ArcadeProcessor.Tick(deltaTime);
 
-                    await playerConnection.Tick();
-                } catch (Exception e) {
-                    Logger.Error(e, "Socket caught an exception in the players loop");
-                }
+        await BattleProcessor.Tick(deltaTime);
+        await TickPlayers();
+
+        await QuestManager.Tick();
+    }
+
+    async Task TickLoop() { // https://stackoverflow.com/q/78850638
+        const int tps = 60;
+        const int maxTPS = 3;
+
+        Logger.Information("HPET enabled: {Value}", Stopwatch.IsHighResolution);
+
+        TimeSpan targetDeltaTime = TimeSpan.FromSeconds(1d / tps);
+        TimeSpan maximumDeltaTime = TimeSpan.FromSeconds(1d / maxTPS);
+
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        TimeSpan lastTick = stopwatch.Elapsed;
+
+        while (IsStarted) {
+            TimeSpan currentTick = stopwatch.Elapsed;
+            TimeSpan deltaTime = TimeSpanUtils.Min(currentTick - lastTick, maximumDeltaTime);
+
+            lastTick = currentTick;
+
+            try {
+                await Update(deltaTime);
+            } catch (Exception e) {
+                Logger.Error(e, "Caught an exception in game loop");
             }
 
-            if (DiscordBot != null)
-                await DiscordBot.SetPlayersCount(PlayerConnections.Count);
+            TimeSpan freeTime = targetDeltaTime - (stopwatch.Elapsed - currentTick);
 
-            Thread.Sleep(5000);
+            if (freeTime > TimeSpan.Zero)
+                await Task.Delay(freeTime);
         }
     }
 }

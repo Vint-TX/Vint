@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.Registration;
 
 [ProtocolId(1438590245672)]
 public class RequestRegisterUserEvent : IServerEvent {
-    const int MaxRegistrationsFromOneComputer = 5;
+    const int MaxRegistrationsPerComputer = 5;
 
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public string EncryptedPasswordDigest { get; private set; } = null!;
@@ -49,7 +49,7 @@ public class RequestRegisterUserEvent : IServerEvent {
             }
 
             if (await db.Players.AnyAsync(player => player.Username == Username) ||
-                await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsFromOneComputer) {
+                await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsPerComputer) {
                 await connection.Send(new RegistrationFailedEvent());
                 return;
             }

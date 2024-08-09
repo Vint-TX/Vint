@@ -26,6 +26,7 @@ using Vint.Core.ECS.Events.Action;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.ECS.Events.Items;
 using Vint.Core.ECS.Events.Items.Module;
+using Vint.Core.ECS.Events.Ping;
 using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Avatar;
 using Vint.Core.ECS.Templates.Containers;
@@ -74,7 +75,6 @@ public interface IPlayerConnection {
     public int BattleSeries { get; set; }
 
     public ConcurrentHashSet<IEntity> SharedEntities { get; }
-    public ConcurrentHashSet<Notification> Notifications { get; }
 
     public Task Register(
         string username,
@@ -180,8 +180,6 @@ public abstract class PlayerConnection(
 
     public long Ping { get; private set; }
     public Invite? Invite { get; set; }
-
-    public ConcurrentHashSet<Notification> Notifications { get; } = [];
 
     public async Task Register(
         string username,
@@ -1020,7 +1018,7 @@ public abstract class PlayerConnection(
         IEntity notification = new SimpleTextNotificationTemplate().Create(message);
 
         await Share(notification);
-        Notifications.Add(new Notification(notification, DateTimeOffset.UtcNow + (closeTime ?? TimeSpan.FromSeconds(15))));
+        Schedule(closeTime ?? TimeSpan.FromSeconds(15), async () => await UnshareIfShared(notification));
     }
 
     public async Task SetClipboard(string content) {
@@ -1064,7 +1062,12 @@ public abstract class PlayerConnection(
     public void Schedule(DateTimeOffset time, Func<Task> action) =>
         DelayedTasks.Add(new DelayedTask(time, action));
 
-    public async Task Tick() {
+    public virtual async Task Tick() {
+        if (PingSendTime + TimeSpan.FromSeconds(5) <= DateTimeOffset.UtcNow) {
+            await Send(new PingEvent(DateTimeOffset.UtcNow));
+            PingSendTime = DateTimeOffset.UtcNow;
+        }
+
         foreach (DelayedAction delayedAction in DelayedActions.Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             delayedAction.Action();
             DelayedActions.TryRemove(delayedAction);
@@ -1073,11 +1076,6 @@ public abstract class PlayerConnection(
         foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             await delayedTask.Task();
             DelayedTasks.TryRemove(delayedTask);
-        }
-
-        foreach (Notification notification in Notifications.Where(notification => notification.CloseTime <= DateTimeOffset.UtcNow)) {
-            await UnshareIfShared(notification.Entity);
-            Notifications.TryRemove(notification);
         }
     }
 
@@ -1214,6 +1212,15 @@ public class SocketPlayerConnection(
         }
     }
 
+    public override async Task Tick() {
+        if (!IsSocketConnected) {
+            await Kick("Zombie");
+            return;
+        }
+
+        await base.Tick();
+    }
+
     async Task ReceiveLoop() {
         byte[] bytes = ArrayPool<byte>.Shared.Rent(4096);
 
@@ -1296,8 +1303,3 @@ public class SocketPlayerConnection(
         await Disconnect();
     }
 }
-
-public record struct Notification(
-    IEntity Entity,
-    DateTimeOffset CloseTime
-);
