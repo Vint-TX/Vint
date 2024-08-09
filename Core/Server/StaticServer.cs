@@ -111,7 +111,7 @@ public class StaticServer(
                 if (result == true)
                     await SendResponse(response, "Your Discord account is successfully linked!");
                 else
-                    await SendResponse(response, "Account is not linked, contact the administrators for support", 400);
+                    await SendResponse(response, "Account is not linked, contact the administrators for support");
                 break;
             }
 
@@ -156,12 +156,11 @@ public class StaticServer(
         response.Close();
     }
 
-    static async Task SendResponse(HttpListenerResponse response, string content, int statusCode = 200) {
+    static async Task SendResponse(HttpListenerResponse response, string content) {
         await using (Stream output = response.OutputStream)
         await using (StreamWriter outputWriter = new(output))
             await outputWriter.WriteAsync(content);
 
-        response.StatusCode = statusCode;
         response.Close();
     }
 
