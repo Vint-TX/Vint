@@ -5,46 +5,41 @@ using Vint.Core.ECS.Templates.Battle.Effect;
 
 namespace Vint.Core.Battles.Effects;
 
-public class ExternalImpactEffect(
+public class FireRingEffect(
     TimeSpan cooldown,
     IEntity marketEntity,
     float radius,
-    float minPercent,
-    float maxDamage,
-    float minDamage,
+    float minDamagePercent,
     float impact,
+    float temperatureLimit,
+    float temperatureDelta,
+    float heatDamage,
     BattleTank tank,
     int level
 ) : Effect(tank, level), IModuleWeaponEffect {
     public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
+
+    float MinDamageRadius => radius;
+    float MaxDamageRadius => 0;
 
     public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
-        Entity = new ExternalImpactEffectTemplate().Create(Tank.BattlePlayer,
+        Entity = new FireRingEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
             impact,
-            minPercent,
-            0,
-            radius);
+            minDamagePercent,
+            MinDamageRadius,
+            MaxDamageRadius);
 
-        WeaponHandler = new ExternalImpactWeaponHandler(Tank,
-            cooldown,
-            marketEntity,
-            Entity,
-            true,
-            0,
-            radius,
-            minPercent,
-            maxDamage,
-            minDamage,
-            int.MaxValue);
+        WeaponHandler = new FireRingWeaponHandler(Tank, cooldown, marketEntity, Entity, temperatureLimit, temperatureDelta, heatDamage,
+            minDamagePercent, MinDamageRadius, MaxDamageRadius);
 
         await ShareAll();
-        Schedule(Duration, Deactivate);
+        Schedule(TimeSpan.FromSeconds(10), Deactivate);
     }
 
     public override async Task Deactivate() {

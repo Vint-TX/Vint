@@ -89,7 +89,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         LastTick = DateTimeOffset.UtcNow.AddTicks(-TickPeriod.Ticks);
         await Battle.DamageProcessor.Heal(Tank, heal);
 
-        Entities.Add(new HealingEffectTemplate().Create(Tank.BattlePlayer, Duration));
+        Entity = new HealingEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await ShareAll();
 
         Schedule(Duration, Deactivate);
@@ -101,7 +101,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         Tank.Effects.TryRemove(this);
 
         await UnshareAll();
-        Entities.Clear();
+        Entity = null;
 
         if (HealLeft <= 0 || Tank.Health >= Tank.MaxHealth) return;
 

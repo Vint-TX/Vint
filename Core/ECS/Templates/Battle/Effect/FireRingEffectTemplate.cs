@@ -9,19 +9,18 @@ using Vint.Core.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Templates.Battle.Effect;
 
-[ProtocolId(1542270967570)]
-public class ExternalImpactEffectTemplate : EffectBaseTemplate {
-    public IEntity Create(
-        BattlePlayer battlePlayer,
+[ProtocolId(1542694831168)]
+public class FireRingEffectTemplate : EffectBaseTemplate {
+    public IEntity Create(BattlePlayer battlePlayer,
         TimeSpan duration,
         bool canTargetTeammates,
         float impactForce,
         float minSplashDamagePercent,
-        float radiusOfMaxSplashDamage,
-        float radiusOfMinSplashDamage) {
-        IEntity entity = Create("battle/effect/externalimpact", battlePlayer, duration, true, true);
+        float radiusOfMinSplashDamage,
+        float radiusOfMaxSplashDamage) {
+        IEntity entity = Create("battle/effect/firering", battlePlayer, duration, true, true);
 
-        entity.AddComponent<ExternalImpactEffectComponent>();
+        entity.AddComponent<FireRingEffectComponent>();
         entity.AddComponent<DiscreteWeaponComponent>();
 
         entity.AddComponent(new SplashImpactComponent(impactForce));

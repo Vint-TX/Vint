@@ -13,17 +13,16 @@ public abstract class Effect(
     BattleTank tank,
     int level
 ) {
-    public BattleTank Tank { get; } = tank;
-    public List<IEntity> Entities { get; } = new(1);
-    public IEntity? Entity => Entities.SingleOrDefaultSafe();
-    public Battle Battle => Tank.Battle;
+    protected BattleTank Tank { get; } = tank;
+    protected Battle Battle => Tank.Battle;
+    public IEntity? Entity { get; protected set; }
 
-    public int Level { get; protected set; } = level;
-    public bool IsSupply => Level < 0;
-    public bool IsActive => Entities.Count != 0;
+    protected int Level { get; set; } = level;
+    protected bool IsSupply => Level < 0;
+    protected bool IsActive => Entity != null;
     public bool CanBeDeactivated { get; set; } = true;
 
-    public TimeSpan Duration { get; protected set; } = TimeSpan.FromSeconds(1);
+    protected TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(1);
 
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
@@ -46,23 +45,33 @@ public abstract class Effect(
 
     public abstract Task Deactivate();
 
-    public virtual Task Share(BattlePlayer battlePlayer) => battlePlayer.PlayerConnection.Share(Entities);
+    public virtual async Task Share(BattlePlayer battlePlayer) {
+        if (Entity != null)
+            await battlePlayer.PlayerConnection.Share(Entity);
+    }
 
     public virtual async Task Unshare(BattlePlayer battlePlayer) {
-        if (battlePlayer.Tank == Tank)
+        if (battlePlayer.Tank == Tank) {
             await Deactivate();
+            return;
+        }
 
-        await battlePlayer.PlayerConnection.Unshare(Entities);
+        if (Entity != null)
+            await battlePlayer.PlayerConnection.Unshare(Entity);
     }
 
     protected async Task ShareAll() {
-        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            await battlePlayer.PlayerConnection.Share(Entities);
+        if (Entity != null) {
+            foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
+                await battlePlayer.PlayerConnection.Share(Entity);
+        }
     }
 
     protected async Task UnshareAll() {
-        foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
-            await battlePlayer.PlayerConnection.Unshare(Entities);
+        if (Entity != null) {
+            foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
+                await battlePlayer.PlayerConnection.Unshare(Entity);
+        }
     }
 
     protected void Schedule(TimeSpan delay, Action action) =>

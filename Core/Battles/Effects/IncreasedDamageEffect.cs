@@ -61,7 +61,7 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
 
         Tank.Effects.Add(this);
 
-        Entities.Add(new DamageEffectTemplate().Create(Tank.BattlePlayer, Duration));
+        Entity = new DamageEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await ShareAll();
 
         Schedule(Duration, Deactivate);
@@ -73,6 +73,6 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
         Tank.Effects.TryRemove(this);
 
         await UnshareAll();
-        Entities.Clear();
+        Entity = null;
     }
 }

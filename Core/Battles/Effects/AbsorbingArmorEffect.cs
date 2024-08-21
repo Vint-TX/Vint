@@ -65,7 +65,7 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
 
         Tank.Effects.Add(this);
 
-        Entities.Add(new ArmorEffectTemplate().Create(EffectConfigPath, Tank.BattlePlayer, Duration));
+        Entity = new ArmorEffectTemplate().Create(EffectConfigPath, Tank.BattlePlayer, Duration);
         await ShareAll();
 
         Schedule(Duration, Deactivate);
@@ -77,6 +77,6 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
         Tank.Effects.TryRemove(this);
 
         await UnshareAll();
-        Entities.Clear();
+        Entity = null;
     }
 }

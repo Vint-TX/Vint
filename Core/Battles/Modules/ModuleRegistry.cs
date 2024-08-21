@@ -28,13 +28,13 @@ public static class ModuleRegistry {
         Register<ForceFieldModule>("ForceField");
         Register<InvisibilityModule>("Invisibility");
         Register<ExplosiveMassModule>("ExplosiveMass");
+        Register<FireRingModule>("FireRing");
     }
 
-    static BattleModule Fallback => new InDevModule();
+    static BattleModuleBuilder<InDevModule> Fallback { get; } = new();
     static Dictionary<long, IBattleModuleBuilder> IdToBuilder { get; } = new();
 
-    public static BattleModule Get(long id) =>
-        IdToBuilder.TryGetValue(id, out IBattleModuleBuilder? builder) ? builder.Build() : Fallback;
+    public static BattleModule Get(long id) => IdToBuilder.GetValueOrDefault(id, Fallback).Build();
 
     static void Register<T>(string name) where T : BattleModule, new() =>
         IdToBuilder[GlobalEntities.GetEntity("modules", name).Id] = new BattleModuleBuilder<T>();

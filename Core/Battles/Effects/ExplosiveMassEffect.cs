@@ -22,13 +22,11 @@ public class ExplosiveMassEffect(
 
         Tank.Effects.Add(this);
 
-        IEntity entity = new ExplosiveMassEffectTemplate().Create(Tank.BattlePlayer, Duration, radius, delay);
-        ExplosiveMassWeaponHandler weaponHandler = new(Tank, cooldown, marketEntity, entity, maxDamage, minDamage);
+        Entity = new ExplosiveMassEffectTemplate().Create(Tank.BattlePlayer, Duration, radius, delay);
+        ExplosiveMassWeaponHandler weaponHandler = new(Tank, cooldown, marketEntity, Entity, maxDamage, minDamage);
 
         weaponHandler.Exploded += Deactivate;
         WeaponHandler = weaponHandler;
-
-        Entities.Add(entity);
 
         await ShareAll();
         Schedule(TimeSpan.FromMilliseconds(delay) + TimeSpan.FromSeconds(10), Deactivate);
@@ -40,6 +38,6 @@ public class ExplosiveMassEffect(
         Tank.Effects.TryRemove(this);
 
         await UnshareAll();
-        Entities.Clear();
+        Entity = null;
     }
 }

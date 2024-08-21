@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(636222384398205627)]
 public class InvisibilityEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration) =>
-        Create("battle/effect/invisibility", battlePlayer, duration, false);
+        Create("battle/effect/invisibility", battlePlayer, duration, false, false);
 }

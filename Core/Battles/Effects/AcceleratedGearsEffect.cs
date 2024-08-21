@@ -28,7 +28,7 @@ public class AcceleratedGearsEffect(
 
         await Tank.UpdateSpeed();
 
-        Entities.Add(new AcceleratedGearsEffectTemplate().Create(Tank.BattlePlayer, Duration));
+        Entity = new AcceleratedGearsEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await ShareAll();
     }
 
@@ -49,6 +49,6 @@ public class AcceleratedGearsEffect(
         await Tank.UpdateSpeed();
         await UnshareAll();
 
-        Entities.Clear();
+        Entity = null;
     }
 }

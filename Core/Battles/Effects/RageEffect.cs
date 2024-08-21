@@ -14,7 +14,7 @@ public class RageEffect(
 
         Tank.Effects.Add(this);
 
-        Entities.Add(new RageEffectTemplate().Create(Tank.BattlePlayer, Duration, decreaseCooldownPerKill));
+        Entity = new RageEffectTemplate().Create(Tank.BattlePlayer, Duration, decreaseCooldownPerKill);
         await Share(Tank.BattlePlayer);
 
         Schedule(Duration, Deactivate);
@@ -26,18 +26,18 @@ public class RageEffect(
         Tank.Effects.TryRemove(this);
         await Unshare(Tank.BattlePlayer);
 
-        Entities.Clear();
+        Entity = null;
     }
 
     public override async Task Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        await battlePlayer.PlayerConnection.Share(Entities);
+        await battlePlayer.PlayerConnection.Share(Entity!);
     }
 
     public override async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        await battlePlayer.PlayerConnection.Unshare(Entities);
+        await battlePlayer.PlayerConnection.Unshare(Entity!);
     }
 }

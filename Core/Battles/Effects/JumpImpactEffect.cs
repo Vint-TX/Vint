@@ -13,7 +13,7 @@ public class JumpImpactEffect(
 
         Tank.Effects.Add(this);
 
-        Entities.Add(new JumpEffectTemplate().Create(Tank.BattlePlayer, Duration, force));
+        Entity = new JumpEffectTemplate().Create(Tank.BattlePlayer, Duration, force);
         await ShareAll();
 
         Schedule(Duration, Deactivate);
@@ -25,6 +25,6 @@ public class JumpImpactEffect(
         Tank.Effects.TryRemove(this);
 
         await UnshareAll();
-        Entities.Clear();
+        Entity = null;
     }
 }

@@ -324,7 +324,7 @@ public class BattleTank {
             await healthModule.OnHealthChanged(before, Health, MaxHealth);
     }
 
-    public async Task SetTemperature(float temperature) {
+    public async Task SetTemperature(float temperature) { // todo rewrite this shit
         float before = Temperature;
         float min = TemperatureConfig.MinTemperature;
         float max = TemperatureConfig.MaxTemperature;
@@ -338,7 +338,7 @@ public class BattleTank {
             await temperatureModule.OnTemperatureChanged(before, Temperature, min, max);
     }
 
-    public async Task HandleTemperature() {
+    public async Task HandleTemperature() { // todo rewrite this shit
         if (StateManager.CurrentState is Dead) return;
 
         TimeSpan period = TimeSpan.FromMilliseconds(TemperatureConfig.TactPeriodInMs);
@@ -360,7 +360,7 @@ public class BattleTank {
             } * TemperatureConfig.TactPeriodInMs;
 
             if (assist is { CurrentTemperature: > 0, Weapon: not IsisWeaponHandler } && (assist.Assistant == this || IsEnemy(assist.Assistant))) {
-                float value = MathF.Round(MathUtils.Map(assist.CurrentTemperature, 0, assist.Weapon.TemperatureLimit, 0, assist.MaxDamage));
+                float value = MathUtils.Map(assist.CurrentTemperature, 0, assist.Weapon.TemperatureLimit, 0, assist.MaxDamage);
 
                 CalculatedDamage damage = new(default, value, false, false);
                 await Battle.DamageProcessor.Damage(assist.Assistant, this, assist.Weapon.MarketEntity, assist.Weapon.BattleEntity, damage);
@@ -381,8 +381,9 @@ public class BattleTank {
         }
     }
 
-    public async Task UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) {
+    public async Task UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) { // todo rewrite this shit
         float maxHeatDamage = (weaponHandler as IHeatWeaponHandler)?.HeatDamage ?? 0;
+        float temperatureLimit = weaponHandler.TemperatureLimit;
         float temperatureDelta = weaponHandler switch {
             IsisWeaponHandler isis => Temperature switch {
                 < 0 => isis.IncreaseFriendTemperature,
@@ -390,6 +391,12 @@ public class BattleTank {
                 _ => 0
             },
             _ => weaponHandler.TemperatureDelta
+        };
+
+        temperatureDelta = temperatureLimit switch {
+            > 0 => Math.Min(temperatureDelta, temperatureLimit),
+            < 0 => Math.Max(temperatureDelta, temperatureLimit),
+            _ => temperatureDelta
         };
 
         temperatureDelta =

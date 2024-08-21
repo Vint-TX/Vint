@@ -10,7 +10,7 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IArcadeProcessor {
-    public void Tick(TimeSpan deltaTime);
+    public void Tick();
 
     public void AddPlayerToQueue(IPlayerConnection connection, ArcadeModeType mode);
 
@@ -24,20 +24,7 @@ public class ArcadeProcessor( // todo replace with MatchmakingProcessor
 
     ConcurrentDictionary<IPlayerConnection, ArcadeModeType> PlayerQueue { get; } = new();
 
-    public void StartTicking() {
-        try {
-            while (true) {
-
-
-                Thread.Sleep(10);
-            }
-        } catch (Exception e) {
-            Logger.Fatal(e, "Fatal error happened in arcade tick loop");
-            throw;
-        }
-    }
-
-    public void Tick(TimeSpan deltaTime) {
+    public void Tick() {
         foreach ((IPlayerConnection connection, ArcadeModeType mode) in PlayerQueue) {
             try {
                 if (!connection.IsOnline) {

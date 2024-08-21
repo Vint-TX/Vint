@@ -185,4 +185,8 @@ public class AdminModule : ChatCommandModule {
 
         await ctx.SendPrivateResponse($"{bonusType} dropped");
     }
+
+    [ChatCommand("tps", "Show TPS")]
+    public async Task TPS(ChatCommandContext ctx) =>
+        await ctx.SendPrivateResponse($"{1 / GameServer.DeltaTime.TotalSeconds} TPS");
 }

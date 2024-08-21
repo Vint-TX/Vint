@@ -3,6 +3,7 @@ using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
+using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -108,8 +109,11 @@ public class SelfHitEvent : HitEvent, IServerEvent {
     }
 
     static IWeaponHandler GetWeaponHandler(BattleTank tank, IEntity weapon) {
-        IModuleWeaponEffect? module = tank.Effects.SingleOrDefault(module => module.Entities.Contains(weapon)) as IModuleWeaponEffect;
+        if (weapon.HasComponent<EffectComponent>()) {
+            return (tank.Effects.SingleOrDefault(effect => effect.Entity == weapon) as IModuleWeaponEffect)?.WeaponHandler ??
+                   throw new InvalidOperationException($"Not found weapon handler for {weapon}");
+        }
 
-        return module?.WeaponHandler ?? tank.WeaponHandler as IWeaponHandler;
+        return tank.WeaponHandler;
     }
 }

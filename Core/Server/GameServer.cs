@@ -32,6 +32,7 @@ public class GameServer(
 
     bool IsStarted { get; set; }
     bool IsAccepting { get; set; }
+    public static TimeSpan DeltaTime { get; private set; }
 
     public async Task Start() {
         if (IsStarted) return;
@@ -108,11 +109,11 @@ public class GameServer(
             await DiscordBot.SetPlayersCount(PlayerConnections.Count);
     }
 
-    async Task Update(TimeSpan deltaTime) {
-        MatchmakingProcessor.Tick(deltaTime);
-        ArcadeProcessor.Tick(deltaTime);
+    async Task Update() {
+        MatchmakingProcessor.Tick();
+        ArcadeProcessor.Tick();
 
-        await BattleProcessor.Tick(deltaTime);
+        await BattleProcessor.Tick();
         await TickPlayers();
 
         await QuestManager.Tick();
@@ -132,12 +133,12 @@ public class GameServer(
 
         while (IsStarted) {
             TimeSpan currentTick = stopwatch.Elapsed;
-            TimeSpan deltaTime = TimeSpanUtils.Min(currentTick - lastTick, maximumDeltaTime);
+            DeltaTime = TimeSpanUtils.Min(currentTick - lastTick, maximumDeltaTime);
 
             lastTick = currentTick;
 
             try {
-                await Update(deltaTime);
+                await Update();
             } catch (Exception e) {
                 Logger.Error(e, "Caught an exception in game loop");
             }

@@ -15,7 +15,7 @@ public class SonarEffect(
 
         Tank.Effects.Add(this);
 
-        Entities.Add(new SonarEffectTemplate().Create(Tank.BattlePlayer, Duration));
+        Entity = new SonarEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await Share(Tank.BattlePlayer);
 
         Schedule(Duration, Deactivate);
@@ -27,18 +27,18 @@ public class SonarEffect(
         Tank.Effects.TryRemove(this);
         await Unshare(Tank.BattlePlayer);
 
-        Entities.Clear();
+        Entity = null;
     }
 
     public override async Task Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        await battlePlayer.PlayerConnection.Share(Entities);
+        await battlePlayer.PlayerConnection.Share(Entity!);
     }
 
     public override async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        await battlePlayer.PlayerConnection.Unshare(Entities);
+        await battlePlayer.PlayerConnection.Unshare(Entity!);
     }
 }

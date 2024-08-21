@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 
 [ProtocolId(1486041253393)]
 public abstract class EffectBaseTemplate : EntityTemplate {
-    protected IEntity Create(string configPath, BattlePlayer battlePlayer, TimeSpan duration, bool withTeam) => Entity(configPath,
+    protected IEntity Create(string configPath, BattlePlayer battlePlayer, TimeSpan duration, bool withTeam, bool withBattle) => Entity(configPath,
         builder => builder
             .AddComponent<EffectComponent>()
             .AddGroupComponent<TankGroupComponent>(battlePlayer.Tank!.Tank)
@@ -23,5 +23,7 @@ public abstract class EffectBaseTemplate : EntityTemplate {
                 entity => {
                     entity.AddComponentFrom<TeamGroupComponent>(battlePlayer.Team!);
                     entity.AddComponentFrom<TeamColorComponent>(battlePlayer.Team!);
-                }));
+                })
+            .ThenExecuteIf(_ => withBattle,
+                entity => entity.AddGroupComponent<BattleGroupComponent>(battlePlayer.Battle.Entity)));
 }

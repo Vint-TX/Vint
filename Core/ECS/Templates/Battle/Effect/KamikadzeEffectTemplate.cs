@@ -18,16 +18,14 @@ public class KamikadzeEffectTemplate : EffectBaseTemplate {
         float minSplashDamagePercent,
         float radiusOfMaxSplashDamage,
         float radiusOfMinSplashDamage) {
-        IEntity entity = Create("battle/effect/kamikadze", battlePlayer, duration, true);
-        
+        IEntity entity = Create("battle/effect/kamikadze", battlePlayer, duration, true, true);
+
         entity.AddComponent<DiscreteWeaponComponent>();
-        
+
         entity.AddComponent(new SplashImpactComponent(impactForce));
         entity.AddComponent(new SplashEffectComponent(canTargetTeammates));
         entity.AddComponent(new SplashWeaponComponent(minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage));
         entity.AddComponent(new DamageWeakeningByDistanceComponent(minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage));
-        
-        entity.AddGroupComponent<BattleGroupComponent>(battlePlayer.Battle.Entity);
         return entity;
     }
 }

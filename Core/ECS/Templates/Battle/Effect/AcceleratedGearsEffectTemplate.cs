@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1486978694968)]
 public class AcceleratedGearsEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration) =>
-        Create("battle/effect/acceleratedgears", battlePlayer, duration, false);
+        Create("battle/effect/acceleratedgears", battlePlayer, duration, false, false);
 }

@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(636367475101866348)]
 public class EnergyInjectionEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration, float percent) {
-        IEntity entity = Create("battle/effect/energyinjection", battlePlayer, duration, false);
+        IEntity entity = Create("battle/effect/energyinjection", battlePlayer, duration, false, false);
 
         entity.AddComponent(new EnergyInjectionEffectComponent(percent));
         return entity;

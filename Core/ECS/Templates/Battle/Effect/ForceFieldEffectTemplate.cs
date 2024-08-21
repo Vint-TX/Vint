@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1503314606668)]
 public class ForceFieldEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration) =>
-        Create("battle/effect/forcefield", battlePlayer, duration, true);
+        Create("battle/effect/forcefield", battlePlayer, duration, true, false);
 }

@@ -232,8 +232,8 @@ public sealed class Battle : IDisposable {
         await LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
     }
 
-    public async Task Tick(TimeSpan deltaTime) {
-        Timer -= deltaTime;
+    public async Task Tick() {
+        Timer -= GameServer.DeltaTime;
 
         await ModeHandler.Tick();
         await TypeHandler.Tick();

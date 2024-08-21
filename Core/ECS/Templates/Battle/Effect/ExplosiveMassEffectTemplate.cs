@@ -10,14 +10,12 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1543482696222)]
 public class ExplosiveMassEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration, float radius, float delay) {
-        IEntity entity = Create("battle/effect/externalimpact", battlePlayer, duration, true);
+        IEntity entity = Create("battle/effect/externalimpact", battlePlayer, duration, true, true);
 
         entity.AddComponent<ExternalImpactEffectComponent>();
         entity.AddComponent<DiscreteWeaponComponent>();
 
         entity.AddComponent(new ExplosiveMassEffectComponent(radius, delay));
-
-        entity.AddGroupComponent<BattleGroupComponent>(battlePlayer.Battle.Entity);
         return entity;
     }
 }

@@ -73,17 +73,17 @@ public class DamageCalculator : IDamageCalculator {
                 shaftHandler.MaxDamage)
             : shaftHandler.MinDamage;
 
-    static float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank, bool isEnemy) => Convert.ToSingle(
-        (sourceTank == targetTank || isEnemy
-             ? isisHandler.DamagePerSecond
-             : isisHandler.HealPerSecond) *
-        isisHandler.Cooldown.TotalSeconds);
+    static float GetIsisDamage(IsisWeaponHandler isisHandler, BattleTank sourceTank, BattleTank targetTank, bool isEnemy) =>
+        (float)((sourceTank == targetTank || isEnemy
+                    ? isisHandler.DamagePerSecond
+                    : isisHandler.HealPerSecond) *
+                isisHandler.Cooldown.TotalSeconds);
 
     static float GetRailgunDamage(RailgunWeaponHandler railgunHandler, float baseDamage, int targetHitIndex) =>
         baseDamage * MathF.Pow(railgunHandler.DamageWeakeningByTargetPercent, targetHitIndex);
 
     static float GetStreamDamage(StreamWeaponHandler streamHandler) =>
-        Convert.ToSingle(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);
+        (float)(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);
 
     float GetDiscreteDamage(IDiscreteWeaponHandler discreteHandler) {
         float min = discreteHandler.MinDamage;

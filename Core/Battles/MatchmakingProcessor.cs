@@ -9,7 +9,7 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IMatchmakingProcessor {
-    public void Tick(TimeSpan deltaTime);
+    public void Tick();
 
     public void AddPlayerToQueue(IPlayerConnection connection);
 
@@ -22,7 +22,7 @@ public class MatchmakingProcessor(
     ILogger Logger { get; } = Log.Logger.ForType(typeof(MatchmakingProcessor));
     ConcurrentHashSet<IPlayerConnection> PlayerQueue { get; } = [];
 
-    public void Tick(TimeSpan deltaTime) {
+    public void Tick() {
         foreach (IPlayerConnection connection in PlayerQueue) {
             try {
                 if (!connection.IsOnline) {

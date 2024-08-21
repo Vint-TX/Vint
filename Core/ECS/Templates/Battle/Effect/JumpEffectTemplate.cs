@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1538451741218)]
 public class JumpEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration, float force) {
-        IEntity entity = Create("battle/effect/jumpimpact", battlePlayer, duration, false);
+        IEntity entity = Create("battle/effect/jumpimpact", battlePlayer, duration, false, false);
 
         entity.AddComponent(new JumpEffectConfigComponent(force));
         return entity;

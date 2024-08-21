@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1486018775542)]
 public class ArmorEffectTemplate : EffectBaseTemplate {
     public IEntity Create(string effectConfigPath, BattlePlayer battlePlayer, TimeSpan duration) =>
-        Create(effectConfigPath, battlePlayer, duration, false);
+        Create(effectConfigPath, battlePlayer, duration, false, false);
 }

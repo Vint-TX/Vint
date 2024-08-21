@@ -7,5 +7,5 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1486018791920)]
 public class DamageEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration) =>
-        Create("battle/effect/damage", battlePlayer, duration, false);
+        Create("battle/effect/damage", battlePlayer, duration, false, false);
 }

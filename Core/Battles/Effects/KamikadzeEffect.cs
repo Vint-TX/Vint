@@ -25,7 +25,7 @@ public class KamikadzeEffect(
         CanBeDeactivated = false;
         Tank.Effects.Add(this);
 
-        IEntity entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
+        Entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
             impact,
@@ -36,7 +36,7 @@ public class KamikadzeEffect(
         WeaponHandler = new KamikadzeWeaponHandler(Tank,
             cooldown,
             marketEntity,
-            entity,
+            Entity,
             true,
             0,
             radius,
@@ -44,8 +44,6 @@ public class KamikadzeEffect(
             maxDamage,
             minDamage,
             int.MaxValue);
-
-        Entities.Add(entity);
 
         await Share(Tank.BattlePlayer);
         Schedule(Duration, DeactivateInternal);
@@ -57,7 +55,7 @@ public class KamikadzeEffect(
         Tank.Effects.TryRemove(this);
         await Unshare(Tank.BattlePlayer);
 
-        Entities.Clear();
+        Entity = null;
     }
 
     async Task DeactivateInternal() {
@@ -68,12 +66,12 @@ public class KamikadzeEffect(
     public override async Task Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        await battlePlayer.PlayerConnection.Share(Entities);
+        await battlePlayer.PlayerConnection.Share(Entity!);
     }
 
     public override async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;
 
-        await battlePlayer.PlayerConnection.Unshare(Entities);
+        await battlePlayer.PlayerConnection.Unshare(Entity!);
     }
 }
