@@ -41,7 +41,6 @@ public abstract class TankWeaponHandler : IWeaponHandler {
     public float MinDamageDistance { get; }
     public float MinDamagePercent { get; }
 
-    public DateTimeOffset LastHitTime { get; set; }
     public abstract int MaxHitTargets { get; }
 
     public abstract Task Fire(HitTarget target, int targetIndex);

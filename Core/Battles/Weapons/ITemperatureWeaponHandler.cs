@@ -10,7 +10,7 @@ public interface ITemperatureWeaponHandler {
     public float TemperatureDelta { get; }
 }
 
-public class TemperatureAssist( // todo modules
+public class TemperatureAssist(
     BattleTank assistant,
     ITemperatureWeaponHandler weapon,
     float maxDamage,
@@ -22,6 +22,6 @@ public class TemperatureAssist( // todo modules
     public float MaxDamage { get; init; } = maxDamage;
     public float CurrentTemperature { get; set; } = currentTemperature;
     public DateTimeOffset LastTick { get; set; } = lastTick;
-    
+
     public override int GetHashCode() => Assistant.GetHashCode();
 }

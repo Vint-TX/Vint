@@ -13,7 +13,7 @@ public class LifeStealEffect(
         Tank.Effects.Add(this);
 
         Entity = new LifestealEffectTemplate().Create(Tank.BattlePlayer, Duration);
-        await ShareAll();
+        await ShareToAllPlayers();
 
         Schedule(Duration, Deactivate);
     }
@@ -23,7 +23,7 @@ public class LifeStealEffect(
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 }

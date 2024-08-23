@@ -21,7 +21,6 @@ public class RicochetBattleItemTemplate : BulletWeaponTemplate {
 
         entity.AddComponent<RicochetComponent>();
         entity.AddComponent(new DiscreteWeaponEnergyComponent(energyRechargeSpeed, energyChargePerShot));
-
         return entity;
     }
 }

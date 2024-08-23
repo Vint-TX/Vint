@@ -29,6 +29,7 @@ public static class ModuleRegistry {
         Register<InvisibilityModule>("Invisibility");
         Register<ExplosiveMassModule>("ExplosiveMass");
         Register<FireRingModule>("FireRing");
+        Register<DroneModule>("Drone");
     }
 
     static BattleModuleBuilder<InDevModule> Fallback { get; } = new();

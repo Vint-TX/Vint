@@ -116,7 +116,7 @@ public class Starting(
             await StateManager.SetState(new NotStarted(StateManager));
         else if (Battle.Timer < TimeSpan.Zero) {
             await Battle.Start();
-            await Battle.LobbyEntity.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
+            await Battle.LobbyEntity.AddGroupComponent<BattleGroupComponent>(Battle.Entity);
             await StateManager.SetState(new Running(StateManager));
         }
     }

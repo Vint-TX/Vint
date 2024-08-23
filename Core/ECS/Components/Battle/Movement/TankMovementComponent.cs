@@ -10,8 +10,8 @@ public class TankMovementComponent(
     float weaponRotation,
     float weaponControl
 ) : IComponent {
-    public ECS.Movement.Movement Movement { get; private set; } = movement;
-    public MoveControl MoveControl { get; private set; } = moveControl;
-    public float WeaponRotation { get; private set; } = weaponRotation;
-    public float WeaponControl { get; private set; } = weaponControl;
+    public ECS.Movement.Movement Movement { get; set; } = movement;
+    public MoveControl MoveControl { get; set; } = moveControl;
+    public float WeaponRotation { get; set; } = weaponRotation;
+    public float WeaponControl { get; set; } = weaponControl;
 }

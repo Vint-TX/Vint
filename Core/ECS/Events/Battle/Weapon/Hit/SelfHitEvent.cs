@@ -4,6 +4,7 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Battle.Effect;
+using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -79,22 +80,6 @@ public class SelfHitEvent : HitEvent, IServerEvent {
     }
 
     bool Validate(IPlayerConnection connection, IWeaponHandler weaponHandler) {
-        DateTimeOffset currentHitTime = DateTimeOffset.UtcNow;
-        /*DateTimeOffset previousHitTime = weaponHandler.LastHitTime;
-        double timePassedMs = (currentHitTime - previousHitTime).TotalMilliseconds + connection.Ping;
-
-        if (weaponHandler is not StreamWeaponHandler && timePassedMs < weaponHandler.Cooldown.TotalMilliseconds) {
-            connection.Logger.ForType(GetType())
-                .Warning("Suspicious behaviour: cooldown has not passed: {TimePassed} < {Cooldown} ({WeaponHandlerName})",
-                    timePassedMs,
-                    weaponHandler.Cooldown.TotalMilliseconds,
-                    weaponHandler.GetType().Name);
-
-            return false;
-        }*/
-
-        weaponHandler.LastHitTime = currentHitTime;
-
         if (Targets?.Count > weaponHandler.MaxHitTargets) {
             connection.Logger.ForType(GetType())
                 .Warning("Suspicious behaviour: hit targets count is greater than max hit targets count: {Current} > {Max} ({WeaponHandlerName})",
@@ -108,12 +93,13 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         return true;
     }
 
-    static IWeaponHandler GetWeaponHandler(BattleTank tank, IEntity weapon) {
-        if (weapon.HasComponent<EffectComponent>()) {
-            return (tank.Effects.SingleOrDefault(effect => effect.Entity == weapon) as IModuleWeaponEffect)?.WeaponHandler ??
-                   throw new InvalidOperationException($"Not found weapon handler for {weapon}");
-        }
+    static IWeaponHandler GetWeaponHandler(BattleTank tank, IEntity weaponEntity) {
+        if (weaponEntity.HasComponent<TankPartComponent>())
+            return tank.WeaponHandler;
 
-        return tank.WeaponHandler;
+        return tank.Effects
+                   .OfType<WeaponEffect>()
+                   .SingleOrDefault(effect => effect.WeaponEntity == weaponEntity)?.WeaponHandler ??
+               throw new InvalidOperationException($"Not found weapon handler for {weaponEntity}");
     }
 }

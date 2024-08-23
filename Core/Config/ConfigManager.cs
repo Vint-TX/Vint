@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,6 +18,7 @@ using Vint.Core.Config.JsonConverters;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Components;
+using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
@@ -150,6 +153,7 @@ public static class ConfigManager {
         IDeserializer deserializer = new DeserializerBuilder()
             .WithNodeDeserializer(new ComponentDeserializer())
             .WithNodeTypeResolver(new ComponentDeserializer())
+            .WithTypeConverter(new Vector3TypeConverter())
             .IgnoreUnmatchedProperties()
             .Build();
 
@@ -266,19 +270,23 @@ public static class ConfigManager {
                     ConstructorInfo componentCtor = componentType.GetConstructors().First();
                     ParameterInfo[] ctorParameters = componentCtor.GetParameters();
 
-                    List<object?> parameters = new(ctorParameters.Length);
-
-                    parameters.AddRange(ctorParameters
+                    object?[] parameters = ctorParameters
                         .Select(ctorParameter => {
                             JToken? rawComponentProperty = rawComponentProperties![ctorParameter.Name!];
 
-                            if (rawComponentProperty == null && ctorParameter.HasDefaultValue)
+                            if (rawComponentProperty == null &&
+                                ctorParameter.HasDefaultValue)
                                 return ctorParameter.DefaultValue;
 
                             return rawComponentProperty?.ToObject(ctorParameter.ParameterType);
-                        }));
+                        })
+                        .ToArray();
 
-                    components.Add((IComponent)componentCtor.Invoke(parameters.ToArray()));
+                    IComponent component = componentType.IsAssignableTo(typeof(GroupComponent))
+                        ? GroupComponentRegistry.FindOrCreateGroup(componentType, (long)parameters.Single()!)
+                        : (IComponent)componentCtor.Invoke(parameters);
+
+                    components.Add(component);
                 }
 
                 Type templateType = types.Single(type => type.Name == templateName);
@@ -478,4 +486,51 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
 
     [GeneratedRegex("^[a-zA-Z]+$")]
     private static partial Regex MyRegex();
+}
+
+public class Vector3TypeConverter : IYamlTypeConverter {
+    public bool Accepts(Type type) => type == typeof(Vector3);
+
+    public object ReadYaml(IParser parser, Type type) {
+        parser.Consume<MappingStart>();
+        Vector3 vector = default;
+
+        while (parser.Current is Scalar property) {
+            switch (property.Value.ToLowerInvariant()) {
+                case "x":
+                    parser.MoveNext();
+                    vector.X = float.Parse(parser.Consume<Scalar>().Value);
+                    break;
+
+                case "y":
+                    parser.MoveNext();
+                    vector.Y = float.Parse(parser.Consume<Scalar>().Value);
+                    break;
+
+                case "z":
+                    parser.MoveNext();
+                    vector.Z = float.Parse(parser.Consume<Scalar>().Value);
+                    break;
+            }
+        }
+
+        parser.Consume<MappingEnd>();
+        return vector;
+    }
+
+    public void WriteYaml(IEmitter emitter, object? value, Type type) {
+        Vector3 vector = value as Vector3? ?? default;
+        emitter.Emit(new MappingStart());
+
+        emitter.Emit(new Scalar("x"));
+        emitter.Emit(new Scalar(vector.X.ToString(CultureInfo.InvariantCulture)));
+
+        emitter.Emit(new Scalar("y"));
+        emitter.Emit(new Scalar(vector.Y.ToString(CultureInfo.InvariantCulture)));
+
+        emitter.Emit(new Scalar("z"));
+        emitter.Emit(new Scalar(vector.Z.ToString(CultureInfo.InvariantCulture)));
+
+        emitter.Emit(new MappingEnd());
+    }
 }

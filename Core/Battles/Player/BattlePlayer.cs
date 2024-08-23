@@ -100,7 +100,7 @@ public class BattlePlayer {
                      .SelectMany(battlePlayer => battlePlayer.Tank!.Effects))
             await effect.Share(this);
 
-        await PlayerConnection.User.AddComponentFrom<BattleGroupComponent>(Battle.Entity);
+        await PlayerConnection.User.AddGroupComponent<BattleGroupComponent>(Battle.Entity);
         await PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
         await Battle.ModeHandler.PlayerEntered(this);
 

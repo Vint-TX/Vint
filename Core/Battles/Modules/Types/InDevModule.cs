@@ -29,7 +29,7 @@ public class InDevModule : BattleModule {
 
         Level = (int)userModule.GetComponent<ModuleUpgradeLevelComponent>().Level;
         SlotEntity = await CreateBattleSlot(Tank, userSlot);
-        Entity = new ModuleUserItemTemplate().Create(Tank, userModule);
+        Entity = new ModuleUserItemTemplate().Create(Tank.Tank, userModule);
     }
 
     protected override async Task<IEntity> CreateBattleSlot(BattleTank tank, IEntity userSlot) {

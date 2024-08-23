@@ -15,7 +15,6 @@ public interface IWeaponHandler {
     public float MinDamageDistance { get; }
     public float MinDamagePercent { get; }
 
-    public DateTimeOffset LastHitTime { get; set; }
     public int MaxHitTargets { get; }
 
     public Task Fire(HitTarget target, int targetIndex);

@@ -26,7 +26,7 @@ public class TankTemplate : EntityTemplate {
                 .AddComponent<WeightComponent>(configPath)
                 .AddComponentFrom<UserGroupComponent>(battleUser)
                 .AddComponentFrom<BattleGroupComponent>(battleUser)
-                .AddComponentFrom<MarketItemGroupComponent>(hull)
+                .AddGroupComponent<MarketItemGroupComponent>(hull)
                 .AddGroupComponent<TankGroupComponent>()
                 .ThenExecuteIf(_ => battleUser.HasComponent<TeamGroupComponent>(),
                     entity => entity.AddComponentFrom<TeamGroupComponent>(battleUser)));

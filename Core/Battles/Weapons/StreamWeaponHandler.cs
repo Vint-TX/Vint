@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
@@ -8,14 +9,17 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
 
-public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeaponHandler {
+public abstract class StreamWeaponHandler : TankWeaponHandler, IStreamWeaponHandler, ITemperatureWeaponHandler {
     protected StreamWeaponHandler(BattleTank battleTank) : base(battleTank) {
         Cooldown = TimeSpan.FromSeconds(ConfigManager.GetComponent<WeaponCooldownComponent>(BattleConfigPath).CooldownIntervalSec);
         DamagePerSecond = ConfigManager.GetComponent<DamagePerSecondPropertyComponent>(MarketConfigPath).FinalValue;
     }
 
+    Stopwatch Stopwatch { get; } = Stopwatch.StartNew();
+
     public float DamagePerSecond { get; }
-    public Dictionary<long, DateTimeOffset> IncarnationIdToHitTime { get; } = new();
+    public Dictionary<long, TimeSpan> IncarnationIdToHitTime { get; } = new();
+    public Dictionary<long, TimeSpan> IncarnationIdToLastHitTime { get; } = new();
 
     public abstract float TemperatureLimit { get; }
     public abstract float TemperatureDelta { get; }
@@ -23,7 +27,8 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeapo
     public override async Task Fire(HitTarget target, int targetIndex) {
         long incarnationId = target.IncarnationEntity.Id;
 
-        if (IsCooldownActive(incarnationId)) return;
+        if (IsCooldownActive(incarnationId))
+            return;
 
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
@@ -42,16 +47,24 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, ITemperatureWeapo
     }
 
     protected bool IsCooldownActive(long targetIncarnationId) {
-        if (!IncarnationIdToHitTime.TryGetValue(targetIncarnationId, out DateTimeOffset lastHitTime)) {
-            IncarnationIdToHitTime[targetIncarnationId] = DateTimeOffset.UtcNow;
+        if (!IncarnationIdToHitTime.TryGetValue(targetIncarnationId, out TimeSpan lastHitTime)) {
+            IncarnationIdToLastHitTime.Remove(targetIncarnationId);
+            IncarnationIdToHitTime[targetIncarnationId] = Stopwatch.Elapsed;
             return true;
         }
 
-        if (DateTimeOffset.UtcNow - lastHitTime < Cooldown) return true;
+        if (Stopwatch.Elapsed - lastHitTime < Cooldown)
+            return true;
 
         IncarnationIdToHitTime.Remove(targetIncarnationId);
+        IncarnationIdToLastHitTime[targetIncarnationId] = lastHitTime;
         return false;
     }
+
+    public TimeSpan GetTimeSinceLastHit(long incarnationId) =>
+        IncarnationIdToLastHitTime.TryGetValue(incarnationId, out TimeSpan hitTime)
+            ? Stopwatch.Elapsed - hitTime
+            : TimeSpan.Zero;
 
     public virtual ValueTask Reset() =>
         BattleTank.BattlePlayer.PlayerConnection.Send(new StreamWeaponResetStateEvent(), BattleEntity);

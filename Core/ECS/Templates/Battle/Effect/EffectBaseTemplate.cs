@@ -21,8 +21,8 @@ public abstract class EffectBaseTemplate : EntityTemplate {
                 })
             .ThenExecuteIf(_ => withTeam && battlePlayer.Battle.ModeHandler is TeamHandler,
                 entity => {
-                    entity.AddComponentFrom<TeamGroupComponent>(battlePlayer.Team!);
                     entity.AddComponentFrom<TeamColorComponent>(battlePlayer.Team!);
+                    entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team);
                 })
             .ThenExecuteIf(_ => withBattle,
                 entity => entity.AddGroupComponent<BattleGroupComponent>(battlePlayer.Battle.Entity)));

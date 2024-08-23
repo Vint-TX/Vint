@@ -14,6 +14,6 @@ public abstract class BonusTemplate : EntityTemplate {
             .AddComponent(new RotationComponent(default))
             .AddComponent(new PositionComponent(position))
             .AddComponent(new BonusDropTimeComponent(DateTimeOffset.UtcNow))
-            .AddComponentFrom<BattleGroupComponent>(battleEntity)
-            .AddComponentFrom<BonusRegionGroupComponent>(regionEntity));
+            .AddGroupComponent<BattleGroupComponent>(battleEntity)
+            .AddGroupComponent<BonusRegionGroupComponent>(regionEntity));
 }

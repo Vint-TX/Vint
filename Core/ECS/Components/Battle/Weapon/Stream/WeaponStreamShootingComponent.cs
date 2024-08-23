@@ -22,6 +22,8 @@ public class WeaponStreamShootingComponent : IComponent {
 
         vulcan.ShootingStartTime = null;
         vulcan.LastOverheatingUpdate = null;
+        vulcan.IncarnationIdToHitTime.Clear();
+        vulcan.IncarnationIdToLastHitTime.Clear();
         return Task.CompletedTask;
     }
 }

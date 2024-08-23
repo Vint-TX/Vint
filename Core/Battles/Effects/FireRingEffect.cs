@@ -16,8 +16,8 @@ public class FireRingEffect(
     float heatDamage,
     BattleTank tank,
     int level
-) : Effect(tank, level), IModuleWeaponEffect {
-    public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
+) : WeaponEffect(tank, level) {
+    public override ModuleWeaponHandler WeaponHandler { get; protected set; } = null!;
 
     float MinDamageRadius => radius;
     float MaxDamageRadius => 0;
@@ -27,7 +27,7 @@ public class FireRingEffect(
 
         Tank.Effects.Add(this);
 
-        Entity = new FireRingEffectTemplate().Create(Tank.BattlePlayer,
+        WeaponEntity = Entity = new FireRingEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
             impact,
@@ -38,7 +38,7 @@ public class FireRingEffect(
         WeaponHandler = new FireRingWeaponHandler(Tank, cooldown, marketEntity, Entity, temperatureLimit, temperatureDelta, heatDamage,
             minDamagePercent, MinDamageRadius, MaxDamageRadius);
 
-        await ShareAll();
+        await ShareToAllPlayers();
         Schedule(TimeSpan.FromSeconds(10), Deactivate);
     }
 
@@ -47,7 +47,7 @@ public class FireRingEffect(
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 }

@@ -12,6 +12,6 @@ public class WeaponSkinBattleItemTemplate : EntityTemplate {
             .AddComponent<WeaponSkinBattleItemComponent>()
             .AddComponentFrom<UserGroupComponent>(tank)
             .AddComponentFrom<BattleGroupComponent>(tank)
-            .AddComponentFrom<TankGroupComponent>(tank)
-            .AddComponentFrom<MarketItemGroupComponent>(skin));
+            .AddGroupComponent<TankGroupComponent>(tank)
+            .AddGroupComponent<MarketItemGroupComponent>(skin));
 }

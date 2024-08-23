@@ -14,21 +14,21 @@ public class ExplosiveMassEffect(
     float minDamage,
     BattleTank tank,
     int level
-) : Effect(tank, level), IModuleWeaponEffect {
-    public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
+) : WeaponEffect(tank, level) {
+    public override ModuleWeaponHandler WeaponHandler { get; protected set; } = null!;
 
     public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
-        Entity = new ExplosiveMassEffectTemplate().Create(Tank.BattlePlayer, Duration, radius, delay);
+        WeaponEntity = Entity = new ExplosiveMassEffectTemplate().Create(Tank.BattlePlayer, Duration, radius, delay);
         ExplosiveMassWeaponHandler weaponHandler = new(Tank, cooldown, marketEntity, Entity, maxDamage, minDamage);
 
         weaponHandler.Exploded += Deactivate;
         WeaponHandler = weaponHandler;
 
-        await ShareAll();
+        await ShareToAllPlayers();
         Schedule(TimeSpan.FromMilliseconds(delay) + TimeSpan.FromSeconds(10), Deactivate);
     }
 
@@ -37,7 +37,7 @@ public class ExplosiveMassEffect(
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 }

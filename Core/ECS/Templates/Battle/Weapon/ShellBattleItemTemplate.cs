@@ -12,6 +12,6 @@ public class ShellBattleItemTemplate : EntityTemplate {
             .AddComponent<ShellBattleItemComponent>()
             .AddComponentFrom<UserGroupComponent>(tank)
             .AddComponentFrom<BattleGroupComponent>(tank)
-            .AddComponentFrom<TankGroupComponent>(tank)
-            .AddComponentFrom<MarketItemGroupComponent>(shell));
+            .AddGroupComponent<TankGroupComponent>(tank)
+            .AddGroupComponent<MarketItemGroupComponent>(shell));
 }

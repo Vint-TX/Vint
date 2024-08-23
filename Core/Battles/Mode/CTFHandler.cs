@@ -54,10 +54,10 @@ public class CTFHandler : TeamHandler {
     public override async Task PlayerExited(BattlePlayer player) {
         await base.PlayerExited(player);
 
+        await player.PlayerConnection.UnshareIfShared(Flags.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
+
         foreach (Flag flag in Flags.Where(flag => flag.Carrier == player))
             await flag.Drop(false);
-
-        await player.PlayerConnection.UnshareIfShared(Flags.SelectMany(flag => new[] { flag.PedestalEntity, flag.Entity }));
     }
 
     public override TeamColor GetDominatedTeam() {

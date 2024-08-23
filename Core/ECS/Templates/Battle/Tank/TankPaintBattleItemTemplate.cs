@@ -13,6 +13,6 @@ public class TankPaintBattleItemTemplate : EntityTemplate {
                 .AddComponent<TankPaintBattleItemComponent>()
                 .AddComponentFrom<UserGroupComponent>(tank)
                 .AddComponentFrom<BattleGroupComponent>(tank)
-                .AddComponentFrom<TankGroupComponent>(tank)
-                .AddComponentFrom<MarketItemGroupComponent>(paint));
+                .AddGroupComponent<TankGroupComponent>(tank)
+                .AddGroupComponent<MarketItemGroupComponent>(paint));
 }

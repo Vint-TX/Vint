@@ -75,7 +75,7 @@ moduleMineEffectHideRangeProperty:
     - 19.44
     - 18.52
     - 17.59
-    - 17
+    - 17.00
 moduleMineEffectBeginHideDistanceProperty:
   linearInterpolation: false
   upgradeLevel2Values:
@@ -88,7 +88,7 @@ moduleMineEffectBeginHideDistanceProperty:
     - 19.44
     - 18.52
     - 17.59
-    - 17
+    - 17.00
 moduleEffectActivationTimeProperty:
   linearInterpolation: false
   upgradeLevel2Values:

@@ -260,7 +260,7 @@ public sealed class Battle : IDisposable {
             Preset preset = connection.Player.CurrentPreset;
 
             await connection.Share(LobbyEntity, LobbyChatEntity);
-            await connection.User.AddComponentFrom<BattleLobbyGroupComponent>(LobbyEntity);
+            await connection.User.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
             await connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
             foreach (BattlePlayer battlePlayer in Players)

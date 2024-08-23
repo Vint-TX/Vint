@@ -20,16 +20,15 @@ public abstract class BattleModule {
     public abstract string ConfigPath { get; }
     public int Level { get; protected set; }
 
-    public ModuleStateManager StateManager { get; }
-    public BattleTank Tank { get; protected set; } = null!;
-    public IEntity MarketEntity { get; protected set; } = null!;
+    public ModuleStateManager StateManager { get; }    public BattleTank Tank { get; protected set; } = null!;
+                                                       public IEntity MarketEntity { get; protected set; } = null!;
+
     public IEntity Entity { get; protected set; } = null!;
     public IEntity SlotEntity { get; protected set; } = null!;
 
     public int CurrentAmmo { get; private set; }
     public int MaxAmmo { get; private set; }
     public TimeSpan Cooldown { get; private set; }
-    TimeSpan OriginalCooldown { get; set; }
 
     public virtual bool ActivationCondition => true;
     public bool IsBlocked => SlotEntity.HasComponent<InventorySlotTemporaryBlockedByServerComponent>();
@@ -43,12 +42,8 @@ public abstract class BattleModule {
 
     public abstract Effect GetEffect();
 
-    public virtual async Task Activate() {
+    public virtual async Task Activate() =>
         await SetAmmo(CurrentAmmo - 1);
-
-        if (StateManager.CurrentState is not Modules.Cooldown)
-            await StateManager.SetState(new Cooldown(StateManager));
-    }
 
     public virtual async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         IEntity userModule = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
@@ -57,9 +52,9 @@ public abstract class BattleModule {
 
         Level = (int)userModule.GetComponent<ModuleUpgradeLevelComponent>().Level;
         CurrentAmmo = MaxAmmo = (int)Leveling.GetStat<ModuleAmmunitionPropertyComponent>(ConfigPath, Level);
-        OriginalCooldown = Cooldown = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleCooldownPropertyComponent>(ConfigPath, Level));
+        Cooldown = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleCooldownPropertyComponent>(ConfigPath, Level));
         SlotEntity = await CreateBattleSlot(Tank, userSlot);
-        Entity = new ModuleUserItemTemplate().Create(Tank, userModule);
+        Entity = new ModuleUserItemTemplate().Create(Tank.Tank, userModule);
     }
 
     protected virtual async Task<IEntity> CreateBattleSlot(BattleTank tank, IEntity userSlot) {

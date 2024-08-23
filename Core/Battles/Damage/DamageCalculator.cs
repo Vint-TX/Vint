@@ -46,7 +46,7 @@ public class DamageCalculator : IDamageCalculator {
             RailgunWeaponHandler railgunHandler => GetRailgunDamage(railgunHandler, GetDiscreteDamage(railgunHandler), targetHitIndex),
             HammerWeaponHandler hammerHandler => hammerHandler.DamagePerPellet,
             SmokyWeaponHandler smokyHandler => smokyHandler.GetProgressedDamage(target.Incarnation.Id, out smokyProgressionIsBig),
-            StreamWeaponHandler streamHandler => GetStreamDamage(streamHandler),
+            IStreamWeaponHandler streamHandler => GetStreamDamage(streamHandler, target.Incarnation.Id),
             IDiscreteWeaponHandler discreteHandler => GetDiscreteDamage(discreteHandler),
             _ => throw new InvalidOperationException($"Cannot find base damage for {weaponHandler.GetType().Name}")
         };
@@ -82,8 +82,11 @@ public class DamageCalculator : IDamageCalculator {
     static float GetRailgunDamage(RailgunWeaponHandler railgunHandler, float baseDamage, int targetHitIndex) =>
         baseDamage * MathF.Pow(railgunHandler.DamageWeakeningByTargetPercent, targetHitIndex);
 
-    static float GetStreamDamage(StreamWeaponHandler streamHandler) =>
-        (float)(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);
+    static float GetStreamDamage(IStreamWeaponHandler streamHandler, long incarnationId) {
+        TimeSpan timeSinceLastHit = streamHandler.GetTimeSinceLastHit(incarnationId);
+
+        return (float)(streamHandler.DamagePerSecond * timeSinceLastHit.TotalSeconds);
+    }
 
     float GetDiscreteDamage(IDiscreteWeaponHandler discreteHandler) {
         float min = discreteHandler.MinDamage;

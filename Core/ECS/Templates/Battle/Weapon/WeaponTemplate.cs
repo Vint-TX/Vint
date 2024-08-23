@@ -16,9 +16,9 @@ public abstract class WeaponTemplate : EntityTemplate {
             .TryAddComponent<WeaponCooldownComponent>(configPath)
             .AddComponentFrom<TankPartComponent>(tank)
             .AddComponentFrom<UserGroupComponent>(tank)
-            .AddComponentFrom<TankGroupComponent>(tank)
             .AddComponentFrom<BattleGroupComponent>(tank)
             .AddComponentFrom<MarketItemGroupComponent>(battlePlayer.PlayerConnection.Player.CurrentPreset.Weapon)
+            .AddGroupComponent<TankGroupComponent>(tank)
             .ThenExecuteIf(_ => this is not HammerBattleItemTemplate, entity => entity.AddComponent(new WeaponEnergyComponent(1)))
-            .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddComponentFrom<TeamGroupComponent>(battlePlayer.Team!)));
+            .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team!)));
 }

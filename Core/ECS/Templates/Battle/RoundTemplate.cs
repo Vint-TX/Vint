@@ -12,5 +12,5 @@ public class RoundTemplate : EntityTemplate {
             .AddComponent<RoundComponent>()
             .AddComponent(new RoundStopTimeComponent(DateTimeOffset.UtcNow.AddSeconds(40)))
             .AddComponent<RoundActiveStateComponent>()
-            .AddComponentFrom<BattleGroupComponent>(battle));
+            .AddGroupComponent<BattleGroupComponent>(battle));
 }

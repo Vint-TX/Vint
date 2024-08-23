@@ -14,7 +14,7 @@ public class EnergyInjectionEffect(
         Tank.Effects.Add(this);
 
         Entity = new EnergyInjectionEffectTemplate().Create(Tank.BattlePlayer, Duration, reloadPercent);
-        await ShareAll();
+        await ShareToAllPlayers();
 
         Schedule(Duration, Deactivate);
     }
@@ -24,7 +24,7 @@ public class EnergyInjectionEffect(
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 }

@@ -15,15 +15,15 @@ public class ExternalImpactEffect(
     float impact,
     BattleTank tank,
     int level
-) : Effect(tank, level), IModuleWeaponEffect {
-    public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
+) : WeaponEffect(tank, level) {
+    public override ModuleWeaponHandler WeaponHandler { get; protected set; } = null!;
 
     public override async Task Activate() {
         if (IsActive) return;
 
         Tank.Effects.Add(this);
 
-        Entity = new ExternalImpactEffectTemplate().Create(Tank.BattlePlayer,
+        WeaponEntity = Entity = new ExternalImpactEffectTemplate().Create(Tank.BattlePlayer,
             Duration,
             Battle.Properties.FriendlyFire,
             impact,
@@ -43,7 +43,7 @@ public class ExternalImpactEffect(
             minDamage,
             int.MaxValue);
 
-        await ShareAll();
+        await ShareToAllPlayers();
         Schedule(Duration, Deactivate);
     }
 
@@ -52,7 +52,7 @@ public class ExternalImpactEffect(
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 }

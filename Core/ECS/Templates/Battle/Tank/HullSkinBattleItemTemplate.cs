@@ -12,6 +12,6 @@ public class HullSkinBattleItemTemplate : EntityTemplate {
             .AddComponent<HullSkinBattleItemComponent>()
             .AddComponentFrom<UserGroupComponent>(tank)
             .AddComponentFrom<BattleGroupComponent>(tank)
-            .AddComponentFrom<TankGroupComponent>(tank)
-            .AddComponentFrom<MarketItemGroupComponent>(skin));
+            .AddGroupComponent<TankGroupComponent>(tank)
+            .AddGroupComponent<MarketItemGroupComponent>(skin));
 }

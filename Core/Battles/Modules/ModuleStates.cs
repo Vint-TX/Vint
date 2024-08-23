@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.ECS.Components.Modules.Inventory;
+using Vint.Core.Server;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battles.Modules;
@@ -19,29 +20,21 @@ public class Cooldown(
     ModuleStateManager stateManager
 ) : ModuleState(stateManager) {
     public bool CanBeUsed => Module.CurrentAmmo > 0;
-    DateTimeOffset StartTime { get; set; }
-    DateTimeOffset LastTickTime { get; set; }
     TimeSpan Elapsed { get; set; } = TimeSpan.Zero;
 
     public override async Task Start() {
         await base.Start();
 
-        LastTickTime = StartTime = DateTimeOffset.UtcNow;
-
         int cooldownMs = (int)Math.Ceiling(Module.Cooldown.TotalMilliseconds);
-        await Module.SlotEntity.AddComponent(new InventoryCooldownStateComponent(cooldownMs, StartTime));
+        await Module.SlotEntity.AddComponent(new InventoryCooldownStateComponent(cooldownMs, DateTimeOffset.UtcNow));
 
         if (Module.CurrentAmmo <= 0)
             await Module.TryBlock(true, cooldownMs);
     }
 
     public override async Task Tick() {
-        DateTimeOffset tickTime = DateTimeOffset.UtcNow;
-        TimeSpan deltaTime = tickTime - LastTickTime;
-
-        Elapsed += deltaTime * Module.Tank.ModuleCooldownCoeff;
-        await CheckForCooldownEnd();
-        LastTickTime = tickTime;
+        Elapsed += GameServer.DeltaTime * Module.Tank.ModuleCooldownCoeff;
+        await TryFinish();
 
         await base.Tick();
     }
@@ -55,7 +48,7 @@ public class Cooldown(
     public void AddElapsedTime(TimeSpan delta) =>
         Elapsed += delta;
 
-    async Task CheckForCooldownEnd() {
+    async Task TryFinish() {
         if (Elapsed < Module.Cooldown) return;
 
         await Module.SetAmmo(Module.CurrentAmmo + 1);

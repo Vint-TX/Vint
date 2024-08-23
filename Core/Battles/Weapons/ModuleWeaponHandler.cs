@@ -30,7 +30,6 @@ public abstract class ModuleWeaponHandler(
     public float MinDamageDistance { get; } = minDamageDistance;
     public float MinDamagePercent { get; } = minDamagePercent;
     public int MaxHitTargets { get; } = maxHitTargets;
-    public DateTimeOffset LastHitTime { get; set; }
 
     public abstract Task Fire(HitTarget target, int targetIndex);
 

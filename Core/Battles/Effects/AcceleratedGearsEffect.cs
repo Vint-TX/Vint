@@ -29,7 +29,7 @@ public class AcceleratedGearsEffect(
         await Tank.UpdateSpeed();
 
         Entity = new AcceleratedGearsEffectTemplate().Create(Tank.BattlePlayer, Duration);
-        await ShareAll();
+        await ShareToAllPlayers();
     }
 
     public override async Task Deactivate() {
@@ -47,7 +47,7 @@ public class AcceleratedGearsEffect(
         }
 
         await Tank.UpdateSpeed();
-        await UnshareAll();
+        await UnshareFromAllPlayers();
 
         Entity = null;
     }

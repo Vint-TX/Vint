@@ -245,7 +245,7 @@ public abstract class PlayerConnection(
         User = new UserTemplate().Create(Player);
         await Share(User);
 
-        await ClientSession.AddComponentFrom<UserGroupComponent>(User);
+        await ClientSession.AddGroupComponent<UserGroupComponent>(User);
 
         if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) { // todo bugs
             foreach (IPlayerConnection connection in tempUser.SharedPlayers) {
@@ -304,7 +304,7 @@ public abstract class PlayerConnection(
 
         if (oldLeagueIndex != Player.League) {
             await User.RemoveComponent<LeagueGroupComponent>();
-            await User.AddComponentFrom<LeagueGroupComponent>(Player.LeagueEntity);
+            await User.AddGroupComponent<LeagueGroupComponent>(Player.LeagueEntity);
         }
 
         if (seasonStats.Reputation != oldReputation)

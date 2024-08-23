@@ -15,7 +15,7 @@ public class InvisibilityEffect : Effect {
         Tank.Effects.Add(this);
 
         Entity = new InvisibilityEffectTemplate().Create(Tank.BattlePlayer, Duration);
-        await ShareAll();
+        await ShareToAllPlayers();
 
         Schedule(Duration, Deactivate);
     }
@@ -25,7 +25,7 @@ public class InvisibilityEffect : Effect {
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
         Deactivated?.Invoke();
     }

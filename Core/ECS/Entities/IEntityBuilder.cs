@@ -21,9 +21,11 @@ public interface IEntityBuilder {
 
     public IEntityBuilder AddComponent<T>(string configPath) where T : class, IComponent;
 
-    public IEntityBuilder AddGroupComponent<T>(IEntity? entity = null) where T : GroupComponent;
+    public IEntityBuilder AddGroupComponent<T>(IEntity? key = null) where T : GroupComponent;
 
     public IEntityBuilder AddComponentFrom<T>(IEntity entity) where T : class, IComponent;
+
+    public IEntityBuilder AddComponentFromConfig<T>() where T : class, IComponent;
 
     public IEntityBuilder TryAddComponent<T>(IEntity entity) where T : class, IComponent;
 

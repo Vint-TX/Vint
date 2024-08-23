@@ -11,7 +11,8 @@ public class StreamWeaponWorkingComponent : IComponent {
     public int Time { get; private set; }
 
     public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return Task.CompletedTask;
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+            return Task.CompletedTask;
 
         foreach (IShotModule shotModule in connection.BattlePlayer.Tank!.Modules.OfType<IShotModule>())
             shotModule.OnShot();
@@ -20,7 +21,9 @@ public class StreamWeaponWorkingComponent : IComponent {
     }
 
     public Task Removed(IPlayerConnection connection, IEntity entity) {
-        (connection.BattlePlayer?.Tank?.WeaponHandler as StreamWeaponHandler)?.IncarnationIdToHitTime.Clear();
+        StreamWeaponHandler? streamWeaponHandler = connection.BattlePlayer?.Tank?.WeaponHandler as StreamWeaponHandler;
+        streamWeaponHandler?.IncarnationIdToHitTime.Clear();
+        streamWeaponHandler?.IncarnationIdToLastHitTime.Clear();
         return Task.CompletedTask;
     }
 }

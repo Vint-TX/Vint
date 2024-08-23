@@ -27,9 +27,11 @@ public interface IEntity {
 
     public Task AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent;
 
-    public Task AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent;
+    public Task AddGroupComponent<T>(IEntity? key = null, IPlayerConnection? excluded = null) where T : GroupComponent;
 
     public Task AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent;
+
+    public Task AddComponentFromConfig<T>() where T : class, IComponent;
 
     public Task AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null);
 

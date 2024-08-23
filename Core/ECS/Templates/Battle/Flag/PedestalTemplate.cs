@@ -11,6 +11,6 @@ public class PedestalTemplate : EntityTemplate {
     public IEntity Create(Vector3 position, IEntity team, IEntity battle) => Entity("battle/modes/ctf",
         builder => builder
             .AddComponent(new FlagPedestalComponent(position))
-            .AddComponentFrom<TeamGroupComponent>(team)
-            .AddComponentFrom<BattleGroupComponent>(battle));
+            .AddGroupComponent<TeamGroupComponent>(team)
+            .AddGroupComponent<BattleGroupComponent>(battle));
 }

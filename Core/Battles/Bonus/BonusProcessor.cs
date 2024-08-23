@@ -62,11 +62,8 @@ public class BonusProcessor : IBonusProcessor {
             await bonus.Tick();
     }
 
-    public async Task Take(BonusBox bonus, BattleTank tank) {
+    public async Task Take(BonusBox bonus, BattleTank tank) =>
         await bonus.Take(tank);
-
-        // todo smth
-    }
 
     public async Task ShareEntities(IPlayerConnection connection) {
         List<IEntity> entities = new(Bonuses.Count * 2);

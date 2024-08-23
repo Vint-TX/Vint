@@ -39,13 +39,16 @@ public class EntityBuilder() : IEntityBuilder {
     public IEntityBuilder AddComponent<T>(string configPath) where T : class, IComponent =>
         AddComponent(ConfigManager.GetComponent<T>(configPath));
 
-    public IEntityBuilder AddGroupComponent<T>(IEntity? entity = null) where T : GroupComponent =>
-        ThenExecuteIf(_ => true, thisEntity => thisEntity.AddGroupComponent<T>(entity));
+    public IEntityBuilder AddGroupComponent<T>(IEntity? key = null) where T : GroupComponent =>
+        ThenExecuteIf(_ => true, thisEntity => thisEntity.AddGroupComponent<T>(key));
 
     public IEntityBuilder AddComponentFrom<T>(IEntity entity) where T : class, IComponent {
         Components.Add(entity.GetComponent<T>());
         return this;
     }
+
+    public IEntityBuilder AddComponentFromConfig<T>() where T : class, IComponent =>
+        AddComponent<T>(TemplateAccessor!.ConfigPath!);
 
     public IEntityBuilder TryAddComponent<T>(IEntity entity) where T : class, IComponent =>
         entity.HasComponent<T>() ? AddComponentFrom<T>(entity) : this;

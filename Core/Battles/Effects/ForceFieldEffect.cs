@@ -13,7 +13,7 @@ public class ForceFieldEffect : Effect {
         Tank.Effects.Add(this);
 
         Entity = new ForceFieldEffectTemplate().Create(Tank.BattlePlayer, Duration);
-        await ShareAll();
+        await ShareToAllPlayers();
 
         Schedule(Duration, Deactivate);
     }
@@ -23,7 +23,7 @@ public class ForceFieldEffect : Effect {
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 }

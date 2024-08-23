@@ -13,6 +13,6 @@ public class TeamTemplate : EntityTemplate {
             .AddComponent<TeamComponent>()
             .AddComponent(new TeamScoreComponent())
             .AddComponent(new TeamColorComponent(teamColor))
-            .AddComponentFrom<BattleGroupComponent>(battle)
+            .AddGroupComponent<BattleGroupComponent>(battle)
             .AddGroupComponent<TeamGroupComponent>());
 }

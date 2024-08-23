@@ -84,6 +84,9 @@ public class Entity(
         Components.ToHashSet());
 
     public async Task AddComponent(IComponent component, IPlayerConnection? excluded = null) {
+        if (component is GroupComponent groupComponent)
+            component = GroupComponentRegistry.FindOrRegisterGroup(groupComponent);
+
         Type type = component.GetType();
 
         if (!TypeToComponent.TryAdd(type, component))
@@ -95,16 +98,22 @@ public class Entity(
             await playerConnection.Send(new ComponentAddCommand(this, component));
     }
 
-    public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() => AddComponent(new T(), excluded);
+    public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() =>
+        AddComponent(new T(), excluded);
 
     public Task AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent =>
         AddComponent(ConfigManager.GetComponent<T>(configPath), excluded);
 
-    public Task AddGroupComponent<T>(IEntity? entity = null, IPlayerConnection? excluded = null) where T : GroupComponent =>
-        AddComponent((T)Activator.CreateInstance(typeof(T), entity ?? this)!, excluded);
+    public async Task AddGroupComponent<T>(IEntity? key = null, IPlayerConnection? excluded = null) where T : GroupComponent {
+        T component = GroupComponentRegistry.FindOrCreateGroup<T>(key?.Id ?? Id);
+        await AddComponent(component);
+    }
 
     public Task AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent =>
         AddComponent(entity.GetComponent<T>(), excluded);
+
+    public Task AddComponentFromConfig<T>() where T : class, IComponent =>
+        AddComponent<T>(TemplateAccessor!.ConfigPath!);
 
     public async Task AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null) {
         if (!HasComponent(component))

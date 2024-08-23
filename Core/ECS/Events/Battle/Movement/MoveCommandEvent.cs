@@ -1,5 +1,6 @@
 using System.Numerics;
 using Vint.Core.Battles.Player;
+using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
 using Vint.Core.Protocol.Attributes;
@@ -28,6 +29,24 @@ public class MoveCommandEvent : IServerEvent {
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(serverEvent, tank);
+
+        await tank.ChangeComponent<TankMovementComponent>(component => {
+            MoveControl moveControl = new() {
+                MoveAxis = MoveCommand.TankControlVertical ?? component.MoveControl.MoveAxis,
+                TurnAxis = MoveCommand.TankControlHorizontal ?? component.MoveControl.TurnAxis
+            };
+
+            component.MoveControl = moveControl;
+
+            if (MoveCommand.Movement.HasValue)
+                component.Movement = MoveCommand.Movement.Value;
+
+            if (MoveCommand.WeaponRotation.HasValue)
+                component.WeaponRotation = MoveCommand.WeaponRotation.Value;
+
+            if (MoveCommand.WeaponRotationControl.HasValue)
+                component.WeaponControl = MoveCommand.WeaponRotationControl.Value;
+        });
 
         if (!MoveCommand.Movement.HasValue ||
             battleTank.StateManager.CurrentState is Dead)

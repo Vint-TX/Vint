@@ -90,7 +90,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         await Battle.DamageProcessor.Heal(Tank, heal);
 
         Entity = new HealingEffectTemplate().Create(Tank.BattlePlayer, Duration);
-        await ShareAll();
+        await ShareToAllPlayers();
 
         Schedule(Duration, Deactivate);
     }
@@ -100,7 +100,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         Tank.Effects.TryRemove(this);
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
 
         if (HealLeft <= 0 || Tank.Health >= Tank.MaxHealth) return;

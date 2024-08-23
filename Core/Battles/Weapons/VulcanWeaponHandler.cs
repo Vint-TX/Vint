@@ -41,8 +41,8 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
+        if (targetTank.StateManager.CurrentState is not Active || !isEnemy)
+            return;
 
         CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);

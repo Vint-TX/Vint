@@ -16,7 +16,7 @@ public class CustomBattleLobbyTemplate : BattleLobbyTemplate {
 
         entity.AddComponent(new ClientBattleParamsComponent(battleProperties));
         entity.AddComponent(new OpenCustomLobbyPriceComponent(price));
-        entity.AddComponentFrom<UserGroupComponent>(owner.User);
+        entity.AddGroupComponent<UserGroupComponent>(owner.User);
         return entity;
     }
 }

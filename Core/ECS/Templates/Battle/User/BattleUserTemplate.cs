@@ -11,14 +11,14 @@ public class BattleUserTemplate : EntityTemplate {
     IEntity Create(IEntity user, IEntity battle) => Entity("battle/battleuser",
         builder => builder
             .AddComponent<BattleUserComponent>()
-            .AddComponentFrom<UserGroupComponent>(user)
-            .AddComponentFrom<BattleGroupComponent>(battle));
+            .AddGroupComponent<UserGroupComponent>(user)
+            .AddGroupComponent<BattleGroupComponent>(battle));
 
     public IEntity CreateAsTank(IEntity user, IEntity battle, IEntity? team) {
         IEntity entity = Create(user, battle);
 
         if (team != null)
-            entity.AddComponentFrom<TeamGroupComponent>(team);
+            entity.AddGroupComponent<TeamGroupComponent>(team);
 
         entity.AddComponent<UserInBattleAsTankComponent>();
         entity.AddComponent(new BattleUserInventoryCooldownSpeedComponent(1));

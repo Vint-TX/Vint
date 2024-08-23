@@ -19,7 +19,7 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         await ResetWeaponState();
 
         Entity = new EmergencyProtectionEffectTemplate().Create(Tank.BattlePlayer, Duration);
-        await ShareAll();
+        await ShareToAllPlayers();
 
         Schedule(Duration, Deactivate);
     }
@@ -30,7 +30,7 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         Tank.Effects.TryRemove(this);
         await Tank.Weapon.AddComponentIfAbsent<ShootableComponent>();
 
-        await UnshareAll();
+        await UnshareFromAllPlayers();
         Entity = null;
     }
 

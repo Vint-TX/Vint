@@ -13,6 +13,6 @@ public class BattleLobbyTemplate : EntityTemplate {
             .AddComponent(new BattleModeComponent(properties.BattleMode))
             .AddComponent(new UserLimitComponent(properties.MaxPlayers))
             .AddComponent(new GravityComponent(properties.Gravity))
-            .AddComponentFrom<MapGroupComponent>(map)
+            .AddGroupComponent<MapGroupComponent>(map)
             .AddGroupComponent<BattleLobbyGroupComponent>());
 }

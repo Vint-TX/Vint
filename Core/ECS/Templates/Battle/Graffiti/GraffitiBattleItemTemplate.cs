@@ -12,5 +12,5 @@ public class GraffitiBattleItemTemplate : EntityTemplate {
             builder
                 .AddComponent<GraffitiBattleItemComponent>()
                 .AddComponentFrom<UserGroupComponent>(tank)
-                .AddComponentFrom<MarketItemGroupComponent>(graffiti));
+                .AddGroupComponent<MarketItemGroupComponent>(graffiti));
 }

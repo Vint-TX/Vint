@@ -8,9 +8,9 @@ namespace Vint.Core.ECS.Templates.Modules;
 
 [ProtocolId(1484901449548)]
 public class ModuleUserItemTemplate : EntityTemplate {
-    public IEntity Create(BattleTank tank, IEntity userItem) =>
+    public IEntity Create(IEntity tank, IEntity userItem) =>
         Entity(userItem.TemplateAccessor?.ConfigPath,
             builder => builder
                 .AddComponent<ModuleUsesCounterComponent>()
-                .AddComponentFrom<TankGroupComponent>(tank.Tank));
+                .AddGroupComponent<TankGroupComponent>(tank));
 }

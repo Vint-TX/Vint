@@ -16,8 +16,8 @@ public class KamikadzeEffect(
     float impact,
     BattleTank tank,
     int level
-) : Effect(tank, level), IModuleWeaponEffect {
-    public ModuleWeaponHandler WeaponHandler { get; private set; } = null!;
+) : WeaponEffect(tank, level) {
+    public override ModuleWeaponHandler WeaponHandler { get; protected set; } = null!;
 
     public override async Task Activate() {
         if (IsActive) return;
@@ -25,13 +25,8 @@ public class KamikadzeEffect(
         CanBeDeactivated = false;
         Tank.Effects.Add(this);
 
-        Entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
-            Duration,
-            Battle.Properties.FriendlyFire,
-            impact,
-            minPercent,
-            0,
-            radius);
+        WeaponEntity = Entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
+            Duration, Battle.Properties.FriendlyFire, impact, minPercent, 0, radius);
 
         WeaponHandler = new KamikadzeWeaponHandler(Tank,
             cooldown,

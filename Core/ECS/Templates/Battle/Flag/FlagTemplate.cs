@@ -14,6 +14,6 @@ public class FlagTemplate : EntityTemplate {
                 .AddComponent<FlagComponent>()
                 .AddComponent<FlagHomeStateComponent>()
                 .AddComponent(new FlagPositionComponent(position))
-                .AddComponentFrom<TeamGroupComponent>(team)
-                .AddComponentFrom<BattleGroupComponent>(battle));
+                .AddGroupComponent<TeamGroupComponent>(team)
+                .AddGroupComponent<BattleGroupComponent>(battle));
 }

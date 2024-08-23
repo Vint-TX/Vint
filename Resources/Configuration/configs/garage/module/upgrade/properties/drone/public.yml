@@ -1,118 +1,46 @@
 moduleCooldownProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 60000
-    - 57778
-    - 55556
-    - 53333
-    - 51111
-    - 48889
-    - 46667
-    - 44444
-    - 42222
     - 40000
 moduleAmmunitionProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
     - 2
     - 2
 moduleEffectDurationProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 12000
-    - 12667
-    - 13333
-    - 14000
-    - 14667
-    - 15333
-    - 16000
-    - 16667
-    - 17333
     - 18000
 moduleEffectMinDamageProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 50.00
-    - 52.78
-    - 55.56
-    - 58.33
-    - 61.11
-    - 63.89
-    - 66.67
-    - 69.44
-    - 72.22
     - 75.00
 moduleEffectMaxDamageProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 50.00
-    - 52.78
-    - 55.56
-    - 58.33
-    - 61.11
-    - 63.89
-    - 66.67
-    - 69.44
-    - 72.22
     - 75.00
 moduleEffectActivationTimeProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 3000
-    - 2889
-    - 2778
-    - 2667
-    - 2556
-    - 2444
-    - 2333
-    - 2222
-    - 2111
     - 2000
 moduleLimitBundleEffectCountProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
-    - 2
     - 2
     - 2
 moduleEffectTargetingDistanceProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 20.00
-    - 21.11
-    - 22.22
-    - 23.33
-    - 24.44
-    - 25.56
-    - 26.67
-    - 27.78
-    - 28.89
     - 30.00
 moduleEffectTargetingPeriodProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 0.50
-    - 0.50
-    - 0.50
-    - 0.50
-    - 0.50
-    - 0.50
-    - 0.50
-    - 0.50
     - 0.50
     - 0.50
 moduleVisualProperties:

@@ -14,5 +14,5 @@ public class RoundUserTemplate : EntityTemplate {
             .AddComponent<RoundUserStatisticsComponent>()
             .AddComponentFrom<UserGroupComponent>(tank)
             .AddComponentFrom<BattleGroupComponent>(tank)
-            .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddComponentFrom<TeamGroupComponent>(battlePlayer.Team!)));
+            .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team!)));
 }
