@@ -22,7 +22,7 @@ public abstract class Effect(
 
     protected int Level { get; set; } = level;
     protected bool IsSupply => Level < 0;
-    [MemberNotNullWhen(true, nameof(Entity))] protected bool IsActive => Entity != null;
+    [MemberNotNullWhen(true, nameof(Entity))] public bool IsActive => Entity != null;
     public bool CanBeDeactivated { get; set; } = true;
 
     protected TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(1);
@@ -47,6 +47,9 @@ public abstract class Effect(
     public abstract Task Activate();
 
     public abstract Task Deactivate();
+
+    public virtual async Task DeactivateByEMP() =>
+        await Deactivate();
 
     public virtual async Task Share(BattlePlayer battlePlayer) {
         if (Entity != null)

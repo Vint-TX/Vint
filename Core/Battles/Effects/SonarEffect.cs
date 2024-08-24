@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Templates.Battle.Effect;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Effects;
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Config;
@@ -12,23 +11,23 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Entities;
 
-public class Entity(
-    long id,
-    TemplateAccessor? templateAccessor,
-    IEnumerable<IComponent> components
-) : IEntity {
+public class Entity : IEntity {
+    public Entity(long id, TemplateAccessor? templateAccessor, IEnumerable<IComponent> components) {
+        Id = id;
+        TemplateAccessor = templateAccessor;
+        ComponentStorage = new EntityComponentStorage(this, components);
+    }
+
     ILogger Logger { get; } = Log.Logger.ForType(typeof(Entity));
-    ConcurrentDictionary<Type, IComponent> TypeToComponent { get; } = new(components.ToDictionary(c => c.GetType()));
+    EntityComponentStorage ComponentStorage { get; }
 
     public ConcurrentHashSet<IPlayerConnection> SharedPlayers { get; } = [];
 
-    public long Id {
-        get => id;
-        set => id = value;
-    }
+    public long Id { get; set; }
 
-    public TemplateAccessor? TemplateAccessor => templateAccessor;
-    public IEnumerable<IComponent> Components => TypeToComponent.Values.ToHashSet();
+    public TemplateAccessor? TemplateAccessor { get; }
+
+    public IEnumerable<IComponent> Components => ComponentStorage.Components;
 
     public EntityShareCommand ToShareCommand() => new(Id, TemplateAccessor, Components.ToArray());
 
@@ -60,12 +59,8 @@ public class Entity(
 
     public T GetComponent<T>() where T : class, IComponent => (T)GetComponent(typeof(T));
 
-    public IComponent GetComponent(Type type) {
-        if (TypeToComponent.TryGetValue(type, out IComponent? component))
-            return component;
-
-        throw new ArgumentException($"{this} does not have component {type}");
-    }
+    public IComponent GetComponent(Type type) =>
+        ComponentStorage.GetComponent(type);
 
     public Task RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent =>
         RemoveComponentIfPresent(typeof(T), excluded);
@@ -87,12 +82,8 @@ public class Entity(
         if (component is GroupComponent groupComponent)
             component = GroupComponentRegistry.FindOrRegisterGroup(groupComponent);
 
-        Type type = component.GetType();
-
-        if (!TypeToComponent.TryAdd(type, component))
-            throw new ArgumentException($"{this} already has component {type}");
-
-        Logger.Debug("Added {Name} component to the {Entity}", type.Name, this);
+        ComponentStorage.AddComponent(component);
+        Logger.Debug("Added {Name} component to the {Entity}", component.GetType().Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
             await playerConnection.Send(new ComponentAddCommand(this, component));
@@ -131,7 +122,7 @@ public class Entity(
     public bool HasComponent(IComponent component) =>
         HasComponent(component.GetType());
 
-    public bool HasComponent(Type type) => TypeToComponent.TryGetValue(type, out _);
+    public bool HasComponent(Type type) => ComponentStorage.HasComponent(type);
 
     public async Task ChangeComponent<T>(Func<T, Task> func) where T : class, IComponent {
         T component = GetComponent<T>();
@@ -148,14 +139,8 @@ public class Entity(
     }
 
     public async Task ChangeComponent(IComponent component, IPlayerConnection? excluded) {
-        Type type = component.GetType();
-
-        if (!TypeToComponent.ContainsKey(type))
-            throw new ArgumentException($"{this} does not have component {type}");
-
-        TypeToComponent[type] = component;
-
-        Logger.Debug("Changed {Name} component in the {Entity}", type.Name, this);
+        ComponentStorage.ChangeComponent(component);
+        Logger.Debug("Changed {Name} component in the {Entity}", component.GetType().Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
             await playerConnection.Send(new ComponentChangeCommand(this, component));
@@ -168,9 +153,7 @@ public class Entity(
         RemoveComponent(component.GetType(), excluded);
 
     public async Task RemoveComponent(Type type, IPlayerConnection? excluded = null) {
-        if (!TypeToComponent.TryRemove(type, out _))
-            throw new ArgumentException($"{this} does not have component {type}");
-
+        ComponentStorage.RemoveComponent(type);
         Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))

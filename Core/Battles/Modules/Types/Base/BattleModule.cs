@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Effects;
+using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
 using Vint.Core.ECS.Components.Group;
@@ -9,6 +10,7 @@ using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.ECS.Templates.Modules;
+using Vint.Core.Server;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types.Base;
@@ -20,8 +22,9 @@ public abstract class BattleModule {
     public abstract string ConfigPath { get; }
     public int Level { get; protected set; }
 
-    public ModuleStateManager StateManager { get; }    public BattleTank Tank { get; protected set; } = null!;
-                                                       public IEntity MarketEntity { get; protected set; } = null!;
+    public ModuleStateManager StateManager { get; }
+    public BattleTank Tank { get; protected set; } = null!;
+    public IEntity MarketEntity { get; protected set; } = null!;
 
     public IEntity Entity { get; protected set; } = null!;
     public IEntity SlotEntity { get; protected set; } = null!;
@@ -29,11 +32,14 @@ public abstract class BattleModule {
     public int CurrentAmmo { get; private set; }
     public int MaxAmmo { get; private set; }
     public TimeSpan Cooldown { get; private set; }
+    public TimeSpan EMPLockTime { get; private set; }
 
     public virtual bool ActivationCondition => true;
+    public bool IsEMPLocked { get; private set; }
     public bool IsBlocked => SlotEntity.HasComponent<InventorySlotTemporaryBlockedByServerComponent>();
     public bool IsEnabled => SlotEntity.HasComponent<InventoryEnabledStateComponent>();
     public bool CanBeActivated => !IsBlocked &&
+                                  !IsEMPLocked &&
                                   IsEnabled &&
                                   ActivationCondition &&
                                   StateManager.CurrentState is Ready or Cooldown { CanBeUsed: true } &&
@@ -84,13 +90,45 @@ public abstract class BattleModule {
             await StateManager.SetState(new Ready(StateManager));
     }
 
-    public Task Tick() => StateManager.Tick();
+    public async Task EMPLock(TimeSpan duration) { // effects should be deactivated separately
+        EMPLockTime += duration;
 
-    public virtual Task TryBlock(bool force = false, long blockTimeMs = 0) =>
-        SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent(blockTimeMs, DateTimeOffset.UtcNow));
+        if (IsEMPLocked)
+            return;
+
+        IsEMPLocked = true;
+        await SlotEntity.AddComponentIfAbsent<SlotLockedByEMPComponent>();
+        await TryBlock(true);
+    }
+
+    public async Task Tick() {
+        await StateManager.Tick();
+
+        if (IsEMPLocked) {
+            EMPLockTime -= GameServer.DeltaTime;
+            await TryEmpUnlock();
+        }
+    }
+
+    public virtual Task TryBlock(bool force = false) =>
+        SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent());
 
     public virtual Task TryUnblock() =>
         CurrentAmmo <= 0
             ? Task.CompletedTask
             : SlotEntity.RemoveComponentIfPresent<InventorySlotTemporaryBlockedByServerComponent>();
+
+    async Task TryEmpUnlock() {
+        if (!IsEMPLocked || EMPLockTime > TimeSpan.Zero)
+            return;
+
+        await TryUnblock();
+        await SlotEntity.RemoveComponentIfPresent<SlotLockedByEMPComponent>();
+
+        IsEMPLocked = false;
+        EMPLockTime = TimeSpan.Zero;
+
+        if (this is IAlwaysActiveModule)
+            await Activate();
+    }
 }

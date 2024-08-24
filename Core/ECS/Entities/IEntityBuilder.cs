@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Entities;
 public interface IEntityBuilder {
     public long Id { get; }
     public TemplateAccessor? TemplateAccessor { get; }
-    public HashSet<IComponent> Components { get; }
+    public List<IComponent> Components { get; }
 
     public IEntityBuilder WithTemplateAccessor(TemplateAccessor templateAccessor);
 

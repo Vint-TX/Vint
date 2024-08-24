@@ -819,7 +819,7 @@ public abstract class PlayerConnection(
                     }
 
                     foreach ((IEntity slot, IEntity module) in slotToNewModule) {
-                        await slot.AddGroupComponent<ModuleGroupComponent>(module);
+                        await slot.AddComponentFrom<ModuleGroupComponent>(module);
                         await module.AddComponent<MountedItemComponent>();
                     }
 

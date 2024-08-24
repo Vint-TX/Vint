@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Weapons;
+using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
@@ -11,14 +12,18 @@ public class WeaponStreamShootingComponent : IComponent {
     public int Time { get; private set; }
 
     public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is not VulcanWeaponHandler vulcan) return Task.CompletedTask;
+        if (!entity.HasComponent<VulcanComponent>() ||
+            connection.BattlePlayer?.Tank?.WeaponHandler is not VulcanWeaponHandler vulcan)
+            return Task.CompletedTask;
 
         vulcan.ShootingStartTime ??= DateTimeOffset.UtcNow;
         return Task.CompletedTask;
     }
 
     public Task Removed(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is not VulcanWeaponHandler vulcan) return Task.CompletedTask;
+        if (!entity.HasComponent<VulcanComponent>() ||
+            connection.BattlePlayer?.Tank?.WeaponHandler is not VulcanWeaponHandler vulcan)
+            return Task.CompletedTask;
 
         vulcan.ShootingStartTime = null;
         vulcan.LastOverheatingUpdate = null;

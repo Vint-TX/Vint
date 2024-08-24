@@ -37,12 +37,12 @@ public class InDevModule : BattleModule {
         clone.Id = EntityRegistry.FreeId;
 
         await clone.AddGroupComponent<TankGroupComponent>(Tank.Tank);
-        await clone.AddComponent(new InventorySlotTemporaryBlockedByServerComponent(9999999, DateTimeOffset.UtcNow));
+        await clone.AddComponent(new InventorySlotTemporaryBlockedByServerComponent());
         await clone.AddComponent(new InventoryAmmunitionComponent(1));
         return clone;
     }
 
-    public override Task TryBlock(bool force = false, long blockTimeMs = 0) => Task.CompletedTask;
+    public override Task TryBlock(bool force = false) => Task.CompletedTask;
 
     public override Task TryUnblock() => Task.CompletedTask;
 }

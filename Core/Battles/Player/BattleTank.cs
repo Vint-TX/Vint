@@ -27,12 +27,14 @@ using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
+using Vint.Core.ECS.Events.Battle.Effect;
 using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.ECS.Events.Battle.Movement;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates.Battle;
+using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.ECS.Templates.Battle.Graffiti;
 using Vint.Core.ECS.Templates.Battle.Incarnation;
 using Vint.Core.ECS.Templates.Battle.Tank;
@@ -272,12 +274,27 @@ public class BattleTank {
         await WeaponHandler.OnTankDisable();
     }
 
-    public async Task UpdateModuleCooldownSpeed(float coeff, bool reset = false) {
-        if (reset) coeff = 1;
-
+    public async Task UpdateModuleCooldownSpeed(float coeff) {
         ModuleCooldownCoeff = coeff;
         await BattleUser.ChangeComponent<BattleUserInventoryCooldownSpeedComponent>(component => component.SpeedCoeff = coeff);
         await BattlePlayer.PlayerConnection.Send(new BattleUserInventoryCooldownSpeedChangedEvent(), BattleUser);
+    }
+
+    public async Task EMPLock(TimeSpan duration) {
+        IPlayerConnection connection = BattlePlayer.PlayerConnection;
+        IEntity debuffEffect = new EMPDebuffEffectTemplate().Create(BattlePlayer, duration);
+
+        await connection.Share(debuffEffect);
+        connection.Schedule(duration, async () => await connection.Unshare(debuffEffect));
+
+        foreach (BattleModule module in Modules)
+            await module.EMPLock(duration);
+
+        foreach (Effect effect in Effects)
+            await effect.DeactivateByEMP();
+
+        foreach (IPlayerConnection conn in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+            await conn.Send(new EMPEffectReadyEvent(), Tank);
     }
 
     public async Task Spawn() {

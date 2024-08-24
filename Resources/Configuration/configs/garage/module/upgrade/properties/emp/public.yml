@@ -1,54 +1,22 @@
 moduleCooldownProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 90000
-    - 86667
-    - 83333
-    - 80000
-    - 76667
-    - 73333
-    - 70000
-    - 66667
-    - 63333
     - 60000
 moduleAmmunitionProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
     - 1
     - 1
 moduleEffectDurationProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 3000
-    - 3167
-    - 3333
-    - 3500
-    - 3667
-    - 3833
-    - 4000
-    - 4167
-    - 4333
     - 4500
 moduleEMPEffectRadiusProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 15.00
-    - 15.83
-    - 16.67
-    - 17.50
-    - 18.33
-    - 19.17
-    - 20.00
-    - 20.83
-    - 21.67
     - 22.50
 moduleVisualProperties:
   properties:

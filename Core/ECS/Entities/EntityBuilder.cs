@@ -12,7 +12,7 @@ public class EntityBuilder() : IEntityBuilder {
 
     public long Id { get; private set; }
     public TemplateAccessor? TemplateAccessor { get; private set; }
-    public HashSet<IComponent> Components { get; } = [];
+    public List<IComponent> Components { get; } = [];
 
     public IEntityBuilder WithTemplateAccessor(TemplateAccessor templateAccessor) {
         TemplateAccessor = templateAccessor;
@@ -65,7 +65,7 @@ public class EntityBuilder() : IEntityBuilder {
         if (Id == 0)
             Id = EntityRegistry.FreeId;
 
-        Entity entity = new(Id, TemplateAccessor, Components.ToList());
+        Entity entity = new(Id, TemplateAccessor, Components);
 
         foreach (Action<IEntity> action in Actions.Where(tuple => tuple.condition(entity)).Select(tuple => tuple.action))
             action(entity);

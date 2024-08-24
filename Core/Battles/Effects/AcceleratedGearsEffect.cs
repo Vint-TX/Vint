@@ -51,4 +51,9 @@ public class AcceleratedGearsEffect(
 
         Entity = null;
     }
+
+    public override async Task DeactivateByEMP() {
+        CanBeDeactivated = true;
+        await Deactivate();
+    }
 }

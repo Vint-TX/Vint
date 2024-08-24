@@ -3,7 +3,6 @@ using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
-using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;

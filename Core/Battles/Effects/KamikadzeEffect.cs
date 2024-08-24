@@ -2,7 +2,6 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.Effect;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Effects;
 
@@ -57,6 +56,9 @@ public class KamikadzeEffect(
         CanBeDeactivated = true;
         await Deactivate();
     }
+
+    public override async Task DeactivateByEMP() =>
+        await DeactivateInternal();
 
     public override async Task Share(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank != Tank) return;

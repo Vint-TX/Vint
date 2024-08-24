@@ -19,7 +19,7 @@ public class AdrenalineEffect(
     public override async Task Deactivate() {
         Tank.Effects.TryRemove(this);
 
-        await Tank.UpdateModuleCooldownSpeed(1, true);
+        await Tank.UpdateModuleCooldownSpeed(1);
         Deactivated?.Invoke();
     }
 

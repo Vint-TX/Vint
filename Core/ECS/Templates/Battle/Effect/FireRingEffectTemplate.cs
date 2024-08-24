@@ -3,7 +3,6 @@ using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Effect.Type;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Splash;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 

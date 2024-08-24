@@ -7,6 +7,7 @@
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=CP/@EntryIndexedValue">CP</s:String>
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=CTF/@EntryIndexedValue">CTF</s:String>
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=DM/@EntryIndexedValue">DM</s:String>
+	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=EMP/@EntryIndexedValue">EMP</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=HP/@EntryIndexedValue">HP</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=ID/@EntryIndexedValue">ID</s:String>
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=MM/@EntryIndexedValue">MM</s:String>
@@ -17,6 +18,7 @@
     <s:Boolean x:Key="/Default/UserDictionary/Words/=coeff/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=CONSALA/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=Deathmatch/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=debuff/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=Disbalanced/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=Geoms/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=hpet/@EntryIndexedValue">True</s:Boolean>

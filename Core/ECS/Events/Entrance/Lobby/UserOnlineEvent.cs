@@ -61,7 +61,7 @@ public class UserOnlineEvent : IServerEvent {
             IEntity slot = presetModule.GetSlotEntity(connection);
 
             await module.AddComponent<MountedItemComponent>();
-            await slot.AddGroupComponent<ModuleGroupComponent>(module);
+            await slot.AddComponentFrom<ModuleGroupComponent>(module);
         }
 
         await connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
