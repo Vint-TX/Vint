@@ -5,7 +5,7 @@ using BepuPhysics.Trees;
 
 namespace Vint.Core.Physics;
 
-public struct RayHitHandler : IRayHitHandler {
+public struct RayClosestHitHandler : IRayHitHandler {
     public Vector3? ClosestHit { get; private set; }
 
     public bool AllowTest(CollidableReference collidable) => true;

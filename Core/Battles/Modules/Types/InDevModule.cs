@@ -23,18 +23,19 @@ public class InDevModule : BattleModule {
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        IEntity userModule = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
-        MarketEntity = marketModule;
         Tank = tank;
+        SlotUserEntity = userSlot;
+        MarketEntity = marketModule;
+        UserEntity = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
 
-        Level = (int)userModule.GetComponent<ModuleUpgradeLevelComponent>().Level;
-        SlotEntity = await CreateBattleSlot(Tank, userSlot);
-        Entity = new ModuleUserItemTemplate().Create(Tank.Tank, userModule);
+        Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>().Level;
+        SlotEntity = await CreateBattleSlot();
+        Entity = await CreateBattleModule();
     }
 
-    protected override async Task<IEntity> CreateBattleSlot(BattleTank tank, IEntity userSlot) {
-        IEntity clone = userSlot.Clone();
-        clone.Id = EntityRegistry.FreeId;
+    protected override async Task<IEntity> CreateBattleSlot() {
+        IEntity clone = SlotUserEntity.Clone();
+        clone.Id = EntityRegistry.GenerateId();
 
         await clone.AddGroupComponent<TankGroupComponent>(Tank.Tank);
         await clone.AddComponent(new InventorySlotTemporaryBlockedByServerComponent());

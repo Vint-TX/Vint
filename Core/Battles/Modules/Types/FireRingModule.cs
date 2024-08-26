@@ -7,6 +7,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(1896579342)]
 public class FireRingModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/firering";
 

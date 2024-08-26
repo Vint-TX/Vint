@@ -1,36 +1,39 @@
+using System.Collections.Concurrent;
 using Vint.Core.ECS.Components;
-using Vint.Core.Structures;
 
 namespace Vint.Core.ECS.Entities;
 
-public class EntityComponentStorage(
-    IEntity entity,
-    IEnumerable<IComponent> components
-) {
-    ConcurrentList<KeyValuePair<Type, IComponent>> ComponentsInternal { get; } = new(components
-        .Select(component => KeyValuePair.Create(component.GetType(), component))
-        .ToList());
+public class EntityComponentStorage {
+    int _lastIndex;
 
-    public IEnumerable<IComponent> Components => ComponentsInternal.Select(kvp => kvp.Value);
+    public EntityComponentStorage(IEntity entity, IEnumerable<IComponent> components) {
+        Entity = entity;
+        TypeToComponent =
+            new ConcurrentDictionary<Type, ComponentWithIndex>(components.ToDictionary(c => c.GetType(),
+                c => new ComponentWithIndex(c, GenerateIndex())));
+    }
+
+    int GenerateIndex() => Interlocked.Increment(ref _lastIndex);
+    IEntity Entity { get; }
+    ConcurrentDictionary<Type, ComponentWithIndex> TypeToComponent { get; }
+
+    public IEnumerable<IComponent> SortedComponents => TypeToComponent.Values.OrderBy(c => c.Index).Select(c => c.Component);
+    public IEnumerable<IComponent> Components => TypeToComponent.Values.Select(c => c.Component);
 
     public void AddComponent(IComponent component) {
         Type type = component.GetType();
-        KeyValuePair<Type, IComponent> kvp = new(type, component);
+        ComponentWithIndex componentWithIndex = new(component, GenerateIndex());
 
-        AssertComponentNotFound(type);
-        ComponentsInternal.Add(kvp);
+        if (!TypeToComponent.TryAdd(type, componentWithIndex))
+            throw new ComponentAlreadyExistsInEntityException(Entity, type);
     }
 
-    public bool HasComponent(Type componentType) =>
-        ComponentsInternal.Select(kvp => kvp.Key).Any(type => type == componentType);
+    public bool HasComponent(Type componentType) => TypeToComponent.ContainsKey(componentType);
 
-    public IComponent GetComponent(Type componentType) {
-        try {
-            return ComponentsInternal.First(kvp => kvp.Key == componentType).Value;
-        } catch (InvalidOperationException) {
-            throw new ComponentNotFoundException(entity, componentType);
-        }
-    }
+    public IComponent GetComponent(Type componentType) =>
+        TypeToComponent.TryGetValue(componentType, out ComponentWithIndex componentWithIndex)
+            ? componentWithIndex.Component
+            : throw new ComponentNotFoundException(Entity, componentType);
 
     public IComponent? GetComponentOrNull(Type componentType) {
         try {
@@ -42,23 +45,20 @@ public class EntityComponentStorage(
 
     public void ChangeComponent(IComponent component) {
         Type type = component.GetType();
-        RemoveComponent(type);
-        AddComponent(component);
+
+        if (TypeToComponent.TryGetValue(type, out ComponentWithIndex componentWithIndex))
+            TypeToComponent.TryUpdate(type, new ComponentWithIndex(component, GenerateIndex()), componentWithIndex);
+        else throw new ComponentNotFoundException(Entity, type);
     }
 
     public void RemoveComponent(Type componentType) {
-        if (ComponentsInternal.RemoveAll(kvp => kvp.Key == componentType) <= 0)
-            throw new ComponentNotFoundException(entity, componentType);
+        if (!TypeToComponent.Remove(componentType, out _))
+            throw new ComponentNotFoundException(Entity, componentType);
     }
 
-    void AssertComponentFound(Type componentType) {
-        if (ComponentsInternal.Select(kvp => kvp.Key).All(type => componentType != type))
-            throw new ComponentNotFoundException(entity, componentType);
-    }
-
-    void AssertComponentNotFound(Type componentType) {
-        if (ComponentsInternal.Select(kvp => kvp.Key).Any(type => componentType == type))
-            throw new ComponentAlreadyExistsInEntityException(entity, componentType);
+    readonly struct ComponentWithIndex(IComponent component, int index) {
+        public IComponent Component { get; } = component;
+        public int Index { get; } = index;
     }
 }
 

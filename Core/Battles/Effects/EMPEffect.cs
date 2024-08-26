@@ -1,6 +1,8 @@
 using System.Numerics;
+using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Events.Battle.Effect;
+using Vint.Core.ECS.Events.Battle.Effect.EMP;
 using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Server;
 
@@ -45,6 +47,9 @@ public class EMPEffect : Effect {
             .Where(target => target.Effects
                 .OfType<InvulnerabilityEffect>()
                 .All(invulnerability => !invulnerability.IsActive))
+            .Where(target => target.Modules
+                .OfType<INeutralizeEMPModule>()
+                .All(neutralize => !neutralize.IsActive))
             .ToArray();
 
         foreach (BattleTank tank in affectedTanks)

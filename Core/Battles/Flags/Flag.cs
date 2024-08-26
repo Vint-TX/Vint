@@ -18,11 +18,12 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles.Flags;
 
 public class Flag {
-    public Flag(Battle battle, IEntity team, TeamColor teamColor, Vector3 pedestalPosition) {
+    public Flag(Battle battle, IEntity team, TeamColor teamColor, Vector3 pedestalPosition, TimeSpan enemyFlagActionInterval) {
         Battle = battle;
         TeamEntity = team;
         TeamColor = teamColor;
         PedestalPosition = pedestalPosition;
+        EnemyFlagActionInterval = enemyFlagActionInterval;
         StateManager = new FlagStateManager(this);
 
         PedestalEntity = new PedestalTemplate().Create(pedestalPosition, TeamEntity, Battle.Entity);
@@ -41,9 +42,10 @@ public class Flag {
     public Vector3 Position => Entity.GetComponent<FlagPositionComponent>().Position;
 
     public BattlePlayer? Carrier { get; private set; }
-    public BattlePlayer? LastCarrier { get; set; }
-    public DateTimeOffset UnfrozeForLastCarrierTime { get; private set; }
-    public HashSet<FlagAssist> Assists { get; } = [];
+    BattlePlayer? LastCarrier { get; set; }
+    DateTimeOffset UnfrozeForLastCarrierTime { get; set; }
+    TimeSpan EnemyFlagActionInterval { get; }
+    HashSet<FlagAssist> Assists { get; } = [];
 
     public async Task Capture(BattlePlayer carrier) {
         if (StateManager.CurrentState is not OnPedestal) return;
@@ -65,7 +67,7 @@ public class Flag {
 
         Vector3 newPosition;
         Vector3 tankPosition = LastCarrier!.Tank!.Position;
-        RayHitHandler hitHandler = new();
+        RayClosestHitHandler hitHandler = new();
         Battle.Simulation.RayCast(tankPosition, -Vector3.UnitY, 655.36f, ref hitHandler);
 
         if (!hitHandler.ClosestHit.HasValue) newPosition = Vector3.UnitY * 1000;
@@ -81,7 +83,7 @@ public class Flag {
             return;
         }
 
-        UnfrozeForLastCarrierTime = DateTimeOffset.UtcNow.AddSeconds(3);
+        UnfrozeForLastCarrierTime = DateTimeOffset.UtcNow + EnemyFlagActionInterval;
 
         FlagAssist assist = Assists.First(assist => assist.Tank == LastCarrier?.Tank);
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, Position);

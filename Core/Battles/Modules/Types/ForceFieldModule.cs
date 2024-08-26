@@ -7,6 +7,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-1597839790)]
 public class ForceFieldModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/forcefield";
 

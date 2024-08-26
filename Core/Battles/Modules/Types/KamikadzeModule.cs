@@ -8,6 +8,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-1603423529)]
 public class KamikadzeModule : TriggerBattleModule, IDeathModule {
     public override string ConfigPath => "garage/module/upgrade/properties/kamikadze";
 

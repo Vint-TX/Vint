@@ -8,12 +8,13 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(137179508)]
 public class InvisibilityModule : ActiveBattleModule, IFlagModule, IShotModule {
     public override string ConfigPath => "garage/module/upgrade/properties/invisibility";
 
     public override InvisibilityEffect GetEffect() => new(Duration, Tank, Level);
 
-    public override bool ActivationCondition => Effect == null;
+    protected override bool ActivationCondition => Effect == null;
 
     TimeSpan Duration { get; set; }
 

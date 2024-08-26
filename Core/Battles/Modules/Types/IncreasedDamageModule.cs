@@ -3,6 +3,7 @@ using Vint.Core.Battles.Modules.Types.Base;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(676407818)]
 public class IncreasedDamageModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/increaseddamage";
 

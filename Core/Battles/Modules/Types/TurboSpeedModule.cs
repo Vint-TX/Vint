@@ -3,6 +3,7 @@ using Vint.Core.Battles.Modules.Types.Base;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-365494384)]
 public class TurboSpeedModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/turbospeed";
 

@@ -8,10 +8,11 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(1367280061)]
 public class AdrenalineModule : PassiveBattleModule, IHealthModule {
     public override string ConfigPath => "garage/module/upgrade/properties/adrenaline";
 
-    public override bool ActivationCondition => Effect == null;
+    protected override bool ActivationCondition => Effect == null;
 
     float HpToTrigger { get; set; }
     float CooldownSpeedCoeff { get; set; }

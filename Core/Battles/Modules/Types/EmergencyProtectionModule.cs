@@ -11,6 +11,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-357196071)]
 public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITemperatureWeaponHandler {
     public override string ConfigPath => "garage/module/upgrade/properties/emergencyprotection";
 
@@ -36,14 +37,12 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
 
         await base.Activate();
 
-        Battle battle = Tank.Battle;
-
         Tank.TemperatureAssists.Clear();
 
-        await battle.DamageProcessor.Heal(Tank, CalculatedHeal);
+        await Battle.DamageProcessor.Heal(Tank, CalculatedHeal);
         await Tank.UpdateTemperatureAssists(Tank, this, false);
 
-        foreach (BattlePlayer player in battle.Players.Where(player => player.InBattle))
+        foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
             await player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
     }
 

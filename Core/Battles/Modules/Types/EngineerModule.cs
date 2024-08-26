@@ -8,21 +8,22 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
-public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect {
+[ModuleId(-1027949361)]
+public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect, INeutralizeEMPModule {
     public override string ConfigPath => "garage/module/upgrade/properties/engineer";
 
     public override Effect GetEffect() => throw new NotSupportedException();
 
-    public override bool ActivationCondition => !Enabled;
+    protected override bool ActivationCondition => !IsActive;
 
     public bool CanBeDeactivated { get; set; }
-    bool Enabled { get; set; }
+    public bool IsActive { get; private set; }
     float Multiplier { get; set; }
 
     public override Task Activate() {
         if (!CanBeActivated) return Task.CompletedTask;
 
-        Enabled = true;
+        IsActive = true;
         CanBeDeactivated = false;
 
         Tank.SupplyDurationMultiplier *= Multiplier;
@@ -30,9 +31,9 @@ public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleW
     }
 
     public Task Deactivate() {
-        if (!Enabled || !CanBeDeactivated) return Task.CompletedTask;
+        if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
 
-        Enabled = false;
+        IsActive = false;
         Tank.SupplyDurationMultiplier /= Multiplier;
         return Task.CompletedTask;
     }

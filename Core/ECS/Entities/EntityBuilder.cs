@@ -63,7 +63,7 @@ public class EntityBuilder() : IEntityBuilder {
 
     public IEntity Build(bool temp) {
         if (Id == 0)
-            Id = EntityRegistry.FreeId;
+            Id = EntityRegistry.GenerateId();
 
         Entity entity = new(Id, TemplateAccessor, Components);
 

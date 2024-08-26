@@ -7,6 +7,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(393550399)]
 public class ExplosiveMassModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/explosivemass";
 

@@ -255,7 +255,7 @@ public static class ConfigManager {
                 long entityId = jToken["id"]!.ToObject<long>();
 
                 if (entityId == 0)
-                    entityId = EntityRegistry.FreeId;
+                    entityId = EntityRegistry.GenerateId();
 
                 JArray templateComponents = jToken["template"]!.ToObject<JArray>()!;
                 string templateName = templateComponents[0].ToObject<string>()!;

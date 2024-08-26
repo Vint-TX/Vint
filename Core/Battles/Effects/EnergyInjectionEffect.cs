@@ -1,4 +1,7 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
+using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.ECS.Templates.Battle.Effect;
 
 namespace Vint.Core.Battles.Effects;
@@ -16,7 +19,12 @@ public class EnergyInjectionEffect(
         Entity = new EnergyInjectionEffectTemplate().Create(Tank.BattlePlayer, Duration, reloadPercent);
         await ShareToAllPlayers();
 
-        Schedule(Duration, Deactivate);
+        IEntity weaponEntity = Tank.Weapon;
+
+        await ReloadWeapon();
+        await Tank.BattlePlayer.PlayerConnection.Send(new ExecuteEnergyInjectionEvent(), Entity, weaponEntity);
+
+        await Deactivate();
     }
 
     public override async Task Deactivate() {
@@ -26,5 +34,10 @@ public class EnergyInjectionEffect(
 
         await UnshareFromAllPlayers();
         Entity = null;
+    }
+
+    async Task ReloadWeapon() {
+        if (Tank.WeaponHandler is HammerWeaponHandler hammer)
+            await hammer.FillMagazine();
     }
 }

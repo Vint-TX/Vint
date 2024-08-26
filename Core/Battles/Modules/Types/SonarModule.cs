@@ -3,6 +3,7 @@ using Vint.Core.Battles.Modules.Types.Base;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-1318192334)]
 public class SonarModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/sonar";
 

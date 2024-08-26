@@ -1,9 +1,12 @@
 using System.Collections.Frozen;
+using System.Numerics;
 using Vint.Core.Battles.Flags;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Type;
+using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Battle.Team;
+using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Utils;
 
@@ -13,16 +16,20 @@ public class CTFHandler : TeamHandler {
     public CTFHandler(Battle battle) : base(battle) {
         RedSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.RedTeam.ToList();
         BlueSpawnPoints = Battle.MapInfo.SpawnPoints.CaptureTheFlag!.Value.BlueTeam.ToList();
+        CTFConfig = ConfigManager.GetComponent<CtfConfigComponent>("battle/modes/ctf");
+
+        TimeSpan enemyFlagActionInterval = TimeSpan.FromSeconds(CTFConfig.EnemyFlagActionMinIntervalSec);
 
         Flags = new HashSet<Flag> {
-            new(Battle, RedTeam, TeamColor.Red, Battle.MapInfo.Flags.Red),
-            new(Battle, BlueTeam, TeamColor.Blue, Battle.MapInfo.Flags.Blue)
+            new(Battle, RedTeam, TeamColor.Red, Battle.MapInfo.Flags.Red, enemyFlagActionInterval),
+            new(Battle, BlueTeam, TeamColor.Blue, Battle.MapInfo.Flags.Blue, enemyFlagActionInterval)
         }.ToFrozenSet();
 
         CanShareFlags = Battle.TypeHandler is not MatchmakingHandler;
     }
 
     bool CanShareFlags { get; set; }
+    CtfConfigComponent CTFConfig { get; }
 
     public FrozenSet<Flag> Flags { get; }
 
@@ -85,4 +92,7 @@ public class CTFHandler : TeamHandler {
         foreach (Flag flag in Flags)
             await flag.StateManager.Tick();
     }
+
+    public bool CanPlaceMine(Vector3 position) =>
+        Flags.All(flag => Vector3.Distance(position, flag.PedestalPosition) >= CTFConfig.MinDistanceFromMineToBase);
 }

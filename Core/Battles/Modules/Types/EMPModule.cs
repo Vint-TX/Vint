@@ -5,8 +5,9 @@ using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battles.Modules;
+namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-1493372159)]
 public class EMPModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/emp";
 

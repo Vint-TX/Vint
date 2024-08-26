@@ -22,6 +22,9 @@ public class SelfSplashHitEvent : SelfHitEvent {
     public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         await base.Execute(connection, entities);
 
+        if (WeaponHandler is IMineWeaponHandler mineHandler)
+            await mineHandler.Explode();
+
         if (!IsProceeded ||
             SplashTargets == null ||
             WeaponHandler is not ISplashWeaponHandler splashHandler) return;

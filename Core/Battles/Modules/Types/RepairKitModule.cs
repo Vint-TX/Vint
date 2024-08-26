@@ -4,10 +4,11 @@ using Vint.Core.Battles.Modules.Types.Base;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-862259125)]
 public class RepairKitModule : ActiveBattleModule, IHealthModule {
     public override string ConfigPath => "garage/module/upgrade/properties/repairkit";
 
-    public override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
+    protected override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
 
     public override async Task Activate() {
         if (!CanBeActivated) return;

@@ -9,12 +9,13 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(596921121)]
 public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect {
     public override string ConfigPath => "garage/module/upgrade/properties/tempblock";
 
     public override Effect GetEffect() => throw new NotSupportedException();
 
-    public override bool ActivationCondition => !Enabled;
+    protected override bool ActivationCondition => !Enabled;
 
     public bool CanBeDeactivated { get; set; }
 

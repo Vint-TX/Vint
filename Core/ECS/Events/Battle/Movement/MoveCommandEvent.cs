@@ -66,5 +66,7 @@ public class MoveCommandEvent : IServerEvent {
         battleTank.Orientation = movement.Orientation;
         battleTank.ForceSelfDestruct =
             PhysicsUtils.IsOutsideMap(battle.MapInfo.PuntativeGeoms, battleTank.Position, velocity, battle.Properties.KillZoneEnabled);
+
+        battle.MineProcessor.TryTriggerSingle(battleTank);
     }
 }

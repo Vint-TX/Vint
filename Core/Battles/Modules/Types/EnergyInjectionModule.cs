@@ -3,6 +3,7 @@ using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components.Battle.Effect.Type;
+using Vint.Core.ECS.Components.Battle.Effect.Type.EnergyInjection;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon;
@@ -10,6 +11,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(1128679079)]
 public class EnergyInjectionModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/energyinjection";
 
@@ -24,15 +26,8 @@ public class EnergyInjectionModule : ActiveBattleModule {
 
         if (effect != null) return;
 
-        effect = GetEffect();
-        await effect.Activate();
-
         await base.Activate();
-        IEntity effectEntity = effect.Entity!;
-        IEntity weaponEntity = Tank.Weapon;
-
-        await ReloadWeapon();
-        await Tank.BattlePlayer.PlayerConnection.Send(new ExecuteEnergyInjectionEvent(), effectEntity, weaponEntity);
+        await GetEffect().Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
@@ -42,8 +37,5 @@ public class EnergyInjectionModule : ActiveBattleModule {
         await SlotEntity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent)); // component for module on slot entity?
     }
 
-    async Task ReloadWeapon() {
-        if (Tank.WeaponHandler is HammerWeaponHandler hammer)
-            await hammer.FillMagazine();
-    }
+
 }

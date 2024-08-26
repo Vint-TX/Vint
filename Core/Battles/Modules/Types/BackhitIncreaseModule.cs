@@ -8,6 +8,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-2075784110)]
 public class BackhitIncreaseModule : PassiveBattleModule, IAlwaysActiveModule {
     public override string ConfigPath => "garage/module/upgrade/properties/backhitincrease";
 

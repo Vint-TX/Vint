@@ -9,7 +9,6 @@ using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
-using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
@@ -24,27 +23,31 @@ public abstract class BattleModule {
 
     public ModuleStateManager StateManager { get; }
     public BattleTank Tank { get; protected set; } = null!;
+    public Battle Battle => Tank.Battle;
     public IEntity MarketEntity { get; protected set; } = null!;
 
     public IEntity Entity { get; protected set; } = null!;
     public IEntity SlotEntity { get; protected set; } = null!;
 
+    protected IEntity UserEntity { get; set; } = null!;
+    protected IEntity SlotUserEntity { get; set; } = null!;
+
     public int CurrentAmmo { get; private set; }
     public int MaxAmmo { get; private set; }
     public TimeSpan Cooldown { get; private set; }
-    public TimeSpan EMPLockTime { get; private set; }
 
-    public virtual bool ActivationCondition => true;
-    public bool IsEMPLocked { get; private set; }
-    public bool IsBlocked => SlotEntity.HasComponent<InventorySlotTemporaryBlockedByServerComponent>();
-    public bool IsEnabled => SlotEntity.HasComponent<InventoryEnabledStateComponent>();
-    public bool CanBeActivated => !IsBlocked &&
-                                  !IsEMPLocked &&
-                                  IsEnabled &&
-                                  ActivationCondition &&
-                                  StateManager.CurrentState is Ready or Cooldown { CanBeUsed: true } &&
-                                  Tank.StateManager.CurrentState is Active &&
-                                  Tank.Battle.StateManager.CurrentState is Running or WarmUp { WarmUpStateManager.CurrentState: WarmingUp };
+    TimeSpan EMPLockTime { get; set; }
+    bool IsEMPLocked { get; set; }
+    bool IsBlocked => SlotEntity.HasComponent<InventorySlotTemporaryBlockedByServerComponent>();
+    bool IsEnabled => SlotEntity.HasComponent<InventoryEnabledStateComponent>();
+    protected virtual bool ActivationCondition => true;
+    protected bool CanBeActivated => !IsBlocked &&
+                                     !IsEMPLocked &&
+                                     IsEnabled &&
+                                     ActivationCondition &&
+                                     StateManager.CurrentState is Ready or Cooldown { CanBeUsed: true } &&
+                                     Tank.StateManager.CurrentState is Active &&
+                                     Battle.StateManager.CurrentState is Running or WarmUp { WarmUpStateManager.CurrentState: WarmingUp };
 
     public abstract Effect GetEffect();
 
@@ -52,26 +55,49 @@ public abstract class BattleModule {
         await SetAmmo(CurrentAmmo - 1);
 
     public virtual async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
-        IEntity userModule = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
-        MarketEntity = marketModule;
         Tank = tank;
+        SlotUserEntity = userSlot;
+        MarketEntity = marketModule;
+        UserEntity = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
 
-        Level = (int)userModule.GetComponent<ModuleUpgradeLevelComponent>().Level;
+        Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>().Level;
         CurrentAmmo = MaxAmmo = (int)Leveling.GetStat<ModuleAmmunitionPropertyComponent>(ConfigPath, Level);
         Cooldown = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleCooldownPropertyComponent>(ConfigPath, Level));
-        SlotEntity = await CreateBattleSlot(Tank, userSlot);
-        Entity = new ModuleUserItemTemplate().Create(Tank.Tank, userModule);
+
+        SlotEntity = await CreateBattleSlot();
+        Entity = await CreateBattleModule();
     }
 
-    protected virtual async Task<IEntity> CreateBattleSlot(BattleTank tank, IEntity userSlot) {
-        IEntity clone = userSlot.Clone();
-        clone.Id = EntityRegistry.FreeId;
+    public async Task SwitchToBattleEntities() {
+        IPlayerConnection connection = Tank.BattlePlayer.PlayerConnection;
 
-        await clone.AddGroupComponent<TankGroupComponent>(tank.Tank);
+        await connection.Unshare(SlotUserEntity, UserEntity);
+        await connection.Share(SlotEntity, Entity);
+    }
+
+    public async Task SwitchToUserEntities() {
+        IPlayerConnection connection = Tank.BattlePlayer.PlayerConnection;
+
+        await connection.Unshare(SlotEntity, Entity);
+        await connection.Share(SlotUserEntity, UserEntity);
+    }
+
+    protected virtual async Task<IEntity> CreateBattleSlot() {
+        IEntity clone = SlotUserEntity.Clone();
+        clone.Id = EntityRegistry.GenerateId();
+
+        await clone.AddGroupComponent<TankGroupComponent>(Tank.Tank);
         await clone.AddComponent<InventoryEnabledStateComponent>();
         await clone.AddComponent(new InventoryAmmunitionComponent(MaxAmmo));
-        await clone.RemoveComponent<SlotTankPartComponent>();
-        await clone.RemoveComponent<MarketItemGroupComponent>();
+        return clone;
+    }
+
+    protected virtual async Task<IEntity> CreateBattleModule() {
+        IEntity clone = UserEntity.Clone();
+        clone.Id = EntityRegistry.GenerateId();
+
+        await clone.AddComponent<ModuleUsesCounterComponent>();
+        await clone.AddGroupComponent<TankGroupComponent>(Tank.Tank);
         return clone;
     }
 

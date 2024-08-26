@@ -8,6 +8,7 @@ using Vint.Core.Battles.ArcadeMode;
 using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Effects;
+using Vint.Core.Battles.Mines;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
@@ -103,6 +104,7 @@ public sealed class Battle : IDisposable {
 
     public TypeHandler TypeHandler { get; }
     public ModeHandler ModeHandler { get; private set; } = null!;
+    public MineProcessor MineProcessor { get; private set; } = null!;
     public IDamageProcessor DamageProcessor { get; private set; } = null!;
     public IBonusProcessor? BonusProcessor { get; private set; }
     public Simulation Simulation { get; private set; } = null!;
@@ -129,6 +131,7 @@ public sealed class Battle : IDisposable {
 
         Properties.DamageEnabled = TypeHandler is not ArcadeHandler { ModeHandler: WithoutDamageHandler };
         DamageProcessor = new DamageProcessor();
+        MineProcessor = new MineProcessor();
 
         if (Properties.DisabledModules) {
             BonusProcessor = null;
@@ -312,7 +315,7 @@ public sealed class Battle : IDisposable {
                 await player.PlayerConnection.Unshare(battlePlayer.Tank!.Entities);
 
             foreach (BattleModule module in battlePlayer.Tank!.Modules)
-                await connection.Unshare(module.SlotEntity, module.Entity);
+                await module.SwitchToUserEntities();
 
             battlePlayer.InBattle = false;
 

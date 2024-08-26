@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using ConcurrentCollections;
 using Vint.Core.Battles.Player;
@@ -25,7 +26,7 @@ public abstract class Effect(
     [MemberNotNullWhen(true, nameof(Entity))] public bool IsActive => Entity != null;
     public bool CanBeDeactivated { get; set; } = true;
 
-    protected TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(1);
+    protected TimeSpan Duration { get; set; } = TimeSpan.Zero;
 
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
@@ -58,6 +59,7 @@ public abstract class Effect(
 
     public virtual async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank == Tank) {
+            CanBeDeactivated = true;
             await Deactivate();
             return;
         }
@@ -119,6 +121,9 @@ public abstract class WeaponEffect(
             entities.Add(Entity);
 
         await battlePlayer.PlayerConnection.Share(entities);
+
+        if (Entity != null)
+            await battlePlayer.PlayerConnection.Send(new EffectActivationEvent(), Entity);
     }
 
     public override async Task Unshare(BattlePlayer battlePlayer) {
@@ -143,8 +148,12 @@ public abstract class WeaponEffect(
         if (Entity != null)
             entities.Add(Entity);
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection)) {
             await connection.Share(entities);
+
+            if (Entity != null)
+                await connection.Send(new EffectActivationEvent(), Entity);
+        }
     }
 
     protected override async Task UnshareFromAllPlayers() {
@@ -177,4 +186,15 @@ public interface IExtendableEffect {
 
 public interface IDamageMultiplierEffect : IMultiplierEffect {
     public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit);
+}
+
+public interface IMineEffect {
+    public BattleTank Owner { get; }
+    public int Index { get; }
+    public Vector3 Position { get; }
+    public float TriggeringArea { get; }
+
+    public void TryExplode();
+
+    public Task Explode();
 }

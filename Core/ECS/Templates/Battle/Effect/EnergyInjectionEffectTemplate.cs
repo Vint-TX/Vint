@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Battle.Effect.Type;
+using Vint.Core.ECS.Components.Battle.Effect.Type.EnergyInjection;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 

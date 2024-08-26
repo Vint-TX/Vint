@@ -10,6 +10,7 @@ namespace Vint.Core.ECS.Entities;
 public interface IEntity {
     public long Id { get; set; }
     public TemplateAccessor? TemplateAccessor { get; }
+    public IEnumerable<IComponent> SortedComponents { get; }
     public IEnumerable<IComponent> Components { get; }
     public ConcurrentHashSet<IPlayerConnection> SharedPlayers { get; }
 

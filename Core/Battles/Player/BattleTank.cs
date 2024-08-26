@@ -28,6 +28,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.ECS.Events.Battle.Effect;
+using Vint.Core.ECS.Events.Battle.Effect.EMP;
 using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.ECS.Events.Battle.Movement;
 using Vint.Core.ECS.Events.Battle.Score;

@@ -2,7 +2,7 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
 
-public interface ISplashWeaponHandler {
+public interface ISplashWeaponHandler : IWeaponHandler {
     public float MinSplashDamagePercent { get; }
     public float RadiusOfMaxSplashDamage { get; }
     public float RadiusOfMinSplashDamage { get; }

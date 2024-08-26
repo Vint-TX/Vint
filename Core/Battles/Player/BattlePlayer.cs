@@ -112,7 +112,7 @@ public class BattlePlayer {
 
             if (!Battle.Properties.DisabledModules) {
                 foreach (BattleModule battleModule in Tank.Modules) {
-                    await PlayerConnection.Share(battleModule.Entity, battleModule.SlotEntity);
+                    await battleModule.SwitchToBattleEntities();
                 }
             }
 

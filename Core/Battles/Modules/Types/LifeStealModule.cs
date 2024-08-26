@@ -10,10 +10,11 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-246333323)]
 public class LifeStealModule : BattleModule, IKillModule {
     public override string ConfigPath => "garage/module/upgrade/properties/lifesteal";
 
-    public override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
+    protected override bool ActivationCondition => Tank.Health < Tank.MaxHealth;
 
     float FixedHeal { get; set; }
     float HpPercent { get; set; }
@@ -34,12 +35,11 @@ public class LifeStealModule : BattleModule, IKillModule {
 
         await base.Activate();
         IEntity effectEntity = effect.Entity!;
-        Battle battle = Tank.Battle;
 
         CalculatedDamage heal = new(default, Heal, false, false);
-        await battle.DamageProcessor.Heal(Tank, heal);
+        await Battle.DamageProcessor.Heal(Tank, heal);
 
-        foreach (BattlePlayer player in battle.Players.Where(player => player.InBattle))
+        foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
             await player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
     }
 

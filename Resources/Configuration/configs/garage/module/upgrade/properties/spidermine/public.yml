@@ -50,7 +50,7 @@ moduleEffectMaxDamageProperty:
     - 1388.89
     - 1444.44
     - 1500.00
-moduleMineEffectImpactProperty:
+moduleEffectImpactProperty:
   linearInterpolation: false
   upgradeLevel2Values:
     - 3.00
@@ -182,7 +182,7 @@ moduleMineEffectSplashDamageMinRadiusProperty:
     - 13.89
     - 14.44
     - 15.00
-moduleMineEffectSplashDamageMinPercentProperty:
+moduleEffectSplashDamageMinPercentProperty:
   linearInterpolation: false
   upgradeLevel2Values:
     - 0.50

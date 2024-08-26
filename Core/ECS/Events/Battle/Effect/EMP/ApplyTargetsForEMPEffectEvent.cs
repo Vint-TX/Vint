@@ -5,7 +5,7 @@ using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Effect;
+namespace Vint.Core.ECS.Events.Battle.Effect.EMP;
 
 [ProtocolId(636250863918020313)]
 public class ApplyTargetsForEMPEffectEvent : IServerEvent {

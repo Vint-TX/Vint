@@ -7,6 +7,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(1392039140)]
 public class DroneModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/drone";
 

@@ -9,6 +9,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(1215656773)]
 public class RageModule : TriggerBattleModule, IKillModule {
     public override string ConfigPath => "garage/module/upgrade/properties/rage";
 

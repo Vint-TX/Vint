@@ -9,7 +9,7 @@ public static class EntityRegistry {
     static ConcurrentDictionary<long, IEntity> Entities { get; } = new();
     static ConcurrentDictionary<long, IEntity> TempEntities { get; } = new();
 
-    public static long FreeId => Interlocked.Increment(ref _lastId);
+    public static long GenerateId() => Interlocked.Increment(ref _lastId);
 
     public static void Add(IEntity entity) {
         if (!Entities.TryAdd(entity.Id, entity))

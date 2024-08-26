@@ -27,9 +27,10 @@ public class Entity : IEntity {
 
     public TemplateAccessor? TemplateAccessor { get; }
 
+    public IEnumerable<IComponent> SortedComponents => ComponentStorage.SortedComponents;
     public IEnumerable<IComponent> Components => ComponentStorage.Components;
 
-    public EntityShareCommand ToShareCommand() => new(Id, TemplateAccessor, Components.ToArray());
+    public EntityShareCommand ToShareCommand() => new(Id, TemplateAccessor, SortedComponents.ToArray());
 
     public EntityUnshareCommand ToUnshareCommand() => new(this);
 

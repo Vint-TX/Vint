@@ -91,7 +91,7 @@ public class DamageCalculator : IDamageCalculator {
     float GetDiscreteDamage(IDiscreteWeaponHandler discreteHandler) {
         float min = discreteHandler.MinDamage;
         float max = discreteHandler.MaxDamage;
-        float mean = (max + min) / 2;
+        float mean = (max + min) * 0.5f;
         float deviation = (max - min) / 6;
         return ZigguratGaussian.Sample(RandomSource, mean, deviation);
     }

@@ -8,12 +8,13 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(1327463523)]
 public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
     public override string ConfigPath => "garage/module/upgrade/properties/jumpimpact";
 
     public override JumpImpactEffect GetEffect() => new(Tank, Level, Force);
 
-    public override bool ActivationCondition => Tank.Temperature >= WorkingTemperature;
+    protected override bool ActivationCondition => Tank.Temperature >= WorkingTemperature;
 
     float Force { get; set; }
     float WorkingTemperature { get; set; }

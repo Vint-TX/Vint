@@ -7,6 +7,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(-1334156852)]
 public class ExternalImpactModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/externalimpact";
 

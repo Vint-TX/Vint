@@ -194,7 +194,7 @@ public abstract class PlayerConnection(
         byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(encryptedPasswordDigest));
 
         Player = new Player {
-            Id = EntityRegistry.FreeId,
+            Id = EntityRegistry.GenerateId(),
             Username = username,
             Email = email,
             CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
@@ -555,7 +555,7 @@ public abstract class PlayerConnection(
                 userItem = GlobalEntities.GetEntity("misc", "Preset");
 
                 userItem.TemplateAccessor!.Template = ((MarketEntityTemplate)userItem.TemplateAccessor.Template).UserTemplate;
-                userItem.Id = EntityRegistry.FreeId;
+                userItem.Id = EntityRegistry.GenerateId();
 
                 await userItem.AddComponent(new PresetEquipmentComponent(preset));
                 await userItem.AddComponent(new PresetNameComponent(preset));

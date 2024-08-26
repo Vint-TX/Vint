@@ -3,6 +3,7 @@ using Vint.Core.Battles.Modules.Types.Base;
 
 namespace Vint.Core.Battles.Modules.Types;
 
+[ModuleId(492941809)]
 public class AbsorbingArmorModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/absorbingarmor";
 

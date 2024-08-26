@@ -108,7 +108,7 @@ public static class GlobalEntities {
             IEntity user = connection.User;
             long entityId = entity.Id;
 
-            entity.Id = EntityRegistry.FreeId;
+            entity.Id = EntityRegistry.GenerateId();
 
             if (path == "moduleSlots") {
                 entity.AddGroupComponent<UserGroupComponent>(user);
@@ -212,7 +212,7 @@ public static class GlobalEntities {
                                 break;
                             }
 
-                            entity.TemplateAccessor.Template = new ActiveModuleUserItemTemplate();
+                            entity.TemplateAccessor.Template = new ModuleUserItemTemplate();
                             break;
                         }
 
@@ -259,7 +259,7 @@ public static class GlobalEntities {
                                          .LoadWith(preset => preset.Modules)
                                          .Where(preset => preset.PlayerId == player.Id)) {
                                 IEntity presetEntity = entity.Clone();
-                                presetEntity.Id = EntityRegistry.FreeId;
+                                presetEntity.Id = EntityRegistry.GenerateId();
 
                                 presetEntity.AddComponent(new PresetEquipmentComponent(preset));
                                 presetEntity.AddComponent(new PresetNameComponent(preset));
