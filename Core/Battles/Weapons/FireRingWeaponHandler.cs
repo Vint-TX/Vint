@@ -16,6 +16,7 @@ public class FireRingWeaponHandler(
     float minDamageRadius,
     float maxDamageRadius
 ) : ModuleWeaponHandler(tank, cooldown, marketEntity, battleEntity, false, 0, 0, 0, 0, 0, int.MaxValue), IHeatWeaponHandler, ISplashWeaponHandler {
+    public TimeSpan TemperatureDuration => TimeSpan.Zero;
     public float TemperatureLimit { get; } = temperatureLimit;
     public float TemperatureDelta { get; } = temperatureDelta;
     public float HeatDamage { get; private set; }

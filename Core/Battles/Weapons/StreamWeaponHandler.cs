@@ -23,6 +23,7 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, IStreamWeaponHand
 
     public abstract float TemperatureLimit { get; }
     public abstract float TemperatureDelta { get; }
+    public virtual TimeSpan TemperatureDuration => TimeSpan.Zero;
 
     public override async Task Fire(HitTarget target, int targetIndex) {
         long incarnationId = target.IncarnationEntity.Id;

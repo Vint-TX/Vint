@@ -5,7 +5,7 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 namespace Vint.Core.Battles.Weapons;
 
-public class MineWeaponHandler(
+public class IceTrapWeaponHandler(
     BattleTank tank,
     TimeSpan cooldown,
     IEntity marketEntity,
@@ -16,6 +16,9 @@ public class MineWeaponHandler(
     float minDamagePercent,
     float maxDamage,
     float minDamage,
+    float temperatureDelta,
+    float temperatureLimit,
+    TimeSpan temperatureDuration,
     Func<Task> explode
 ) : ModuleWeaponHandler(tank,
     cooldown,
@@ -27,10 +30,14 @@ public class MineWeaponHandler(
     minDamagePercent,
     maxDamage,
     minDamage,
-    int.MaxValue), IDiscreteWeaponHandler, IMineWeaponHandler {
+    int.MaxValue), IDiscreteWeaponHandler, IMineWeaponHandler, ITemperatureWeaponHandler {
     public float MinSplashDamagePercent { get; } = minDamagePercent;
     public float RadiusOfMaxSplashDamage { get; } = maxDamageDistance;
     public float RadiusOfMinSplashDamage { get; } = minDamageDistance;
+
+    public float TemperatureLimit { get; } = temperatureLimit;
+    public float TemperatureDelta { get; } = temperatureDelta;
+    public TimeSpan TemperatureDuration { get; } = temperatureDuration;
 
     public async Task Explode() => await explode();
 
@@ -43,6 +50,8 @@ public class MineWeaponHandler(
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
+
+        await targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 

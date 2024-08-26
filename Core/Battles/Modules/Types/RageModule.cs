@@ -21,7 +21,7 @@ public class RageModule : TriggerBattleModule, IKillModule {
         await base.Init(tank, userSlot, marketModule);
 
         DecreaseCooldownPerKill =
-            TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleRageEffectReduceCooldownTimePerKillPropertyComponent>(ConfigPath, Level));
+            TimeSpan.FromMilliseconds(GetStat<ModuleRageEffectReduceCooldownTimePerKillPropertyComponent>());
     }
 
     public override async Task Activate() {

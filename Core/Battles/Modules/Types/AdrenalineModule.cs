@@ -39,9 +39,9 @@ public class AdrenalineModule : PassiveBattleModule, IHealthModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        HpToTrigger = Leveling.GetStat<ModuleAdrenalineEffectMaxHPPercentWorkingPropertyComponent>(ConfigPath, Level) * Tank.MaxHealth;
-        CooldownSpeedCoeff = Leveling.GetStat<ModuleAdrenalineEffectCooldownSpeedCoeffPropertyComponent>(ConfigPath, Level);
-        DamageMultiplier = Leveling.GetStat<ModuleDamageEffectMaxFactorPropertyComponent>(ConfigPath, Level);
+        HpToTrigger = GetStat<ModuleAdrenalineEffectMaxHPPercentWorkingPropertyComponent>() * Tank.MaxHealth;
+        CooldownSpeedCoeff = GetStat<ModuleAdrenalineEffectCooldownSpeedCoeffPropertyComponent>();
+        DamageMultiplier = GetStat<ModuleDamageEffectMaxFactorPropertyComponent>();
     }
 
     Task TryDeactivate() =>

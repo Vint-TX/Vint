@@ -22,11 +22,11 @@ public class ExternalImpactModule : ActiveBattleModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Impact = Leveling.GetStat<ModuleEffectImpactPropertyComponent>(ConfigPath, Level);
-        Radius = Leveling.GetStat<ModuleEffectSplashRadiusPropertyComponent>(ConfigPath, Level);
-        MinPercent = Leveling.GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>(ConfigPath, Level) * 100;
-        MaxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
-        MinDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
+        Impact = GetStat<ModuleEffectImpactPropertyComponent>();
+        Radius = GetStat<ModuleEffectSplashRadiusPropertyComponent>();
+        MinPercent = GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>() * 100;
+        MaxDamage = GetStat<ModuleEffectMaxDamagePropertyComponent>();
+        MinDamage = GetStat<ModuleEffectMinDamagePropertyComponent>();
     }
 
     public override async Task Activate() {

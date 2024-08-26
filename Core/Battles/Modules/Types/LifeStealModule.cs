@@ -46,8 +46,8 @@ public class LifeStealModule : BattleModule, IKillModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        FixedHeal = Leveling.GetStat<ModuleLifestealEffectFixedHPPropertyComponent>(ConfigPath, Level);
-        HpPercent = Leveling.GetStat<ModuleLifestealEffectAdditiveHPFactorPropertyComponent>(ConfigPath, Level);
+        FixedHeal = GetStat<ModuleLifestealEffectFixedHPPropertyComponent>();
+        HpPercent = GetStat<ModuleLifestealEffectAdditiveHPFactorPropertyComponent>();
         HpFromCurrentTank = Tank.MaxHealth * HpPercent;
         Heal = FixedHeal + HpFromCurrentTank;
     }

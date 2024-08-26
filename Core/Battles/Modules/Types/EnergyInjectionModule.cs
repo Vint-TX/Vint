@@ -33,7 +33,7 @@ public class EnergyInjectionModule : ActiveBattleModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        ReloadEnergyPercent = Leveling.GetStat<ModuleEnergyInjectionEffectReloadPercentPropertyComponent>(ConfigPath, Level);
+        ReloadEnergyPercent = GetStat<ModuleEnergyInjectionEffectReloadPercentPropertyComponent>();
         await SlotEntity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent)); // component for module on slot entity?
     }
 

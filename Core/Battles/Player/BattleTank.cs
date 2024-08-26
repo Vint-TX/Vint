@@ -255,8 +255,6 @@ public class BattleTank {
         TotalHealth = MaxHealth;
         TemperatureAssists.Clear();
         await SetTemperature(0);
-        //await Tank.ChangeComponent(OriginalSpeedComponent.Clone());
-        await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             await Tank.RemoveComponent<SelfDestructionComponent>();
@@ -369,7 +367,17 @@ public class BattleTank {
         foreach (TemperatureAssist assist in TemperatureAssists) {
             if (StateManager.CurrentState is Dead) break;
 
-            if (DateTimeOffset.UtcNow - assist.LastTick < period) continue;
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+            TimeSpan delta = now - assist.LastTick;
+
+            if (delta < period) continue;
+
+            assist.LastTick = now;
+
+            if (assist.Duration > TimeSpan.Zero) {
+                assist.Duration -= delta;
+                continue;
+            }
 
             float temperatureDelta = assist.CurrentTemperature switch {
                 > 0 => -TemperatureConfig.AutoDecrementInMs,
@@ -394,12 +402,11 @@ public class BattleTank {
                 if (TemperatureAssists.Count == 0)
                     await SetTemperature(0);
             }
-
-            assist.LastTick = DateTimeOffset.UtcNow;
         }
     }
 
     public async Task UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) { // todo rewrite this shit
+        TimeSpan duration = weaponHandler.TemperatureDuration;
         float maxHeatDamage = (weaponHandler as IHeatWeaponHandler)?.HeatDamage ?? 0;
         float temperatureLimit = weaponHandler.TemperatureLimit;
         float temperatureDelta = weaponHandler switch {
@@ -454,7 +461,7 @@ public class BattleTank {
                                        assist.Weapon == weaponHandler);
 
         if (sourceAssist == null) {
-            sourceAssist = new TemperatureAssist(assistant, weaponHandler, maxHeatDamage, temperatureDelta, DateTimeOffset.UtcNow);
+            sourceAssist = new TemperatureAssist(assistant, weaponHandler, maxHeatDamage, temperatureDelta, DateTimeOffset.UtcNow, duration);
             TemperatureAssists.Add(sourceAssist);
         } else {
             float limit = sourceAssist.Weapon.TemperatureLimit;
@@ -488,6 +495,7 @@ public class BattleTank {
         } else {
             await Tank.ChangeComponent(OriginalSpeedComponent.Clone());
             await Weapon.ChangeComponent(WeaponHandler.OriginalWeaponRotationComponent.Clone());
+            await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
         }
     }
 

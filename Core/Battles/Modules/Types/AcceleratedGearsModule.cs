@@ -31,8 +31,8 @@ public class AcceleratedGearsModule : PassiveBattleModule, IAlwaysActiveModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        TurretSpeed = Leveling.GetStat<ModuleAcceleratedGearsEffectTurretSpeedPropertyComponent>(ConfigPath, Level);
-        TurretAcceleration = Leveling.GetStat<ModuleAcceleratedGearsEffectTurretAccelerationPropertyComponent>(ConfigPath, Level);
-        HullRotation = Leveling.GetStat<ModuleAcceleratedGearsEffectHullRotationSpeedPropertyComponent>(ConfigPath, Level);
+        TurretSpeed = GetStat<ModuleAcceleratedGearsEffectTurretSpeedPropertyComponent>();
+        TurretAcceleration = GetStat<ModuleAcceleratedGearsEffectTurretAccelerationPropertyComponent>();
+        HullRotation = GetStat<ModuleAcceleratedGearsEffectHullRotationSpeedPropertyComponent>();
     }
 }

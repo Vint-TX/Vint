@@ -28,12 +28,12 @@ moduleFireRingEffectHeatDamageProperty:
   upgradeLevel2Values:
     - 150
     - 225
-moduleFireRingEffectTemperatureDeltaProperty:
+moduleEffectTemperatureDeltaProperty:
   linearInterpolation: true
   upgradeLevel2Values:
     - 1.00
     - 1.00
-moduleFireRingEffectTemperatureLimitProperty:
+moduleEffectTemperatureLimitProperty:
   linearInterpolation: true
   upgradeLevel2Values:
     - 0.60

@@ -61,8 +61,8 @@ public abstract class BattleModule {
         UserEntity = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
 
         Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>().Level;
-        CurrentAmmo = MaxAmmo = (int)Leveling.GetStat<ModuleAmmunitionPropertyComponent>(ConfigPath, Level);
-        Cooldown = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleCooldownPropertyComponent>(ConfigPath, Level));
+        CurrentAmmo = MaxAmmo = (int)GetStat<ModuleAmmunitionPropertyComponent>();
+        Cooldown = TimeSpan.FromMilliseconds(GetStat<ModuleCooldownPropertyComponent>());
 
         SlotEntity = await CreateBattleSlot();
         Entity = await CreateBattleModule();
@@ -157,4 +157,7 @@ public abstract class BattleModule {
         if (this is IAlwaysActiveModule)
             await Activate();
     }
+
+    protected float GetStat<T>() where T : ModuleEffectUpgradablePropertyComponent =>
+        Leveling.GetStat<T>(ConfigPath, Level);
 }

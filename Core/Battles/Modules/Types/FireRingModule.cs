@@ -24,12 +24,12 @@ public class FireRingModule : ActiveBattleModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Radius = Leveling.GetStat<ModuleEffectSplashRadiusPropertyComponent>(ConfigPath, Level);
-        HeatDamage = Leveling.GetStat<ModuleFireRingEffectHeatDamagePropertyComponent>(ConfigPath, Level);
-        TemperatureLimit = Leveling.GetStat<ModuleFireRingEffectTemperatureLimitPropertyComponent>(ConfigPath, Level);
-        TemperatureDelta = Leveling.GetStat<ModuleFireRingEffectTemperatureDeltaPropertyComponent>(ConfigPath, Level);
-        MinDamagePercent = Leveling.GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>(ConfigPath, Level) * 100;
-        Impact = Leveling.GetStat<ModuleEffectImpactPropertyComponent>(ConfigPath, Level);
+        Radius = GetStat<ModuleEffectSplashRadiusPropertyComponent>();
+        HeatDamage = GetStat<ModuleFireRingEffectHeatDamagePropertyComponent>();
+        TemperatureLimit = GetStat<ModuleEffectTemperatureLimitPropertyComponent>();
+        TemperatureDelta = GetStat<ModuleEffectTemperatureDeltaPropertyComponent>();
+        MinDamagePercent = GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>() * 100;
+        Impact = GetStat<ModuleEffectImpactPropertyComponent>();
     }
 
     public override async Task Activate() {

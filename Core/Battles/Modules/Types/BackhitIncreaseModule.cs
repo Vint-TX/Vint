@@ -29,6 +29,6 @@ public class BackhitIncreaseModule : PassiveBattleModule, IAlwaysActiveModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Multiplier = Leveling.GetStat<ModuleBackhitModificatorEffectPropertyComponent>(ConfigPath, Level);
+        Multiplier = GetStat<ModuleBackhitModificatorEffectPropertyComponent>();
     }
 }

@@ -48,7 +48,7 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
         await base.Init(tank, userSlot, marketModule);
 
         OriginalTemperatureConfigComponent = Tank.TemperatureConfig.Clone();
-        Decrement = Leveling.GetStat<ModuleTempblockDecrementPropertyComponent>(ConfigPath, Level);
-        Increment = Leveling.GetStat<ModuleTempblockIncrementPropertyComponent>(ConfigPath, Level);
+        Decrement = GetStat<ModuleTempblockDecrementPropertyComponent>();
+        Increment = GetStat<ModuleTempblockIncrementPropertyComponent>();
     }
 }

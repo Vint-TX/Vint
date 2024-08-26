@@ -41,6 +41,6 @@ public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleW
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Multiplier = Leveling.GetStat<ModuleEngineerEffectDurationFactorPropertyComponent>(ConfigPath, Level);
+        Multiplier = GetStat<ModuleEngineerEffectDurationFactorPropertyComponent>();
     }
 }

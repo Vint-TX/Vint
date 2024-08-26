@@ -23,11 +23,11 @@ public class KamikadzeModule : TriggerBattleModule, IDeathModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Impact = Leveling.GetStat<ModuleEffectImpactPropertyComponent>(ConfigPath, Level);
-        Radius = Leveling.GetStat<ModuleEffectSplashRadiusPropertyComponent>(ConfigPath, Level);
-        MinPercent = Leveling.GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>(ConfigPath, Level) * 100;
-        MinDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
-        MaxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
+        Impact = GetStat<ModuleEffectImpactPropertyComponent>();
+        Radius = GetStat<ModuleEffectSplashRadiusPropertyComponent>();
+        MinPercent = GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>() * 100;
+        MinDamage = GetStat<ModuleEffectMinDamagePropertyComponent>();
+        MaxDamage = GetStat<ModuleEffectMaxDamagePropertyComponent>();
     }
 
     public override async Task Activate() {

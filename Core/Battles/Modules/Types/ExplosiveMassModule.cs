@@ -21,10 +21,10 @@ public class ExplosiveMassModule : ActiveBattleModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Radius = Leveling.GetStat<ModuleEffectTargetingDistancePropertyComponent>(ConfigPath, Level);
-        MaxDamage = Leveling.GetStat<ModuleEffectMaxDamagePropertyComponent>(ConfigPath, Level);
-        MinDamage = Leveling.GetStat<ModuleEffectMinDamagePropertyComponent>(ConfigPath, Level);
-        ActivationTime = Leveling.GetStat<ModuleEffectActivationTimePropertyComponent>(ConfigPath, Level);
+        Radius = GetStat<ModuleEffectTargetingDistancePropertyComponent>();
+        MaxDamage = GetStat<ModuleEffectMaxDamagePropertyComponent>();
+        MinDamage = GetStat<ModuleEffectMinDamagePropertyComponent>();
+        ActivationTime = GetStat<ModuleEffectActivationTimePropertyComponent>();
     }
 
     public override async Task Activate() {

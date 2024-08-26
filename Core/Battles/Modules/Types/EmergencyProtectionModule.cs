@@ -49,9 +49,9 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        AdditiveHpFactor = Leveling.GetStat<ModuleEmergencyProtectionEffectAdditiveHPFactorPropertyComponent>(ConfigPath, Level);
-        FixedHp = Leveling.GetStat<ModuleEmergencyProtectionEffectFixedHPPropertyComponent>(ConfigPath, Level);
-        Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEmergencyProtectionEffectHolyshieldDurationPropertyComponent>(ConfigPath, Level));
+        AdditiveHpFactor = GetStat<ModuleEmergencyProtectionEffectAdditiveHPFactorPropertyComponent>();
+        FixedHp = GetStat<ModuleEmergencyProtectionEffectFixedHPPropertyComponent>();
+        Duration = TimeSpan.FromMilliseconds(GetStat<ModuleEmergencyProtectionEffectHolyshieldDurationPropertyComponent>());
     }
 
     public async Task OnHealthChanged(float before, float current, float max) {
@@ -63,4 +63,5 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
     public IEntity BattleEntity => Entity;
     public float TemperatureLimit => -0.99f;
     public float TemperatureDelta => -0.99f;
+    public TimeSpan TemperatureDuration => TimeSpan.Zero;
 }

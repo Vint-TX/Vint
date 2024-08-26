@@ -4,21 +4,21 @@ using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Battle.Effect.Type.Mine;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
-[ModuleId(1133911248)]
-public class MineModule : ActiveBattleModule {
+[ModuleId(-1177680131)]
+public class IceTrapModule : ActiveBattleModule {
     const float MineHalfSize = 0.5f;
 
-    public override string ConfigPath => "garage/module/upgrade/properties/mine";
+    public override string ConfigPath => "garage/module/upgrade/properties/icetrap";
 
-    public override MineEffect GetEffect() => new(GenerateIndex(), MarketEntity, ActivationTime, ExplosionDelay, BeginHideDistance, HideRange,
-        TriggeringArea, Impact, MinSplashDamagePercent, RadiusOfMaxSplashDamage, RadiusOfMinSplashDamage, MaxDamage, MinDamage, Tank, Level);
+    public override IceTrapEffect GetEffect() => new(GenerateIndex(), MarketEntity, ActivationTime, ExplosionDelay, BeginHideDistance, HideRange,
+        TriggeringArea, Impact, MinSplashDamagePercent, RadiusOfMaxSplashDamage, RadiusOfMinSplashDamage, MaxDamage, MinDamage, TemperatureDelta,
+        TemperatureLimit, TemperatureDuration, Tank, Level);
 
-    IEnumerable<MineEffect> Mines => Tank.Effects.OfType<MineEffect>();
-    IEnumerable<MineEffect> MinesSorted => Mines.OrderBy(mine => mine.Index);
+    IEnumerable<IceTrapEffect> Mines => Tank.Effects.OfType<IceTrapEffect>();
+    IEnumerable<IceTrapEffect> MinesSorted => Mines.OrderBy(mine => mine.Index);
 
     TimeSpan ActivationTime { get; set; }
     TimeSpan ExplosionDelay { get; set; }
@@ -32,6 +32,9 @@ public class MineModule : ActiveBattleModule {
     float RadiusOfMinSplashDamage { get; set; }
     float MinSplashDamagePercent { get; set; }
     float TriggeringArea { get; set; }
+    float TemperatureDelta { get; set; }
+    float TemperatureLimit { get; set; }
+    TimeSpan TemperatureDuration { get; set; }
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
@@ -58,6 +61,9 @@ public class MineModule : ActiveBattleModule {
         RadiusOfMinSplashDamage = GetStat<ModuleMineEffectSplashDamageMinRadiusPropertyComponent>();
         MinSplashDamagePercent = GetStat<ModuleEffectSplashDamageMinPercentPropertyComponent>();
         TriggeringArea = GetStat<ModuleMineEffectTriggeringAreaPropertyComponent>() + MineHalfSize;
+        TemperatureDelta = GetStat<ModuleEffectTemperatureDeltaPropertyComponent>();
+        TemperatureLimit = GetStat<ModuleEffectTemperatureLimitPropertyComponent>();
+        TemperatureDuration = TimeSpan.FromMilliseconds(GetStat<ModuleIcetrapEffectTemperatureDurationPropertyComponent>());
     }
 
     protected override async Task<IEntity> CreateBattleModule() {

@@ -32,7 +32,7 @@ public class InvisibilityModule : ActiveBattleModule, IFlagModule, IShotModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(ConfigPath, Level));
+        Duration = TimeSpan.FromMilliseconds(GetStat<ModuleEffectDurationPropertyComponent>());
     }
 
     public async Task OnFlagAction(FlagAction action) {

@@ -195,6 +195,4 @@ public interface IMineEffect {
     public float TriggeringArea { get; }
 
     public void TryExplode();
-
-    public Task Explode();
 }

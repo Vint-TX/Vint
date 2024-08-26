@@ -33,8 +33,8 @@ public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Force = Leveling.GetStat<JumpImpactForceMultPropertyComponent>(ConfigPath, Level);
-        WorkingTemperature = -Leveling.GetStat<JumpImpactWorkingTemperaturePropertyComponent>(ConfigPath, Level);
+        Force = GetStat<JumpImpactForceMultPropertyComponent>();
+        WorkingTemperature = -GetStat<JumpImpactWorkingTemperaturePropertyComponent>();
     }
 
     public override async Task TryUnblock() {

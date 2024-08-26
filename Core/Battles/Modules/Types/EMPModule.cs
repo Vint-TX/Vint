@@ -30,7 +30,7 @@ public class EMPModule : ActiveBattleModule {
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        Duration = TimeSpan.FromMilliseconds(Leveling.GetStat<ModuleEffectDurationPropertyComponent>(ConfigPath, Level));
-        Radius = Leveling.GetStat<ModuleEMPEffectRadiusPropertyComponent>(ConfigPath, Level);
+        Duration = TimeSpan.FromMilliseconds(GetStat<ModuleEffectDurationPropertyComponent>());
+        Radius = GetStat<ModuleEMPEffectRadiusPropertyComponent>();
     }
 }
