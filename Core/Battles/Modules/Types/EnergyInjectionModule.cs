@@ -1,13 +1,9 @@
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Weapons;
-using Vint.Core.ECS.Components.Battle.Effect.Type;
 using Vint.Core.ECS.Components.Battle.Effect.Type.EnergyInjection;
 using Vint.Core.ECS.Components.Server.Effect;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Weapon;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 
@@ -34,8 +30,12 @@ public class EnergyInjectionModule : ActiveBattleModule {
         await base.Init(tank, userSlot, marketModule);
 
         ReloadEnergyPercent = GetStat<ModuleEnergyInjectionEffectReloadPercentPropertyComponent>();
-        await SlotEntity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent)); // component for module on slot entity?
     }
 
+    protected override async Task<IEntity> CreateBattleModule() {
+        IEntity entity = await base.CreateBattleModule();
 
+        await entity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent));
+        return entity;
+    }
 }
