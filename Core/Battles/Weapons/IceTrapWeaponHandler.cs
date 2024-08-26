@@ -55,7 +55,7 @@ public class IceTrapWeaponHandler(
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true);
+        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true, true);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 
