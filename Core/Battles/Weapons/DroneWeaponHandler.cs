@@ -47,7 +47,7 @@ public class DroneWeaponHandler(
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy)
             return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, ignoreSourceEffects: true);
+        CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, ignoreSourceEffects: true);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 

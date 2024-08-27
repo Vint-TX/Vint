@@ -53,7 +53,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
             // ReSharper disable once ArrangeRedundantParentheses
             if (targetTank.StateManager.CurrentState is not Active || !isEnemy) continue;
 
-            CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, hitTarget, i);
+            CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, hitTarget, i);
 
             if (tankToDamage.TryAdd(targetTank, damage)) continue;
 

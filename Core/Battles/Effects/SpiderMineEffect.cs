@@ -66,7 +66,7 @@ public class SpiderMineEffect(
     }
 
     public override async Task Deactivate() {
-        if (!IsActive || !CanBeDeactivated) return;
+        if (!CanBeDeactivated || !IsActive) return;
 
         Tank.Effects.TryRemove(this);
 

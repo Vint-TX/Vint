@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 
 namespace Vint.Core.Battles.Effects;
 
@@ -25,6 +26,6 @@ public class AdrenalineEffect(
 
     public float Multiplier { get; } = damageMultiplier;
 
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
         source == Tank ? Multiplier : 1;
 }

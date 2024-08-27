@@ -186,7 +186,7 @@ public interface IExtendableEffect {
 }
 
 public interface IDamageMultiplierEffect : IMultiplierEffect {
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit);
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit);
 }
 
 public interface IMineEffect {

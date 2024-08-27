@@ -34,7 +34,7 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         Entity = null;
     }
 
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) => 0;
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) => 0;
 
     ValueTask ResetWeaponState() =>
         Tank.WeaponHandler is StreamWeaponHandler streamWeapon

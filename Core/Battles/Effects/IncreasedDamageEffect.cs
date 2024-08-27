@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Server;
@@ -26,7 +27,7 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
 
     public float Multiplier { get; private set; }
 
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
         IsActive && (Tank != target || isSplash) ? Multiplier : 1;
 
     public async Task Extend(int newLevel) {

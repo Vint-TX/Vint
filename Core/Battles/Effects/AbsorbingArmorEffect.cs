@@ -27,7 +27,7 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
 
     public float Multiplier { get; private set; }
 
-    public float GetMultiplier(BattleTank source, BattleTank target, bool isSplash, bool isBackHit, bool isTurretHit) =>
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
         IsActive &&
         Tank == target &&
         (source.WeaponHandler is not IsisWeaponHandler ||

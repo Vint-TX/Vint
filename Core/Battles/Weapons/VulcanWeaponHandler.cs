@@ -44,7 +44,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy)
             return;
 
-        CalculatedDamage damage = DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
+        CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 
