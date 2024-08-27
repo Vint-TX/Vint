@@ -15,9 +15,10 @@ public class DroneEffectTemplate : EffectBaseTemplate {
 
         IEntity entity = Create(configPath, battlePlayer, duration, true, false);
         DroneMoveConfigComponent droneMoveConfigComponent = ConfigManager.GetComponent<DroneMoveConfigComponent>(configPath);
+        BattleTank tank = battlePlayer.Tank!;
 
         entity.AddComponent(droneMoveConfigComponent);
-        entity.AddComponent(new UnitMoveComponent(battlePlayer.Tank!.Position + droneMoveConfigComponent.SpawnPosition));
+        entity.AddComponent(new UnitMoveComponent(tank.Position + droneMoveConfigComponent.SpawnPosition, tank.Orientation));
         entity.AddComponent(new UnitTargetingConfigComponent(targetingDistance));
         entity.AddComponent<DroneEffectComponent>();
         entity.AddComponent<UnitComponent>();

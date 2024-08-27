@@ -121,20 +121,20 @@ public class GameServer(
 
     async Task TickLoop() { // https://stackoverflow.com/q/78850638
         const int tps = 60;
-        const int maxTPS = 3;
+        //const int maxTPS = 3;
 
         Logger.Information("HPET enabled: {Value}", Stopwatch.IsHighResolution);
 
         TimeSpan targetDeltaTime = TimeSpan.FromSeconds(1d / tps);
-        TimeSpan maximumDeltaTime = TimeSpan.FromSeconds(1d / maxTPS);
+        //TimeSpan maximumDeltaTime = TimeSpan.FromSeconds(1d / maxTPS);
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         TimeSpan lastTick = stopwatch.Elapsed;
 
         while (IsStarted) {
             TimeSpan currentTick = stopwatch.Elapsed;
-            DeltaTime = TimeSpanUtils.Min(currentTick - lastTick, maximumDeltaTime);
-
+            //DeltaTime = TimeSpanUtils.Min(currentTick - lastTick, maximumDeltaTime);
+            DeltaTime = currentTick - lastTick;
             lastTick = currentTick;
 
             try {

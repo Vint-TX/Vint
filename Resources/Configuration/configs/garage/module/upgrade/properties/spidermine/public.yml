@@ -1,145 +1,57 @@
 moduleCooldownProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 90000
-    - 86667
-    - 83333
-    - 80000
-    - 76667
-    - 73333
-    - 70000
-    - 66667
-    - 63333
     - 60000
 moduleAmmunitionProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
     - 1
     - 1
 moduleEffectMinDamageProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 700.00
-    - 738.89
-    - 777.78
-    - 816.67
-    - 855.56
-    - 894.44
-    - 933.33
-    - 972.22
-    - 1011.11
-    - 1050.00
+    - 700
+    - 1050
 moduleEffectMaxDamageProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 1000.00
-    - 1055.56
-    - 1111.11
-    - 1166.67
-    - 1222.22
-    - 1277.78
-    - 1333.33
-    - 1388.89
-    - 1444.44
-    - 1500.00
+    - 1000
+    - 1500
 moduleEffectImpactProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 3.00
-    - 3.17
-    - 3.33
-    - 3.50
-    - 3.67
-    - 3.83
-    - 4.00
-    - 4.17
-    - 4.33
     - 4.50
 moduleMineEffectHideRangeProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 25.00
-    - 24.07
-    - 23.15
-    - 22.22
-    - 21.30
-    - 20.37
-    - 19.44
-    - 18.52
-    - 17.59
     - 17.00
 moduleMineEffectBeginHideDistanceProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 25.00
-    - 24.07
-    - 23.15
-    - 22.22
-    - 21.30
-    - 20.37
-    - 19.44
-    - 18.52
-    - 17.59
     - 17.00
 moduleEffectActivationTimeProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 3000
-    - 2889
-    - 2778
-    - 2667
-    - 2556
-    - 2444
-    - 2333
-    - 2222
-    - 2111
     - 2000
 moduleLimitBundleEffectCountProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
     - 1
     - 1
 moduleEffectAccelerationProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 12.00
-    - 12.67
-    - 13.33
-    - 14.00
-    - 14.67
-    - 15.33
-    - 16.00
-    - 16.67
-    - 17.33
     - 18.00
 moduleEffectSpeedProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 12.00
-    - 12.67
-    - 13.33
-    - 14.00
-    - 14.67
-    - 15.33
-    - 16.00
-    - 16.67
-    - 17.33
     - 18.00
 moduleSpiderMineEffectEnergyProperty:
   linearInterpolation: true
@@ -157,56 +69,24 @@ moduleSpiderMineEffectChasingEnergyDrainRateProperty:
     - 10
     - 10
 moduleMineEffectSplashDamageMaxRadiusProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 5.00
-    - 5.28
-    - 5.56
-    - 5.83
-    - 6.11
-    - 6.39
-    - 6.67
-    - 6.94
-    - 7.22
     - 7.50
 moduleMineEffectSplashDamageMinRadiusProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 10.00
-    - 10.56
-    - 11.11
-    - 11.67
-    - 12.22
-    - 12.78
-    - 13.33
-    - 13.89
-    - 14.44
     - 15.00
 moduleEffectSplashDamageMinPercentProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 0.50
-    - 0.53
-    - 0.56
-    - 0.58
-    - 0.61
-    - 0.64
-    - 0.67
-    - 0.69
-    - 0.72
     - 0.75
 moduleEffectTargetingDistanceProperty:
-  linearInterpolation: false
+  linearInterpolation: true
   upgradeLevel2Values:
     - 15.00
-    - 15.83
-    - 16.67
-    - 17.50
-    - 18.33
-    - 19.17
-    - 20.00
-    - 20.83
-    - 21.67
     - 22.50
 moduleEffectTargetingPeriodProperty:
   linearInterpolation: true
@@ -224,17 +104,9 @@ moduleVisualProperties:
       format: 0.0
       spriteUID: 75703cb6-f734-4a53-9b7b-fcb5df984159
     - name: Damage
-      linearInterpolation: false
+      linearInterpolation: true
       upgradeLevel2Values:
         - 700
-        - 738
-        - 778
-        - 817
-        - 856
-        - 894
-        - 933
-        - 972
-        - 1011
         - 1050
       maxAndMinString:
         - 700-1000

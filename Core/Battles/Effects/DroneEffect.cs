@@ -53,15 +53,21 @@ public class DroneEffect : WeaponEffect {
             await WeaponEntity.AddComponent<ShootableComponent>();
         });
 
-        Schedule(Duration, Deactivate);
+        Schedule(Duration, DeactivateInternal);
+        CanBeDeactivated = false;
     }
 
     public override async Task Deactivate() {
-        if (!IsActive) return;
+        if (!CanBeDeactivated || !IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
         Entity = null;
+    }
+
+    async Task DeactivateInternal() {
+        CanBeDeactivated = true;
+        await Deactivate();
     }
 }

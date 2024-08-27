@@ -128,6 +128,7 @@ public abstract class WeaponEffect(
 
     public override async Task Unshare(BattlePlayer battlePlayer) {
         if (battlePlayer.Tank == Tank) {
+            CanBeDeactivated = true;
             await Deactivate();
             return;
         }
