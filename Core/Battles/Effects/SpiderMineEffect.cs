@@ -34,7 +34,8 @@ public class SpiderMineEffect(
     public override ModuleWeaponHandler WeaponHandler { get; protected set; } = null!;
 
     public int Index { get; } = index;
-    float Energy { get; set; } = energy;
+    public SpiderState State { get; set; } = SpiderState.Idling;
+    double Energy { get; set; } = energy;
 
     public override async Task Activate() {
         if (IsActive) return;
@@ -73,20 +74,26 @@ public class SpiderMineEffect(
         Entity = null;
     }
 
-    public override async Task Tick() {
-        await base.Tick();
-
-        if (!IsActive) return;
-
-        // todo drain energy
-    }
-
     public async Task ForceDeactivate() {
         CanBeDeactivated = true;
         await Deactivate();
     }
 
-    public async Task Explode() {
+    public override async Task Tick() {
+        await base.Tick();
+
+        if (!IsActive) return;
+
+        await DrainEnergy(GameServer.DeltaTime);
+    }
+
+    async Task TryExplode() {
+        if (!IsActive) return;
+
+        await Tank.BattlePlayer.PlayerConnection.Send(new MineTryExplosionEvent(), Entity);
+    }
+
+    async Task Explode() {
         if (!IsActive) return;
 
         foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
@@ -94,4 +101,22 @@ public class SpiderMineEffect(
 
         await ForceDeactivate();
     }
+
+    async Task DrainEnergy(TimeSpan deltaTime) {
+        double energyDelta = State switch {
+            SpiderState.Idling => idleEnergyDrain,
+            SpiderState.Chasing => chasingEnergyDrain,
+            _ => 0
+        } * deltaTime.TotalSeconds;
+
+        Energy -= energyDelta;
+
+        if (Energy <= 0)
+            await TryExplode();
+    }
+}
+
+public enum SpiderState {
+    Idling,
+    Chasing
 }

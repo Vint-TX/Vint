@@ -12,15 +12,42 @@ public class UnitTargetComponent : IComponent {
     public IEntity TargetIncarnation { get; private set; } = null!;
 
     public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer
-                ?.Tank
-                ?.Effects
-                .OfType<WeaponEffect>()
-                .Single(effect => effect.Entity == entity)
-                .WeaponHandler is not DroneWeaponHandler weaponHandler)
-            return Task.CompletedTask;
+        switch (GetEffect(connection, entity)) {
+            case DroneEffect drone:
+                DroneAdded(drone);
+                break;
 
-        weaponHandler.IncarnationId = TargetIncarnation.Id;
+            case SpiderMineEffect spider:
+                SpiderAdded(spider);
+                break;
+        }
+
         return Task.CompletedTask;
     }
+
+    public Task Removed(IPlayerConnection connection, IEntity entity) {
+        switch (GetEffect(connection, entity)) {
+            case SpiderMineEffect spider:
+                SpiderRemoved(spider);
+                break;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    void DroneAdded(DroneEffect effect) =>
+        ((DroneWeaponHandler)effect.WeaponHandler).IncarnationId = TargetIncarnation.Id;
+
+    static void SpiderAdded(SpiderMineEffect effect) =>
+        effect.State = SpiderState.Chasing;
+
+    static void SpiderRemoved(SpiderMineEffect effect) =>
+        effect.State = SpiderState.Idling;
+
+    static WeaponEffect? GetEffect(IPlayerConnection connection, IEntity entity) =>
+        connection.BattlePlayer
+            ?.Tank
+            ?.Effects
+            .OfType<WeaponEffect>()
+            .Single(effect => effect.Entity == entity);
 }
