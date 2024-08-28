@@ -40,7 +40,7 @@ public class KamikadzeEffect(
             int.MaxValue);
 
         await Share(Tank.BattlePlayer);
-        Schedule(Duration, DeactivateInternal);
+        Schedule(TimeSpan.FromSeconds(10), DeactivateInternal);
     }
 
     public override async Task Deactivate() {

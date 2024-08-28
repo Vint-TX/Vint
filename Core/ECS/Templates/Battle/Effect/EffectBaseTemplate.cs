@@ -20,10 +20,7 @@ public abstract class EffectBaseTemplate : EntityTemplate {
                     entity.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
                 })
             .ThenExecuteIf(_ => withTeam && battlePlayer.Battle.ModeHandler is TeamHandler,
-                entity => {
-                    entity.AddComponentFrom<TeamColorComponent>(battlePlayer.Team!);
-                    entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team);
-                })
+                entity => entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team))
             .ThenExecuteIf(_ => withBattle,
                 entity => entity.AddGroupComponent<BattleGroupComponent>(battlePlayer.Battle.Entity)));
 }

@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Battle.Effect.EMP;
 
 [ProtocolId(636250863918020313)]
 public class ApplyTargetsForEMPEffectEvent : IServerEvent {
-    public long[] Targets { get; private set; } = null!;
+    public IEntity[] Targets { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         IEntity emp = entities.Single();
@@ -19,14 +19,12 @@ public class ApplyTargetsForEMPEffectEvent : IServerEvent {
             .OfType<EMPEffect>()
             .SingleOrDefault(effect => effect.Entity == emp);
 
-        await ChatUtils.SendMessage($"Targets: {Targets.Length}; Effect: {effect?.ToString() ?? "null"}", ChatUtils.GetChat(connection), [connection], null);
-
         if (tank == null || effect == null)
             return;
 
         BattleTank[] tanks = battle.Players
             .Select(player => player.Tank)
-            .Where(targetTank => targetTank != null && Targets.Contains(targetTank.Tank.Id))
+            .Where(targetTank => Targets.Contains(targetTank!.Tank))
             .ToArray()!;
 
         await effect.Apply(tanks);
