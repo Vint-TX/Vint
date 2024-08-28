@@ -1,6 +1,6 @@
+using System.Collections.Frozen;
 using Vint.Core.Battles.Bonus.Type;
 using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -9,6 +9,8 @@ using BonusInfo = Vint.Core.Config.MapInformation.Bonus;
 namespace Vint.Core.Battles.Bonus;
 
 public interface IBonusProcessor {
+    public int GoldsDropped { get; }
+
     public Task Start();
 
     public Task Tick();
@@ -21,7 +23,7 @@ public interface IBonusProcessor {
 
     public BonusBox? FindByEntity(IEntity bonusEntity);
 
-    public Task<bool> DropBonus(BonusType type);
+    public Task<bool> ForceDropBonus(BonusType type, BattlePlayer? battlePlayer);
 }
 
 public class BonusProcessor : IBonusProcessor {
@@ -30,8 +32,6 @@ public class BonusProcessor : IBonusProcessor {
 
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach ((BonusType type, IEnumerable<BonusInfo> bonusesInfo) in bonusesInfos) {
-            if (type == BonusType.Gold && battle.TypeHandler is not MatchmakingHandler) continue;
-
             IEnumerable<BonusBox> bonusBoxes = type switch {
                 BonusType.Repair => bonusesInfo.Select(bonusInfo => new RepairBox(battle, bonusInfo.Position, bonusInfo.HasParachute)),
                 BonusType.Armor => bonusesInfo.Select(bonusInfo => new ArmorBox(battle, bonusInfo.Position, bonusInfo.HasParachute)),
@@ -44,10 +44,12 @@ public class BonusProcessor : IBonusProcessor {
             bonuses.AddRange(bonusBoxes);
         }
 
-        Bonuses = bonuses.Shuffle();
+        Bonuses = bonuses.Shuffle().ToFrozenSet();
     }
 
-    IReadOnlyList<BonusBox> Bonuses { get; }
+    FrozenSet<BonusBox> Bonuses { get; }
+
+    public int GoldsDropped { get; private set; }
 
     public async Task Start() {
         foreach (SupplyBox supply in Bonuses.OfType<SupplyBox>()) {
@@ -97,12 +99,28 @@ public class BonusProcessor : IBonusProcessor {
     public BonusBox? FindByEntity(IEntity bonusEntity) =>
         Bonuses.FirstOrDefault(bonus => bonus.Entity == bonusEntity);
 
-    public async Task<bool> DropBonus(BonusType type) {
-        BonusBox? bonus = Bonuses.FirstOrDefault(bonus => bonus.Type == type && bonus.StateManager.CurrentState is not Spawned);
+    public async Task<bool> ForceDropBonus(BonusType type, BattlePlayer? player) {
+        BonusBox? bonus = Bonuses.ToArray().Shuffle().FirstOrDefault(bonus => bonus.Type == type && bonus.CanBeDropped(true));
 
-        if (bonus == null) return false;
+        switch (bonus) {
+            case null:
+                return false;
 
-        await bonus.Drop();
+            case GoldBox gold:
+                return await ForceDropGold(gold, player);
+
+            default:
+                await bonus.Drop();
+                return true;
+        }
+    }
+
+    async Task<bool> ForceDropGold(GoldBox gold, BattlePlayer? player) {
+        if (!gold.CanBeDropped(true))
+            return false;
+
+        await gold.Drop(player);
+        GoldsDropped++;
         return true;
     }
 }

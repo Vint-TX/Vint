@@ -35,14 +35,8 @@ public class RepairKitModule : ActiveBattleModule, IHealthModule {
         await base.TryUnblock();
     }
 
-    public override async Task TryBlock(bool force = false) {
-        if (!force && Tank.Health < Tank.MaxHealth) return;
-
-        await base.TryBlock(force);
-    }
-
     public async Task OnHealthChanged(float before, float current, float max) {
         if (current < max) await TryUnblock();
-        else await TryBlock(true);
+        else await TryBlock();
     }
 }

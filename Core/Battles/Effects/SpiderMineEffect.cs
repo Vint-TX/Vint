@@ -103,6 +103,9 @@ public class SpiderMineEffect(
     }
 
     async Task DrainEnergy(TimeSpan deltaTime) {
+        if (Energy <= 0)
+            return;
+
         double energyDelta = State switch {
             SpiderState.Idling => idleEnergyDrain,
             SpiderState.Chasing => chasingEnergyDrain,

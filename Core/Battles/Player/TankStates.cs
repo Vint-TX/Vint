@@ -124,6 +124,6 @@ public class Active(
         await base.Finish();
 
         foreach (BattleModule module in BattleTank.Modules)
-            await module.TryBlock(true);
+            await module.TryBlock();
     }
 }

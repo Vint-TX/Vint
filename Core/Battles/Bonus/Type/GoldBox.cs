@@ -2,6 +2,7 @@ using System.Numerics;
 using LinqToDB;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
+using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Database;
@@ -56,19 +57,26 @@ public sealed class GoldBox(
         await StateManager.SetState(new Spawned(StateManager));
     }
 
-    public override async Task Drop() {
+    public override bool CanBeDropped(bool force) => StateManager.CurrentState is None;
+
+    public async Task Drop(BattlePlayer? player) {
+        string username = player?.PlayerConnection.Player.Username ?? "";
+
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle)) {
-            await battlePlayer.PlayerConnection.Send(new GoldScheduleNotificationEvent(""), Battle.RoundEntity);
+            await battlePlayer.PlayerConnection.Send(new GoldScheduleNotificationEvent(username), Battle.RoundEntity);
             await battlePlayer.PlayerConnection.Share(RegionEntity!);
         }
 
         await StateManager.SetState(new Cooldown(StateManager, TimeSpan.FromSeconds(20)));
     }
 
+    public override Task Drop() => Drop(null);
+
     public override async Task Tick() {
         await base.Tick();
 
-        if (Battle.Timer.TotalSeconds < 120 ||
+        if (Battle.TypeHandler is not MatchmakingHandler ||
+            Battle.Timer.TotalSeconds < 120 ||
             Battle.StateManager.CurrentState is not Running ||
             StateManager.CurrentState is not None) return;
 

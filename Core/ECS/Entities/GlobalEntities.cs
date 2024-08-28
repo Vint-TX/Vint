@@ -7,6 +7,7 @@ using Vint.Core.ECS.Components.Fraction;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Modules;
+using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Components.Preset;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Enums;
@@ -106,45 +107,39 @@ public static class GlobalEntities {
         foreach (IEntity entity in GetEntities(path)) {
             Player player = connection.Player;
             IEntity user = connection.User;
-            long entityId = entity.Id;
-
-            entity.Id = EntityRegistry.GenerateId();
-
-            if (path == "moduleSlots") {
-                entity.AddGroupComponent<UserGroupComponent>(user);
-                yield return entity;
-            }
+            long marketEntityId = entity.Id;
 
             if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue;
 
+            entity.Id = EntityRegistry.GenerateId();
             entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
 
             using DbConnection db = new();
 
             switch (path) {
                 case "avatars": {
-                    if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == entityId))
+                    if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "covers": {
-                    if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == entityId))
+                    if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "graffities": {
-                    if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == entityId))
+                    if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "hulls": {
-                    Hull? hull = db.Hulls.FirstOrDefault(hull => hull.PlayerId == player.Id && hull.Id == entityId);
+                    Hull? hull = db.Hulls.FirstOrDefault(hull => hull.PlayerId == player.Id && hull.Id == marketEntityId);
 
                     if (hull != null)
                         entity.AddGroupComponent<UserGroupComponent>(user);
@@ -159,28 +154,28 @@ public static class GlobalEntities {
                 }
 
                 case "hullSkins": {
-                    if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == entityId))
+                    if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "paints": {
-                    if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == entityId))
+                    if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "shells": {
-                    if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == entityId))
+                    if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
                 }
 
                 case "weapons": {
-                    Weapon? weapon = db.Weapons.FirstOrDefault(weapon => weapon.PlayerId == player.Id && weapon.Id == entityId);
+                    Weapon? weapon = db.Weapons.FirstOrDefault(weapon => weapon.PlayerId == player.Id && weapon.Id == marketEntityId);
 
                     if (weapon != null)
                         entity.AddGroupComponent<UserGroupComponent>(user);
@@ -195,7 +190,7 @@ public static class GlobalEntities {
                 }
 
                 case "weaponSkins": {
-                    if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == entityId))
+                    if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
                     break;
@@ -209,6 +204,8 @@ public static class GlobalEntities {
                         case ModuleBehaviourType.Active: {
                             if (configPathParts[3] == "common") {
                                 entity.TemplateAccessor.Template = new GoldBonusModuleUserItemTemplate();
+                                entity.AddComponent<MountedItemComponent>();
+                                entity.AddGroupComponent<UserGroupComponent>(user);
                                 break;
                             }
 
@@ -229,7 +226,7 @@ public static class GlobalEntities {
                         default: throw new UnreachableException();
                     }
 
-                    Module? module = player.Modules.SingleOrDefault(module => module.Id == entityId);
+                    Module? module = player.Modules.SingleOrDefault(module => module.Id == marketEntityId);
                     int moduleLevel = module?.Level ?? -1;
 
                     if (moduleLevel >= 0)
@@ -278,9 +275,35 @@ public static class GlobalEntities {
                         case GoldBonusUserItemTemplate: {
                             IEntity gold = connection.SharedEntities.Single(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
 
-                            entity.AddGroupComponent<ModuleGroupComponent>(gold);
+                            entity.AddComponentFrom<ModuleGroupComponent>(gold);
                             entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
                             break;
+                        }
+
+                        case SlotUserItemTemplate: {
+                            string configPath = entity.TemplateAccessor!.ConfigPath!;
+                            Dictionary<Slot, ModuleBehaviourType> behaviourTypes = ConfigManager.GetComponent<SlotsTypesComponent>(configPath).Slots;
+                            Dictionary<Slot, TankPartModuleType> tankParts = ConfigManager.GetComponent<SlotToTankPartComponent>(configPath).Slots;
+
+                            foreach (Slot slot in Enum.GetValues<Slot>()) {
+                                IEntity slotEntity = entity.Clone();
+                                slotEntity.Id = EntityRegistry.GenerateId();
+
+                                ModuleBehaviourType behaviourType = behaviourTypes[slot];
+                                TankPartModuleType tankPart = tankParts[slot];
+
+                                slotEntity.AddComponent(new SlotTankPartComponent(tankPart));
+                                slotEntity.AddComponent(new SlotUserItemInfoComponent(slot, behaviourType));
+
+                                if (slot == Slot.Slot7) {
+                                    IEntity gold = GetEntity("modules", "Gold").GetUserModule(connection);
+                                    slotEntity.AddGroupComponent<ModuleGroupComponent>(gold);
+                                }
+
+                                connection.Share(slotEntity);
+                            }
+
+                            continue;
                         }
                     }
 
@@ -288,7 +311,7 @@ public static class GlobalEntities {
                 }
 
                 case "containers": {
-                    Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == entityId);
+                    Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == marketEntityId);
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
                     entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));

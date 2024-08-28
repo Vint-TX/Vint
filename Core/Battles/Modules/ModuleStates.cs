@@ -29,7 +29,7 @@ public class Cooldown(
         await Module.SlotEntity.AddComponent(new InventoryCooldownStateComponent(cooldownMs, DateTimeOffset.UtcNow));
 
         if (Module.CurrentAmmo <= 0)
-            await Module.TryBlock(true);
+            await Module.TryBlock();
     }
 
     public override async Task Tick() {

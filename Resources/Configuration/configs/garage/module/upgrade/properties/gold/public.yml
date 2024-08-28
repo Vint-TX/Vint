@@ -1,7 +1,7 @@
 moduleCooldownProperty:
   linearInterpolation: true
   upgradeLevel2Values:
-    - 30000
+    - 60000
 moduleAmmunitionProperty:
   linearInterpolation: true
   upgradeLevel2Values:

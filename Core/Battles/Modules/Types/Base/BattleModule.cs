@@ -116,6 +116,23 @@ public abstract class BattleModule {
             await StateManager.SetState(new Ready(StateManager));
     }
 
+    public virtual async Task Tick() {
+        await StateManager.Tick();
+
+        if (IsEMPLocked) {
+            EMPLockTime -= GameServer.DeltaTime;
+            await TryEMPUnlock();
+        }
+    }
+
+    public virtual Task TryBlock() =>
+        SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent());
+
+    public virtual Task TryUnblock() =>
+        CurrentAmmo <= 0
+            ? Task.CompletedTask
+            : SlotEntity.RemoveComponentIfPresent<InventorySlotTemporaryBlockedByServerComponent>();
+
     public async Task EMPLock(TimeSpan duration) { // effects should be deactivated separately
         EMPLockTime += duration;
 
@@ -124,27 +141,10 @@ public abstract class BattleModule {
 
         IsEMPLocked = true;
         await SlotEntity.AddComponentIfAbsent<SlotLockedByEMPComponent>();
-        await TryBlock(true);
+        await TryBlock();
     }
 
-    public async Task Tick() {
-        await StateManager.Tick();
-
-        if (IsEMPLocked) {
-            EMPLockTime -= GameServer.DeltaTime;
-            await TryEmpUnlock();
-        }
-    }
-
-    public virtual Task TryBlock(bool force = false) =>
-        SlotEntity.AddComponentIfAbsent(new InventorySlotTemporaryBlockedByServerComponent());
-
-    public virtual Task TryUnblock() =>
-        CurrentAmmo <= 0
-            ? Task.CompletedTask
-            : SlotEntity.RemoveComponentIfPresent<InventorySlotTemporaryBlockedByServerComponent>();
-
-    async Task TryEmpUnlock() {
+    async Task TryEMPUnlock() {
         if (!IsEMPLocked || EMPLockTime > TimeSpan.Zero)
             return;
 

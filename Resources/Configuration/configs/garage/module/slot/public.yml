@@ -7,8 +7,8 @@ slotsTypes:
     SLOT5: ACTIVE
     SLOT6: PASSIVE
     SLOT7: ACTIVE
-slot2TankPart:
-  slots2TankPart:
+slotToTankPart:
+  slots:
     SLOT1: WEAPON
     SLOT2: WEAPON
     SLOT3: WEAPON

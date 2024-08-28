@@ -7,7 +7,8 @@ questVariations:
     - range: 0-10
       targetValue: 10
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -15,7 +16,8 @@ questVariations:
     - range: 11-20
       targetValue: 15
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -23,7 +25,8 @@ questVariations:
     - range: 21-30
       targetValue: 20
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -31,7 +34,8 @@ questVariations:
     - range: 31-40
       targetValue: 25
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -39,7 +43,8 @@ questVariations:
     - range: 41-50
       targetValue: 30
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -47,7 +52,8 @@ questVariations:
     - range: 51-60
       targetValue: 35
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -55,7 +61,8 @@ questVariations:
     - range: 61-70
       targetValue: 35
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -63,7 +70,8 @@ questVariations:
     - range: 71-80
       targetValue: 35
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -71,7 +79,8 @@ questVariations:
     - range: 81-90
       targetValue: 35
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1
@@ -79,7 +88,8 @@ questVariations:
     - range: 91-101
       targetValue: 35
       questReward:
-        255419373: 1
+        reward: 255419373
+        amount: 1
       questRarity: COMMON
       questConditions:
       questWeight: 1

@@ -23,11 +23,12 @@ using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Modules.Inventory;
+using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Components.Server;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
-using Vint.Core.ECS.Events.Battle.Effect;
 using Vint.Core.ECS.Events.Battle.Effect.EMP;
 using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.ECS.Events.Battle.Movement;
@@ -41,6 +42,7 @@ using Vint.Core.ECS.Templates.Battle.Incarnation;
 using Vint.Core.ECS.Templates.Battle.Tank;
 using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.ECS.Templates.Battle.Weapon;
+using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.Server;
 using Vint.Core.Utils;
@@ -118,14 +120,6 @@ public class BattleTank {
 
         Health = TotalHealth = MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
         TemperatureConfig = ConfigManager.GetComponent<TemperatureConfigComponent>(Tank.TemplateAccessor!.ConfigPath!);
-
-        if (!Battle.Properties.DisabledModules) {
-            foreach (PresetModule presetModule in preset.Modules) {
-                BattleModule module = ModuleRegistry.Get(presetModule.Entity.Id);
-                module.Init(this, presetModule.GetSlotEntity(playerConnection), presetModule.Entity).GetAwaiter().GetResult();
-                Modules.Add(module);
-            }
-        }
 
         Statistics = new BattleTankStatistics();
         BattleEnterTime = DateTimeOffset.UtcNow;
@@ -708,6 +702,29 @@ public class BattleTank {
 
     public void CreateUserResult() =>
         Result = new UserResult(BattlePlayer);
+
+    public async Task InitModules() {
+        IPlayerConnection connection = BattlePlayer.PlayerConnection;
+        Preset preset = connection.Player.CurrentPreset;
+
+        foreach (PresetModule presetModule in preset.Modules) {
+            BattleModule module = ModuleRegistry.Get(presetModule.Entity.Id);
+            await module.Init(this, presetModule.GetSlotEntity(connection), presetModule.Entity);
+            Modules.Add(module);
+        }
+
+        IEntity goldModuleEntity = GlobalEntities.GetEntity("modules", "Gold");
+        IEntity goldSlotEntity = connection.SharedEntities.Single(entity =>
+            entity.TemplateAccessor?.Template is SlotUserItemTemplate &&
+            entity.GetComponent<SlotUserItemInfoComponent>().Slot == Slot.Slot7);
+
+        BattleModule gold = ModuleRegistry.Get(goldModuleEntity.Id);
+        await gold.Init(this, goldSlotEntity, goldModuleEntity);
+        Modules.Add(gold);
+
+        foreach (BattleModule module in Modules)
+            await module.SwitchToBattleEntities();
+    }
 
     public override int GetHashCode() => BattlePlayer.GetHashCode();
 }

@@ -43,7 +43,7 @@ public class InDevModule : BattleModule {
         return clone;
     }
 
-    public override Task TryBlock(bool force = false) => Task.CompletedTask;
+    public override Task TryBlock() => Task.CompletedTask;
 
     public override Task TryUnblock() => Task.CompletedTask;
 }

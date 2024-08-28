@@ -110,11 +110,8 @@ public class BattlePlayer {
         } else {
             Tank = new BattleTank(this);
 
-            if (!Battle.Properties.DisabledModules) {
-                foreach (BattleModule battleModule in Tank.Modules) {
-                    await battleModule.SwitchToBattleEntities();
-                }
-            }
+            if (!Battle.Properties.DisabledModules)
+                await Tank.InitModules();
 
             InBattle = true;
 

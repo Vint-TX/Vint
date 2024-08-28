@@ -59,4 +59,8 @@ public abstract class SupplyBox : BonusBox {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(battlePlayer => battlePlayer.InBattle))
             await battlePlayer.PlayerConnection.ShareIfUnshared(RegionEntity);
     }
+
+    public override bool CanBeDropped(bool force) =>
+        StateManager.CurrentState is not Spawned ||
+        force && StateManager.CurrentState is Cooldown;
 }

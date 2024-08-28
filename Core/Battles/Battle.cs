@@ -87,8 +87,8 @@ public sealed class Battle : IDisposable {
     public TimeSpan DominationDuration { get; } = TimeSpan.FromSeconds(30);
     public bool DominationCanBegin =>
         !DominationStartTime.HasValue &&
-        Timer.TotalSeconds > 120 &&
-        Timer.TotalSeconds < Properties.TimeLimit * 60 - 60;
+        Timer.TotalMinutes > 2 &&
+        Timer.TotalMinutes < Properties.TimeLimit - 1;
 
     public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }

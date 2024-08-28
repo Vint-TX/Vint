@@ -175,10 +175,19 @@ public class AdminModule : ChatCommandModule {
     [ChatCommand("dropBonus", "Drop bonus"), RequireConditions(ChatCommandConditions.InBattle)]
     public async Task DropBonus(
         ChatCommandContext ctx,
-        [Option("type", "Type of the bonus")] BonusType bonusType) {
-        bool? isSuccessful = await (ctx.Connection.BattlePlayer?.Battle.BonusProcessor?.DropBonus(bonusType) ?? Task.FromResult(false));
+        [Option("type", "Type of the bonus")] BonusType bonusType,
+        [Option("anonymous", "Drop the gold anonymously", true)] bool anon = true) {
+        IBonusProcessor? bonusProcessor = ctx.Connection.BattlePlayer?.Battle.BonusProcessor;
 
-        if (isSuccessful != true) {
+        if (bonusProcessor == null) {
+            await ctx.SendPrivateResponse("Bonuses are disabled in this battle");
+            return;
+        }
+
+        BattlePlayer? player = anon ? null : ctx.Connection.BattlePlayer;
+        bool dropped = await bonusProcessor.ForceDropBonus(bonusType, player);
+
+        if (!dropped) {
             await ctx.SendPrivateResponse($"{bonusType} is not dropped");
             return;
         }

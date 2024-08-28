@@ -43,14 +43,8 @@ public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
         await base.TryUnblock();
     }
 
-    public override async Task TryBlock(bool force = false) {
-        if (!force && Tank.Temperature >= WorkingTemperature) return;
-
-        await base.TryBlock(force);
-    }
-
     public async Task OnTemperatureChanged(float before, float current, float min, float max) {
         if (current >= WorkingTemperature) await TryUnblock();
-        else await TryBlock(true);
+        else await TryBlock();
     }
 }

@@ -1,5 +1,18 @@
 ﻿[
   {
+    "name": "ModuleSlot",
+    "id": 1335431730,
+    "template": [
+      "SlotMarketItemTemplate",
+      "garage/module/slot"
+    ],
+    "components": {
+      "MarketItemGroupComponent": {
+        "key": 1335431730
+      }
+    }
+  },
+  {
     "name": "Preset",
     "id": -571744569,
     "template": [
@@ -48,19 +61,6 @@
     "components": {
       "MarketItemGroupComponent": {
         "key": 636909271
-      }
-    }
-  },
-  {
-    "name": "ModuleSlot",
-    "id": 1335431730,
-    "template": [
-      "SlotMarketItemTemplate",
-      "garage/module/slot/market"
-    ],
-    "components": {
-      "MarketItemGroupComponent": {
-        "key": 1335431730
       }
     }
   },

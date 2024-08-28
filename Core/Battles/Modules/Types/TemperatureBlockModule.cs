@@ -15,12 +15,12 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
 
     public override Effect GetEffect() => throw new NotSupportedException();
 
-    protected override bool ActivationCondition => !Enabled;
+    protected override bool ActivationCondition => !IsActive;
 
     public bool CanBeDeactivated { get; set; }
 
     TemperatureConfigComponent OriginalTemperatureConfigComponent { get; set; } = null!;
-    bool Enabled { get; set; }
+    public bool IsActive { get; private set; }
 
     float Decrement { get; set; }
     float Increment { get; set; }
@@ -28,7 +28,7 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
     public override Task Activate() {
         if (!CanBeActivated) return Task.CompletedTask;
 
-        Enabled = true;
+        IsActive = true;
         CanBeDeactivated = false;
 
         Tank.TemperatureConfig.AutoDecrementInMs += Decrement;
@@ -37,9 +37,9 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
     }
 
     public Task Deactivate() {
-        if (!Enabled || !CanBeDeactivated) return Task.CompletedTask;
+        if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
 
-        Enabled = false;
+        IsActive = false;
         Tank.TemperatureConfig = OriginalTemperatureConfigComponent.Clone();
         return Task.CompletedTask;
     }

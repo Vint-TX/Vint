@@ -815,7 +815,7 @@
     "name": "Gold",
     "id": -150814762,
     "template": [
-      "ModuleMarketItemTemplate",
+      "GoldBonusModuleMarketItemTemplate",
       "garage/module/prebuildmodule/common/active/1/gold"
     ],
     "components": {

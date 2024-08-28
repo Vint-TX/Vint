@@ -54,6 +54,8 @@ public abstract class BonusBox {
 
     public abstract Task Spawn();
 
+    public abstract bool CanBeDropped(bool force);
+
     public virtual Task Drop() => Spawn();
 
     public virtual Task Tick() => StateManager.Tick();

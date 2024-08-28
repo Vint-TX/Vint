@@ -352,14 +352,9 @@ public static class ConfigManager {
         return node.Entities.Values.Select(entity => entity.Clone());
     }
 
-    public static IEnumerable<IEntity> GetGlobalEntities() {
-        string[] excluded = ["moduleSlots"];
-
-        return Root.Children
-            .Where(child => !excluded.Contains(child.Key))
-            .SelectMany(child =>
-                child.Value.Entities.Values.Select(entity => entity.Clone()));
-    }
+    public static IEnumerable<IEntity> GetGlobalEntities() =>
+        Root.Children.SelectMany(child =>
+            child.Value.Entities.Values.Select(entity => entity.Clone()));
 
     public static T GetComponent<T>(string path) where T : class, IComponent =>
         GetComponentOrNull<T>(path)!;
@@ -424,7 +419,7 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
             return false;
         }
 
-        IComponent component = (IComponent)RuntimeHelpers.GetUninitializedObject(expectedType);
+        IComponent component = (IComponent)(Activator.CreateInstance(expectedType) ?? RuntimeHelpers.GetUninitializedObject(expectedType));
 
         reader.MoveNext();
 
