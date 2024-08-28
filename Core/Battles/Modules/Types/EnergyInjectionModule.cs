@@ -30,12 +30,6 @@ public class EnergyInjectionModule : ActiveBattleModule {
         await base.Init(tank, userSlot, marketModule);
 
         ReloadEnergyPercent = GetStat<ModuleEnergyInjectionEffectReloadPercentPropertyComponent>();
-    }
-
-    protected override async Task<IEntity> CreateBattleModule() {
-        IEntity entity = await base.CreateBattleModule();
-
-        await entity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent));
-        return entity;
+        await Entity.AddComponent(new EnergyInjectionModuleReloadEnergyComponent(ReloadEnergyPercent));
     }
 }
