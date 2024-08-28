@@ -52,7 +52,7 @@
     }
   },
   {
-    "name": "Goldbonus",
+    "name": "GoldBonus",
     "id": 636909271,
     "template": [
       "GoldBonusMarketItemTemplate",

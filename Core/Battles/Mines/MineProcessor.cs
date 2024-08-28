@@ -16,6 +16,8 @@ public class MineProcessor {
     public bool RemoveMine(int index) => Mines.Remove(index, out _);
 
     public void TryTriggerSingle(BattleTank tank) {
+        if (tank.StateManager.CurrentState is not Active) return;
+
         foreach (Mine mine in Mines.Values) {
             if (mine.TryTrigger(tank))
                 break;

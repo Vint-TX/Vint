@@ -44,7 +44,7 @@ public class ExternalImpactEffect(
             int.MaxValue);
 
         await ShareToAllPlayers();
-        Schedule(Duration, Deactivate);
+        Schedule(TimeSpan.FromSeconds(10), Deactivate);
     }
 
     public override async Task Deactivate() {

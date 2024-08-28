@@ -4,6 +4,8 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
+using Vint.Core.ECS.Components.Item;
+using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Items;
 using Vint.Core.Server;
 
@@ -26,6 +28,8 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
     public bool IsActive => false;
     public bool CanBeDeactivated { get; set; } = true;
 
+    static IEntity MarketCounterEntity { get; } = GlobalEntities.GetEntity("misc", "GoldBonus");
+    IEntity CounterEntity { get; set; } = null!;
     IBonusProcessor BonusProcessor => Battle.BonusProcessor!;
     BattlePlayer BattlePlayer => Tank.BattlePlayer;
     IPlayerConnection Connection => BattlePlayer.PlayerConnection;
@@ -39,6 +43,7 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
 
         if (dropped) {
             await Connection.SetGoldBoxes(PlayerGoldsCount - 1);
+            await CounterEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = PlayerGoldsCount);
             await Connection.Send(new GoldBonusesCountChangedEvent(PlayerGoldsCount), Connection.User);
         }
     }
@@ -50,5 +55,11 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
 
         if (!ActivationCondition) await TryBlock(); // bruh
         else await TryUnblock();
+    }
+
+    public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
+        await base.Init(tank, userSlot, marketModule);
+
+        CounterEntity = MarketCounterEntity.GetUserEntity(Connection);
     }
 }
