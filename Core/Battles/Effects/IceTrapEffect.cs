@@ -1,4 +1,5 @@
 using System.Numerics;
+using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components.Battle.Effect;
@@ -44,7 +45,8 @@ public class IceTrapEffect(
         RayClosestHitHandler hitHandler = new();
         Battle.Simulation.RayCast(Tank.Position, -Vector3.UnitY, 655.36f, ref hitHandler);
 
-        if (!hitHandler.ClosestHit.HasValue)
+        if (!hitHandler.ClosestHit.HasValue ||
+            Battle.ModeHandler is CTFHandler ctf && !ctf.CanPlaceMine(hitHandler.ClosestHit.Value))
             return;
 
         Tank.Effects.Add(this);
