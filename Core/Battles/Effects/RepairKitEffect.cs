@@ -23,11 +23,11 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
         TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
 
-        Heal = HealLeft = Tank.MaxHealth * Percent;
-        HealPerMs = (float)(Heal / Duration.TotalMilliseconds);
-
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
+
+        Heal = HealLeft = Tank.MaxHealth * Percent;
+        HealPerMs = (float)(Heal / Duration.TotalMilliseconds);
     }
 
     HealingComponent SupplyHealingComponent { get; }
@@ -82,11 +82,10 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     public override async Task Activate() {
         if (IsActive) return;
 
+        LastTick = DateTimeOffset.UtcNow.AddTicks(-TickPeriod.Ticks);
         Tank.Effects.Add(this);
 
         CalculatedDamage heal = new(default, InstantHp, false, false);
-
-        LastTick = DateTimeOffset.UtcNow.AddTicks(-TickPeriod.Ticks);
         await Battle.DamageProcessor.Heal(Tank, heal);
 
         Entity = new HealingEffectTemplate().Create(Tank.BattlePlayer, Duration);
@@ -118,7 +117,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         LastTick = DateTimeOffset.UtcNow;
 
-        float healHp = Math.Min(Math.Min(Convert.ToSingle(timePassed.TotalMilliseconds * HealPerMs), Tank.MaxHealth - Tank.Health), HealLeft);
+        float healHp = Math.Min(Math.Min((float)(timePassed.TotalMilliseconds * HealPerMs), Tank.MaxHealth - Tank.Health), HealLeft);
         HealLeft -= healHp;
 
         if (Tank.Health >= Tank.MaxHealth) return;
