@@ -3,10 +3,10 @@ using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
-using Vint.Core.ECS.Components.Server.Effect;
+using Vint.Core.Battles.Tank;
+using Vint.Core.ECS.Components.Server.Modules.Effect.LifeSteal;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 

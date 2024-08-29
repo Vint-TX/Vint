@@ -1,7 +1,9 @@
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Types.Base;
-using Vint.Core.Battles.Player;
-using Vint.Core.ECS.Components.Server.Effect;
+using Vint.Core.Battles.Tank;
+using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
+using Vint.Core.ECS.Components.Server.Modules.Effect.Mine;
+using Vint.Core.ECS.Components.Server.Modules.Effect.SpiderMine;
 using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Battles.Modules.Types;

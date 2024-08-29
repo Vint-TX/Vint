@@ -1,13 +1,13 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Effect;
-using Vint.Core.ECS.Components.Server;
-using Vint.Core.ECS.Components.Server.Effect;
+using Vint.Core.ECS.Components.Server.Modules.Effect.AbsorbingArmor;
+using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Utils;
 using DurationComponent = Vint.Core.ECS.Components.Battle.Effect.DurationComponent;
-using EffectDurationComponent = Vint.Core.ECS.Components.Server.DurationComponent;
+using EffectDurationComponent = Vint.Core.ECS.Components.Server.Modules.Effect.Common.DurationComponent;
 
 namespace Vint.Core.Battles.Effects;
 

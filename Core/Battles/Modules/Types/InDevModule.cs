@@ -1,11 +1,10 @@
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Types.Base;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Modules.Inventory;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.Server;
 using Vint.Core.Utils;
 

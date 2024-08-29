@@ -4,6 +4,7 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Items;

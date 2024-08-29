@@ -3,7 +3,7 @@ using Redzen.Numerics.Distributions.Float;
 using Redzen.Random;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Interfaces;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;

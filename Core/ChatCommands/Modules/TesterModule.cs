@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database.Models;
 

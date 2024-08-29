@@ -1,5 +1,5 @@
 using System.Numerics;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 
 namespace Vint.Core.Battles.Flags;
 

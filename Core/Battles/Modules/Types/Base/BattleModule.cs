@@ -1,12 +1,12 @@
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Modules.Interfaces;
-using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Modules.Inventory;
 using Vint.Core.ECS.Components.Modules.Slot;
-using Vint.Core.ECS.Components.Server.Effect;
+using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.Server;

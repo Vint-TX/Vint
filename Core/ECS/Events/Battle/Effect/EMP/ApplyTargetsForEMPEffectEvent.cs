@@ -1,9 +1,8 @@
 using Vint.Core.Battles.Effects;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;
-using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Effect.EMP;
 

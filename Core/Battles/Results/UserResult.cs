@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Modules;

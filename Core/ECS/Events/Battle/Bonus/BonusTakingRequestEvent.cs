@@ -1,6 +1,7 @@
 using System.Numerics;
 using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;

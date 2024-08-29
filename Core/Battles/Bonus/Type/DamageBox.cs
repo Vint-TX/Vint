@@ -1,6 +1,6 @@
 using System.Numerics;
 using Vint.Core.Battles.Effects;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 
 namespace Vint.Core.Battles.Bonus.Type;
 

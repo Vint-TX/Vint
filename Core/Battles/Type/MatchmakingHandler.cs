@@ -7,7 +7,7 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Components.Notification;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Login;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Matchmaking;

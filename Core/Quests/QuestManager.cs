@@ -1,7 +1,7 @@
 using LinqToDB;
 using Serilog;
 using Vint.Core.Battles;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Database;

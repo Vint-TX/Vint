@@ -1,9 +1,9 @@
 using Vint.Core.Battles.Damage;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Damage;
 using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 

@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Weapon;

@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Templates.Battle.Effect;
 
 namespace Vint.Core.Battles.Effects;

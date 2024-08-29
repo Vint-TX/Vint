@@ -13,6 +13,7 @@ using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.States;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;

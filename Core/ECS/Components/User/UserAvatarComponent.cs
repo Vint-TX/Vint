@@ -1,5 +1,5 @@
 ﻿using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Avatar;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;

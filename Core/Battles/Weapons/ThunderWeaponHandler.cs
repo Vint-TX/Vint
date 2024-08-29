@@ -1,5 +1,5 @@
 using Vint.Core.Battles.Damage;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Battle.Weapon.Splash;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 

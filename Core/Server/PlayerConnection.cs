@@ -18,7 +18,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Preset;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Experience;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
@@ -558,7 +558,7 @@ public abstract class PlayerConnection(
                 userItem.Id = EntityRegistry.GenerateId();
 
                 await userItem.AddComponent(new PresetEquipmentComponent(preset));
-                await userItem.AddComponent(new PresetNameComponent(preset));
+                await userItem.AddComponent(new PresetNameComponent(preset.Name));
 
                 preset.Entity = userItem;
                 Player.UserPresets.Add(preset);

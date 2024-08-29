@@ -9,7 +9,9 @@ using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Modules;
 using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Components.Preset;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Experience;
+using Vint.Core.ECS.Components.Server.Modules;
+using Vint.Core.ECS.Components.Server.Shop;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Gold;
@@ -259,7 +261,7 @@ public static class GlobalEntities {
                                 presetEntity.Id = EntityRegistry.GenerateId();
 
                                 presetEntity.AddComponent(new PresetEquipmentComponent(preset));
-                                presetEntity.AddComponent(new PresetNameComponent(preset));
+                                presetEntity.AddComponent(new PresetNameComponent(preset.Name));
 
                                 if (preset.Index == player.CurrentPresetIndex)
                                     presetEntity.AddComponent<MountedItemComponent>();

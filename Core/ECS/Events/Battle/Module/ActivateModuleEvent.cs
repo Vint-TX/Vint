@@ -1,5 +1,5 @@
 using Vint.Core.Battles.Modules.Types.Base;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;

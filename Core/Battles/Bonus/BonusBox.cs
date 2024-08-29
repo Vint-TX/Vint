@@ -1,7 +1,7 @@
 using System.Numerics;
 using Serilog;
-using Vint.Core.Battles.Player;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.Battles.Tank;
+using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Bonus;
 using Vint.Core.Server;

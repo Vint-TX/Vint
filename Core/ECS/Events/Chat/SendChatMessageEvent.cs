@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Chat;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server;

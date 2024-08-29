@@ -17,38 +17,37 @@ namespace Vint.Core.Protocol;
 
 public class Protocol {
     public Protocol() {
-        Register(typeof(bool), new BoolCodec());
-        Register(typeof(sbyte), new SByteCodec());
-        Register(typeof(byte), new ByteCodec());
-        Register(typeof(short), new ShortCodec());
-        Register(typeof(ushort), new UShortCodec());
-        Register(typeof(int), new IntCodec());
-        Register(typeof(uint), new UIntCodec());
-        Register(typeof(long), new LongCodec());
-        Register(typeof(ulong), new ULongCodec());
-        Register(typeof(float), new FloatCodec());
-        Register(typeof(double), new DoubleCodec());
-        Register(typeof(string), new StringCodec());
-        Register(typeof(DateTime), new DateTimeCodec());
-        Register(typeof(DateTimeOffset), new DateTimeOffsetCodec());
+        Register<bool>(new BoolCodec());
+        Register<sbyte>(new SByteCodec());
+        Register<byte>(new ByteCodec());
+        Register<short>(new ShortCodec());
+        Register<ushort>(new UShortCodec());
+        Register<int>(new IntCodec());
+        Register<uint>(new UIntCodec());
+        Register<long>(new LongCodec());
+        Register<ulong>(new ULongCodec());
+        Register<float>(new FloatCodec());
+        Register<double>(new DoubleCodec());
+        Register<string>(new StringCodec());
+        Register<DateTime>(new DateTimeCodec());
+        Register<DateTimeOffset>(new DateTimeOffsetCodec());
 
-        Register(typeof(TemplateAccessor), new TemplateAccessorCodec());
-        Register(typeof(IEntity), new EntityCodec());
+        Register<TemplateAccessor>(new TemplateAccessorCodec());
+        Register<IEntity>(new EntityCodec());
 
-        Register(typeof(ICommand),
-            new CommandCodec()
-                .Register<InitTimeCommand>(CommandCode.InitTime)
-                .Register<CloseCommand>(CommandCode.Close)
-                .Register<ComponentAddCommand>(CommandCode.ComponentAdd)
-                .Register<ComponentChangeCommand>(CommandCode.ComponentChange)
-                .Register<ComponentRemoveCommand>(CommandCode.ComponentRemove)
-                .Register<EntityShareCommand>(CommandCode.EntityShare)
-                .Register<EntityUnshareCommand>(CommandCode.EntityUnshare)
-                .Register<SendEventCommand>(CommandCode.SendEvent));
+        Register<ICommand>(new CommandCodec()
+            .Register<InitTimeCommand>(CommandCode.InitTime)
+            .Register<CloseCommand>(CommandCode.Close)
+            .Register<ComponentAddCommand>(CommandCode.ComponentAdd)
+            .Register<ComponentChangeCommand>(CommandCode.ComponentChange)
+            .Register<ComponentRemoveCommand>(CommandCode.ComponentRemove)
+            .Register<EntityShareCommand>(CommandCode.EntityShare)
+            .Register<EntityUnshareCommand>(CommandCode.EntityUnshare)
+            .Register<SendEventCommand>(CommandCode.SendEvent));
 
-        Register(typeof(Vector3), new Vector3Codec());
-        Register(typeof(MoveCommand), new MoveCommandCodec());
-        Register(typeof(Movement), new MovementCodec());
+        Register<Vector3>(new Vector3Codec());
+        Register<MoveCommand>(new MoveCommandCodec());
+        Register<Movement>(new MovementCodec());
 
         Factories.Add(new OptionalCodecFactory());
         Factories.Add(new VariedCodecFactory());
@@ -73,9 +72,9 @@ public class Protocol {
     Dictionary<ICodecInfo, ICodec> Codecs { get; } = new();
     List<ICodecFactory> Factories { get; } = [];
 
-    public void Register(Type type, Codec codec) => InitAndRegister(new TypeCodecInfo(type), codec);
+    void Register<T>(ICodec codec) => InitAndRegister(new TypeCodecInfo(typeof(T)), codec);
 
-    public void InitAndRegister(ICodecInfo codecInfo, Codec codec) {
+    void InitAndRegister(ICodecInfo codecInfo, ICodec codec) {
         codec.Init(this);
         Codecs[codecInfo] = codec;
     }

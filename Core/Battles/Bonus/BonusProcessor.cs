@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using Vint.Core.Battles.Bonus.Type;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server;
 using Vint.Core.Utils;

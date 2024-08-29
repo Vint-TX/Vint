@@ -1,8 +1,8 @@
 using LinqToDB;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
-using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Results;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Database;

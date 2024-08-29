@@ -1,6 +1,7 @@
 using LinqToDB;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components.Battle.Tank;

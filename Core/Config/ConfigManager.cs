@@ -19,7 +19,7 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Attributes;

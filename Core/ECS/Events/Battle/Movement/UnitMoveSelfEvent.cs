@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Battle.Unit;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;

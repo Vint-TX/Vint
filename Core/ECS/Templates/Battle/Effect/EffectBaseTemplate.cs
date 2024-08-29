@@ -1,7 +1,6 @@
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Battle.Effect;
-using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;

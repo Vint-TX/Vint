@@ -6,7 +6,7 @@ using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Utils;
 

@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Login;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
@@ -271,15 +271,19 @@ public class Player {
     public async Task<bool> UnWarn(long warnId) {
         await using DbConnection db = new();
 
-        Punishment? punishment = await db.Punishments
+        IQueryable<Punishment> punishments = db.Punishments
             .Where(punishment => punishment.PlayerId == Id &&
-                                 punishment.Type == PunishmentType.Warn)
-            .SingleOrDefaultAsync(punishment => punishment.Id == warnId);
+                                 punishment.Type == PunishmentType.Warn &&
+                                 punishment.Id == warnId);
+
+        Punishment? punishment = await punishments.SingleOrDefaultAsync();
 
         if (punishment == null) return false;
 
         punishment.Active = false;
-        await db.UpdateAsync(punishment);
+        await punishments
+            .Set(p => p.Active, punishment.Active)
+            .UpdateAsync();
         return true;
     }
 

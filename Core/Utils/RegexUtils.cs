@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Login;
 
 namespace Vint.Core.Utils;
 

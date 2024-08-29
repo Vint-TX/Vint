@@ -1,6 +1,6 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battles.Tank;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server;
+using Vint.Core.ECS.Components.Server.Weapon;
 
 namespace Vint.Core.Battles.Weapons;
 
