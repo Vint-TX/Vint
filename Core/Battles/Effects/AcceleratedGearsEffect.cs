@@ -26,7 +26,7 @@ public class AcceleratedGearsEffect(
             shaft.AimingSpeedComponent.HorizontalAcceleration *= turretAcceleration;
         }
 
-        // todo update self speed
+        await Tank.UpdateSpeed();
 
         Entity = new AcceleratedGearsEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await ShareToAllPlayers();
@@ -46,7 +46,7 @@ public class AcceleratedGearsEffect(
             shaft.AimingSpeedComponent.HorizontalAcceleration /= turretAcceleration;
         }
 
-        // todo update self speed
+        await Tank.UpdateSpeed();
         await UnshareFromAllPlayers();
 
         Entity = null;

@@ -1,10 +1,11 @@
 using System.Collections.Concurrent;
 using Vint.Core.Battles.Damage;
+using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Server.Tank;
-using Vint.Core.ECS.Events.Battle.Movement;
 using Vint.Core.Server;
+using Vint.Core.Structures;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Tank.Temperature;
@@ -18,8 +19,8 @@ public class TemperatureProcessor {
 
     public float Temperature { get; private set; }
 
+    bool IsFrozen => Temperature < 0;
     bool WasFrozen { get; set; }
-    bool Reset { get; set; }
 
     TimeSpan TickPeriod { get; }
     TimeSpan RemainingPeriod { get; set; }
@@ -29,37 +30,36 @@ public class TemperatureProcessor {
     Battle Battle => Tank.Battle;
 
     ConcurrentQueue<TemperatureAssist> NewAssists { get; } = [];
-    List<TemperatureAssist> Assists { get; } = [];
+    ConcurrentList<TemperatureAssist> Assists { get; } = [];
 
     public async Task Tick() {
-        if (Reset) {
-            Assists.Clear();
-            RemainingPeriod = TimeSpan.Zero;
-            Reset = false;
-            await ResetSpeed();
-        }
-
         if (Tank.StateManager.CurrentState is not Active)
             return;
 
+        WasFrozen = Temperature < 0;
+
         UpdateAssistsDuration();
+        NormalizeTankTemperature();
+        AcceptNewAssists();
+        NormalizeAllAssists();
 
         if (RemainingPeriod > TimeSpan.Zero) {
             RemainingPeriod -= GameServer.DeltaTime;
             return;
         }
 
-        RemainingPeriod = TickPeriod;
-        WasFrozen = Temperature < 0;
+        RemainingPeriod += TickPeriod;
 
         await HeatDamage();
-        NormalizeTankTemperature();
-        AcceptNewAssists();
-        NormalizeAllAssists();
         await UpdateTemperatureAndSpeed();
     }
 
-    public void ResetAll() => Reset = true;
+    public async Task ResetAll() {
+        NewAssists.Clear();
+        Assists.Clear();
+
+        await UpdateTemperatureAndSpeed();
+    }
 
     public void EnqueueAssist(TemperatureAssist assist) =>
         NewAssists.Enqueue(assist);
@@ -87,7 +87,9 @@ public class TemperatureProcessor {
         if (Temperature == 0)
             return;
 
-        TemperatureAssist[] assists = Assists.Where(assist => assist.CurrentDuration <= TimeSpan.Zero).ToArray();
+        TemperatureAssist[] assists = Assists
+            .Where(assist => assist.CurrentDuration <= TimeSpan.Zero)
+            .ToArray();
 
         if (assists.Length == 0)
             return;
@@ -96,9 +98,14 @@ public class TemperatureProcessor {
             ? TemperatureConfig.AutoDecrementInMs
             : TemperatureConfig.AutoIncrementInMs;
 
-        delta *= (float)TickPeriod.TotalMilliseconds;
+        delta *= (float)GameServer.DeltaTime.TotalMilliseconds;
 
         while (delta > 0) {
+            assists = assists.Where(assist => assist.CurrentDelta != 0).ToArray();
+
+            if (assists.Length == 0)
+                break;
+
             float assistDelta = delta / assists.Length;
             float subtracted = 0;
 
@@ -125,7 +132,7 @@ public class TemperatureProcessor {
 
             NormalizeWithOpposite(assist);
 
-            if (assist.CurrentDelta == 0)
+            if (assist.CurrentDelta == 0 || assist.NormalizeOnly)
                 continue;
 
             Assists.Add(assist);
@@ -164,23 +171,25 @@ public class TemperatureProcessor {
 
             oppositeAssist.Subtract(subtract);
             assist.Subtract(subtract);
+
+            if (ownDelta == 0)
+                break;
         }
 
         Assists.RemoveAll(a => a.CurrentDelta == 0);
     }
 
     async Task UpdateTemperatureAndSpeed() {
+        float before = Temperature;
         Temperature = Assists.Sum(assist => assist.CurrentDelta);
         await Tank.Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
 
-        if (WasFrozen) {
+        if (IsFrozen || WasFrozen) {
             await Tank.UpdateSpeed();
-
-            if (Temperature >= 0)
-                await ResetSpeed();
         }
+
+        foreach (ITemperatureModule temperatureModule in Tank.Modules.OfType<ITemperatureModule>())
+            await temperatureModule.OnTemperatureChanged(before, Temperature, -1, 1);
     }
 
-    async Task ResetSpeed() =>
-        await Tank.BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank.Tank);
 }

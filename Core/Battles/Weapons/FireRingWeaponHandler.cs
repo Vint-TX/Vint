@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Tank;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
@@ -26,7 +27,7 @@ public class FireRingWeaponHandler(
 
     public override Task Fire(HitTarget target, int targetIndex) => throw new NotSupportedException();
 
-    public async Task SplashFire(HitTarget target, int targetIndex) {
+    public Task SplashFire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
         BattleTank targetTank = battle.Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
@@ -36,12 +37,16 @@ public class FireRingWeaponHandler(
         float multiplier = GetSplashMultiplier(target.HitDistance);
 
         if (multiplier <= 0)
-            return;
+            return Task.CompletedTask;
 
         HeatDamage = maxHeatDamage * multiplier;
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
-        // todo heat the enemy
+
+        TemperatureAssist assist = TemperatureCalculator.Calculate(BattleTank, this, !isEnemy);
+        targetTank.TemperatureProcessor.EnqueueAssist(assist);
+
+        return Task.CompletedTask;
     }
 
     public float GetSplashMultiplier(float distance) {

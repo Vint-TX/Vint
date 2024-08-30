@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Tank;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Server.Damage;
@@ -39,7 +40,8 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, IStreamWeaponHand
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        // todo update target temperature
+        TemperatureAssist assist = TemperatureCalculator.Calculate(BattleTank, this, !isEnemy);
+        targetTank.TemperatureProcessor.EnqueueAssist(assist);
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 

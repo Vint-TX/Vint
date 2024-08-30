@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Tank;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
@@ -49,7 +50,8 @@ public class IsisWeaponHandler : StreamWeaponHandler {
             await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
             await battle.DamageProcessor.Heal(BattleTank, heal);
         } else {
-            // todo normalize ally temperature
+            TemperatureAssist assist = TemperatureCalculator.Calculate(BattleTank, this, true);
+            targetTank.TemperatureProcessor.EnqueueAssist(assist);
 
             const int healScore = 2;
             if (targetTank.Health >= targetTank.MaxHealth) return;

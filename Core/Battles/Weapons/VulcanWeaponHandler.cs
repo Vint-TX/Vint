@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Tank;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon;
@@ -50,10 +51,10 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
 
     public override async Task Tick() {
         await base.Tick();
-        await UpdateOverheating();
+        UpdateOverheating();
     }
 
-    async Task UpdateOverheating() {
+    void UpdateOverheating() {
         if (!IsOverheating ||
             LastOverheatingUpdate.HasValue &&
             DateTimeOffset.UtcNow - LastOverheatingUpdate < Cooldown) return;
@@ -64,7 +65,9 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
             return;
         }
 
-        // todo heat ourself
+        TemperatureAssist assist = TemperatureCalculator.Calculate(BattleTank, this, false);
+        BattleTank.TemperatureProcessor.EnqueueAssist(assist);
+
         LastOverheatingUpdate = DateTimeOffset.UtcNow;
     }
 
