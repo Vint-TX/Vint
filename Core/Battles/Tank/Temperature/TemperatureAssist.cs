@@ -4,16 +4,18 @@ namespace Vint.Core.Battles.Tank.Temperature;
 
 public class TemperatureAssist(
     BattleTank tank,
-    IEntity weaponMarketEntity,
-    IEntity weaponBattleEntity,
     TimeSpan duration,
     float delta,
-    float limit
+    float limit,
+    bool normalizeOnly,
+    IEntity weaponMarketEntity,
+    IEntity weaponBattleEntity
 ) {
     public BattleTank Tank { get; } = tank;
     public IEntity WeaponMarketEntity { get; } = weaponMarketEntity;
     public IEntity WeaponBattleEntity { get; } = weaponBattleEntity;
     public float Limit { get; } = limit;
+    public bool NormalizeOnly { get; } = normalizeOnly;
     public int LimitSign { get; } = Math.Sign(limit);
 
     public TimeSpan CurrentDuration { get; set; } = duration;
@@ -22,7 +24,7 @@ public class TemperatureAssist(
     public bool CanMerge(TemperatureAssist other) =>
         LimitSign == other.LimitSign &&
         Tank == other.Tank &&
-        WeaponBattleEntity == other.WeaponMarketEntity;
+        WeaponMarketEntity == other.WeaponMarketEntity;
 
     public void MergeWith(TemperatureAssist other) {
         if (!CanMerge(other))
@@ -48,9 +50,10 @@ public class HeatTemperatureAssist(
     TimeSpan duration,
     float delta,
     float limit,
+    bool normalizeOnly,
     IEntity weaponMarketEntity,
     IEntity weaponBattleEntity,
     float heatDamage
-) : TemperatureAssist(tank, weaponMarketEntity, weaponBattleEntity, duration, delta, limit) {
+) : TemperatureAssist(tank, duration, delta, limit, normalizeOnly, weaponMarketEntity, weaponBattleEntity) {
     public float HeatDamage { get; } = heatDamage;
 }

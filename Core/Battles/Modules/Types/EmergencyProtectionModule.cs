@@ -4,6 +4,7 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Components.Server.Modules.Effect.EmergencyProtection;
 using Vint.Core.ECS.Entities;
@@ -37,10 +38,11 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
 
         await base.Activate();
 
-        // todo reset tank temperature
+        Tank.TemperatureProcessor.ResetAll();
+        TemperatureAssist temperatureAssist = TemperatureCalculator.Calculate(Tank, this, false);
 
         await Battle.DamageProcessor.Heal(Tank, CalculatedHeal);
-        // todo freeze the tank
+        Tank.TemperatureProcessor.EnqueueAssist(temperatureAssist);
 
         foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
             await player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
@@ -63,5 +65,5 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
     public IEntity BattleEntity => Entity;
     public float TemperatureLimit => -1f;
     public float TemperatureDelta => -1f;
-    public TimeSpan TemperatureDuration => TimeSpan.Zero;
+    public TimeSpan TemperatureDuration => Duration;
 }

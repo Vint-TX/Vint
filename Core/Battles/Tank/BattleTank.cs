@@ -116,7 +116,7 @@ public class BattleTank {
             _ => throw new UnreachableException()
         };
 
-        SpeedComponent = Tank.GetComponent<SpeedComponent>();
+        SpeedComponent = Tank.GetComponent<SpeedComponent>().Clone();
 
         Health = TotalHealth = MaxHealth = Tank.GetComponent<HealthComponent>().MaxHealth;
         TemperatureProcessor = new TemperatureProcessor(this);
@@ -245,6 +245,7 @@ public class BattleTank {
 
         TotalHealth = MaxHealth;
         TemperatureProcessor.ResetAll();
+        await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             await Tank.RemoveComponent<SelfDestructionComponent>();
@@ -344,6 +345,7 @@ public class BattleTank {
         } else {
             await Tank.ChangeComponent(SpeedComponent.Clone());
             await Weapon.ChangeComponent(WeaponHandler.WeaponRotationComponent.Clone());
+            await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
         }
     }
 

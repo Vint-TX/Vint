@@ -69,7 +69,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         await ShareToAllPlayers();
 
         Tank.SpeedComponent.Speed *= Multiplier;
-        // todo update self speed
+        await Tank.UpdateSpeed();
         Schedule(Duration, Deactivate);
     }
 
@@ -82,6 +82,6 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         Entity = null;
 
         Tank.SpeedComponent.Speed /= Multiplier;
-        // todo update self speed
+        await Tank.UpdateSpeed();
     }
 }

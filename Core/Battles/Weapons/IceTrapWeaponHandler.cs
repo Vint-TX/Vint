@@ -1,5 +1,6 @@
 using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Tank;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
@@ -51,7 +52,8 @@ public class IceTrapWeaponHandler(
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
 
-        // todo freeze the target
+        TemperatureAssist assist = TemperatureCalculator.Calculate(BattleTank, this, !isEnemy);
+        targetTank.TemperatureProcessor.EnqueueAssist(assist);
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 
