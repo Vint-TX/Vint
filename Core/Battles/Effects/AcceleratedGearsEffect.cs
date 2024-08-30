@@ -17,9 +17,9 @@ public class AcceleratedGearsEffect(
         Tank.Effects.Add(this);
         CanBeDeactivated = false;
 
-        Tank.OriginalSpeedComponent.TurnSpeed *= hullRotation;
-        Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed *= turretSpeed;
-        Tank.WeaponHandler.OriginalWeaponRotationComponent.Acceleration *= turretAcceleration;
+        Tank.SpeedComponent.TurnSpeed *= hullRotation;
+        Tank.WeaponHandler.WeaponRotationComponent.Speed *= turretSpeed;
+        Tank.WeaponHandler.WeaponRotationComponent.Acceleration *= turretAcceleration;
 
         if (Tank.WeaponHandler is ShaftWeaponHandler shaft) {
             shaft.AimingSpeedComponent.MaxHorizontalSpeed *= turretSpeed;
@@ -37,9 +37,9 @@ public class AcceleratedGearsEffect(
 
         Tank.Effects.TryRemove(this);
 
-        Tank.OriginalSpeedComponent.TurnSpeed /= hullRotation;
-        Tank.WeaponHandler.OriginalWeaponRotationComponent.Speed /= turretSpeed;
-        Tank.WeaponHandler.OriginalWeaponRotationComponent.Acceleration /= turretAcceleration;
+        Tank.SpeedComponent.TurnSpeed /= hullRotation;
+        Tank.WeaponHandler.WeaponRotationComponent.Speed /= turretSpeed;
+        Tank.WeaponHandler.WeaponRotationComponent.Acceleration /= turretAcceleration;
 
         if (Tank.WeaponHandler is ShaftWeaponHandler shaft) {
             shaft.AimingSpeedComponent.MaxHorizontalSpeed /= turretSpeed;
