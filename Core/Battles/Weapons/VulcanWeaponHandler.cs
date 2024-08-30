@@ -64,7 +64,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
             return;
         }
 
-        await BattleTank.UpdateTemperatureAssists(BattleTank, this, false);
+        // todo heat ourself
         LastOverheatingUpdate = DateTimeOffset.UtcNow;
     }
 

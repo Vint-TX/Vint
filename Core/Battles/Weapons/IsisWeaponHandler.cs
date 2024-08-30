@@ -49,7 +49,7 @@ public class IsisWeaponHandler : StreamWeaponHandler {
             await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
             await battle.DamageProcessor.Heal(BattleTank, heal);
         } else {
-            await targetTank.UpdateTemperatureAssists(BattleTank, this, true);
+            // todo normalize ally temperature
 
             const int healScore = 2;
             if (targetTank.Health >= targetTank.MaxHealth) return;

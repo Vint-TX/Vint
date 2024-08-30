@@ -6,15 +6,17 @@ namespace Vint.Core.Structures;
 public class ConcurrentList<T>(List<T> inner) : IList<T> {
     readonly object _lock = new();
 
+    public ConcurrentList() : this([]) { }
+
     IEnumerator IEnumerable.GetEnumerator() {
         lock (_lock)
-            return inner.GetEnumerator();
+            return inner.ToList().GetEnumerator();
     }
 
     [MustDisposeResource]
     IEnumerator<T> IEnumerable<T>.GetEnumerator() {
         lock (_lock)
-            return inner.GetEnumerator();
+            return inner.ToList().GetEnumerator();
     }
 
     public int Count {

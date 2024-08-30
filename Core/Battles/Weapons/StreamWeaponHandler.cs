@@ -39,7 +39,7 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, IStreamWeaponHand
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        await targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
+        // todo update target temperature
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 

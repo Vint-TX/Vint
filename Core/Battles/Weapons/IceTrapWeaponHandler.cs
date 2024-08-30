@@ -51,7 +51,7 @@ public class IceTrapWeaponHandler(
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
 
-        await targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
+        // todo freeze the target
 
         if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
 
