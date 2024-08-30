@@ -21,6 +21,7 @@ using Vint.Core.ECS.Components.Battle.Incarnation;
 using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Tank;
+using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Modules.Inventory;
 using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Entities;
@@ -29,6 +30,7 @@ using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.ECS.Events.Battle.Effect.EMP;
 using Vint.Core.ECS.Events.Battle.Module;
+using Vint.Core.ECS.Events.Battle.Movement;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
@@ -67,8 +69,6 @@ public class BattleTank {
         IEntity cover = preset.Cover;
         IEntity paint = preset.Paint;
         IEntity graffiti = preset.Graffiti;
-
-        OriginalSpeedComponent = ConfigManager.GetComponent<SpeedComponent>(hull.TemplateAccessor!.ConfigPath!);
 
         BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.User, Battle.Entity, battlePlayer.Team);
 
@@ -116,7 +116,9 @@ public class BattleTank {
             _ => throw new UnreachableException()
         };
 
-        Health = TotalHealth = MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
+        SpeedComponent = Tank.GetComponent<SpeedComponent>();
+
+        Health = TotalHealth = MaxHealth = Tank.GetComponent<HealthComponent>().MaxHealth;
         TemperatureProcessor = new TemperatureProcessor(this);
 
         Statistics = new BattleTankStatistics();
@@ -130,7 +132,7 @@ public class BattleTank {
     public long CollisionsPhase { get; set; } = -1;
 
     public float SupplyDurationMultiplier { get; set; } = 1;
-    public float ModuleCooldownCoeff { get; set; } = 1;
+    public float ModuleCooldownCoeff { get; private set; } = 1;
 
     public ConcurrentHashSet<Effect> Effects { get; } = [];
 
@@ -146,6 +148,7 @@ public class BattleTank {
     public float MaxHealth { get; }
 
     public TemperatureProcessor TemperatureProcessor { get; }
+    public SpeedComponent SpeedComponent { get; }
 
     public Vector3 PreviousPosition { get; set; }
     public Vector3 Position { get; set; }
@@ -181,8 +184,6 @@ public class BattleTank {
 
     public IEntity Graffiti { get; }
     public IEntity Shell { get; }
-
-    public SpeedComponent OriginalSpeedComponent { get; }
 
     public async Task Tick() {
         if (BattlePlayer.IsPaused &&
@@ -243,7 +244,7 @@ public class BattleTank {
         }
 
         TotalHealth = MaxHealth;
-        // todo reset temperature
+        TemperatureProcessor.ResetAll();
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             await Tank.RemoveComponent<SelfDestructionComponent>();
@@ -321,6 +322,29 @@ public class BattleTank {
 
         foreach (IHealthModule healthModule in Modules.OfType<IHealthModule>())
             await healthModule.OnHealthChanged(before, Health, MaxHealth);
+    }
+
+    public async Task UpdateSpeed() {
+        float temperature = TemperatureProcessor.Temperature;
+
+        if (temperature < 0) {
+            float minSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponent.Speed, 12.5f);
+            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(SpeedComponent.TurnSpeed, 2.5f);
+            float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(WeaponHandler.WeaponRotationComponent.Speed, 7.5f);
+
+            float newSpeed = MathUtils.Map(temperature, 0, -1, SpeedComponent.Speed, minSpeed);
+            float newTurnSpeed = MathUtils.Map(temperature, 0, -1, SpeedComponent.TurnSpeed, minTurnSpeed);
+            float newWeaponSpeed = MathUtils.Map(temperature, 0, -1, WeaponHandler.WeaponRotationComponent.Speed, minWeaponSpeed);
+
+            await Tank.ChangeComponent<SpeedComponent>(component => {
+                component.Speed = newSpeed;
+                component.TurnSpeed = newTurnSpeed;
+            });
+            await Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
+        } else {
+            await Tank.ChangeComponent(SpeedComponent.Clone());
+            await Weapon.ChangeComponent(WeaponHandler.WeaponRotationComponent.Clone());
+        }
     }
 
     public bool IsEnemy(BattleTank other) => other != null! &&

@@ -35,7 +35,7 @@ public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
             Math.Clamp((DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow)).TotalMilliseconds, 0, 1 / EnergyDrainPerMs);
 
         AimingDuration = TimeSpan.FromMilliseconds(durationMs);
-        BattleEntity.ChangeComponent(OriginalWeaponRotationComponent.Clone());
+        BattleEntity.ChangeComponent(WeaponRotationComponent.Clone());
     }
 
     public void Reset() {

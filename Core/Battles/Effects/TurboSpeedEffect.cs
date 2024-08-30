@@ -68,7 +68,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         Entity = new TurboSpeedEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await ShareToAllPlayers();
 
-        Tank.OriginalSpeedComponent.Speed *= Multiplier;
+        Tank.SpeedComponent.Speed *= Multiplier;
         // todo update self speed
         Schedule(Duration, Deactivate);
     }
@@ -81,7 +81,7 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
         await UnshareFromAllPlayers();
         Entity = null;
 
-        Tank.OriginalSpeedComponent.Speed /= Multiplier;
+        Tank.SpeedComponent.Speed /= Multiplier;
         // todo update self speed
     }
 }

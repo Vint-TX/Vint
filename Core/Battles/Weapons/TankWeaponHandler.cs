@@ -21,11 +21,11 @@ public abstract class TankWeaponHandler : IWeaponHandler {
         MinDamageDistance = damageWeakeningByDistanceComponent?.RadiusOfMinDamage ?? 0;
         MinDamagePercent = damageWeakeningByDistanceComponent?.MinDamagePercent ?? 0;
 
-        OriginalWeaponRotationComponent = BattleTank.Weapon.GetComponent<WeaponRotationComponent>().Clone();
+        WeaponRotationComponent = BattleTank.Weapon.GetComponent<WeaponRotationComponent>().Clone();
         DamageCalculator = new DamageCalculator();
     }
 
-    public WeaponRotationComponent OriginalWeaponRotationComponent { get; }
+    public WeaponRotationComponent WeaponRotationComponent { get; }
     public IEntity BattleEntity { get; }
     public IEntity MarketEntity { get; }
     public string BattleConfigPath => BattleEntity.TemplateAccessor!.ConfigPath!;

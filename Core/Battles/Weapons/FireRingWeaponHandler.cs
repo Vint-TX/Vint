@@ -41,7 +41,7 @@ public class FireRingWeaponHandler(
         HeatDamage = maxHeatDamage * multiplier;
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
-        await targetTank.UpdateTemperatureAssists(BattleTank, this, !isEnemy);
+        // todo heat the enemy
     }
 
     public float GetSplashMultiplier(float distance) {
