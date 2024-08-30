@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Numerics;
 using ConcurrentCollections;
 using LinqToDB;
-using Vint.Core.Battles.Damage;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Modules;
@@ -10,6 +9,7 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Results;
+using Vint.Core.Battles.Tank.Temperature;
 using Vint.Core.Battles.Type;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Config;
@@ -21,17 +21,14 @@ using Vint.Core.ECS.Components.Battle.Incarnation;
 using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Tank;
-using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Modules.Inventory;
 using Vint.Core.ECS.Components.Modules.Slot;
-using Vint.Core.ECS.Components.Server.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.ECS.Events.Battle.Effect.EMP;
 using Vint.Core.ECS.Events.Battle.Module;
-using Vint.Core.ECS.Events.Battle.Movement;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Movement;
@@ -120,7 +117,7 @@ public class BattleTank {
         };
 
         Health = TotalHealth = MaxHealth = ConfigManager.GetComponent<HealthComponent>(hull.TemplateAccessor.ConfigPath!).MaxHealth;
-        TemperatureConfig = ConfigManager.GetComponent<TemperatureConfigComponent>(Tank.TemplateAccessor!.ConfigPath!);
+        TemperatureProcessor = new TemperatureProcessor(this);
 
         Statistics = new BattleTankStatistics();
         BattleEnterTime = DateTimeOffset.UtcNow;
@@ -141,7 +138,6 @@ public class BattleTank {
     public BattleTankStatistics Statistics { get; }
     public UserResult Result { get; private set; } = null!;
     public Dictionary<BattleTank, float> KillAssistants { get; } = new();
-    public ConcurrentHashSet<TemperatureAssist> TemperatureAssists { get; } = [];
     public float DealtDamage { get; set; }
     public float TakenDamage { get; set; }
 
@@ -149,8 +145,7 @@ public class BattleTank {
     public float TotalHealth { get; set; }
     public float MaxHealth { get; }
 
-    public TemperatureConfigComponent TemperatureConfig { get; set; }
-    public float Temperature { get; private set; }
+    public TemperatureProcessor TemperatureProcessor { get; }
 
     public Vector3 PreviousPosition { get; set; }
     public Vector3 Position { get; set; }
@@ -213,7 +208,7 @@ public class BattleTank {
 
         await StateManager.Tick();
         await WeaponHandler.Tick();
-        await HandleTemperature();
+        await TemperatureProcessor.Tick();
 
         foreach (Effect effect in Effects)
             await effect.Tick();
@@ -248,8 +243,7 @@ public class BattleTank {
         }
 
         TotalHealth = MaxHealth;
-        TemperatureAssists.Clear();
-        await SetTemperature(0);
+        // todo reset temperature
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {
             await Tank.RemoveComponent<SelfDestructionComponent>();
@@ -327,165 +321,6 @@ public class BattleTank {
 
         foreach (IHealthModule healthModule in Modules.OfType<IHealthModule>())
             await healthModule.OnHealthChanged(before, Health, MaxHealth);
-    }
-
-    public async Task SetTemperature(float temperature) { // todo rewrite this shit
-        float before = Temperature;
-        float min = TemperatureConfig.MinTemperature;
-        float max = TemperatureConfig.MaxTemperature;
-
-        Temperature = Math.Clamp(temperature, min, max);
-        await Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
-
-        await UpdateSpeed();
-
-        foreach (ITemperatureModule temperatureModule in Modules.OfType<ITemperatureModule>())
-            await temperatureModule.OnTemperatureChanged(before, Temperature, min, max);
-    }
-
-    public async Task HandleTemperature() { // todo rewrite this shit
-        if (StateManager.CurrentState is Dead) return;
-
-        TimeSpan period = TimeSpan.FromMilliseconds(TemperatureConfig.TactPeriodInMs);
-
-        if (TemperatureAssists.Count > 0) {
-            float newTemperature = TemperatureAssists.Sum(ass => ass.CurrentTemperature);
-            await SetTemperature(newTemperature);
-        }
-
-        foreach (TemperatureAssist assist in TemperatureAssists) {
-            if (StateManager.CurrentState is Dead) break;
-
-            DateTimeOffset now = DateTimeOffset.UtcNow;
-            TimeSpan delta = now - assist.LastTick;
-
-            if (delta < period) continue;
-
-            assist.LastTick = now;
-
-            if (assist.Duration > TimeSpan.Zero) {
-                assist.Duration -= delta;
-                continue;
-            }
-
-            float temperatureDelta = assist.CurrentTemperature switch {
-                > 0 => -TemperatureConfig.AutoDecrementInMs,
-                < 0 => TemperatureConfig.AutoIncrementInMs,
-                _ => 0
-            } * TemperatureConfig.TactPeriodInMs;
-
-            if (assist is { CurrentTemperature: > 0, Weapon: not IsisWeaponHandler } && (assist.Assistant == this || IsEnemy(assist.Assistant))) {
-                float value = MathUtils.Map(assist.CurrentTemperature, 0, assist.Weapon.TemperatureLimit, 0, assist.MaxDamage);
-
-                CalculatedDamage damage = new(default, value, false, false);
-                await Battle.DamageProcessor.Damage(assist.Assistant, this, assist.Weapon.MarketEntity, assist.Weapon.BattleEntity, damage);
-            }
-
-            bool wasPositive = assist.CurrentTemperature > 0;
-            assist.CurrentTemperature += temperatureDelta;
-            bool isPositive = assist.CurrentTemperature > 0;
-
-            if (wasPositive != isPositive) {
-                TemperatureAssists.TryRemove(assist);
-
-                if (TemperatureAssists.Count == 0)
-                    await SetTemperature(0);
-            }
-        }
-    }
-
-    public async Task UpdateTemperatureAssists(BattleTank assistant, ITemperatureWeaponHandler weaponHandler, bool normalizeOnly) { // todo rewrite this shit
-        TimeSpan duration = weaponHandler.TemperatureDuration;
-        float maxHeatDamage = (weaponHandler as IHeatWeaponHandler)?.HeatDamage ?? 0;
-        float temperatureLimit = weaponHandler.TemperatureLimit;
-        float temperatureDelta = weaponHandler switch {
-            IsisWeaponHandler isis => Temperature switch {
-                < 0 => isis.IncreaseFriendTemperature,
-                > 0 => -isis.DecreaseFriendTemperature,
-                _ => 0
-            },
-            _ => weaponHandler.TemperatureDelta
-        };
-
-        temperatureDelta = temperatureLimit switch {
-            > 0 => Math.Min(temperatureDelta, temperatureLimit),
-            < 0 => Math.Max(temperatureDelta, temperatureLimit),
-            _ => temperatureDelta
-        };
-
-        temperatureDelta =
-            Math.Clamp(Temperature + temperatureDelta, TemperatureConfig.MinTemperature, TemperatureConfig.MaxTemperature) - Temperature;
-
-        if (temperatureDelta == 0) return;
-
-        bool deltaIsPositive = temperatureDelta >= 0;
-
-        if (Temperature - temperatureDelta >= 0 != deltaIsPositive) {
-            foreach (TemperatureAssist assist in TemperatureAssists) {
-                bool assistTemperatureIsPositive = assist.CurrentTemperature > 0;
-
-                if (assistTemperatureIsPositive == deltaIsPositive) continue;
-
-                if (assist.CurrentTemperature + temperatureDelta >= 0 != assistTemperatureIsPositive) {
-                    TemperatureAssists.TryRemove(assist);
-
-                    if (deltaIsPositive) temperatureDelta -= assist.CurrentTemperature;
-                    else temperatureDelta += assist.CurrentTemperature;
-
-                    deltaIsPositive = temperatureDelta > 0;
-                    continue;
-                }
-
-                assist.CurrentTemperature += temperatureDelta;
-            }
-
-            if (TemperatureAssists.Count == 0)
-                await SetTemperature(0);
-        }
-
-        if (temperatureDelta == 0 || normalizeOnly) return;
-
-        TemperatureAssist? sourceAssist = TemperatureAssists
-            .SingleOrDefault(assist => assist.Assistant == assistant &&
-                                       assist.Weapon == weaponHandler);
-
-        if (sourceAssist == null) {
-            sourceAssist = new TemperatureAssist(assistant, weaponHandler, maxHeatDamage, temperatureDelta, DateTimeOffset.UtcNow, duration);
-            TemperatureAssists.Add(sourceAssist);
-        } else {
-            float limit = sourceAssist.Weapon.TemperatureLimit;
-            float newTemperature = sourceAssist.CurrentTemperature + temperatureDelta;
-
-            sourceAssist.CurrentTemperature = limit switch {
-                < 0 => Math.Clamp(newTemperature, limit, 0),
-                > 0 => Math.Clamp(newTemperature, 0, limit),
-                _ => 0
-            };
-        }
-    }
-
-    public async Task UpdateSpeed() {
-        if (Temperature < 0) {
-            float minTemperature = TemperatureConfig.MinTemperature;
-
-            float minSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.Speed, 12.5f);
-            float minTurnSpeed = TankUtils.CalculateFrozenSpeed(OriginalSpeedComponent.TurnSpeed, 2.5f);
-            float minWeaponSpeed = TankUtils.CalculateFrozenSpeed(WeaponHandler.OriginalWeaponRotationComponent.Speed, 7.5f);
-
-            float newSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.Speed, minSpeed);
-            float newTurnSpeed = MathUtils.Map(Temperature, 0, minTemperature, OriginalSpeedComponent.TurnSpeed, minTurnSpeed);
-            float newWeaponSpeed = MathUtils.Map(Temperature, 0, minTemperature, WeaponHandler.OriginalWeaponRotationComponent.Speed, minWeaponSpeed);
-
-            await Tank.ChangeComponent<SpeedComponent>(component => {
-                component.Speed = newSpeed;
-                component.TurnSpeed = newTurnSpeed;
-            });
-            await Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
-        } else {
-            await Tank.ChangeComponent(OriginalSpeedComponent.Clone());
-            await Weapon.ChangeComponent(WeaponHandler.OriginalWeaponRotationComponent.Clone());
-            await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
-        }
     }
 
     public bool IsEnemy(BattleTank other) => other != null! &&

@@ -135,7 +135,7 @@ public class DamageCalculator : IDamageCalculator {
             (current, damageEffect) => current * damageEffect.GetMultiplier(source, target, weaponHandler, isSplash, isBackHit, isTurretHit));
     }
 
-    static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers
+    static bool IsBackHit(Vector3 hitPoint, IEntity hull) => // todo server physics
         hitPoint.Z <
         hull.TemplateAccessor?.ConfigPath?.Split('/').Last() switch {
             "dictator" => -1.9,
@@ -144,7 +144,7 @@ public class DamageCalculator : IDamageCalculator {
             _ => -1.25
         };
 
-    static bool IsTurretHit(Vector3 hitPoint, IEntity hull) => // "magic" numbers
+    static bool IsTurretHit(Vector3 hitPoint, IEntity hull) => // todo server physics
         hitPoint.Y >
         hull.TemplateAccessor?.ConfigPath?.Split('/').Last() switch {
             "dictator" => 2.015,

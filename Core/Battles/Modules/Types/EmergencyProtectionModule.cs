@@ -37,10 +37,10 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
 
         await base.Activate();
 
-        Tank.TemperatureAssists.Clear();
+        // todo reset tank temperature
 
         await Battle.DamageProcessor.Heal(Tank, CalculatedHeal);
-        await Tank.UpdateTemperatureAssists(Tank, this, false);
+        // todo freeze the tank
 
         foreach (BattlePlayer player in Battle.Players.Where(player => player.InBattle))
             await player.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effectEntity);
@@ -61,7 +61,7 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
     }
 
     public IEntity BattleEntity => Entity;
-    public float TemperatureLimit => -0.99f;
-    public float TemperatureDelta => -0.99f;
+    public float TemperatureLimit => -1f;
+    public float TemperatureDelta => -1f;
     public TimeSpan TemperatureDuration => TimeSpan.Zero;
 }

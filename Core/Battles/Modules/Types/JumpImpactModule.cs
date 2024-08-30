@@ -13,7 +13,7 @@ public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
 
     public override JumpImpactEffect GetEffect() => new(Tank, Level, Force);
 
-    protected override bool ActivationCondition => Tank.Temperature >= WorkingTemperature;
+    // todo protected override bool ActivationCondition => Tank.Temperature >= WorkingTemperature;
 
     float Force { get; set; }
     float WorkingTemperature { get; set; }
@@ -37,7 +37,7 @@ public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
     }
 
     public override async Task TryUnblock() {
-        if (Tank.Temperature < WorkingTemperature) return;
+        // todo if (Tank.Temperature < WorkingTemperature) return;
 
         await base.TryUnblock();
     }

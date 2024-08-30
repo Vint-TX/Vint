@@ -19,7 +19,6 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
 
     public bool CanBeDeactivated { get; set; }
 
-    TemperatureConfigComponent OriginalTemperatureConfigComponent { get; set; } = null!;
     public bool IsActive { get; private set; }
 
     float Decrement { get; set; }
@@ -31,8 +30,7 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
         IsActive = true;
         CanBeDeactivated = false;
 
-        Tank.TemperatureConfig.AutoDecrementInMs += Decrement;
-        Tank.TemperatureConfig.AutoIncrementInMs += Increment;
+        Tank.TemperatureProcessor.ChangeTemperatureConfig(Increment, Decrement);
         return Task.CompletedTask;
     }
 
@@ -40,14 +38,13 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
         if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
 
         IsActive = false;
-        Tank.TemperatureConfig = OriginalTemperatureConfigComponent.Clone();
+        Tank.TemperatureProcessor.ChangeTemperatureConfig(-Increment, -Decrement);
         return Task.CompletedTask;
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        OriginalTemperatureConfigComponent = Tank.TemperatureConfig.Clone();
         Decrement = GetStat<ModuleTempblockDecrementPropertyComponent>();
         Increment = GetStat<ModuleTempblockIncrementPropertyComponent>();
     }
