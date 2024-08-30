@@ -244,7 +244,7 @@ public class BattleTank {
         }
 
         TotalHealth = MaxHealth;
-        TemperatureProcessor.ResetAll();
+        await TemperatureProcessor.ResetAll();
         await BattlePlayer.PlayerConnection.Send(new ResetTankSpeedEvent(), Tank);
 
         if (Tank.HasComponent<SelfDestructionComponent>()) {

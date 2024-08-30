@@ -38,7 +38,7 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
 
         await base.Activate();
 
-        Tank.TemperatureProcessor.ResetAll();
+        await Tank.TemperatureProcessor.ResetAll();
         TemperatureAssist temperatureAssist = TemperatureCalculator.Calculate(Tank, this, false);
 
         await Battle.DamageProcessor.Heal(Tank, CalculatedHeal);
