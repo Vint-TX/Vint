@@ -10,8 +10,11 @@ namespace Vint.Core.Utils;
 public static class Extensions {
     static ConcurrentDictionary<PropertyInfo, bool> NullabilityPool { get; } = new();
 
-    public static ProtocolIdAttribute GetProtocolId(this Type type) =>
-        type.GetCustomAttribute<ProtocolIdAttribute>() ??
+    public static bool HasProtocolId(this Type type) =>
+        type.IsDefined(typeof(ProtocolIdAttribute));
+
+    public static long GetProtocolId(this Type type) =>
+        type.GetCustomAttribute<ProtocolIdAttribute>()?.Id ??
         throw new ProtocolIdNotFoundException(type);
 
     public static List<Type> DumpInterfaces(this Type type) {

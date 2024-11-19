@@ -4,10 +4,14 @@ namespace Vint.Core.ECS.Components.Battle.Limit;
 
 [ProtocolId(-3596341255560623830)]
 public class TimeLimitComponent(
-    long timeLimitSec,
-    long warmingUpTimeLimitSec
+    TimeSpan timeLimit,
+    TimeSpan warmingUpTimeLimit
 ) : IComponent {
-    public long TimeLimitSec { get; private set; } = timeLimitSec;
+    [ProtocolTimeKind<long>(TimeSpanKind.Seconds)]
+    [ProtocolName("TimeLimitSec")]
+    public TimeSpan TimeLimit { get; } = timeLimit;
 
-    public long WarmingUpTimeLimitSec { get; private set; } = warmingUpTimeLimitSec;
+    [ProtocolTimeKind<long>(TimeSpanKind.Seconds)]
+    [ProtocolName("WarmingUpTimeLimitSec")]
+    public TimeSpan WarmingUpTimeLimit { get; } = warmingUpTimeLimit;
 }

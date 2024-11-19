@@ -89,7 +89,7 @@ public sealed class Battle : IDisposable {
     public bool DominationCanBegin =>
         !DominationStartTime.HasValue &&
         Timer.TotalMinutes > 2 &&
-        Timer.TotalMinutes < Properties.TimeLimit - 1;
+        Timer.TotalMinutes < Properties.TimeLimit.TotalMinutes - 1;
 
     public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }
@@ -120,7 +120,7 @@ public sealed class Battle : IDisposable {
             _ => throw new UnreachableException()
         };
 
-        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.TimeLimit * 60, Properties.MaxPlayers, 60);
+        Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.TimeLimit * 60, Properties.MaxPlayers, TimeSpan.FromMinutes(1));
         RoundEntity = new RoundTemplate().Create(Entity);
 
         ModeHandler = Properties.BattleMode switch {

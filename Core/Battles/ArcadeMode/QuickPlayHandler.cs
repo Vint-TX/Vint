@@ -20,7 +20,7 @@ public class QuickPlayHandler(
             true,
             false,
             mapInfo.MaxPlayers,
-            5,
+            TimeSpan.FromMinutes(5),
             50);
 
         Battle.MapInfo = mapInfo;

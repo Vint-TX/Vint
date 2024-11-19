@@ -5,7 +5,6 @@ using Vint.Core.ECS.Templates.Battle.Effect;
 namespace Vint.Core.Battles.Effects;
 
 public class RageEffect(
-    TimeSpan decreaseCooldownPerKill,
     BattleTank tank,
     int level
 ) : Effect(tank, level) {
@@ -14,7 +13,7 @@ public class RageEffect(
 
         Tank.Effects.Add(this);
 
-        Entity = new RageEffectTemplate().Create(Tank.BattlePlayer, Duration, decreaseCooldownPerKill);
+        Entity = new RageEffectTemplate().Create(Tank.BattlePlayer, Duration);
         await Share(Tank.BattlePlayer);
 
         Schedule(Duration, Deactivate);

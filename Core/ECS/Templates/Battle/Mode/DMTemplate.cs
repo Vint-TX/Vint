@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Templates.Battle.Mode;
 
 [ProtocolId(-4141404049750078994)]
 public class DMTemplate : BattleModeTemplate {
-    public override IEntity Create(TypeHandler typeHandler, IEntity lobby, int timeLimit, int userLimit, int warmUpTimeLimit) {
+    public override IEntity Create(TypeHandler typeHandler, IEntity lobby, TimeSpan timeLimit, int userLimit, TimeSpan warmUpTimeLimit) {
         IEntity entity = Entity(typeHandler, lobby, BattleMode.DM, timeLimit, userLimit, warmUpTimeLimit);
 
         entity.AddComponent<DMComponent>();

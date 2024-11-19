@@ -1,4 +1,4 @@
-﻿namespace Vint.Core.Protocol.Codecs;
+﻿namespace Vint.Core.Protocol.Codecs.Helpers;
 
 public static class VarIntCodecHelper {
     public static void Encode(BinaryWriter writer, int value) {

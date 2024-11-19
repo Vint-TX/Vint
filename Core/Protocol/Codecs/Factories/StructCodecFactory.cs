@@ -1,25 +1,24 @@
 ﻿using System.Reflection;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Protocol.Codecs.Impl;
+using Vint.Core.Protocol.Codecs.Info;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Codecs.Factories;
 
 public class StructCodecFactory : ICodecFactory {
-    public ICodec? Create(Protocol protocol, ICodecInfo codecInfo) {
-        if (codecInfo is not ITypeCodecInfo typeCodecInfo) return null;
+    public ICodec Create(Protocol protocol, CodecInfoWithAttributes codecInfoWithAttributes) {
+        ICodecInfo codecInfo = codecInfoWithAttributes.CodecInfo;
 
-        List<PropertyRequest> properties = GetSortedProperties(typeCodecInfo.Type)
-            .Select(property => new PropertyRequest(property,
-                new TypeCodecInfo(property.PropertyType,
+        List<PropertyDescription> properties = GetSortedProperties(codecInfo.Type)
+            .Select(property => new PropertyDescription(property,
+                new CodecInfoWithAttributes(property.PropertyType,
                     property.IsNullable(),
                     property.GetCustomAttribute<ProtocolVariedAttribute>() != null,
-                    property.GetCustomAttributes<ProtocolCollectionAttribute>()
-                        .Cast<Attribute>()
-                        .ToHashSet())))
+                    property.GetCustomAttributes())))
             .ToList();
 
-        return new StructCodec(typeCodecInfo.Type, properties);
+        return new StructCodec(codecInfo.Type, properties);
     }
 
     static IOrderedEnumerable<PropertyInfo> GetSortedProperties(Type type) => type.GetProperties()

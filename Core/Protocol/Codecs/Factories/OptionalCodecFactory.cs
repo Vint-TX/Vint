@@ -1,16 +1,14 @@
 ﻿using Vint.Core.Protocol.Codecs.Impl;
+using Vint.Core.Protocol.Codecs.Info;
 
 namespace Vint.Core.Protocol.Codecs.Factories;
 
 public class OptionalCodecFactory : ICodecFactory {
-    public ICodec? Create(Protocol protocol, ICodecInfo codecInfo) {
-        if (codecInfo is not ITypeCodecInfo { Nullable: true } typeCodecInfo) return null;
+    public ICodec? Create(Protocol protocol, CodecInfoWithAttributes codecInfoWithAttributes) {
+        ICodecInfo codecInfo = codecInfoWithAttributes.CodecInfo;
 
-        return new OptionalCodec(protocol.GetCodec(
-            new TypeCodecInfo(
-                typeCodecInfo.Type,
-                false,
-                typeCodecInfo.Varied,
-                typeCodecInfo.Attributes)));
+        return codecInfo.Nullable
+            ? new OptionalCodec(protocol.GetCodec(new CodecInfoWithAttributes(codecInfo.Type, false, codecInfo.Varied)))
+            : null;
     }
 }

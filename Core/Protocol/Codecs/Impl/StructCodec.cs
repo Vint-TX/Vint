@@ -1,15 +1,16 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using Vint.Core.Protocol.Codecs.Buffer;
+using Vint.Core.Protocol.Codecs.Info;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class StructCodec(
     Type type,
-    List<PropertyRequest> properties
+    List<PropertyDescription> properties
 ) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
-        foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
+        foreach ((PropertyInfo property, CodecInfoWithAttributes codecInfo) in properties) {
             object? item = property.GetValue(value);
 
             Protocol.GetCodec(codecInfo).Encode(buffer, item!);
@@ -19,7 +20,7 @@ public class StructCodec(
     public override object Decode(ProtocolBuffer buffer) {
         object value = RuntimeHelpers.GetUninitializedObject(type);
 
-        foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
+        foreach ((PropertyInfo property, CodecInfoWithAttributes codecInfo) in properties) {
             object item = Protocol.GetCodec(codecInfo).Decode(buffer);
 
             property.SetValue(value, item, null);
@@ -29,7 +30,9 @@ public class StructCodec(
     }
 }
 
-public readonly record struct PropertyRequest(
+public readonly record struct PropertyDescription(
     PropertyInfo Property,
-    ICodecInfo CodecInfo
-);
+    CodecInfoWithAttributes CodecInfoWithAttributes
+) {
+    ICodecInfo CodecInfo => CodecInfoWithAttributes.CodecInfo;
+}

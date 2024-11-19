@@ -22,7 +22,7 @@ public class FullRandomHandler(
             false,
             GetRandomMaxPlayers(),
             GetRandomTimer(),
-            GetRandomTimer() * 10);
+            (int)GetRandomTimer().TotalMinutes * 10);
 
         Battle.MapInfo = mapInfo;
         Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.Id);
@@ -49,5 +49,5 @@ public class FullRandomHandler(
         return max;
     }
 
-    static int GetRandomTimer() => Random.Shared.Next(7, 21);
+    static TimeSpan GetRandomTimer() => TimeSpan.FromMinutes(Random.Shared.Next(7, 21));
 }

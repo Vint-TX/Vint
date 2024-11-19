@@ -6,5 +6,6 @@ namespace Vint.Core.ECS.Components.Battle.Effect;
 public class DurationConfigComponent(
     TimeSpan duration
 ) : IComponent {
-    public long Duration { get; set; } = (long)Math.Ceiling(duration.TotalMilliseconds);
+    [ProtocolTimeKind<long>(TimeSpanKind.Milliseconds)]
+    public TimeSpan Duration { get; set; } = duration;
 }

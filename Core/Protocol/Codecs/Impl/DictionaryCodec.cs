@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using Vint.Core.Protocol.Codecs.Buffer;
+using Vint.Core.Protocol.Codecs.Helpers;
+using Vint.Core.Protocol.Codecs.Info;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class DictionaryCodec(
-    ICodecInfo keyCodecInfo,
-    ICodecInfo valueCodecInfo
+    CodecInfoWithAttributes keyCodecInfo,
+    CodecInfoWithAttributes valueCodecInfo
 ) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         if (value is not IDictionary dict)

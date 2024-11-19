@@ -18,7 +18,7 @@ abstract class Program {
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        LoggerUtils.Initialize(LogEventLevel.Information);
+        LoggerUtils.Initialize(LogEventLevel.Verbose);
 
         Logger = Log.Logger.ForType(typeof(Program));
 

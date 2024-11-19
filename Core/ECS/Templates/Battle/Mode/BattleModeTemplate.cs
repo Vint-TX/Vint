@@ -16,9 +16,9 @@ public abstract class BattleModeTemplate : EntityTemplate {
         TypeHandler typeHandler,
         IEntity lobby,
         BattleMode mode,
-        int timeLimit,
+        TimeSpan timeLimit,
         int userLimit,
-        int warmUpTimeLimit) => Entity(
+        TimeSpan warmUpTimeLimit) => Entity(
         $"battle/modes/{mode.ToString().ToLower()}",
         builder => builder
             .AddComponent<BattleComponent>()
@@ -27,7 +27,7 @@ public abstract class BattleModeTemplate : EntityTemplate {
             .AddComponent<VisibleItemComponent>()
             .AddComponent(new UserCountComponent(userLimit))
             .AddComponent(new TimeLimitComponent(timeLimit, warmUpTimeLimit))
-            .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(warmUpTimeLimit)))
+            .AddComponent(new BattleStartTimeComponent(DateTimeOffset.UtcNow + warmUpTimeLimit))
             .AddComponentFrom<GravityComponent>(lobby)
             .AddComponentFrom<BattleModeComponent>(lobby)
             .AddComponentFrom<UserLimitComponent>(lobby)
@@ -38,5 +38,5 @@ public abstract class BattleModeTemplate : EntityTemplate {
             .ThenExecuteIf(_ => typeHandler is MatchmakingHandler, entity => entity.AddComponent<RatingBattleComponent>())
             .ThenExecuteIf(_ => typeHandler is CustomHandler, entity => entity.AddComponent<CustomBattleComponent>()));
 
-    public abstract IEntity Create(TypeHandler typeHandler, IEntity lobby, int timeLimit, int userLimit, int warmUpTimeLimit);
+    public abstract IEntity Create(TypeHandler typeHandler, IEntity lobby, TimeSpan timeLimit, int userLimit, TimeSpan warmUpTimeLimit);
 }

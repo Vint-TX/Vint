@@ -69,7 +69,7 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         Heal = HealLeft = Tank.MaxHealth * Percent;
         HealPerMs = (float)(Heal / Duration.TotalMilliseconds);
 
-        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
+        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Duration);
         await Entity!.RemoveComponent<DurationComponent>();
         await Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
 

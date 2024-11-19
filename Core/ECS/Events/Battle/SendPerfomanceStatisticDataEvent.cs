@@ -28,7 +28,8 @@ public class PerformanceStatisticData {
 
     public string MapName { get; private set; } = null!;
 
-    public int BattleRoundTimeInMin { get; private set; }
+    [ProtocolTimeKind<int>(TimeSpanKind.Minutes)]
+    public TimeSpan BattleRoundTimeInMin { get; private set; }
 
     public int TankCountModa { get; private set; }
 

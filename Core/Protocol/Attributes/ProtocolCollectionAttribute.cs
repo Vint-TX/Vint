@@ -8,7 +8,5 @@ public class ProtocolCollectionAttribute(
     public bool Nullable => nullable;
     public bool Varied => varied;
 
-    public static ProtocolCollectionAttribute Default => new();
-
     public override string ToString() => $"ProtocolCollection {{ Nullable: {Nullable}; Varied: {Varied} }}";
 }

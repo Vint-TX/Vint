@@ -4,9 +4,10 @@ namespace Vint.Core.ECS.Components.Modules.Inventory;
 
 [ProtocolId(1486635434064)]
 public class InventoryCooldownStateComponent(
-    int cooldownTimeMs,
+    TimeSpan cooldownTime,
     DateTimeOffset cooldownStartTime
 ) : IComponent {
-    public int CooldownTimeMs { get; set; } = cooldownTimeMs;
+    [ProtocolTimeKind<int>(TimeSpanKind.Milliseconds)]
+    public TimeSpan CooldownTimeMs { get; set; } = cooldownTime;
     public DateTimeOffset CooldownStartTime { get; } = cooldownStartTime;
 }

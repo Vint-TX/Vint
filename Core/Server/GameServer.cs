@@ -6,6 +6,7 @@ using Serilog;
 using Vint.Core.Battles;
 using Vint.Core.ChatCommands;
 using Vint.Core.Discord;
+using Vint.Core.Protocol;
 using Vint.Core.Quests;
 using Vint.Core.Utils;
 
@@ -18,7 +19,7 @@ public class GameServer(
     const string DiscordDebugToken = "VINT_DISCORD_BOT_DEBUG_TOKEN", DiscordProdToken = "VINT_DISCORD_BOT_PROD_TOKEN";
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
-    Protocol.Protocol Protocol { get; } = new();
+    Protocol.Protocol Protocol { get; } = new ProtocolBuilder().Build();
     TcpListener Listener { get; } = new(host, port);
     IEnumerable<SocketPlayerConnection> SocketPlayerConnections => PlayerConnections.Values.Cast<SocketPlayerConnection>();
 

@@ -47,7 +47,7 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
 
         Level = newLevel;
 
-        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Convert.ToInt64(Duration.TotalMilliseconds));
+        await Entity!.ChangeComponent<DurationConfigComponent>(component => component.Duration = Duration);
         await Entity!.RemoveComponent<DurationComponent>();
         await Entity!.AddComponent(new DurationComponent(DateTimeOffset.UtcNow));
 

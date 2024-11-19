@@ -1,9 +1,11 @@
 ﻿using Vint.Core.Protocol.Codecs.Buffer;
+using Vint.Core.Protocol.Codecs.Helpers;
+using Vint.Core.Protocol.Codecs.Info;
 
 namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class ArrayCodec(
-    ICodecInfo elementCodecInfo
+    CodecInfoWithAttributes elementCodecInfo
 ) : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         if (value is not Array array)
@@ -17,12 +19,9 @@ public class ArrayCodec(
     }
 
     public override object Decode(ProtocolBuffer buffer) {
-        if (elementCodecInfo is not ITypeCodecInfo elementTypeCodecInfo)
-            throw new NotSupportedException("CodecInfo must implement ITypeCodecInfo");
-
         int count = VarIntCodecHelper.Decode(buffer.Reader);
         ICodec elementCodec = Protocol.GetCodec(elementCodecInfo);
-        Array array = Array.CreateInstance(elementTypeCodecInfo.Type, count);
+        Array array = Array.CreateInstance(elementCodecInfo.CodecInfo.Type, count);
 
         for (int i = 0; i < count; i++)
             array.SetValue(elementCodec.Decode(buffer), i);

@@ -24,7 +24,7 @@ public abstract class MoveCodec : Codec {
 
     protected readonly static byte[] BufferForWeaponRotation = new byte[WeaponRotationSize];
 
-    protected readonly static byte[] BufferForWeaponRotationEmpty = Array.Empty<byte>();
+    protected readonly static byte[] BufferForWeaponRotationEmpty = [];
 
     protected readonly static BitArray BitsForWeaponRotation = new(BufferForWeaponRotation);
 

@@ -11,7 +11,7 @@ public class BattleProperties(
     bool damageEnabled,
     bool disabledModules,
     int maxPlayers,
-    int timeLimit,
+    TimeSpan timeLimit,
     int scoreLimit
 ) {
     public BattleMode BattleMode { get; private set; } = battleMode;
@@ -22,7 +22,8 @@ public class BattleProperties(
     [ProtocolIgnore] public bool DamageEnabled { get; set; } = damageEnabled;
     public bool DisabledModules { get; private set; } = disabledModules;
     public int MaxPlayers { get; private set; } = maxPlayers;
-    public int TimeLimit { get; private set; } = timeLimit;
+    [ProtocolTimeKind<int>(TimeSpanKind.Minutes)]
+    public TimeSpan TimeLimit { get; private set; } = timeLimit;
     public int ScoreLimit { get; private set; } = scoreLimit;
 
     [ProtocolIgnore] public static IReadOnlyDictionary<GravityType, float> GravityToForce { get; set; } = new Dictionary<GravityType, float> {

@@ -10,14 +10,13 @@ namespace Vint.Core.ECS.Events.Screen;
 public class ChangeScreenEvent : IServerEvent {
     public string CurrentScreen { get; private set; } = null!;
     public string NextScreen { get; private set; } = null!;
-    public double Duration { get; private set; }
+    [ProtocolTimeKind<double>(TimeSpanKind.Seconds)]
+    public TimeSpan Duration { get; private set; }
 
     public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Information("Changed screen {Current} to {Next}",
-            CurrentScreen,
-            NextScreen);
+        logger.Information("Changed screen {Current} to {Next} ({Duration})", CurrentScreen, NextScreen, Duration);
 
         return Task.CompletedTask;
     }

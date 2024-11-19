@@ -39,7 +39,7 @@ public class MatchmakingHandler : TypeHandler {
             true,
             false,
             mapInfo.MaxPlayers,
-            10,
+            TimeSpan.FromMinutes(10),
             100);
 
         Battle.MapInfo = mapInfo;

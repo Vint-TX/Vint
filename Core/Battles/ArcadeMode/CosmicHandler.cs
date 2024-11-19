@@ -20,7 +20,7 @@ public class CosmicHandler(
             true,
             false,
             mapInfo.MaxPlayers,
-            15,
+            TimeSpan.FromMinutes(15),
             150);
 
         Battle.MapInfo = mapInfo;

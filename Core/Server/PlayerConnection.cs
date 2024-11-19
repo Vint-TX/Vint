@@ -48,6 +48,7 @@ using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.ECS.Templates.Weapons.User;
 using Vint.Core.Protocol.Codecs.Buffer;
 using Vint.Core.Protocol.Codecs.Impl;
+using Vint.Core.Protocol.Codecs.Info;
 using Vint.Core.Protocol.Commands;
 using Vint.Core.Utils;
 
@@ -1238,7 +1239,7 @@ public class SocketPlayerConnection(
                 while (availableForRead > 0) {
                     Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
 
-                    ICommand command = (ICommand)Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
+                    ICommand command = (ICommand)Protocol.GetCodec(typeof(ICommand)).Decode(buffer);
 
                     Logger.Debug("Queueing for executing: {Command}", command);
                     await ExecuteChannel.Writer.WriteAsync(command);
@@ -1265,7 +1266,7 @@ public class SocketPlayerConnection(
                     Logger.Verbose("Encoding {Command}", command);
 
                     ProtocolBuffer buffer = new(new OptionalMap(), this);
-                    Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
+                    Protocol.GetCodec(typeof(ICommand)).Encode(buffer, command);
 
                     using MemoryStream stream = new();
                     await using BinaryWriter writer = new BigEndianBinaryWriter(stream);

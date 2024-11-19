@@ -25,8 +25,7 @@ public class Cooldown(
     public override async Task Start() {
         await base.Start();
 
-        int cooldownMs = (int)Math.Ceiling(Module.Cooldown.TotalMilliseconds);
-        await Module.SlotEntity.AddComponent(new InventoryCooldownStateComponent(cooldownMs, DateTimeOffset.UtcNow));
+        await Module.SlotEntity.AddComponent(new InventoryCooldownStateComponent(Module.Cooldown, DateTimeOffset.UtcNow));
 
         if (Module.CurrentAmmo <= 0)
             await Module.TryBlock();
