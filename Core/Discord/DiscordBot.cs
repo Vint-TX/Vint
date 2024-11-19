@@ -6,6 +6,7 @@ using DSharpPlus.Commands;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
+using DSharpPlus.Net;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -39,54 +40,45 @@ public class DiscordBot(
     DiscordChannel ReportsChannel { get; set; } = null!;
 
     public async Task Start() {
-        Client = new DiscordClient(new DiscordConfiguration {
-            Token = token,
-            TokenType = TokenType.Bot,
-            Intents = DiscordIntents.All
-        });
-
-        ServiceProvider serviceProvider = new ServiceCollection()
-            .AddLogging(builder => builder.AddSerilog(Logger))
+        IServiceCollection serviceCollection = new ServiceCollection()
             .AddSingleton(this)
-            .AddSingleton(gameServer)
-            .BuildServiceProvider();
+            .AddSingleton(gameServer);
 
-        CommandsExtension commands = Client.UseCommands(new CommandsConfiguration {
-            ServiceProvider = serviceProvider,
-            RegisterDefaultCommandProcessors = false
-        });
+        Client = DiscordClientBuilder
+            .CreateDefault(token, DiscordIntents.All, serviceCollection)
+            .ConfigureLogging(builder => builder.AddSerilog(Logger))
+            .UseCommands((_, commands) => {
+                commands.AddCommands(Assembly.GetExecutingAssembly());
+                commands.AddProcessor<SlashCommandProcessor>();
 
-        SlashCommandProcessor slashCommandProcessor = new();
+                commands.CommandExecuted += (_, args) => {
+                    CommandContext ctx = args.Context;
+                    string username = ctx.User.Username;
+                    string commandName = ctx.Command.Name;
+                    string channelName = ctx.Channel.Name;
+                    string executionPlace = ctx.Channel.IsPrivate ? "DMs" : ctx.Guild!.Name;
 
-        await commands.AddProcessorAsync(slashCommandProcessor);
-        commands.AddCommands(Assembly.GetExecutingAssembly());
+                    Logger.Information("{User} executed command \'{Name}\' in {Place}, {Channel}", username, commandName, executionPlace, channelName);
+                    return Task.CompletedTask;
+                };
 
-        commands.CommandExecuted += (_, args) => {
-            CommandContext ctx = args.Context;
-            string username = ctx.User.Username;
-            string commandName = ctx.Command.Name;
-            string channelName = ctx.Channel.Name;
-            string executionPlace = ctx.Channel.IsPrivate ? "DMs" : ctx.Guild!.Name;
-
-            Logger.Information("{User} executed command \'{Name}\' in {Place}, {Channel}", username, commandName, executionPlace, channelName);
-            return Task.CompletedTask;
-        };
-
-        commands.CommandErrored += (_, args) => {
-            Logger.Error(args.Exception, "Got an exception while executing command {Name}", args.Context.Command.Name);
-            return Task.CompletedTask;
-        };
+                commands.CommandErrored += (_, args) => {
+                    Logger.Error(args.Exception, "Got an exception while executing command {Name}", args.Context.Command.Name);
+                    return Task.CompletedTask;
+                };
+            }, new CommandsConfiguration { RegisterDefaultCommandProcessors = false })
+            .Build();
 
         ConfigManager.NewLinkRequest = NewLinkRequest;
 
         Guild = await Client.GetGuildAsync(ConfigManager.Discord.GuildId);
-        LinkedRole = Guild.GetRole(ConfigManager.Discord.LinkedRoleId)!;
+        LinkedRole = await Guild.GetRoleAsync(ConfigManager.Discord.LinkedRoleId)!;
         ReportsChannel = await Client.GetChannelAsync(ConfigManager.Discord.ReportsChannelId);
         await Client.ConnectAsync(new DiscordActivity("Vint", DiscordActivityType.Competing));
     }
 
     public async Task SetPlayersCount(int count) {
-        if (LastPlayersCount == count || Client is not { IsConnected: true }) return;
+        if (LastPlayersCount == count || Client is not { AllShardsConnected: true }) return;
 
         await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), DiscordActivityType.Competing));
         LastPlayersCount = count;
@@ -98,7 +90,7 @@ public class DiscordBot(
         await ReportsChannel.SendMessageAsync(embed);
     }
 
-    public async Task GiveLinkedRole(DiscordClient userClient, string username, string accessToken) {
+    public async Task GiveLinkedRole(DiscordRestClient userClient, string username, string accessToken) {
         DiscordMember? member = await AddToOrGetFromGuild(userClient.CurrentUser, username, accessToken);
 
         if (member! == null!) return;
@@ -151,10 +143,7 @@ public class DiscordBot(
         OAuth2Data oAuth2Data = (await response.Content.ReadFromJsonAsync<OAuth2Data>())!;
         DateTimeOffset tokenExpirationDate = DateTimeOffset.UtcNow.AddSeconds(oAuth2Data.ExpiresIn - 300);
 
-        DiscordClient userClient = new(new DiscordConfiguration {
-            Token = oAuth2Data.AccessToken,
-            TokenType = TokenType.Bearer
-        });
+        DiscordRestClient userClient = new(new RestClientOptions(), oAuth2Data.AccessToken, TokenType.Bearer);
 
         await userClient.InitializeAsync();
         await using DbConnection db = new();

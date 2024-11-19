@@ -413,7 +413,8 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
         IParser reader,
         Type expectedType,
         Func<IParser, Type, object?> nestedObjectDeserializer,
-        out object? retValue) {
+        out object? retValue,
+        ObjectDeserializer rootDeserializer) {
         if (!typeof(IComponent).IsAssignableFrom(expectedType)) {
             retValue = null;
             return false;
@@ -486,7 +487,7 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
 public class Vector3TypeConverter : IYamlTypeConverter {
     public bool Accepts(Type type) => type == typeof(Vector3);
 
-    public object ReadYaml(IParser parser, Type type) {
+    public object ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) {
         parser.Consume<MappingStart>();
         Vector3 vector = default;
 
@@ -513,7 +514,7 @@ public class Vector3TypeConverter : IYamlTypeConverter {
         return vector;
     }
 
-    public void WriteYaml(IEmitter emitter, object? value, Type type) {
+    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer) {
         Vector3 vector = value as Vector3? ?? default;
         emitter.Emit(new MappingStart());
 

@@ -10,7 +10,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.Discord.Modules;
 
-[Command("admin"), RequirePermissions(DiscordPermissions.Administrator)]
+[Command("admin"), RequirePermissions(DiscordPermission.Administrator)]
 public class AdminModule(
     GameServer gameServer
 ) {

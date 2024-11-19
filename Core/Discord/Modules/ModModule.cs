@@ -6,7 +6,7 @@ using Vint.Core.Server;
 
 namespace Vint.Core.Discord.Modules;
 
-[Command("mod"), RequirePermissions(DiscordPermissions.ModerateMembers)]
+[Command("mod"), RequirePermissions(DiscordPermission.ModerateMembers)]
 public class ModModule(
     GameServer gameServer
 ) {

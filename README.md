@@ -8,7 +8,7 @@ Issues and pull-requests are acceptable
 
 ## Building
 
-1. Install [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+1. Install [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 2. Clone this repository
 3. Type `dotnet build` into the terminal in the directory with the server
 

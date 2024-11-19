@@ -37,7 +37,7 @@ public class RestorePasswordByDiscordEvent : IServerEvent {
 
         if (player == null || discordLink == null) return;
 
-        (DiscordClient? client, bool? isAuthorized) = await discordLink.GetClient(connection, discordBot);
+        (DiscordRestClient? client, bool? isAuthorized) = await discordLink.GetClient(connection, discordBot);
 
         if (isAuthorized != true || client == null) {
             await connection.Send(new DiscordInvalidEvent(DiscordID));

@@ -1,8 +1,10 @@
 using System.Net.Http.Json;
 using DSharpPlus;
 using DSharpPlus.Exceptions;
+using DSharpPlus.Net;
 using LinqToDB;
 using LinqToDB.Mapping;
+using Microsoft.Extensions.Logging;
 using Vint.Core.Discord;
 using Vint.Core.Server;
 
@@ -55,10 +57,7 @@ public class DiscordLink {
 
     static async Task<bool?> IsAuthorized(string accessToken) {
         try {
-            await new DiscordClient(new DiscordConfiguration {
-                Token = accessToken,
-                TokenType = TokenType.Bearer
-            }).InitializeAsync();
+            await new DiscordRestClient(new RestClientOptions(), accessToken, TokenType.Bearer).InitializeAsync();
             return true;
         } catch (UnauthorizedException) {
             return false;
@@ -67,7 +66,7 @@ public class DiscordLink {
         }
     }
 
-    public async Task<(DiscordClient? client, bool? isAuthorized)> GetClient(IPlayerConnection connection, DiscordBot discordBot) {
+    public async Task<(DiscordRestClient? client, bool? isAuthorized)> GetClient(IPlayerConnection connection, DiscordBot discordBot) {
         bool? isAuthorized = await PrepareToken(discordBot);
 
         switch (isAuthorized) {
@@ -80,11 +79,7 @@ public class DiscordLink {
             }
 
             case true: {
-                DiscordClient client = new(new DiscordConfiguration {
-                    Token = AccessToken,
-                    TokenType = TokenType.Bearer
-                });
-
+                DiscordRestClient client = new(new RestClientOptions(), AccessToken, TokenType.Bearer);
                 await client.InitializeAsync();
                 return (client, true);
             }
