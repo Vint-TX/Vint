@@ -12,7 +12,7 @@ namespace Vint.Core.Battles.Modules.Types;
 public class RageModule : TriggerBattleModule, IKillModule {
     public override string ConfigPath => "garage/module/upgrade/properties/rage";
 
-    public override RageEffect GetEffect() => new(DecreaseCooldownPerKill, Tank, Level);
+    public override RageEffect GetEffect() => new(Tank, Level);
 
     TimeSpan DecreaseCooldownPerKill { get; set; }
 

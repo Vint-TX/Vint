@@ -6,7 +6,7 @@ namespace Vint.Core.Protocol.Codecs.Impl;
 
 public class GroupComponentCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
-        Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, value.GetType().GetProtocolId().Id);
+        Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, value.GetType().GetProtocolId());
         Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, ((GroupComponent)value).Key);
     }
 
@@ -18,6 +18,6 @@ public class GroupComponentCodec : Codec {
         return (type.GetConstructors()
                     .Single(c =>
                         c.GetParameters().Single().ParameterType == typeof(long))
-                    .Invoke(new[] { key }) as GroupComponent)!;
+                    .Invoke([key]) as GroupComponent)!;
     }
 }

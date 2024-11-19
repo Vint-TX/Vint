@@ -7,7 +7,7 @@ public class VariedTypeCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         if (value is not Type type) throw new ArgumentException("Value must be Type", nameof(value));
 
-        Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, type.GetProtocolId().Id);
+        Protocol.GetCodec(new TypeCodecInfo(typeof(long))).Encode(buffer, type.GetProtocolId());
     }
 
     public override object Decode(ProtocolBuffer buffer) {

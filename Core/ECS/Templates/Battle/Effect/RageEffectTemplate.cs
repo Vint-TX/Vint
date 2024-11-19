@@ -7,10 +7,10 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 
 [ProtocolId(636364997672415488)]
 public class RageEffectTemplate : EffectBaseTemplate {
-    public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration, TimeSpan decreaseCooldownPerKill) {
+    public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration) {
         IEntity entity = Create("battle/effect/rage", battlePlayer, duration, false, false);
 
-        entity.AddComponent(new RageEffectComponent(decreaseCooldownPerKill));
+        entity.AddComponent<RageEffectComponent>();
         return entity;
     }
 }

@@ -6,7 +6,7 @@ namespace Vint.Core.Protocol.Codecs.Impl;
 public class VariedStructCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
         Type type = value.GetType();
-        buffer.Writer.Write(type.GetProtocolId().Id);
+        buffer.Writer.Write(type.GetProtocolId());
 
         Protocol.GetCodec(new TypeCodecInfo(type)).Encode(buffer, value);
     }

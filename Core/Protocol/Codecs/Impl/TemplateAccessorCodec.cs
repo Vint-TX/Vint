@@ -11,7 +11,7 @@ public class TemplateAccessorCodec : Codec {
             throw new ArgumentException("Value must be TemplateAccessor");
 
         Protocol.GetCodec(new TypeCodecInfo(typeof(long)))
-            .Encode(buffer, templateAccessor.Template.GetType().GetProtocolId().Id);
+            .Encode(buffer, templateAccessor.Template.GetType().GetProtocolId());
 
         Protocol.GetCodec(new TypeCodecInfo(typeof(string), true)).Encode(buffer, templateAccessor.ConfigPath!);
     }
