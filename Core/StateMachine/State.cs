@@ -8,7 +8,7 @@ public abstract class State {
 
     public virtual Task Started() => Task.CompletedTask;
 
-    public virtual Task Tick() => Task.CompletedTask;
+    public virtual Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
 
     public virtual Task Finish() => Task.FromResult(IsFinished = true);
 

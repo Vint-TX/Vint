@@ -1,18 +1,19 @@
 ﻿using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1479879892222)]
 public class ClientGarageFirstLoadEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        DiscordBot? discordBot = connection.Server.DiscordBot;
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
 
         if (discordBot == null) return;
 

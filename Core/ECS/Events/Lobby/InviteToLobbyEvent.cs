@@ -1,6 +1,7 @@
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
@@ -8,10 +9,11 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class InviteToLobbyEvent : IServerEvent {
     public long[] InvitedUsersIds { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
-        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        List<IPlayerConnection> connections = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .ToList();
 

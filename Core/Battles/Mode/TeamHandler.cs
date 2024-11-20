@@ -6,7 +6,7 @@ using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Chat;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Mode;

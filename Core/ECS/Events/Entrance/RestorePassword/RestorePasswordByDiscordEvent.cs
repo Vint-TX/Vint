@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -9,7 +10,7 @@ using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Validation;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
@@ -18,11 +19,11 @@ namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
 public class RestorePasswordByDiscordEvent : IServerEvent {
     public string DiscordID { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
         logger.Warning("Restoring password '{Id}'", DiscordID);
 
-        DiscordBot? discordBot = connection.Server.DiscordBot;
+        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
 
         if (discordBot == null ||
             DiscordID.Length is < 17 or > 18 ||

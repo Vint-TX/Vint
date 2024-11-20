@@ -9,13 +9,13 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Flag;
 
 [ProtocolId(1463741053998)]
 public class FlagCollisionRequestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

@@ -1,19 +1,22 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.ElevatedAccess;
 
 [ProtocolId(1503470140938), Obsolete]
 public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEvent {
-    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.Player.IsAdmin) return;
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);
 
@@ -23,7 +26,7 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
 
         if (targetConnection != null) {
             notifyChat = ChatUtils.GetChat(targetConnection);
-            notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+            notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
         } else {
             await using DbConnection db = new();
             targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == Username);
@@ -44,7 +47,7 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
 
         if (notifyChat == null || notifiedConnections == null) {
             notifyChat = ChatUtils.GlobalChat;
-            notifiedConnections = connection.Server.PlayerConnections.Values.ToList();
+            notifiedConnections = server.PlayerConnections.Values.ToList();
         }
 
         await ChatUtils.SendMessage($"{Username} was {punishment}", notifyChat, notifiedConnections, null);

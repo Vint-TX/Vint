@@ -51,5 +51,5 @@ public abstract class TankWeaponHandler : IWeaponHandler {
     public virtual async Task OnTankDisable() =>
         await BattleEntity.RemoveComponentIfPresent<ShootableComponent>();
 
-    public virtual Task Tick() => Task.CompletedTask;
+    public virtual Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
 }

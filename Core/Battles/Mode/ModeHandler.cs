@@ -4,7 +4,7 @@ using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Score;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battles.Mode;
 
@@ -13,7 +13,7 @@ public abstract class ModeHandler(
 ) {
     protected Battle Battle { get; } = battle;
 
-    public abstract Task Tick();
+    public abstract Task Tick(TimeSpan deltaTime);
 
     public abstract SpawnPoint GetRandomSpawnPoint(BattlePlayer battlePlayer);
 

@@ -3,7 +3,7 @@ using Serilog;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Commands;
@@ -16,7 +16,7 @@ public class SendEventCommand(
     [ProtocolVaried, ProtocolPosition(0)] public IEvent Event { get; private set; } = @event;
     [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
 
-    public async Task Execute(IPlayerConnection connection) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         if (Event is not IServerEvent serverEvent) {
@@ -25,7 +25,7 @@ public class SendEventCommand(
         }
 
         logger.Debug("Executing event {Name} with {Count} entities", serverEvent.GetType().Name, Entities.Length);
-        await serverEvent.Execute(connection, Entities);
+        await serverEvent.Execute(connection, serviceProvider, Entities);
     }
 
     public override string ToString() => $"SendEvent command {{ " +

@@ -1,4 +1,3 @@
-using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
 using Vint.Core.StateMachine;
 
@@ -15,47 +14,43 @@ public abstract class WarmUpState(
 public class WarmingUp(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (Battle.Timer.TotalSeconds <= 5) {
-            foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
-                BattleTank tank = battlePlayer.Tank!;
-
+            foreach (BattleTank tank in Battle.Players.Where(player => player.InBattleAsTank).Select(player => player.Tank!)) {
                 await tank.Disable(true);
-                await tank.Tank.RemoveComponentIfPresent(tank.StateManager.CurrentState.StateComponent);
             }
 
             await StateManager.SetState(new PreparingToFight(StateManager));
         }
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 
 public class PreparingToFight(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (Battle.Timer <= TimeSpan.Zero) {
-            foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattleAsTank)) {
-                TankStateManager tankStateManager = battlePlayer.Tank!.StateManager;
+            foreach (BattleTank tank in Battle.Players.Where(player => player.InBattleAsTank).Select(player => player.Tank!)) {
+                TankStateManager tankStateManager = tank.StateManager;
                 await tankStateManager.SetState(new Spawn(tankStateManager));
             }
 
-            //Battle.Timer = TimeSpan.FromSeconds(1);
             await StateManager.SetState(new Respawning(StateManager));
         }
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 
 public class Respawning(
     WarmUpStateManager stateManager
 ) : WarmUpState(stateManager) {
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (Battle.Timer <= TimeSpan.Zero)
             await BattleStateManager.SetState(new Running(BattleStateManager));
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }

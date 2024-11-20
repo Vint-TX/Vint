@@ -11,7 +11,7 @@ using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Bonus;
 using Vint.Core.ECS.Templates.Battle.Bonus;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Bonus.Type;
@@ -73,8 +73,8 @@ public sealed class GoldBox(
 
     public override Task Drop() => Drop(null);
 
-    public override async Task Tick() {
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await base.Tick(deltaTime);
 
         if (Battle.TypeHandler is not MatchmakingHandler ||
             Battle.Timer.TotalSeconds < 120 ||

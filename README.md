@@ -21,4 +21,4 @@ Issues and pull-requests are acceptable
 
 ## Information
 
-Server uses port 8080 for the HTTP Static server (for client resources) and 5050 for the TCP Game server (main server)
+Server uses port 8080 for the HTTP Static server, 5050 for the TCP Game server and 5051 for the local HTTP REST API server

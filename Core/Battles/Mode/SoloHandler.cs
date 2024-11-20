@@ -4,7 +4,7 @@ using Vint.Core.ECS.Components.Battle.Limit;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Score;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Mode;
@@ -15,7 +15,7 @@ public abstract class SoloHandler(
     protected abstract List<SpawnPoint> SpawnPoints { get; }
     SpawnPoint? LastSpawnPoint { get; set; }
 
-    public override Task Tick() => Task.CompletedTask;
+    public override Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
 
     public override async Task UpdateScore(IEntity? team, int score) {
         int maxScore = Battle.Players

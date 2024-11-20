@@ -1,13 +1,14 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Server.Chat;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Chat;
@@ -18,14 +19,16 @@ public class SendChatMessageEvent : IServerEvent {
 
     public string Message { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection sender, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection sender, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        IChatCommandProcessor chatCommandProcessor = serviceProvider.GetRequiredService<IChatCommandProcessor>();
         IEntity chat = entities.Single();
 
-        if (sender.Server.ChatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
+        if (chatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {
             if (chatCommand == null)
                 await ChatUtils.SendMessage("Unknown command", chat, [sender], null);
             else
-                await chatCommand.Execute(sender, chat, Message);
+                await chatCommand.Execute(sender, serviceProvider, chat, Message);
 
             return;
         }
@@ -43,7 +46,7 @@ public class SendChatMessageEvent : IServerEvent {
         }
 
         CleanupMessage();
-        await ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(sender, chat), sender);
+        await ChatUtils.SendMessage(Message, chat, ChatUtils.GetReceivers(server, sender, chat), sender);
     }
 
     bool Validate(string chatConfigPath) {

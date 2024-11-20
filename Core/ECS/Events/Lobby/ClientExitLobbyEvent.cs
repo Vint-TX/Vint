@@ -1,13 +1,13 @@
 ﻿using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1496753144455)]
 public class ClientExitLobbyEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

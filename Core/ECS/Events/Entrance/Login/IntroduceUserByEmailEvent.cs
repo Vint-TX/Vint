@@ -5,7 +5,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Validation;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Login;
@@ -14,7 +14,7 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 public class IntroduceUserByEmailEvent : IntroduceUserEvent {
     public string Email { get; private set; } = null!;
 
-    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
         logger.Information("Login by email '{Email}'", Email);

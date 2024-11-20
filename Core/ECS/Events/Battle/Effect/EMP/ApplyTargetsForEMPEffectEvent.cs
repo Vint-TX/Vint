@@ -2,7 +2,7 @@ using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Effect.EMP;
 
@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Battle.Effect.EMP;
 public class ApplyTargetsForEMPEffectEvent : IServerEvent {
     public IEntity[] Targets { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         IEntity emp = entities.Single();
         BattleTank? tank = connection.BattlePlayer?.Tank;
         Battles.Battle battle = tank?.Battle!;

@@ -5,7 +5,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Lobby;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Type;

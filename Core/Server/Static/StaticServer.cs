@@ -5,13 +5,12 @@ using Vint.Core.Config;
 using Vint.Core.Discord;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Server;
+namespace Vint.Core.Server.Static;
 
-public class StaticServer(
-    IPAddress host,
-    ushort port
-) {
-    ILogger Logger { get; set; } = Log.Logger.ForType(typeof(StaticServer));
+public class StaticServer {
+    const ushort Port = 8080;
+
+    ILogger Logger { get; } = Log.Logger.ForType(typeof(StaticServer));
     HttpListener Listener { get; } = new();
 
     bool IsStarted { get; set; }
@@ -22,10 +21,10 @@ public class StaticServer(
     public async Task Start() {
         if (IsStarted) return;
 
-        Listener.Prefixes.Add($"http://{(Equals(host, IPAddress.Any) ? "*" : host)}:{port}/");
-
-        Listener.Start();
         IsStarted = true;
+
+        Listener.Prefixes.Add($"http://*:{Port}/");
+        Listener.Start();
 
         OnStarted();
         await Accept();
@@ -40,16 +39,14 @@ public class StaticServer(
         while (Listener.IsListening) {
             try {
                 HttpListenerContext context = await Listener.GetContextAsync();
-                ILogger oldLogger = Logger;
+                ILogger logger = Logger;
 
                 string? ip = context.Request.Headers["X-Real-IP"];
 
                 if (!string.IsNullOrWhiteSpace(ip) && IPEndPoint.TryParse(ip, out IPEndPoint? ipAddress))
-                    Logger = Logger.WithEndPoint(ipAddress);
+                    logger = logger.WithEndPoint(ipAddress);
 
-                await ProcessRequest(context);
-
-                Logger = oldLogger;
+                await ProcessRequest(context, logger);
             } catch (Exception e) {
                 Logger.Error(e, "");
             }
@@ -58,12 +55,12 @@ public class StaticServer(
         IsAccepting = false;
     }
 
-    async Task ProcessRequest(HttpListenerContext context) {
+    async Task ProcessRequest(HttpListenerContext context, ILogger logger) {
         HttpListenerRequest request = context.Request;
         HttpListenerResponse response = context.Response;
         Uri? url = request.Url;
 
-        Logger.Information("{Method} {Url}", request.HttpMethod, request.RawUrl);
+        logger.Information("{Method} {Url}", request.HttpMethod, request.RawUrl);
 
         if (request.HttpMethod != "GET" || url == null) {
             SendError(response, 400);

@@ -1,8 +1,10 @@
-﻿using Vint.Core.ECS.Components.Entrance;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Vint.Core.Discord;
+using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
 
@@ -11,10 +13,12 @@ public class RequestChangePasswordEvent : IServerEvent {
     public string PasswordDigest { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
+
         if (connection.RestorePasswordCode == null ||
             !connection.RestorePasswordCodeValid ||
-            connection.Server.DiscordBot == null) {
+            discordBot == null) {
             connection.Player = null!;
             return;
         }

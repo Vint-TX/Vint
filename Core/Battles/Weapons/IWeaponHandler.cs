@@ -23,5 +23,5 @@ public interface IWeaponHandler {
 
     public Task OnTankDisable();
 
-    public Task Tick();
+    public Task Tick(TimeSpan deltaTime);
 }

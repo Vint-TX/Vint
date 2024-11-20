@@ -1,13 +1,13 @@
 using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Quest;
 
 [ProtocolId(1476874341214)]
 public class ResetQuestProgressEvent : IServerEvent {
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         IEntity quest = entities.Single();
 
         QuestProgressComponent progressComponent = quest.GetComponent<QuestProgressComponent>();

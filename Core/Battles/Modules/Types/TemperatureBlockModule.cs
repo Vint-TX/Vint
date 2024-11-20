@@ -3,9 +3,7 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Server.Modules.Effect.TempBlock;
-using Vint.Core.ECS.Components.Server.Tank;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types;
 

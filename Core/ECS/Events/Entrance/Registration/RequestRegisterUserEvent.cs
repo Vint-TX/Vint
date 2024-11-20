@@ -3,7 +3,7 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Registration;
@@ -20,7 +20,7 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool Steam { get; private set; }
     public bool QuickRegistration { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!RegexUtils.IsLoginValid(Username) || !RegexUtils.IsEmailValid(Email)) {
             await connection.Send(new RegistrationFailedEvent());
             return;

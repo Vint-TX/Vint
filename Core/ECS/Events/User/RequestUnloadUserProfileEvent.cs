@@ -1,6 +1,6 @@
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User;
 
@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.User;
 public class RequestUnloadUserProfileEvent : IServerEvent {
     public long UserId { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         IEntity? user = connection.SharedEntities.SingleOrDefault(entity => entity.Id == UserId);
 
         if (user == null) return Task.CompletedTask;

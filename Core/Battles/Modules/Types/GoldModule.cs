@@ -8,7 +8,7 @@ using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Items;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battles.Modules.Types;
 
@@ -51,8 +51,8 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
 
     public Task Deactivate() => Task.CompletedTask;
 
-    public override async Task Tick() {
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await base.Tick(deltaTime);
 
         if (!ActivationCondition) await TryBlock(); // bruh
         else await TryUnblock();

@@ -108,8 +108,8 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         await Battle.DamageProcessor.Heal(Tank, heal);
     }
 
-    public override async Task Tick() {
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await base.Tick(deltaTime);
 
         TimeSpan timePassed = TimePassedFromLastTick;
 

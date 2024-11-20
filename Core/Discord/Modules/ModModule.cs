@@ -2,7 +2,7 @@ using DSharpPlus.Commands;
 using DSharpPlus.Commands.ContextChecks;
 using DSharpPlus.Entities;
 using Vint.Core.Discord.Utils;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Discord.Modules;
 

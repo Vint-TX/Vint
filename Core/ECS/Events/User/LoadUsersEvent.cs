@@ -1,10 +1,11 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.User;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User;
 
@@ -13,8 +14,9 @@ public class LoadUsersEvent : IServerEvent {
     public long RequestEntityId { get; private set; }
     public HashSet<long> UsersId { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
-        List<IPlayerConnection> playerConnections = connection.Server.PlayerConnections.Values
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        List<IPlayerConnection> playerConnections = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .ToList();
 

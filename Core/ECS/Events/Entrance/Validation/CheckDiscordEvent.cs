@@ -1,8 +1,10 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Entrance.Validation;
 
@@ -10,8 +12,10 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class CheckDiscordEvent : IServerEvent {
     public string DiscordID { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        if (connection.Server.DiscordBot == null ||
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
+
+        if (discordBot == null ||
             DiscordID.Length is < 17 or > 18 ||
             !ulong.TryParse(DiscordID, out ulong discordId)) {
             await connection.Send(new DiscordInvalidEvent(DiscordID));

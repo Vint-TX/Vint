@@ -1,4 +1,5 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battles;
 using Vint.Core.Battles.Tank;
@@ -10,14 +11,14 @@ using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates.Quests;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Quests;
 
 public class QuestManager {
-    public QuestManager(GameServer gameServer) {
-        GameServer = gameServer;
+    public QuestManager(IServiceProvider serviceProvider) {
+        ServiceProvider = serviceProvider;
         UpdateNextTime();
     }
 
@@ -25,7 +26,7 @@ public class QuestManager {
     static QuestsInfo QuestsInfo => ConfigManager.QuestsInfo;
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(QuestManager));
 
-    GameServer GameServer { get; }
+    IServiceProvider ServiceProvider { get; }
     DateTimeOffset NextUpdate { get; set; }
 
     public async Task<List<Quest>> SetupQuests(IPlayerConnection connection, bool deleteAllUncompleted) {
@@ -68,7 +69,9 @@ public class QuestManager {
         await using DbConnection db = new();
         await db.BeginTransactionAsync();
 
-        foreach (IPlayerConnection connection in GameServer.PlayerConnections.Values.Where(conn => conn.IsOnline)) {
+        GameServer server = ServiceProvider.GetRequiredService<GameServer>();
+
+        foreach (IPlayerConnection connection in server.PlayerConnections.Values.Where(conn => conn.IsOnline)) {
             try {
                 await SetupQuests(connection, true);
 

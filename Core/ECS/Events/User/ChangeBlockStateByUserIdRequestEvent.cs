@@ -4,7 +4,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User;
 
@@ -14,7 +14,7 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await using DbConnection db = new();
         Player? targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 

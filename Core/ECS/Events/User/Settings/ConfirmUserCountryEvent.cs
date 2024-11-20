@@ -4,7 +4,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User.Settings;
 
@@ -12,7 +12,7 @@ namespace Vint.Core.ECS.Events.User.Settings;
 public class ConfirmUserCountryEvent : IServerEvent {
     public string CountryCode { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         IEntity user = entities.Single();
         Player player = connection.Player;
 

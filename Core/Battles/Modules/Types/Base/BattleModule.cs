@@ -9,7 +9,7 @@ using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Modules.Types.Base;
@@ -116,11 +116,11 @@ public abstract class BattleModule {
             await StateManager.SetState(new Ready(StateManager));
     }
 
-    public virtual async Task Tick() {
-        await StateManager.Tick();
+    public virtual async Task Tick(TimeSpan deltaTime) {
+        await StateManager.Tick(deltaTime);
 
         if (IsEMPLocked) {
-            EMPLockTime -= GameServer.DeltaTime;
+            EMPLockTime -= deltaTime;
             await TryEMPUnlock();
         }
     }

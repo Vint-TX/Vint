@@ -1,10 +1,11 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User.Friends;
 
@@ -14,7 +15,7 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await using DbConnection db = new();
         Player? player = db.Players.SingleOrDefault(player => player.Id == UserId);
 
@@ -61,7 +62,8 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
 
         await db.CommitTransactionAsync();
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 

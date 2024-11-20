@@ -28,11 +28,11 @@ public class Cooldown(
         TimeToSpawn = DateTimeOffset.UtcNow + Duration;
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (DateTimeOffset.UtcNow >= TimeToSpawn)
             await Bonus.Spawn();
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 

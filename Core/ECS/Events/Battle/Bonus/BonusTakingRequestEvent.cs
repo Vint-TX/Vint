@@ -4,14 +4,14 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Bonus;
 
 [ProtocolId(-4179984519411113540)]
 public class BonusTakingRequestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         BattlePlayer? battlePlayer = connection.BattlePlayer;
         IBonusProcessor? bonusProcessor = battlePlayer?.Battle.BonusProcessor;
 

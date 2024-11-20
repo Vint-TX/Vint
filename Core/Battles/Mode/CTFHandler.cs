@@ -88,9 +88,9 @@ public class CTFHandler : TeamHandler {
         _ => -99999
     };
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         foreach (Flag flag in Flags)
-            await flag.StateManager.Tick();
+            await flag.StateManager.Tick(deltaTime);
     }
 
     public bool CanPlaceMine(Vector3 position) =>

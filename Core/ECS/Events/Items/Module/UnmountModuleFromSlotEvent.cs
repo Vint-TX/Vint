@@ -7,13 +7,13 @@ using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(1485777830853)]
 public class UnmountModuleFromSlotEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         entities = (IEntity[])entities;
 
         IEntity moduleUserItem = entities.ElementAt(0);

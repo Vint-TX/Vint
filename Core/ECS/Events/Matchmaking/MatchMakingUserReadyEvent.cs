@@ -3,13 +3,13 @@ using Vint.Core.Battles.States;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Matchmaking;
 
 [ProtocolId(1496829083447)]
 public class MatchMakingUserReadyEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await connection.User.AddComponentIfAbsent<MatchMakingUserReadyComponent>();
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

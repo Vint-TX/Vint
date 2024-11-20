@@ -16,7 +16,7 @@ using Vint.Core.ECS.Templates.Graffiti;
 using Vint.Core.ECS.Templates.Hulls;
 using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.ECS.Templates.Weapons.Market;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Utils;
 

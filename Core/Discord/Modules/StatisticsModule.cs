@@ -1,20 +1,22 @@
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
+using Vint.Core.Battles;
 using Vint.Core.Discord.Utils;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Discord.Modules;
 
 [Command("statistics")]
 public class StatisticsModule(
-    GameServer gameServer
+    GameServer gameServer,
+    IBattleProcessor battleProcessor
 ) {
     [Command("count")]
     public async Task Count(CommandContext ctx) {
         await ctx.DeferResponseAsync();
 
         int players = gameServer.PlayerConnections.Count;
-        int battles = gameServer.BattleProcessor.BattlesCount;
+        int battles = battleProcessor.BattlesCount;
 
         DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed("")
             .AddField("Players", $"{players}", true)

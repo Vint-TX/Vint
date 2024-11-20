@@ -3,7 +3,7 @@ using Vint.Core.Battles.Bonus.Type;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 using BonusInfo = Vint.Core.Config.MapInformation.Bonus;
 
@@ -14,7 +14,7 @@ public interface IBonusProcessor {
 
     public Task Start();
 
-    public Task Tick();
+    public Task Tick(TimeSpan deltaTime);
 
     public Task Take(BonusBox bonus, BattleTank tank);
 
@@ -60,9 +60,9 @@ public class BonusProcessor : IBonusProcessor {
         }
     }
 
-    public async Task Tick() {
+    public async Task Tick(TimeSpan deltaTime) {
         foreach (BonusBox bonus in Bonuses)
-            await bonus.Tick();
+            await bonus.Tick(deltaTime);
     }
 
     public async Task Take(BonusBox bonus, BattleTank tank) =>

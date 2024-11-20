@@ -5,7 +5,7 @@ using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Notification;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 using Container = Vint.Core.Database.Models.Container;
 
@@ -16,7 +16,7 @@ public class OpenContainerEvent : IServerEvent {
     const int MaxAmount = 250;
     public long Amount { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await using DbConnection db = new();
 
         IEntity userEntity = entities.Single();

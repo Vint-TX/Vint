@@ -37,5 +37,5 @@ public abstract class ModuleWeaponHandler(
 
     public virtual Task OnTankDisable() => Task.CompletedTask;
 
-    public virtual Task Tick() => Task.CompletedTask;
+    public virtual Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
 }

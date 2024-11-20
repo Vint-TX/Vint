@@ -4,7 +4,7 @@ using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
@@ -12,7 +12,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class UpdateBattleParamsEvent : IServerEvent {
     public BattleProperties Params { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

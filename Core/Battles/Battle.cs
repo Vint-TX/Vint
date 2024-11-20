@@ -4,6 +4,7 @@ using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuUtilities.Memory;
 using ConcurrentCollections;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battles.ArcadeMode;
 using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Damage;
@@ -29,13 +30,15 @@ using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
 using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Physics;
-using Vint.Core.Server;
+using Vint.Core.Quests;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles;
 
 public sealed class Battle : IDisposable {
-    public Battle() { // Matchmaking battle
+    public Battle(IServiceProvider serviceProvider) { // Matchmaking battle
+        ServiceProvider = serviceProvider;
         Properties = null!;
 
         TypeHandler = new MatchmakingHandler(this);
@@ -46,9 +49,12 @@ public sealed class Battle : IDisposable {
 
         LobbyChatEntity = new BattleLobbyChatTemplate().Create();
         BattleChatEntity = new GeneralBattleChatTemplate().Create();
+
+        Server = ServiceProvider.GetRequiredService<GameServer>();
     }
 
-    public Battle(ArcadeModeType arcadeMode) { // Arcade battle
+    public Battle(IServiceProvider serviceProvider, ArcadeModeType arcadeMode) { // Arcade battle
+        ServiceProvider = serviceProvider;
         Properties = null!;
 
         TypeHandler = new ArcadeHandler(this, arcadeMode);
@@ -59,10 +65,14 @@ public sealed class Battle : IDisposable {
 
         LobbyChatEntity = new BattleLobbyChatTemplate().Create();
         BattleChatEntity = new GeneralBattleChatTemplate().Create();
+
+        Server = ServiceProvider.GetRequiredService<GameServer>();
     }
 
-    public Battle(BattleProperties properties, IPlayerConnection owner) { // Custom battle
+    public Battle(IServiceProvider serviceProvider, BattleProperties properties, IPlayerConnection owner) { // Custom battle
         properties.DamageEnabled = true;
+
+        ServiceProvider = serviceProvider;
         Properties = properties;
 
         TypeHandler = new CustomHandler(this, owner);
@@ -73,7 +83,12 @@ public sealed class Battle : IDisposable {
 
         LobbyChatEntity = new BattleLobbyChatTemplate().Create();
         BattleChatEntity = new GeneralBattleChatTemplate().Create();
+
+        Server = ServiceProvider.GetRequiredService<GameServer>();
     }
+
+    IServiceProvider ServiceProvider { get; }
+    GameServer Server { get; }
 
     public long Id => Entity.Id;
     public long LobbyId => LobbyEntity.Id;
@@ -226,7 +241,8 @@ public sealed class Battle : IDisposable {
 
         foreach (BattlePlayer battlePlayer in players.Where(battlePlayer => battlePlayer.InBattle)) {
             try {
-                await battlePlayer.OnBattleEnded(hasEnemies);
+                QuestManager questManager = ServiceProvider.GetRequiredService<QuestManager>();
+                await battlePlayer.OnBattleEnded(hasEnemies, questManager);
             } catch { /**/ }
         }
 
@@ -236,18 +252,18 @@ public sealed class Battle : IDisposable {
         await LobbyEntity.RemoveComponentIfPresent<BattleGroupComponent>();
     }
 
-    public async Task Tick() {
-        Timer -= GameServer.DeltaTime;
+    public async Task Tick(TimeSpan deltaTime) {
+        Timer -= deltaTime;
 
-        await ModeHandler.Tick();
+        await ModeHandler.Tick(deltaTime);
         await TypeHandler.Tick();
-        await StateManager.Tick();
+        await StateManager.Tick(deltaTime);
 
         if (BonusProcessor != null)
-            await BonusProcessor.Tick();
+            await BonusProcessor.Tick(deltaTime);
 
         foreach (BattlePlayer battlePlayer in Players)
-            await battlePlayer.Tick();
+            await battlePlayer.Tick(deltaTime);
     }
 
     public async Task AddPlayer(IPlayerConnection connection, bool spectator = false) { // todo squads

@@ -7,7 +7,7 @@ using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.ECS.Templates.Shells;
 using Vint.Core.ECS.Templates.Skins;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Containers;

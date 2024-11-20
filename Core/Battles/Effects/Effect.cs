@@ -9,7 +9,7 @@ using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Effect;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Effects;
@@ -32,7 +32,7 @@ public abstract class Effect(
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
-    public virtual async Task Tick() {
+    public virtual async Task Tick(TimeSpan deltaTime) {
         foreach (DelayedAction delayedAction in DelayedActions
                      .Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             DelayedActions.TryRemove(delayedAction);

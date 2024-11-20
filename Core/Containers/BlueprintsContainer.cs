@@ -3,7 +3,7 @@ using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server.Modules;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Notification;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Containers;

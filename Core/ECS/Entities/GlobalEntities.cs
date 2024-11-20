@@ -18,7 +18,7 @@ using Vint.Core.ECS.Templates.Gold;
 using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.ECS.Templates.Money;
 using Vint.Core.ECS.Templates.Preset;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Entities;
 

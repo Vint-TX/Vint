@@ -3,7 +3,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User.PromoCode;
 
@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.User.PromoCode;
 public class CheckPromoCodeEvent : IServerEvent { // todo
     public string Code { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         string[] parts = Code.Split('/');
 
         IEntity user = entities.Single();

@@ -1,8 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Chat;
 
@@ -10,11 +11,13 @@ namespace Vint.Core.ECS.Events.Chat;
 public class CreatePrivateChatEvent : IServerEvent {
     [ProtocolName("UserUid")] public string Username { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.Player.Username == Username)
             return Task.CompletedTask;
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(playerConnection => playerConnection.IsOnline)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 

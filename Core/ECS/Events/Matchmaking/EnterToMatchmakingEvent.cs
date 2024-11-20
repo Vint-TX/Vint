@@ -1,7 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
+using Vint.Core.Battles;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Matchmaking;
 
@@ -9,7 +11,7 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 public class EnterToMatchmakingEvent : IServerEvent {
     static IEnumerable<IEntity> Modes { get; } = GlobalEntities.GetEntities("matchmakingModes").ToList();
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.InLobby) return;
 
         IEntity selectedMode = entities.Single();
@@ -23,9 +25,11 @@ public class EnterToMatchmakingEvent : IServerEvent {
         if (configPathParts[1] == "arcade") {
             if (!Enum.TryParse(configPathParts[3], true, out ArcadeModeType mode)) return;
 
-            connection.Server.ArcadeProcessor.AddPlayerToQueue(connection, mode);
+            IArcadeProcessor arcadeProcessor = serviceProvider.GetRequiredService<IArcadeProcessor>();
+            arcadeProcessor.AddPlayerToQueue(connection, mode);
         } else {
-            connection.Server.MatchmakingProcessor.AddPlayerToQueue(connection);
+            IMatchmakingProcessor matchmakingProcessor = serviceProvider.GetRequiredService<IMatchmakingProcessor>();
+            matchmakingProcessor.AddPlayerToQueue(connection);
         }
 
         await connection.Send(new EnteredToMatchmakingEvent(), selectedMode);

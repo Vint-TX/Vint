@@ -1,15 +1,16 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User.Friends;
 
 [ProtocolId(1450263956353)]
 public class RevokeFriendEvent : FriendBaseEvent, IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await using DbConnection db = new();
         Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == User.Id);
 
@@ -33,7 +34,8 @@ public class RevokeFriendEvent : FriendBaseEvent, IServerEvent {
         await db.CommitTransactionAsync();
         await connection.Send(new OutgoingFriendRemovedEvent(player.Id), connection.User);
 
-        IPlayerConnection? targetConnection = connection.Server.PlayerConnections.Values
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 

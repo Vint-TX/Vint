@@ -1,5 +1,5 @@
 using Vint.Core.Battles.Type;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ChatCommands.Attributes;
 

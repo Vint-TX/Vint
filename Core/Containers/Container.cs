@@ -1,5 +1,5 @@
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Containers;
 

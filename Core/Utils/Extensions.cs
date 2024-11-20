@@ -116,25 +116,36 @@ public static class Extensions {
         return list;
     }
 
-    public static void RunTaskInBackground(Func<Task> task, Func<Exception, Task> @catch, bool longRunning = false) {
-        Task.Factory.StartNew(async () => {
-            try {
-                await task();
-            } catch (Exception e) {
-                await @catch(e);
-                throw;
-            }
-        }, longRunning ? TaskCreationOptions.LongRunning : TaskCreationOptions.None);
-    }
+    public static Task WhenAllFastFail(params Task[] input) {
+        if (input == null! || input.Length == 0)
+            return Task.CompletedTask;
 
-    public static void RunTaskInBackground(Func<Task> task, Action<Exception> @catch, bool longRunning = false) {
-        Task.Factory.StartNew(async () => {
-            try {
-                await task();
-            } catch (Exception e) {
-                @catch(e);
-                throw;
+        Task[] tasks = (Task[])input.Clone();
+
+        TaskCompletionSource tcs = new();
+        int remaining = tasks.Length;
+
+        Action<Task> check = t => {
+            switch (t.Status) {
+                case TaskStatus.Faulted:
+                    tcs.TrySetException(t.Exception?.InnerException!);
+                    break;
+
+                case TaskStatus.Canceled:
+                    tcs.TrySetCanceled();
+                    break;
+
+                default:
+                    if (Interlocked.Decrement(ref remaining) == 0)
+                        tcs.SetResult();
+                    break;
             }
-        }, longRunning ? TaskCreationOptions.LongRunning : TaskCreationOptions.None);
+        };
+
+        foreach (Task task in tasks) {
+            task.ContinueWith(check, default, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+        }
+
+        return tcs.Task;
     }
 }

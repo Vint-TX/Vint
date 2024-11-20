@@ -13,9 +13,9 @@ public abstract class StateManager<T> : IStateManager where T : State {
 
     public T CurrentState { get; protected set; } = null!;
 
-    public virtual async Task Tick() {
+    public virtual async Task Tick(TimeSpan deltaTime) {
         if (!CurrentState.IsFinished)
-            await CurrentState.Tick();
+            await CurrentState.Tick(deltaTime);
     }
 
     public virtual async Task SetState(T state) {

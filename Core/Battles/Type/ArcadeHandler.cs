@@ -7,7 +7,7 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Matchmaking;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battles.Type;
 

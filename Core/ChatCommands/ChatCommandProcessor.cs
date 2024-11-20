@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Utils;
@@ -13,7 +14,9 @@ public interface IChatCommandProcessor {
     public bool TryParseCommand(string rawCommand, out ChatCommand? chatCommand);
 }
 
-public class ChatCommandProcessor : IChatCommandProcessor {
+public class ChatCommandProcessor(
+    IServiceProvider serviceProvider
+) : IChatCommandProcessor {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(ChatCommandProcessor));
     List<ChatCommand> Commands { get; set; } = [];
 
@@ -46,7 +49,7 @@ public class ChatCommandProcessor : IChatCommandProcessor {
         foreach (Type commandModule in commandModules) {
             Logger.Debug("Generating {Name} group", commandModule.Name);
 
-            ChatCommandModule chatCommandModule = (ChatCommandModule)Activator.CreateInstance(commandModule)!;
+            ChatCommandModule chatCommandModule = (ChatCommandModule)ActivatorUtilities.CreateInstance(serviceProvider, commandModule);
             ChatCommandGroupAttribute? chatCommandGroupAttribute = commandModule.GetCustomAttribute<ChatCommandGroupAttribute>();
 
             List<MethodInfo> commands = commandModule

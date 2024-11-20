@@ -8,7 +8,7 @@ using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Chat;
 using Vint.Core.ECS.Templates.Chat;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Utils;
 
@@ -76,8 +76,8 @@ public static class ChatUtils {
     }
 
     // todo squads
-    public static IEnumerable<IPlayerConnection> GetReceivers(IPlayerConnection from, IEntity chat) => chat.TemplateAccessor?.Template switch {
-        GeneralChatTemplate => from.Server.PlayerConnections.Values
+    public static IEnumerable<IPlayerConnection> GetReceivers(GameServer server, IPlayerConnection from, IEntity chat) => chat.TemplateAccessor?.Template switch {
+        GeneralChatTemplate => server.PlayerConnections.Values
             .Where(conn => conn.IsOnline),
 
         BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players
@@ -90,7 +90,7 @@ public static class ChatUtils {
         PersonalChatTemplate => chat.GetComponent<ChatParticipantsComponent>().Users
             .ToList()
             .Select(user => {
-                IPlayerConnection? connection = from.Server.PlayerConnections.Values
+                IPlayerConnection? connection = server.PlayerConnections.Values
                     .Where(conn => conn.IsOnline)
                     .SingleOrDefault(conn => conn.User.Id == user.Id);
 

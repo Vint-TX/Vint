@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Protocol.Commands;
 
@@ -12,5 +12,5 @@ public abstract class EntityCommand(
 ) : ICommand {
     [ProtocolPosition(0)] public IEntity Entity { get; protected set; } = entity;
 
-    public virtual Task Execute(IPlayerConnection connection) => throw new UnreachableException();
+    public virtual Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) => throw new UnreachableException();
 }

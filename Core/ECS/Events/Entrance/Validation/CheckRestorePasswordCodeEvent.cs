@@ -2,7 +2,7 @@
 using System.Text;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Entrance.Validation;
 
@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class CheckRestorePasswordCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.RestorePasswordCode == null) return;
 
         if (CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(Code), Encoding.UTF8.GetBytes(connection.RestorePasswordCode))) {

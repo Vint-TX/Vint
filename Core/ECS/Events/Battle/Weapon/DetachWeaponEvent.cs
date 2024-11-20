@@ -3,7 +3,7 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon;
 
@@ -12,7 +12,7 @@ public class DetachWeaponEvent : IServerEvent {
     public Vector3 AngularVelocity { get; private set; }
     public Vector3 Velocity { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         IEntity tank = entities.Single();
 
         if (!connection.InLobby ||

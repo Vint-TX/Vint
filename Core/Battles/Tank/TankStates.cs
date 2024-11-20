@@ -50,11 +50,11 @@ public class Dead(
             await flag.Drop(false);
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (!BattleTank.BattlePlayer.IsPaused && DateTimeOffset.UtcNow >= TimeToNextState)
             await StateManager.SetState(new Spawn(StateManager));
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 
@@ -71,11 +71,11 @@ public class Spawn(
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1.75);
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (DateTimeOffset.UtcNow >= TimeToNextState)
             await StateManager.SetState(new SemiActive(StateManager));
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 
@@ -92,11 +92,11 @@ public class SemiActive(
         TimeToNextState = DateTimeOffset.UtcNow.AddSeconds(1);
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (DateTimeOffset.UtcNow >= TimeToNextState)
             await BattleTank.Tank.AddComponentIfAbsent(new TankStateTimeOutComponent());
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 

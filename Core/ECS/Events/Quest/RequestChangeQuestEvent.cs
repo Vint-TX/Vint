@@ -1,24 +1,25 @@
 using LinqToDB;
 using LinqToDB.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Quests;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Quest;
 
 // og name: UseBonusEvent
 [ProtocolId(1504703762311)]
 public class RequestChangeQuestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.IsOnline) return;
 
         entities = entities.ToList();
 
-        QuestManager questManager = connection.Server.QuestManager;
+        QuestManager questManager = serviceProvider.GetRequiredService<QuestManager>();
         Player player = connection.Player;
         IEntity bonus = entities.ElementAt(0);
         IEntity quest = entities.ElementAt(1);

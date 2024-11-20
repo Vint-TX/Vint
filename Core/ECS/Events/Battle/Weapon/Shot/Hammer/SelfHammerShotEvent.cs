@@ -1,7 +1,7 @@
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Shot.Hammer;
 
@@ -16,10 +16,10 @@ public class SelfHammerShotEvent : SelfShotEvent {
         ClientTime = ClientTime
     };
 
-    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.BattlePlayer?.Tank?.WeaponHandler is not HammerWeaponHandler weaponHandler) return;
 
-        await base.Execute(connection, entities);
+        await base.Execute(connection, serviceProvider, entities);
         await weaponHandler.SetCurrentCartridgeCount(weaponHandler.CurrentCartridgeCount - 1);
     }
 }

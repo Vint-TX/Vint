@@ -3,7 +3,7 @@ using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Battle.Unit;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Movement;
 
@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.Battle.Movement;
 public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
     UnitMoveRemoteEvent RemoteEvent => new(UnitMove);
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
             return;
 

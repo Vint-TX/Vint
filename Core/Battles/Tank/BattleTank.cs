@@ -43,7 +43,7 @@ using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.ECS.Templates.Battle.Weapon;
 using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.ECS.Templates.Weapons.Market;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 using HealthComponent = Vint.Core.ECS.Components.Battle.Parameters.Health.HealthComponent;
 using SpeedComponent = Vint.Core.ECS.Components.Battle.Parameters.Chassis.SpeedComponent;
@@ -185,7 +185,7 @@ public class BattleTank {
     public IEntity Graffiti { get; }
     public IEntity Shell { get; }
 
-    public async Task Tick() {
+    public async Task Tick(TimeSpan deltaTime) {
         if (BattlePlayer.IsPaused &&
             (!BattlePlayer.KickTime.HasValue ||
              DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
@@ -207,15 +207,15 @@ public class BattleTank {
             await SetHealth(MaxHealth);
         }
 
-        await StateManager.Tick();
-        await WeaponHandler.Tick();
-        await TemperatureProcessor.Tick();
+        await StateManager.Tick(deltaTime);
+        await WeaponHandler.Tick(deltaTime);
+        await TemperatureProcessor.Tick(deltaTime);
 
         foreach (Effect effect in Effects)
-            await effect.Tick();
+            await effect.Tick(deltaTime);
 
         foreach (BattleModule module in Modules)
-            await module.Tick();
+            await module.Tick(deltaTime);
     }
 
     public async Task Enable() {

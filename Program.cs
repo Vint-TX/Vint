@@ -1,31 +1,28 @@
-using System.Diagnostics;
-using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using Vint.Core.Battles;
+using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database;
+using Vint.Core.Discord;
+using Vint.Core.Protocol;
+using Vint.Core.Quests;
 using Vint.Core.Server;
+using Vint.Core.Server.API;
+using Vint.Core.Server.Game;
+using Vint.Core.Server.Static;
 using Vint.Core.Utils;
 
 namespace Vint;
 
 abstract class Program {
-    const ushort GameServerPort = 5050, StaticServerPort = 8080;
-
-    static ILogger Logger { get; set; } = null!;
-
     static async Task Main() {
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-
         LoggerUtils.Initialize(LogEventLevel.Information);
 
-        Logger = Log.Logger.ForType(typeof(Program));
+        Log.Logger.ForType(typeof(Program)).Information("Welcome to Vint!");
 
         DatabaseConfig.Initialize();
-
-        StaticServer staticServer = new(IPAddress.Any, StaticServerPort);
-        GameServer gameServer = new(IPAddress.Any, GameServerPort);
 
         await Task.WhenAll(
             Task.Run(ConfigManager.InitializeCache),
@@ -35,21 +32,28 @@ abstract class Program {
                 await ConfigManager.InitializeNodes();
                 await ConfigManager.InitializeConfigs();
                 await ConfigManager.InitializeGlobalEntities();
-            }));
+            })
+        );
 
-        Extensions.RunTaskInBackground(staticServer.Start, e => {
-            Logger.Fatal(e, "");
-            Environment.Exit(e.HResult);
-        }, true);
+        IServiceProvider serviceProvider = new ServiceCollection()
+            .AddSingleton<ApiServer>()
+            .AddSingleton<StaticServer>()
+            .AddSingleton<GameServer>()
+            .AddSingleton<DiscordBot>()
+            .AddSingleton<Runner>()
+            .AddSingleton<Protocol>()
+            .AddSingleton<QuestManager>()
+            .AddSingleton<IBattleProcessor, BattleProcessor>()
+            .AddSingleton<IArcadeProcessor, ArcadeProcessor>()
+            .AddSingleton<IMatchmakingProcessor, MatchmakingProcessor>()
+            .AddSingleton<IChatCommandProcessor>(serviceProvider => {
+                ChatCommandProcessor chatCommandProcessor = new(serviceProvider);
+                chatCommandProcessor.RegisterCommands();
+                return chatCommandProcessor;
+            })
+            .BuildServiceProvider();
 
-        Extensions.RunTaskInBackground(gameServer.Start, e => {
-            Logger.Fatal(e, "");
-            Environment.Exit(e.HResult);
-        }, true);
-
-        stopwatch.Stop();
-        Logger.Information("Started in {Time}", stopwatch.Elapsed);
-
-        await Task.Delay(-1);
+        Runner runner = serviceProvider.GetRequiredService<Runner>();
+        await runner.Run();
     }
 }

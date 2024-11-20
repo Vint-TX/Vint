@@ -1,6 +1,5 @@
 using Vint.Core.Battles.Modules.Types.Base;
 using Vint.Core.ECS.Components.Modules.Inventory;
-using Vint.Core.Server;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battles.Modules;
@@ -32,11 +31,11 @@ public class Cooldown(
             await Module.TryBlock();
     }
 
-    public override async Task Tick() {
-        Elapsed += GameServer.DeltaTime * Module.Tank.ModuleCooldownCoeff;
+    public override async Task Tick(TimeSpan deltaTime) {
+        Elapsed += deltaTime * Module.Tank.ModuleCooldownCoeff;
         await TryFinish();
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 
     public override async Task Finish() {

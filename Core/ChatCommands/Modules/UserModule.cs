@@ -1,16 +1,21 @@
 using System.Reflection;
 using System.Text;
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
+using Vint.Core.Battles;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ChatCommands.Modules;
 
 [ChatCommandGroup("user", "Commands for all players", PlayerGroups.None)]
-public class UserModule : ChatCommandModule {
+public class UserModule(
+    GameServer server
+) : ChatCommandModule {
     [ChatCommand("help", "Show list of commands or usage of specified command")]
     public async Task Help(
         ChatCommandContext ctx,
@@ -56,11 +61,14 @@ public class UserModule : ChatCommandModule {
 
     [ChatCommand("players", "Show online players count")]
     public async Task Players(ChatCommandContext ctx) =>
-        await ctx.SendPrivateResponse($"{ctx.Connection.Server.PlayerConnections.Count} players online");
+        await ctx.SendPrivateResponse($"{server.PlayerConnections.Count} players online");
 
     [ChatCommand("battles", "Show current battles count")]
-    public async Task Battles(ChatCommandContext ctx) =>
-        await ctx.SendPrivateResponse($"{ctx.Connection.Server.BattleProcessor.BattlesCount} battles");
+    public async Task Battles(ChatCommandContext ctx) {
+        IBattleProcessor battleProcessor = ctx.ServiceProvider.GetRequiredService<IBattleProcessor>();
+
+        await ctx.SendPrivateResponse($"{battleProcessor.BattlesCount} battles");
+    }
 
     [ChatCommand("ping", "Show ping")]
     public async Task Ping(ChatCommandContext ctx) =>
@@ -91,7 +99,7 @@ public class UserModule : ChatCommandModule {
 
     [ChatCommand("link", "Link your account with Discord"), RequireConditions(ChatCommandConditions.InGarage)]
     public async Task Link(ChatCommandContext ctx) {
-        DiscordBot? discordBot = ctx.GameServer.DiscordBot;
+        DiscordBot? discordBot = ctx.ServiceProvider.GetService<DiscordBot>();
 
         if (discordBot == null) {
             await ctx.SendPrivateResponse("Cannot request account linking without Discord bot");
@@ -140,7 +148,7 @@ public class UserModule : ChatCommandModule {
 
     [ChatCommand("unlink", "(Not recommended) Unlink your account with Discord"), RequireConditions(ChatCommandConditions.InGarage)]
     public async Task Unlink(ChatCommandContext ctx) {
-        DiscordBot? discordBot = ctx.GameServer.DiscordBot;
+        DiscordBot? discordBot = ctx.ServiceProvider.GetService<DiscordBot>();
 
         if (discordBot == null) {
             await ctx.SendPrivateResponse("Cannot request account unlinking without Discord bot");

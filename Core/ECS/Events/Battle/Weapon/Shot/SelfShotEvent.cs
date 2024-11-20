@@ -5,7 +5,7 @@ using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Shot;
 
@@ -17,7 +17,7 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         ClientTime = ClientTime
     };
 
-    public virtual async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public virtual async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;
 
         IEntity tank = entities.Single();

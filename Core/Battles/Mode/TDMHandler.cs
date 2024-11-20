@@ -12,7 +12,7 @@ public class TDMHandler(
     protected override List<SpawnPoint> RedSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch!.Value.RedTeam.ToList();
     protected override List<SpawnPoint> BlueSpawnPoints { get; } = battle.MapInfo.SpawnPoints.TeamDeathmatch!.Value.BlueTeam.ToList();
 
-    public override Task Tick() => Task.CompletedTask;
+    public override Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
 
     public override TeamColor GetDominatedTeam() {
         const int dominationDiff = 30;

@@ -1,10 +1,9 @@
-﻿using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Channels;
 using ConcurrentCollections;
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battles.Player;
 using Vint.Core.Config;
@@ -51,12 +50,11 @@ using Vint.Core.Protocol.Codecs.Impl;
 using Vint.Core.Protocol.Commands;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Server;
+namespace Vint.Core.Server.Game;
 
 public interface IPlayerConnection {
     public ILogger Logger { get; }
 
-    public GameServer Server { get; }
     public Player Player { get; set; }
     public BattlePlayer? BattlePlayer { get; set; }
     public IEntity User { get; }
@@ -122,15 +120,15 @@ public interface IPlayerConnection {
 
     public Task SetClipboard(string content);
 
-    public ValueTask OpenURL(string url);
+    public Task OpenURL(string url);
 
     public Task Kick(string? reason);
 
-    public ValueTask Send(ICommand command);
+    public Task Send(ICommand command);
 
-    public ValueTask Send(IEvent @event);
+    public Task Send(IEvent @event);
 
-    public ValueTask Send(IEvent @event, params IEntity[] entities);
+    public Task Send(IEvent @event, params IEntity[] entities);
 
     public Task Share(IEntity entity);
 
@@ -151,13 +149,10 @@ public interface IPlayerConnection {
     public Task Tick();
 }
 
-public abstract class PlayerConnection(
-    GameServer server
-) : IPlayerConnection {
+public abstract class PlayerConnection : IPlayerConnection {
     public Guid Id { get; } = Guid.NewGuid();
     public ILogger Logger { get; protected set; } = Log.Logger.ForType(typeof(PlayerConnection));
 
-    public GameServer Server { get; } = server;
     public Player Player { get; set; } = null!;
     public IEntity User { get; private set; } = null!;
     public IEntity ClientSession { get; protected set; } = null!;
@@ -1026,15 +1021,15 @@ public abstract class PlayerConnection(
         await Share(new ClipboardSetNotificationTemplate().Create(User));
     }
 
-    public ValueTask OpenURL(string url) => Send(new OpenURLEvent(url));
+    public Task OpenURL(string url) => Send(new OpenURLEvent(url));
 
     public abstract Task Kick(string? reason);
 
-    public abstract ValueTask Send(ICommand command);
+    public abstract Task Send(ICommand command);
 
-    public ValueTask Send(IEvent @event) => Send(@event, ClientSession);
+    public Task Send(IEvent @event) => Send(@event, ClientSession);
 
-    public ValueTask Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
+    public Task Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
 
     public Task Share(IEntity entity) => entity.Share(this);
 
@@ -1088,30 +1083,18 @@ public abstract class PlayerConnection(
 }
 
 public class SocketPlayerConnection(
-    GameServer server,
-    Socket socket,
-    Protocol.Protocol protocol
-) : PlayerConnection(server) {
+    IServiceProvider serviceProvider,
+    Socket socket
+) : PlayerConnection {
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
     public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
-    public bool IsSocketConnected => Socket.Connected;
+    bool IsSocketConnected => Socket.Connected;
     bool IsConnected { get; set; }
 
     Socket Socket { get; } = socket;
-    Protocol.Protocol Protocol { get; } = protocol;
-
-    Channel<ICommand> ExecuteChannel { get; } =
-        Channel.CreateUnbounded<ICommand>(new UnboundedChannelOptions {
-            SingleReader = true,
-            SingleWriter = true
-        });
-
-    Channel<ICommand> SendChannel { get; } =
-        Channel.CreateUnbounded<ICommand>(new UnboundedChannelOptions {
-            SingleReader = true,
-            SingleWriter = true
-        });
+    Protocol.Protocol Protocol { get; } = serviceProvider.GetRequiredService<Protocol.Protocol>();
+    GameServer Server { get; } = serviceProvider.GetRequiredService<GameServer>();
 
     public override async Task SetUsername(string username) {
         await base.SetUsername(username);
@@ -1132,19 +1115,34 @@ public class SocketPlayerConnection(
         await Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         await Share(ClientSession);
 
-        Extensions.RunTaskInBackground(ReceiveLoop, OnException, true);
-        Extensions.RunTaskInBackground(SendLoop, OnException, true);
-        Extensions.RunTaskInBackground(ExecuteLoop, OnException, true);
-
         IsConnected = true;
     }
 
-    public override ValueTask Send(ICommand command) {
+    public override async Task Send(ICommand command) {
         if (!IsSocketConnected)
-            return ValueTask.CompletedTask;
+            return;
 
-        Logger.Debug("Queueing for sending {Command}", command);
-        return SendChannel.Writer.WriteAsync(command);
+        try {
+            Logger.Verbose("Encoding {Command}", command);
+
+            ProtocolBuffer buffer = new(new OptionalMap(), this);
+            Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
+
+            using MemoryStream stream = new();
+            await using BinaryWriter writer = new BigEndianBinaryWriter(stream);
+            buffer.Wrap(writer);
+
+            byte[] bytes = stream.ToArray();
+
+            CancellationTokenSource cts = new();
+            cts.CancelAfter(TimeSpan.FromSeconds(2));
+
+            await Socket.SendAsync(bytes, cts.Token);
+
+            Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
+        } catch (Exception e) {
+            Logger.Error(e, "Failed to send {Command}", command);
+        }
     }
 
     async Task Disconnect() {
@@ -1196,9 +1194,6 @@ public class SocketPlayerConnection(
         } finally {
             Server.RemovePlayer(Id);
 
-            SendChannel.Writer.TryComplete();
-            ExecuteChannel.Writer.TryComplete();
-
             foreach (IEntity entity in SharedEntities) {
                 entity.SharedPlayers.TryRemove(this);
 
@@ -1219,87 +1214,43 @@ public class SocketPlayerConnection(
         }
 
         await base.Tick();
+        await ReceiveAndExecute();
     }
 
-    async Task ReceiveLoop() {
-        byte[] bytes = ArrayPool<byte>.Shared.Rent(4096);
+    async Task ReceiveAndExecute() {
+        if (!IsSocketConnected)
+            return;
 
         try {
-            while (IsSocketConnected) {
-                ProtocolBuffer buffer = new(new OptionalMap(), this);
-                await using NetworkStream stream = new(Socket);
-                using BinaryReader reader = new BigEndianBinaryReader(stream);
+            if (Socket.Available <= 0)
+                return;
 
-                if (!buffer.Unwrap(reader))
-                    throw new InvalidDataException("Failed to unwrap packet");
+            await using NetworkStream stream = new(Socket);
+            using BinaryReader reader = new BigEndianBinaryReader(stream);
+            ProtocolBuffer buffer = new(new OptionalMap(), this);
 
-                long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+            if (!buffer.Unwrap(reader))
+                throw new InvalidDataException("Failed to unwrap packet");
 
-                while (availableForRead > 0) {
-                    Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
+            long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
 
-                    ICommand command = (ICommand)Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Decode(buffer);
+            while (availableForRead > 0) {
+                Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
 
-                    Logger.Debug("Queueing for executing: {Command}", command);
-                    await ExecuteChannel.Writer.WriteAsync(command);
-
-                    availableForRead = buffer.Stream.Length - buffer.Stream.Position;
-                }
-
-                Array.Clear(bytes);
-            }
-        } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception in ReceiveLoop");
-            await Disconnect();
-        } finally {
-            ArrayPool<byte>.Shared.Return(bytes);
-        }
-    }
-
-    async Task SendLoop() {
-        try {
-            while (IsSocketConnected) {
-                ICommand command = await SendChannel.Reader.ReadAsync();
+                ICommand command = (ICommand)Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand)))
+                    .Decode(buffer);
 
                 try {
-                    Logger.Verbose("Encoding {Command}", command);
-
-                    ProtocolBuffer buffer = new(new OptionalMap(), this);
-                    Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
-
-                    using MemoryStream stream = new();
-                    await using BinaryWriter writer = new BigEndianBinaryWriter(stream);
-                    buffer.Wrap(writer);
-
-                    byte[] bytes = stream.ToArray();
-                    await Socket.SendAsync(bytes);
-
-                    Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
-                } catch (Exception e) {
-                    Logger.Error(e, "Failed to send {Command}", command);
-                }
-            }
-        } catch (InvalidOperationException) { }
-    }
-
-    async Task ExecuteLoop() {
-        try {
-            while (true) {
-                ICommand command = await ExecuteChannel.Reader.ReadAsync();
-
-                try {
-                    await command.Execute(this);
+                    await command.Execute(this, serviceProvider);
                 } catch (Exception e) {
                     Logger.Error(e, "Failed to execute {Command}", command);
                 }
-            }
-        } catch (Exception e) {
-            Logger.Error(e, "Socket caught an exception in ExecuteLoop");
-        }
-    }
 
-    async Task OnException(Exception e) {
-        Logger.Error(e, "");
-        await Disconnect();
+                availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+            }
+        } catch {
+            await Disconnect();
+            throw;
+        }
     }
 }

@@ -8,7 +8,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.StateMachine;
 using Vint.Core.Utils;
 
@@ -24,11 +24,11 @@ public abstract class BattleState(
 public class NotEnoughPlayers(
     BattleStateManager stateManager
 ) : BattleState(stateManager) {
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (Battle.Players.Count > 0)
             await StateManager.SetState(new Countdown(StateManager));
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 }
 
@@ -52,13 +52,13 @@ public class Countdown(
         await base.Start();
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         if (Battle.Players.Count <= 0)
             await StateManager.SetState(new NotEnoughPlayers(StateManager));
         else if (Battle.Timer < TimeSpan.Zero)
             await StateManager.SetState(new Starting(StateManager));
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 
     public override async Task Finish() {
@@ -75,7 +75,7 @@ public class Starting(
         await base.Start();
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         switch (Battle.TypeHandler) {
             case MatchmakingHandler:
                 await MatchmakingBattleTick();
@@ -90,7 +90,7 @@ public class Starting(
                 break;
         }
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 
     async Task MatchmakingBattleTick() {
@@ -151,9 +151,9 @@ public class WarmUp(
         await base.Start();
     }
 
-    public override async Task Tick() {
-        await WarmUpStateManager.Tick();
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await WarmUpStateManager.Tick(deltaTime);
+        await base.Tick(deltaTime);
     }
 
     public override async Task Finish() {
@@ -179,7 +179,7 @@ public class Running(
         await base.Start();
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(TimeSpan deltaTime) {
         switch (Battle.TypeHandler) {
             case CustomHandler:
                 await CustomBattleTick();
@@ -194,7 +194,7 @@ public class Running(
         if (Battle.Timer < TimeSpan.Zero)
             await Battle.Finish();
 
-        await base.Tick();
+        await base.Tick(deltaTime);
     }
 
     async Task NonCustomBattleTick() {

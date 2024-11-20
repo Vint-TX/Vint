@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ChatCommands;
 
@@ -25,8 +25,8 @@ public sealed class ChatCommand(
     public MethodInfo Method { get; } = method;
     public List<ParameterInfo> Parameters { get; } = parameters;
 
-    public async Task Execute(IPlayerConnection connection, IEntity chat, string rawCommand) {
-        ChatCommandContext context = new(Processor, connection, chat, Info);
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEntity chat, string rawCommand) {
+        ChatCommandContext context = new(serviceProvider, Processor, connection, chat, Info);
         bool shouldExecute = Module.BeforeCommandExecution(context);
 
         if (!shouldExecute) return;

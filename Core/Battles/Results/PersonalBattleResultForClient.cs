@@ -7,7 +7,7 @@ using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Results;

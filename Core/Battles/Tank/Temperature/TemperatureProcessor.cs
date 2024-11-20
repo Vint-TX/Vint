@@ -4,7 +4,6 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Server.Tank;
-using Vint.Core.Server;
 using Vint.Core.Structures;
 using Vint.Core.Utils;
 
@@ -32,19 +31,19 @@ public class TemperatureProcessor {
     ConcurrentQueue<TemperatureAssist> NewAssists { get; } = [];
     ConcurrentList<TemperatureAssist> Assists { get; } = [];
 
-    public async Task Tick() {
+    public async Task Tick(TimeSpan deltaTime) {
         if (Tank.StateManager.CurrentState is not Active)
             return;
 
         WasFrozen = Temperature < 0;
 
-        UpdateAssistsDuration();
-        NormalizeTankTemperature();
+        UpdateAssistsDuration(deltaTime);
+        NormalizeTankTemperature(deltaTime);
         AcceptNewAssists();
         NormalizeAllAssists();
 
         if (RemainingPeriod > TimeSpan.Zero) {
-            RemainingPeriod -= GameServer.DeltaTime;
+            RemainingPeriod -= deltaTime;
             return;
         }
 
@@ -69,9 +68,9 @@ public class TemperatureProcessor {
         TemperatureConfig.AutoDecrementInMs += decrementTemperatureDelta;
     }
 
-    void UpdateAssistsDuration() {
+    void UpdateAssistsDuration(TimeSpan deltaTime) {
         foreach (TemperatureAssist assist in Assists.Where(assist => assist.CurrentDuration > TimeSpan.Zero))
-            assist.CurrentDuration -= GameServer.DeltaTime;
+            assist.CurrentDuration -= deltaTime;
     }
 
     async Task HeatDamage() {
@@ -83,7 +82,7 @@ public class TemperatureProcessor {
         }
     }
 
-    void NormalizeTankTemperature() {
+    void NormalizeTankTemperature(TimeSpan deltaTime) {
         if (Temperature == 0)
             return;
 
@@ -98,7 +97,7 @@ public class TemperatureProcessor {
             ? TemperatureConfig.AutoDecrementInMs
             : TemperatureConfig.AutoIncrementInMs;
 
-        delta *= (float)GameServer.DeltaTime.TotalMilliseconds;
+        delta *= (float)deltaTime.TotalMilliseconds;
 
         while (delta > 0) {
             assists = assists.Where(assist => assist.CurrentDelta != 0).ToArray();

@@ -6,7 +6,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Effect.Mine;
 using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Physics;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battles.Effects;
 
@@ -79,12 +79,12 @@ public class SpiderMineEffect(
         await Deactivate();
     }
 
-    public override async Task Tick() {
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await base.Tick(deltaTime);
 
         if (!IsActive) return;
 
-        await DrainEnergy(GameServer.DeltaTime);
+        await DrainEnergy(deltaTime);
     }
 
     async Task TryExplode() {

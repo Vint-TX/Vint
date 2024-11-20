@@ -10,28 +10,31 @@ using DSharpPlus.Net;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Vint.Core.Battles;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
 using Vint.Core.ECS.Templates.Notification;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 using ILogger = Serilog.ILogger;
 
 namespace Vint.Core.Discord;
 
 public class DiscordBot(
-    string token,
-    GameServer gameServer
+    IServiceProvider serviceProvider
 ) {
-    const string ClientSecretProdEnv = "VINT_DISCORD_BOT_PROD_CLIENT_SECRET";
-    const string ClientSecretDebugEnv = "VINT_DISCORD_BOT_DEBUG_CLIENT_SECRET";
-    const string StatusTemplate = "Vint | {0} players online";
+    const string
+        DebugToken = "VINT_DISCORD_BOT_DEBUG_TOKEN",
+        ProdToken = "VINT_DISCORD_BOT_PROD_TOKEN",
+        DebugClientSecret = "VINT_DISCORD_BOT_DEBUG_CLIENT_SECRET",
+        ProdClientSecret = "VINT_DISCORD_BOT_PROD_CLIENT_SECRET",
+        StatusTemplate = "Vint | {0} players online";
 
     public ulong Id => Client.CurrentApplication.Id;
-    public string ClientSecret { get; } = Environment.GetEnvironmentVariable(ClientSecretDebugEnv) ??
-                                          Environment.GetEnvironmentVariable(ClientSecretProdEnv)!;
+    public string ClientSecret { get; } = Environment.GetEnvironmentVariable(DebugClientSecret) ??
+                                          Environment.GetEnvironmentVariable(ProdClientSecret)!;
     int LastPlayersCount { get; set; }
     ILogger Logger { get; } = Log.Logger.ForType(typeof(DiscordBot));
     DiscordClient Client { get; set; } = null!;
@@ -39,14 +42,21 @@ public class DiscordBot(
     DiscordRole LinkedRole { get; set; } = null!;
     DiscordChannel ReportsChannel { get; set; } = null!;
 
-    public async Task Start() {
-        IServiceCollection serviceCollection = new ServiceCollection()
-            .AddSingleton(this)
-            .AddSingleton(gameServer);
+    bool IsStarted { get; set; }
+
+    public async Task TryStart() {
+        string? token = Environment.GetEnvironmentVariable(DebugToken) ??
+                        Environment.GetEnvironmentVariable(ProdToken);
+
+        if (token == null)
+            return;
 
         Client = DiscordClientBuilder
-            .CreateDefault(token, DiscordIntents.All, serviceCollection)
+            .CreateDefault(token, DiscordIntents.All)
             .ConfigureLogging(builder => builder.AddSerilog(Logger))
+            .ConfigureServices(serviceCollection => serviceCollection
+                .AddSingleton<GameServer>()
+                .AddSingleton<IBattleProcessor, BattleProcessor>())
             .UseCommands((_, commands) => {
                 commands.AddCommands(Assembly.GetExecutingAssembly());
                 commands.AddProcessor<SlashCommandProcessor>();
@@ -67,6 +77,7 @@ public class DiscordBot(
                     return Task.CompletedTask;
                 };
             }, new CommandsConfiguration { RegisterDefaultCommandProcessors = false })
+            .DisableDefaultLogging()
             .Build();
 
         ConfigManager.NewLinkRequest = NewLinkRequest;
@@ -75,22 +86,28 @@ public class DiscordBot(
         LinkedRole = await Guild.GetRoleAsync(ConfigManager.Discord.LinkedRoleId)!;
         ReportsChannel = await Client.GetChannelAsync(ConfigManager.Discord.ReportsChannelId);
         await Client.ConnectAsync(new DiscordActivity("Vint", DiscordActivityType.Competing));
+
+        IsStarted = true;
     }
 
     public async Task SetPlayersCount(int count) {
-        if (LastPlayersCount == count || Client is not { AllShardsConnected: true }) return;
+        if (!IsStarted || LastPlayersCount == count || Client is not { AllShardsConnected: true }) return;
 
         await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), DiscordActivityType.Competing));
         LastPlayersCount = count;
     }
 
     public async Task SendReport(string message, string reporter) {
+        if (!IsStarted) return;
+
         DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(message, "New report submitted", $"Reported by **{reporter}**");
 
         await ReportsChannel.SendMessageAsync(embed);
     }
 
     public async Task GiveLinkedRole(DiscordRestClient userClient, string username, string accessToken) {
+        if (!IsStarted) return;
+
         DiscordMember? member = await AddToOrGetFromGuild(userClient.CurrentUser, username, accessToken);
 
         if (member! == null!) return;
@@ -103,6 +120,8 @@ public class DiscordBot(
     }
 
     public async Task RevokeLinkedRole(ulong userId) {
+        if (!IsStarted) return;
+
         try {
             DiscordMember member = await Guild.GetMemberAsync(userId);
             await member.RevokeRoleAsync(LinkedRole);
@@ -112,6 +131,8 @@ public class DiscordBot(
     }
 
     public async Task<DiscordMember?> AddToOrGetFromGuild(DiscordUser user, string username, string accessToken) {
+        if (!IsStarted) return null;
+
         try {
             return await Guild.AddMemberWithRolesAsync(user, accessToken, [LinkedRole], username) ??
                    await Guild.GetMemberAsync(user.Id);
@@ -160,7 +181,8 @@ public class DiscordBot(
             UserId = userId
         };
 
-        IPlayerConnection? connection = gameServer.PlayerConnections.Values.FirstOrDefault(conn => conn.IsOnline && conn.Player.Id == playerId);
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        IPlayerConnection? connection = server.PlayerConnections.Values.FirstOrDefault(conn => conn.IsOnline && conn.Player.Id == playerId);
 
         if (connection == null) {
             await discordLink.Revoke(this, connection);

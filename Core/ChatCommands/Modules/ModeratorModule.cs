@@ -5,13 +5,15 @@ using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ChatCommands.Modules;
 
 [ChatCommandGroup("moderator", "Commands for moderators", PlayerGroups.Moderator)]
-public class ModeratorModule : ChatCommandModule {
+public class ModeratorModule(
+    GameServer server
+) : ChatCommandModule {
     [ChatCommand("warn", "Warn a player")]
     public async Task Warn(
         ChatCommandContext ctx,
@@ -23,7 +25,7 @@ public class ModeratorModule : ChatCommandModule {
         string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -36,7 +38,7 @@ public class ModeratorModule : ChatCommandModule {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
                 notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -84,7 +86,7 @@ public class ModeratorModule : ChatCommandModule {
         string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -97,7 +99,7 @@ public class ModeratorModule : ChatCommandModule {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
                 notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -140,7 +142,7 @@ public class ModeratorModule : ChatCommandModule {
         [Option("username", "Username of player to unwarn")]
         string username,
         [Option("id", "Id of warn")] long id) {
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -153,7 +155,7 @@ public class ModeratorModule : ChatCommandModule {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
                 notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -189,7 +191,7 @@ public class ModeratorModule : ChatCommandModule {
         ChatCommandContext ctx,
         [Option("username", "Username of player to unmute")]
         string username) {
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -202,7 +204,7 @@ public class ModeratorModule : ChatCommandModule {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
                 notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -240,7 +242,7 @@ public class ModeratorModule : ChatCommandModule {
         string username,
         [WaitingForText, Option("reason", "Reason for kick", true)]
         string? reason = null) {
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -266,7 +268,7 @@ public class ModeratorModule : ChatCommandModule {
             Battle battle = targetConnection.BattlePlayer!.Battle;
 
             notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-            notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+            notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
         }
 
         await targetConnection.Kick(reason);
@@ -291,7 +293,7 @@ public class ModeratorModule : ChatCommandModule {
         string message) {
         switch (username) {
             case "@a": {
-                foreach (IPlayerConnection connection in ctx.Connection.Server.PlayerConnections.Values)
+                foreach (IPlayerConnection connection in server.PlayerConnections.Values)
                     await connection.DisplayMessage(message);
                 break;
             }
@@ -304,7 +306,7 @@ public class ModeratorModule : ChatCommandModule {
                 break;
 
             default: {
-                IPlayerConnection? target = ctx.Connection.Server.PlayerConnections.Values
+                IPlayerConnection? target = server.PlayerConnections.Values
                     .Where(conn => conn.IsOnline)
                     .SingleOrDefault(conn => conn.Player.Username == username);
 

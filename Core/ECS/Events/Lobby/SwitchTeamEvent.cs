@@ -5,13 +5,13 @@ using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1499172594697)]
 public class SwitchTeamEvent : IServerEvent {
-    public Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby) return Task.CompletedTask;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

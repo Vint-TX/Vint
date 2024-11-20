@@ -4,7 +4,7 @@ using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Bonus;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Bonus;
@@ -58,5 +58,5 @@ public abstract class BonusBox {
 
     public virtual Task Drop() => Spawn();
 
-    public virtual Task Tick() => StateManager.Tick();
+    public virtual Task Tick(TimeSpan deltaTime) => StateManager.Tick(deltaTime);
 }

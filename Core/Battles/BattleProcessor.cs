@@ -1,7 +1,7 @@
 using ConcurrentCollections;
 using Serilog;
 using Vint.Core.Battles.Type;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles;
@@ -9,7 +9,7 @@ namespace Vint.Core.Battles;
 public interface IBattleProcessor {
     public int BattlesCount { get; }
 
-    public Task Tick();
+    public Task Tick(TimeSpan deltaTime);
 
     public Task PutPlayerFromMatchmaking(IPlayerConnection connection);
 
@@ -32,17 +32,19 @@ public interface IBattleProcessor {
     public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner);
 }
 
-public class BattleProcessor : IBattleProcessor {
+public class BattleProcessor(
+    IServiceProvider serviceProvider
+) : IBattleProcessor {
     ConcurrentHashSet<Battle> Battles { get; } = [];
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(BattleProcessor));
 
     public int BattlesCount => Battles.Count;
 
-    public async Task Tick() {
+    public async Task Tick(TimeSpan deltaTime) {
         foreach (Battle battle in Battles) {
             try {
-                await battle.Tick();
+                await battle.Tick(deltaTime);
 
                 if (battle is { WasPlayers: true, Players.Count: 0 }) {
                     Logger.Warning("Removing battle {Id}", battle.LobbyId);
@@ -81,21 +83,21 @@ public class BattleProcessor : IBattleProcessor {
     public Battle? FindByIndex(int index) => Battles.ElementAtOrDefault(index);
 
     public Battle CreateMatchmakingBattle() {
-        Battle battle = new();
+        Battle battle = new(serviceProvider);
         Battles.Add(battle);
 
         return battle;
     }
 
     public Battle CreateArcadeBattle(ArcadeModeType mode) {
-        Battle battle = new(mode);
+        Battle battle = new(serviceProvider, mode);
         Battles.Add(battle);
 
         return battle;
     }
 
     public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner) {
-        Battle battle = new(properties, owner);
+        Battle battle = new(serviceProvider, properties, owner);
         Battles.Add(battle);
 
         return battle;

@@ -4,7 +4,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Notification;
 using Vint.Core.ECS.Templates.Notification;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.User.Settings;
@@ -14,7 +14,7 @@ public class BuyUsernameChangeEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public long Price { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!RegexUtils.IsLoginValid(Username)) return;
 
         IEntity user = entities.Single();

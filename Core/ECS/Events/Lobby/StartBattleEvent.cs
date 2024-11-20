@@ -1,13 +1,13 @@
 using Vint.Core.Battles.States;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1497356545125)]
 public class StartBattleEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         Battles.Battle battle = connection.BattlePlayer!.Battle;
         BattleStateManager stateManager = battle.StateManager;
 

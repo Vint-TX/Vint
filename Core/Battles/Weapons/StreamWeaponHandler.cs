@@ -69,6 +69,6 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, IStreamWeaponHand
             ? Stopwatch.Elapsed - hitTime
             : TimeSpan.Zero;
 
-    public virtual ValueTask Reset() =>
+    public virtual Task Reset() =>
         BattleTank.BattlePlayer.PlayerConnection.Send(new StreamWeaponResetStateEvent(), BattleEntity);
 }

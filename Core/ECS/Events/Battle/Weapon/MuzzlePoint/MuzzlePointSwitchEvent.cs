@@ -1,13 +1,13 @@
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.MuzzlePoint;
 
 [ProtocolId(-2650671245931951659)]
 public class MuzzlePointSwitchEvent : MuzzlePointEvent, IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Tank!.WeaponHandler is not TwinsWeaponHandler) return;

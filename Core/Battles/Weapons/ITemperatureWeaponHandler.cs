@@ -1,4 +1,3 @@
-using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Battles.Weapons;

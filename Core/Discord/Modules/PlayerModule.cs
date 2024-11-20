@@ -7,7 +7,7 @@ using Vint.Core.Battles;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Discord.Modules;
 

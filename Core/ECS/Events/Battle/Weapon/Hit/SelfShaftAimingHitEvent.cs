@@ -1,7 +1,7 @@
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
@@ -17,8 +17,8 @@ public class SelfShaftAimingHitEvent : SelfHitEvent {
         ClientTime = ClientTime
     };
 
-    public override async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        await base.Execute(connection, entities);
+    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        await base.Execute(connection, serviceProvider, entities);
 
         if (WeaponHandler is not ShaftWeaponHandler shaft) return;
 

@@ -1,6 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
+using Vint.Core.Battles;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Lobby;
 
@@ -8,8 +10,9 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class EnterBattleAsSpectatorFromLobbyRequestEvent : IServerEvent {
     public long BattleId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
-        Battles.Battle? battle = connection.Server.BattleProcessor.FindByBattleId(BattleId);
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        IBattleProcessor battleProcessor = serviceProvider.GetRequiredService<IBattleProcessor>();
+        Battles.Battle? battle = battleProcessor.FindByBattleId(BattleId);
 
         if (connection.InLobby || battle == null) return;
 

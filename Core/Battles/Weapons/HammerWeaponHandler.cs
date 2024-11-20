@@ -82,8 +82,8 @@ public class HammerWeaponHandler : TankWeaponHandler {
         await ResetMagazine();
     }
 
-    public override async Task Tick() {
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await base.Tick(deltaTime);
         await TryReload();
     }
 

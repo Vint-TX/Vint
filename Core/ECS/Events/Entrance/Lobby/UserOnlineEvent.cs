@@ -7,14 +7,14 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Payment;
 using Vint.Core.ECS.Events.User.Friends;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Lobby;
 
 [ProtocolId(1507022246767)]
 public class UserOnlineEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await connection.Share(connection.GetEntities());
 
         await using DbConnection db = new();

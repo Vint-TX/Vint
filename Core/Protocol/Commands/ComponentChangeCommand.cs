@@ -4,7 +4,7 @@ using Serilog;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Protocol.Commands;
@@ -16,7 +16,7 @@ public class ComponentChangeCommand(
 ) : EntityCommand(entity) {
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
-    public override async Task Execute(IPlayerConnection connection) {
+    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
         ILogger logger = connection.Logger.ForType(GetType());
         Type type = Component.GetType();
         ClientChangeableAttribute? clientChangeable = type.GetCustomAttribute<ClientChangeableAttribute>();

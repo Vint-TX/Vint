@@ -1,5 +1,6 @@
 using System.Text;
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battles;
 using Vint.Core.Battles.Bonus;
 using Vint.Core.Battles.Player;
@@ -8,13 +9,15 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ChatCommands.Modules;
 
 [ChatCommandGroup("admin", "Commands for admins", PlayerGroups.Admin)]
-public class AdminModule : ChatCommandModule {
+public class AdminModule(
+    GameServer server
+) : ChatCommandModule {
     [ChatCommand("ban", "Ban a player")]
     public async Task Ban(
         ChatCommandContext ctx,
@@ -26,7 +29,7 @@ public class AdminModule : ChatCommandModule {
         string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -39,7 +42,7 @@ public class AdminModule : ChatCommandModule {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
                 notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -82,7 +85,7 @@ public class AdminModule : ChatCommandModule {
         ChatCommandContext ctx,
         [Option("username", "Username of player to unban")]
         string username) {
-        IPlayerConnection? targetConnection = ctx.Connection.Server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -95,7 +98,7 @@ public class AdminModule : ChatCommandModule {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
                 notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(targetConnection, notifyChat).ToList();
+                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -161,7 +164,7 @@ public class AdminModule : ChatCommandModule {
     [ChatCommand("usernames", "Online player usernames")]
     public async Task Usernames(ChatCommandContext ctx) {
         StringBuilder builder = new();
-        List<IPlayerConnection> connections = ctx.Connection.Server.PlayerConnections.Values.ToList();
+        List<IPlayerConnection> connections = server.PlayerConnections.Values.ToList();
         List<string> onlineUsernames = connections
             .Where(connection => connection.IsOnline)
             .Select(connection => connection.Player.Username)
@@ -196,6 +199,9 @@ public class AdminModule : ChatCommandModule {
     }
 
     [ChatCommand("tps", "Show TPS")]
-    public async Task TPS(ChatCommandContext ctx) =>
-        await ctx.SendPrivateResponse($"{1 / GameServer.DeltaTime.TotalSeconds} TPS");
+    public async Task TPS(ChatCommandContext ctx) {
+        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>().DeltaTime;
+
+        await ctx.SendPrivateResponse($"{1 / deltaTime.TotalSeconds} TPS");
+    }
 }

@@ -4,9 +4,8 @@ using DSharpPlus.Exceptions;
 using DSharpPlus.Net;
 using LinqToDB;
 using LinqToDB.Mapping;
-using Microsoft.Extensions.Logging;
 using Vint.Core.Discord;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Database.Models;
 

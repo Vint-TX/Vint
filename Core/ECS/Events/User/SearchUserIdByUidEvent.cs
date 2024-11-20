@@ -3,7 +3,7 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User;
 
@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.User;
 public class SearchUserIdByUidEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await using DbConnection db = new();
 
         Player searcherPlayer = connection.Player;

@@ -1,7 +1,7 @@
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Damage;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battles.Damage;
 

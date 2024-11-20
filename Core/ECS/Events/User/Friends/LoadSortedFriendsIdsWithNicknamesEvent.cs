@@ -1,16 +1,19 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User.Friends;
 
 [ProtocolId(1498740539984)]
 public class LoadSortedFriendsIdsWithNicknamesEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         await using DbConnection db = new();
-        List<IPlayerConnection> connections = connection.Server.PlayerConnections.Values.ToList();
+
+        GameServer server = serviceProvider.GetRequiredService<GameServer>();
+        List<IPlayerConnection> connections = server.PlayerConnections.Values.ToList();
 
         Dictionary<long, string> friends = db.Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)

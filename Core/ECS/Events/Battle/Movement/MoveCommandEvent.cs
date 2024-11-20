@@ -5,7 +5,7 @@ using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Movement;
@@ -14,7 +14,7 @@ namespace Vint.Core.ECS.Events.Battle.Movement;
 public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank)
             return;

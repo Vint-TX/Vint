@@ -1,4 +1,5 @@
 ﻿using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -7,17 +8,17 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Quests;
 using Vint.Core.Protocol.Attributes;
 using Vint.Core.Quests;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.User.Quest;
 
 [ProtocolId(1497606008074)]
 public class UserQuestReadyEvent : IServerEvent { // todo premium
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.IsOnline) return;
 
         Player player = connection.Player;
-        QuestManager questManager = connection.Server.QuestManager;
+        QuestManager questManager = serviceProvider.GetRequiredService<QuestManager>();
 
         bool updateQuests = player.LastQuestUpdateTime < ConfigManager.ServerConfig.LastQuestsUpdate;
         bool noChanges = player.QuestChanges >= player.MaxQuestChanges;

@@ -4,13 +4,13 @@ using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Registration;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Entrance.Invite;
 
 [ProtocolId(1439810001590)]
 public class InviteEnteredEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         string? code = connection.ClientSession.GetComponent<InviteComponent>().InviteCode;
 
         if (string.IsNullOrWhiteSpace(code)) {

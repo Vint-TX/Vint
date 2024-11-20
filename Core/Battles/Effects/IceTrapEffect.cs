@@ -7,7 +7,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Effect.Mine;
 using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Physics;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battles.Effects;
 

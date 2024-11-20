@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Serilog;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Components;

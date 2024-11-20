@@ -7,6 +7,7 @@ using Vint.Core.Battles.Type;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Components.Group;
@@ -16,7 +17,8 @@ using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Templates.Battle.User;
-using Vint.Core.Server;
+using Vint.Core.Quests;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Player;
@@ -126,7 +128,7 @@ public class BattlePlayer {
             .SelectMany(player => player.Tank!.Entities));
     }
 
-    public async Task OnBattleEnded(bool hasEnemies) {
+    public async Task OnBattleEnded(bool hasEnemies, QuestManager questManager) {
         Database.Models.Player player = PlayerConnection.Player;
 
         if (IsSpectator) {
@@ -195,7 +197,7 @@ public class BattlePlayer {
             await PlayerConnection.ChangeReputation(reputationDelta);
             await PlayerConnection.ChangeGameplayChestScore(score);
 
-            await PlayerConnection.Server.QuestManager.BattleFinished(PlayerConnection, hasEnemies);
+            await questManager.BattleFinished(PlayerConnection, hasEnemies);
         }
 
         PersonalBattleResultForClient personalBattleResult = new();
@@ -206,17 +208,17 @@ public class BattlePlayer {
         await PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.User);
     }
 
-    public async Task OnAntiCheatSuspected() {
+    public async Task OnAntiCheatSuspected(DiscordBot? discordBot) {
         if (Reported) return;
 
-        if (PlayerConnection.Server.DiscordBot != null)
-            await PlayerConnection.Server.DiscordBot.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
+        if (discordBot != null)
+            await discordBot.SendReport($"{PlayerConnection.Player.Username} is suspected to be cheating.", "Server");
 
         Reported = true;
     }
 
     public float GetBattleSeriesMultiplier() {
-        float[] battleSeriesMultiplier = [1f, 1.05f, 1.10f, 1.15f, 1.2f, 1.25f];
+        float[] battleSeriesMultiplier = [1f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f];
         int series = Math.Clamp(PlayerConnection.BattleSeries, 0, battleSeriesMultiplier.Length - 1);
         return battleSeriesMultiplier[series];
     }
@@ -237,10 +239,10 @@ public class BattlePlayer {
             await battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
     }
 
-    public async Task Tick() {
+    public async Task Tick(TimeSpan deltaTime) {
         if (!InBattleAsTank) return;
 
-        await Tank!.Tick();
+        await Tank!.Tick(deltaTime);
     }
 
     public override int GetHashCode() => PlayerConnection.GetHashCode();

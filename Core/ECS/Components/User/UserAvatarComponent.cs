@@ -2,7 +2,7 @@
 using Vint.Core.ECS.Components.Server.Avatar;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Components.User;
 

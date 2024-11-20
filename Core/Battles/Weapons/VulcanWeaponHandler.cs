@@ -49,8 +49,8 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
 
-    public override async Task Tick() {
-        await base.Tick();
+    public override async Task Tick(TimeSpan deltaTime) {
+        await base.Tick(deltaTime);
         UpdateOverheating();
     }
 
@@ -71,7 +71,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
         LastOverheatingUpdate = DateTimeOffset.UtcNow;
     }
 
-    public override ValueTask Reset() =>
+    public override Task Reset() =>
         BattleTank.BattlePlayer.PlayerConnection.Send(new VulcanResetStateEvent(), BattleEntity);
 
     public override async Task OnTankDisable() {

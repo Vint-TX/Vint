@@ -2,7 +2,7 @@ using Vint.Core.Battles.Modules.Interfaces;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
 

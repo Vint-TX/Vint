@@ -13,7 +13,7 @@ using Vint.Core.ECS.Events.Battle.Flag;
 using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.ECS.Templates.Battle.Flag;
 using Vint.Core.Physics;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battles.Flags;

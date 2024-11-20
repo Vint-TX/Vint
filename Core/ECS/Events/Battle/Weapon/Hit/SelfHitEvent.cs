@@ -1,13 +1,15 @@
 using LinqToDB;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
@@ -24,7 +26,7 @@ public class SelfHitEvent : HitEvent, IServerEvent {
     [ProtocolIgnore] protected bool IsProceeded { get; private set; }
     [ProtocolIgnore] protected IWeaponHandler WeaponHandler { get; private set; } = null!;
 
-    public virtual async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public virtual async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         IsProceeded = true;
 
         if (!connection.InLobby) {
@@ -46,7 +48,8 @@ public class SelfHitEvent : HitEvent, IServerEvent {
 
         if (!Validate(connection, WeaponHandler)) {
             IsProceeded = false;
-            await battlePlayer.OnAntiCheatSuspected();
+            DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
+            await battlePlayer.OnAntiCheatSuspected(discordBot);
             return;
         }
 

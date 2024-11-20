@@ -2,13 +2,13 @@ using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Battle.Pause;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Pause;
 
 [ProtocolId(-1316093147997460626)]
 public class PauseEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.IsPaused)

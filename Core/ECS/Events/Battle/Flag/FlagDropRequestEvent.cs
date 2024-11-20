@@ -3,13 +3,13 @@ using Vint.Core.Battles.Mode;
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server;
+using Vint.Core.Server.Game;
 
 namespace Vint.Core.ECS.Events.Battle.Flag;
 
 [ProtocolId(-1910863908782544246)]
 public class FlagDropRequestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer;
