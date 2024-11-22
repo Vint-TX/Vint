@@ -15,7 +15,8 @@ public class LoadSortedFriendsIdsWithNicknamesEvent : IServerEvent {
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
         List<IPlayerConnection> connections = server.PlayerConnections.Values.ToList();
 
-        Dictionary<long, string> friends = db.Relations
+        Dictionary<long, string> friends = db
+            .Relations
             .Where(relation => relation.SourcePlayerId == connection.Player.Id)
             .LoadWith(relation => relation.TargetPlayer)
             .Select(relation => new { Id = relation.TargetPlayerId, relation.TargetPlayer.Username })
@@ -23,8 +24,12 @@ public class LoadSortedFriendsIdsWithNicknamesEvent : IServerEvent {
             .Select(relation => new {
                 relation.Id,
                 relation.Username,
-                IsOnline = connections.Where(conn => conn.IsOnline).Any(conn => conn.Player.Id == relation.Id),
-                InLobby = connections.Where(conn => conn is { IsOnline: true, InLobby: true }).Any(conn => conn.Player.Id == relation.Id)
+                IsOnline = connections
+                    .Where(conn => conn.IsOnline)
+                    .Any(conn => conn.Player.Id == relation.Id),
+                InLobby = connections
+                    .Where(conn => conn is { IsOnline: true, InLobby: true })
+                    .Any(conn => conn.Player.Id == relation.Id)
             })
             .OrderByDescending(player => player.IsOnline)
             .ThenBy(player => player.InLobby)

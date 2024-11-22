@@ -10,7 +10,8 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 
 [ProtocolId(1542694831168)]
 public class FireRingEffectTemplate : EffectBaseTemplate {
-    public IEntity Create(BattlePlayer battlePlayer,
+    public IEntity Create(
+        BattlePlayer battlePlayer,
         TimeSpan duration,
         bool canTargetTeammates,
         float impactForce,

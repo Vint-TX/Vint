@@ -16,7 +16,9 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);
 
@@ -26,7 +28,10 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
 
         if (targetConnection != null) {
             notifyChat = ChatUtils.GetChat(targetConnection);
-            notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+
+            notifiedConnections = ChatUtils
+                .GetReceivers(server, targetConnection, notifyChat)
+                .ToList();
         } else {
             await using DbConnection db = new();
             targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == Username);
@@ -45,7 +50,8 @@ public class ElevatedAccessUserBlockUserEvent : ElevatedAccessUserBasePunishEven
         Punishment punishment = await targetPlayer.Ban(((SocketPlayerConnection)targetConnection!).EndPoint.Address.ToString(), Reason, null);
         targetConnection?.Kick(Reason);
 
-        if (notifyChat == null || notifiedConnections == null) {
+        if (notifyChat == null ||
+            notifiedConnections == null) {
             notifyChat = ChatUtils.GlobalChat;
             notifiedConnections = server.PlayerConnections.Values.ToList();
         }

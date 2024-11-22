@@ -1,8 +1,8 @@
 namespace Vint.Core.Battles.Modules.Interfaces;
 
 public interface IModuleWithoutEffect {
-    public bool IsActive { get; }
-    public bool CanBeDeactivated { get; set; }
+    bool IsActive { get; }
+    bool CanBeDeactivated { get; set; }
 
-    public Task Deactivate();
+    Task Deactivate();
 }

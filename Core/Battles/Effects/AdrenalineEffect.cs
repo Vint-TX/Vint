@@ -9,6 +9,13 @@ public class AdrenalineEffect(
     float cooldownSpeedCoeff,
     float damageMultiplier
 ) : Effect(tank, level), IDamageMultiplierEffect {
+    public float Multiplier { get; } = damageMultiplier;
+
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
+        source == Tank
+            ? Multiplier
+            : 1;
+
     public event Action? Deactivated;
 
     public override async Task Activate() {
@@ -23,9 +30,4 @@ public class AdrenalineEffect(
         await Tank.UpdateModuleCooldownSpeed(1);
         Deactivated?.Invoke();
     }
-
-    public float Multiplier { get; } = damageMultiplier;
-
-    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
-        source == Tank ? Multiplier : 1;
 }

@@ -12,7 +12,8 @@ public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
     UnitMoveRemoteEvent RemoteEvent => new(UnitMove);
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank)
             return;
 
         IEntity unit = entities.Single();
@@ -23,7 +24,8 @@ public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
         if (battleTank.Effects.All(effect => effect.Entity != unit))
             return;
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(RemoteEvent, unit);

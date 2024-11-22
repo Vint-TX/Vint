@@ -25,7 +25,8 @@ public class ClientGarageFirstLoadEvent : IServerEvent {
                 player.DiscordUserId = default;
 
                 await using (DbConnection db = new())
-                    await db.Players
+                    await db
+                        .Players
                         .Where(p => p.Id == player.Id)
                         .Set(p => p.DiscordLinked, false)
                         .Set(p => p.DiscordUserId, default(ulong))

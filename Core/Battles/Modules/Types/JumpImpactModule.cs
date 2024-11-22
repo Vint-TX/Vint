@@ -11,22 +11,32 @@ namespace Vint.Core.Battles.Modules.Types;
 public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
     public override string ConfigPath => "garage/module/upgrade/properties/jumpimpact";
 
-    public override JumpImpactEffect GetEffect() => new(Tank, Level, Force);
-
     protected override bool ActivationCondition => Tank.TemperatureProcessor.Temperature >= WorkingTemperature;
 
     float Force { get; set; }
     float WorkingTemperature { get; set; }
 
+    public async Task OnTemperatureChanged(float before, float current, float min, float max) {
+        if (current >= WorkingTemperature) await TryUnblock();
+        else await TryBlock();
+    }
+
+    public override JumpImpactEffect GetEffect() => new(Tank, Level, Force);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        JumpImpactEffect? effect = Tank.Effects.OfType<JumpImpactEffect>().SingleOrDefault();
+        JumpImpactEffect? effect = Tank
+            .Effects
+            .OfType<JumpImpactEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
@@ -40,10 +50,5 @@ public class JumpImpactModule : ActiveBattleModule, ITemperatureModule {
         if (Tank.TemperatureProcessor.Temperature < WorkingTemperature) return;
 
         await base.TryUnblock();
-    }
-
-    public async Task OnTemperatureChanged(float before, float current, float min, float max) {
-        if (current >= WorkingTemperature) await TryUnblock();
-        else await TryBlock();
     }
 }

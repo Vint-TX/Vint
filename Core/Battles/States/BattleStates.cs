@@ -135,15 +135,18 @@ public class WarmUp(
     public override async Task Start() {
         DateTimeOffset now = DateTimeOffset.UtcNow;
 
-        TimeSpan warmUp = TimeSpan.FromSeconds(Battle.Entity.GetComponent<TimeLimitComponent>().WarmingUpTimeLimitSec);
+        TimeSpan warmUp = TimeSpan.FromSeconds(Battle.Entity.GetComponent<TimeLimitComponent>()
+            .WarmingUpTimeLimitSec);
 
-        await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
-            component.RoundStartTime = now + warmUp);
+        await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component => component.RoundStartTime = now + warmUp);
 
-        await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
-            component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
+        await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(
+            component => component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new BattleTimerUpdatedEvent(), Battle.Entity, Battle.RoundEntity);
 
         await Battle.RoundEntity.AddComponent<RoundWarmingUpStateComponent>();
@@ -171,11 +174,11 @@ public class Running(
 
         Battle.Timer = TimeSpan.FromMinutes(Battle.Properties.TimeLimit);
 
-        await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component =>
-            component.RoundStartTime = now);
+        await Battle.Entity.ChangeComponent<BattleStartTimeComponent>(component => component.RoundStartTime = now);
 
-        await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(component =>
-            component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
+        await Battle.RoundEntity.ChangeComponent<RoundStopTimeComponent>(
+            component => component.StopTime = now.AddMinutes(Battle.Properties.TimeLimit));
+
         await base.Start();
     }
 
@@ -206,7 +209,12 @@ public class Running(
             if (dominatedTeam == TeamColor.None) return;
 
             Battle.DominationStartTime = DateTimeOffset.UtcNow;
-            Battle.StopTimeComponentBeforeDomination = Battle.RoundEntity.GetComponent<RoundStopTimeComponent>().Clone();
+
+            Battle.StopTimeComponentBeforeDomination = Battle
+                .RoundEntity
+                .GetComponent<RoundStopTimeComponent>()
+                .Clone();
+
             DateTimeOffset battleEndTime = Battle.DominationStartTime.Value + Battle.DominationDuration;
 
             await Battle.RoundEntity.AddComponent(new RoundDisbalancedComponent(dominatedTeam,

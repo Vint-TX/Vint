@@ -23,7 +23,8 @@ public class SelfUpdateStreamHitEvent : UpdateStreamHitEvent, IServerEvent {
             TankHit = TankHit
         };
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(serverEvent, weapon);

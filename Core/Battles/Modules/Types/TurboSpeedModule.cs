@@ -11,11 +11,17 @@ public class TurboSpeedModule : ActiveBattleModule {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        TurboSpeedEffect? effect = Tank.Effects.OfType<TurboSpeedEffect>().SingleOrDefault();
+
+        TurboSpeedEffect? effect = Tank
+            .Effects
+            .OfType<TurboSpeedEffect>()
+            .SingleOrDefault();
 
         switch (effect) {
             case null:
-                await GetEffect().Activate();
+                await GetEffect()
+                    .Activate();
+
                 break;
 
             case IExtendableEffect extendableEffect:

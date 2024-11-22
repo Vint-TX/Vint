@@ -11,10 +11,6 @@ public class Runner(
     GameServer gameServer
 ) {
     public async Task Run() {
-        await Extensions.WhenAllFastFail(
-            staticServer.Start(),
-            apiServer.Start(),
-            gameServer.Start()
-        );
+        await Extensions.WhenAllFastFail(staticServer.Start(), apiServer.Start(), gameServer.Start());
     }
 }

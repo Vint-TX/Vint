@@ -60,7 +60,9 @@ public abstract class BattleModule {
         MarketEntity = marketModule;
         UserEntity = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
 
-        Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>().Level;
+        Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>()
+            .Level;
+
         CurrentAmmo = MaxAmmo = (int)GetStat<ModuleAmmunitionPropertyComponent>();
         Cooldown = TimeSpan.FromMilliseconds(GetStat<ModuleCooldownPropertyComponent>());
 
@@ -102,7 +104,8 @@ public abstract class BattleModule {
     }
 
     public async Task SetAmmo(int value) {
-        if (value < 0 || value > MaxAmmo) return;
+        if (value < 0 ||
+            value > MaxAmmo) return;
 
         CurrentAmmo = value;
         await SlotEntity.ChangeComponent<InventoryAmmunitionComponent>(component => component.CurrentCount = CurrentAmmo);
@@ -110,9 +113,11 @@ public abstract class BattleModule {
 
         await TryUnblock();
 
-        if (CurrentAmmo < MaxAmmo && StateManager.CurrentState is not Modules.Cooldown)
+        if (CurrentAmmo < MaxAmmo &&
+            StateManager.CurrentState is not Modules.Cooldown)
             await StateManager.SetState(new Cooldown(StateManager));
-        else if (CurrentAmmo >= MaxAmmo && StateManager.CurrentState is not Ready)
+        else if (CurrentAmmo >= MaxAmmo &&
+                 StateManager.CurrentState is not Ready)
             await StateManager.SetState(new Ready(StateManager));
     }
 
@@ -145,7 +150,8 @@ public abstract class BattleModule {
     }
 
     async Task TryEMPUnlock() {
-        if (!IsEMPLocked || EMPLockTime > TimeSpan.Zero)
+        if (!IsEMPLocked ||
+            EMPLockTime > TimeSpan.Zero)
             return;
 
         await TryUnblock();

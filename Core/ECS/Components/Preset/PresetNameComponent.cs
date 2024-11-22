@@ -14,14 +14,17 @@ public class PresetNameComponent(
     public string Name { get; private set; } = name;
 
     public async Task Changed(IPlayerConnection connection, IEntity entity) {
-        if (string.IsNullOrWhiteSpace(Name) || Name.Length > 18) return;
+        if (string.IsNullOrWhiteSpace(Name) ||
+            Name.Length > 18) return;
 
         Player player = connection.Player;
         Database.Models.Preset preset = player.UserPresets.Single(p => p.Entity!.Id == entity.Id);
         preset.Name = Name;
 
         await using DbConnection db = new();
-        await db.Presets
+
+        await db
+            .Presets
             .Where(p => p.PlayerId == player.Id && p.Index == preset.Index)
             .Set(p => p.Name, preset.Name)
             .UpdateAsync();

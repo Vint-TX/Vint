@@ -6,8 +6,7 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 
 [ProtocolId(636446543585160318)]
 public class CheckGiftsEvent : IServerEvent {
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
         // TODO
-        return Task.CompletedTask;
-    }
+        Task.CompletedTask;
 }

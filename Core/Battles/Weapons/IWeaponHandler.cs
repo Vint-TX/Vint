@@ -5,23 +5,23 @@ using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 namespace Vint.Core.Battles.Weapons;
 
 public interface IWeaponHandler {
-    public IDamageCalculator DamageCalculator { get; }
-    public BattleTank BattleTank { get; }
+    IDamageCalculator DamageCalculator { get; }
+    BattleTank BattleTank { get; }
 
-    public TimeSpan Cooldown { get; }
+    TimeSpan Cooldown { get; }
 
-    public bool DamageWeakeningByDistance { get; }
-    public float MaxDamageDistance { get; }
-    public float MinDamageDistance { get; }
-    public float MinDamagePercent { get; }
+    bool DamageWeakeningByDistance { get; }
+    float MaxDamageDistance { get; }
+    float MinDamageDistance { get; }
+    float MinDamagePercent { get; }
 
-    public int MaxHitTargets { get; }
+    int MaxHitTargets { get; }
 
-    public Task Fire(HitTarget target, int targetIndex);
+    Task Fire(HitTarget target, int targetIndex);
 
-    public Task OnTankEnable();
+    Task OnTankEnable();
 
-    public Task OnTankDisable();
+    Task OnTankDisable();
 
-    public Task Tick(TimeSpan deltaTime);
+    Task Tick(TimeSpan deltaTime);
 }

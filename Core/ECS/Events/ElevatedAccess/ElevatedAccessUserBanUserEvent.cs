@@ -18,7 +18,9 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == Username);
 
@@ -30,8 +32,13 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
             if (targetConnection.InLobby) {
                 Battles.Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -86,7 +93,8 @@ public class ElevatedAccessUserBanUserEvent : ElevatedAccessUserBasePunishEvent 
 
         if (punishMessage == null) return;
 
-        if (notifyChat == null || notifiedConnections == null) {
+        if (notifyChat == null ||
+            notifiedConnections == null) {
             notifyChat = ChatUtils.GlobalChat;
             notifiedConnections = server.PlayerConnections.Values.ToList();
         }

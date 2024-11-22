@@ -12,7 +12,7 @@ using MathUtils = Vint.Core.Utils.MathUtils;
 namespace Vint.Core.Battles.Damage;
 
 public interface IDamageCalculator {
-    public Task<CalculatedDamage> Calculate(
+    Task<CalculatedDamage> Calculate(
         BattleTank source,
         BattleTank target,
         IWeaponHandler weaponHandler,
@@ -41,7 +41,8 @@ public class DamageCalculator : IDamageCalculator {
         bool isEnemy = source.IsEnemy(target);
         bool smokyProgressionIsBig = false;
 
-        foreach (IDamageCalculateModule damageCalculateModule in target.Modules
+        foreach (IDamageCalculateModule damageCalculateModule in target
+                     .Modules
                      .OfType<IDamageCalculateModule>()
                      .Concat(source.Modules.OfType<IDamageCalculateModule>()))
             await damageCalculateModule.CalculatingDamage(source, target, weaponHandler);
@@ -126,7 +127,10 @@ public class DamageCalculator : IDamageCalculator {
         bool isBackHit,
         bool isTurretHit,
         bool ignoreSourceEffects) {
-        List<IDamageMultiplierEffect> effects = target.Effects.OfType<IDamageMultiplierEffect>().ToList();
+        List<IDamageMultiplierEffect> effects = target
+            .Effects
+            .OfType<IDamageMultiplierEffect>()
+            .ToList();
 
         if (!ignoreSourceEffects && source != target)
             effects.AddRange(source.Effects.OfType<IDamageMultiplierEffect>());

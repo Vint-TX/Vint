@@ -15,9 +15,7 @@ public class ChangeScreenEvent : IServerEvent {
     public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         ILogger logger = connection.Logger.ForType(GetType());
 
-        logger.Information("Changed screen {Current} to {Next}",
-            CurrentScreen,
-            NextScreen);
+        logger.Information("Changed screen {Current} to {Next}", CurrentScreen, NextScreen);
 
         return Task.CompletedTask;
     }

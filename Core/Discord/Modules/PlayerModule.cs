@@ -30,7 +30,9 @@ public class PlayerModule(
             return;
         }
 
-        IPlayerConnection? connection = gameServer.PlayerConnections.Values
+        IPlayerConnection? connection = gameServer
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == player.Username);
 
@@ -40,12 +42,13 @@ public class PlayerModule(
         bool inBattle = battle != null;
 
         string status = isOnline
-                            ? inBattle
-                                  ? $"In battle: {battle!.MapInfo.Name}, {battle.Properties.BattleMode}"
-                                  : "Online"
-                            : "Offline";
+            ? inBattle
+                ? $"In battle: {battle!.MapInfo.Name}, {battle.Properties.BattleMode}"
+                : "Online"
+            : "Offline";
 
-        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(status, $"{player.Username} profile")
+        DiscordEmbedBuilder embed = Embeds
+            .GetNotificationEmbed(status, $"{player.Username} profile")
             .AddField("Experience", $"{player.Experience}", true)
             .AddField("Reputation", $"{player.Reputation}", true)
             .AddField("League", $"{player.League}", true)
@@ -60,7 +63,8 @@ public class PlayerModule(
         await ctx.DeferResponseAsync();
         await using DbConnection db = new();
 
-        var player = await db.Players
+        var player = await db
+            .Players
             .LoadWith(player => player.Stats)
             .Where(player => player.DiscordUserId == ctx.User.Id)
             .Select(player => new { player.Stats, player.Username })
@@ -73,7 +77,9 @@ public class PlayerModule(
         }
 
         Statistics statistics = player.Stats;
-        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed("", $"{player.Username} statistics")
+
+        DiscordEmbedBuilder embed = Embeds
+            .GetNotificationEmbed("", $"{player.Username} statistics")
             .AddField("Kills/Deaths", $"{statistics.Kills}/{statistics.Deaths} ({statistics.KD})", true)
             .AddField("Victories/Defeats", $"{statistics.Victories}/{statistics.Defeats} ({statistics.VD})", true)
             .AddField("Crystals earned", $"{statistics.CrystalsEarned}", true)
@@ -89,14 +95,12 @@ public class PlayerModule(
     public async Task RestorePasswordCode(SlashCommandContext ctx) {
         await ctx.DeferResponseAsync(true);
 
-        IPlayerConnection? connection = gameServer.PlayerConnections.Values
-            .SingleOrDefault(conn => conn.RestorePasswordCode != null &&
-                                     conn.Player.DiscordUserId == ctx.User.Id);
+        IPlayerConnection? connection =
+            gameServer.PlayerConnections.Values.SingleOrDefault(conn => conn.RestorePasswordCode != null && conn.Player.DiscordUserId == ctx.User.Id);
 
         if (connection == null) return;
 
-        await ctx.EditResponseAsync(Embeds.GetWarningEmbed(
-            $"Your confirmation code: {Formatter.Spoiler(connection.RestorePasswordCode!)}",
+        await ctx.EditResponseAsync(Embeds.GetWarningEmbed($"Your confirmation code: {Formatter.Spoiler(connection.RestorePasswordCode!)}",
             "Do not share this code with anyone!",
             "If someone asks you to send them this code, contact the administrators immediately!"));
     }

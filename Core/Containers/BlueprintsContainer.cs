@@ -13,9 +13,15 @@ public class BlueprintsContainer : Container {
         string configPath = MarketItem.TemplateAccessor!.ConfigPath!;
 
         Random = new WyRandom();
-        Info = ConfigManager.Blueprints[configPath.Split('/').Last()];
-        TargetTierItemList = ConfigManager.GetComponent<TargetTierComponent>(configPath).ItemList?
-            .Select(id => GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == id))
+
+        Info = ConfigManager.Blueprints[configPath
+            .Split('/')
+            .Last()];
+
+        TargetTierItemList = ConfigManager
+            .GetComponent<TargetTierComponent>(configPath)
+            .ItemList
+            ?.Select(id => GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == id))
             .ToList();
     }
 
@@ -41,11 +47,18 @@ public class BlueprintsContainer : Container {
             int tier1Amount = 0;
 
             for (int i = 0; i < amount; i++) {
-                tier3Amount += MathUtils.RollTheDice(Info.Tier3Probability, Random) ? Random.Next(Info.MinTier3Amount, Info.MaxTier3Amount) : 0;
-                tier2Amount += MathUtils.RollTheDice(Info.Tier2Probability, Random) ? Random.Next(Info.MinTier2Amount, Info.MaxTier2Amount) : 0;
+                tier3Amount += MathUtils.RollTheDice(Info.Tier3Probability, Random)
+                    ? Random.Next(Info.MinTier3Amount, Info.MaxTier3Amount)
+                    : 0;
+
+                tier2Amount += MathUtils.RollTheDice(Info.Tier2Probability, Random)
+                    ? Random.Next(Info.MinTier2Amount, Info.MaxTier2Amount)
+                    : 0;
             }
 
-            tier1Amount += MathUtils.RollTheDice(Info.Tier1Probability, Random) ? Math.Max(0, blueprintsAmount - (tier3Amount + tier2Amount)) : 0;
+            tier1Amount += MathUtils.RollTheDice(Info.Tier1Probability, Random)
+                ? Math.Max(0, blueprintsAmount - (tier3Amount + tier2Amount))
+                : 0;
 
             while (blueprintsAmount > 0) {
                 IReadOnlyCollection<IEntity> pool;
@@ -70,7 +83,9 @@ public class BlueprintsContainer : Container {
     }
 
     async IAsyncEnumerable<IEntity> SaveRewards(IPlayerConnection connection, Dictionary<IEntity, int> entityToAmount) {
-        foreach ((IEntity marketItem, int amount) in entityToAmount.ToList().Shuffle()) {
+        foreach ((IEntity marketItem, int amount) in entityToAmount
+                     .ToList()
+                     .Shuffle()) {
             await connection.PurchaseItem(marketItem, amount, 0, false, false);
             yield return new NewItemNotificationTemplate().CreateCard(MarketItem, marketItem, amount);
         }

@@ -116,9 +116,13 @@ public class BattleTank {
             _ => throw new UnreachableException()
         };
 
-        SpeedComponent = Tank.GetComponent<SpeedComponent>().Clone();
+        SpeedComponent = Tank
+            .GetComponent<SpeedComponent>()
+            .Clone();
 
-        Health = TotalHealth = MaxHealth = Tank.GetComponent<HealthComponent>().MaxHealth;
+        Health = TotalHealth = MaxHealth = Tank.GetComponent<HealthComponent>()
+            .MaxHealth;
+
         TemperatureProcessor = new TemperatureProcessor(this);
 
         Statistics = new BattleTankStatistics();
@@ -187,8 +191,7 @@ public class BattleTank {
 
     public async Task Tick(TimeSpan deltaTime) {
         if (BattlePlayer.IsPaused &&
-            (!BattlePlayer.KickTime.HasValue ||
-             DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
+            (!BattlePlayer.KickTime.HasValue || DateTimeOffset.UtcNow > BattlePlayer.KickTime)) {
             BattlePlayer.IsPaused = false;
             BattlePlayer.KickTime = null;
             await BattlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), BattleUser);
@@ -198,10 +201,11 @@ public class BattleTank {
         if (ForceSelfDestruct || SelfDestructTime.HasValue && SelfDestructTime.Value <= DateTimeOffset.UtcNow)
             await SelfDestruct();
 
-        if (CollisionsPhase == Battle.Entity.GetComponent<BattleTankCollisionsComponent>().SemiActiveCollisionsPhase) {
+        if (CollisionsPhase ==
+            Battle.Entity.GetComponent<BattleTankCollisionsComponent>()
+                .SemiActiveCollisionsPhase) {
             await Tank.RemoveComponentIfPresent<TankStateTimeOutComponent>();
-            await Battle.Entity.ChangeComponent<BattleTankCollisionsComponent>(component =>
-                component.SemiActiveCollisionsPhase++);
+            await Battle.Entity.ChangeComponent<BattleTankCollisionsComponent>(component => component.SemiActiveCollisionsPhase++);
 
             await StateManager.SetState(new Active(StateManager));
             await SetHealth(MaxHealth);
@@ -283,7 +287,10 @@ public class BattleTank {
         foreach (Effect effect in Effects)
             await effect.DeactivateByEMP();
 
-        foreach (IPlayerConnection conn in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection conn in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await conn.Send(new EMPEffectReadyEvent(), Tank);
     }
 
@@ -341,6 +348,7 @@ public class BattleTank {
                 component.Speed = newSpeed;
                 component.TurnSpeed = newTurnSpeed;
             });
+
             await Weapon.ChangeComponent<WeaponRotationComponent>(component => component.Speed = newWeaponSpeed);
         } else {
             await Tank.ChangeComponent(SpeedComponent.Clone());
@@ -351,24 +359,26 @@ public class BattleTank {
 
     public bool IsEnemy(BattleTank other) => other != null! &&
                                              this != other &&
-                                             (Battle.Properties.FriendlyFire ||
-                                              Battle.Properties.BattleMode == BattleMode.DM ||
-                                              !IsSameTeam(other));
+                                             (Battle.Properties.FriendlyFire || Battle.Properties.BattleMode == BattleMode.DM || !IsSameTeam(other));
 
-    public bool IsSameTeam(BattleTank other) => other != null! &&
-                                                BattlePlayer.TeamColor == other.BattlePlayer.TeamColor;
+    public bool IsSameTeam(BattleTank other) => other != null! && BattlePlayer.TeamColor == other.BattlePlayer.TeamColor;
 
     public async Task KillBy(BattleTank killer, IEntity weapon) {
         const int baseScore = 10;
 
         float coeff = TotalHealth / MaxHealth;
-        Dictionary<BattleTank, float> assistants = KillAssistants.Where(assist => assist.Key != this).ToDictionary();
+
+        Dictionary<BattleTank, float> assistants = KillAssistants
+            .Where(assist => assist.Key != this)
+            .ToDictionary();
+
         await SelfKill();
 
         Database.Models.Player currentPlayer = BattlePlayer.PlayerConnection.Player;
         KillEvent killEvent = new(weapon, Tank);
 
-        foreach (IPlayerConnection connection in Battle.Players
+        foreach (IPlayerConnection connection in Battle
+                     .Players
                      .Where(battlePlayer => battlePlayer.InBattle)
                      .Select(battlePlayer => battlePlayer.PlayerConnection)) {
             await connection.Send(killEvent, killer.BattleUser);
@@ -385,6 +395,7 @@ public class BattleTank {
                 score += 5;
 
                 await killer.AddScore(score);
+
                 await killer.BattlePlayer.PlayerConnection.Send(
                     new VisualScoreKillEvent(BattlePlayer.GetScoreWithBonus(score), currentPlayer.Username, currentPlayer.Rank),
                     killer.BattleUser);
@@ -424,24 +435,26 @@ public class BattleTank {
         await using DbConnection db = new();
         await db.BeginTransactionAsync();
 
-        await db.Hulls
-            .Where(hull => hull.PlayerId == player.Id &&
-                           hull.Id == player.CurrentPreset.Hull.Id)
+        await db
+            .Hulls
+            .Where(hull => hull.PlayerId == player.Id && hull.Id == player.CurrentPreset.Hull.Id)
             .Set(hull => hull.Kills, hull => hull.Kills + 1)
             .UpdateAsync();
 
-        await db.Weapons
-            .Where(w => w.PlayerId == player.Id &&
-                        w.Id == player.CurrentPreset.Weapon.Id)
+        await db
+            .Weapons
+            .Where(w => w.PlayerId == player.Id && w.Id == player.CurrentPreset.Weapon.Id)
             .Set(w => w.Kills, w => w.Kills + 1)
             .UpdateAsync();
 
-        await db.Statistics
+        await db
+            .Statistics
             .Where(stats => stats.PlayerId == player.Id)
             .Set(stats => stats.Kills, stats => stats.Kills + 1)
             .UpdateAsync();
 
-        await db.SeasonStatistics
+        await db
+            .SeasonStatistics
             .Where(stats => stats.PlayerId == player.Id)
             .Where(stats => stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.Kills, stats => stats.Kills + 1)
@@ -480,7 +493,9 @@ public class BattleTank {
         if (Battle.TypeHandler is not MatchmakingHandler) return;
 
         await using DbConnection db = new();
-        await db.Statistics
+
+        await db
+            .Statistics
             .Where(stats => stats.PlayerId == BattlePlayer.PlayerConnection.Player.Id)
             .Set(stats => stats.Deaths, stats => stats.Deaths + 1)
             .UpdateAsync();
@@ -508,7 +523,8 @@ public class BattleTank {
         await RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component =>
             component.ScoreWithoutBonuses = Math.Max(0, component.ScoreWithoutBonuses + deltaWithoutBonus));
 
-        if (deltaWithoutBonus <= 0 || Battle.TypeHandler is not MatchmakingHandler) return;
+        if (deltaWithoutBonus <= 0 ||
+            Battle.TypeHandler is not MatchmakingHandler) return;
 
         int deltaWithBonus = BattlePlayer.GetScoreWithBonus(deltaWithoutBonus);
         IPlayerConnection connection = BattlePlayer.PlayerConnection;
@@ -518,14 +534,19 @@ public class BattleTank {
     }
 
     public async Task CommitStatistics() {
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new RoundUserStatisticsUpdatedEvent(), RoundUser);
 
         await Battle.ModeHandler.SortPlayers();
     }
 
     async Task UpdateKillStreak() {
-        int killStreak = Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>().Kills;
+        int killStreak = Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>()
+            .Kills;
+
         int newStreak = Math.Max(Statistics.KillStrike, killStreak);
 
         if (Statistics.KillStrike == newStreak) return;
@@ -539,17 +560,17 @@ public class BattleTank {
         await RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.ScoreWithoutBonuses += score);
         await BattlePlayer.PlayerConnection.Send(new VisualScoreStreakEvent(BattlePlayer.GetScoreWithBonus(score)), BattleUser);
 
-        if (killStreak < 5 || killStreak % 5 == 0)
+        if (killStreak < 5 ||
+            killStreak % 5 == 0)
             await BattlePlayer.PlayerConnection.Send(new KillStreakEvent(score), Incarnation);
     }
 
     async Task ResetKillStreak(BattleTank? killer = null) {
-        TankIncarnationKillStatisticsComponent incarnationStatisticsComponent =
-            Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>();
+        TankIncarnationKillStatisticsComponent incarnationStatisticsComponent = Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>();
 
-        if (incarnationStatisticsComponent.Kills >= 2 && killer != null)
-            await killer.BattlePlayer.PlayerConnection.Send(
-                new StreakTerminationEvent(BattlePlayer.PlayerConnection.Player.Username),
+        if (incarnationStatisticsComponent.Kills >= 2 &&
+            killer != null)
+            await killer.BattlePlayer.PlayerConnection.Send(new StreakTerminationEvent(BattlePlayer.PlayerConnection.Player.Username),
                 killer.BattleUser);
 
         incarnationStatisticsComponent.Kills = 0;
@@ -570,9 +591,11 @@ public class BattleTank {
         }
 
         IEntity goldModuleEntity = GlobalEntities.GetEntity("modules", "Gold");
-        IEntity goldSlotEntity = connection.SharedEntities.Single(entity =>
-            entity.TemplateAccessor?.Template is SlotUserItemTemplate &&
-            entity.GetComponent<SlotUserItemInfoComponent>().Slot == Slot.Slot7);
+
+        IEntity goldSlotEntity = connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is SlotUserItemTemplate &&
+                                                                            entity.GetComponent<SlotUserItemInfoComponent>()
+                                                                                .Slot ==
+                                                                            Slot.Slot7);
 
         BattleModule gold = ModuleRegistry.Get(goldModuleEntity.Id);
         await gold.Init(this, goldSlotEntity, goldModuleEntity);

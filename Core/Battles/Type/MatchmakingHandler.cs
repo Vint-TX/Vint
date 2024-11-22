@@ -43,11 +43,8 @@ public class MatchmakingHandler : TypeHandler {
             100);
 
         Battle.MapInfo = mapInfo;
-        Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.Id);
-        Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(
-            Battle.Properties,
-            Battle.MapEntity);
-
+        Battle.MapEntity = GlobalEntities.GetEntity("maps", map => map.Id == mapInfo.Id);
+        Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(Battle.Properties, Battle.MapEntity);
         return Task.CompletedTask;
     }
 
@@ -103,7 +100,9 @@ public class MatchmakingHandler : TypeHandler {
                 lefts++;
 
                 if (lefts >= 2)
-                    needGoodBattles = needGoodBattles > 0 ? (int)lefts / 2 : 2;
+                    needGoodBattles = needGoodBattles > 0
+                        ? (int)lefts / 2
+                        : 2;
             }
         }
 
@@ -141,7 +140,10 @@ public class MatchmakingHandler : TypeHandler {
             battles < loginRewardsComponent.BattleCountToUnlock) return;
 
         int day = player.LastLoginRewardDay + 1;
-        List<LoginRewardItem> loginRewards = Leveling.GetLoginRewards(day).ToList();
+
+        List<LoginRewardItem> loginRewards = Leveling
+            .GetLoginRewards(day)
+            .ToList();
 
         foreach (LoginRewardItem reward in loginRewards) {
             IEntity? entity = connection.GetEntity(reward.MarketItemEntity);

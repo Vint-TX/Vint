@@ -11,15 +11,23 @@ namespace Vint.Core.Battles.Modules.Types;
 public class FireRingModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/firering";
 
-    public override FireRingEffect GetEffect() => new(Cooldown, MarketEntity, Radius, MinDamagePercent, Impact, TemperatureLimit, TemperatureDelta,
-        HeatDamage, Tank, Level);
-
     float Radius { get; set; }
     float MinDamagePercent { get; set; }
     float Impact { get; set; }
     float HeatDamage { get; set; }
     float TemperatureLimit { get; set; }
     float TemperatureDelta { get; set; }
+
+    public override FireRingEffect GetEffect() => new(Cooldown,
+        MarketEntity,
+        Radius,
+        MinDamagePercent,
+        Impact,
+        TemperatureLimit,
+        TemperatureDelta,
+        HeatDamage,
+        Tank,
+        Level);
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
@@ -35,11 +43,16 @@ public class FireRingModule : ActiveBattleModule {
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        FireRingEffect? effect = Tank.Effects.OfType<FireRingEffect>().SingleOrDefault();
+        FireRingEffect? effect = Tank
+            .Effects
+            .OfType<FireRingEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 }

@@ -26,7 +26,10 @@ public static class TimeSpanUtils {
             foreach ((string abbreviation, TimeSpan initialTimeSpan) in TimeSpanInfos) {
                 if (!format.Contains(abbreviation)) continue;
 
-                result += initialTimeSpan * int.Parse(new Regex(@$"(\d+){abbreviation}").Match(format).Groups[1].Value);
+                result += initialTimeSpan *
+                          int.Parse(new Regex(@$"(\d+){abbreviation}")
+                              .Match(format)
+                              .Groups[1].Value);
             }
         } catch {
             duration = null;
@@ -50,19 +53,19 @@ public static class TimeSpanUtils {
     }
 
     public static TimeSpan Min(TimeSpan left, TimeSpan right) =>
-        left <= right ? left : right;
+        left <= right
+            ? left
+            : right;
 
     public static TimeSpan Max(TimeSpan left, TimeSpan right) =>
-        left >= right ? left : right;
+        left >= right
+            ? left
+            : right;
 
     public static TimeSpan Max(TimeSpan value, TimeSpan min, TimeSpan max) {
         if (min > max)
             throw new ArgumentException("min should not be bigger than max");
 
-        return value < min
-            ? min
-            : value > max
-                ? max
-                : value;
+        return value < min ? min : value > max ? max : value;
     }
 }

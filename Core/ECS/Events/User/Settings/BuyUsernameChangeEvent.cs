@@ -18,7 +18,10 @@ public class BuyUsernameChangeEvent : IServerEvent {
         if (!RegexUtils.IsLoginValid(Username)) return;
 
         IEntity user = entities.Single();
-        long truePrice = ConfigManager.GetComponent<GoodsXPriceComponent>("payment/payable/changeuid").Price;
+
+        long truePrice = ConfigManager.GetComponent<GoodsXPriceComponent>("payment/payable/changeuid")
+            .Price;
+
         bool success = Price == truePrice && connection.Player.Crystals >= truePrice;
 
         await connection.Send(new CompleteBuyUsernameChangeEvent(success), user);

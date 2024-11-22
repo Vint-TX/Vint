@@ -12,5 +12,6 @@ public class FlagAssist(
     public BattleTank Tank { get; } = tank;
 
     public override bool Equals(object? obj) => obj is BattleTank other && other == Tank;
+
     public override int GetHashCode() => Tank.GetHashCode();
 }

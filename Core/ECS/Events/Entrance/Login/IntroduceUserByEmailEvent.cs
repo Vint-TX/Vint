@@ -20,7 +20,9 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
         logger.Information("Login by email '{Email}'", Email);
 
         await using DbConnection db = new();
-        Player? player = await db.Players
+
+        Player? player = await db
+            .Players
             .LoadWith(player => player.Modules)
             .LoadWith(player => player.DiscordLink)
             .SingleOrDefaultAsync(player => player.Email == Email);

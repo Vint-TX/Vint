@@ -18,13 +18,18 @@ public abstract class SoloHandler(
     public override Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
 
     public override async Task UpdateScore(IEntity? team, int score) {
-        int maxScore = Battle.Players
+        int maxScore = Battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
-            .Max(battlePlayer => battlePlayer.Tank!.RoundUser
-                .GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses);
+            .Max(battlePlayer => battlePlayer.Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>()
+                .ScoreWithoutBonuses);
 
         await Battle.Entity.ChangeComponent<ScoreLimitComponent>(component => component.ScoreLimit = maxScore);
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
     }
 

@@ -18,16 +18,11 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
 
     public override string ConfigPath => "garage/module/upgrade/properties/gold";
 
-    public override Effect GetEffect() => throw new NotSupportedException();
-
     protected override bool ActivationCondition => PlayerGoldsCount > 0 &&
                                                    BonusProcessor != null! &&
                                                    BonusProcessor.GoldsDropped < MaxGoldsPerBattle &&
                                                    Battle.Timer.TotalMinutes > 1 &&
                                                    Battle.StateManager.CurrentState is Running;
-
-    public bool IsActive => false;
-    public bool CanBeDeactivated { get; set; } = true;
 
     static IEntity MarketCounterEntity { get; } = GlobalEntities.GetEntity("misc", "GoldBonus");
     IEntity CounterEntity { get; set; } = null!;
@@ -35,6 +30,13 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
     BattlePlayer BattlePlayer => Tank.BattlePlayer;
     IPlayerConnection Connection => BattlePlayer.PlayerConnection;
     int PlayerGoldsCount => Connection.Player.GoldBoxItems;
+
+    public bool IsActive => false;
+    public bool CanBeDeactivated { get; set; } = true;
+
+    public Task Deactivate() => Task.CompletedTask;
+
+    public override Effect GetEffect() => throw new NotSupportedException();
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
@@ -48,8 +50,6 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
             await Connection.Send(new GoldBonusesCountChangedEvent(PlayerGoldsCount), Connection.User);
         }
     }
-
-    public Task Deactivate() => Task.CompletedTask;
 
     public override async Task Tick(TimeSpan deltaTime) {
         await base.Tick(deltaTime);

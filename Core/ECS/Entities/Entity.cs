@@ -75,7 +75,8 @@ public class Entity : IEntity {
     }
 
     public IEntity Clone() => new Entity(Id,
-        TemplateAccessor == null ? null
+        TemplateAccessor == null
+            ? null
             : new TemplateAccessor(TemplateAccessor.Template, TemplateAccessor.ConfigPath),
         Components.ToHashSet());
 
@@ -84,7 +85,11 @@ public class Entity : IEntity {
             component = GroupComponentRegistry.FindOrRegisterGroup(groupComponent);
 
         ComponentStorage.AddComponent(component);
-        Logger.Debug("Added {Name} component to the {Entity}", component.GetType().Name, this);
+
+        Logger.Debug("Added {Name} component to the {Entity}",
+            component.GetType()
+                .Name,
+            this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
             await playerConnection.Send(new ComponentAddCommand(this, component));
@@ -141,7 +146,11 @@ public class Entity : IEntity {
 
     public async Task ChangeComponent(IComponent component, IPlayerConnection? excluded) {
         ComponentStorage.ChangeComponent(component);
-        Logger.Debug("Changed {Name} component in the {Entity}", component.GetType().Name, this);
+
+        Logger.Debug("Changed {Name} component in the {Entity}",
+            component.GetType()
+                .Name,
+            this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
             await playerConnection.Send(new ComponentChangeCommand(this, component));

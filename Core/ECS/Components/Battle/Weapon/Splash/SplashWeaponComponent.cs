@@ -5,7 +5,8 @@ namespace Vint.Core.ECS.Components.Battle.Weapon.Splash;
 
 [ProtocolId(3169143415222756957)]
 public class SplashWeaponComponent : IComponent {
-    [UsedImplicitly] public SplashWeaponComponent() { }
+    [UsedImplicitly]
+    public SplashWeaponComponent() { }
 
     public SplashWeaponComponent(float minSplashDamagePercent, float radiusOfMaxSplashDamage, float radiusOfMinSplashDamage) {
         MinSplashDamagePercent = minSplashDamagePercent;

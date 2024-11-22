@@ -46,6 +46,7 @@ public sealed class ChatCommand(
         }
 
         List<object?> parameters = [context];
+
         List<string> rawParameterValues = rawCommand
             .Split()
             .Skip(1) // Command name
@@ -91,8 +92,15 @@ public sealed class ChatCommand(
                 OptionAttribute option = Options[parameterInfo.Name!];
 
                 if (e.InnerException is OverflowException) {
-                    object? minValue = parameterInfo.ParameterType.GetField("MinValue")?.GetValue(null);
-                    object? maxValue = parameterInfo.ParameterType.GetField("MaxValue")?.GetValue(null);
+                    object? minValue = parameterInfo
+                        .ParameterType
+                        .GetField("MinValue")
+                        ?.GetValue(null);
+
+                    object? maxValue = parameterInfo
+                        .ParameterType
+                        .GetField("MaxValue")
+                        ?.GetValue(null);
 
                     await context.SendPrivateResponse($"'{option}' must be in range from '{minValue}' to '{maxValue}'");
                     return;

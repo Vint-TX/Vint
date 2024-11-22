@@ -21,15 +21,14 @@ public class AdminModule(
     [ChatCommand("ban", "Ban a player")]
     public async Task Ban(
         ChatCommandContext ctx,
-        [Option("username", "Username of player to ban")]
-        string username,
-        [Option("duration", "Duration of ban", true)]
-        string? rawDuration = null,
-        [WaitingForText, Option("reason", "Reason for ban", true)]
-        string? reason = null) {
+        [Option("username", "Username of player to ban")] string username,
+        [Option("duration", "Duration of ban", true)] string? rawDuration = null,
+        [WaitingForText, Option("reason", "Reason for ban", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -41,8 +40,13 @@ public class AdminModule(
             if (targetConnection.InLobby) {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -59,7 +63,8 @@ public class AdminModule(
             return;
         }
 
-        if (!ctx.Connection.Player.IsAdmin && targetPlayer.IsModerator) {
+        if (!ctx.Connection.Player.IsAdmin &&
+            targetPlayer.IsModerator) {
             await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
@@ -70,7 +75,8 @@ public class AdminModule(
 
         await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -81,11 +87,10 @@ public class AdminModule(
     }
 
     [ChatCommand("unban", "Remove ban from player")]
-    public async Task UnBan(
-        ChatCommandContext ctx,
-        [Option("username", "Username of player to unban")]
-        string username) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+    public async Task UnBan(ChatCommandContext ctx, [Option("username", "Username of player to unban")] string username) {
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -97,8 +102,13 @@ public class AdminModule(
             if (targetConnection.InLobby) {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -119,7 +129,8 @@ public class AdminModule(
 
         string punishMessage = $"{username} was unbanned";
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -130,10 +141,7 @@ public class AdminModule(
     }
 
     [ChatCommand("createInvite", "Create new invite")]
-    public async Task CreateInvite(
-        ChatCommandContext ctx,
-        [Option("code", "Code")] string code,
-        [Option("uses", "Maximum uses")] ushort uses) {
+    public async Task CreateInvite(ChatCommandContext ctx, [Option("code", "Code")] string code, [Option("uses", "Maximum uses")] ushort uses) {
         await using DbConnection db = new();
         Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
 
@@ -165,6 +173,7 @@ public class AdminModule(
     public async Task Usernames(ChatCommandContext ctx) {
         StringBuilder builder = new();
         List<IPlayerConnection> connections = server.PlayerConnections.Values.ToList();
+
         List<string> onlineUsernames = connections
             .Where(connection => connection.IsOnline)
             .Select(connection => connection.Player.Username)
@@ -187,7 +196,10 @@ public class AdminModule(
             return;
         }
 
-        BattlePlayer? player = anon ? null : ctx.Connection.BattlePlayer;
+        BattlePlayer? player = anon
+            ? null
+            : ctx.Connection.BattlePlayer;
+
         bool dropped = await bonusProcessor.ForceDropBonus(bonusType, player);
 
         if (!dropped) {
@@ -200,7 +212,8 @@ public class AdminModule(
 
     [ChatCommand("tps", "Show TPS")]
     public async Task TPS(ChatCommandContext ctx) {
-        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>().DeltaTime;
+        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>()
+            .DeltaTime;
 
         await ctx.SendPrivateResponse($"{1 / deltaTime.TotalSeconds} TPS");
     }

@@ -12,7 +12,8 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class ConnectToCustomLobbyEvent : IServerEvent {
     public long LobbyId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) { // todo rework for admins
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        // todo rework for admins
         if (connection.InLobby) {
             await connection.Send(new EnterBattleLobbyFailedEvent(true, false), connection.User);
             return;
@@ -23,7 +24,9 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
 
         if (await ValidateAndJoin(connection, battle)) return;
 
-        if (connection.Player.IsAdmin && LobbyId >= 0 && LobbyId < battleProcessor.BattlesCount) {
+        if (connection.Player.IsAdmin &&
+            LobbyId >= 0 &&
+            LobbyId < battleProcessor.BattlesCount) {
             battle = battleProcessor.FindByIndex((int)LobbyId);
 
             if (await ValidateAndJoin(connection, battle)) return;
@@ -33,12 +36,14 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
     }
 
     static async Task<bool> ValidateAndJoin(IPlayerConnection connection, Battles.Battle? battle) {
-        if (battle is not { CanAddPlayers: true } || !battle.LobbyEntity.HasComponent<OpenToConnectLobbyComponent>()) {
+        if (battle is not { CanAddPlayers: true } ||
+            !battle.LobbyEntity.HasComponent<OpenToConnectLobbyComponent>()) {
             await connection.Send(new EnterBattleLobbyFailedEvent(false, true), connection.User);
             return false;
         }
 
-        if (battle is not { TypeHandler: CustomHandler } && !connection.Player.IsAdmin) {
+        if (battle is not { TypeHandler: CustomHandler } &&
+            !connection.Player.IsAdmin) {
             await connection.Send(new CustomLobbyNotExistsEvent(), connection.User);
             return false;
         }

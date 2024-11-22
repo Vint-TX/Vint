@@ -9,15 +9,12 @@ public class ArrayCodecFactory : ICodecFactory {
             !typeCodecInfo.Type.IsArray)
             return null;
 
-        ProtocolCollectionAttribute protocolCollection = typeCodecInfo.Attributes
+        ProtocolCollectionAttribute protocolCollection = typeCodecInfo
+                                                             .Attributes
                                                              .OfType<ProtocolCollectionAttribute>()
                                                              .FirstOrDefault() ??
                                                          ProtocolCollectionAttribute.Default;
 
-        return new ArrayCodec(
-            new TypeCodecInfo(
-                typeCodecInfo.Type.GetElementType()!,
-                protocolCollection.Nullable,
-                protocolCollection.Varied));
+        return new ArrayCodec(new TypeCodecInfo(typeCodecInfo.Type.GetElementType()!, protocolCollection.Nullable, protocolCollection.Varied));
     }
 }

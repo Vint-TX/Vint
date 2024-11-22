@@ -3,11 +3,11 @@
 namespace Vint.Core.Protocol.Codecs;
 
 public interface ICodec {
-    public Protocol Protocol { get; }
+    Protocol Protocol { get; }
 
-    public void Init(Protocol protocol);
+    void Init(Protocol protocol);
 
-    public void Encode(ProtocolBuffer buffer, object value);
+    void Encode(ProtocolBuffer buffer, object value);
 
-    public object Decode(ProtocolBuffer buffer);
+    object Decode(ProtocolBuffer buffer);
 }

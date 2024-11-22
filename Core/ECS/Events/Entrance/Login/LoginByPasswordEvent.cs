@@ -36,7 +36,10 @@ public class LoginByPasswordEvent : IServerEvent {
         }
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        List<IPlayerConnection> connections = server.PlayerConnections.Values
+
+        List<IPlayerConnection> connections = server
+            .PlayerConnections
+            .Values
             .Where(player => player.IsOnline && player.Player.Id == connection.Player.Id)
             .ToList();
 

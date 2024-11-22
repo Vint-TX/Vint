@@ -15,7 +15,8 @@ public class BonusTakingRequestEvent : IServerEvent {
         BattlePlayer? battlePlayer = connection.BattlePlayer;
         IBonusProcessor? bonusProcessor = battlePlayer?.Battle.BonusProcessor;
 
-        if (battlePlayer is not { InBattleAsTank: true } || bonusProcessor == null) return;
+        if (battlePlayer is not { InBattleAsTank: true } ||
+            bonusProcessor == null) return;
 
         BattleTank battleTank = battlePlayer.Tank!;
         IEntity bonus = entities.First();
@@ -27,6 +28,7 @@ public class BonusTakingRequestEvent : IServerEvent {
             bonusBox.RegionPosition.Y,
             bonusBox.ConfigComponent.FallSpeed,
             spawned.SpawnTime);
+
         Vector3 tankPosition = battleTank.Position;
         Vector3 bonusPosition = bonusBox.RegionPosition with { Y = bonusHeight };
 

@@ -100,7 +100,9 @@ public class TemperatureProcessor {
         delta *= (float)deltaTime.TotalMilliseconds;
 
         while (delta > 0) {
-            assists = assists.Where(assist => assist.CurrentDelta != 0).ToArray();
+            assists = assists
+                .Where(assist => assist.CurrentDelta != 0)
+                .ToArray();
 
             if (assists.Length == 0)
                 break;
@@ -121,17 +123,19 @@ public class TemperatureProcessor {
 
     void AcceptNewAssists() {
         while (NewAssists.TryDequeue(out TemperatureAssist? assist)) {
-            TemperatureAssist? existingAssist = Assists.FirstOrDefault(a => a.Tank == assist.Tank &&
-                                                                            a.WeaponMarketEntity == assist.WeaponMarketEntity);
+            TemperatureAssist? existingAssist =
+                Assists.FirstOrDefault(a => a.Tank == assist.Tank && a.WeaponMarketEntity == assist.WeaponMarketEntity);
 
-            if (existingAssist != null && existingAssist.CanMerge(assist)) {
+            if (existingAssist != null &&
+                existingAssist.CanMerge(assist)) {
                 Assists.Remove(existingAssist);
                 assist.MergeWith(existingAssist);
             }
 
             NormalizeWithOpposite(assist);
 
-            if (assist.CurrentDelta == 0 || assist.NormalizeOnly)
+            if (assist.CurrentDelta == 0 ||
+                assist.NormalizeOnly)
                 continue;
 
             Assists.Add(assist);
@@ -160,7 +164,9 @@ public class TemperatureProcessor {
     void NormalizeWithOpposite(TemperatureAssist assist) {
         int sign = Math.Sign(Temperature);
 
-        if (sign == 0 || assist.CurrentDelta == 0 || sign == assist.LimitSign)
+        if (sign == 0 ||
+            assist.CurrentDelta == 0 ||
+            sign == assist.LimitSign)
             return;
 
         foreach (TemperatureAssist oppositeAssist in Assists.Where(a => a.LimitSign != assist.LimitSign)) {
@@ -190,5 +196,4 @@ public class TemperatureProcessor {
         foreach (ITemperatureModule temperatureModule in Tank.Modules.OfType<ITemperatureModule>())
             await temperatureModule.OnTemperatureChanged(before, Temperature, -1, 1);
     }
-
 }

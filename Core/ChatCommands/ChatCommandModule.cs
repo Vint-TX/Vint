@@ -4,9 +4,12 @@ namespace Vint.Core.ChatCommands;
 
 public abstract class ChatCommandModule {
     public virtual bool BeforeCommandExecution(ChatCommandContext context) {
-        context.Connection.Logger
+        context
+            .Connection
+            .Logger
             .ForType(GetType())
             .Information("Trying to execute command '{Name}'", context.CommandInfo.Name);
+
         return true;
     }
 

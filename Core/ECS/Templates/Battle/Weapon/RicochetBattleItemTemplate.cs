@@ -14,10 +14,11 @@ public class RicochetBattleItemTemplate : BulletWeaponTemplate {
         const string configPath = "garage/weapon/ricochet";
         IEntity entity = Create(configPath, tank, battlePlayer);
 
-        float energyChargePerShot =
-            ConfigManager.GetComponent<EnergyChargePerShotPropertyComponent>(configPath).FinalValue;
-        float energyRechargeSpeed =
-            ConfigManager.GetComponent<EnergyRechargeSpeedPropertyComponent>(configPath).FinalValue;
+        float energyChargePerShot = ConfigManager.GetComponent<EnergyChargePerShotPropertyComponent>(configPath)
+            .FinalValue;
+
+        float energyRechargeSpeed = ConfigManager.GetComponent<EnergyRechargeSpeedPropertyComponent>(configPath)
+            .FinalValue;
 
         entity.AddComponent<RicochetComponent>();
         entity.AddComponent(new DiscreteWeaponEnergyComponent(energyRechargeSpeed, energyChargePerShot));

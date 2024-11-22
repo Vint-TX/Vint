@@ -11,7 +11,8 @@ public class StreamWeaponWorkingComponent : IComponent {
     public int Time { get; private set; }
 
     public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank)
             return Task.CompletedTask;
 
         foreach (IShotModule shotModule in connection.BattlePlayer.Tank!.Modules.OfType<IShotModule>())

@@ -11,6 +11,9 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
 
     public float Multiplier => 1;
 
+    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
+        0;
+
     public override async Task Activate() {
         if (IsActive) return;
 
@@ -33,8 +36,6 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         await UnshareFromAllPlayers();
         Entity = null;
     }
-
-    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) => 0;
 
     Task ResetWeaponState() =>
         Tank.WeaponHandler is StreamWeaponHandler streamWeapon

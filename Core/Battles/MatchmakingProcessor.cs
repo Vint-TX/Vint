@@ -9,11 +9,11 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IMatchmakingProcessor {
-    public void Tick();
+    void Tick();
 
-    public void AddPlayerToQueue(IPlayerConnection connection);
+    void AddPlayerToQueue(IPlayerConnection connection);
 
-    public Task RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction);
+    Task RemovePlayerFromMatchmaking(IPlayerConnection connection, IEntity? lobby, bool selfAction);
 }
 
 public class MatchmakingProcessor(
@@ -49,7 +49,8 @@ public class MatchmakingProcessor(
             BattlePlayer battlePlayer = connection.BattlePlayer!;
             Battle battle = battlePlayer.Battle;
 
-            if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
+            if (battlePlayer.InBattleAsTank ||
+                battlePlayer.IsSpectator)
                 await battle.RemovePlayer(battlePlayer);
             else
                 await battle.RemovePlayerFromLobby(battlePlayer);

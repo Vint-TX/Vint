@@ -25,7 +25,9 @@ public class CheckPromoCodeEvent : IServerEvent { // todo
             IEntity item = GlobalEntities.GetEntity(parts[0], parts[1]);
 
             if (item.TemplateAccessor?.Template is not MarketEntityTemplate ||
-                item.GetUserEntity(connection).HasComponent<UserGroupComponent>()) {
+                item
+                    .GetUserEntity(connection)
+                    .HasComponent<UserGroupComponent>()) {
                 await connection.Send(new PromoCodeCheckResultEvent(Code, PromoCodeCheckResult.Invalid), user);
                 return;
             }

@@ -15,14 +15,12 @@ public class AdminModule(
     GameServer gameServer
 ) {
     [Command("ban")]
-    public async Task BanPlayer(
-        CommandContext ctx,
-        string username,
-        TimeSpan? duration = null,
-        string? reason = null) {
+    public async Task BanPlayer(CommandContext ctx, string username, TimeSpan? duration = null, string? reason = null) {
         await ctx.DeferResponseAsync();
 
-        IPlayerConnection? targetConnection = gameServer.PlayerConnections.Values
+        IPlayerConnection? targetConnection = gameServer
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -66,7 +64,9 @@ public class AdminModule(
     public async Task UnbanPlayer(CommandContext ctx, string username) {
         await ctx.DeferResponseAsync();
 
-        IPlayerConnection? targetConnection = gameServer.PlayerConnections.Values
+        IPlayerConnection? targetConnection = gameServer
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 

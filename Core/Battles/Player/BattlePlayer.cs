@@ -43,7 +43,10 @@ public class BattlePlayer {
         get => _team;
         set {
             _team = value;
-            TeamColor = _team?.GetComponent<TeamColorComponent>().TeamColor ?? TeamColor.None;
+
+            TeamColor = _team?.GetComponent<TeamColorComponent>()
+                            .TeamColor ??
+                        TeamColor.None;
         }
     }
 
@@ -78,14 +81,20 @@ public class BattlePlayer {
             switch (Battle.ModeHandler) {
                 case TeamHandler teamHandler: {
                     TeamColor winningTeam;
-                    int redScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>().Score;
-                    int blueScore = teamHandler.BlueTeam.GetComponent<TeamScoreComponent>().Score;
+
+                    int redScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>()
+                        .Score;
+
+                    int blueScore = teamHandler.BlueTeam.GetComponent<TeamScoreComponent>()
+                        .Score;
 
                     if (redScore > blueScore) winningTeam = TeamColor.Red;
                     else if (blueScore > redScore) winningTeam = TeamColor.Blue;
                     else return TeamBattleResult.Draw;
 
-                    return TeamColor == winningTeam ? TeamBattleResult.Win : TeamBattleResult.Defeat;
+                    return TeamColor == winningTeam
+                        ? TeamBattleResult.Win
+                        : TeamBattleResult.Defeat;
                 }
 
                 default: return TeamBattleResult.Draw;
@@ -97,7 +106,8 @@ public class BattlePlayer {
         await PlayerConnection.Share(Battle.Entity, Battle.RoundEntity, Battle.BattleChatEntity);
         Battle.BonusProcessor?.ShareEntities(PlayerConnection);
 
-        foreach (Effect effect in Battle.Players
+        foreach (Effect effect in Battle
+                     .Players
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .SelectMany(battlePlayer => battlePlayer.Tank!.Effects))
             await effect.Share(this);
@@ -123,7 +133,8 @@ public class BattlePlayer {
             await Battle.ModeHandler.SortPlayers();
         }
 
-        await PlayerConnection.Share(Battle.Players
+        await PlayerConnection.Share(Battle
+            .Players
             .Where(player => player != this && player.InBattleAsTank)
             .SelectMany(player => player.Tank!.Entities));
     }
@@ -143,26 +154,28 @@ public class BattlePlayer {
         await using DbConnection db = new();
 
         await db.BeginTransactionAsync();
-        await db.SeasonStatistics
-            .Where(stats => stats.PlayerId == player.Id &&
-                            stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
+
+        await db
+            .SeasonStatistics
+            .Where(stats => stats.PlayerId == player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.BattlesPlayed, stats => stats.BattlesPlayed + 1)
             .UpdateAsync();
 
-        await db.Hulls
-            .Where(hull => hull.PlayerId == player.Id &&
-                           hull.Id == preset.Hull.Id)
+        await db
+            .Hulls
+            .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
             .Set(hull => hull.BattlesPlayed, hull => hull.BattlesPlayed + 1)
             .UpdateAsync();
 
-        await db.Weapons
-            .Where(weapon => weapon.PlayerId == player.Id &&
-                             weapon.Id == preset.Weapon.Id)
+        await db
+            .Weapons
+            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
             .Set(weapon => weapon.BattlesPlayed, weapon => weapon.BattlesPlayed + 1)
             .UpdateAsync();
 
         if (Battle.TypeHandler is not MatchmakingHandler) {
-            await db.Statistics
+            await db
+                .Statistics
                 .Where(stats => stats.PlayerId == player.Id)
                 .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
                 .Set(stats => stats.AllCustomBattlesParticipated, stats => stats.AllCustomBattlesParticipated + 1)
@@ -171,12 +184,21 @@ public class BattlePlayer {
             await db.CommitTransactionAsync();
             reputationDelta = 0;
         } else {
-            await db.Statistics
+            await db
+                .Statistics
                 .Where(stats => stats.PlayerId == player.Id)
                 .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
                 .Set(stats => stats.BattlesParticipated, stats => stats.BattlesParticipated + 1)
-                .Set(stats => stats.Defeats, stats => stats.Defeats + (TeamBattleResult == TeamBattleResult.Defeat ? 1 : 0))
-                .Set(stats => stats.Victories, stats => stats.Victories + (TeamBattleResult == TeamBattleResult.Win ? 1 : 0))
+                .Set(stats => stats.Defeats,
+                    stats => stats.Defeats +
+                             (TeamBattleResult == TeamBattleResult.Defeat
+                                 ? 1
+                                 : 0))
+                .Set(stats => stats.Victories,
+                    stats => stats.Victories +
+                             (TeamBattleResult == TeamBattleResult.Win
+                                 ? 1
+                                 : 0))
                 .UpdateAsync();
 
             await db.CommitTransactionAsync();
@@ -224,10 +246,16 @@ public class BattlePlayer {
     }
 
     public int GetScoreWithBonus(int score) =>
-        (int)Math.Round(score * GetBattleSeriesMultiplier() + score * (PlayerConnection.Player.IsPremium ? 0.5 : 0));
+        (int)Math.Round(score * GetBattleSeriesMultiplier() +
+                        score *
+                        (PlayerConnection.Player.IsPremium
+                            ? 0.5
+                            : 0));
 
     public int GetBattleUserScoreWithBonus() {
-        int scoreWithoutBonuses = Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses;
+        int scoreWithoutBonuses = Tank!.RoundUser.GetComponent<RoundUserStatisticsComponent>()
+            .ScoreWithoutBonuses;
+
         int scoreWithBonus = GetScoreWithBonus(scoreWithoutBonuses);
         float battleSeriesMultiplier = GetBattleSeriesMultiplier() / 100;
 

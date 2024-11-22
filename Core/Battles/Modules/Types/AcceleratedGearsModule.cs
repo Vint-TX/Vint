@@ -11,20 +11,24 @@ namespace Vint.Core.Battles.Modules.Types;
 public class AcceleratedGearsModule : PassiveBattleModule, IAlwaysActiveModule {
     public override string ConfigPath => "garage/module/upgrade/properties/acceleratedgears";
 
-    public override AcceleratedGearsEffect GetEffect() => new(Tank, Level, TurretSpeed, TurretAcceleration, HullRotation);
-
     float TurretSpeed { get; set; }
     float TurretAcceleration { get; set; }
     float HullRotation { get; set; }
 
+    public override AcceleratedGearsEffect GetEffect() => new(Tank, Level, TurretSpeed, TurretAcceleration, HullRotation);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        AcceleratedGearsEffect? effect = Tank.Effects.OfType<AcceleratedGearsEffect>().SingleOrDefault();
+        AcceleratedGearsEffect? effect = Tank
+            .Effects
+            .OfType<AcceleratedGearsEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
-        await GetEffect().Activate();
+        await GetEffect()
+            .Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

@@ -11,11 +11,17 @@ public class IncreasedDamageModule : ActiveBattleModule {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        IncreasedDamageEffect? effect = Tank.Effects.OfType<IncreasedDamageEffect>().SingleOrDefault();
+
+        IncreasedDamageEffect? effect = Tank
+            .Effects
+            .OfType<IncreasedDamageEffect>()
+            .SingleOrDefault();
 
         switch (effect) {
             case null:
-                await GetEffect().Activate();
+                await GetEffect()
+                    .Activate();
+
                 break;
 
             case IExtendableEffect extendableEffect:

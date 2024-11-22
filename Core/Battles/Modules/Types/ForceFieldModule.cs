@@ -10,19 +10,24 @@ namespace Vint.Core.Battles.Modules.Types;
 public class ForceFieldModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/forcefield";
 
-    public override ForceFieldEffect GetEffect() => new(Duration, Tank, Level);
-
     TimeSpan Duration { get; set; }
+
+    public override ForceFieldEffect GetEffect() => new(Duration, Tank, Level);
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        ForceFieldEffect? effect = Tank.Effects.OfType<ForceFieldEffect>().SingleOrDefault();
+        ForceFieldEffect? effect = Tank
+            .Effects
+            .OfType<ForceFieldEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

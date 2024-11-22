@@ -23,7 +23,9 @@ public class ActivatePromoCodeEvent : IServerEvent { // todo
             item = GlobalEntities.GetEntity(parts[0], parts[1]);
 
             if (item.TemplateAccessor?.Template is not MarketEntityTemplate ||
-                item.GetUserEntity(connection).HasComponent<UserGroupComponent>()) return;
+                item
+                    .GetUserEntity(connection)
+                    .HasComponent<UserGroupComponent>()) return;
         } catch (NullReferenceException) {
             return;
         }

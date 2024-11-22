@@ -9,7 +9,10 @@ namespace Vint.Core.Battles.Weapons;
 
 public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
     public ShaftWeaponHandler(BattleTank battleTank) : base(battleTank) {
-        EnergyDrainPerMs = ConfigManager.GetComponent<EnergyChargeSpeedPropertyComponent>(MarketConfigPath).FinalValue / 1000;
+        EnergyDrainPerMs = ConfigManager.GetComponent<EnergyChargeSpeedPropertyComponent>(MarketConfigPath)
+                               .FinalValue /
+                           1000;
+
         AimingSpeedComponent = BattleEntity.GetComponent<ShaftAimingSpeedComponent>();
     }
 
@@ -24,6 +27,7 @@ public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
     public void Aim() {
         Aiming = true;
         AimingBeginTime = DateTimeOffset.UtcNow;
+
         BattleEntity.ChangeComponent<WeaponRotationComponent>(component => { // vertical speed controlled by client, but horizontal is not
             component.Speed = AimingSpeedComponent.MaxHorizontalSpeed;
             component.Acceleration = AimingSpeedComponent.HorizontalAcceleration;
@@ -31,8 +35,9 @@ public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
     }
 
     public void Idle() {
-        double durationMs =
-            Math.Clamp((DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow)).TotalMilliseconds, 0, 1 / EnergyDrainPerMs);
+        double durationMs = Math.Clamp((DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow)).TotalMilliseconds,
+            0,
+            1 / EnergyDrainPerMs);
 
         AimingDuration = TimeSpan.FromMilliseconds(durationMs);
         BattleEntity.ChangeComponent(WeaponRotationComponent.Clone());

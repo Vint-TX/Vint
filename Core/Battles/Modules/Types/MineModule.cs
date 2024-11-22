@@ -14,9 +14,6 @@ public class MineModule : ActiveBattleModule {
 
     public override string ConfigPath => "garage/module/upgrade/properties/mine";
 
-    public override MineEffect GetEffect() => new(GenerateIndex(), MarketEntity, ActivationTime, ExplosionDelay, BeginHideDistance, HideRange,
-        TriggeringArea, Impact, MinSplashDamagePercent, RadiusOfMaxSplashDamage, RadiusOfMinSplashDamage, MaxDamage, MinDamage, Tank, Level);
-
     IEnumerable<MineEffect> Mines => Tank.Effects.OfType<MineEffect>();
     IEnumerable<MineEffect> MinesSorted => Mines.OrderBy(mine => mine.Index);
 
@@ -33,14 +30,34 @@ public class MineModule : ActiveBattleModule {
     float MinSplashDamagePercent { get; set; }
     float TriggeringArea { get; set; }
 
+    public override MineEffect GetEffect() => new(GenerateIndex(),
+        MarketEntity,
+        ActivationTime,
+        ExplosionDelay,
+        BeginHideDistance,
+        HideRange,
+        TriggeringArea,
+        Impact,
+        MinSplashDamagePercent,
+        RadiusOfMaxSplashDamage,
+        RadiusOfMinSplashDamage,
+        MaxDamage,
+        MinDamage,
+        Tank,
+        Level);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
 
         while (Mines.Count() > CountLimit)
-            await MinesSorted.First().ForceDeactivate();
+            await MinesSorted
+                .First()
+                .ForceDeactivate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

@@ -13,7 +13,11 @@ namespace Vint.Core.Battles.Type;
 
 public class ArcadeHandler : TypeHandler {
     public ArcadeHandler(Battle battle, ArcadeModeType mode) : base(battle) {
-        Maps = ConfigManager.MapInfos.Where(map => map.Matchmaking && map.HasSpawnPoints(BattleMode)).ToList();
+        Maps = ConfigManager
+            .MapInfos
+            .Where(map => map.Matchmaking && map.HasSpawnPoints(BattleMode))
+            .ToList();
+
         Mode = mode;
         ModeHandler = GetHandlerByType(Battle, Mode);
     }

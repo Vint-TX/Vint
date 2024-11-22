@@ -13,61 +13,6 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles.Results;
 
 public class PersonalBattleResultForClient {
-    public async Task Init(IPlayerConnection connection, IEntity prevLeague, double reputationDelta) {
-        Database.Models.Player player = connection.Player;
-        Preset preset = player.CurrentPreset;
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        IEntity userHull = preset.Hull.GetUserEntity(connection);
-        IEntity userWeapon = preset.Weapon.GetUserEntity(connection);
-        IEntity? reward = await Leveling.GetLevelUpRewards(connection);
-
-        if (reward != null)
-            await connection.Share(reward);
-
-        int battleScore = battlePlayer.GetBattleUserScoreWithBonus();
-        float battleSeriesMultiplier = battlePlayer.GetBattleSeriesMultiplier();
-        await using DbConnection db = new();
-
-        TankInitExp = (int)userHull.GetComponent<ExperienceItemComponent>().Experience - battleScore;
-        TankFinalExp = userHull.GetComponent<ExperienceToLevelUpItemComponent>().FinalLevelExperience;
-        TankExp = (int)await db.Hulls
-            .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
-            .Select(hull => hull.Xp)
-            .SingleAsync();
-        TankLevel = Leveling.GetLevel(TankExp);
-
-        WeaponInitExp = (int)userWeapon.GetComponent<ExperienceItemComponent>().Experience - battleScore;
-        WeaponFinalExp = userWeapon.GetComponent<ExperienceToLevelUpItemComponent>().FinalLevelExperience;
-        WeaponExp = (int)await db.Weapons
-            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
-            .Select(weapon => weapon.Xp)
-            .SingleAsync();
-        WeaponLevel = Leveling.GetLevel(WeaponExp);
-
-        RankExp = (int)player.Experience;
-        RankExpDelta = battleScore;
-
-        ReputationDelta = reputationDelta;
-        Reputation = player.Reputation;
-        PrevLeague = prevLeague;
-        League = player.LeagueEntity;
-        LeaguePlace = await Leveling.GetSeasonPlace(player.Id);
-
-        Container = League.GetComponent<ChestBattleRewardComponent>().Chest;
-        ContainerScoreDelta = battleScore;
-        ContainerScore = (int)player.GameplayChestScore;
-        ContainerScoreMultiplier = battleSeriesMultiplier;
-
-        ItemsExpDelta = battleScore;
-        Reward = reward;
-
-        UserTeamColor = connection.User.GetComponent<TeamColorComponent>().TeamColor;
-        TeamBattleResult = battlePlayer.TeamBattleResult;
-
-        CurrentBattleSeries = connection.BattleSeries;
-        ScoreBattleSeriesMultiplier = battleSeriesMultiplier;
-    }
-
     public int CurrentBattleSeries { get; set; }
     public int MaxBattleSeries => 5;
     public int RankExp { get; set; }
@@ -101,4 +46,77 @@ public class PersonalBattleResultForClient {
     public int EnergyDelta => 0;
     public int CrystalsForExtraEnergy => 0;
     public EnergySource? MaxEnergySource => null;
+
+    public async Task Init(IPlayerConnection connection, IEntity prevLeague, double reputationDelta) {
+        Database.Models.Player player = connection.Player;
+        Preset preset = player.CurrentPreset;
+        BattlePlayer battlePlayer = connection.BattlePlayer!;
+        IEntity userHull = preset.Hull.GetUserEntity(connection);
+        IEntity userWeapon = preset.Weapon.GetUserEntity(connection);
+        IEntity? reward = await Leveling.GetLevelUpRewards(connection);
+
+        if (reward != null)
+            await connection.Share(reward);
+
+        int battleScore = battlePlayer.GetBattleUserScoreWithBonus();
+        float battleSeriesMultiplier = battlePlayer.GetBattleSeriesMultiplier();
+        await using DbConnection db = new();
+
+        TankInitExp = (int)userHull.GetComponent<ExperienceItemComponent>()
+                          .Experience -
+                      battleScore;
+
+        TankFinalExp = userHull.GetComponent<ExperienceToLevelUpItemComponent>()
+            .FinalLevelExperience;
+
+        TankExp = (int)await db
+            .Hulls
+            .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
+            .Select(hull => hull.Xp)
+            .SingleAsync();
+
+        TankLevel = Leveling.GetLevel(TankExp);
+
+        WeaponInitExp = (int)userWeapon.GetComponent<ExperienceItemComponent>()
+                            .Experience -
+                        battleScore;
+
+        WeaponFinalExp = userWeapon.GetComponent<ExperienceToLevelUpItemComponent>()
+            .FinalLevelExperience;
+
+        WeaponExp = (int)await db
+            .Weapons
+            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
+            .Select(weapon => weapon.Xp)
+            .SingleAsync();
+
+        WeaponLevel = Leveling.GetLevel(WeaponExp);
+
+        RankExp = (int)player.Experience;
+        RankExpDelta = battleScore;
+
+        ReputationDelta = reputationDelta;
+        Reputation = player.Reputation;
+        PrevLeague = prevLeague;
+        League = player.LeagueEntity;
+        LeaguePlace = await Leveling.GetSeasonPlace(player.Id);
+
+        Container = League.GetComponent<ChestBattleRewardComponent>()
+            .Chest;
+
+        ContainerScoreDelta = battleScore;
+        ContainerScore = (int)player.GameplayChestScore;
+        ContainerScoreMultiplier = battleSeriesMultiplier;
+
+        ItemsExpDelta = battleScore;
+        Reward = reward;
+
+        UserTeamColor = connection.User.GetComponent<TeamColorComponent>()
+            .TeamColor;
+
+        TeamBattleResult = battlePlayer.TeamBattleResult;
+
+        CurrentBattleSeries = connection.BattleSeries;
+        ScoreBattleSeriesMultiplier = battleSeriesMultiplier;
+    }
 }

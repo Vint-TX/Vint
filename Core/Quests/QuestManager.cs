@@ -17,12 +17,13 @@ using Vint.Core.Utils;
 namespace Vint.Core.Quests;
 
 public class QuestManager {
+    const int MaxQuests = 4;
+
     public QuestManager(IServiceProvider serviceProvider) {
         ServiceProvider = serviceProvider;
         UpdateNextTime();
     }
 
-    const int MaxQuests = 4;
     static QuestsInfo QuestsInfo => ConfigManager.QuestsInfo;
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(QuestManager));
 
@@ -31,10 +32,13 @@ public class QuestManager {
 
     public async Task<List<Quest>> SetupQuests(IPlayerConnection connection, bool deleteAllUncompleted) {
         List<Quest> quests = await GetCurrentQuests(connection.Player.Id, deleteAllUncompleted);
-        List<IEntity> removedEntities = connection.SharedEntities
-            .Where(entity => entity.HasComponent<QuestComponent>() &&
-                             entity.HasComponent<SlotIndexComponent>())
-            .DistinctBy(entity => quests.Any(quest => quest.Index == entity.GetComponent<SlotIndexComponent>().Index))
+
+        List<IEntity> removedEntities = connection
+            .SharedEntities
+            .Where(entity => entity.HasComponent<QuestComponent>() && entity.HasComponent<SlotIndexComponent>())
+            .DistinctBy(entity => quests.Any(quest => quest.Index ==
+                                                      entity.GetComponent<SlotIndexComponent>()
+                                                          .Index))
             .ToList();
 
         await connection.Unshare(removedEntities);
@@ -77,7 +81,8 @@ public class QuestManager {
 
                 DateTimeOffset now = DateTimeOffset.UtcNow;
 
-                await db.Players
+                await db
+                    .Players
                     .Where(player => player.Id == connection.Player.Id)
                     .Set(player => player.LastQuestUpdateTime, now)
                     .UpdateAsync();
@@ -106,7 +111,8 @@ public class QuestManager {
 
         await using DbConnection db = new();
 
-        List<Quest> quests = await db.Quests
+        List<Quest> quests = await db
+            .Quests
             .Where(quest => quest.PlayerId == connection.Player.Id)
             .ToListAsync();
 
@@ -114,7 +120,9 @@ public class QuestManager {
                                                       quest.ConditionMet(preset.Weapon, preset.Hull, battle.Properties.BattleMode))) {
             IEntity? entity = connection.SharedEntities.SingleOrDefault(entity => entity.HasComponent<QuestComponent>() &&
                                                                                   entity.HasComponent<SlotIndexComponent>() &&
-                                                                                  entity.GetComponent<SlotIndexComponent>().Index == quest.Index);
+                                                                                  entity.GetComponent<SlotIndexComponent>()
+                                                                                      .Index ==
+                                                                                  quest.Index);
 
             if (entity == null) continue;
 
@@ -124,7 +132,9 @@ public class QuestManager {
                 QuestType.Frags => tank.Result.Kills,
                 QuestType.Scores => tank.Result.Score,
                 QuestType.Supply => tank.Result.BonusesTaken,
-                QuestType.Victories => tank.BattlePlayer.TeamBattleResult == TeamBattleResult.Win ? 1 : 0,
+                QuestType.Victories => tank.BattlePlayer.TeamBattleResult == TeamBattleResult.Win
+                    ? 1
+                    : 0,
                 _ => 0
             };
 
@@ -143,8 +153,14 @@ public class QuestManager {
     public async Task ChangeQuest(IPlayerConnection connection, IEntity questEntity) {
         await using DbConnection db = new();
 
-        List<Quest> quests = await db.Quests.Where(quest => quest.PlayerId == connection.Player.Id).ToListAsync();
-        Quest? quest = quests.SingleOrDefault(quest => quest.Index == questEntity.GetComponent<SlotIndexComponent>().Index);
+        List<Quest> quests = await db
+            .Quests
+            .Where(quest => quest.PlayerId == connection.Player.Id)
+            .ToListAsync();
+
+        Quest? quest = quests.SingleOrDefault(quest => quest.Index ==
+                                                       questEntity.GetComponent<SlotIndexComponent>()
+                                                           .Index);
 
         if (quest == null) return;
 
@@ -163,7 +179,9 @@ public class QuestManager {
         player.QuestChangesResetTime = null;
 
         await using DbConnection db = new();
-        await db.Players
+
+        await db
+            .Players
             .Where(p => p.Id == player.Id)
             .Set(p => p.QuestChangesResetTime, player.QuestChangesResetTime)
             .Set(p => p.QuestChanges, player.QuestChanges)
@@ -213,7 +231,11 @@ public class QuestManager {
 
     static async Task<List<Quest>> GetCurrentQuests(long playerId, bool deleteAllUncompleted) {
         await using DbConnection db = new();
-        List<Quest> quests = await db.Quests.Where(quest => quest.PlayerId == playerId).ToListAsync();
+
+        List<Quest> quests = await db
+            .Quests
+            .Where(quest => quest.PlayerId == playerId)
+            .ToListAsync();
 
         foreach (Quest quest in quests
                      .ToList()
@@ -278,7 +300,8 @@ public class QuestManager {
     }
 
     static KeyValuePair<QuestType, QuestTypeInfo> GetRandomQuestInfo(IEnumerable<QuestType> usedTypes) =>
-        QuestsInfo.Types
+        QuestsInfo
+            .Types
             .Where(info => !usedTypes.Contains(info.Key))
             .ToList()
             .Shuffle()
@@ -287,7 +310,8 @@ public class QuestManager {
     static (QuestConditionType?, long) GenerateCondition(bool withCondition) {
         if (!withCondition) return (null, default);
 
-        QuestConditionType conditionType = Enum.GetValues<QuestConditionType>()
+        QuestConditionType conditionType = Enum
+            .GetValues<QuestConditionType>()
             .Where(type => type != QuestConditionType.Mode)
             .ToList()
             .Shuffle()
@@ -298,12 +322,22 @@ public class QuestManager {
         // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
         switch (conditionType) {
             case QuestConditionType.Weapon:
-                IEntity weapon = GlobalEntities.GetEntities("weapons").ToList().Shuffle().First();
+                IEntity weapon = GlobalEntities
+                    .GetEntities("weapons")
+                    .ToList()
+                    .Shuffle()
+                    .First();
+
                 value = weapon.Id;
                 break;
 
             case QuestConditionType.Tank:
-                IEntity hull = GlobalEntities.GetEntities("hulls").ToList().Shuffle().First();
+                IEntity hull = GlobalEntities
+                    .GetEntities("hulls")
+                    .ToList()
+                    .Shuffle()
+                    .First();
+
                 value = hull.Id;
                 break;
 
@@ -315,26 +349,18 @@ public class QuestManager {
     }
 
     static Range GetValuesRange(QuestTypeInfo questInfo, bool isRare, bool withCondition) =>
-        withCondition
-            ? questInfo.ConditionValue..questInfo.ConditionValue
-            : isRare
-                ? questInfo.MinRareValue..questInfo.MaxRareValue
-                : questInfo.MinCommonValue..questInfo.MaxCommonValue;
+        withCondition ? questInfo.ConditionValue..questInfo.ConditionValue :
+        isRare ? questInfo.MinRareValue..questInfo.MaxRareValue : questInfo.MinCommonValue..questInfo.MaxCommonValue;
 
     static QuestRewardType GetRewardType(bool isRare, bool withCondition) =>
-        withCondition
-            ? QuestRewardType.Condition
-            : isRare
-                ? QuestRewardType.Rare
-                : QuestRewardType.Common;
+        withCondition ? QuestRewardType.Condition : isRare ? QuestRewardType.Rare : QuestRewardType.Common;
 
     static QuestRarityType GetRarityType(bool isRare, bool withCondition) =>
-        withCondition
-            ? QuestRarityType.Condition
-            : isRare
-                ? QuestRarityType.Rare
-                : QuestRarityType.Common;
+        withCondition ? QuestRarityType.Condition : isRare ? QuestRarityType.Rare : QuestRarityType.Common;
 
     static QuestRewardInfo GetRandomReward(QuestRewardType rewardType) =>
-        QuestsInfo.Rewards[rewardType].Shuffle().First();
+        QuestsInfo
+            .Rewards[rewardType]
+            .Shuffle()
+            .First();
 }

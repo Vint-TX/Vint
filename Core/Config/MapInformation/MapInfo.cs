@@ -18,12 +18,12 @@ public record struct MapInfo(
 ) {
     static Vector3 GltfToUnity { get; } = new(-1, 1, 1);
 
-    object Lock { get; set; }
+    Lock Lock { get; set; }
     string ConfigPath { get; set; }
     Triangle[]? Triangles { get; set; }
 
     public void Init() {
-        Lock = new object();
+        Lock = new Lock();
         ConfigPath = Path.Combine(ConfigManager.ResourcesPath, "Maps", Name);
     }
 
@@ -47,6 +47,7 @@ public record struct MapInfo(
                         RedTeam = [new SpawnPoint()]
                     }
                 };
+
                 break;
 
             case BattleMode.CTF:
@@ -56,6 +57,7 @@ public record struct MapInfo(
                         RedTeam = [new SpawnPoint()]
                     }
                 };
+
                 break;
         }
     }
@@ -71,13 +73,24 @@ public record struct MapInfo(
             string mapModelPath = Path.Combine(ConfigPath, "model.glb");
             ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
 
-            Triangle[] triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
+            Triangle[] triangles = mapRoot
+                .DefaultScene // todo create a mesh immediately instead of store list of triangles
                 .EvaluateTriangles()
-                .Select(tuple =>
-                    new Triangle(
-                        tuple.A.GetGeometry().GetPosition() * GltfToUnity,
-                        tuple.B.GetGeometry().GetPosition() * GltfToUnity,
-                        tuple.C.GetGeometry().GetPosition() * GltfToUnity))
+                .Select(tuple => new Triangle(tuple
+                                                  .A
+                                                  .GetGeometry()
+                                                  .GetPosition() *
+                                              GltfToUnity,
+                    tuple
+                        .B
+                        .GetGeometry()
+                        .GetPosition() *
+                    GltfToUnity,
+                    tuple
+                        .C
+                        .GetGeometry()
+                        .GetPosition() *
+                    GltfToUnity))
                 .ToArray();
 
             Triangles = triangles;

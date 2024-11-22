@@ -12,26 +12,36 @@ public class BattleResultForClient {
         BattleId = battle.Id;
         MapId = battle.MapInfo.Id;
         BattleMode = battle.Properties.BattleMode;
-        MatchMakingModeType = battle.TypeHandler is ArcadeHandler ? BattleType.Arcade : BattleType.Rating;
+
+        MatchMakingModeType = battle.TypeHandler is ArcadeHandler
+            ? BattleType.Arcade
+            : BattleType.Rating;
 
         switch (battle.ModeHandler) {
             case TeamHandler teamHandler:
-                RedTeamScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>().Score;
-                BlueTeamScore = teamHandler.BlueTeam.GetComponent<TeamScoreComponent>().Score;
+                RedTeamScore = teamHandler.RedTeam.GetComponent<TeamScoreComponent>()
+                    .Score;
 
-                RedUsers = teamHandler.RedPlayers
+                BlueTeamScore = teamHandler.BlueTeam.GetComponent<TeamScoreComponent>()
+                    .Score;
+
+                RedUsers = teamHandler
+                    .RedPlayers
                     .Select(player => player.Tank!.Result)
                     .OrderByDescending(userResult => userResult.ScoreWithoutPremium)
                     .ToList();
 
-                BlueUsers = teamHandler.BluePlayers
+                BlueUsers = teamHandler
+                    .BluePlayers
                     .Select(player => player.Tank!.Result)
                     .OrderByDescending(userResult => userResult.ScoreWithoutPremium)
                     .ToList();
+
                 break;
 
             case DMHandler:
-                List<UserResult> userResults = battle.Players
+                List<UserResult> userResults = battle
+                    .Players
                     .Where(player => player.InBattleAsTank)
                     .Select(player => player.Tank!.Result)
                     .OrderByDescending(userResult => userResult.ScoreWithoutPremium)

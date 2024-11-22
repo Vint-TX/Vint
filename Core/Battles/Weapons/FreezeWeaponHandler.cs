@@ -6,9 +6,12 @@ namespace Vint.Core.Battles.Weapons;
 
 public class FreezeWeaponHandler : StreamWeaponHandler {
     public FreezeWeaponHandler(BattleTank battleTank) : base(battleTank) {
-        TemperatureLimit = ConfigManager.GetComponent<TemperatureLimitPropertyComponent>(MarketConfigPath).FinalValue;
-        TemperatureDelta =
-            ConfigManager.GetComponent<DeltaTemperaturePerSecondPropertyComponent>(MarketConfigPath).FinalValue * (float)Cooldown.TotalSeconds;
+        TemperatureLimit = ConfigManager.GetComponent<TemperatureLimitPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        TemperatureDelta = ConfigManager.GetComponent<DeltaTemperaturePerSecondPropertyComponent>(MarketConfigPath)
+                               .FinalValue *
+                           (float)Cooldown.TotalSeconds;
     }
 
     public override int MaxHitTargets => int.MaxValue;

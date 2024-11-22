@@ -37,7 +37,13 @@ public class ExitFromMatchmakingEvent : IServerEvent {
                 break;
 
             default:
-                connection.Logger.ForType(GetType()).Error("Unexpected type handler: {Handler}", battle.TypeHandler.GetType().Name);
+                connection
+                    .Logger
+                    .ForType(GetType())
+                    .Error("Unexpected type handler: {Handler}",
+                        battle.TypeHandler.GetType()
+                            .Name);
+
                 break;
         }
 

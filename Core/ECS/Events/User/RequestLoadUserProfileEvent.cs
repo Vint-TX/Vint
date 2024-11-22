@@ -15,9 +15,13 @@ public class RequestLoadUserProfileEvent : IServerEvent {
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        IEntity? user = server.PlayerConnections.Values
+
+        IEntity? user = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Id == UserId)?.User;
+            .SingleOrDefault(conn => conn.Player.Id == UserId)
+            ?.User;
 
         if (EntityRegistry.TryGetTemp(UserId, out IEntity? tempUser)) { // temp user exists..
             if (user != null) { // ..but player is online

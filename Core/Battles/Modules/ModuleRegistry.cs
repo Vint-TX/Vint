@@ -7,7 +7,8 @@ namespace Vint.Core.Battles.Modules;
 
 public static class ModuleRegistry {
     static ModuleRegistry() {
-        System.Type[] modules = Assembly.GetExecutingAssembly()
+        System.Type[] modules = Assembly
+            .GetExecutingAssembly()
             .GetTypes()
             .Where(type => type.IsDefined(typeof(ModuleIdAttribute)))
             .ToArray();
@@ -16,6 +17,7 @@ public static class ModuleRegistry {
 
         foreach (System.Type module in modules) {
             long id = module.GetCustomAttribute<ModuleIdAttribute>()!.Id;
+
             IBattleModuleBuilder battleModuleBuilder =
                 (IBattleModuleBuilder)Activator.CreateInstance(typeof(BattleModuleBuilder<>).MakeGenericType(module))!;
 
@@ -28,13 +30,15 @@ public static class ModuleRegistry {
     static BattleModuleBuilder<InDevModule> Fallback { get; } = new();
     static FrozenDictionary<long, IBattleModuleBuilder> IdToBuilder { get; }
 
-    public static BattleModule Get(long id) => IdToBuilder.GetValueOrDefault(id, Fallback).Build();
+    public static BattleModule Get(long id) => IdToBuilder
+        .GetValueOrDefault(id, Fallback)
+        .Build();
 
     class BattleModuleBuilder<T> : IBattleModuleBuilder where T : BattleModule, new() {
         public BattleModule Build() => new T();
     }
 
     interface IBattleModuleBuilder {
-        public BattleModule Build();
+        BattleModule Build();
     }
 }

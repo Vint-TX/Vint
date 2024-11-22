@@ -154,7 +154,8 @@ public sealed class Battle : IDisposable {
             return;
         }
 
-        Dictionary<BonusType, IEnumerable<Config.MapInformation.Bonus>> bonuses = MapInfo.BonusRegions
+        Dictionary<BonusType, IEnumerable<Config.MapInformation.Bonus>> bonuses = MapInfo
+            .BonusRegions
             .Get(Properties.BattleMode)
             .ToDictionary();
 
@@ -170,7 +171,7 @@ public sealed class Battle : IDisposable {
 
         Properties = properties;
         MapInfo = ConfigManager.MapInfos.Single(map => map.Id == Properties.MapId);
-        MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Properties.MapId);
+        MapEntity = GlobalEntities.GetEntity("maps", map => map.Id == Properties.MapId);
 
         await LobbyEntity.RemoveComponent<MapGroupComponent>();
         await LobbyEntity.AddGroupComponent<MapGroupComponent>(MapEntity);
@@ -220,7 +221,9 @@ public sealed class Battle : IDisposable {
         await ModeHandler.OnFinished();
 
         List<BattlePlayer> players = Players.ToList();
-        List<BattlePlayer> tankPlayers = players.Where(player => player.InBattleAsTank).ToList();
+        List<BattlePlayer> tankPlayers = players
+            .Where(player => player.InBattleAsTank)
+            .ToList();
 
         bool hasEnemies = ModeHandler is TeamHandler teamHandler &&
                           teamHandler.BluePlayers.Any() &&
@@ -306,8 +309,7 @@ public sealed class Battle : IDisposable {
 
         await connection.Unshare(Entity, RoundEntity, BattleChatEntity);
         await connection.Unshare(Players
-            .Where(player => player.InBattleAsTank &&
-                             player != battlePlayer)
+            .Where(player => player.InBattleAsTank && player != battlePlayer)
             .SelectMany(player => player.Tank!.Entities));
 
         BonusProcessor?.UnshareEntities(connection);

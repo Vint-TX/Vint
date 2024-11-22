@@ -11,18 +11,22 @@ namespace Vint.Core.Battles.Modules.Types;
 public class BackhitIncreaseModule : PassiveBattleModule, IAlwaysActiveModule {
     public override string ConfigPath => "garage/module/upgrade/properties/backhitincrease";
 
-    public override BackhitIncreaseEffect GetEffect() => new(Tank, Level, Multiplier);
-
     float Multiplier { get; set; }
+
+    public override BackhitIncreaseEffect GetEffect() => new(Tank, Level, Multiplier);
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        BackhitIncreaseEffect? effect = Tank.Effects.OfType<BackhitIncreaseEffect>().SingleOrDefault();
+        BackhitIncreaseEffect? effect = Tank
+            .Effects
+            .OfType<BackhitIncreaseEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
-        await GetEffect().Activate();
+        await GetEffect()
+            .Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

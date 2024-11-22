@@ -23,7 +23,8 @@ public class OpenContainerEvent : IServerEvent {
         IEntity marketEntity = userEntity.GetMarketEntity(connection);
         Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id && cont.Id == marketEntity.Id);
 
-        if (container == null || container.Count < Amount) return;
+        if (container == null ||
+            container.Count < Amount) return;
 
         Amount = Math.Clamp(container.Count, 1, MaxAmount); /*Math.Min(Amount, MaxAmount);*/
 
@@ -34,7 +35,8 @@ public class OpenContainerEvent : IServerEvent {
         if (container.Count == 0) await db.DeleteAsync(container);
         else await db.UpdateAsync(container);
 
-        List<IEntity> rewards = await ContainerRegistry.GetContainer(marketEntity)
+        List<IEntity> rewards = await ContainerRegistry
+            .GetContainer(marketEntity)
             .Open(connection, Amount)
             .ToListAsync();
 

@@ -11,16 +11,25 @@ namespace Vint.Core.Battles.Modules.Types;
 public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect {
     public override string ConfigPath => "garage/module/upgrade/properties/tempblock";
 
-    public override Effect GetEffect() => throw new NotSupportedException();
-
     protected override bool ActivationCondition => !IsActive;
+
+    float Decrement { get; set; }
+    float Increment { get; set; }
 
     public bool CanBeDeactivated { get; set; }
 
     public bool IsActive { get; private set; }
 
-    float Decrement { get; set; }
-    float Increment { get; set; }
+    public Task Deactivate() {
+        if (!IsActive ||
+            !CanBeDeactivated) return Task.CompletedTask;
+
+        IsActive = false;
+        Tank.TemperatureProcessor.ChangeTemperatureConfig(-Increment, -Decrement);
+        return Task.CompletedTask;
+    }
+
+    public override Effect GetEffect() => throw new NotSupportedException();
 
     public override Task Activate() {
         if (!CanBeActivated) return Task.CompletedTask;
@@ -29,14 +38,6 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
         CanBeDeactivated = false;
 
         Tank.TemperatureProcessor.ChangeTemperatureConfig(Increment, Decrement);
-        return Task.CompletedTask;
-    }
-
-    public Task Deactivate() {
-        if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
-
-        IsActive = false;
-        Tank.TemperatureProcessor.ChangeTemperatureConfig(-Increment, -Decrement);
         return Task.CompletedTask;
     }
 

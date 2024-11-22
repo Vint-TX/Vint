@@ -27,17 +27,16 @@ public class ItemsContainer(
             (IEntity regularReward, int itemAmount, long compensation) = await GetReward(ItemsComponent.Items, connection, random);
             yield return await SaveRewardOrCompensation(connection, regularReward, itemAmount, compensation);
 
-            if (ItemsComponent.RareItems == null || ItemsComponent.RareItems.Count == 0 || !MathUtils.RollTheDice(0.1, random) /* 10% */) continue;
+            if (ItemsComponent.RareItems == null ||
+                ItemsComponent.RareItems.Count == 0 ||
+                !MathUtils.RollTheDice(0.1, random) /* 10% */) continue;
 
             (IEntity rareReward, itemAmount, compensation) = await GetReward(ItemsComponent.RareItems, connection, random);
             yield return await SaveRewardOrCompensation(connection, rareReward, itemAmount, compensation);
         }
     }
 
-    static async Task<(IEntity, int, long)> GetReward(
-        IReadOnlyList<ContainerItem> rewards,
-        IPlayerConnection connection,
-        IRandomSource random) {
+    static async Task<(IEntity, int, long)> GetReward(IReadOnlyList<ContainerItem> rewards, IPlayerConnection connection, IRandomSource random) {
         int rollCountLeft = 10;
         IEntity reward;
         int amount;
@@ -76,11 +75,9 @@ public class ItemsContainer(
 
         if (template == null) return false;
 
-        return template is not (
-                   HullSkinMarketItemTemplate or
-                   WeaponSkinMarketItemTemplate or
-                   ShellMarketItemTemplate) ||
-               await connection.OwnsItem(GlobalEntities.AllMarketTemplateEntities.Single(entity =>
-                   entity.Id == marketItem.GetComponent<ParentGroupComponent>().Key));
+        return template is not (HullSkinMarketItemTemplate or WeaponSkinMarketItemTemplate or ShellMarketItemTemplate) ||
+               await connection.OwnsItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id ==
+                                                                                                   marketItem.GetComponent<ParentGroupComponent>()
+                                                                                                       .Key));
     }
 }

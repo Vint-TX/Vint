@@ -8,9 +8,8 @@ namespace Vint.Core.ECS.Templates.Battle.Graffiti;
 [ProtocolId(636100801926133320)]
 public class GraffitiBattleItemTemplate : EntityTemplate {
     public IEntity Create(IEntity graffiti, IEntity tank) => Entity(graffiti.TemplateAccessor!.ConfigPath,
-        builder =>
-            builder
-                .AddComponent<GraffitiBattleItemComponent>()
-                .AddComponentFrom<UserGroupComponent>(tank)
-                .AddGroupComponent<MarketItemGroupComponent>(graffiti));
+        builder => builder
+            .AddComponent<GraffitiBattleItemComponent>()
+            .AddComponentFrom<UserGroupComponent>(tank)
+            .AddGroupComponent<MarketItemGroupComponent>(graffiti));
 }

@@ -10,11 +10,17 @@ namespace Vint.Core.Battles.Weapons;
 
 public class IsisWeaponHandler : StreamWeaponHandler {
     public IsisWeaponHandler(BattleTank battleTank) : base(battleTank) {
-        HealPerSecond = ConfigManager.GetComponent<HealingPropertyComponent>(MarketConfigPath).FinalValue;
-        SelfHealPercentage = ConfigManager.GetComponent<SelfHealingPropertyComponent>(MarketConfigPath).FinalValue;
+        HealPerSecond = ConfigManager.GetComponent<HealingPropertyComponent>(MarketConfigPath)
+            .FinalValue;
 
-        DecreaseFriendTemperature = ConfigManager.GetComponent<DecreaseFriendTemperaturePropertyComponent>(MarketConfigPath).FinalValue;
-        IncreaseFriendTemperature = ConfigManager.GetComponent<IncreaseFriendTemperaturePropertyComponent>(MarketConfigPath).FinalValue;
+        SelfHealPercentage = ConfigManager.GetComponent<SelfHealingPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        DecreaseFriendTemperature = ConfigManager.GetComponent<DecreaseFriendTemperaturePropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        IncreaseFriendTemperature = ConfigManager.GetComponent<IncreaseFriendTemperaturePropertyComponent>(MarketConfigPath)
+            .FinalValue;
     }
 
     public float HealPerSecond { get; }
@@ -34,7 +40,9 @@ public class IsisWeaponHandler : StreamWeaponHandler {
         if (IsCooldownActive(incarnationId)) return;
 
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);

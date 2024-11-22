@@ -11,13 +11,22 @@ namespace Vint.Core.Battles.Modules.Types;
 public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect, INeutralizeEMPModule {
     public override string ConfigPath => "garage/module/upgrade/properties/engineer";
 
-    public override Effect GetEffect() => throw new NotSupportedException();
-
     protected override bool ActivationCondition => !IsActive;
+    float Multiplier { get; set; }
 
     public bool CanBeDeactivated { get; set; }
     public bool IsActive { get; private set; }
-    float Multiplier { get; set; }
+
+    public Task Deactivate() {
+        if (!IsActive ||
+            !CanBeDeactivated) return Task.CompletedTask;
+
+        IsActive = false;
+        Tank.SupplyDurationMultiplier /= Multiplier;
+        return Task.CompletedTask;
+    }
+
+    public override Effect GetEffect() => throw new NotSupportedException();
 
     public override Task Activate() {
         if (!CanBeActivated) return Task.CompletedTask;
@@ -26,14 +35,6 @@ public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleW
         CanBeDeactivated = false;
 
         Tank.SupplyDurationMultiplier *= Multiplier;
-        return Task.CompletedTask;
-    }
-
-    public Task Deactivate() {
-        if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
-
-        IsActive = false;
-        Tank.SupplyDurationMultiplier /= Multiplier;
         return Task.CompletedTask;
     }
 

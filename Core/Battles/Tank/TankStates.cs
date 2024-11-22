@@ -51,7 +51,8 @@ public class Dead(
     }
 
     public override async Task Tick(TimeSpan deltaTime) {
-        if (!BattleTank.BattlePlayer.IsPaused && DateTimeOffset.UtcNow >= TimeToNextState)
+        if (!BattleTank.BattlePlayer.IsPaused &&
+            DateTimeOffset.UtcNow >= TimeToNextState)
             await StateManager.SetState(new Spawn(StateManager));
 
         await base.Tick(deltaTime);

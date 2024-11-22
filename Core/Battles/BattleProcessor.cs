@@ -7,29 +7,29 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IBattleProcessor {
-    public int BattlesCount { get; }
+    int BattlesCount { get; }
 
-    public Task Tick(TimeSpan deltaTime);
+    Task Tick(TimeSpan deltaTime);
 
-    public Task PutPlayerFromMatchmaking(IPlayerConnection connection);
+    Task PutPlayerFromMatchmaking(IPlayerConnection connection);
 
-    public Task PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode);
+    Task PutArcadePlayer(IPlayerConnection connection, ArcadeModeType mode);
 
-    public Battle? SingleOrDefault(Func<Battle, bool> predicate);
+    Battle? SingleOrDefault(Func<Battle, bool> predicate);
 
-    public Battle? FirstOrDefault(Func<Battle, bool> predicate);
+    Battle? FirstOrDefault(Func<Battle, bool> predicate);
 
-    public Battle? FindByBattleId(long id);
+    Battle? FindByBattleId(long id);
 
-    public Battle? FindByLobbyId(long id);
+    Battle? FindByLobbyId(long id);
 
-    public Battle? FindByIndex(int index);
+    Battle? FindByIndex(int index);
 
-    public Battle CreateMatchmakingBattle();
+    Battle CreateMatchmakingBattle();
 
-    public Battle CreateArcadeBattle(ArcadeModeType mode);
+    Battle CreateArcadeBattle(ArcadeModeType mode);
 
-    public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner);
+    Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner);
 }
 
 public class BattleProcessor(

@@ -14,7 +14,8 @@ public class EnterBattleAsSpectatorFromLobbyRequestEvent : IServerEvent {
         IBattleProcessor battleProcessor = serviceProvider.GetRequiredService<IBattleProcessor>();
         Battles.Battle? battle = battleProcessor.FindByBattleId(BattleId);
 
-        if (connection.InLobby || battle == null) return;
+        if (connection.InLobby ||
+            battle == null) return;
 
         await battle.AddPlayer(connection, true);
     }

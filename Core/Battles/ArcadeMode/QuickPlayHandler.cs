@@ -24,7 +24,7 @@ public class QuickPlayHandler(
             50);
 
         Battle.MapInfo = mapInfo;
-        Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == mapInfo.Id);
+        Battle.MapEntity = GlobalEntities.GetEntity("maps", map => map.Id == mapInfo.Id);
         Battle.LobbyEntity = new MatchMakingLobbyTemplate().Create(Battle.Properties, Battle.MapEntity);
         return Task.CompletedTask;
     }

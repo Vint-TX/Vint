@@ -10,8 +10,6 @@ namespace Vint.Core.Battles.Modules.Types;
 public class DroneModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/drone";
 
-    public override DroneEffect GetEffect() => new(Drones.Count(), MarketEntity, Duration, ActivationTime, TargetingDistance, Damage, Tank, Level);
-
     IEnumerable<DroneEffect> Drones => Tank.Effects.OfType<DroneEffect>();
     IEnumerable<DroneEffect> DronesSorted => Drones.OrderBy(drone => drone.Index);
 
@@ -21,14 +19,20 @@ public class DroneModule : ActiveBattleModule {
     float Damage { get; set; }
     float TargetingDistance { get; set; }
 
+    public override DroneEffect GetEffect() => new(Drones.Count(), MarketEntity, Duration, ActivationTime, TargetingDistance, Damage, Tank, Level);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
 
         while (Drones.Count() > CountLimit)
-            await DronesSorted.First().Deactivate();
+            await DronesSorted
+                .First()
+                .Deactivate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

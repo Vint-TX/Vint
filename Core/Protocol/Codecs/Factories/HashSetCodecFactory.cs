@@ -10,16 +10,13 @@ public class HashSetCodecFactory : ICodecFactory {
             !typeCodecInfo.Type.IsHashSet())
             return null;
 
-        ProtocolCollectionAttribute protocolCollection = typeCodecInfo.Attributes
+        ProtocolCollectionAttribute protocolCollection = typeCodecInfo
+                                                             .Attributes
                                                              .OfType<ProtocolCollectionAttribute>()
                                                              .FirstOrDefault() ??
                                                          ProtocolCollectionAttribute.Default;
 
-        return new HashSetCodec(
-            typeCodecInfo.Type,
-            new TypeCodecInfo(
-                typeCodecInfo.Type.GenericTypeArguments.Single(),
-                protocolCollection.Nullable,
-                protocolCollection.Varied));
+        return new HashSetCodec(typeCodecInfo.Type,
+            new TypeCodecInfo(typeCodecInfo.Type.GenericTypeArguments.Single(), protocolCollection.Nullable, protocolCollection.Varied));
     }
 }

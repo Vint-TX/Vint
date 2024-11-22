@@ -43,7 +43,8 @@ public static class ConfigManager {
     public static QuestsInfo QuestsInfo { get; private set; }
     public static CommonMapInfo CommonMapInfo { get; private set; }
 
-    public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
+    public static IEnumerable<string> GlobalEntitiesTypeNames => Root
+        .Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
 
@@ -62,29 +63,34 @@ public static class ConfigManager {
         string replacementsPath = Path.Combine(rootPath, "Replacements");
         string badWordsPath = Path.Combine(rootPath, "badwords.txt");
 
-        ConcurrentDictionary<char, string> replacements = new(Directory.EnumerateFiles(replacementsPath, "*.json", SearchOption.TopDirectoryOnly)
+        ConcurrentDictionary<char, string> replacements = new(Directory
+            .EnumerateFiles(replacementsPath, "*.json", SearchOption.TopDirectoryOnly)
             .Select(replacementPath => JsonConvert.DeserializeObject<Dictionary<char, string>>(File.ReadAllText(replacementPath))!)
-            .Aggregate(new Dictionary<char, string>(), (current, stringToRegex) => current.Concat(stringToRegex).ToDictionary()));
+            .Aggregate(new Dictionary<char, string>(),
+                (current, stringToRegex) => current
+                    .Concat(stringToRegex)
+                    .ToDictionary()));
 
         string[] badWords = await File.ReadAllLinesAsync(badWordsPath);
         ConcurrentDictionary<string, Regex> regexes = new();
 
-        Parallel.ForEach(badWords, word => {
-            Logger.Debug("Preparing {Word}", word);
+        Parallel.ForEach(badWords,
+            word => {
+                Logger.Debug("Preparing {Word}", word);
 
-            StringBuilder patternBuilder = new();
+                StringBuilder patternBuilder = new();
 
-            foreach (char @char in word) {
-                if (!replacements.TryGetValue(@char, out string? pattern))
-                    patternBuilder.Append(@char);
-                else patternBuilder.Append(pattern);
-            }
+                foreach (char @char in word) {
+                    if (!replacements.TryGetValue(@char, out string? pattern))
+                        patternBuilder.Append(@char);
+                    else patternBuilder.Append(pattern);
+                }
 
-            Regex regex = new(patternBuilder.ToString(), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                Regex regex = new(patternBuilder.ToString(), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-            regexes.TryAdd(word, regex);
-            Logger.Verbose("{Word}: {Regex}", word, regex);
-        });
+                regexes.TryAdd(word, regex);
+                Logger.Verbose("{Word}: {Regex}", word, regex);
+            });
 
         CensorshipRegexes = regexes.ToFrozenDictionary();
         Logger.Information("Chat censorship initialized");
@@ -157,8 +163,13 @@ public static class ConfigManager {
             .IgnoreUnmatchedProperties()
             .Build();
 
-        foreach (string filePath in Directory.EnumerateFiles(configsPath, "*.*", SearchOption.AllDirectories).OrderBy(x => x)) {
-            string relativePath = Path.GetRelativePath(configsPath, filePath).Replace('\\', '/');
+        foreach (string filePath in Directory
+                     .EnumerateFiles(configsPath, "*.*", SearchOption.AllDirectories)
+                     .OrderBy(x => x)) {
+            string relativePath = Path
+                .GetRelativePath(configsPath, filePath)
+                .Replace('\\', '/');
+
             string fileName = Path.GetFileName(filePath);
 
             if (string.IsNullOrEmpty(fileName)) continue;
@@ -170,8 +181,7 @@ public static class ConfigManager {
 
             switch (fileName) {
                 case "id.yml": {
-                    Dictionary<string, long> obj =
-                        new Deserializer().Deserialize<Dictionary<string, long>>(await File.ReadAllTextAsync(filePath));
+                    Dictionary<string, long> obj = new Deserializer().Deserialize<Dictionary<string, long>>(await File.ReadAllTextAsync(filePath));
 
                     ids[relativePath[..^7]] = obj["id"];
                     break;
@@ -179,7 +189,11 @@ public static class ConfigManager {
 
                 case "public.yml": {
                     if (deserializer.Deserialize(await File.ReadAllTextAsync(filePath)) is Dictionary<object, object> dict)
-                        components[relativePath[..^11]] = dict.Values.OfType<IComponent>().ToList();
+                        components[relativePath[..^11]] = dict
+                            .Values
+                            .OfType<IComponent>()
+                            .ToList();
+
                     break;
                 }
             }
@@ -208,8 +222,7 @@ public static class ConfigManager {
                 foreach (IComponent serverComponent in curNode.ServerComponents.Values) {
                     foreach (Type type in serverComponent
                                  .GetType()
-                                 .FindInterfaces((type, iType) => type.IsGenericType &&
-                                                                  ReferenceEquals(type.GetGenericTypeDefinition(), iType),
+                                 .FindInterfaces((type, iType) => type.IsGenericType && ReferenceEquals(type.GetGenericTypeDefinition(), iType),
                                      typeof(IConvertible<>))) {
                         Type resultType = type.GenericTypeArguments[0];
 
@@ -229,7 +242,11 @@ public static class ConfigManager {
     public static async Task InitializeGlobalEntities() {
         Logger.Information("Generating global entities");
 
-        List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
+        List<Type> types = Assembly
+            .GetExecutingAssembly()
+            .GetTypes()
+            .ToList();
+
         string rootPath = Path.Combine(ResourcesPath, "GlobalEntities");
 
         Dictionary<string, Dictionary<string, IEntity>> globalEntities = new();
@@ -238,7 +255,10 @@ public static class ConfigManager {
             JsonConvert.DeserializeObject<List<string>>(await File.ReadAllTextAsync(Path.Combine(rootPath, "typesToLoad.json")))!;
 
         foreach (string filePath in typesToLoad.Select(type => Path.Combine(rootPath, $"{type}.json"))) {
-            string relativePath = Path.GetRelativePath(rootPath, filePath).Replace('\\', '/');
+            string relativePath = Path
+                .GetRelativePath(rootPath, filePath)
+                .Replace('\\', '/');
+
             string entitiesTypeName = Path.GetFileNameWithoutExtension(filePath);
 
             Logger.Verbose("Parsing {File}", relativePath);
@@ -258,8 +278,12 @@ public static class ConfigManager {
                     entityId = EntityRegistry.GenerateId();
 
                 JArray templateComponents = jToken["template"]!.ToObject<JArray>()!;
-                string templateName = templateComponents[0].ToObject<string>()!;
-                string configPath = templateComponents[1].ToObject<string>()!;
+
+                string templateName = templateComponents[0]
+                    .ToObject<string>()!;
+
+                string configPath = templateComponents[1]
+                    .ToObject<string>()!;
 
                 JObject rawComponents = jToken["components"]!.ToObject<JObject>()!;
 
@@ -267,7 +291,11 @@ public static class ConfigManager {
 
                 foreach ((string rawComponentName, JToken? rawComponentProperties) in rawComponents) {
                     Type componentType = types.Single(type => type.Name == rawComponentName);
-                    ConstructorInfo componentCtor = componentType.GetConstructors().First();
+
+                    ConstructorInfo componentCtor = componentType
+                        .GetConstructors()
+                        .First();
+
                     ParameterInfo[] ctorParameters = componentCtor.GetParameters();
 
                     object?[] parameters = ctorParameters
@@ -290,7 +318,11 @@ public static class ConfigManager {
                 }
 
                 Type templateType = types.Single(type => type.Name == templateName);
-                ConstructorInfo templateCtor = templateType.GetConstructors().First();
+
+                ConstructorInfo templateCtor = templateType
+                    .GetConstructors()
+                    .First();
+
                 EntityTemplate template = (EntityTemplate)templateCtor.Invoke(null);
 
                 IEntityBuilder entityBuilder = new EntityBuilder(entityId).WithTemplateAccessor(template, configPath);
@@ -333,9 +365,9 @@ public static class ConfigManager {
         QuestsInfo = JsonConvert.DeserializeObject<QuestsInfo>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "quests.json")),
             new TimeOnlyConverter());
 
-        Blueprints = JsonConvert
-            .DeserializeObject<Dictionary<string, BlueprintChest>>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "blueprints.json")))!
-            .ToFrozenDictionary();
+        Blueprints =
+            JsonConvert.DeserializeObject<Dictionary<string, BlueprintChest>>(
+                await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "blueprints.json")))!.ToFrozenDictionary();
 
         Logger.Information("Configs initialized");
     }
@@ -343,7 +375,9 @@ public static class ConfigManager {
     public static IEntity GetGlobalEntity(string path, string entityName) {
         ConfigNode node = GetNode(path)!.Value;
 
-        return node.Entities[entityName].Clone();
+        return node
+            .Entities[entityName]
+            .Clone();
     }
 
     public static IEnumerable<IEntity> GetGlobalEntities(string path) {
@@ -353,8 +387,7 @@ public static class ConfigManager {
     }
 
     public static IEnumerable<IEntity> GetGlobalEntities() =>
-        Root.Children.SelectMany(child =>
-            child.Value.Entities.Values.Select(entity => entity.Clone()));
+        Root.Children.SelectMany(child => child.Value.Entities.Values.Select(entity => entity.Clone()));
 
     public static T GetComponent<T>(string path) where T : class, IComponent =>
         GetComponentOrNull<T>(path)!;
@@ -407,7 +440,9 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
     ILogger Logger { get; } = Log.Logger.ForType(typeof(ComponentDeserializer));
     Type? Type { get; set; }
 
-    IEnumerable<Type> Types { get; } = Assembly.GetExecutingAssembly().GetTypes();
+    IEnumerable<Type> Types { get; } = Assembly
+        .GetExecutingAssembly()
+        .GetTypes();
 
     public bool Deserialize(
         IParser reader,
@@ -427,7 +462,12 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
         while (reader.Current != null && reader.Current is not MappingEnd) {
             if (reader.Current is not Scalar scalar) continue;
 
-            string key = scalar.Value[0].ToString().ToUpper() + scalar.Value[1..];
+            string key = scalar
+                             .Value[0]
+                             .ToString()
+                             .ToUpper() +
+                         scalar.Value[1..];
+
             PropertyInfo? info = expectedType.GetProperty(key);
 
             reader.MoveNext();
@@ -464,15 +504,16 @@ public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserialize
 
         if (nodeEvent is not Scalar scalar ||
             scalar.Value.Length < 2 ||
-            !MyRegex().IsMatch(scalar.Value)) return false;
+            !MyRegex()
+                .IsMatch(scalar.Value)) return false;
 
-        string typeName =
-            $"{scalar.Value[0].ToString().ToUpper()}{scalar.Value[1..]}Component";
+        string typeName = $"{scalar.Value[0].ToString().ToUpper()}{scalar.Value[1..]}Component";
 
-        List<Type> types = Types.Where(type => type.Name == typeName).ToList();
+        List<Type> types = Types
+            .Where(type => type.Name == typeName)
+            .ToList();
 
-        Type? resolvedType = types.FirstOrDefault(type => !Attribute.IsDefined(type, typeof(ProtocolIdAttribute))) ??
-                             types.FirstOrDefault();
+        Type? resolvedType = types.FirstOrDefault(type => !Attribute.IsDefined(type, typeof(ProtocolIdAttribute))) ?? types.FirstOrDefault();
 
         if (resolvedType != null)
             Type = resolvedType;
@@ -495,17 +536,26 @@ public class Vector3TypeConverter : IYamlTypeConverter {
             switch (property.Value.ToLowerInvariant()) {
                 case "x":
                     parser.MoveNext();
-                    vector.X = float.Parse(parser.Consume<Scalar>().Value);
+
+                    vector.X = float.Parse(parser.Consume<Scalar>()
+                        .Value);
+
                     break;
 
                 case "y":
                     parser.MoveNext();
-                    vector.Y = float.Parse(parser.Consume<Scalar>().Value);
+
+                    vector.Y = float.Parse(parser.Consume<Scalar>()
+                        .Value);
+
                     break;
 
                 case "z":
                     parser.MoveNext();
-                    vector.Z = float.Parse(parser.Consume<Scalar>().Value);
+
+                    vector.Z = float.Parse(parser.Consume<Scalar>()
+                        .Value);
+
                     break;
             }
         }

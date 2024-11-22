@@ -12,7 +12,9 @@ public class StructCodec(
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
             object? item = property.GetValue(value);
 
-            Protocol.GetCodec(codecInfo).Encode(buffer, item!);
+            Protocol
+                .GetCodec(codecInfo)
+                .Encode(buffer, item!);
         }
     }
 
@@ -20,7 +22,9 @@ public class StructCodec(
         object value = RuntimeHelpers.GetUninitializedObject(type);
 
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
-            object item = Protocol.GetCodec(codecInfo).Decode(buffer);
+            object item = Protocol
+                .GetCodec(codecInfo)
+                .Decode(buffer);
 
             property.SetValue(value, item, null);
         }

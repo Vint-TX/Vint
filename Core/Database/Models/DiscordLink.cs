@@ -41,7 +41,9 @@ public class DiscordLink {
             DateTimeOffset tokenExpirationDate = DateTimeOffset.UtcNow.AddSeconds(oAuth2Data.ExpiresIn - 300);
 
             await using DbConnection db = new();
-            await db.DiscordLinks
+
+            await db
+                .DiscordLinks
                 .Where(dLink => dLink.PlayerId == PlayerId && dLink.UserId == UserId)
                 .Set(dLink => dLink.AccessToken, oAuth2Data.AccessToken)
                 .Set(dLink => dLink.RefreshToken, oAuth2Data.RefreshToken)
@@ -89,19 +91,22 @@ public class DiscordLink {
         await using DbConnection db = new();
         await db.BeginTransactionAsync();
 
-        await db.Players
+        await db
+            .Players
             .Where(player => player.Id == PlayerId && player.DiscordUserId == UserId)
             .Set(player => player.DiscordUserId, default(ulong))
             .Set(player => player.DiscordLinked, false)
             .UpdateAsync();
 
-        await db.DiscordLinks
+        await db
+            .DiscordLinks
             .Where(dLink => dLink.PlayerId == PlayerId && dLink.UserId == UserId)
             .DeleteAsync();
 
         await db.CommitTransactionAsync();
 
-        if (connection != null && connection.Player.Id == PlayerId) {
+        if (connection != null &&
+            connection.Player.Id == PlayerId) {
             connection.Player.DiscordLinked = false;
             connection.Player.DiscordUserId = default;
             connection.Player.DiscordLink = null!;

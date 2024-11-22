@@ -12,8 +12,7 @@ public class ExplosiveMassWeaponHandler(
     IEntity battleEntity,
     float maxDamage,
     float minDamage
-) : ModuleWeaponHandler(
-    tank,
+) : ModuleWeaponHandler(tank,
     cooldown,
     marketEntity,
     battleEntity,
@@ -23,24 +22,27 @@ public class ExplosiveMassWeaponHandler(
     int.MaxValue,
     maxDamage,
     minDamage,
-    int.MaxValue
-), IDiscreteWeaponHandler {
-    public event Func<Task>? Exploded;
-
+    int.MaxValue), IDiscreteWeaponHandler {
     public override async Task Fire(HitTarget target, int targetIndex) {
         if (Exploded != null)
             await Exploded();
 
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
+
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
+        if (targetTank.StateManager.CurrentState is not Active ||
+            !isEnemy) return;
 
         CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, ignoreSourceEffects: true);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
     }
+
+    public event Func<Task>? Exploded;
 }

@@ -10,21 +10,21 @@ using BonusInfo = Vint.Core.Config.MapInformation.Bonus;
 namespace Vint.Core.Battles.Bonus;
 
 public interface IBonusProcessor {
-    public int GoldsDropped { get; }
+    int GoldsDropped { get; }
 
-    public Task Start();
+    Task Start();
 
-    public Task Tick(TimeSpan deltaTime);
+    Task Tick(TimeSpan deltaTime);
 
-    public Task Take(BonusBox bonus, BattleTank tank);
+    Task Take(BonusBox bonus, BattleTank tank);
 
-    public Task ShareEntities(IPlayerConnection connection);
+    Task ShareEntities(IPlayerConnection connection);
 
-    public Task UnshareEntities(IPlayerConnection connection);
+    Task UnshareEntities(IPlayerConnection connection);
 
-    public BonusBox? FindByEntity(IEntity bonusEntity);
+    BonusBox? FindByEntity(IEntity bonusEntity);
 
-    public Task<bool> ForceDropBonus(BonusType type, BattlePlayer? battlePlayer);
+    Task<bool> ForceDropBonus(BonusType type, BattlePlayer? battlePlayer);
 }
 
 public class BonusProcessor : IBonusProcessor {
@@ -72,7 +72,8 @@ public class BonusProcessor : IBonusProcessor {
         List<IEntity> entities = new(Bonuses.Count * 2);
 
         foreach (BonusBox bonus in Bonuses) {
-            if (bonus.RegionEntity == null || bonus is GoldBox && bonus.StateManager.CurrentState is None) continue;
+            if (bonus.RegionEntity == null ||
+                bonus is GoldBox && bonus.StateManager.CurrentState is None) continue;
 
             entities.Add(bonus.RegionEntity);
 
@@ -101,7 +102,10 @@ public class BonusProcessor : IBonusProcessor {
         Bonuses.FirstOrDefault(bonus => bonus.Entity == bonusEntity);
 
     public async Task<bool> ForceDropBonus(BonusType type, BattlePlayer? player) {
-        BonusBox? bonus = Bonuses.ToArray().Shuffle().FirstOrDefault(bonus => bonus.Type == type && bonus.CanBeDropped(true));
+        BonusBox? bonus = Bonuses
+            .ToArray()
+            .Shuffle()
+            .FirstOrDefault(bonus => bonus.Type == type && bonus.CanBeDropped(true));
 
         switch (bonus) {
             case null:

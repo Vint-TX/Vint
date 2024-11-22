@@ -11,20 +11,25 @@ namespace Vint.Core.Battles.Modules.Types;
 public class EMPModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/emp";
 
-    public override EMPEffect GetEffect() => new(Tank, Level, Duration, Radius);
-
     TimeSpan Duration { get; set; }
     float Radius { get; set; }
+
+    public override EMPEffect GetEffect() => new(Tank, Level, Duration, Radius);
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        EMPEffect? effect = Tank.Effects.OfType<EMPEffect>().SingleOrDefault();
+        EMPEffect? effect = Tank
+            .Effects
+            .OfType<EMPEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

@@ -8,13 +8,13 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Components;
 
 public interface IComponent {
-    public Task Added(IPlayerConnection connection, IEntity entity) => Task.CompletedTask;
+    Task Added(IPlayerConnection connection, IEntity entity) => Task.CompletedTask;
 
-    public Task Changed(IPlayerConnection connection, IEntity entity) => Task.CompletedTask;
+    Task Changed(IPlayerConnection connection, IEntity entity) => Task.CompletedTask;
 
-    public Task Removed(IPlayerConnection connection, IEntity entity) => Task.CompletedTask;
+    Task Removed(IPlayerConnection connection, IEntity entity) => Task.CompletedTask;
 
-    public IComponent Clone() {
+    IComponent Clone() {
         Type type = GetType();
         ILogger logger = Log.Logger.ForType(type);
         IComponent component = (IComponent)RuntimeHelpers.GetUninitializedObject(type);

@@ -24,44 +24,163 @@ namespace Vint.Core.ECS.Entities;
 
 public static class GlobalEntities {
     static GlobalEntities() =>
-        AllMarketTemplateEntities = ConfigManager.GetGlobalEntities().ToList();
+        AllMarketTemplateEntities = ConfigManager
+            .GetGlobalEntities()
+            .ToList();
 
     public static List<IEntity> AllMarketTemplateEntities { get; }
 
     public static IReadOnlyDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
-        { GetEntity("weapons", "Flamethrower").Id, GetEntity("weaponSkins", "FlamethrowerM0").Id },
-        { GetEntity("weapons", "Freeze").Id, GetEntity("weaponSkins", "FreezeM0").Id },
-        { GetEntity("weapons", "Hammer").Id, GetEntity("weaponSkins", "HammerM0").Id },
-        { GetEntity("weapons", "Isis").Id, GetEntity("weaponSkins", "IsisM0").Id },
-        { GetEntity("weapons", "Railgun").Id, GetEntity("weaponSkins", "RailgunM0").Id },
-        { GetEntity("weapons", "Ricochet").Id, GetEntity("weaponSkins", "RicochetM0").Id },
-        { GetEntity("weapons", "Shaft").Id, GetEntity("weaponSkins", "ShaftM0").Id },
-        { GetEntity("weapons", "Smoky").Id, GetEntity("weaponSkins", "SmokyM0").Id },
-        { GetEntity("weapons", "Thunder").Id, GetEntity("weaponSkins", "ThunderM0").Id },
-        { GetEntity("weapons", "Twins").Id, GetEntity("weaponSkins", "TwinsM0").Id },
-        { GetEntity("weapons", "Vulcan").Id, GetEntity("weaponSkins", "VulcanM0").Id },
-
-        { GetEntity("hulls", "Dictator").Id, GetEntity("hullSkins", "DictatorM0").Id },
-        { GetEntity("hulls", "Hornet").Id, GetEntity("hullSkins", "HornetM0").Id },
-        { GetEntity("hulls", "Hunter").Id, GetEntity("hullSkins", "HunterM0").Id },
-        { GetEntity("hulls", "Mammoth").Id, GetEntity("hullSkins", "MammothM0").Id },
-        { GetEntity("hulls", "Titan").Id, GetEntity("hullSkins", "TitanM0").Id },
-        { GetEntity("hulls", "Viking").Id, GetEntity("hullSkins", "VikingM0").Id },
-        { GetEntity("hulls", "Wasp").Id, GetEntity("hullSkins", "WaspM0").Id }
+        {
+            GetEntity("weapons", "Flamethrower")
+                .Id,
+            GetEntity("weaponSkins", "FlamethrowerM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Freeze")
+                .Id,
+            GetEntity("weaponSkins", "FreezeM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Hammer")
+                .Id,
+            GetEntity("weaponSkins", "HammerM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Isis")
+                .Id,
+            GetEntity("weaponSkins", "IsisM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Railgun")
+                .Id,
+            GetEntity("weaponSkins", "RailgunM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Ricochet")
+                .Id,
+            GetEntity("weaponSkins", "RicochetM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Shaft")
+                .Id,
+            GetEntity("weaponSkins", "ShaftM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Smoky")
+                .Id,
+            GetEntity("weaponSkins", "SmokyM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Thunder")
+                .Id,
+            GetEntity("weaponSkins", "ThunderM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Twins")
+                .Id,
+            GetEntity("weaponSkins", "TwinsM0")
+                .Id
+        }, {
+            GetEntity("weapons", "Vulcan")
+                .Id,
+            GetEntity("weaponSkins", "VulcanM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Dictator")
+                .Id,
+            GetEntity("hullSkins", "DictatorM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Hornet")
+                .Id,
+            GetEntity("hullSkins", "HornetM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Hunter")
+                .Id,
+            GetEntity("hullSkins", "HunterM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Mammoth")
+                .Id,
+            GetEntity("hullSkins", "MammothM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Titan")
+                .Id,
+            GetEntity("hullSkins", "TitanM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Viking")
+                .Id,
+            GetEntity("hullSkins", "VikingM0")
+                .Id
+        }, {
+            GetEntity("hulls", "Wasp")
+                .Id,
+            GetEntity("hullSkins", "WaspM0")
+                .Id
+        }
     };
 
     public static IReadOnlyDictionary<long, long> DefaultShells { get; } = new Dictionary<long, long> {
-        { GetEntity("weapons", "Flamethrower").Id, GetEntity("shells", "FlamethrowerOrange").Id },
-        { GetEntity("weapons", "Freeze").Id, GetEntity("shells", "FreezeSkyblue").Id },
-        { GetEntity("weapons", "Hammer").Id, GetEntity("shells", "HammerStandard").Id },
-        { GetEntity("weapons", "Isis").Id, GetEntity("shells", "IsisStandard").Id },
-        { GetEntity("weapons", "Railgun").Id, GetEntity("shells", "RailgunPaleblue").Id },
-        { GetEntity("weapons", "Ricochet").Id, GetEntity("shells", "RicochetAurulent").Id },
-        { GetEntity("weapons", "Shaft").Id, GetEntity("shells", "ShaftStandard").Id },
-        { GetEntity("weapons", "Smoky").Id, GetEntity("shells", "SmokyStandard").Id },
-        { GetEntity("weapons", "Thunder").Id, GetEntity("shells", "ThunderStandard").Id },
-        { GetEntity("weapons", "Twins").Id, GetEntity("shells", "TwinsBlue").Id },
-        { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
+        {
+            GetEntity("weapons", "Flamethrower")
+                .Id,
+            GetEntity("shells", "FlamethrowerOrange")
+                .Id
+        }, {
+            GetEntity("weapons", "Freeze")
+                .Id,
+            GetEntity("shells", "FreezeSkyblue")
+                .Id
+        }, {
+            GetEntity("weapons", "Hammer")
+                .Id,
+            GetEntity("shells", "HammerStandard")
+                .Id
+        }, {
+            GetEntity("weapons", "Isis")
+                .Id,
+            GetEntity("shells", "IsisStandard")
+                .Id
+        }, {
+            GetEntity("weapons", "Railgun")
+                .Id,
+            GetEntity("shells", "RailgunPaleblue")
+                .Id
+        }, {
+            GetEntity("weapons", "Ricochet")
+                .Id,
+            GetEntity("shells", "RicochetAurulent")
+                .Id
+        }, {
+            GetEntity("weapons", "Shaft")
+                .Id,
+            GetEntity("shells", "ShaftStandard")
+                .Id
+        }, {
+            GetEntity("weapons", "Smoky")
+                .Id,
+            GetEntity("shells", "SmokyStandard")
+                .Id
+        }, {
+            GetEntity("weapons", "Thunder")
+                .Id,
+            GetEntity("shells", "ThunderStandard")
+                .Id
+        }, {
+            GetEntity("weapons", "Twins")
+                .Id,
+            GetEntity("shells", "TwinsBlue")
+                .Id
+        }, {
+            GetEntity("weapons", "Vulcan")
+                .Id,
+            GetEntity("shells", "VulcanStandard")
+                .Id
+        }
     };
 
     public static IReadOnlyList<IEntity> Tier1Modules { get; } = new List<IEntity> {
@@ -199,7 +318,9 @@ public static class GlobalEntities {
                 }
 
                 case "modules": {
-                    ModuleBehaviourType moduleBehaviourType = entity.GetComponent<ModuleBehaviourTypeComponent>().BehaviourType;
+                    ModuleBehaviourType moduleBehaviourType = entity.GetComponent<ModuleBehaviourTypeComponent>()
+                        .BehaviourType;
+
                     string[] configPathParts = entity.TemplateAccessor.ConfigPath!.Split('/');
 
                     switch (moduleBehaviourType) {
@@ -254,7 +375,8 @@ public static class GlobalEntities {
                         }
 
                         case PresetUserItemTemplate: {
-                            foreach (Preset preset in db.Presets
+                            foreach (Preset preset in db
+                                         .Presets
                                          .LoadWith(preset => preset.Modules)
                                          .Where(preset => preset.PlayerId == player.Id)) {
                                 IEntity presetEntity = entity.Clone();
@@ -284,8 +406,12 @@ public static class GlobalEntities {
 
                         case SlotUserItemTemplate: {
                             string configPath = entity.TemplateAccessor!.ConfigPath!;
-                            Dictionary<Slot, ModuleBehaviourType> behaviourTypes = ConfigManager.GetComponent<SlotsTypesComponent>(configPath).Slots;
-                            Dictionary<Slot, TankPartModuleType> tankParts = ConfigManager.GetComponent<SlotToTankPartComponent>(configPath).Slots;
+
+                            Dictionary<Slot, ModuleBehaviourType> behaviourTypes = ConfigManager.GetComponent<SlotsTypesComponent>(configPath)
+                                .Slots;
+
+                            Dictionary<Slot, TankPartModuleType> tankParts = ConfigManager.GetComponent<SlotToTankPartComponent>(configPath)
+                                .Slots;
 
                             foreach (Slot slot in Enum.GetValues<Slot>()) {
                                 IEntity slotEntity = entity.Clone();
@@ -298,7 +424,9 @@ public static class GlobalEntities {
                                 slotEntity.AddComponent(new SlotUserItemInfoComponent(slot, behaviourType));
 
                                 if (slot == Slot.Slot7) {
-                                    IEntity gold = GetEntity("modules", "Gold").GetUserModule(connection);
+                                    IEntity gold = GetEntity("modules", "Gold")
+                                        .GetUserModule(connection);
+
                                     slotEntity.AddGroupComponent<ModuleGroupComponent>(gold);
                                 }
 
@@ -313,7 +441,8 @@ public static class GlobalEntities {
                 }
 
                 case "containers": {
-                    Container? container = db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == marketEntityId);
+                    Container? container =
+                        db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == marketEntityId);
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
                     entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));
@@ -323,7 +452,9 @@ public static class GlobalEntities {
                 }
 
                 case "moduleCards": {
-                    long moduleId = entity.GetComponent<ParentGroupComponent>().Key;
+                    long moduleId = entity.GetComponent<ParentGroupComponent>()
+                        .Key;
+
                     Module? module = player.Modules.SingleOrDefault(module => module.Id == moduleId);
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
@@ -339,33 +470,40 @@ public static class GlobalEntities {
     public static IEntity GetEntity(string typeName, string entityName) =>
         ConfigManager.GetGlobalEntity(typeName, entityName);
 
+    public static IEntity GetEntity(string typeName, Func<IEntity, bool> predicate) =>
+        GetEntities(typeName).Single(predicate);
+
     public static IEnumerable<IEntity> GetEntities(string typeName) =>
         ConfigManager.GetGlobalEntities(typeName);
 
     public static IEntity GetUserModule(this IEntity marketEntity, IPlayerConnection connection) =>
         connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
-                                                   entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
+                                                   entity.GetComponent<MarketItemGroupComponent>()
+                                                       .Key ==
+                                                   marketEntity.Id);
 
     public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;
+        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>()
+                                    .Key ==
+                                marketEntity.Id;
 
         return marketEntity.TemplateAccessor!.Template switch {
             UserEntityTemplate => marketEntity,
             MarketEntityTemplate marketTemplate => connection.SharedEntities.Single(entity =>
-                entity.TemplateAccessor?.Template == marketTemplate.UserTemplate &&
-                predicate(entity)),
+                entity.TemplateAccessor?.Template == marketTemplate.UserTemplate && predicate(entity)),
             _ => throw new KeyNotFoundException()
         };
     }
 
     public static IEntity GetMarketEntity(this IEntity userEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.Id == userEntity.GetComponent<MarketItemGroupComponent>().Key;
+        predicate ??= entity => entity.Id ==
+                                userEntity.GetComponent<MarketItemGroupComponent>()
+                                    .Key;
 
         return userEntity.TemplateAccessor!.Template switch {
             MarketEntityTemplate => userEntity,
             UserEntityTemplate userTemplate => connection.SharedEntities.Single(entity =>
-                entity.TemplateAccessor?.Template == userTemplate.MarketTemplate &&
-                predicate(entity)),
+                entity.TemplateAccessor?.Template == userTemplate.MarketTemplate && predicate(entity)),
             _ => throw new KeyNotFoundException()
         };
     }
@@ -379,8 +517,8 @@ public static class GlobalEntities {
 
         if (ConfigManager.TryGetComponent(configPath, out PackPriceComponent? packPriceComponent)) {
             Dictionary<int, int> packPrice = forXCrystals
-                                                 ? packPriceComponent.PackXPrice
-                                                 : packPriceComponent.PackPrice;
+                ? packPriceComponent.PackXPrice
+                : packPriceComponent.PackPrice;
 
             if (!packPrice.TryGetValue(amount, out int value)) return false;
 
@@ -414,17 +552,19 @@ public static class GlobalEntities {
 
         if (configPrice != price) return false;
 
-        bool crystalsEnough = (forXCrystals ? connection.Player.XCrystals : connection.Player.Crystals) >= price;
+        bool crystalsEnough = (forXCrystals
+                                  ? connection.Player.XCrystals
+                                  : connection.Player.Crystals) >=
+                              price;
 
-        return crystalsEnough && (forXCrystals ||
-                                  !ConfigManager.TryGetComponent(configPath,
-                                      out CrystalsPurchaseUserRankRestrictionComponent? restrictionComponent) ||
-                                  connection.Player.Rank >= restrictionComponent.RestrictionValue);
+        return crystalsEnough &&
+               (forXCrystals ||
+                !ConfigManager.TryGetComponent(configPath, out CrystalsPurchaseUserRankRestrictionComponent? restrictionComponent) ||
+                connection.Player.Rank >= restrictionComponent.RestrictionValue);
     }
 
     static IEnumerable<IEntity> GetUserEntities(this IPlayerConnection connection) =>
-        ConfigManager.GlobalEntitiesTypeNames
-            .SelectMany(entitiesTypeName => GetUserTemplateEntities(connection, entitiesTypeName));
+        ConfigManager.GlobalEntitiesTypeNames.SelectMany(entitiesTypeName => GetUserTemplateEntities(connection, entitiesTypeName));
 
     static int CalculateAdditionalPrice(ItemsAutoIncreasePriceComponent increasePrice, int itemCount) {
         itemCount++;
@@ -436,7 +576,8 @@ public static class GlobalEntities {
         int num2 = (int)num * increasePrice.PriceIncreaseAmount;
         int maxAdditionalPrice = increasePrice.MaxAdditionalPrice;
 
-        if (maxAdditionalPrice <= 0 || num2 < maxAdditionalPrice)
+        if (maxAdditionalPrice <= 0 ||
+            num2 < maxAdditionalPrice)
             return num2;
 
         return maxAdditionalPrice;

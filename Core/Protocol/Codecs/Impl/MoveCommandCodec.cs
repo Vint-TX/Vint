@@ -31,7 +31,9 @@ public class MoveCommandCodec : MoveCodec {
         }
 
         if (movementHasValue)
-            Protocol.GetCodec(new TypeCodecInfo(typeof(Movement))).Encode(buffer, moveCommand.Movement!);
+            Protocol
+                .GetCodec(new TypeCodecInfo(typeof(Movement)))
+                .Encode(buffer, moveCommand.Movement!);
 
         if (weaponRotationHasValue) {
             int position = 0;
@@ -72,7 +74,9 @@ public class MoveCommandCodec : MoveCodec {
         }
 
         if (movementHasValue)
-            moveCommand.Movement = (Movement)Protocol.GetCodec(new TypeCodecInfo(typeof(Movement))).Decode(buffer);
+            moveCommand.Movement = (Movement)Protocol
+                .GetCodec(new TypeCodecInfo(typeof(Movement)))
+                .Decode(buffer);
 
         int position = 0;
         byte[] bytes = GetBufferForWeaponRotation(weaponRotationHasValue);

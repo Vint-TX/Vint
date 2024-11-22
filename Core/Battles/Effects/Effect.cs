@@ -24,7 +24,8 @@ public abstract class Effect(
 
     protected int Level { get; set; } = level;
     protected bool IsSupply => Level < 0;
-    [MemberNotNullWhen(true, nameof(Entity))] public bool IsActive => Entity != null;
+    [MemberNotNullWhen(true, nameof(Entity))]
+    public bool IsActive => Entity != null;
     public bool CanBeDeactivated { get; set; } = true;
 
     protected TimeSpan Duration { get; set; } = TimeSpan.Zero;
@@ -33,14 +34,12 @@ public abstract class Effect(
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
     public virtual async Task Tick(TimeSpan deltaTime) {
-        foreach (DelayedAction delayedAction in DelayedActions
-                     .Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+        foreach (DelayedAction delayedAction in DelayedActions.Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             DelayedActions.TryRemove(delayedAction);
             delayedAction.Action();
         }
 
-        foreach (DelayedTask delayedTask in DelayedTasks
-                     .Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+        foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             DelayedTasks.TryRemove(delayedTask);
             await delayedTask.Task();
         }
@@ -73,14 +72,20 @@ public abstract class Effect(
 
     protected virtual async Task ShareToAllPlayers() {
         if (Entity != null) {
-            foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+            foreach (IPlayerConnection connection in Battle
+                         .Players
+                         .Where(player => player.InBattle)
+                         .Select(player => player.PlayerConnection))
                 await connection.Share(Entity);
         }
     }
 
     protected virtual async Task UnshareFromAllPlayers() {
         if (Entity != null) {
-            foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection)) {
+            foreach (IPlayerConnection connection in Battle
+                         .Players
+                         .Where(player => player.InBattle)
+                         .Select(player => player.PlayerConnection)) {
                 await connection.Send(new RemoveEffectEvent(), Entity);
                 await connection.Unshare(Entity);
             }
@@ -98,7 +103,10 @@ public abstract class Effect(
         DelayedTasks.Clear();
     }
 
-    public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this), GetType().Name, Tank);
+    public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this),
+        GetType()
+            .Name,
+        Tank);
 }
 
 public abstract class DurationEffect : Effect {
@@ -150,7 +158,10 @@ public abstract class WeaponEffect(
         if (Entity != null)
             entities.Add(Entity);
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection)) {
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection)) {
             await connection.Share(entities);
 
             if (Entity != null)
@@ -164,7 +175,10 @@ public abstract class WeaponEffect(
         if (Entity != null)
             entities.Add(Entity);
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection)) {
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection)) {
             if (Entity != null)
                 await connection.Send(new RemoveEffectEvent(), Entity);
 
@@ -174,27 +188,27 @@ public abstract class WeaponEffect(
 }
 
 public interface IMultiplierEffect {
-    public float Multiplier { get; }
+    float Multiplier { get; }
 }
 
 public interface ISupplyEffect {
-    public float SupplyMultiplier { get; }
-    public float SupplyDurationMs { get; }
+    float SupplyMultiplier { get; }
+    float SupplyDurationMs { get; }
 }
 
 public interface IExtendableEffect {
-    public Task Extend(int newLevel);
+    Task Extend(int newLevel);
 }
 
 public interface IDamageMultiplierEffect : IMultiplierEffect {
-    public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit);
+    float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit);
 }
 
 public interface IMineEffect {
-    public BattleTank Owner { get; }
-    public int Index { get; }
-    public Vector3 Position { get; }
-    public float TriggeringArea { get; }
+    BattleTank Owner { get; }
+    int Index { get; }
+    Vector3 Position { get; }
+    float TriggeringArea { get; }
 
-    public void TryExplode();
+    void TryExplode();
 }

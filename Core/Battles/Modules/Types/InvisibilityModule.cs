@@ -11,13 +11,20 @@ namespace Vint.Core.Battles.Modules.Types;
 public class InvisibilityModule : ActiveBattleModule, IFlagModule, IShotModule {
     public override string ConfigPath => "garage/module/upgrade/properties/invisibility";
 
-    public override InvisibilityEffect GetEffect() => new(Duration, Tank, Level);
-
     protected override bool ActivationCondition => Effect == null;
 
     TimeSpan Duration { get; set; }
 
     InvisibilityEffect? Effect { get; set; }
+
+    public async Task OnFlagAction(FlagAction action) {
+        if (action == FlagAction.Capture)
+            await TryDeactivate();
+    }
+
+    public Task OnShot() => TryDeactivate();
+
+    public override InvisibilityEffect GetEffect() => new(Duration, Tank, Level);
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
@@ -33,13 +40,6 @@ public class InvisibilityModule : ActiveBattleModule, IFlagModule, IShotModule {
 
         Duration = TimeSpan.FromMilliseconds(GetStat<ModuleEffectDurationPropertyComponent>());
     }
-
-    public async Task OnFlagAction(FlagAction action) {
-        if (action == FlagAction.Capture)
-            await TryDeactivate();
-    }
-
-    public Task OnShot() => TryDeactivate();
 
     Task TryDeactivate() =>
         Effect == null

@@ -31,8 +31,9 @@ public abstract class BaseQuestTemplate : EntityTemplate {
             .AddGroupComponent<UserGroupComponent>(user)
             .ThenExecuteIf(_ => conditionType != null,
                 entity => entity.AddComponent(new QuestConditionComponent(conditionType!.Value, conditionValue)))
-            .ThenExecuteIf(_ => isCompleted, entity => {
-                entity.AddComponent<CompleteQuestComponent>();
-                entity.AddComponent<RewardedQuestComponent>();
-            }));
+            .ThenExecuteIf(_ => isCompleted,
+                entity => {
+                    entity.AddComponent<CompleteQuestComponent>();
+                    entity.AddComponent<RewardedQuestComponent>();
+                }));
 }

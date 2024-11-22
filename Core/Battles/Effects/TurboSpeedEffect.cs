@@ -16,14 +16,22 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
     const string MarketConfigPath = "garage/module/upgrade/properties/turbospeed";
 
     public TurboSpeedEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        SupplyMultiplier = ConfigManager.GetComponent<TurboSpeedEffectComponent>(EffectConfigPath).SpeedCoeff;
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
+        SupplyMultiplier = ConfigManager.GetComponent<TurboSpeedEffectComponent>(EffectConfigPath)
+            .SpeedCoeff;
 
-        Multiplier = IsSupply ? SupplyMultiplier : Leveling.GetStat<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath, Level);
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
+                               .Duration *
+                           Tank.SupplyDurationMultiplier;
+
+        Multiplier = IsSupply
+            ? SupplyMultiplier
+            : Leveling.GetStat<ModuleTurbospeedEffectPropertyComponent>(MarketConfigPath, Level);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
     }
+
+    public float Multiplier { get; private set; }
 
     public async Task Extend(int newLevel) {
         if (!IsActive) return;
@@ -54,8 +62,6 @@ public sealed class TurboSpeedEffect : DurationEffect, ISupplyEffect, IExtendabl
 
         Schedule(Duration, Deactivate);
     }
-
-    public float Multiplier { get; private set; }
 
     public float SupplyMultiplier { get; }
     public float SupplyDurationMs { get; }

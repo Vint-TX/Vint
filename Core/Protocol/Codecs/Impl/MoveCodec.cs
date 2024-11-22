@@ -137,14 +137,21 @@ public abstract class MoveCodec : Codec {
     }
 
     protected void WriteQuaternion(BitArray bits, ref int position, Quaternion value, int size, float factor) {
-        int num = value.W >= 0f ? 1 : -1;
+        int num = value.W >= 0f
+            ? 1
+            : -1;
+
         WriteFloat(bits, ref position, value.X * num, size, factor);
         WriteFloat(bits, ref position, value.Y * num, size, factor);
         WriteFloat(bits, ref position, value.Z * num, size, factor);
     }
 
-    protected BitArray GetBitsForWeaponRotation(bool hasWeaponRotation) => !hasWeaponRotation ? BitsForWeaponRotationEmpty : BitsForWeaponRotation;
+    protected BitArray GetBitsForWeaponRotation(bool hasWeaponRotation) => !hasWeaponRotation
+        ? BitsForWeaponRotationEmpty
+        : BitsForWeaponRotation;
 
     protected byte[] GetBufferForWeaponRotation(bool hasWeaponRotation) =>
-        !hasWeaponRotation ? BufferForWeaponRotationEmpty : BufferForWeaponRotation;
+        !hasWeaponRotation
+            ? BufferForWeaponRotationEmpty
+            : BufferForWeaponRotation;
 }

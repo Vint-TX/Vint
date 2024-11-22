@@ -17,15 +17,14 @@ public class ModeratorModule(
     [ChatCommand("warn", "Warn a player")]
     public async Task Warn(
         ChatCommandContext ctx,
-        [Option("username", "Username of player to warn")]
-        string username,
-        [Option("duration", "Duration of warn", true)]
-        string? rawDuration = null,
-        [WaitingForText, Option("reason", "Reason for warn", true)]
-        string? reason = null) {
+        [Option("username", "Username of player to warn")] string username,
+        [Option("duration", "Duration of warn", true)] string? rawDuration = null,
+        [WaitingForText, Option("reason", "Reason for warn", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -37,8 +36,13 @@ public class ModeratorModule(
             if (targetConnection.InLobby) {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -55,7 +59,8 @@ public class ModeratorModule(
             return;
         }
 
-        if (!ctx.Connection.Player.IsAdmin && targetPlayer.IsModerator) {
+        if (!ctx.Connection.Player.IsAdmin &&
+            targetPlayer.IsModerator) {
             await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
@@ -65,7 +70,8 @@ public class ModeratorModule(
 
         await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -78,15 +84,14 @@ public class ModeratorModule(
     [ChatCommand("mute", "Mute a player")]
     public async Task Mute(
         ChatCommandContext ctx,
-        [Option("username", "Username of player to mute")]
-        string username,
-        [Option("duration", "Duration of mute", true)]
-        string? rawDuration = null,
-        [WaitingForText, Option("reason", "Reason for mute", true)]
-        string? reason = null) {
+        [Option("username", "Username of player to mute")] string username,
+        [Option("duration", "Duration of mute", true)] string? rawDuration = null,
+        [WaitingForText, Option("reason", "Reason for mute", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -98,8 +103,13 @@ public class ModeratorModule(
             if (targetConnection.InLobby) {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -116,7 +126,8 @@ public class ModeratorModule(
             return;
         }
 
-        if (!ctx.Connection.Player.IsAdmin && targetPlayer.IsModerator) {
+        if (!ctx.Connection.Player.IsAdmin &&
+            targetPlayer.IsModerator) {
             await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
@@ -126,7 +137,8 @@ public class ModeratorModule(
 
         await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -139,10 +151,11 @@ public class ModeratorModule(
     [ChatCommand("unwarn", "Remove warn from player")]
     public async Task UnWarn(
         ChatCommandContext ctx,
-        [Option("username", "Username of player to unwarn")]
-        string username,
+        [Option("username", "Username of player to unwarn")] string username,
         [Option("id", "Id of warn")] long id) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -154,8 +167,13 @@ public class ModeratorModule(
             if (targetConnection.InLobby) {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -176,7 +194,8 @@ public class ModeratorModule(
 
         string punishMessage = $"{username} was unwarned";
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -187,11 +206,10 @@ public class ModeratorModule(
     }
 
     [ChatCommand("unmute", "Remove mute from player")]
-    public async Task UnMute(
-        ChatCommandContext ctx,
-        [Option("username", "Username of player to unmute")]
-        string username) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+    public async Task UnMute(ChatCommandContext ctx, [Option("username", "Username of player to unmute")] string username) {
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -203,8 +221,13 @@ public class ModeratorModule(
             if (targetConnection.InLobby) {
                 Battle battle = targetConnection.BattlePlayer!.Battle;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-                notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                    ? battle.BattleChatEntity
+                    : battle.LobbyChatEntity;
+
+                notifiedConnections = ChatUtils
+                    .GetReceivers(server, targetConnection, notifyChat)
+                    .ToList();
             }
         } else {
             await using DbConnection db = new();
@@ -225,7 +248,8 @@ public class ModeratorModule(
 
         string punishMessage = $"{username} was unmuted";
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -238,11 +262,11 @@ public class ModeratorModule(
     [ChatCommand("kick", "Kick player from server")]
     public async Task Kick(
         ChatCommandContext ctx,
-        [Option("username", "Username of player to kick")]
-        string username,
-        [WaitingForText, Option("reason", "Reason for kick", true)]
-        string? reason = null) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        [Option("username", "Username of player to kick")] string username,
+        [WaitingForText, Option("reason", "Reason for kick", true)] string? reason = null) {
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -259,7 +283,8 @@ public class ModeratorModule(
             return;
         }
 
-        if (!ctx.Connection.Player.IsAdmin && targetConnection.Player.IsModerator) {
+        if (!ctx.Connection.Player.IsAdmin &&
+            targetConnection.Player.IsModerator) {
             await ctx.SendPrivateResponse("Moderator cannot punish other moderator");
             return;
         }
@@ -267,14 +292,20 @@ public class ModeratorModule(
         if (targetConnection.InLobby) {
             Battle battle = targetConnection.BattlePlayer!.Battle;
 
-            notifyChat = targetConnection.BattlePlayer.InBattleAsTank ? battle.BattleChatEntity : battle.LobbyChatEntity;
-            notifiedConnections = ChatUtils.GetReceivers(server, targetConnection, notifyChat).ToList();
+            notifyChat = targetConnection.BattlePlayer.InBattleAsTank
+                ? battle.BattleChatEntity
+                : battle.LobbyChatEntity;
+
+            notifiedConnections = ChatUtils
+                .GetReceivers(server, targetConnection, notifyChat)
+                .ToList();
         }
 
         await targetConnection.Kick(reason);
         string punishMessage = $"{username} was kicked for '{reason}'";
 
-        if (notifyChat == null || notifiedConnections == null)
+        if (notifyChat == null ||
+            notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);
@@ -287,26 +318,29 @@ public class ModeratorModule(
     [ChatCommand("dmsg", "Displays a message on player screen")]
     public async Task DisplayMessage(
         ChatCommandContext ctx,
-        [Option("username", "Username of player (@a for broadcast, @b for broadcast in battle)")]
-        string username,
-        [WaitingForText, Option("message", "Message to display")]
-        string message) {
+        [Option("username", "Username of player (@a for broadcast, @b for broadcast in battle)")] string username,
+        [WaitingForText, Option("message", "Message to display")] string message) {
         switch (username) {
             case "@a": {
                 foreach (IPlayerConnection connection in server.PlayerConnections.Values)
                     await connection.DisplayMessage(message);
+
                 break;
             }
 
             case "@b":
-                if (!ctx.Connection.InLobby || !ctx.Connection.BattlePlayer!.InBattle) return;
+                if (!ctx.Connection.InLobby ||
+                    !ctx.Connection.BattlePlayer!.InBattle) return;
 
                 foreach (BattlePlayer battlePlayer in ctx.Connection.BattlePlayer.Battle.Players.Where(player => player.InBattleAsTank))
                     await battlePlayer.PlayerConnection.DisplayMessage(message);
+
                 break;
 
             default: {
-                IPlayerConnection? target = server.PlayerConnections.Values
+                IPlayerConnection? target = server
+                    .PlayerConnections
+                    .Values
                     .Where(conn => conn.IsOnline)
                     .SingleOrDefault(conn => conn.Player.Username == username);
 

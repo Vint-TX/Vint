@@ -17,25 +17,27 @@ public class BreakOffFriendEvent : FriendBaseEvent, IServerEvent {
         if (player == null) return;
 
         await db.BeginTransactionAsync();
-        await db.Relations
-            .Where(relation => relation.SourcePlayerId == player.Id &&
-                               relation.TargetPlayerId == connection.Player.Id)
-            .Set(relation => relation.Types,
-                relation => relation.Types & ~RelationTypes.Friend)
+
+        await db
+            .Relations
+            .Where(relation => relation.SourcePlayerId == player.Id && relation.TargetPlayerId == connection.Player.Id)
+            .Set(relation => relation.Types, relation => relation.Types & ~RelationTypes.Friend)
             .UpdateAsync();
 
-        await db.Relations
-            .Where(relation => relation.SourcePlayerId == connection.Player.Id &&
-                               relation.TargetPlayerId == player.Id)
-            .Set(relation => relation.Types,
-                relation => relation.Types & ~RelationTypes.Friend)
+        await db
+            .Relations
+            .Where(relation => relation.SourcePlayerId == connection.Player.Id && relation.TargetPlayerId == player.Id)
+            .Set(relation => relation.Types, relation => relation.Types & ~RelationTypes.Friend)
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
         await connection.Send(new AcceptedFriendRemovedEvent(player.Id), connection.User);
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 

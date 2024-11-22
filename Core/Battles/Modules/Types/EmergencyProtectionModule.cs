@@ -16,18 +16,32 @@ namespace Vint.Core.Battles.Modules.Types;
 public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITemperatureWeaponHandler {
     public override string ConfigPath => "garage/module/upgrade/properties/emergencyprotection";
 
-    public override EmergencyProtectionEffect GetEffect() => new(Duration, Tank, Level);
-
     float AdditiveHpFactor { get; set; }
     float FixedHp { get; set; }
     TimeSpan Duration { get; set; }
 
     CalculatedDamage CalculatedHeal => new(default, Tank.MaxHealth * AdditiveHpFactor + FixedHp, false, false);
 
+    public async Task OnHealthChanged(float before, float current, float max) {
+        if (current > 0) return;
+
+        await Activate();
+    }
+
+    public IEntity BattleEntity => Entity;
+    public float TemperatureLimit => -1f;
+    public float TemperatureDelta => -1f;
+    public TimeSpan TemperatureDuration => Duration;
+
+    public override EmergencyProtectionEffect GetEffect() => new(Duration, Tank, Level);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        EmergencyProtectionEffect? effect = Tank.Effects.OfType<EmergencyProtectionEffect>().SingleOrDefault();
+        EmergencyProtectionEffect? effect = Tank
+            .Effects
+            .OfType<EmergencyProtectionEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
@@ -55,15 +69,4 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
         FixedHp = GetStat<ModuleEmergencyProtectionEffectFixedHPPropertyComponent>();
         Duration = TimeSpan.FromMilliseconds(GetStat<ModuleEmergencyProtectionEffectHolyshieldDurationPropertyComponent>());
     }
-
-    public async Task OnHealthChanged(float before, float current, float max) {
-        if (current > 0) return;
-
-        await Activate();
-    }
-
-    public IEntity BattleEntity => Entity;
-    public float TemperatureLimit => -1f;
-    public float TemperatureDelta => -1f;
-    public TimeSpan TemperatureDuration => Duration;
 }

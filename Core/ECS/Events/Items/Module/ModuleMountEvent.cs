@@ -23,20 +23,22 @@ public class ModuleMountEvent : IServerEvent {
             slotUserItem.HasComponent<ModuleGroupComponent>()) return;
 
         Player player = connection.Player;
-        long marketItemId = moduleUserItem.GetComponent<MarketItemGroupComponent>().Key;
+
+        long marketItemId = moduleUserItem.GetComponent<MarketItemGroupComponent>()
+            .Key;
 
         Database.Models.Module? module = player.Modules.SingleOrDefault(module => module.Id == marketItemId);
 
-        if (module == null || module.Level < 0) return;
+        if (module == null ||
+            module.Level < 0) return;
 
-        Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
+        Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>()
+            .Slot;
 
         await using DbConnection db = new();
 
-        PresetModule? presetModule = await db.PresetModules
-            .SingleOrDefaultAsync(pModule => pModule.PlayerId == player.Id &&
-                                        pModule.PresetIndex == player.CurrentPresetIndex &&
-                                        pModule.Slot == slot);
+        PresetModule? presetModule = await db.PresetModules.SingleOrDefaultAsync(pModule =>
+            pModule.PlayerId == player.Id && pModule.PresetIndex == player.CurrentPresetIndex && pModule.Slot == slot);
 
         presetModule ??= new PresetModule { Player = player, Preset = player.CurrentPreset, Slot = slot };
         presetModule.Entity = connection.GetEntity(marketItemId)!;

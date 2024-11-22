@@ -2,7 +2,7 @@
   "id": -1664220274,
   "maxPlayers": 16,
   "matchmaking": true,
-"flags": {
+  "flags": {
     "red": {
       "x": -6.31,
       "y": 0.15,

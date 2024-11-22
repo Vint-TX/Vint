@@ -20,11 +20,18 @@ public class SendEventCommand(
         ILogger logger = connection.Logger.ForType(GetType());
 
         if (Event is not IServerEvent serverEvent) {
-            logger.Warning("Event {Event} is not IServerEvent", Event.GetType().Name);
+            logger.Warning("Event {Event} is not IServerEvent",
+                Event.GetType()
+                    .Name);
+
             return;
         }
 
-        logger.Debug("Executing event {Name} with {Count} entities", serverEvent.GetType().Name, Entities.Length);
+        logger.Debug("Executing event {Name} with {Count} entities",
+            serverEvent.GetType()
+                .Name,
+            Entities.Length);
+
         await serverEvent.Execute(connection, serviceProvider, Entities);
     }
 

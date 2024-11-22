@@ -59,7 +59,8 @@ public class Protocol {
         Factories.Add(new GroupComponentCodecFactory());
         Factories.Add(new StructCodecFactory());
 
-        Assembly.GetExecutingAssembly()
+        Assembly
+            .GetExecutingAssembly()
             .GetTypes()
             .Where(type => type.IsDefined(typeof(ProtocolIdAttribute)))
             .ToList()
@@ -85,16 +86,13 @@ public class Protocol {
             Type? underlyingType = Nullable.GetUnderlyingType(typeCodecInfo.Type);
 
             if (underlyingType != null) {
-                codecInfo = new TypeCodecInfo(underlyingType,
-                    typeCodecInfo.Nullable,
-                    typeCodecInfo.Varied,
-                    typeCodecInfo.Attributes);
+                codecInfo = new TypeCodecInfo(underlyingType, typeCodecInfo.Nullable, typeCodecInfo.Varied, typeCodecInfo.Attributes);
             }
         }
 
         return Codecs.TryGetValue(codecInfo, out ICodec? codec)
-                   ? codec
-                   : CreateCodec(codecInfo);
+            ? codec
+            : CreateCodec(codecInfo);
     }
 
     public Type GetTypeById(long id) {
@@ -110,7 +108,11 @@ public class Protocol {
 
             if (codec == null) continue;
 
-            Logger.Verbose("Created {Codec} with {Factory} for {Info}", codec, codecFactory.GetType().Name, codecInfo);
+            Logger.Verbose("Created {Codec} with {Factory} for {Info}",
+                codec,
+                codecFactory.GetType()
+                    .Name,
+                codecInfo);
 
             codec.Init(this);
 

@@ -6,13 +6,13 @@ using Vint.Core.Server.Game;
 namespace Vint.Core.Battles.Damage;
 
 public interface IDamageProcessor {
-    public Task Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage);
+    Task Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage);
 
-    public Task<DamageType> Damage(BattleTank target, CalculatedDamage damage);
+    Task<DamageType> Damage(BattleTank target, CalculatedDamage damage);
 
-    public Task Heal(BattleTank source, BattleTank target, CalculatedDamage heal);
+    Task Heal(BattleTank source, BattleTank target, CalculatedDamage heal);
 
-    public Task Heal(BattleTank target, CalculatedDamage heal);
+    Task Heal(BattleTank target, CalculatedDamage heal);
 }
 
 public class DamageProcessor : IDamageProcessor {
@@ -64,7 +64,9 @@ public class DamageProcessor : IDamageProcessor {
 
         return target.Health switch {
             <= 0 => DamageType.Kill,
-            _ => damage.IsCritical ? DamageType.Critical : DamageType.Normal
+            _ => damage.IsCritical
+                ? DamageType.Critical
+                : DamageType.Normal
         };
     }
 

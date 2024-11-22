@@ -37,7 +37,8 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 
-        if (!battlePlayer.InBattleAsTank || !battle.Properties.DamageEnabled) {
+        if (!battlePlayer.InBattleAsTank ||
+            !battle.Properties.DamageEnabled) {
             IsProceeded = false;
             return;
         }
@@ -53,7 +54,8 @@ public class SelfHitEvent : HitEvent, IServerEvent {
             return;
         }
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(RemoteEvent, weapon);
@@ -76,7 +78,9 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         }
 
         await using DbConnection db = new();
-        await db.Statistics
+
+        await db
+            .Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Hits, stats => stats.Hits + Targets.Count)
             .UpdateAsync();
@@ -84,11 +88,14 @@ public class SelfHitEvent : HitEvent, IServerEvent {
 
     bool Validate(IPlayerConnection connection, IWeaponHandler weaponHandler) {
         if (Targets?.Count > weaponHandler.MaxHitTargets) {
-            connection.Logger.ForType(GetType())
+            connection
+                .Logger
+                .ForType(GetType())
                 .Warning("Suspicious behaviour: hit targets count is greater than max hit targets count: {Current} > {Max} ({WeaponHandlerName})",
                     Targets?.Count,
                     weaponHandler.MaxHitTargets,
-                    weaponHandler.GetType().Name);
+                    weaponHandler.GetType()
+                        .Name);
 
             return false;
         }
@@ -100,9 +107,11 @@ public class SelfHitEvent : HitEvent, IServerEvent {
         if (weaponEntity.HasComponent<TankPartComponent>())
             return tank.WeaponHandler;
 
-        return tank.Effects
+        return tank
+                   .Effects
                    .OfType<WeaponEffect>()
-                   .SingleOrDefault(effect => effect.WeaponEntity == weaponEntity)?.WeaponHandler ??
+                   .SingleOrDefault(effect => effect.WeaponEntity == weaponEntity)
+                   ?.WeaponHandler ??
                throw new InvalidOperationException($"Not found weapon handler for {weaponEntity}");
     }
 }

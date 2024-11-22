@@ -12,10 +12,6 @@ namespace Vint.Core.Battles.Modules.Types;
 public class SpiderMineModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/spidermine";
 
-    public override SpiderMineEffect GetEffect() => new(Mines.Count(), MarketEntity, ActivationTime, TargetingDistance, BeginHideDistance, HideRange,
-        Impact, MinSplashDamagePercent, RadiusOfMaxSplashDamage, RadiusOfMinSplashDamage, MaxDamage, MinDamage, Speed, Acceleration, Energy,
-        IdleEnergyDrain, ChasingEnergyDrain, Tank, Level);
-
     IEnumerable<SpiderMineEffect> Mines => Tank.Effects.OfType<SpiderMineEffect>();
     IEnumerable<SpiderMineEffect> MinesSorted => Mines.OrderBy(mine => mine.Index);
 
@@ -36,14 +32,38 @@ public class SpiderMineModule : ActiveBattleModule {
     float ChasingEnergyDrain { get; set; }
     float TargetingDistance { get; set; }
 
+    public override SpiderMineEffect GetEffect() => new(Mines.Count(),
+        MarketEntity,
+        ActivationTime,
+        TargetingDistance,
+        BeginHideDistance,
+        HideRange,
+        Impact,
+        MinSplashDamagePercent,
+        RadiusOfMaxSplashDamage,
+        RadiusOfMinSplashDamage,
+        MaxDamage,
+        MinDamage,
+        Speed,
+        Acceleration,
+        Energy,
+        IdleEnergyDrain,
+        ChasingEnergyDrain,
+        Tank,
+        Level);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
 
         while (Mines.Count() > CountLimit)
-            await MinesSorted.First().ForceDeactivate();
+            await MinesSorted
+                .First()
+                .ForceDeactivate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

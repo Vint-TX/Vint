@@ -10,16 +10,13 @@ public class ListCodecFactory : ICodecFactory {
             !typeCodecInfo.Type.IsList())
             return null;
 
-        ProtocolCollectionAttribute protocolCollection = typeCodecInfo.Attributes
+        ProtocolCollectionAttribute protocolCollection = typeCodecInfo
+                                                             .Attributes
                                                              .OfType<ProtocolCollectionAttribute>()
                                                              .FirstOrDefault() ??
                                                          ProtocolCollectionAttribute.Default;
 
-        return new ListCodec(
-            typeCodecInfo.Type,
-            new TypeCodecInfo(
-                typeCodecInfo.Type.GenericTypeArguments.Single(),
-                protocolCollection.Nullable,
-                protocolCollection.Varied));
+        return new ListCodec(typeCodecInfo.Type,
+            new TypeCodecInfo(typeCodecInfo.Type.GenericTypeArguments.Single(), protocolCollection.Nullable, protocolCollection.Varied));
     }
 }

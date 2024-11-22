@@ -21,12 +21,17 @@ public class LifeStealModule : BattleModule, IKillModule {
     float HpFromCurrentTank { get; set; }
     float Heal { get; set; }
 
+    public Task OnKill(BattleTank target) => Activate();
+
     public override LifeStealEffect GetEffect() => new(Tank, Level);
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        LifeStealEffect? effect = Tank.Effects.OfType<LifeStealEffect>().SingleOrDefault();
+        LifeStealEffect? effect = Tank
+            .Effects
+            .OfType<LifeStealEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
@@ -51,6 +56,4 @@ public class LifeStealModule : BattleModule, IKillModule {
         HpFromCurrentTank = Tank.MaxHealth * HpPercent;
         Heal = FixedHeal + HpFromCurrentTank;
     }
-
-    public Task OnKill(BattleTank target) => Activate();
 }

@@ -9,7 +9,9 @@ namespace Vint.Core.ECS.Events.Battle.Pause;
 [ProtocolId(-3944419188146485646)]
 public class UnpauseEvent : IServerEvent {
     public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank || !connection.BattlePlayer.IsPaused) return Task.CompletedTask;
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank ||
+            !connection.BattlePlayer.IsPaused) return Task.CompletedTask;
 
         IEntity user = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer;

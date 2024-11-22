@@ -29,7 +29,10 @@ public class OptionAttribute(
             builder.Append(')');
         }
 
-        builder.Append(Optional ? ']' : '>');
+        builder.Append(Optional
+            ? ']'
+            : '>');
+
         return builder.ToString();
     }
 }

@@ -40,7 +40,8 @@ public class Flag {
     public Battle Battle { get; private set; }
     public TeamColor TeamColor { get; private set; }
     public Vector3 PedestalPosition { get; }
-    public Vector3 Position => Entity.GetComponent<FlagPositionComponent>().Position;
+    public Vector3 Position => Entity.GetComponent<FlagPositionComponent>()
+        .Position;
 
     public BattlePlayer? Carrier { get; private set; }
     BattlePlayer? LastCarrier { get; set; }
@@ -92,8 +93,7 @@ public class Flag {
 
     public async Task Pickup(BattlePlayer carrier) {
         if (StateManager.CurrentState is not OnGround ||
-            LastCarrier == carrier &&
-            UnfrozeForLastCarrierTime > DateTimeOffset.UtcNow) return;
+            LastCarrier == carrier && UnfrozeForLastCarrierTime > DateTimeOffset.UtcNow) return;
 
         await StateManager.SetState(new Captured(StateManager, carrier.Tank!.Tank));
         Carrier = carrier;
@@ -116,7 +116,9 @@ public class Flag {
         if (returner != null) {
             await Entity.AddGroupComponent<TankGroupComponent>(returner.Tank!.Tank);
 
-            Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == LastCarrier?.TeamColor).PedestalPosition;
+            Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == LastCarrier?.TeamColor)
+                .PedestalPosition;
+
             Vector3 returnPosition = Position;
 
             float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
@@ -156,7 +158,9 @@ public class Flag {
         if (returner == null) return;
 
         await using DbConnection db = new();
-        await db.Statistics
+
+        await db
+            .Statistics
             .Where(stats => stats.PlayerId == returner.PlayerConnection.Player.Id)
             .Set(stats => stats.FlagsReturned, stats => stats.FlagsReturned + 1)
             .UpdateAsync();
@@ -178,7 +182,9 @@ public class Flag {
 
             BattleTank tank = battlePlayer.Tank!;
             FlagAssist carrierAssist = Assists.First(assist => assist.Tank == tank);
-            Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == battlePlayer.TeamColor).PedestalPosition;
+
+            Vector3 carrierPedestal = ctf.Flags.First(flag => flag.TeamColor == battlePlayer.TeamColor)
+                .PedestalPosition;
 
             float maxDistance = Vector3.Distance(PedestalPosition, carrierPedestal);
             float carrierDistance = carrierAssist.TraveledDistance + Vector3.Distance(carrierAssist.LastPickupPoint, carrierPedestal);
@@ -221,7 +227,9 @@ public class Flag {
             await flagModule.OnFlagAction(FlagAction.Deliver);
 
         await using DbConnection db = new();
-        await db.Statistics
+
+        await db
+            .Statistics
             .Where(stats => stats.PlayerId == battlePlayer.PlayerConnection.Player.Id)
             .Set(stats => stats.FlagsDelivered, stats => stats.FlagsDelivered + 1)
             .UpdateAsync();

@@ -23,13 +23,11 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
 
         await db.BeginTransactionAsync();
 
-        Relation? thisToTargetRelation = await db.Relations
-            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == connection.Player.Id &&
-                                         relation.TargetPlayerId == player.Id);
+        Relation? thisToTargetRelation = await db.Relations.SingleOrDefaultAsync(relation =>
+            relation.SourcePlayerId == connection.Player.Id && relation.TargetPlayerId == player.Id);
 
-        Relation? targetToThisRelation = await db.Relations
-            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == player.Id &&
-                                         relation.TargetPlayerId == connection.Player.Id);
+        Relation? targetToThisRelation = await db.Relations.SingleOrDefaultAsync(relation =>
+            relation.SourcePlayerId == player.Id && relation.TargetPlayerId == connection.Player.Id);
 
         if ((targetToThisRelation?.Types & RelationTypes.Blocked) == RelationTypes.Blocked)
             return;
@@ -63,7 +61,10 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
         await db.CommitTransactionAsync();
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 

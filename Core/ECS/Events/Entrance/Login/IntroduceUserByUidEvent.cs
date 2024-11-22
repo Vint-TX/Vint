@@ -20,7 +20,9 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
         logger.Information("Login by username '{Username}'", Username);
 
         await using DbConnection db = new();
-        Player? player = await db.Players
+
+        Player? player = await db
+            .Players
             .LoadWith(player => player.Modules)
             .LoadWith(player => player.DiscordLink)
             .SingleOrDefaultAsync(player => player.Username == Username);

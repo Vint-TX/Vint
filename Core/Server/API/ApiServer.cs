@@ -15,11 +15,12 @@ public class ApiServer {
     const ushort Port = 5051;
 
     public ApiServer() {
-        Server = new WebServer(options => options.WithUrlPrefix($"http://localhost:{Port}/").WithMode(HttpListenerMode.Microsoft))
-            .HandleHttpException(HandleHttpException).HandleUnhandledException(HandleUnhandledException).WithWebApi(
-                "/invites/",
-                SerializeAndSend,
-                module => module.WithController<InviteController>());
+        Server = new WebServer(options => options
+                .WithUrlPrefix($"http://localhost:{Port}/")
+                .WithMode(HttpListenerMode.Microsoft))
+            .HandleHttpException(HandleHttpException)
+            .HandleUnhandledException(HandleUnhandledException)
+            .WithWebApi("/invites/", SerializeAndSend, module => module.WithController<InviteController>());
 
         Server.StateChanged += (_, e) => Logger.Debug("State changed: {Old} => {New}", e.OldState, e.NewState);
     }

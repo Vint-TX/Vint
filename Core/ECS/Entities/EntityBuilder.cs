@@ -51,10 +51,14 @@ public class EntityBuilder() : IEntityBuilder {
         AddComponent<T>(TemplateAccessor!.ConfigPath!);
 
     public IEntityBuilder TryAddComponent<T>(IEntity entity) where T : class, IComponent =>
-        entity.HasComponent<T>() ? AddComponentFrom<T>(entity) : this;
+        entity.HasComponent<T>()
+            ? AddComponentFrom<T>(entity)
+            : this;
 
     public IEntityBuilder TryAddComponent<T>(string configPath) where T : class, IComponent =>
-        ConfigManager.TryGetComponent(configPath, out T? component) ? AddComponent(component) : this;
+        ConfigManager.TryGetComponent(configPath, out T? component)
+            ? AddComponent(component)
+            : this;
 
     public IEntityBuilder ThenExecuteIf(Func<IEntity, bool> condition, Action<IEntity> action) {
         Actions.Add((action, condition));
@@ -67,7 +71,9 @@ public class EntityBuilder() : IEntityBuilder {
 
         Entity entity = new(Id, TemplateAccessor, Components);
 
-        foreach (Action<IEntity> action in Actions.Where(tuple => tuple.condition(entity)).Select(tuple => tuple.action))
+        foreach (Action<IEntity> action in Actions
+                     .Where(tuple => tuple.condition(entity))
+                     .Select(tuple => tuple.action))
             action(entity);
 
         if (temp) EntityRegistry.AddTemp(entity);

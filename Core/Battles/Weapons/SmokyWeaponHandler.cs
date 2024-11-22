@@ -8,17 +8,32 @@ namespace Vint.Core.Battles.Weapons;
 
 public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
     public SmokyWeaponHandler(BattleTank battleTank) : base(battleTank) {
-        CriticalDamage = ConfigManager.GetComponent<CriticalDamagePropertyComponent>(MarketConfigPath).FinalValue;
-        StartCriticalProbability = ConfigManager.GetComponent<StartCriticalProbabilityPropertyComponent>(MarketConfigPath).FinalValue;
-        CriticalProbabilityDelta = ConfigManager.GetComponent<CriticalProbabilityDeltaPropertyComponent>(MarketConfigPath).FinalValue;
-        AfterCriticalProbability = ConfigManager.GetComponent<AfterCriticalHitProbabilityPropertyComponent>(MarketConfigPath).FinalValue;
-        MaxCriticalProbability = ConfigManager.GetComponent<MaxCriticalProbabilityPropertyComponent>(MarketConfigPath).FinalValue;
+        CriticalDamage = ConfigManager.GetComponent<CriticalDamagePropertyComponent>(MarketConfigPath)
+            .FinalValue;
 
-        StartDamageProgression = ConfigManager.GetComponent<StartDamageProgressionPropertyComponent>(MarketConfigPath).FinalValue;
-        MaxDamageProgression = ConfigManager.GetComponent<MaxDamageProgressionPropertyComponent>(MarketConfigPath).FinalValue;
-        DamageProgressionDelta = ConfigManager.GetComponent<DamageProgressionDeltaPropertyComponent>(MarketConfigPath).FinalValue;
-        DamageProgressionReset =
-            TimeSpan.FromSeconds(ConfigManager.GetComponent<DamageProgressionResetTimeSecPropertyComponent>(MarketConfigPath).FinalValue);
+        StartCriticalProbability = ConfigManager.GetComponent<StartCriticalProbabilityPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        CriticalProbabilityDelta = ConfigManager.GetComponent<CriticalProbabilityDeltaPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        AfterCriticalProbability = ConfigManager.GetComponent<AfterCriticalHitProbabilityPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        MaxCriticalProbability = ConfigManager.GetComponent<MaxCriticalProbabilityPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        StartDamageProgression = ConfigManager.GetComponent<StartDamageProgressionPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        MaxDamageProgression = ConfigManager.GetComponent<MaxDamageProgressionPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        DamageProgressionDelta = ConfigManager.GetComponent<DamageProgressionDeltaPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        DamageProgressionReset = TimeSpan.FromSeconds(ConfigManager.GetComponent<DamageProgressionResetTimeSecPropertyComponent>(MarketConfigPath)
+            .FinalValue);
 
         DamageProgressionMiddle = (StartDamageProgression + MaxDamageProgression) / 2;
     }

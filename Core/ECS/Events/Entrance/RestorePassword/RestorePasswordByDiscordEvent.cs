@@ -30,17 +30,21 @@ public class RestorePasswordByDiscordEvent : IServerEvent {
             !ulong.TryParse(DiscordID, out ulong discordId)) return;
 
         await using DbConnection db = new();
-        Player? player = await db.Players
+
+        Player? player = await db
+            .Players
             .LoadWith(player => player.DiscordLink)
             .SingleOrDefaultAsync(player => player.DiscordUserId == discordId);
 
         DiscordLink? discordLink = player?.DiscordLink;
 
-        if (player == null || discordLink == null) return;
+        if (player == null ||
+            discordLink == null) return;
 
         (DiscordRestClient? client, bool? isAuthorized) = await discordLink.GetClient(connection, discordBot);
 
-        if (isAuthorized != true || client == null) {
+        if (isAuthorized != true ||
+            client == null) {
             await connection.Send(new DiscordInvalidEvent(DiscordID));
             return;
         }

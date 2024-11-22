@@ -22,9 +22,7 @@ public class TemperatureAssist(
     public float CurrentDelta { get; set; } = delta;
 
     public bool CanMerge(TemperatureAssist other) =>
-        LimitSign == other.LimitSign &&
-        Tank == other.Tank &&
-        WeaponMarketEntity == other.WeaponMarketEntity;
+        LimitSign == other.LimitSign && Tank == other.Tank && WeaponMarketEntity == other.WeaponMarketEntity;
 
     public void MergeWith(TemperatureAssist other) {
         if (!CanMerge(other))

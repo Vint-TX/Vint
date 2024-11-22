@@ -11,14 +11,18 @@ public class RicochetWeaponHandler(
 
     public override async Task Fire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
+
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
 
         // ReSharper disable once ArrangeRedundantParentheses
-        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
+        if (targetTank.StateManager.CurrentState is not Active ||
+            !isEnemy) return;
 
         CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);

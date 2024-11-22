@@ -49,24 +49,47 @@ public class SpiderMineEffect(
         Tank.Effects.Add(this);
         Vector3 position = hitHandler.ClosestHit.Value;
 
-        WeaponEntity = Entity = new SpiderEffectTemplate().Create(Tank.BattlePlayer, Duration, position, Battle.Properties.FriendlyFire,
-            beginHideDistance, hideRange, impact, minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage, targetingDistance, speed,
+        WeaponEntity = Entity = new SpiderEffectTemplate().Create(Tank.BattlePlayer,
+            Duration,
+            position,
+            Battle.Properties.FriendlyFire,
+            beginHideDistance,
+            hideRange,
+            impact,
+            minSplashDamagePercent,
+            radiusOfMaxSplashDamage,
+            radiusOfMinSplashDamage,
+            targetingDistance,
+            speed,
             acceleration);
 
-        WeaponHandler = new SpiderMineWeaponHandler(Tank, TimeSpan.Zero, marketEntity, WeaponEntity, true, radiusOfMaxSplashDamage,
-            radiusOfMinSplashDamage, minSplashDamagePercent, maxDamage, minDamage, Explode);
+        WeaponHandler = new SpiderMineWeaponHandler(Tank,
+            TimeSpan.Zero,
+            marketEntity,
+            WeaponEntity,
+            true,
+            radiusOfMaxSplashDamage,
+            radiusOfMinSplashDamage,
+            minSplashDamagePercent,
+            maxDamage,
+            minDamage,
+            Explode);
 
         await ShareToAllPlayers();
         Schedule(activationTime, async () => await Entity.AddComponent<EffectActiveComponent>());
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new MineDropEvent(), Entity);
 
         CanBeDeactivated = false;
     }
 
     public override async Task Deactivate() {
-        if (!CanBeDeactivated || !IsActive) return;
+        if (!CanBeDeactivated ||
+            !IsActive) return;
 
         Tank.Effects.TryRemove(this);
 
@@ -96,7 +119,10 @@ public class SpiderMineEffect(
     async Task Explode() {
         if (!IsActive) return;
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new MineExplosionEvent(), Entity);
 
         await ForceDeactivate();
@@ -107,10 +133,11 @@ public class SpiderMineEffect(
             return;
 
         double energyDelta = State switch {
-            SpiderState.Idling => idleEnergyDrain,
-            SpiderState.Chasing => chasingEnergyDrain,
-            _ => 0
-        } * deltaTime.TotalSeconds;
+                                 SpiderState.Idling => idleEnergyDrain,
+                                 SpiderState.Chasing => chasingEnergyDrain,
+                                 _ => 0
+                             } *
+                             deltaTime.TotalSeconds;
 
         Energy -= energyDelta;
 

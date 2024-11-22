@@ -20,20 +20,21 @@ abstract class Program {
     static async Task Main() {
         LoggerUtils.Initialize(LogEventLevel.Information);
 
-        Log.Logger.ForType(typeof(Program)).Information("Welcome to Vint!");
+        Log
+            .Logger
+            .ForType(typeof(Program))
+            .Information("Welcome to Vint!");
 
         DatabaseConfig.Initialize();
 
-        await Task.WhenAll(
-            Task.Run(ConfigManager.InitializeCache),
+        await Task.WhenAll(Task.Run(ConfigManager.InitializeCache),
             ConfigManager.InitializeMapInfos(),
             ConfigManager.InitializeChatCensorship(),
             Task.Run(async () => {
                 await ConfigManager.InitializeNodes();
                 await ConfigManager.InitializeConfigs();
                 await ConfigManager.InitializeGlobalEntities();
-            })
-        );
+            }));
 
         IServiceProvider serviceProvider = new ServiceCollection()
             .AddSingleton<ApiServer>()

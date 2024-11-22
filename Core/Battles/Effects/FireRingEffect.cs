@@ -35,8 +35,16 @@ public class FireRingEffect(
             MinDamageRadius,
             MaxDamageRadius);
 
-        WeaponHandler = new FireRingWeaponHandler(Tank, cooldown, marketEntity, Entity, temperatureLimit, temperatureDelta, heatDamage,
-            minDamagePercent, MinDamageRadius, MaxDamageRadius);
+        WeaponHandler = new FireRingWeaponHandler(Tank,
+            cooldown,
+            marketEntity,
+            Entity,
+            temperatureLimit,
+            temperatureDelta,
+            heatDamage,
+            minDamagePercent,
+            MinDamageRadius,
+            MaxDamageRadius);
 
         await ShareToAllPlayers();
         Schedule(TimeSpan.FromSeconds(10), Deactivate);

@@ -11,19 +11,24 @@ namespace Vint.Core.Battles.Modules.Types;
 public class EnergyInjectionModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/energyinjection";
 
-    public override EnergyInjectionEffect GetEffect() => new(Tank, Level, ReloadEnergyPercent);
-
     float ReloadEnergyPercent { get; set; }
+
+    public override EnergyInjectionEffect GetEffect() => new(Tank, Level, ReloadEnergyPercent);
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        EnergyInjectionEffect? effect = Tank.Effects.OfType<EnergyInjectionEffect>().SingleOrDefault();
+        EnergyInjectionEffect? effect = Tank
+            .Effects
+            .OfType<EnergyInjectionEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

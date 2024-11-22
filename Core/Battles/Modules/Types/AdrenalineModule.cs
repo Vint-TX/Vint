@@ -20,6 +20,12 @@ public class AdrenalineModule : PassiveBattleModule, IHealthModule {
 
     AdrenalineEffect? Effect { get; set; }
 
+    public async Task OnHealthChanged(float before, float current, float max) {
+        if (current > HpToTrigger ||
+            current == 0) await TryDeactivate();
+        else await Activate();
+    }
+
     public override AdrenalineEffect GetEffect() => new(Tank, Level, CooldownSpeedCoeff, DamageMultiplier);
 
     public override async Task Activate() {
@@ -29,11 +35,6 @@ public class AdrenalineModule : PassiveBattleModule, IHealthModule {
         Effect.Deactivated += Deactivated;
         await Effect.Activate();
         await base.Activate();
-    }
-
-    public async Task OnHealthChanged(float before, float current, float max) {
-        if (current > HpToTrigger || current == 0) await TryDeactivate();
-        else await Activate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

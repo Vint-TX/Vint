@@ -14,11 +14,15 @@ public abstract class DiscreteTankWeaponHandler : TankWeaponHandler, IDiscreteWe
             MinDamage = minDamageComponent.FinalValue;
             MaxDamage = maxDamageComponent.FinalValue;
         } else {
-            MinDamage = ConfigManager.GetComponent<AimingMinDamagePropertyComponent>(MarketConfigPath).FinalValue;
-            MaxDamage = ConfigManager.GetComponent<AimingMaxDamagePropertyComponent>(MarketConfigPath).FinalValue;
+            MinDamage = ConfigManager.GetComponent<AimingMinDamagePropertyComponent>(MarketConfigPath)
+                .FinalValue;
+
+            MaxDamage = ConfigManager.GetComponent<AimingMaxDamagePropertyComponent>(MarketConfigPath)
+                .FinalValue;
         }
 
-        Cooldown = TimeSpan.FromSeconds(ConfigManager.GetComponent<WeaponCooldownComponent>(MarketConfigPath).CooldownIntervalSec);
+        Cooldown = TimeSpan.FromSeconds(ConfigManager.GetComponent<WeaponCooldownComponent>(MarketConfigPath)
+            .CooldownIntervalSec);
     }
 
     public float MinDamage { get; }
@@ -26,13 +30,17 @@ public abstract class DiscreteTankWeaponHandler : TankWeaponHandler, IDiscreteWe
 
     public override async Task Fire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
+
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
+        if (targetTank.StateManager.CurrentState is not Active ||
+            !isEnemy) return;
 
         CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);

@@ -12,11 +12,16 @@ public class SonarModule : ActiveBattleModule {
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        SonarEffect? effect = Tank.Effects.OfType<SonarEffect>().SingleOrDefault();
+        SonarEffect? effect = Tank
+            .Effects
+            .OfType<SonarEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 }

@@ -53,28 +53,28 @@ using Vint.Core.Utils;
 namespace Vint.Core.Server.Game;
 
 public interface IPlayerConnection {
-    public ILogger Logger { get; }
+    ILogger Logger { get; }
 
-    public Player Player { get; set; }
-    public BattlePlayer? BattlePlayer { get; set; }
-    public IEntity User { get; }
-    public IEntity ClientSession { get; }
+    Player Player { get; set; }
+    BattlePlayer? BattlePlayer { get; set; }
+    IEntity User { get; }
+    IEntity ClientSession { get; }
 
-    public bool IsOnline { get; }
-    public bool InLobby { get; }
-    public DateTimeOffset PingSendTime { set; }
-    public DateTimeOffset PongReceiveTime { set; }
-    public long Ping { get; }
-    public Invite? Invite { get; set; }
+    bool IsOnline { get; }
+    bool InLobby { get; }
+    DateTimeOffset PingSendTime { set; }
+    DateTimeOffset PongReceiveTime { set; }
+    long Ping { get; }
+    Invite? Invite { get; set; }
 
-    public string? RestorePasswordCode { get; set; }
-    public bool RestorePasswordCodeValid { get; set; }
+    string? RestorePasswordCode { get; set; }
+    bool RestorePasswordCodeValid { get; set; }
 
-    public int BattleSeries { get; set; }
+    int BattleSeries { get; set; }
 
-    public ConcurrentHashSet<IEntity> SharedEntities { get; }
+    ConcurrentHashSet<IEntity> SharedEntities { get; }
 
-    public Task Register(
+    Task Register(
         string username,
         string encryptedPasswordDigest,
         string email,
@@ -83,74 +83,73 @@ public interface IPlayerConnection {
         bool steam,
         bool quickRegistration);
 
-    public Task Login(
-        bool saveAutoLoginToken,
-        bool rememberMe,
-        string hardwareFingerprint);
+    Task Login(bool saveAutoLoginToken, bool rememberMe, string hardwareFingerprint);
 
-    public Task ChangePassword(string passwordDigest);
+    Task ChangePassword(string passwordDigest);
 
-    public Task ChangeReputation(int delta);
+    Task ChangeReputation(int delta);
 
-    public Task CheckRankUp();
+    Task CheckRankUp();
 
-    public Task ChangeExperience(int delta);
+    Task ChangeExperience(int delta);
 
-    public Task ChangeGameplayChestScore(int delta);
+    Task ChangeGameplayChestScore(int delta);
 
-    public Task PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount);
+    Task PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount);
 
-    public Task MountItem(IEntity userItem);
+    Task MountItem(IEntity userItem);
 
-    public Task AssembleModule(IEntity marketItem);
+    Task AssembleModule(IEntity marketItem);
 
-    public Task UpgradeModule(IEntity userItem, bool forXCrystals);
+    Task UpgradeModule(IEntity userItem, bool forXCrystals);
 
-    public Task<bool> OwnsItem(IEntity marketItem);
+    Task<bool> OwnsItem(IEntity marketItem);
 
-    public Task SetUsername(string username);
+    Task SetUsername(string username);
 
-    public Task ChangeCrystals(long delta);
+    Task ChangeCrystals(long delta);
 
-    public Task ChangeXCrystals(long delta);
+    Task ChangeXCrystals(long delta);
 
-    public Task SetGoldBoxes(int goldBoxes);
+    Task SetGoldBoxes(int goldBoxes);
 
-    public Task DisplayMessage(string message, TimeSpan? closeTime = null);
+    Task DisplayMessage(string message, TimeSpan? closeTime = null);
 
-    public Task SetClipboard(string content);
+    Task SetClipboard(string content);
 
-    public Task OpenURL(string url);
+    Task OpenURL(string url);
 
-    public Task Kick(string? reason);
+    Task Kick(string? reason);
 
-    public Task Send(ICommand command);
+    Task Send(ICommand command);
 
-    public Task Send(IEvent @event);
+    Task Send(IEvent @event);
 
-    public Task Send(IEvent @event, params IEntity[] entities);
+    Task Send(IEvent @event, params IEntity[] entities);
 
-    public Task Share(IEntity entity);
+    Task Share(IEntity entity);
 
-    public Task ShareIfUnshared(IEntity entity);
+    Task ShareIfUnshared(IEntity entity);
 
-    public Task Unshare(IEntity entity);
+    Task Unshare(IEntity entity);
 
-    public Task UnshareIfShared(IEntity entity);
+    Task UnshareIfShared(IEntity entity);
 
-    public void Schedule(TimeSpan delay, Action action);
+    void Schedule(TimeSpan delay, Action action);
 
-    public void Schedule(DateTimeOffset time, Action action);
+    void Schedule(DateTimeOffset time, Action action);
 
-    public void Schedule(TimeSpan delay, Func<Task> action);
+    void Schedule(TimeSpan delay, Func<Task> action);
 
-    public void Schedule(DateTimeOffset time, Func<Task> action);
+    void Schedule(DateTimeOffset time, Func<Task> action);
 
-    public Task Tick();
+    Task Tick();
 }
 
 public abstract class PlayerConnection : IPlayerConnection {
     public Guid Id { get; } = Guid.NewGuid();
+    ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
+    ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
     public ILogger Logger { get; protected set; } = Log.Logger.ForType(typeof(PlayerConnection));
 
     public Player Player { get; set; } = null!;
@@ -159,8 +158,6 @@ public abstract class PlayerConnection : IPlayerConnection {
     public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
     public ConcurrentHashSet<IEntity> SharedEntities { get; } = [];
-    ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
-    ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
     public string? RestorePasswordCode { get; set; }
     public bool RestorePasswordCodeValid { get; set; }
@@ -192,7 +189,8 @@ public abstract class PlayerConnection : IPlayerConnection {
             Id = EntityRegistry.GenerateId(),
             Username = username,
             Email = email,
-            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
+            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>()
+                .LocaleCode,
             HardwareFingerprint = hardwareFingerprint,
             Subscribed = subscribed,
             RegistrationTime = DateTimeOffset.UtcNow,
@@ -215,10 +213,7 @@ public abstract class PlayerConnection : IPlayerConnection {
         await Login(true, true, hardwareFingerprint);
     }
 
-    public async Task Login(
-        bool saveAutoLoginToken,
-        bool rememberMe,
-        string hardwareFingerprint) {
+    public async Task Login(bool saveAutoLoginToken, bool rememberMe, string hardwareFingerprint) {
         Logger = Logger.WithPlayer((SocketPlayerConnection)this);
 
         Player.RememberMe = rememberMe;
@@ -260,7 +255,9 @@ public abstract class PlayerConnection : IPlayerConnection {
         Player.PasswordHash = passwordHash;
 
         await using DbConnection db = new();
-        await db.Players
+
+        await db
+            .Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.PasswordHash, Player.PasswordHash)
             .UpdateAsync();
@@ -272,13 +269,11 @@ public abstract class PlayerConnection : IPlayerConnection {
         await using DbConnection db = new();
         await db.BeginTransactionAsync();
 
-        SeasonStatistics seasonStats = await db.SeasonStatistics
-            .SingleAsync(stats => stats.PlayerId == Player.Id &&
-                                  stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber);
+        SeasonStatistics seasonStats = await db.SeasonStatistics.SingleAsync(stats =>
+            stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber);
 
-        ReputationStatistics? reputationStats = await db.ReputationStatistics
-            .SingleOrDefaultAsync(repStats => repStats.PlayerId == Player.Id &&
-                                              repStats.Date == date);
+        ReputationStatistics? reputationStats =
+            await db.ReputationStatistics.SingleOrDefaultAsync(repStats => repStats.PlayerId == Player.Id && repStats.Date == date);
 
         League oldLeagueIndex = Player.League;
         uint oldReputation = Player.Reputation;
@@ -329,14 +324,15 @@ public abstract class PlayerConnection : IPlayerConnection {
         await using DbConnection db = new();
         await db.BeginTransactionAsync();
 
-        await db.Players
+        await db
+            .Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.Experience, player => player.Experience + delta)
             .UpdateAsync();
 
-        await db.SeasonStatistics
-            .Where(stats => stats.PlayerId == Player.Id &&
-                            stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
+        await db
+            .SeasonStatistics
+            .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.ExperienceEarned, stats => stats.ExperienceEarned + delta)
             .UpdateAsync();
 
@@ -353,7 +349,13 @@ public abstract class PlayerConnection : IPlayerConnection {
 
         if (earned != 0) {
             Player.GameplayChestScore -= earned * scoreLimit;
-            await PurchaseItem(Player.LeagueEntity.GetComponent<ChestBattleRewardComponent>().Chest, earned, 0, false, false);
+
+            await PurchaseItem(Player.LeagueEntity.GetComponent<ChestBattleRewardComponent>()
+                    .Chest,
+                earned,
+                0,
+                false,
+                false);
         }
 
         try {
@@ -402,10 +404,7 @@ public abstract class PlayerConnection : IPlayerConnection {
         };
 
         static int CalculateXCrystals(int rankIndex) =>
-            rankIndex == 100 ? 100 :
-            rankIndex % 10 == 0 ? 50 :
-            rankIndex % 5 == 0 ? 20 :
-            0;
+            rankIndex == 100 ? 100 : rankIndex % 10 == 0 ? 50 : rankIndex % 5 == 0 ? 20 : 0;
     }
 
     public async Task PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount) {
@@ -470,7 +469,8 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
 
             case HullSkinMarketItemTemplate: {
-                long hullId = marketItem.GetComponent<ParentGroupComponent>().Key;
+                long hullId = marketItem.GetComponent<ParentGroupComponent>()
+                    .Key;
 
                 if (!await db.Hulls.AnyAsync(hull => hull.PlayerId == Player.Id && hull.Id == hullId)) return;
 
@@ -479,7 +479,8 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
 
             case WeaponSkinMarketItemTemplate: {
-                long weaponId = marketItem.GetComponent<ParentGroupComponent>().Key;
+                long weaponId = marketItem.GetComponent<ParentGroupComponent>()
+                    .Key;
 
                 if (!await db.Weapons.AnyAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == weaponId)) return;
 
@@ -498,7 +499,8 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
 
             case ShellMarketItemTemplate: {
-                long weaponId = marketItem.GetComponent<ParentGroupComponent>().Key;
+                long weaponId = marketItem.GetComponent<ParentGroupComponent>()
+                    .Key;
 
                 if (!await db.Weapons.AnyAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == weaponId)) return;
 
@@ -507,7 +509,9 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
 
             case ModuleCardMarketItemTemplate: {
-                long moduleId = marketItem.GetComponent<ParentGroupComponent>().Key;
+                long moduleId = marketItem.GetComponent<ParentGroupComponent>()
+                    .Key;
+
                 Module? module = Player.Modules.SingleOrDefault(module => module.Id == moduleId);
 
                 if (module == null) {
@@ -544,7 +548,10 @@ public abstract class PlayerConnection : IPlayerConnection {
                 break;
 
             case PresetMarketItemTemplate: {
-                List<Preset> presets = await db.Presets.Where(preset => preset.PlayerId == Player.Id).ToListAsync();
+                List<Preset> presets = await db
+                    .Presets
+                    .Where(preset => preset.PlayerId == Player.Id)
+                    .ToListAsync();
 
                 Preset preset = new() { Player = Player, Index = presets.Count, Name = $"Preset {presets.Count + 1}" };
                 userItem = GlobalEntities.GetEntity("misc", "Preset");
@@ -564,7 +571,10 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
 
             default:
-                Logger.Error("{Name} purchase is not implemented", template?.GetType().Name);
+                Logger.Error("{Name} purchase is not implemented",
+                    template?.GetType()
+                        .Name);
+
                 throw new NotImplementedException();
         }
 
@@ -592,7 +602,10 @@ public abstract class PlayerConnection : IPlayerConnection {
         await using (DbConnection db = new()) {
             switch (userItem.TemplateAccessor!.Template) {
                 case AvatarUserItemTemplate: {
-                    await this.GetEntity(Player.CurrentAvatarId)!.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await this.GetEntity(Player.CurrentAvatarId)!
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     await userItem.AddComponent<MountedItemComponent>();
 
                     Player.CurrentAvatarId = marketItem.Id;
@@ -603,7 +616,11 @@ public abstract class PlayerConnection : IPlayerConnection {
                 }
 
                 case GraffitiUserItemTemplate: {
-                    await currentPreset.Graffiti.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset
+                        .Graffiti
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.Graffiti = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
 
@@ -613,20 +630,37 @@ public abstract class PlayerConnection : IPlayerConnection {
 
                 case TankUserItemTemplate: {
                     changeEquipment = true;
-                    await currentPreset.Hull.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+
+                    await currentPreset
+                        .Hull
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.Hull = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
-                    currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetHullId(currentPreset.Hull.Id);
 
-                    Hull newHull = await db.Hulls
+                    currentPreset.Entity!
+                        .GetComponent<PresetEquipmentComponent>()
+                        .SetHullId(currentPreset.Hull.Id);
+
+                    Hull newHull = await db
+                        .Hulls
                         .Where(hull => hull.PlayerId == Player.Id)
                         .SingleAsync(hull => hull.Id == currentPreset.Hull.Id);
 
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newHull.SkinId);
 
-                    await currentPreset.HullSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset
+                        .HullSkin
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.HullSkin = skin;
-                    await currentPreset.HullSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+
+                    await currentPreset
+                        .HullSkin
+                        .GetUserEntity(this)
+                        .AddComponentIfAbsent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
@@ -634,32 +668,58 @@ public abstract class PlayerConnection : IPlayerConnection {
 
                 case WeaponUserItemTemplate: {
                     changeEquipment = true;
-                    await currentPreset.Weapon.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+
+                    await currentPreset
+                        .Weapon
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.Weapon = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
-                    currentPreset.Entity!.GetComponent<PresetEquipmentComponent>().SetWeaponId(currentPreset.Weapon.Id);
 
-                    Weapon newWeapon = await db.Weapons
+                    currentPreset.Entity!
+                        .GetComponent<PresetEquipmentComponent>()
+                        .SetWeaponId(currentPreset.Weapon.Id);
+
+                    Weapon newWeapon = await db
+                        .Weapons
                         .Where(weapon => weapon.PlayerId == Player.Id)
                         .SingleAsync(weapon => weapon.Id == currentPreset.Weapon.Id);
 
                     IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.SkinId);
                     IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == newWeapon.ShellId);
 
-                    await currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
-                    currentPreset.WeaponSkin = skin;
-                    await currentPreset.WeaponSkin.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+                    await currentPreset
+                        .WeaponSkin
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
 
-                    await currentPreset.Shell.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    currentPreset.WeaponSkin = skin;
+
+                    await currentPreset
+                        .WeaponSkin
+                        .GetUserEntity(this)
+                        .AddComponentIfAbsent<MountedItemComponent>();
+
+                    await currentPreset
+                        .Shell
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.Shell = shell;
-                    await currentPreset.Shell.GetUserEntity(this).AddComponentIfAbsent<MountedItemComponent>();
+
+                    await currentPreset
+                        .Shell
+                        .GetUserEntity(this)
+                        .AddComponentIfAbsent<MountedItemComponent>();
 
                     await db.UpdateAsync(currentPreset);
                     break;
                 }
 
                 case HullSkinUserItemTemplate: {
-                    HullSkin skin = await db.HullSkins
+                    HullSkin skin = await db
+                        .HullSkins
                         .Where(skin => skin.PlayerId == Player.Id)
                         .SingleAsync(skin => skin.Id == marketItem.Id);
 
@@ -674,13 +734,17 @@ public abstract class PlayerConnection : IPlayerConnection {
                         await MountItem(newUserHull);
                     }
 
-                    await currentPreset.HullSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    await currentPreset
+                        .HullSkin
+                        .GetUserEntity(this)
+                        .RemoveComponentIfPresent<MountedItemComponent>();
+
                     currentPreset.HullSkin = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
 
-                    await db.Hulls
-                        .Where(hull => hull.PlayerId == Player.Id &&
-                                       hull.Id == skin.HullId)
+                    await db
+                        .Hulls
+                        .Where(hull => hull.PlayerId == Player.Id && hull.Id == skin.HullId)
                         .Set(hull => hull.SkinId, skin.Id)
                         .UpdateAsync();
 
@@ -689,14 +753,16 @@ public abstract class PlayerConnection : IPlayerConnection {
                 }
 
                 case WeaponSkinUserItemTemplate: {
-                    WeaponSkin skin = await db.WeaponSkins
+                    WeaponSkin skin = await db
+                        .WeaponSkins
                         .Where(skin => skin.PlayerId == Player.Id)
                         .SingleAsync(skin => skin.Id == marketItem.Id);
 
                     bool isCurrentWeapon = skin.WeaponId == currentPreset.Weapon.Id;
 
                     if (!isCurrentWeapon) {
-                        Weapon? newWeapon = await db.Weapons.SingleOrDefaultAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == skin.WeaponId);
+                        Weapon? newWeapon =
+                            await db.Weapons.SingleOrDefaultAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == skin.WeaponId);
 
                         if (newWeapon == null) return;
 
@@ -704,13 +770,17 @@ public abstract class PlayerConnection : IPlayerConnection {
                         await MountItem(newUserWeapon);
                     }
 
-                    await currentPreset.WeaponSkin.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    await currentPreset
+                        .WeaponSkin
+                        .GetUserEntity(this)
+                        .RemoveComponentIfPresent<MountedItemComponent>();
+
                     currentPreset.WeaponSkin = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
 
-                    await db.Weapons
-                        .Where(weapon => weapon.PlayerId == Player.Id &&
-                                         weapon.Id == currentPreset.Weapon.Id)
+                    await db
+                        .Weapons
+                        .Where(weapon => weapon.PlayerId == Player.Id && weapon.Id == currentPreset.Weapon.Id)
                         .Set(weapon => weapon.SkinId, currentPreset.WeaponSkin.Id)
                         .UpdateAsync();
 
@@ -719,7 +789,11 @@ public abstract class PlayerConnection : IPlayerConnection {
                 }
 
                 case TankPaintUserItemTemplate: {
-                    await currentPreset.Paint.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset
+                        .Paint
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.Paint = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
 
@@ -728,7 +802,11 @@ public abstract class PlayerConnection : IPlayerConnection {
                 }
 
                 case WeaponPaintUserItemTemplate: {
-                    await currentPreset.Cover.GetUserEntity(this).RemoveComponent<MountedItemComponent>();
+                    await currentPreset
+                        .Cover
+                        .GetUserEntity(this)
+                        .RemoveComponent<MountedItemComponent>();
+
                     currentPreset.Cover = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
 
@@ -737,14 +815,16 @@ public abstract class PlayerConnection : IPlayerConnection {
                 }
 
                 case ShellUserItemTemplate: {
-                    Shell shell = await db.Shells
+                    Shell shell = await db
+                        .Shells
                         .Where(shell => shell.PlayerId == Player.Id)
                         .SingleAsync(shell => shell.Id == marketItem.Id);
 
                     bool isCurrentWeapon = shell.WeaponId == currentPreset.Weapon.Id;
 
                     if (!isCurrentWeapon) {
-                        Weapon? newWeapon = await db.Weapons.SingleOrDefaultAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == shell.WeaponId);
+                        Weapon? newWeapon =
+                            await db.Weapons.SingleOrDefaultAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == shell.WeaponId);
 
                         if (newWeapon == null) return;
 
@@ -752,13 +832,17 @@ public abstract class PlayerConnection : IPlayerConnection {
                         await MountItem(newUserWeapon);
                     }
 
-                    await currentPreset.Shell.GetUserEntity(this).RemoveComponentIfPresent<MountedItemComponent>();
+                    await currentPreset
+                        .Shell
+                        .GetUserEntity(this)
+                        .RemoveComponentIfPresent<MountedItemComponent>();
+
                     currentPreset.Shell = marketItem;
                     await userItem.AddComponent<MountedItemComponent>();
 
-                    await db.Weapons
-                        .Where(weapon => weapon.PlayerId == Player.Id &&
-                                         weapon.Id == currentPreset.Weapon.Id)
+                    await db
+                        .Weapons
+                        .Where(weapon => weapon.PlayerId == Player.Id && weapon.Id == currentPreset.Weapon.Id)
                         .Set(weapon => weapon.ShellId, currentPreset.Shell.Id)
                         .UpdateAsync();
 
@@ -772,12 +856,10 @@ public abstract class PlayerConnection : IPlayerConnection {
 
                     if (newPreset == null) return;
 
-                    Dictionary<IEntity, IEntity> slotToCurrentModule = currentPreset.Modules.ToDictionary(
-                        pModule => pModule.GetSlotEntity(this),
+                    Dictionary<IEntity, IEntity> slotToCurrentModule = currentPreset.Modules.ToDictionary(pModule => pModule.GetSlotEntity(this),
                         pModule => pModule.Entity.GetUserModule(this));
 
-                    Dictionary<IEntity, IEntity> slotToNewModule = newPreset.Modules.ToDictionary(
-                        pModule => pModule.GetSlotEntity(this),
+                    Dictionary<IEntity, IEntity> slotToNewModule = newPreset.Modules.ToDictionary(pModule => pModule.GetSlotEntity(this),
                         pModule => pModule.Entity.GetUserModule(this));
 
                     foreach (IEntity entity in new[] {
@@ -819,10 +901,13 @@ public abstract class PlayerConnection : IPlayerConnection {
                     }
 
                     Player.CurrentPresetIndex = newPreset.Index;
-                    await db.Players
+
+                    await db
+                        .Players
                         .Where(player => player.Id == Player.Id)
                         .Set(player => player.CurrentPresetIndex, () => Player.CurrentPresetIndex)
                         .UpdateAsync();
+
                     break;
                 }
 
@@ -830,7 +915,8 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
         }
 
-        if (!changeEquipment || !User.HasComponent<UserEquipmentComponent>()) return;
+        if (!changeEquipment ||
+            !User.HasComponent<UserEquipmentComponent>()) return;
 
         await User.RemoveComponent<UserEquipmentComponent>();
         await User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
@@ -845,14 +931,17 @@ public abstract class PlayerConnection : IPlayerConnection {
             return;
         }
 
-        module.Cards -= marketItem.GetComponent<ModuleCardsCompositionComponent>().CraftPrice.Cards;
+        module.Cards -= marketItem.GetComponent<ModuleCardsCompositionComponent>()
+            .CraftPrice.Cards;
+
         module.Level++;
 
         await db.UpdateAsync(module);
 
-        IEntity card = SharedEntities.Single(entity =>
-            entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
-            entity.GetComponent<ParentGroupComponent>().Key == marketItem.Id);
+        IEntity card = SharedEntities.Single(entity => entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
+                                                       entity.GetComponent<ParentGroupComponent>()
+                                                           .Key ==
+                                                       marketItem.Id);
 
         IEntity userItem = marketItem.GetUserModule(this);
 
@@ -864,14 +953,16 @@ public abstract class PlayerConnection : IPlayerConnection {
     }
 
     public async Task UpgradeModule(IEntity userItem, bool forXCrystals) {
-        long id = userItem.GetComponent<ParentGroupComponent>().Key;
+        long id = userItem.GetComponent<ParentGroupComponent>()
+            .Key;
 
         await using DbConnection db = new();
 
         Module? module = Player.Modules.SingleOrDefault(module => module.Id == id);
         ModuleCardsCompositionComponent compositionComponent = userItem.GetComponent<ModuleCardsCompositionComponent>();
 
-        if (module == null || module.Level >= compositionComponent.UpgradePrices.Count) {
+        if (module == null ||
+            module.Level >= compositionComponent.UpgradePrices.Count) {
             Logger.Error("Module {Id} is not upgradable", id);
             return;
         }
@@ -884,8 +975,8 @@ public abstract class PlayerConnection : IPlayerConnection {
         }
 
         bool crystalsEnough = forXCrystals
-                                  ? price.XCrystals <= Player.XCrystals
-                                  : price.Crystals <= Player.Crystals;
+            ? price.XCrystals <= Player.XCrystals
+            : price.Crystals <= Player.Crystals;
 
         if (!crystalsEnough) {
             Logger.Error("Not enough (x)crystals to upgrade module {Id}", id);
@@ -900,9 +991,10 @@ public abstract class PlayerConnection : IPlayerConnection {
 
         await db.UpdateAsync(module);
 
-        IEntity card = SharedEntities.Single(entity =>
-            entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
-            entity.GetComponent<ParentGroupComponent>().Key == id);
+        IEntity card = SharedEntities.Single(entity => entity.TemplateAccessor?.Template is ModuleCardUserItemTemplate &&
+                                                       entity.GetComponent<ParentGroupComponent>()
+                                                           .Key ==
+                                                       id);
 
         await card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
         await userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
@@ -918,16 +1010,20 @@ public abstract class PlayerConnection : IPlayerConnection {
             TankMarketItemTemplate => await db.Hulls.AnyAsync(hull => hull.PlayerId == Player.Id && hull.Id == marketItem.Id),
             WeaponMarketItemTemplate => await db.Weapons.AnyAsync(weapon => weapon.PlayerId == Player.Id && weapon.Id == marketItem.Id),
             HullSkinMarketItemTemplate => await db.HullSkins.AnyAsync(hullSkin => hullSkin.PlayerId == Player.Id && hullSkin.Id == marketItem.Id),
-            WeaponSkinMarketItemTemplate => await db.WeaponSkins.AnyAsync(weaponSkin => weaponSkin.PlayerId == Player.Id && weaponSkin.Id == marketItem.Id),
+            WeaponSkinMarketItemTemplate => await db.WeaponSkins.AnyAsync(weaponSkin =>
+                weaponSkin.PlayerId == Player.Id && weaponSkin.Id == marketItem.Id),
             TankPaintMarketItemTemplate => await db.Paints.AnyAsync(paint => paint.PlayerId == Player.Id && paint.Id == marketItem.Id),
             WeaponPaintMarketItemTemplate => await db.Covers.AnyAsync(cover => cover.PlayerId == Player.Id && cover.Id == marketItem.Id),
             ShellMarketItemTemplate => await db.Shells.AnyAsync(shell => shell.PlayerId == Player.Id && shell.Id == marketItem.Id),
             GraffitiMarketItemTemplate => await db.Graffities.AnyAsync(graffiti => graffiti.PlayerId == Player.Id && graffiti.Id == marketItem.Id),
-            ChildGraffitiMarketItemTemplate => await db.Graffities.AnyAsync(graffiti => graffiti.PlayerId == Player.Id && graffiti.Id == marketItem.Id),
-            ContainerPackPriceMarketItemTemplate => await db.Containers.AnyAsync(container => container.PlayerId == Player.Id && container.Id == marketItem.Id),
+            ChildGraffitiMarketItemTemplate => await db.Graffities.AnyAsync(
+                graffiti => graffiti.PlayerId == Player.Id && graffiti.Id == marketItem.Id),
+            ContainerPackPriceMarketItemTemplate => await db.Containers.AnyAsync(container =>
+                container.PlayerId == Player.Id && container.Id == marketItem.Id),
             DonutChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
             GameplayChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
-            TutorialGameplayChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
+            TutorialGameplayChestMarketItemTemplate =>
+                await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
             _ => false
         };
     }
@@ -938,7 +1034,9 @@ public abstract class PlayerConnection : IPlayerConnection {
         await User.ChangeComponent<UserUidComponent>(component => component.Username = username);
 
         await using DbConnection db = new();
-        await db.Players
+
+        await db
+            .Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.Username, username)
             .UpdateAsync();
@@ -951,18 +1049,21 @@ public abstract class PlayerConnection : IPlayerConnection {
         await db.BeginTransactionAsync();
 
         if (delta > 0) {
-            await db.Statistics
+            await db
+                .Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
                 .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)delta)
                 .UpdateAsync();
 
-            await db.SeasonStatistics
+            await db
+                .SeasonStatistics
                 .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
                 .Set(stats => stats.CrystalsEarned, stats => stats.CrystalsEarned + (ulong)delta)
                 .UpdateAsync();
         }
 
-        await db.Players
+        await db
+            .Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.Crystals, player => player.Crystals + delta)
             .UpdateAsync();
@@ -977,18 +1078,21 @@ public abstract class PlayerConnection : IPlayerConnection {
         await db.BeginTransactionAsync();
 
         if (delta > 0) {
-            await db.Statistics
+            await db
+                .Statistics
                 .Where(stats => stats.PlayerId == Player.Id)
                 .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)delta)
                 .UpdateAsync();
 
-            await db.SeasonStatistics
+            await db
+                .SeasonStatistics
                 .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
                 .Set(stats => stats.XCrystalsEarned, stats => stats.XCrystalsEarned + (ulong)delta)
                 .UpdateAsync();
         }
 
-        await db.Players
+        await db
+            .Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.XCrystals, player => player.XCrystals + delta)
             .UpdateAsync();
@@ -1001,7 +1105,8 @@ public abstract class PlayerConnection : IPlayerConnection {
     public async Task SetGoldBoxes(int goldBoxes) {
         await using DbConnection db = new();
 
-        await db.Players
+        await db
+            .Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.GoldBoxItems, goldBoxes)
             .UpdateAsync();
@@ -1077,9 +1182,8 @@ public abstract class PlayerConnection : IPlayerConnection {
     public override int GetHashCode() => Id.GetHashCode();
 
     [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
-    public override string ToString() => $"PlayerConnection {{ " +
-                                         $"ClientSession Id: '{ClientSession?.Id}'; " +
-                                         $"Username: '{Player?.Username}' }}";
+    public override string ToString() =>
+        $"PlayerConnection {{ " + $"ClientSession Id: '{ClientSession?.Id}'; " + $"Username: '{Player?.Username}' }}";
 }
 
 public class SocketPlayerConnection(
@@ -1126,7 +1230,10 @@ public class SocketPlayerConnection(
             Logger.Verbose("Encoding {Command}", command);
 
             ProtocolBuffer buffer = new(new OptionalMap(), this);
-            Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand))).Encode(buffer, command);
+
+            Protocol
+                .GetCodec(new TypeCodecInfo(typeof(ICommand)))
+                .Encode(buffer, command);
 
             using MemoryStream stream = new();
             await using BinaryWriter writer = new BigEndianBinaryWriter(stream);
@@ -1167,7 +1274,8 @@ public class SocketPlayerConnection(
                 foreach (IPlayerConnection connection in User.SharedPlayers.Where(connection => !connection.InLobby)) {
                     try {
                         await connection.Unshare(User);
-                    } catch { /**/ }
+                    } catch { /**/
+                    }
                 }
 
                 try {
@@ -1179,13 +1287,15 @@ public class SocketPlayerConnection(
                 foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == User.Id)) {
                     try {
                         ConfigManager.DiscordLinkRequests.TryRemove(request);
-                    } catch { /**/ }
+                    } catch { /**/
+                    }
                 }
             }
 
             if (!InLobby) return;
 
-            if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
+            if (BattlePlayer!.InBattleAsTank ||
+                BattlePlayer.IsSpectator)
                 await BattlePlayer.Battle.RemovePlayer(BattlePlayer);
             else
                 await BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
@@ -1198,9 +1308,11 @@ public class SocketPlayerConnection(
                 entity.SharedPlayers.TryRemove(this);
 
                 try {
-                    if (entity.SharedPlayers.Count == 0 && !EntityRegistry.TryRemoveTemp(entity.Id))
+                    if (entity.SharedPlayers.Count == 0 &&
+                        !EntityRegistry.TryRemoveTemp(entity.Id))
                         EntityRegistry.Remove(entity.Id);
-                } catch { /**/ }
+                } catch { /**/
+                }
             }
 
             SharedEntities.Clear();
@@ -1237,7 +1349,8 @@ public class SocketPlayerConnection(
             while (availableForRead > 0) {
                 Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
 
-                ICommand command = (ICommand)Protocol.GetCodec(new TypeCodecInfo(typeof(ICommand)))
+                ICommand command = (ICommand)Protocol
+                    .GetCodec(new TypeCodecInfo(typeof(ICommand)))
                     .Decode(buffer);
 
                 try {

@@ -17,10 +17,7 @@ public class UserModule(
     GameServer server
 ) : ChatCommandModule {
     [ChatCommand("help", "Show list of commands or usage of specified command")]
-    public async Task Help(
-        ChatCommandContext ctx,
-        [Option("command", "Name of command to get help", true)]
-        string commandName = "") {
+    public async Task Help(ChatCommandContext ctx, [Option("command", "Name of command to get help", true)] string commandName = "") {
         if (!string.IsNullOrWhiteSpace(commandName)) {
             ChatCommand? command = ctx.ChatCommandProcessor.GetOrDefault(commandName);
 
@@ -38,7 +35,9 @@ public class UserModule(
 
             await ctx.SendPrivateResponse(command.ToString());
         } else {
-            IEnumerable<string> commands = ctx.ChatCommandProcessor.GetAll()
+            IEnumerable<string> commands = ctx
+                .ChatCommandProcessor
+                .GetAll()
                 .Where(command => {
                     RequirePermissionsAttribute? requirePermissionsAttribute = command.Method.GetCustomAttribute<RequirePermissionsAttribute>();
 

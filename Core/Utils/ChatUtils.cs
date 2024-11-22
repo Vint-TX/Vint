@@ -53,14 +53,20 @@ public static class ChatUtils {
 
         Dictionary<string, string> localizedStrings = Localization[receiverLocale];
 
-        long userId = isSystem ? 0 : sender!.Player.Id;
-        string avatarId = isSystem ? "" : sender!.User.GetComponent<UserAvatarComponent>().Id;
+        long userId = isSystem
+            ? 0
+            : sender!.Player.Id;
 
-        string username = isSystem ? localizedStrings["SystemUsername"]
-                          : isBlocked ? localizedStrings["BlockedUsername"]
-                          : sender!.Player.Username;
+        string avatarId = isSystem
+            ? ""
+            : sender!.User.GetComponent<UserAvatarComponent>()
+                .Id;
 
-        message = isBlocked ? localizedStrings["BlockedMessage"] : message;
+        string username = isSystem ? localizedStrings["SystemUsername"] : isBlocked ? localizedStrings["BlockedUsername"] : sender!.Player.Username;
+
+        message = isBlocked
+            ? localizedStrings["BlockedMessage"]
+            : message;
 
         return new ChatMessageReceivedEvent(username, message, userId, avatarId, isSystem);
     }
@@ -76,35 +82,42 @@ public static class ChatUtils {
     }
 
     // todo squads
-    public static IEnumerable<IPlayerConnection> GetReceivers(GameServer server, IPlayerConnection from, IEntity chat) => chat.TemplateAccessor?.Template switch {
-        GeneralChatTemplate => server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline),
+    public static IEnumerable<IPlayerConnection> GetReceivers(GameServer server, IPlayerConnection from, IEntity chat) =>
+        chat.TemplateAccessor?.Template switch {
+            GeneralChatTemplate => server.PlayerConnections.Values.Where(conn => conn.IsOnline),
 
-        BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players
-            .Select(battlePlayer => battlePlayer.PlayerConnection),
+            BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players.Select(battlePlayer => battlePlayer.PlayerConnection),
 
-        GeneralBattleChatTemplate => from.BattlePlayer!.Battle.Players
-            .Where(battlePlayer => battlePlayer.InBattle)
-            .Select(battlePlayer => battlePlayer.PlayerConnection),
+            GeneralBattleChatTemplate => from.BattlePlayer!
+                .Battle
+                .Players
+                .Where(battlePlayer => battlePlayer.InBattle)
+                .Select(battlePlayer => battlePlayer.PlayerConnection),
 
-        PersonalChatTemplate => chat.GetComponent<ChatParticipantsComponent>().Users
-            .ToList()
-            .Select(user => {
-                IPlayerConnection? connection = server.PlayerConnections.Values
-                    .Where(conn => conn.IsOnline)
-                    .SingleOrDefault(conn => conn.User.Id == user.Id);
+            PersonalChatTemplate => chat
+                .GetComponent<ChatParticipantsComponent>()
+                .Users
+                .ToList()
+                .Select(user => {
+                    IPlayerConnection? connection = server
+                        .PlayerConnections
+                        .Values
+                        .Where(conn => conn.IsOnline)
+                        .SingleOrDefault(conn => conn.User.Id == user.Id);
 
-                connection?.ShareIfUnshared(chat, from.User);
-                return connection!;
-            })
-            .Where(conn => conn != null!),
+                    connection?.ShareIfUnshared(chat, from.User);
+                    return connection!;
+                })
+                .Where(conn => conn != null!),
 
-        TeamBattleChatTemplate => from.BattlePlayer!.Battle.Players
-            .Where(battlePlayer => battlePlayer.TeamColor == from.BattlePlayer.TeamColor)
-            .Select(battlePlayer => battlePlayer.PlayerConnection),
+            TeamBattleChatTemplate => from.BattlePlayer!
+                .Battle
+                .Players
+                .Where(battlePlayer => battlePlayer.TeamColor == from.BattlePlayer.TeamColor)
+                .Select(battlePlayer => battlePlayer.PlayerConnection),
 
-        _ => []
-    };
+            _ => []
+        };
 
     public static IEntity GetChat(IPlayerConnection connection) {
         if (!connection.InLobby)
@@ -113,6 +126,8 @@ public static class ChatUtils {
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battle battle = battlePlayer.Battle;
 
-        return battlePlayer.InBattle ? battle.BattleChatEntity : battle.LobbyChatEntity;
+        return battlePlayer.InBattle
+            ? battle.BattleChatEntity
+            : battle.LobbyChatEntity;
     }
 }

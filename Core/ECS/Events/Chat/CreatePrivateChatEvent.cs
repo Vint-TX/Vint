@@ -17,7 +17,9 @@ public class CreatePrivateChatEvent : IServerEvent {
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server
+            .PlayerConnections
+            .Values
             .Where(playerConnection => playerConnection.IsOnline)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 
@@ -26,11 +28,18 @@ public class CreatePrivateChatEvent : IServerEvent {
             return Task.CompletedTask;
         }
 
-        IEntity? chat = connection.User.GetComponent<PersonalChatOwnerComponent>().Chats
-            .Concat(targetConnection.User.GetComponent<PersonalChatOwnerComponent>().Chats)
-            .Select(chat => new { Chat = chat, chat.GetComponent<ChatParticipantsComponent>().Users })
-            .FirstOrDefault(x => x.Users.Contains(connection.User) &&
-                                 x.Users.Contains(targetConnection.User))?.Chat;
+        IEntity? chat = connection
+            .User
+            .GetComponent<PersonalChatOwnerComponent>()
+            .Chats
+            .Concat(targetConnection.User.GetComponent<PersonalChatOwnerComponent>()
+                .Chats)
+            .Select(chat => new {
+                Chat = chat, chat.GetComponent<ChatParticipantsComponent>()
+                    .Users
+            })
+            .FirstOrDefault(x => x.Users.Contains(connection.User) && x.Users.Contains(targetConnection.User))
+            ?.Chat;
 
         if (chat == null) {
             chat = new PersonalChatTemplate().Create(connection.User, targetConnection.User);

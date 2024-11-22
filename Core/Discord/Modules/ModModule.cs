@@ -11,21 +11,21 @@ public class ModModule(
     GameServer gameServer
 ) {
     [Command("dmsg")]
-    public async Task DisplayMessage(
-        CommandContext ctx,
-        string username,
-        string message) {
+    public async Task DisplayMessage(CommandContext ctx, string username, string message) {
         await ctx.DeferResponseAsync();
 
         switch (username) {
             case "@a": {
                 foreach (IPlayerConnection connection in gameServer.PlayerConnections.Values)
                     await connection.DisplayMessage(message);
+
                 break;
             }
 
             default: {
-                IPlayerConnection? target = gameServer.PlayerConnections.Values
+                IPlayerConnection? target = gameServer
+                    .PlayerConnections
+                    .Values
                     .Where(conn => conn.IsOnline)
                     .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -45,13 +45,12 @@ public class ModModule(
     }
 
     [Command("kick")]
-    public async Task KickPlayer(
-        CommandContext ctx,
-        string username,
-        string? reason = null) {
+    public async Task KickPlayer(CommandContext ctx, string username, string? reason = null) {
         await ctx.DeferResponseAsync();
 
-        IPlayerConnection? targetConnection = gameServer.PlayerConnections.Values
+        IPlayerConnection? targetConnection = gameServer
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .SingleOrDefault(conn => conn.Player.Username == username);
 

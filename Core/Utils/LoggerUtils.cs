@@ -54,13 +54,14 @@ public static class LoggerUtils {
         LogEventLevel = logEventLevel;
 
         Log.Logger = new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .WriteTo.Console(new ExpressionTemplate(template, theme: Theme))
-            .WriteTo.File(new ExpressionTemplate(template),
-                "Vint.log",
-                rollingInterval: RollingInterval.Day,
-                rollOnFileSizeLimit: true)
-            .MinimumLevel.Is(LogEventLevel)
+            .Enrich
+            .FromLogContext()
+            .WriteTo
+            .Console(new ExpressionTemplate(template, theme: Theme))
+            .WriteTo
+            .File(new ExpressionTemplate(template), "Vint.log", rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
+            .MinimumLevel
+            .Is(LogEventLevel)
             .CreateLogger();
 
         Swan.Logging.Logger.UnregisterLogger<ConsoleLogger>();
@@ -78,17 +79,20 @@ public static class LoggerUtils {
 
     // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
     public static ILogger WithPlayer(this ILogger logger, SocketPlayerConnection player) =>
-        logger.WithEndPoint(player.EndPoint).ForContext("Username", player.Player?.Username);
+        logger
+            .WithEndPoint(player.EndPoint)
+            .ForContext("Username", player.Player?.Username);
 }
 
 [UsedImplicitly]
 public sealed class SerilogLogger : Swan.Logging.ILogger {
-    public LogLevel LogLevel { get; } = LoggerUtils.SwanToSerilogLogLevels.First(pair => pair.Value == LoggerUtils.LogEventLevel).Key;
-
     Dictionary<string, ILogger> SourceToLogger { get; } = new();
+    public LogLevel LogLevel { get; } = LoggerUtils.SwanToSerilogLogLevels.First(pair => pair.Value == LoggerUtils.LogEventLevel)
+        .Key;
 
     public void Log(LogMessageReceivedEventArgs logEvent) {
         LogEventLevel logLevel = LoggerUtils.SwanToSerilogLogLevels[logEvent.MessageType];
+
         ILogger logger = SourceToLogger.GetOrAdd(logEvent.Source ?? "SWAN",
             static source => Serilog.Log.Logger.ForContext(Constants.SourceContextPropertyName, source));
 

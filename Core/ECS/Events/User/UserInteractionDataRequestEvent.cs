@@ -17,13 +17,11 @@ public class UserInteractionDataRequestEvent : IServerEvent {
 
         if (player == null) return;
 
-        Relation? thisToTargetRelation = await db.Relations
-            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == connection.Player.Id &&
-                                              relation.TargetPlayerId == player.Id);
+        Relation? thisToTargetRelation = await db.Relations.SingleOrDefaultAsync(relation =>
+            relation.SourcePlayerId == connection.Player.Id && relation.TargetPlayerId == player.Id);
 
-        Relation? targetToThisRelation = await db.Relations
-            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == player.Id &&
-                                              relation.TargetPlayerId == connection.Player.Id);
+        Relation? targetToThisRelation = await db.Relations.SingleOrDefaultAsync(relation =>
+            relation.SourcePlayerId == player.Id && relation.TargetPlayerId == connection.Player.Id);
 
         bool noRelations = !IsFriend(thisToTargetRelation) &&
                            !IsBlocked(thisToTargetRelation) &&
@@ -41,6 +39,7 @@ public class UserInteractionDataRequestEvent : IServerEvent {
                 !noRelations && IsBlocked(thisToTargetRelation),
                 IsReported(thisToTargetRelation)),
             entities.Single());
+
         return;
 
         static bool IsFriend(Relation? relation) => (relation?.Types & RelationTypes.Friend) == RelationTypes.Friend;

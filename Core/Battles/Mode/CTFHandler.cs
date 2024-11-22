@@ -71,12 +71,19 @@ public class CTFHandler : TeamHandler {
         const int dominationDiff = 6;
 
         TeamColor dominationTeam = TeamColor.None;
-        int redScore = RedTeam.GetComponent<TeamScoreComponent>().Score;
-        int blueScore = BlueTeam.GetComponent<TeamScoreComponent>().Score;
+
+        int redScore = RedTeam.GetComponent<TeamScoreComponent>()
+            .Score;
+
+        int blueScore = BlueTeam.GetComponent<TeamScoreComponent>()
+            .Score;
+
         int diff = Math.Abs(redScore - blueScore);
 
         if (diff >= dominationDiff)
-            dominationTeam = redScore > blueScore ? TeamColor.Blue : TeamColor.Red;
+            dominationTeam = redScore > blueScore
+                ? TeamColor.Blue
+                : TeamColor.Red;
 
         return dominationTeam;
     }

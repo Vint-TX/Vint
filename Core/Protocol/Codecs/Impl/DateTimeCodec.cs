@@ -9,5 +9,6 @@ public class DateTimeCodec : Codec {
     }
 
     public override object Decode(ProtocolBuffer buffer) =>
-        DateTimeOffset.FromUnixTimeMilliseconds(buffer.Reader.ReadInt64()).UtcDateTime;
+        DateTimeOffset.FromUnixTimeMilliseconds(buffer.Reader.ReadInt64())
+            .UtcDateTime;
 }

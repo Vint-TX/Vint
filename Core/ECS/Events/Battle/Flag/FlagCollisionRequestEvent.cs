@@ -33,7 +33,9 @@ public class FlagCollisionRequestEvent : IServerEvent {
         Battles.Flags.Flag collisionFlag = ctf.Flags.Single(flag => flag.Entity == flagEntity);
         Battles.Flags.Flag oppositeFlag = ctf.Flags.Single(flag => flag != collisionFlag);
 
-        TeamColor tankTeamColor = battlePlayer.PlayerConnection.User.GetComponent<TeamColorComponent>().TeamColor;
+        TeamColor tankTeamColor = battlePlayer.PlayerConnection.User.GetComponent<TeamColorComponent>()
+            .TeamColor;
+
         TeamColor flagTeamColor = collisionFlag.TeamColor;
         bool isAllyFlag = tankTeamColor == flagTeamColor;
 
@@ -44,7 +46,9 @@ public class FlagCollisionRequestEvent : IServerEvent {
                 if (isAllyFlag) {
                     if (oppositeFlag.StateManager.CurrentState is not Captured ||
                         !oppositeFlag.Entity.HasComponent<TankGroupComponent>() ||
-                        oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id) return;
+                        oppositeFlag.Entity.GetComponent<TankGroupComponent>()
+                            .Key !=
+                        tankEntity.Id) return;
 
                     await oppositeFlag.Deliver(battlePlayer);
                 } else await collisionFlag.Capture(battlePlayer);

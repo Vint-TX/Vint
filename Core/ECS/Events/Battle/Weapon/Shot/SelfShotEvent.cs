@@ -18,13 +18,15 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
     };
 
     public virtual async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank) return;
 
         IEntity tank = entities.Single();
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(RemoteEvent, tank);
@@ -36,7 +38,9 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
             await shotModule.OnShot();
 
         await using DbConnection db = new();
-        await db.Statistics
+
+        await db
+            .Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Shots, stats => stats.Shots + 1)
             .UpdateAsync();

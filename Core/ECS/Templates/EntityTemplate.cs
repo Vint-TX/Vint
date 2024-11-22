@@ -25,7 +25,8 @@ public abstract class EntityTemplate {
     }
 
     public override int GetHashCode() =>
-        unchecked((int)GetType().GetProtocolId());
+        unchecked((int)GetType()
+            .GetProtocolId());
 }
 
 public abstract class MarketEntityTemplate : EntityTemplate {

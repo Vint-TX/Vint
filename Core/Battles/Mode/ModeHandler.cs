@@ -21,10 +21,12 @@ public abstract class ModeHandler(
         foreach (var roundUserToPlace in players
                      .Where(battlePlayer => battlePlayer.InBattleAsTank)
                      .Select(battlePlayer => battlePlayer.Tank!.RoundUser)
-                     .OrderByDescending(roundUser => roundUser.GetComponent<RoundUserStatisticsComponent>().ScoreWithoutBonuses)
+                     .OrderByDescending(roundUser => roundUser.GetComponent<RoundUserStatisticsComponent>()
+                         .ScoreWithoutBonuses)
                      .Select((roundUser, index) => new { RoundUser = roundUser, Place = index + 1 })
-                     .Where(roundUserToPlace =>
-                         roundUserToPlace.RoundUser.GetComponent<RoundUserStatisticsComponent>().Place != roundUserToPlace.Place)) {
+                     .Where(roundUserToPlace => roundUserToPlace.RoundUser.GetComponent<RoundUserStatisticsComponent>()
+                                                    .Place !=
+                                                roundUserToPlace.Place)) {
             SetScoreTablePositionEvent @event = new(roundUserToPlace.Place);
             await roundUserToPlace.RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.Place = roundUserToPlace.Place);
 

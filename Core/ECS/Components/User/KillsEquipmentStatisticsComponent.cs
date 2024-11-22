@@ -8,12 +8,14 @@ public class KillsEquipmentStatisticsComponent : IComponent {
     public KillsEquipmentStatisticsComponent(long playerId) {
         using DbConnection db = new();
 
-        HullStatistics = db.Hulls
+        HullStatistics = db
+            .Hulls
             .Where(hull => hull.PlayerId == playerId)
             .Select(hull => new { hull.Id, hull.Kills })
             .ToDictionary(hull => hull.Id, hull => hull.Kills);
 
-        TurretStatistics = db.Weapons
+        TurretStatistics = db
+            .Weapons
             .Where(weapon => weapon.PlayerId == playerId)
             .Select(weapon => new { weapon.Id, weapon.Kills })
             .ToDictionary(weapon => weapon.Id, weapon => weapon.Kills);

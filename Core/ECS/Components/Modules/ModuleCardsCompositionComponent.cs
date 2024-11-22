@@ -16,7 +16,10 @@ public class ModuleCardsCompositionComponent : IComponent {
         };
 
         CraftPrice = prices.First();
-        UpgradePrices = prices.Skip(1).ToList();
+
+        UpgradePrices = prices
+            .Skip(1)
+            .ToList();
     }
 
     public ModulePrice CraftPrice { get; private set; }

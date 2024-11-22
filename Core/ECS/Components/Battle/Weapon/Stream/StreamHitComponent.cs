@@ -12,7 +12,8 @@ public class StreamHitComponent : IComponent {
     public StaticHit? StaticHit { get; private set; }
 
     public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return Task.CompletedTask;
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank) return Task.CompletedTask;
 
         foreach (IShotModule shotModule in connection.BattlePlayer.Tank!.Modules.OfType<IShotModule>())
             shotModule.OnShot();

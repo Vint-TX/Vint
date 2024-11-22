@@ -25,8 +25,7 @@ namespace Vint.Core.Discord;
 public class DiscordBot(
     IServiceProvider serviceProvider
 ) {
-    const string
-        DebugToken = "VINT_DISCORD_BOT_DEBUG_TOKEN",
+    const string DebugToken = "VINT_DISCORD_BOT_DEBUG_TOKEN",
         ProdToken = "VINT_DISCORD_BOT_PROD_TOKEN",
         DebugClientSecret = "VINT_DISCORD_BOT_DEBUG_CLIENT_SECRET",
         ProdClientSecret = "VINT_DISCORD_BOT_PROD_CLIENT_SECRET",
@@ -45,8 +44,7 @@ public class DiscordBot(
     bool IsStarted { get; set; }
 
     public async Task TryStart() {
-        string? token = Environment.GetEnvironmentVariable(DebugToken) ??
-                        Environment.GetEnvironmentVariable(ProdToken);
+        string? token = Environment.GetEnvironmentVariable(DebugToken) ?? Environment.GetEnvironmentVariable(ProdToken);
 
         if (token == null)
             return;
@@ -58,25 +56,34 @@ public class DiscordBot(
                 .AddSingleton<GameServer>()
                 .AddSingleton<IBattleProcessor, BattleProcessor>())
             .UseCommands((_, commands) => {
-                commands.AddCommands(Assembly.GetExecutingAssembly());
-                commands.AddProcessor<SlashCommandProcessor>();
+                    commands.AddCommands(Assembly.GetExecutingAssembly());
+                    commands.AddProcessor<SlashCommandProcessor>();
 
-                commands.CommandExecuted += (_, args) => {
-                    CommandContext ctx = args.Context;
-                    string username = ctx.User.Username;
-                    string commandName = ctx.Command.Name;
-                    string channelName = ctx.Channel.Name;
-                    string executionPlace = ctx.Channel.IsPrivate ? "DMs" : ctx.Guild!.Name;
+                    commands.CommandExecuted += (_, args) => {
+                        CommandContext ctx = args.Context;
+                        string username = ctx.User.Username;
+                        string commandName = ctx.Command.Name;
+                        string channelName = ctx.Channel.Name;
 
-                    Logger.Information("{User} executed command \'{Name}\' in {Place}, {Channel}", username, commandName, executionPlace, channelName);
-                    return Task.CompletedTask;
-                };
+                        string executionPlace = ctx.Channel.IsPrivate
+                            ? "DMs"
+                            : ctx.Guild!.Name;
 
-                commands.CommandErrored += (_, args) => {
-                    Logger.Error(args.Exception, "Got an exception while executing command {Name}", args.Context.Command.Name);
-                    return Task.CompletedTask;
-                };
-            }, new CommandsConfiguration { RegisterDefaultCommandProcessors = false })
+                        Logger.Information("{User} executed command \'{Name}\' in {Place}, {Channel}",
+                            username,
+                            commandName,
+                            executionPlace,
+                            channelName);
+
+                        return Task.CompletedTask;
+                    };
+
+                    commands.CommandErrored += (_, args) => {
+                        Logger.Error(args.Exception, "Got an exception while executing command {Name}", args.Context.Command.Name);
+                        return Task.CompletedTask;
+                    };
+                },
+                new CommandsConfiguration { RegisterDefaultCommandProcessors = false })
             .DisableDefaultLogging()
             .Build();
 
@@ -91,7 +98,9 @@ public class DiscordBot(
     }
 
     public async Task SetPlayersCount(int count) {
-        if (!IsStarted || LastPlayersCount == count || Client is not { AllShardsConnected: true }) return;
+        if (!IsStarted ||
+            LastPlayersCount == count ||
+            Client is not { AllShardsConnected: true }) return;
 
         await Client.UpdateStatusAsync(new DiscordActivity(string.Format(StatusTemplate, count), DiscordActivityType.Competing));
         LastPlayersCount = count;
@@ -134,8 +143,7 @@ public class DiscordBot(
         if (!IsStarted) return null;
 
         try {
-            return await Guild.AddMemberWithRolesAsync(user, accessToken, [LinkedRole], username) ??
-                   await Guild.GetMemberAsync(user.Id);
+            return await Guild.AddMemberWithRolesAsync(user, accessToken, [LinkedRole], username) ?? await Guild.GetMemberAsync(user.Id);
         } catch (NotFoundException) {
             return null;
         } catch (UnauthorizedException e) {
@@ -192,7 +200,9 @@ public class DiscordBot(
         await db.BeginTransactionAsync();
         await db.InsertOrReplaceAsync(discordLink);
 
-        await db.Players.Where(player => player.Id == playerId)
+        await db
+            .Players
+            .Where(player => player.Id == playerId)
             .Set(player => player.DiscordUserId, userId)
             .Set(player => player.DiscordLinked, true)
             .UpdateAsync();
@@ -209,7 +219,9 @@ public class DiscordBot(
                 await connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.User, linkReward.MarketEntity, linkReward.Amount));
             }
 
-            await db.Players.Where(player => player.Id == playerId)
+            await db
+                .Players
+                .Where(player => player.Id == playerId)
                 .Set(player => player.DiscordLinkRewarded, true)
                 .UpdateAsync();
 

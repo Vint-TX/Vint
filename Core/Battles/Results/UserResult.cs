@@ -25,7 +25,10 @@ public class UserResult {
         Username = player.Username;
         UserId = player.Id;
         BattleUserId = battlePlayer.BattleUser.Id;
-        AvatarId = connection.User.GetComponent<UserAvatarComponent>().Id;
+
+        AvatarId = connection.User.GetComponent<UserAvatarComponent>()
+            .Id;
+
         Rank = player.Rank;
         ReputationInBattle = player.Reputation;
         EnterTime = battleTank.BattleEnterTime.ToUnixTimeMilliseconds();
@@ -57,10 +60,18 @@ public class UserResult {
 
         UnfairMatching = battle.IsUnfair();
         League = player.LeagueEntity;
-        Modules = preset.Modules.Select(pModule => new ModuleInfo {
-            ModuleId = pModule.Entity.Id,
-            UpgradeLevel = pModule.Entity.GetUserModule(connection).GetComponent<ModuleUpgradeLevelComponent>().Level
-        }).ToList();
+
+        Modules = preset
+            .Modules
+            .Select(pModule => new ModuleInfo {
+                ModuleId = pModule.Entity.Id,
+                UpgradeLevel = pModule
+                    .Entity
+                    .GetUserModule(connection)
+                    .GetComponent<ModuleUpgradeLevelComponent>()
+                    .Level
+            })
+            .ToList();
     }
 
     [ProtocolName("Uid")] public string Username { get; }

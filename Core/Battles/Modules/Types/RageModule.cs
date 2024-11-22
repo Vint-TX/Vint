@@ -12,21 +12,25 @@ namespace Vint.Core.Battles.Modules.Types;
 public class RageModule : TriggerBattleModule, IKillModule {
     public override string ConfigPath => "garage/module/upgrade/properties/rage";
 
-    public override RageEffect GetEffect() => new(Tank, Level);
-
     TimeSpan DecreaseCooldownPerKill { get; set; }
+
+    public Task OnKill(BattleTank target) => Activate();
+
+    public override RageEffect GetEffect() => new(Tank, Level);
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
 
-        DecreaseCooldownPerKill =
-            TimeSpan.FromMilliseconds(GetStat<ModuleRageEffectReduceCooldownTimePerKillPropertyComponent>());
+        DecreaseCooldownPerKill = TimeSpan.FromMilliseconds(GetStat<ModuleRageEffectReduceCooldownTimePerKillPropertyComponent>());
     }
 
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        RageEffect? effect = Tank.Effects.OfType<RageEffect>().SingleOrDefault();
+        RageEffect? effect = Tank
+            .Effects
+            .OfType<RageEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
@@ -42,6 +46,4 @@ public class RageModule : TriggerBattleModule, IKillModule {
         await Tank.BattlePlayer.PlayerConnection.Send(new TriggerEffectExecuteEvent(), effect.Entity!);
         await base.Activate();
     }
-
-    public Task OnKill(BattleTank target) => Activate();
 }

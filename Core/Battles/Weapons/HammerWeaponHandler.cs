@@ -13,13 +13,20 @@ public class HammerWeaponHandler : TankWeaponHandler {
     public HammerWeaponHandler(BattleTank battleTank) : base(battleTank) {
         MagazineWeaponComponent magazineWeaponComponent = ConfigManager.GetComponent<MagazineWeaponComponent>(MarketConfigPath);
 
-        PelletCount = BattleEntity.GetComponent<HammerPelletConeComponent>().PelletCount;
-        DamagePerPellet = ConfigManager.GetComponent<DamagePerPelletPropertyComponent>(MarketConfigPath).FinalValue;
+        PelletCount = BattleEntity.GetComponent<HammerPelletConeComponent>()
+            .PelletCount;
+
+        DamagePerPellet = ConfigManager.GetComponent<DamagePerPelletPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
         ReloadMagazineTimeSec = magazineWeaponComponent.ReloadMagazineTimePerSec;
         MaximumCartridgeCount = magazineWeaponComponent.MaxCartridgeCount;
 
         BattleEntity.AddComponent(new MagazineStorageComponent(MaximumCartridgeCount));
-        SetCurrentCartridgeCount(MaximumCartridgeCount).GetAwaiter().GetResult();
+
+        SetCurrentCartridgeCount(MaximumCartridgeCount)
+            .GetAwaiter()
+            .GetResult();
     }
 
     public float ReloadMagazineTimeSec { get; }
@@ -37,7 +44,9 @@ public class HammerWeaponHandler : TankWeaponHandler {
 
     public async Task Fire(List<HitTarget> hitTargets) {
         Battle battle = BattleTank.Battle;
-        List<BattleTank> tanks = battle.Players
+
+        List<BattleTank> tanks = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .ToList();
@@ -51,7 +60,8 @@ public class HammerWeaponHandler : TankWeaponHandler {
             bool isEnemy = BattleTank.IsEnemy(targetTank);
 
             // ReSharper disable once ArrangeRedundantParentheses
-            if (targetTank.StateManager.CurrentState is not Active || !isEnemy) continue;
+            if (targetTank.StateManager.CurrentState is not Active ||
+                !isEnemy) continue;
 
             CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, hitTarget, i);
 
@@ -60,7 +70,9 @@ public class HammerWeaponHandler : TankWeaponHandler {
             CalculatedDamage calculatedDamage = tankToDamage[targetTank];
 
             calculatedDamage = calculatedDamage with {
-                HitPoint = damage.IsSpecial ? damage.HitPoint : calculatedDamage.HitPoint,
+                HitPoint = damage.IsSpecial
+                    ? damage.HitPoint
+                    : calculatedDamage.HitPoint,
                 Value = damage.Value + calculatedDamage.Value,
                 IsSpecial = damage.IsSpecial || calculatedDamage.IsSpecial
             };
@@ -123,7 +135,8 @@ public class HammerWeaponHandler : TankWeaponHandler {
     }
 
     async Task TryReload() {
-        if (ReloadEndTime == null || ReloadEndTime > DateTimeOffset.UtcNow) return;
+        if (ReloadEndTime == null ||
+            ReloadEndTime > DateTimeOffset.UtcNow) return;
 
         await FillMagazine();
     }

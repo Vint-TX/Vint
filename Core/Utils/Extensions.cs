@@ -11,7 +11,8 @@ public static class Extensions {
     static ConcurrentDictionary<PropertyInfo, bool> NullabilityPool { get; } = new();
 
     public static long GetProtocolId(this Type type) =>
-        type.GetCustomAttribute<ProtocolIdAttribute>()?.Id ??
+        type.GetCustomAttribute<ProtocolIdAttribute>()
+            ?.Id ??
         throw new ProtocolIdNotFoundException(type);
 
     public static List<Type> DumpInterfaces(this Type type) {
@@ -68,33 +69,44 @@ public static class Extensions {
             return isNullable;
 
         NullabilityInfo nullabilityInfo = new NullabilityInfoContext().Create(property);
-        isNullable = nullabilityInfo.ReadState == NullabilityState.Nullable ||
-                     nullabilityInfo.WriteState == NullabilityState.Nullable;
+        isNullable = nullabilityInfo.ReadState == NullabilityState.Nullable || nullabilityInfo.WriteState == NullabilityState.Nullable;
 
         NullabilityPool.TryAdd(property, isNullable);
         return isNullable;
     }
 
     public static bool IsList(this Type type) => type.IsGenericType &&
-                                                 type.GetGenericTypeDefinition()
+                                                 type
+                                                     .GetGenericTypeDefinition()
                                                      .IsAssignableFrom(typeof(List<>));
 
     public static bool IsDictionary(this Type type) => type.IsGenericType &&
-                                                       type.GetGenericTypeDefinition()
+                                                       type
+                                                           .GetGenericTypeDefinition()
                                                            .IsAssignableFrom(typeof(Dictionary<,>));
 
     public static bool IsHashSet(this Type type) => type.IsGenericType &&
-                                                    type.GetGenericTypeDefinition()
+                                                    type
+                                                        .GetGenericTypeDefinition()
                                                         .IsAssignableFrom(typeof(HashSet<>));
 
     public static string ToString<T>(this IEnumerable<T> enumerable, bool extended) {
         List<T> list = enumerable.ToList();
 
-        return list.Count == 0 ? "Empty" : string.Join(", ", list.Select(obj => extended ? $"{obj}" : obj!.GetType().Name));
+        return list.Count == 0
+            ? "Empty"
+            : string.Join(", ",
+                list.Select(obj => extended
+                    ? $"{obj}"
+                    : obj!.GetType()
+                        .Name));
     }
 
-    public static Task Catch(this Task task) => task.ContinueWith(t =>
-            t.Exception!.Flatten().InnerExceptions.ToList().ForEach(Console.Error.WriteLine),
+    public static Task Catch(this Task task) => task.ContinueWith(t => t.Exception!
+            .Flatten()
+            .InnerExceptions
+            .ToList()
+            .ForEach(Console.Error.WriteLine),
         TaskContinuationOptions.OnlyOnFaulted);
 
     public static T? SingleOrDefaultSafe<T>(this IEnumerable<T> enumerable, T? defaultValue = default) {
@@ -117,7 +129,8 @@ public static class Extensions {
     }
 
     public static Task WhenAllFastFail(params Task[] input) {
-        if (input == null! || input.Length == 0)
+        if (input == null! ||
+            input.Length == 0)
             return Task.CompletedTask;
 
         Task[] tasks = (Task[])input.Clone();
@@ -138,6 +151,7 @@ public static class Extensions {
                 default:
                     if (Interlocked.Decrement(ref remaining) == 0)
                         tcs.SetResult();
+
                     break;
             }
         };

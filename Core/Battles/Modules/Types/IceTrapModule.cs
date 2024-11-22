@@ -15,10 +15,6 @@ public class IceTrapModule : ActiveBattleModule {
 
     public override string ConfigPath => "garage/module/upgrade/properties/icetrap";
 
-    public override IceTrapEffect GetEffect() => new(GenerateIndex(), MarketEntity, ActivationTime, ExplosionDelay, BeginHideDistance, HideRange,
-        TriggeringArea, Impact, MinSplashDamagePercent, RadiusOfMaxSplashDamage, RadiusOfMinSplashDamage, MaxDamage, MinDamage, TemperatureDelta,
-        TemperatureLimit, TemperatureDuration, Tank, Level);
-
     IEnumerable<IceTrapEffect> Mines => Tank.Effects.OfType<IceTrapEffect>();
     IEnumerable<IceTrapEffect> MinesSorted => Mines.OrderBy(mine => mine.Index);
 
@@ -38,14 +34,37 @@ public class IceTrapModule : ActiveBattleModule {
     float TemperatureLimit { get; set; }
     TimeSpan TemperatureDuration { get; set; }
 
+    public override IceTrapEffect GetEffect() => new(GenerateIndex(),
+        MarketEntity,
+        ActivationTime,
+        ExplosionDelay,
+        BeginHideDistance,
+        HideRange,
+        TriggeringArea,
+        Impact,
+        MinSplashDamagePercent,
+        RadiusOfMaxSplashDamage,
+        RadiusOfMinSplashDamage,
+        MaxDamage,
+        MinDamage,
+        TemperatureDelta,
+        TemperatureLimit,
+        TemperatureDuration,
+        Tank,
+        Level);
+
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
 
         while (Mines.Count() > CountLimit)
-            await MinesSorted.First().ForceDeactivate();
+            await MinesSorted
+                .First()
+                .ForceDeactivate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

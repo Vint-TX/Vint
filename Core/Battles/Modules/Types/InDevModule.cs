@@ -27,7 +27,9 @@ public class InDevModule : BattleModule {
         MarketEntity = marketModule;
         UserEntity = marketModule.GetUserModule(tank.BattlePlayer.PlayerConnection);
 
-        Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>().Level;
+        Level = (int)UserEntity.GetComponent<ModuleUpgradeLevelComponent>()
+            .Level;
+
         SlotEntity = await CreateBattleSlot();
         Entity = await CreateBattleModule();
     }

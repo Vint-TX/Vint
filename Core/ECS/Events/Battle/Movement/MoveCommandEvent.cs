@@ -26,7 +26,8 @@ public class MoveCommandEvent : IServerEvent {
 
         MoveCommandServerEvent serverEvent = new(MoveCommand);
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != battlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(serverEvent, tank);
@@ -65,6 +66,7 @@ public class MoveCommandEvent : IServerEvent {
         battleTank.PreviousPosition = battleTank.Position;
         battleTank.Position = movement.Position;
         battleTank.Orientation = movement.Orientation;
+
         battleTank.ForceSelfDestruct =
             PhysicsUtils.IsOutsideMap(battle.MapInfo.PuntativeGeoms, battleTank.Position, velocity, battle.Properties.KillZoneEnabled);
 

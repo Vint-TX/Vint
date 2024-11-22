@@ -14,14 +14,18 @@ public class ApplyTargetsForEMPEffectEvent : IServerEvent {
         IEntity emp = entities.Single();
         BattleTank? tank = connection.BattlePlayer?.Tank;
         Battles.Battle battle = tank?.Battle!;
-        EMPEffect? effect = tank?.Effects
+
+        EMPEffect? effect = tank
+            ?.Effects
             .OfType<EMPEffect>()
             .SingleOrDefault(effect => effect.Entity == emp);
 
-        if (tank == null || effect == null)
+        if (tank == null ||
+            effect == null)
             return;
 
-        BattleTank[] tanks = battle.Players
+        BattleTank[] tanks = battle
+            .Players
             .Select(player => player.Tank)
             .Where(targetTank => Targets.Contains(targetTank!.Tank))
             .ToArray()!;

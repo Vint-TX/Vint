@@ -15,8 +15,24 @@ public class Mine(
 
     bool Triggered { get; set; }
 
+    public int CompareTo(Mine? other) {
+        if (other == null)
+            return -1;
+
+        return Owner == other.Owner
+            ? Index.CompareTo(other.Index)
+            : Owner
+                .GetHashCode()
+                .CompareTo(other.Owner.GetHashCode());
+    }
+
+    public bool Equals(Mine? other) =>
+        other != null && Owner == other.Owner && Index == other.Index;
+
     public bool TryTrigger(BattleTank tank) {
-        if (Triggered || !tank.IsEnemy(Owner) || Vector3.Distance(tank.Position, Position) > TriggeringArea)
+        if (Triggered ||
+            !tank.IsEnemy(Owner) ||
+            Vector3.Distance(tank.Position, Position) > TriggeringArea)
             return false;
 
         Triggered = true;
@@ -24,23 +40,8 @@ public class Mine(
         return true;
     }
 
-    public bool Equals(Mine? other) =>
-        other != null &&
-        Owner == other.Owner &&
-        Index == other.Index;
-
     public override bool Equals(object? obj) =>
-        obj is Mine mine &&
-        Equals(mine);
-
-    public int CompareTo(Mine? other) {
-        if (other == null)
-            return -1;
-
-        return Owner == other.Owner
-            ? Index.CompareTo(other.Index)
-            : Owner.GetHashCode().CompareTo(other.Owner.GetHashCode());
-    }
+        obj is Mine mine && Equals(mine);
 
     public override int GetHashCode() => HashCode.Combine(Owner, Index);
 

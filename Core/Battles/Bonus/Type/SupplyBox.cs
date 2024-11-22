@@ -23,7 +23,10 @@ public abstract class SupplyBox<T>(
 
         await StateManager.SetState(new Cooldown(StateManager));
 
-        T? effect = battleTank.Effects.OfType<T>().SingleOrDefault();
+        T? effect = battleTank
+            .Effects
+            .OfType<T>()
+            .SingleOrDefault();
 
         switch (effect) {
             case null:
@@ -38,10 +41,7 @@ public abstract class SupplyBox<T>(
 }
 
 public abstract class SupplyBox : BonusBox {
-    protected SupplyBox(
-        Battle battle,
-        Vector3 regionPosition,
-        bool hasParachute) : base(battle, regionPosition, hasParachute) =>
+    protected SupplyBox(Battle battle, Vector3 regionPosition, bool hasParachute) : base(battle, regionPosition, hasParachute) =>
         // ReSharper disable VirtualMemberCallInConstructor
         ConfigComponent = ConfigManager.GetComponent<BonusConfigComponent>($"battle/bonus/{Type.ToString().ToLower()}");
 

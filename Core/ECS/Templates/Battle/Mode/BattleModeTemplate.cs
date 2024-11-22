@@ -12,13 +12,7 @@ using Vint.Core.ECS.Entities;
 namespace Vint.Core.ECS.Templates.Battle.Mode;
 
 public abstract class BattleModeTemplate : EntityTemplate {
-    protected IEntity Entity(
-        TypeHandler typeHandler,
-        IEntity lobby,
-        BattleMode mode,
-        int timeLimit,
-        int userLimit,
-        int warmUpTimeLimit) => Entity(
+    protected IEntity Entity(TypeHandler typeHandler, IEntity lobby, BattleMode mode, int timeLimit, int userLimit, int warmUpTimeLimit) => Entity(
         $"battle/modes/{mode.ToString().ToLower()}",
         builder => builder
             .AddComponent<BattleComponent>()

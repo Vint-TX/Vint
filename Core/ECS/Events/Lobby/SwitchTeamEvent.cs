@@ -21,12 +21,19 @@ public class SwitchTeamEvent : IServerEvent {
 
         UserLimitComponent userLimitComponent = battle.LobbyEntity.GetComponent<UserLimitComponent>();
         TeamColor prevColor = battlePlayer.TeamColor;
-        int newTeamPlayersCount = prevColor == TeamColor.Red ? teamHandler.BluePlayers.Count() : teamHandler.RedPlayers.Count();
+
+        int newTeamPlayersCount = prevColor == TeamColor.Red
+            ? teamHandler.BluePlayers.Count()
+            : teamHandler.RedPlayers.Count();
 
         if (newTeamPlayersCount >= userLimitComponent.TeamLimit) return Task.CompletedTask;
 
         connection.User.RemoveComponent<TeamColorComponent>();
-        battlePlayer.Team = prevColor == TeamColor.Red ? teamHandler.BlueTeam : teamHandler.RedTeam;
+
+        battlePlayer.Team = prevColor == TeamColor.Red
+            ? teamHandler.BlueTeam
+            : teamHandler.RedTeam;
+
         return Task.CompletedTask;
     }
 }

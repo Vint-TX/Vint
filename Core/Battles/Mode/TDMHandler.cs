@@ -18,12 +18,18 @@ public class TDMHandler(
         const int dominationDiff = 30;
         const int restoreDominationDiff = 26;
 
-        int redScore = RedTeam.GetComponent<TeamScoreComponent>().Score;
-        int blueScore = BlueTeam.GetComponent<TeamScoreComponent>().Score;
+        int redScore = RedTeam.GetComponent<TeamScoreComponent>()
+            .Score;
+
+        int blueScore = BlueTeam.GetComponent<TeamScoreComponent>()
+            .Score;
+
         int diff = Math.Abs(redScore - blueScore);
 
         LastDominationTeam = diff switch {
-            >= dominationDiff => redScore > blueScore ? TeamColor.Blue : TeamColor.Red,
+            >= dominationDiff => redScore > blueScore
+                ? TeamColor.Blue
+                : TeamColor.Red,
             <= restoreDominationDiff => TeamColor.None,
             _ => LastDominationTeam
         };

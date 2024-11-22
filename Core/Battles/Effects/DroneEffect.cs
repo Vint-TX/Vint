@@ -42,23 +42,26 @@ public class DroneEffect : WeaponEffect {
         WeaponEntity = new DroneWeaponTemplate().Create(Tank.BattlePlayer);
         Entity = new DroneEffectTemplate().Create(Tank.BattlePlayer, Duration, WeaponEntity, TargetingDistance);
 
-        TimeSpan cooldown = TimeSpan.FromSeconds(WeaponEntity.GetComponent<WeaponCooldownComponent>().CooldownIntervalSec);
+        TimeSpan cooldown = TimeSpan.FromSeconds(WeaponEntity.GetComponent<WeaponCooldownComponent>()
+            .CooldownIntervalSec);
 
         WeaponHandler = new DroneWeaponHandler(Tank, cooldown, MarketEntity, WeaponEntity, Damage);
 
         await ShareToAllPlayers();
 
-        Schedule(ActivationTime, async () => {
-            await Entity.AddComponent<EffectActiveComponent>();
-            await WeaponEntity.AddComponent<ShootableComponent>();
-        });
+        Schedule(ActivationTime,
+            async () => {
+                await Entity.AddComponent<EffectActiveComponent>();
+                await WeaponEntity.AddComponent<ShootableComponent>();
+            });
 
         Schedule(Duration, DeactivateInternal);
         CanBeDeactivated = false;
     }
 
     public override async Task Deactivate() {
-        if (!CanBeDeactivated || !IsActive) return;
+        if (!CanBeDeactivated ||
+            !IsActive) return;
 
         Tank.Effects.TryRemove(this);
 

@@ -8,8 +8,7 @@ namespace Vint.Core.ECS.Templates.Battle.Reward;
 [ProtocolId(1513235522063)]
 public abstract class BattleResultRewardTemplate : EntityTemplate {
     protected IEntity Create(string configPath) => Entity(configPath,
-        builder =>
-            builder
-                .AddComponent<PersonalBattleRewardComponent>()
-                .AddGroupComponent<BattleRewardGroupComponent>());
+        builder => builder
+            .AddComponent<PersonalBattleRewardComponent>()
+            .AddGroupComponent<BattleRewardGroupComponent>());
 }

@@ -18,10 +18,20 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
     public RepairKitEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
         SupplyHealingComponent = ConfigManager.GetComponent<HealingComponent>(EffectConfigPath);
 
-        InstantHp = IsSupply ? 0 : Leveling.GetStat<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath, Level);
-        Percent = IsSupply ? SupplyHealingComponent.Percent : Leveling.GetStat<ModuleHealingEffectPercentPropertyComponent>(MarketConfigPath, Level);
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
-        TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
+        InstantHp = IsSupply
+            ? 0
+            : Leveling.GetStat<ModuleHealingEffectInstantHPPropertyComponent>(MarketConfigPath, Level);
+
+        Percent = IsSupply
+            ? SupplyHealingComponent.Percent
+            : Leveling.GetStat<ModuleHealingEffectPercentPropertyComponent>(MarketConfigPath, Level);
+
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
+                               .Duration *
+                           Tank.SupplyDurationMultiplier;
+
+        TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath)
+            .Period);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -102,7 +112,8 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         await UnshareFromAllPlayers();
         Entity = null;
 
-        if (HealLeft <= 0 || Tank.Health >= Tank.MaxHealth) return;
+        if (HealLeft <= 0 ||
+            Tank.Health >= Tank.MaxHealth) return;
 
         CalculatedDamage heal = new(default, HealLeft, false, false);
         await Battle.DamageProcessor.Heal(Tank, heal);
@@ -113,7 +124,9 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         TimeSpan timePassed = TimePassedFromLastTick;
 
-        if (!IsActive || HealLeft <= 0 || timePassed < TickPeriod) return;
+        if (!IsActive ||
+            HealLeft <= 0 ||
+            timePassed < TickPeriod) return;
 
         LastTick = DateTimeOffset.UtcNow;
 

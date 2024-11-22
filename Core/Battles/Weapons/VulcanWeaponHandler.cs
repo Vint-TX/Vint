@@ -10,11 +10,18 @@ namespace Vint.Core.Battles.Weapons;
 
 public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
     public VulcanWeaponHandler(BattleTank battleTank) : base(battleTank) {
-        OverheatingTime = TimeSpan.FromSeconds(ConfigManager.GetComponent<TemperatureHittingTimePropertyComponent>(MarketConfigPath).FinalValue);
-        HeatDamage = ConfigManager.GetComponent<HeatDamagePropertyComponent>(MarketConfigPath).FinalValue;
-        TemperatureLimit = ConfigManager.GetComponent<TemperatureLimitPropertyComponent>(MarketConfigPath).FinalValue;
-        TemperatureDelta =
-            ConfigManager.GetComponent<DeltaTemperaturePerSecondPropertyComponent>(MarketConfigPath).FinalValue * (float)Cooldown.TotalSeconds;
+        OverheatingTime = TimeSpan.FromSeconds(ConfigManager.GetComponent<TemperatureHittingTimePropertyComponent>(MarketConfigPath)
+            .FinalValue);
+
+        HeatDamage = ConfigManager.GetComponent<HeatDamagePropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        TemperatureLimit = ConfigManager.GetComponent<TemperatureLimitPropertyComponent>(MarketConfigPath)
+            .FinalValue;
+
+        TemperatureDelta = ConfigManager.GetComponent<DeltaTemperaturePerSecondPropertyComponent>(MarketConfigPath)
+                               .FinalValue *
+                           (float)Cooldown.TotalSeconds;
     }
 
     public override int MaxHitTargets => 1;
@@ -23,8 +30,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
     public DateTimeOffset? LastOverheatingUpdate { get; set; }
     TimeSpan OverheatingTime { get; }
 
-    bool IsOverheating => ShootingStartTime.HasValue &&
-                          DateTimeOffset.UtcNow - ShootingStartTime >= OverheatingTime;
+    bool IsOverheating => ShootingStartTime.HasValue && DateTimeOffset.UtcNow - ShootingStartTime >= OverheatingTime;
     public override float TemperatureLimit { get; }
     public override float TemperatureDelta { get; }
     public float HeatDamage { get; }
@@ -35,14 +41,17 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
         if (IsCooldownActive(incarnationId)) return;
 
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
 
         bool isEnemy = BattleTank.IsEnemy(targetTank);
 
-        if (targetTank.StateManager.CurrentState is not Active || !isEnemy)
+        if (targetTank.StateManager.CurrentState is not Active ||
+            !isEnemy)
             return;
 
         CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
@@ -56,8 +65,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
 
     void UpdateOverheating() {
         if (!IsOverheating ||
-            LastOverheatingUpdate.HasValue &&
-            DateTimeOffset.UtcNow - LastOverheatingUpdate < Cooldown) return;
+            LastOverheatingUpdate.HasValue && DateTimeOffset.UtcNow - LastOverheatingUpdate < Cooldown) return;
 
         if (BattleTank.StateManager.CurrentState is Dead) {
             ShootingStartTime = null;

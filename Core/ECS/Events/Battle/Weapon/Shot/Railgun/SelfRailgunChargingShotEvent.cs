@@ -18,7 +18,8 @@ public class SelfRailgunChargingShotEvent : RailgunChargingShotEvent, IServerEve
 
         RemoteRailgunChargingShotEvent serverEvent = new() { ClientTime = ClientTime };
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != connection.BattlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(serverEvent, weapon);

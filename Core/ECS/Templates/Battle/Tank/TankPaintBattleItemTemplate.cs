@@ -8,11 +8,10 @@ namespace Vint.Core.ECS.Templates.Battle.Tank;
 [ProtocolId(1437375358285)]
 public class TankPaintBattleItemTemplate : EntityTemplate {
     public IEntity Create(IEntity paint, IEntity tank) => Entity(paint.TemplateAccessor!.ConfigPath,
-        builder =>
-            builder
-                .AddComponent<TankPaintBattleItemComponent>()
-                .AddComponentFrom<UserGroupComponent>(tank)
-                .AddComponentFrom<BattleGroupComponent>(tank)
-                .AddGroupComponent<TankGroupComponent>(tank)
-                .AddGroupComponent<MarketItemGroupComponent>(paint));
+        builder => builder
+            .AddComponent<TankPaintBattleItemComponent>()
+            .AddComponentFrom<UserGroupComponent>(tank)
+            .AddComponentFrom<BattleGroupComponent>(tank)
+            .AddGroupComponent<TankGroupComponent>(tank)
+            .AddGroupComponent<MarketItemGroupComponent>(paint));
 }

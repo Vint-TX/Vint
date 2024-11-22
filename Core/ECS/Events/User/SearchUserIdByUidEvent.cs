@@ -22,13 +22,13 @@ public class SearchUserIdByUidEvent : IServerEvent {
             return;
         }
 
-        bool noRelations = await db.Relations
-            .Where(relation => relation.SourcePlayerId == searchedPlayer.Id &&
-                               relation.TargetPlayerId == searcherPlayer.Id)
+        bool noRelations = await db
+            .Relations
+            .Where(relation => relation.SourcePlayerId == searchedPlayer.Id && relation.TargetPlayerId == searcherPlayer.Id)
             .AllAsync(relation => (relation.Types & RelationTypes.Friend) != RelationTypes.Friend &&
-                             (relation.Types & RelationTypes.Blocked) != RelationTypes.Blocked &&
-                             (relation.Types & RelationTypes.IncomingRequest) != RelationTypes.IncomingRequest &&
-                             (relation.Types & RelationTypes.OutgoingRequest) != RelationTypes.OutgoingRequest);
+                                  (relation.Types & RelationTypes.Blocked) != RelationTypes.Blocked &&
+                                  (relation.Types & RelationTypes.IncomingRequest) != RelationTypes.IncomingRequest &&
+                                  (relation.Types & RelationTypes.OutgoingRequest) != RelationTypes.OutgoingRequest);
 
         bool canRequestFriend = searcherPlayer.Id != searchedPlayer.Id && noRelations;
 

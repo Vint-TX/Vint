@@ -17,7 +17,8 @@ public class MuzzlePointSwitchEvent : MuzzlePointEvent, IServerEvent {
 
         RemoteMuzzlePointSwitchEvent serverEvent = new() { Index = Index };
 
-        foreach (IPlayerConnection playerConnection in battle.Players
+        foreach (IPlayerConnection playerConnection in battle
+                     .Players
                      .Where(player => player != connection.BattlePlayer)
                      .Select(player => player.PlayerConnection))
             await playerConnection.Send(serverEvent, weapon);

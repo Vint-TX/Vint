@@ -5,7 +5,8 @@ namespace Vint.Core.ECS.Components.Quest;
 
 [ProtocolId(1493196614850)]
 public class QuestRewardComponent : IComponent {
-    [UsedImplicitly] public QuestRewardComponent() { }
+    [UsedImplicitly]
+    public QuestRewardComponent() { }
 
     public QuestRewardComponent(long id, int amount) {
         Reward = id;

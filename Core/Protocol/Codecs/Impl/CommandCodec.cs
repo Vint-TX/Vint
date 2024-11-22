@@ -14,17 +14,27 @@ public class CommandCodec : Codec {
         Type type = value.GetType();
         CommandCode code = CommandToCode[type];
 
-        Protocol.GetCodec(new TypeCodecInfo(typeof(CommandCode))).Encode(buffer, code);
-        Protocol.GetCodec(new TypeCodecInfo(type)).Encode(buffer, value);
+        Protocol
+            .GetCodec(new TypeCodecInfo(typeof(CommandCode)))
+            .Encode(buffer, code);
+
+        Protocol
+            .GetCodec(new TypeCodecInfo(type))
+            .Encode(buffer, value);
     }
 
     public override ICommand Decode(ProtocolBuffer buffer) {
-        CommandCode code = (CommandCode)Protocol.GetCodec(new TypeCodecInfo(typeof(CommandCode))).Decode(buffer);
+        CommandCode code = (CommandCode)Protocol
+            .GetCodec(new TypeCodecInfo(typeof(CommandCode)))
+            .Decode(buffer);
+
         Type type = CodeToCommand[code];
 
         //Logger.Debug("Decoding command of type {Type}", code);
 
-        return (Protocol.GetCodec(new TypeCodecInfo(type)).Decode(buffer) as ICommand)!;
+        return (Protocol
+            .GetCodec(new TypeCodecInfo(type))
+            .Decode(buffer) as ICommand)!;
     }
 
     public CommandCodec Register<T>(CommandCode code) where T : ICommand {

@@ -29,7 +29,9 @@ public class FireRingWeaponHandler(
 
     public Task SplashFire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
@@ -55,8 +57,6 @@ public class FireRingWeaponHandler(
 
         return 0.01f *
                (MinSplashDamagePercent +
-                (RadiusOfMinSplashDamage - distance) *
-                (100f - MinSplashDamagePercent) /
-                (RadiusOfMinSplashDamage - RadiusOfMaxSplashDamage));
+                (RadiusOfMinSplashDamage - distance) * (100f - MinSplashDamagePercent) / (RadiusOfMinSplashDamage - RadiusOfMaxSplashDamage));
     }
 }

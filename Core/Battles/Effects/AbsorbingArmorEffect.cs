@@ -16,10 +16,16 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
     const string MarketConfigPath = "garage/module/upgrade/properties/absorbingarmor";
 
     public AbsorbingArmorEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        SupplyMultiplier = ConfigManager.GetComponent<ArmorEffectComponent>(EffectConfigPath).Factor;
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
+        SupplyMultiplier = ConfigManager.GetComponent<ArmorEffectComponent>(EffectConfigPath)
+            .Factor;
 
-        Multiplier = IsSupply ? SupplyMultiplier : Leveling.GetStat<ModuleArmorEffectPropertyComponent>(MarketConfigPath, Level);
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
+                               .Duration *
+                           Tank.SupplyDurationMultiplier;
+
+        Multiplier = IsSupply
+            ? SupplyMultiplier
+            : Leveling.GetStat<ModuleArmorEffectPropertyComponent>(MarketConfigPath, Level);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -28,10 +34,9 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
     public float Multiplier { get; private set; }
 
     public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
-        IsActive &&
-        Tank == target &&
-        (source.WeaponHandler is not IsisWeaponHandler ||
-         source.IsEnemy(target)) ? Multiplier : 1;
+        IsActive && Tank == target && (source.WeaponHandler is not IsisWeaponHandler || source.IsEnemy(target))
+            ? Multiplier
+            : 1;
 
     public async Task Extend(int newLevel) {
         if (!IsActive) return;

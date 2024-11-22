@@ -18,7 +18,8 @@ public class StatisticsModule(
         int players = gameServer.PlayerConnections.Count;
         int battles = battleProcessor.BattlesCount;
 
-        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed("")
+        DiscordEmbedBuilder embed = Embeds
+            .GetNotificationEmbed("")
             .AddField("Players", $"{players}", true)
             .AddField("Battles", $"{battles}", true);
 

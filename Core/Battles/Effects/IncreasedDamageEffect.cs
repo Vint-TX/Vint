@@ -16,10 +16,16 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     const string MarketConfigPath = "garage/module/upgrade/properties/increaseddamage";
 
     public IncreasedDamageEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath).Factor;
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
+        SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath)
+            .Factor;
 
-        Multiplier = IsSupply ? SupplyMultiplier : Leveling.GetStat<ModuleDamageEffectMaxFactorPropertyComponent>(MarketConfigPath, Level);
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
+                               .Duration *
+                           Tank.SupplyDurationMultiplier;
+
+        Multiplier = IsSupply
+            ? SupplyMultiplier
+            : Leveling.GetStat<ModuleDamageEffectMaxFactorPropertyComponent>(MarketConfigPath, Level);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -28,7 +34,9 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     public float Multiplier { get; private set; }
 
     public float GetMultiplier(BattleTank source, BattleTank target, IWeaponHandler weaponHandler, bool isSplash, bool isBackHit, bool isTurretHit) =>
-        IsActive && (Tank != target || isSplash) ? Multiplier : 1;
+        IsActive && (Tank != target || isSplash)
+            ? Multiplier
+            : 1;
 
     public async Task Extend(int newLevel) {
         if (!IsActive) return;

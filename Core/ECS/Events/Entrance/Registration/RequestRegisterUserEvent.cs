@@ -21,13 +21,15 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool QuickRegistration { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!RegexUtils.IsLoginValid(Username) || !RegexUtils.IsEmailValid(Email)) {
+        if (!RegexUtils.IsLoginValid(Username) ||
+            !RegexUtils.IsEmailValid(Email)) {
             await connection.Send(new RegistrationFailedEvent());
             return;
         }
 
         await using (DbConnection db = new()) {
-            List<Punishment> punishments = await db.Punishments
+            List<Punishment> punishments = await db
+                .Punishments
                 .Where(punishment => punishment.Active &&
                                      punishment.Type == PunishmentType.Ban &&
                                      punishment.HardwareFingerprint == HardwareFingerprint)

@@ -8,7 +8,9 @@ public class VariedStructCodec : Codec {
         Type type = value.GetType();
         buffer.Writer.Write(type.GetProtocolId());
 
-        Protocol.GetCodec(new TypeCodecInfo(type)).Encode(buffer, value);
+        Protocol
+            .GetCodec(new TypeCodecInfo(type))
+            .Encode(buffer, value);
     }
 
     public override object Decode(ProtocolBuffer buffer) {
@@ -19,6 +21,8 @@ public class VariedStructCodec : Codec {
 
         if (!inner.Unwrap(buffer.Reader)) throw new InvalidOperationException();
 
-        return Protocol.GetCodec(new TypeCodecInfo(type)).Decode(inner);
+        return Protocol
+            .GetCodec(new TypeCodecInfo(type))
+            .Decode(inner);
     }
 }

@@ -23,7 +23,9 @@ public class AutoLoginUserEvent : IServerEvent {
         logger.Warning("Autologin '{Username}'", Username);
 
         await using DbConnection db = new();
-        Player? player = await db.Players
+
+        Player? player = await db
+            .Players
             .LoadWith(player => player.Modules)
             .LoadWith(player => player.DiscordLink)
             .SingleOrDefaultAsync(player => player.Username == Username);
@@ -35,8 +37,7 @@ public class AutoLoginUserEvent : IServerEvent {
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
         Punishment? ban = await player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
-        int connections = server.PlayerConnections.Values
-            .Count(conn => conn.IsOnline && conn.Player.Username == Username);
+        int connections = server.PlayerConnections.Values.Count(conn => conn.IsOnline && conn.Player.Username == Username);
 
         if (!player.RememberMe ||
             connections != 0 ||

@@ -21,7 +21,11 @@ public abstract class TankWeaponHandler : IWeaponHandler {
         MinDamageDistance = damageWeakeningByDistanceComponent?.RadiusOfMinDamage ?? 0;
         MinDamagePercent = damageWeakeningByDistanceComponent?.MinDamagePercent ?? 0;
 
-        WeaponRotationComponent = BattleTank.Weapon.GetComponent<WeaponRotationComponent>().Clone();
+        WeaponRotationComponent = BattleTank
+            .Weapon
+            .GetComponent<WeaponRotationComponent>()
+            .Clone();
+
         DamageCalculator = new DamageCalculator();
     }
 

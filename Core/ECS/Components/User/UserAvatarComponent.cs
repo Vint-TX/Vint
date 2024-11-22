@@ -11,6 +11,7 @@ public class UserAvatarComponent(
     IPlayerConnection connection,
     long avatarId
 ) : IComponent {
-    public string Id { get; set; } =
-        ConfigManager.GetComponent<AvatarItemComponent>(connection.GetEntity(avatarId)?.TemplateAccessor?.ConfigPath!).Id;
+    public string Id { get; set; } = ConfigManager.GetComponent<AvatarItemComponent>(connection.GetEntity(avatarId)
+            ?.TemplateAccessor?.ConfigPath!)
+        .Id;
 }

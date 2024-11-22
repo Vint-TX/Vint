@@ -20,11 +20,8 @@ public class CustomHandler(
 
     public override async Task Setup() {
         Battle.MapInfo = ConfigManager.MapInfos.Single(map => map.Id == Battle.Properties.MapId);
-        Battle.MapEntity = GlobalEntities.GetEntities("maps").Single(map => map.Id == Battle.Properties.MapId);
-        Battle.LobbyEntity = new CustomBattleLobbyTemplate().Create(
-            Battle.Properties,
-            Battle.MapEntity,
-            Owner);
+        Battle.MapEntity = GlobalEntities.GetEntity("maps", map => map.Id == Battle.Properties.MapId);
+        Battle.LobbyEntity = new CustomBattleLobbyTemplate().Create(Battle.Properties, Battle.MapEntity, Owner);
 
         await Battle.StateManager.SetState(new NotStarted(Battle.StateManager));
 
@@ -39,7 +36,8 @@ public class CustomHandler(
     public override async Task PlayerExited(BattlePlayer battlePlayer) {
         if (battlePlayer.PlayerConnection != Owner) return;
 
-        List<IPlayerConnection> players = Battle.Players
+        List<IPlayerConnection> players = Battle
+            .Players
             .Where(player => !player.IsSpectator && player != battlePlayer)
             .Select(player => player.PlayerConnection)
             .ToList()

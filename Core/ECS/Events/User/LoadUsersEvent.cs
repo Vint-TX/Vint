@@ -14,14 +14,19 @@ public class LoadUsersEvent : IServerEvent {
     public long RequestEntityId { get; private set; }
     public HashSet<long> UsersId { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        // bug: client crashes while scrolling friends list
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        List<IPlayerConnection> playerConnections = server.PlayerConnections.Values
+
+        List<IPlayerConnection> playerConnections = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .ToList();
 
         foreach (long userId in UsersId) {
-            IEntity? user = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)?.User;
+            IEntity? user = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)
+                ?.User;
 
             if (EntityRegistry.TryGetTemp(userId, out IEntity? tempUser)) { // temp user exists..
                 if (user != null) { // ..but player is online

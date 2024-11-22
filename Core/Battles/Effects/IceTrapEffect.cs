@@ -32,12 +32,20 @@ public class IceTrapEffect(
     int level
 ) : WeaponEffect(tank, level), IMineEffect {
     public override ModuleWeaponHandler WeaponHandler { get; protected set; } = null!;
+    bool WaitingForExplosion { get; set; }
 
     public BattleTank Owner => Tank;
     public int Index { get; } = index;
     public Vector3 Position { get; private set; }
     public float TriggeringArea { get; } = triggeringArea;
-    bool WaitingForExplosion { get; set; }
+
+    public void TryExplode() {
+        if (WaitingForExplosion || !IsActive)
+            return;
+
+        WaitingForExplosion = true;
+        Schedule(explosionDelay, async () => await Tank.BattlePlayer.PlayerConnection.Send(new MineTryExplosionEvent(), Entity));
+    }
 
     public override async Task Activate() {
         if (IsActive) return;
@@ -52,29 +60,56 @@ public class IceTrapEffect(
         Tank.Effects.Add(this);
 
         Position = hitHandler.ClosestHit.Value + Vector3.UnitY;
-        WeaponEntity = Entity = new IceTrapEffectTemplate().Create(Tank.BattlePlayer, Duration, Position, Battle.Properties.FriendlyFire,
-            beginHideDistance, hideRange, TriggeringArea, impact, minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage);
 
-        WeaponHandler = new IceTrapWeaponHandler(Tank, TimeSpan.Zero, marketEntity, WeaponEntity, true, radiusOfMaxSplashDamage,
-            radiusOfMinSplashDamage, minSplashDamagePercent, maxDamage, minDamage, temperatureDelta, temperatureLimit, temperatureDuration, Explode);
+        WeaponEntity = Entity = new IceTrapEffectTemplate().Create(Tank.BattlePlayer,
+            Duration,
+            Position,
+            Battle.Properties.FriendlyFire,
+            beginHideDistance,
+            hideRange,
+            TriggeringArea,
+            impact,
+            minSplashDamagePercent,
+            radiusOfMaxSplashDamage,
+            radiusOfMinSplashDamage);
+
+        WeaponHandler = new IceTrapWeaponHandler(Tank,
+            TimeSpan.Zero,
+            marketEntity,
+            WeaponEntity,
+            true,
+            radiusOfMaxSplashDamage,
+            radiusOfMinSplashDamage,
+            minSplashDamagePercent,
+            maxDamage,
+            minDamage,
+            temperatureDelta,
+            temperatureLimit,
+            temperatureDuration,
+            Explode);
 
         await ShareToAllPlayers();
 
-        Schedule(activationTime, async () => {
-            await Entity.AddComponent<EffectActiveComponent>();
+        Schedule(activationTime,
+            async () => {
+                await Entity.AddComponent<EffectActiveComponent>();
 
-            if (!Battle.MineProcessor.AddMine(this))
-                await ForceDeactivate();
-        });
+                if (!Battle.MineProcessor.AddMine(this))
+                    await ForceDeactivate();
+            });
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new MineDropEvent(), Entity);
 
         CanBeDeactivated = false;
     }
 
     public override async Task Deactivate() {
-        if (!IsActive || !CanBeDeactivated) return;
+        if (!IsActive ||
+            !CanBeDeactivated) return;
 
         Battle.MineProcessor.RemoveMine(Index);
         Tank.Effects.TryRemove(this);
@@ -88,19 +123,15 @@ public class IceTrapEffect(
         await Deactivate();
     }
 
-    public void TryExplode() {
-        if (WaitingForExplosion || !IsActive)
-            return;
-
-        WaitingForExplosion = true;
-        Schedule(explosionDelay, async () => await Tank.BattlePlayer.PlayerConnection.Send(new MineTryExplosionEvent(), Entity));
-    }
-
     public async Task Explode() {
-        if (!WaitingForExplosion || !IsActive)
+        if (!WaitingForExplosion ||
+            !IsActive)
             return;
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new MineExplosionEvent(), Entity);
 
         await ForceDeactivate();

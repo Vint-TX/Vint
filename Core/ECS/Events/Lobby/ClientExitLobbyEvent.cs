@@ -13,7 +13,8 @@ public class ClientExitLobbyEvent : IServerEvent {
         BattlePlayer battlePlayer = connection.BattlePlayer!;
         Battles.Battle battle = battlePlayer.Battle;
 
-        if (battlePlayer.InBattleAsTank || battlePlayer.IsSpectator)
+        if (battlePlayer.InBattleAsTank ||
+            battlePlayer.IsSpectator)
             await battle.RemovePlayer(battlePlayer);
         else
             await battle.RemovePlayerFromLobby(battlePlayer);

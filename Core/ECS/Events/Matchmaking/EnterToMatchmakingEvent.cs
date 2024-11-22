@@ -9,7 +9,9 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 
 [ProtocolId(1494937115182)]
 public class EnterToMatchmakingEvent : IServerEvent {
-    static IEnumerable<IEntity> Modes { get; } = GlobalEntities.GetEntities("matchmakingModes").ToList();
+    static IEnumerable<IEntity> Modes { get; } = GlobalEntities
+        .GetEntities("matchmakingModes")
+        .ToList();
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.InLobby) return;

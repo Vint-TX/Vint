@@ -29,7 +29,9 @@ public readonly record struct QuestRewardInfo(
     public IEntity RewardEntity => GlobalEntities.GetEntity(TypeName, EntityName);
 
     public int GetAmount(int targetValue, int minValue, int maxValue) =>
-        minValue == maxValue ? MaxAmount : MathUtils.Map(targetValue, minValue, maxValue, MinAmount, MaxAmount);
+        minValue == maxValue
+            ? MaxAmount
+            : MathUtils.Map(targetValue, minValue, maxValue, MinAmount, MaxAmount);
 }
 
 public readonly record struct UpdatesInfo(

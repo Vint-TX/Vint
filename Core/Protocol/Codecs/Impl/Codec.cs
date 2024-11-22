@@ -11,5 +11,6 @@ public abstract class Codec : ICodec {
 
     public abstract object Decode(ProtocolBuffer buffer);
 
-    public override string ToString() => GetType().Name;
+    public override string ToString() => GetType()
+        .Name;
 }

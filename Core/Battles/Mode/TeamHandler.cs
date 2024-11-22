@@ -18,11 +18,9 @@ public abstract class TeamHandler(
     public IEntity BlueTeam { get; } = new TeamTemplate().Create(TeamColor.Blue, battle.Entity);
     IEntity TeamChat { get; } = new TeamBattleChatTemplate().Create();
 
-    public IEnumerable<BattlePlayer> RedPlayers => Battle.Players
-        .Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Red);
+    public IEnumerable<BattlePlayer> RedPlayers => Battle.Players.Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Red);
 
-    public IEnumerable<BattlePlayer> BluePlayers => Battle.Players
-        .Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Blue);
+    public IEnumerable<BattlePlayer> BluePlayers => Battle.Players.Where(battlePlayer => battlePlayer.TeamColor == TeamColor.Blue);
 
     SpawnPoint? LastRedSpawnPoint { get; set; }
     SpawnPoint? LastBlueSpawnPoint { get; set; }
@@ -38,7 +36,11 @@ public abstract class TeamHandler(
         if (team == null) return;
 
         await team.ChangeComponent<TeamScoreComponent>(component => component.Score = Math.Max(0, component.Score + score));
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new RoundScoreUpdatedEvent(), Battle.RoundEntity);
     }
 
@@ -92,10 +94,15 @@ public abstract class TeamHandler(
                 players = players.Shuffle();
                 BattlePlayer battlePlayer = players.First();
 
-                battlePlayer.Team = currentColor == TeamColor.Red ? RedTeam : BlueTeam;
+                battlePlayer.Team = currentColor == TeamColor.Red
+                    ? RedTeam
+                    : BlueTeam;
 
                 players.Remove(battlePlayer);
-                currentColor = currentColor == TeamColor.Red ? TeamColor.Blue : TeamColor.Red;
+
+                currentColor = currentColor == TeamColor.Red
+                    ? TeamColor.Blue
+                    : TeamColor.Red;
             }
         }
     }
@@ -107,7 +114,10 @@ public abstract class TeamHandler(
         await player.PlayerConnection.Unshare(TeamChat, RedTeam, BlueTeam);
 
     public override BattlePlayer SetupBattlePlayer(IPlayerConnection player) {
-        IEntity team = RedPlayers.Count() < BluePlayers.Count() ? RedTeam : BlueTeam;
+        IEntity team = RedPlayers.Count() < BluePlayers.Count()
+            ? RedTeam
+            : BlueTeam;
+
         BattlePlayer battlePlayer = new(player, Battle, team, false);
 
         return battlePlayer;

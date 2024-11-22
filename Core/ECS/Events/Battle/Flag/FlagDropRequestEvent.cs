@@ -10,7 +10,8 @@ namespace Vint.Core.ECS.Events.Battle.Flag;
 [ProtocolId(-1910863908782544246)]
 public class FlagDropRequestEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank) return;
+        if (!connection.InLobby ||
+            !connection.BattlePlayer!.InBattleAsTank) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer;
         Battles.Battle battle = battlePlayer.Battle;

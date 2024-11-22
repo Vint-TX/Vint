@@ -7,6 +7,6 @@ public class GraffitiUserItemTemplate(
     bool isChild
 ) : UserEntityTemplate {
     public override MarketEntityTemplate MarketTemplate => isChild
-                                                               ? new ChildGraffitiMarketItemTemplate()
-                                                               : new GraffitiMarketItemTemplate();
+        ? new ChildGraffitiMarketItemTemplate()
+        : new GraffitiMarketItemTemplate();
 }

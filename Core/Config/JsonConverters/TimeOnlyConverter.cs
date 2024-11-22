@@ -7,5 +7,7 @@ public class TimeOnlyConverter : JsonConverter<TimeOnly> {
         writer.WriteValue(value.ToString());
 
     public override TimeOnly ReadJson(JsonReader reader, Type objectType, TimeOnly existingValue, bool hasExistingValue, JsonSerializer serializer) =>
-        TimeOnly.TryParse((string?)reader.Value, out TimeOnly timeOnly) ? timeOnly : default;
+        TimeOnly.TryParse((string?)reader.Value, out TimeOnly timeOnly)
+            ? timeOnly
+            : default;
 }

@@ -7,11 +7,11 @@ using Vint.Core.Utils;
 namespace Vint.Core.ChatCommands;
 
 public interface IChatCommandProcessor {
-    public ChatCommand? GetOrDefault(string name);
+    ChatCommand? GetOrDefault(string name);
 
-    public IEnumerable<ChatCommand> GetAll();
+    IEnumerable<ChatCommand> GetAll();
 
-    public bool TryParseCommand(string rawCommand, out ChatCommand? chatCommand);
+    bool TryParseCommand(string rawCommand, out ChatCommand? chatCommand);
 }
 
 public class ChatCommandProcessor(
@@ -31,7 +31,8 @@ public class ChatCommandProcessor(
             return false;
         }
 
-        string commandName = value[1..].Split()[0];
+        string commandName = value[1..]
+            .Split()[0];
 
         chatCommand = Commands.SingleOrDefault(command => command.Info.Name == commandName);
         return true;
@@ -75,7 +76,10 @@ public class ChatCommandProcessor(
                     .Skip(1) // Context
                     .ToList();
 
-                if (options.Count < command.GetParameters().Length - 1) continue;
+                if (options.Count <
+                    command.GetParameters()
+                        .Length -
+                    1) continue;
 
                 ChatCommand chatCommand = new(command.Name,
                     this,

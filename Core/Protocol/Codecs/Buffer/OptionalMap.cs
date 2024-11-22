@@ -24,8 +24,7 @@ public class OptionalMap {
 
     public bool Get() {
         if (Position >= Length) {
-            throw new IndexOutOfRangeException(
-                "Index was out of range. Must be non-negative and less than the size of the OptionalMap.");
+            throw new IndexOutOfRangeException("Index was out of range. Must be non-negative and less than the size of the OptionalMap.");
         }
 
         return Convert.ToBoolean(Data[Position / 8] >> 7 - Position++ % 8 & 1);

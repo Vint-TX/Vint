@@ -41,7 +41,11 @@ public class SendChatMessageEvent : IServerEvent {
         }
 
         if (!Validate(chat.TemplateAccessor!.ConfigPath!)) {
-            sender.Logger.ForType(GetType()).Warning("Message failed validation: '{Message}'", Message);
+            sender
+                .Logger
+                .ForType(GetType())
+                .Warning("Message failed validation: '{Message}'", Message);
+
             return;
         }
 
@@ -62,12 +66,13 @@ public class SendChatMessageEvent : IServerEvent {
 
         ConcurrentDictionary<string, Regex> badWords = new();
 
-        Parallel.ForEach(ConfigManager.CensorshipRegexes, pair => {
-            (string word, Regex regex) = pair;
+        Parallel.ForEach(ConfigManager.CensorshipRegexes,
+            pair => {
+                (string word, Regex regex) = pair;
 
-            if (regex.IsMatch(Message))
-                badWords.TryAdd(word, regex);
-        });
+                if (regex.IsMatch(Message))
+                    badWords.TryAdd(word, regex);
+            });
 
         foreach ((string word, Regex regex) in badWords) {
             foreach (Match match in regex.Matches(word))

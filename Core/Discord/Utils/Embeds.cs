@@ -4,12 +4,10 @@ namespace Vint.Core.Discord.Utils;
 
 static class Embeds {
     public static async Task SendEmbed(this DiscordInteraction interaction, DiscordEmbed embed, bool ephemeral = true) =>
-        await interaction.CreateResponseAsync(
-            DiscordInteractionResponseType.ChannelMessageWithSource,
+        await interaction.CreateResponseAsync(DiscordInteractionResponseType.ChannelMessageWithSource,
             new DiscordInteractionResponseBuilder()
                 .AddEmbed(embed)
-                .AsEphemeral(ephemeral)
-        );
+                .AsEphemeral(ephemeral));
 
     public static DiscordEmbedBuilder AddFields(this DiscordEmbedBuilder builder, params (string name, string value, bool inline)[] fields) {
         foreach ((string name, string value, bool inline) in fields)
@@ -33,7 +31,9 @@ static class Embeds {
     public static DiscordEmbedBuilder GetErrorEmbed(string description, string title = "Error", bool critical = false) =>
         GetEmbed(title,
             description,
-            critical ? "If you think an error has occurred, report it to the Vint server" : null,
+            critical
+                ? "If you think an error has occurred, report it to the Vint server"
+                : null,
             "#CC0605");
 
     static DiscordEmbedBuilder GetEmbed(string title, string description, string? footer, string color) => new DiscordEmbedBuilder()

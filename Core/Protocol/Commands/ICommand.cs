@@ -3,5 +3,5 @@
 namespace Vint.Core.Protocol.Commands;
 
 public interface ICommand {
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider);
+    Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider);
 }

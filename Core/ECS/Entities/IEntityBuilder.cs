@@ -5,33 +5,33 @@ using Vint.Core.ECS.Templates;
 namespace Vint.Core.ECS.Entities;
 
 public interface IEntityBuilder {
-    public long Id { get; }
-    public TemplateAccessor? TemplateAccessor { get; }
-    public List<IComponent> Components { get; }
+    long Id { get; }
+    TemplateAccessor? TemplateAccessor { get; }
+    List<IComponent> Components { get; }
 
-    public IEntityBuilder WithTemplateAccessor(TemplateAccessor templateAccessor);
+    IEntityBuilder WithTemplateAccessor(TemplateAccessor templateAccessor);
 
-    public IEntityBuilder WithTemplateAccessor(EntityTemplate template, string? configPath);
+    IEntityBuilder WithTemplateAccessor(EntityTemplate template, string? configPath);
 
-    public IEntityBuilder WithId(long id);
+    IEntityBuilder WithId(long id);
 
-    public IEntityBuilder AddComponent(IComponent component);
+    IEntityBuilder AddComponent(IComponent component);
 
-    public IEntityBuilder AddComponent<T>() where T : class, IComponent, new();
+    IEntityBuilder AddComponent<T>() where T : class, IComponent, new();
 
-    public IEntityBuilder AddComponent<T>(string configPath) where T : class, IComponent;
+    IEntityBuilder AddComponent<T>(string configPath) where T : class, IComponent;
 
-    public IEntityBuilder AddGroupComponent<T>(IEntity? key = null) where T : GroupComponent;
+    IEntityBuilder AddGroupComponent<T>(IEntity? key = null) where T : GroupComponent;
 
-    public IEntityBuilder AddComponentFrom<T>(IEntity entity) where T : class, IComponent;
+    IEntityBuilder AddComponentFrom<T>(IEntity entity) where T : class, IComponent;
 
-    public IEntityBuilder AddComponentFromConfig<T>() where T : class, IComponent;
+    IEntityBuilder AddComponentFromConfig<T>() where T : class, IComponent;
 
-    public IEntityBuilder TryAddComponent<T>(IEntity entity) where T : class, IComponent;
+    IEntityBuilder TryAddComponent<T>(IEntity entity) where T : class, IComponent;
 
-    public IEntityBuilder TryAddComponent<T>(string configPath) where T : class, IComponent;
+    IEntityBuilder TryAddComponent<T>(string configPath) where T : class, IComponent;
 
-    public IEntityBuilder ThenExecuteIf(Func<IEntity, bool> condition, Action<IEntity> action);
+    IEntityBuilder ThenExecuteIf(Func<IEntity, bool> condition, Action<IEntity> action);
 
-    public IEntity Build(bool temp);
+    IEntity Build(bool temp);
 }

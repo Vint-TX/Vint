@@ -28,9 +28,8 @@ public class ReportUserByUserIdEvent : IServerEvent {
         if (discordBot != null)
             await discordBot.SendReport($"{targetPlayer.Username} has been reported", connection.Player.Username);
 
-        Relation? relation = await db.Relations
-            .SingleOrDefaultAsync(relation => relation.SourcePlayerId == SourceId &&
-                                         relation.TargetPlayerId == UserId);
+        Relation? relation =
+            await db.Relations.SingleOrDefaultAsync(relation => relation.SourcePlayerId == SourceId && relation.TargetPlayerId == UserId);
 
         if (relation == null) {
             await db.InsertAsync(new Relation { SourcePlayer = connection.Player, TargetPlayer = targetPlayer, Types = RelationTypes.Reported });

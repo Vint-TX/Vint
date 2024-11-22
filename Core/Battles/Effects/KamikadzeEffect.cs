@@ -26,7 +26,12 @@ public class KamikadzeEffect(
         Tank.Effects.Add(this);
 
         WeaponEntity = Entity = new KamikadzeEffectTemplate().Create(Tank.BattlePlayer,
-            Duration, Battle.Properties.FriendlyFire, impact, minPercent, 0, radius);
+            Duration,
+            Battle.Properties.FriendlyFire,
+            impact,
+            minPercent,
+            0,
+            radius);
 
         WeaponHandler = new KamikadzeWeaponHandler(Tank,
             cooldown,
@@ -45,7 +50,8 @@ public class KamikadzeEffect(
     }
 
     public override async Task Deactivate() {
-        if (!IsActive || !CanBeDeactivated) return;
+        if (!IsActive ||
+            !CanBeDeactivated) return;
 
         Tank.Effects.TryRemove(this);
         await Unshare(Tank.BattlePlayer);

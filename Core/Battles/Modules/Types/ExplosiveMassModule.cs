@@ -10,12 +10,12 @@ namespace Vint.Core.Battles.Modules.Types;
 public class ExplosiveMassModule : ActiveBattleModule {
     public override string ConfigPath => "garage/module/upgrade/properties/explosivemass";
 
-    public override ExplosiveMassEffect GetEffect() => new(Cooldown, MarketEntity, Radius, ActivationTime, MaxDamage, MinDamage, Tank, Level);
-
     float Radius { get; set; }
     float MaxDamage { get; set; }
     float MinDamage { get; set; }
     float ActivationTime { get; set; }
+
+    public override ExplosiveMassEffect GetEffect() => new(Cooldown, MarketEntity, Radius, ActivationTime, MaxDamage, MinDamage, Tank, Level);
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {
         await base.Init(tank, userSlot, marketModule);
@@ -29,11 +29,16 @@ public class ExplosiveMassModule : ActiveBattleModule {
     public override async Task Activate() {
         if (!CanBeActivated) return;
 
-        ExplosiveMassEffect? effect = Tank.Effects.OfType<ExplosiveMassEffect>().SingleOrDefault();
+        ExplosiveMassEffect? effect = Tank
+            .Effects
+            .OfType<ExplosiveMassEffect>()
+            .SingleOrDefault();
 
         if (effect != null) return;
 
         await base.Activate();
-        await GetEffect().Activate();
+
+        await GetEffect()
+            .Activate();
     }
 }

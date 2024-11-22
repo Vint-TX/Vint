@@ -13,7 +13,10 @@ public class OpenCustomLobbyEvent : IServerEvent {
             connection.BattlePlayer!.Battle.TypeHandler is not CustomHandler customHandler) return;
 
         Player player = connection.Player;
-        int price = player.IsPremium ? 0 : 1000;
+
+        int price = player.IsPremium
+            ? 0
+            : 1000;
 
         if (player.Crystals < price) return;
 

@@ -22,13 +22,17 @@ public class ThunderWeaponHandler : DiscreteTankWeaponHandler, ISplashWeaponHand
 
     public async Task SplashFire(HitTarget target, int targetIndex) {
         Battle battle = BattleTank.Battle;
-        BattleTank targetTank = battle.Players
+
+        BattleTank targetTank = battle
+            .Players
             .Where(battlePlayer => battlePlayer.InBattleAsTank)
             .Select(battlePlayer => battlePlayer.Tank!)
             .Single(battleTank => battleTank.Incarnation == target.IncarnationEntity);
+
         bool isEnemy = targetTank == BattleTank || BattleTank.IsEnemy(targetTank);
 
-        if (targetTank.StateManager.CurrentState is not Active || !isEnemy) return;
+        if (targetTank.StateManager.CurrentState is not Active ||
+            !isEnemy) return;
 
         CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex, true);
         await battle.DamageProcessor.Damage(BattleTank, targetTank, MarketEntity, BattleEntity, damage);
@@ -40,8 +44,6 @@ public class ThunderWeaponHandler : DiscreteTankWeaponHandler, ISplashWeaponHand
 
         return 0.01f *
                (MinSplashDamagePercent +
-                (RadiusOfMinSplashDamage - distance) *
-                (100f - MinSplashDamagePercent) /
-                (RadiusOfMinSplashDamage - RadiusOfMaxSplashDamage));
+                (RadiusOfMinSplashDamage - distance) * (100f - MinSplashDamagePercent) / (RadiusOfMinSplashDamage - RadiusOfMaxSplashDamage));
     }
 }

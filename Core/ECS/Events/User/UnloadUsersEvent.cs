@@ -8,13 +8,12 @@ namespace Vint.Core.ECS.Events.User;
 public class UnloadUsersEvent : IServerEvent {
     public HashSet<long /*IEntity*/> Users { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) { // bug: client crashes while scrolling friends list
+    public Task Execute(
+        IPlayerConnection connection,
+        IServiceProvider serviceProvider,
+        IEnumerable<IEntity> entities) => // bug: client crashes while scrolling friends list
         // todo temporary solution: do not unshare the players
-
         // Users.RemoveWhere(user => connection.BattlePlayer?.Battle.Players.Any(battlePlayer => battlePlayer.PlayerConnection.User == user) ?? false);
-
         // connection.Unshare(Users);
-
-        return Task.CompletedTask;
-    }
+        Task.CompletedTask;
 }

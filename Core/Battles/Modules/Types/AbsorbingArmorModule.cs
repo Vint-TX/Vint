@@ -11,11 +11,17 @@ public class AbsorbingArmorModule : ActiveBattleModule {
         if (!CanBeActivated) return;
 
         await base.Activate();
-        AbsorbingArmorEffect? effect = Tank.Effects.OfType<AbsorbingArmorEffect>().SingleOrDefault();
+
+        AbsorbingArmorEffect? effect = Tank
+            .Effects
+            .OfType<AbsorbingArmorEffect>()
+            .SingleOrDefault();
 
         switch (effect) {
             case null:
-                await GetEffect().Activate();
+                await GetEffect()
+                    .Activate();
+
                 break;
 
             case IExtendableEffect extendableEffect:

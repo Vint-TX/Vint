@@ -13,7 +13,10 @@ public class InviteToLobbyEvent : IServerEvent {
         if (!connection.InLobby) return;
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        List<IPlayerConnection> connections = server.PlayerConnections.Values
+
+        List<IPlayerConnection> connections = server
+            .PlayerConnections
+            .Values
             .Where(conn => conn.IsOnline)
             .ToList();
 

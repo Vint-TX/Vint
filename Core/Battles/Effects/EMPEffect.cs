@@ -23,7 +23,10 @@ public class EMPEffect : Effect {
         Entity = new EMPEffectTemplate().Create(Tank.BattlePlayer, Duration, Radius);
         await ShareToAllPlayers();
 
-        foreach (IPlayerConnection connection in Battle.Players.Where(player => player.InBattle).Select(player => player.PlayerConnection))
+        foreach (IPlayerConnection connection in Battle
+                     .Players
+                     .Where(player => player.InBattle)
+                     .Select(player => player.PlayerConnection))
             await connection.Send(new EMPEffectReadyEvent(), Entity);
 
         Schedule(Duration, Deactivate);
@@ -43,10 +46,12 @@ public class EMPEffect : Effect {
 
         BattleTank[] affectedTanks = targets
             .Where(target => Vector3.Distance(position, target.Position) <= Radius)
-            .Where(target => target.Effects
+            .Where(target => target
+                .Effects
                 .OfType<InvulnerabilityEffect>()
                 .All(invulnerability => !invulnerability.IsActive))
-            .Where(target => target.Modules
+            .Where(target => target
+                .Modules
                 .OfType<INeutralizeEMPModule>()
                 .All(neutralize => !neutralize.IsActive))
             .ToArray();

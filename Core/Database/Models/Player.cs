@@ -89,11 +89,14 @@ public class Player {
     [NotColumn] public IEntity Fraction => GlobalEntities.GetEntity("fractions", FractionName);
 
     [Column] public int QuestChanges { get; set; }
-    [NotColumn] public int MaxQuestChanges => IsPremium ? 2 : 1;
+    [NotColumn] public int MaxQuestChanges => IsPremium
+        ? 2
+        : 1;
 
     [Column] public int LastLoginRewardDay { get; set; }
     [NotColumn] public DateTimeOffset NextLoginRewardTime =>
-        LastLoginRewardTime.AddSeconds(ConfigManager.GetComponent<LoginRewardsComponent>("login_rewards").IntervalInSeconds);
+        LastLoginRewardTime.AddSeconds(ConfigManager.GetComponent<LoginRewardsComponent>("login_rewards")
+            .IntervalInSeconds);
 
     [Column] public required DateTimeOffset RegistrationTime { get; init; }
     [Column] public required DateTimeOffset LastLoginTime { get; set; }
@@ -101,8 +104,7 @@ public class Player {
     [Column] public DateTimeOffset LastLoginRewardTime { get; set; }
     [Column] public DateTimeOffset? QuestChangesResetTime { get; set; }
 
-    [Association(
-        ThisKey = $"{nameof(Id)},{nameof(DiscordUserId)}",
+    [Association(ThisKey = $"{nameof(Id)},{nameof(DiscordUserId)}",
         OtherKey = $"{nameof(Models.DiscordLink.PlayerId)},{nameof(Models.DiscordLink.UserId)}")]
     public DiscordLink DiscordLink { get; set; } = null!;
 
@@ -158,20 +160,30 @@ public class Player {
     public List<Punishment> Punishments { get; private set; } = null!;
 
     public async Task InitializeNew() {
-        CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
+        CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist")
+            .Id;
+
         Reputation = 100;
 
-        long weaponId = GlobalEntities.GetEntity("weapons", "Smoky").Id;
-        long hullId = GlobalEntities.GetEntity("hulls", "Hunter").Id;
+        long weaponId = GlobalEntities.GetEntity("weapons", "Smoky")
+            .Id;
+
+        long hullId = GlobalEntities.GetEntity("hulls", "Hunter")
+            .Id;
 
         long shellId = GlobalEntities.DefaultShells[weaponId];
         long weaponSkinId = GlobalEntities.DefaultSkins[weaponId];
-        long coverId = GlobalEntities.GetEntity("covers", "None").Id;
+
+        long coverId = GlobalEntities.GetEntity("covers", "None")
+            .Id;
 
         long hullSkinId = GlobalEntities.DefaultSkins[hullId];
-        long paintId = GlobalEntities.GetEntity("paints", "Green").Id;
 
-        long graffitiId = GlobalEntities.GetEntity("graffities", "Logo").Id;
+        long paintId = GlobalEntities.GetEntity("paints", "Green")
+            .Id;
+
+        long graffitiId = GlobalEntities.GetEntity("graffities", "Logo")
+            .Id;
 
         await using (DbConnection db = new()) {
             await db.BeginTransactionAsync();
@@ -271,29 +283,28 @@ public class Player {
     public async Task<bool> UnWarn(long warnId) {
         await using DbConnection db = new();
 
-        IQueryable<Punishment> punishments = db.Punishments
-            .Where(punishment => punishment.PlayerId == Id &&
-                                 punishment.Type == PunishmentType.Warn &&
-                                 punishment.Id == warnId);
+        IQueryable<Punishment> punishments = db.Punishments.Where(punishment =>
+            punishment.PlayerId == Id && punishment.Type == PunishmentType.Warn && punishment.Id == warnId);
 
         Punishment? punishment = await punishments.SingleOrDefaultAsync();
 
         if (punishment == null) return false;
 
         punishment.Active = false;
+
         await punishments
             .Set(p => p.Active, punishment.Active)
             .UpdateAsync();
+
         return true;
     }
 
     public async Task<bool> UnMute() {
         await using DbConnection db = new();
 
-        Punishment? punishment = await db.Punishments
-            .Where(punishment => punishment.PlayerId == Id &&
-                                 punishment.Type == PunishmentType.Mute &&
-                                 punishment.Active)
+        Punishment? punishment = await db
+            .Punishments
+            .Where(punishment => punishment.PlayerId == Id && punishment.Type == PunishmentType.Mute && punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
             .FirstOrDefaultAsync();
 
@@ -307,9 +318,9 @@ public class Player {
     public async Task<bool> UnBan() {
         await using DbConnection db = new();
 
-        Punishment? punishment = await db.Punishments
-            .Where(punishment => (punishment.PlayerId == Id ||
-                                  punishment.HardwareFingerprint == HardwareFingerprint) &&
+        Punishment? punishment = await db
+            .Punishments
+            .Where(punishment => (punishment.PlayerId == Id || punishment.HardwareFingerprint == HardwareFingerprint) &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
@@ -326,7 +337,9 @@ public class Player {
         await RefreshPunishments();
 
         await using DbConnection db = new();
-        return await db.Punishments
+
+        return await db
+            .Punishments
             .Where(punishment => punishment.Active &&
                                  punishment.Type == PunishmentType.Ban &&
                                  (punishment.PlayerId == Id ||
@@ -340,10 +353,10 @@ public class Player {
         await RefreshPunishments();
 
         await using DbConnection db = new();
-        return await db.Punishments
-            .Where(punishment => punishment.PlayerId == Id &&
-                                 punishment.Type == PunishmentType.Mute &&
-                                 punishment.Active)
+
+        return await db
+            .Punishments
+            .Where(punishment => punishment.PlayerId == Id && punishment.Type == PunishmentType.Mute && punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
             .FirstOrDefaultAsync();
     }
@@ -354,9 +367,9 @@ public class Player {
         try {
             await db.BeginTransactionAsync();
 
-            foreach (Punishment punishment in db.Punishments
-                         .Where(punishment => punishment.PlayerId == Id &&
-                                              punishment.Active)
+            foreach (Punishment punishment in db
+                         .Punishments
+                         .Where(punishment => punishment.PlayerId == Id && punishment.Active)
                          .ToList()
                          .Where(punishment => punishment.EndTime <= DateTimeOffset.UtcNow)) {
                 punishment.Active = false;

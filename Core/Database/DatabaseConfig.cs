@@ -16,8 +16,7 @@ public readonly record struct DatabaseConfig(
 
     static ILogger Logger { get; } = Log.Logger.ForType(typeof(DatabaseConfig));
 
-    static string ConfigPath { get; } =
-        Path.Combine(Directory.GetCurrentDirectory(), "Resources", "database.json");
+    static string ConfigPath { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "database.json");
 
     static DatabaseConfig Cache { get; set; }
 

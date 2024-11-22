@@ -10,11 +10,11 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IArcadeProcessor {
-    public void Tick();
+    void Tick();
 
-    public void AddPlayerToQueue(IPlayerConnection connection, ArcadeModeType mode);
+    void AddPlayerToQueue(IPlayerConnection connection, ArcadeModeType mode);
 
-    public Task RemoveArcadePlayer(IPlayerConnection connection, IEntity? lobby, bool selfAction);
+    Task RemoveArcadePlayer(IPlayerConnection connection, IEntity? lobby, bool selfAction);
 }
 
 public class ArcadeProcessor( // todo replace with MatchmakingProcessor
