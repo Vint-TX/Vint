@@ -53,8 +53,8 @@ public class DiscordBot(
             .CreateDefault(token, DiscordIntents.All)
             .ConfigureLogging(builder => builder.AddSerilog(Logger))
             .ConfigureServices(serviceCollection => serviceCollection
-                .AddSingleton<GameServer>()
-                .AddSingleton<IBattleProcessor, BattleProcessor>())
+                .AddSingleton(serviceProvider.GetRequiredService<GameServer>())
+                .AddSingleton<IBattleProcessor, BattleProcessor>(_ => serviceProvider.GetRequiredService<BattleProcessor>()))
             .UseCommands((_, commands) => {
                     commands.AddCommands(Assembly.GetExecutingAssembly());
                     commands.AddProcessor<SlashCommandProcessor>();
