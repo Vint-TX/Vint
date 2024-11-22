@@ -54,7 +54,7 @@ public class DiscordBot(
             .ConfigureLogging(builder => builder.AddSerilog(Logger))
             .ConfigureServices(serviceCollection => serviceCollection
                 .AddSingleton(serviceProvider.GetRequiredService<GameServer>())
-                .AddSingleton<IBattleProcessor, BattleProcessor>(_ => serviceProvider.GetRequiredService<BattleProcessor>()))
+                .AddSingleton<IBattleProcessor, BattleProcessor>(_ => (BattleProcessor)serviceProvider.GetRequiredService<IBattleProcessor>()))
             .UseCommands((_, commands) => {
                     commands.AddCommands(Assembly.GetExecutingAssembly());
                     commands.AddProcessor<SlashCommandProcessor>();
