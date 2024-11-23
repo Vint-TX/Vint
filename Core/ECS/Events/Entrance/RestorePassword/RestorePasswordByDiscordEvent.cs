@@ -9,8 +9,8 @@ using Vint.Core.Discord;
 using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Entrance.Validation;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.RestorePassword;

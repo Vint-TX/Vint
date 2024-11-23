@@ -6,8 +6,8 @@ using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Payment;
 using Vint.Core.ECS.Events.User.Friends;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Entrance.Lobby;

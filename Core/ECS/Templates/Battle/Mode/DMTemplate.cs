@@ -3,7 +3,7 @@ using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Components.Battle.Limit;
 using Vint.Core.ECS.Components.Battle.Mode;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Templates.Battle.Mode;
 

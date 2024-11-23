@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.Protocol.Commands;
+namespace Vint.Core.Server.Game.Protocol.Commands;
 
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public abstract class EntityCommand(

@@ -1,5 +1,5 @@
 using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Server.Modules.Effect.AcceleratedGears;
 

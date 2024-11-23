@@ -1,7 +1,7 @@
 using Vint.Core.Battles.Player;
 using Vint.Core.ECS.Components.Battle.Effect.Type.EMP;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Templates.Battle.Effect;
 

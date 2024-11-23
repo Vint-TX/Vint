@@ -1,5 +1,5 @@
 using Vint.Core.Battles.Bonus;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Battle.Bonus;
 

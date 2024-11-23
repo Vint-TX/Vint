@@ -2,8 +2,8 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Battle.Unit;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.Battle.Movement;
 

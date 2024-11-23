@@ -1,5 +1,5 @@
 using JetBrains.Annotations;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Battle.Weapon.Splash;
 

@@ -45,9 +45,9 @@ using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.ECS.Templates.User;
 using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.ECS.Templates.Weapons.User;
-using Vint.Core.Protocol.Codecs.Buffer;
-using Vint.Core.Protocol.Codecs.Impl;
-using Vint.Core.Protocol.Commands;
+using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
+using Vint.Core.Server.Game.Protocol.Codecs.Impl;
+using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game;

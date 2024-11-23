@@ -1,4 +1,4 @@
-﻿namespace Vint.Core.Protocol.Codecs.Buffer;
+﻿namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
 public class OptionalMap {
     public OptionalMap() => Data = new List<byte>();

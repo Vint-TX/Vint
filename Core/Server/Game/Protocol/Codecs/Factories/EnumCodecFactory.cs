@@ -1,6 +1,6 @@
-﻿using Vint.Core.Protocol.Codecs.Impl;
+﻿using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
-namespace Vint.Core.Protocol.Codecs.Factories;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Factories;
 
 public class EnumCodecFactory : ICodecFactory {
     Dictionary<Type, EnumCodec> Codecs { get; } = new();

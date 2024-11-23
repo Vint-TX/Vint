@@ -3,7 +3,7 @@ using System.Numerics;
 using Serilog;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol.Codecs.Impl;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public abstract class MoveCodec : Codec {
     public const int MovementSize = 21;

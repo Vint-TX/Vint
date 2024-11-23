@@ -2,8 +2,8 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.User.PromoCode;
 

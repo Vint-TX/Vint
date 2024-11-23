@@ -6,14 +6,14 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Exceptions;
-using Vint.Core.Protocol.Attributes;
-using Vint.Core.Protocol.Codecs;
-using Vint.Core.Protocol.Codecs.Factories;
-using Vint.Core.Protocol.Codecs.Impl;
-using Vint.Core.Protocol.Commands;
+using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Codecs;
+using Vint.Core.Server.Game.Protocol.Codecs.Factories;
+using Vint.Core.Server.Game.Protocol.Codecs.Impl;
+using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol;
+namespace Vint.Core.Server.Game.Protocol;
 
 public class Protocol {
     public Protocol() {

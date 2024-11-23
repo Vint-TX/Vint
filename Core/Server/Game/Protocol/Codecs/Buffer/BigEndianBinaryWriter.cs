@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Vint.Core.Protocol.Codecs.Buffer;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
 public class BigEndianBinaryWriter : BinaryWriter {
     public BigEndianBinaryWriter(Stream output) : base(output) { }

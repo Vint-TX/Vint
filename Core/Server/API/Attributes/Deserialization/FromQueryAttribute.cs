@@ -12,9 +12,10 @@ public class FromQueryAttribute(
     string? fieldName = null,
     object? @default = null,
     bool badRequestIfMissing = false
-) : Attribute, IRequestDataAttribute<WebApiController, string>, IRequestDataAttribute<WebApiController, string[]>,
+) : Attribute,
+    IRequestDataAttribute<WebApiController, string>,
+    IRequestDataAttribute<WebApiController, string[]>,
     IRequestDataAttribute<WebApiController> {
-
     string[]? GetValues(WebApiController controller, string key) {
         NameValueCollection query = controller.HttpContext.GetRequestQueryData();
 

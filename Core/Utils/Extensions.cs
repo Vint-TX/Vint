@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Vint.Core.ECS.Components;
 using Vint.Core.Exceptions;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Utils;
 

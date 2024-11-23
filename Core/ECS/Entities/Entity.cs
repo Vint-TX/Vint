@@ -5,8 +5,8 @@ using Vint.Core.Config;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Templates;
-using Vint.Core.Protocol.Commands;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Entities;

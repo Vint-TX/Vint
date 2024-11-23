@@ -1,8 +1,8 @@
 using System.Collections;
 using Vint.Core.ECS.Movement;
-using Vint.Core.Protocol.Codecs.Buffer;
+using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
-namespace Vint.Core.Protocol.Codecs.Impl;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class MovementCodec : MoveCodec {
     public override void Encode(ProtocolBuffer buffer, object value) {

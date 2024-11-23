@@ -1,8 +1,7 @@
 ﻿using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol.Codecs.Buffer;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
 public class ProtocolBuffer(
     OptionalMap optionalMap,

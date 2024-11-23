@@ -4,8 +4,8 @@ using Vint.Core.Battles.Player;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Shot;
 

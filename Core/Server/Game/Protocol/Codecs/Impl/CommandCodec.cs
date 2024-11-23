@@ -1,9 +1,9 @@
 ﻿using Serilog;
-using Vint.Core.Protocol.Codecs.Buffer;
-using Vint.Core.Protocol.Commands;
+using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
+using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol.Codecs.Impl;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class CommandCodec : Codec {
     ILogger Logger { get; } = Log.Logger.ForType(typeof(CommandCodec));

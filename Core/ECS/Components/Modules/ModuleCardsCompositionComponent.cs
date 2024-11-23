@@ -1,5 +1,5 @@
 ﻿using Vint.Core.Config;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Modules;
 

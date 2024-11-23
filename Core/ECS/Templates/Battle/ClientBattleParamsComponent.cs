@@ -1,6 +1,6 @@
 using Vint.Core.Battles;
 using Vint.Core.ECS.Components;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Templates.Battle;
 

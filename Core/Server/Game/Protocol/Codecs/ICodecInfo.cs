@@ -1,3 +1,3 @@
-﻿namespace Vint.Core.Protocol.Codecs;
+﻿namespace Vint.Core.Server.Game.Protocol.Codecs;
 
 public interface ICodecInfo;

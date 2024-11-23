@@ -4,8 +4,8 @@ using Vint.Core.Database;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Notification;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 using Container = Vint.Core.Database.Models.Container;
 

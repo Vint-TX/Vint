@@ -8,8 +8,8 @@ using Vint.Core.Database;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;

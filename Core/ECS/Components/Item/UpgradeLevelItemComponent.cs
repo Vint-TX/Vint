@@ -1,4 +1,4 @@
-﻿using Vint.Core.Protocol.Attributes;
+﻿using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Components.Item;

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
-using Vint.Core.Server.Game;
 
-namespace Vint.Core.Protocol.Commands;
+namespace Vint.Core.Server.Game.Protocol.Commands;
 
 public class InitTimeCommand(
     long serverTime

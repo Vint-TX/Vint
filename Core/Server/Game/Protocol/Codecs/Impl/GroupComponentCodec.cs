@@ -1,8 +1,8 @@
 ﻿using Vint.Core.ECS.Components.Group;
-using Vint.Core.Protocol.Codecs.Buffer;
+using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol.Codecs.Impl;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class GroupComponentCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {

@@ -2,8 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Chat;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.Chat;
 

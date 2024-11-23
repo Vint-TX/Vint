@@ -1,4 +1,4 @@
-﻿namespace Vint.Core.Protocol.Commands;
+﻿namespace Vint.Core.Server.Game.Protocol.Commands;
 
 public enum CommandCode : byte {
     SendEvent = 1,

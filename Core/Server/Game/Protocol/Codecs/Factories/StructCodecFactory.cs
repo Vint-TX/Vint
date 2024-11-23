@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using Vint.Core.Protocol.Attributes;
-using Vint.Core.Protocol.Codecs.Impl;
+using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol.Codecs.Factories;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Factories;
 
 public class StructCodecFactory : ICodecFactory {
     public ICodec? Create(Protocol protocol, ICodecInfo codecInfo) {

@@ -4,7 +4,7 @@ using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Types;
 using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Templates.Battle.Weapon;
 

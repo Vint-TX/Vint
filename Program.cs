@@ -6,11 +6,11 @@ using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Discord;
-using Vint.Core.Protocol;
 using Vint.Core.Quests;
 using Vint.Core.Server;
 using Vint.Core.Server.API;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol;
 using Vint.Core.Server.Static;
 using Vint.Core.Utils;
 

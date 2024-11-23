@@ -2,8 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battles;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Protocol.Attributes;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.Matchmaking;
 

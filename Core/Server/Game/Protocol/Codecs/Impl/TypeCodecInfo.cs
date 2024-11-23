@@ -1,6 +1,6 @@
 ﻿using Vint.Core.Utils;
 
-namespace Vint.Core.Protocol.Codecs.Impl;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class TypeCodecInfo(
     Type type,

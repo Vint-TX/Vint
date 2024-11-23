@@ -22,7 +22,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Server.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
-using Vint.Core.Protocol.Attributes;
+using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;

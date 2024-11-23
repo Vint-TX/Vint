@@ -1,6 +1,6 @@
-﻿using Vint.Core.Protocol.Codecs.Buffer;
+﻿using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
-namespace Vint.Core.Protocol.Codecs;
+namespace Vint.Core.Server.Game.Protocol.Codecs;
 
 public interface ICodec {
     Protocol Protocol { get; }

@@ -1,6 +1,6 @@
 ﻿using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Protocol.Commands;
+namespace Vint.Core.Server.Game.Protocol.Commands;
 
 public class EntityUnshareCommand(
     IEntity entity

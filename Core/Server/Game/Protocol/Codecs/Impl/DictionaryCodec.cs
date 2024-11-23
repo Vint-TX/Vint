@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using Vint.Core.Protocol.Codecs.Buffer;
+using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
-namespace Vint.Core.Protocol.Codecs.Impl;
+namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class DictionaryCodec(
     ICodecInfo keyCodecInfo,
