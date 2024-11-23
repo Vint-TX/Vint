@@ -10,17 +10,17 @@ namespace Vint.Core.Server.API.Controllers;
 
 public class InviteController : WebApiController {
     [Post("/")]
-    public async Task<Invite> CreateInvite([FromJsonBody] InviteModel inviteModel) {
+    public async Task<Invite> CreateInvite([FromBody] InviteDTO inviteDTO) {
         await using DbConnection db = new();
-        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == inviteModel.Code);
+        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == inviteDTO.Code);
 
         if (invite != null) {
-            throw HttpException.BadRequest($"Invite with code {inviteModel.Code} already exists", invite);
+            throw HttpException.BadRequest($"Invite with code {inviteDTO.Code} already exists", invite);
         }
 
         invite = new Invite {
-            Code = inviteModel.Code,
-            RemainingUses = inviteModel.Uses
+            Code = inviteDTO.Code,
+            RemainingUses = inviteDTO.Uses
         };
 
         invite.Id = await db.InsertWithInt64IdentityAsync(invite);
@@ -60,7 +60,7 @@ public class InviteController : WebApiController {
     }
 }
 
-public readonly record struct InviteModel(
+public record InviteDTO(
     string Code,
     ushort Uses
 );

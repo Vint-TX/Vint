@@ -19,8 +19,10 @@ public class ApiServer {
                 .WithUrlPrefix($"http://localhost:{Port}/")
                 .WithMode(HttpListenerMode.Microsoft))
             .HandleHttpException(HandleHttpException)
-            .HandleUnhandledException(HandleUnhandledException)
-            .WithWebApi("/invites/", SerializeAndSend, module => module.WithController<InviteController>());
+            .HandleUnhandledException(HandleUnhandledException);
+
+        WithController<InviteController>("/invites/");
+        WithController<PlayerController>("/players/");
 
         Server.StateChanged += (_, e) => Logger.Debug("State changed: {Old} => {New}", e.OldState, e.NewState);
     }
@@ -61,6 +63,15 @@ public class ApiServer {
 
         await SerializeAndSend(context, new ErrorResponse($"{type.FullName}: {message}", exception.Data));
     }
+
+    void WithController<TController>(string baseRoute) where TController : WebApiController, new() =>
+        Server.WithWebApi(baseRoute, SerializeAndSend, module => module.WithController<TController>());
+
+    void WithController<TController>(string baseRoute, Action<WebApiModule> configure) where TController : WebApiController, new() =>
+        Server.WithWebApi(baseRoute, SerializeAndSend, module => {
+            module.WithController<TController>();
+            configure(module);
+        });
 }
 
 class ResponseJsonSerializer {
