@@ -1,12 +1,8 @@
 using Redzen.Random;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates;
 using Vint.Core.ECS.Templates.Notification;
-using Vint.Core.ECS.Templates.Shells;
-using Vint.Core.ECS.Templates.Skins;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
@@ -14,7 +10,7 @@ namespace Vint.Core.Containers;
 
 public class ItemsContainer(
     IEntity marketItem
-) : Container(marketItem) {
+) : Container(marketItem) { // todo rewrite
     ItemsContainerItemComponent ItemsComponent { get; } =
         ConfigManager.GetComponent<ItemsContainerItemComponent>(marketItem.TemplateAccessor!.ConfigPath!);
 
@@ -50,9 +46,9 @@ public class ItemsContainer(
             amount = random.Next(bundle.Amount, bundle.Max + 1);
             reward = connection.SharedEntities.Single(entity => entity.Id == bundle.MarketItem);
             rollCountLeft--;
-        } while (rollCountLeft >= 0 && !await ValidateReward(connection, reward));
+        } while (rollCountLeft >= 0 && !await connection.CanOwnItem(reward));
 
-        return rollCountLeft >= 0 || await ValidateReward(connection, reward)
+        return rollCountLeft >= 0 || await connection.CanOwnItem(reward)
             ? (reward, amount, compensation)
             : (GlobalEntities.GetEntity("misc", "Crystal"), (int)compensation, compensation);
     }
@@ -66,18 +62,5 @@ public class ItemsContainer(
             await connection.PurchaseItem(marketItem, amount, 0, false, false);
 
         return new NewItemNotificationTemplate().CreateRegular(MarketItem, marketItem, amount);
-    }
-
-    static async Task<bool> ValidateReward(IPlayerConnection connection, IEntity marketItem) {
-        if (!marketItem.HasComponent<ParentGroupComponent>()) return true;
-
-        EntityTemplate? template = marketItem.TemplateAccessor?.Template;
-
-        if (template == null) return false;
-
-        return template is not (HullSkinMarketItemTemplate or WeaponSkinMarketItemTemplate or ShellMarketItemTemplate) ||
-               await connection.OwnsItem(GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id ==
-                                                                                                   marketItem.GetComponent<ParentGroupComponent>()
-                                                                                                       .Key));
     }
 }

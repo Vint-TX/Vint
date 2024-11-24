@@ -4,16 +4,15 @@ namespace Vint.Core.Database.Models;
 
 [Table("WeaponSkins")]
 public class WeaponSkin {
-    [NotColumn] readonly Player _player = null!;
     [PrimaryKey(2)] public required long Id { get; init; }
 
     [PrimaryKey(1)] public required long WeaponId { get; init; }
 
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
     public required Player Player {
-        get => _player;
+        get;
         init {
-            _player = value;
+            field = value;
             PlayerId = value.Id;
         }
     }

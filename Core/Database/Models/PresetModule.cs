@@ -9,17 +9,14 @@ namespace Vint.Core.Database.Models;
 
 [Table("PresetModules")]
 public class PresetModule {
-    [NotColumn] readonly Player _player = null!;
-    [NotColumn] readonly Preset _preset = null!;
-
-    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {
-        get => _player;
+        get;
         init {
-            _player = value;
+            field = value;
             PlayerId = value.Id;
         }
-    }
+    } = null!;
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
     [PrimaryKey(1)] public int PresetIndex { get; private set; }
@@ -28,13 +25,14 @@ public class PresetModule {
     [Column] public IEntity Entity { get; set; } = null!;
 
     [Association(ThisKey = $"{nameof(PlayerId)},{nameof(PresetIndex)}", OtherKey = $"{nameof(Preset.PlayerId)},{nameof(Preset.Index)}")]
+    [field: NotColumn]
     public required Preset Preset {
-        get => _preset;
+        get;
         init {
-            _preset = value;
+            field = value;
             PresetIndex = value.Index;
         }
-    }
+    } = null!;
 
     public IEntity GetSlotEntity(IPlayerConnection connection) =>
         connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is SlotUserItemTemplate &&

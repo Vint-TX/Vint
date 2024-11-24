@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -35,14 +36,12 @@ public class DroppedItem(
     string marketEntityName,
     int amount
 ) {
-    IEntity? _marketItemEntity;
-
-    public IEntity MarketItemEntity {
+    [field: AllowNull, MaybeNull] public IEntity MarketItemEntity {
         get {
-            _marketItemEntity ??= GlobalEntities.GetEntity(marketEntityType, marketEntityName);
-            return _marketItemEntity;
+            field ??= GlobalEntities.GetEntity(marketEntityType, marketEntityName);
+            return field;
         }
-        private set => _marketItemEntity = value;
+        private set;
     }
 
     public int Amount { get; private set; } = amount;

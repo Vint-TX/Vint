@@ -105,6 +105,8 @@ public interface IPlayerConnection {
 
     Task<bool> OwnsItem(IEntity marketItem);
 
+    Task<bool> CanOwnItem(IEntity marketItem);
+
     Task SetUsername(string username);
 
     Task ChangeCrystals(long delta);
@@ -1018,14 +1020,37 @@ public abstract class PlayerConnection : IPlayerConnection {
             GraffitiMarketItemTemplate => await db.Graffities.AnyAsync(graffiti => graffiti.PlayerId == Player.Id && graffiti.Id == marketItem.Id),
             ChildGraffitiMarketItemTemplate => await db.Graffities.AnyAsync(
                 graffiti => graffiti.PlayerId == Player.Id && graffiti.Id == marketItem.Id),
-            ContainerPackPriceMarketItemTemplate => await db.Containers.AnyAsync(container =>
-                container.PlayerId == Player.Id && container.Id == marketItem.Id),
-            DonutChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
-            GameplayChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
-            TutorialGameplayChestMarketItemTemplate =>
-                await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
+            // ContainerPackPriceMarketItemTemplate => await db.Containers.AnyAsync(container =>
+            //     container.PlayerId == Player.Id && container.Id == marketItem.Id),
+            // DonutChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
+            // GameplayChestMarketItemTemplate => await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
+            // TutorialGameplayChestMarketItemTemplate =>
+            //     await db.Containers.AnyAsync(chest => chest.PlayerId == Player.Id && chest.Id == marketItem.Id),
             _ => false
         };
+    }
+
+    public async Task<bool> CanOwnItem(IEntity marketItem) {
+        bool alreadyOwned = await OwnsItem(marketItem);
+
+        if (alreadyOwned)
+            return false;
+
+        if (!marketItem.HasComponent<ParentGroupComponent>())
+            return true;
+
+        EntityTemplate? template = marketItem.TemplateAccessor?.Template;
+
+        if (template == null)
+            return false;
+
+        if (template is not (HullSkinMarketItemTemplate or WeaponSkinMarketItemTemplate or ShellMarketItemTemplate))
+            return true;
+
+        long parentId = marketItem.GetComponent<ParentGroupComponent>().Key;
+        IEntity parent = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == parentId);
+
+        return await OwnsItem(parent);
     }
 
     public virtual async Task SetUsername(string username) {

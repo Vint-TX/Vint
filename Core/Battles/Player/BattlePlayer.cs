@@ -24,9 +24,6 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles.Player;
 
 public class BattlePlayer {
-    IEntity? _team;
-    TeamColor _teamColor = TeamColor.None;
-
     public BattlePlayer(IPlayerConnection playerConnection, Battle battle, IEntity? team, bool isSpectator) {
         PlayerConnection = playerConnection;
         Team = team;
@@ -40,11 +37,11 @@ public class BattlePlayer {
     public IPlayerConnection PlayerConnection { get; }
 
     public IEntity? Team {
-        get => _team;
+        get;
         set {
-            _team = value;
+            field = value;
 
-            TeamColor = _team?.GetComponent<TeamColorComponent>()
+            TeamColor = field?.GetComponent<TeamColorComponent>()
                             .TeamColor ??
                         TeamColor.None;
         }
@@ -56,16 +53,16 @@ public class BattlePlayer {
     public BattleTank? Tank { get; set; }
 
     public TeamColor TeamColor {
-        get => _teamColor;
+        get;
         private set {
-            _teamColor = value;
+            field = value;
 
             if (PlayerConnection.User.HasComponent<TeamColorComponent>())
-                PlayerConnection.User.ChangeComponent<TeamColorComponent>(component => component.TeamColor = _teamColor);
+                PlayerConnection.User.ChangeComponent<TeamColorComponent>(component => component.TeamColor = field);
             else
-                PlayerConnection.User.AddComponent(new TeamColorComponent(_teamColor));
+                PlayerConnection.User.AddComponent(new TeamColorComponent(field));
         }
-    }
+    } = TeamColor.None;
 
     public bool IsSpectator { get; }
     public bool InBattleAsTank => InBattle && Tank != null;

@@ -13,15 +13,14 @@ public class DroneWeaponHandler(
     IEntity battleEntity,
     float damage
 ) : ModuleWeaponHandler(tank, cooldown, marketEntity, battleEntity, false, 0, 0, 0, damage, damage, 1), IStreamWeaponHandler {
-    long _incarnationId;
     Stopwatch Stopwatch { get; } = Stopwatch.StartNew();
     TimeSpan HitTime { get; set; }
     TimeSpan LastHitTime { get; set; }
 
     public long IncarnationId {
-        get => _incarnationId;
+        get;
         set {
-            _incarnationId = value;
+            field = value;
 
             HitTime = TimeSpan.MinValue;
             LastHitTime = TimeSpan.MinValue;

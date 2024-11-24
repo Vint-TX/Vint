@@ -308,6 +308,69 @@ CREATE TABLE `Presets`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `PromoCodes`
+--
+
+DROP TABLE IF EXISTS `PromoCodes`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PromoCodes`
+(
+    `Id`            bigint      NOT NULL AUTO_INCREMENT,
+    `Code`          varchar(32) NOT NULL,
+    `Uses`          int         NOT NULL DEFAULT 0,
+    `MaxUses`       int         NOT NULL DEFAULT -1,
+    `OwnedPlayerId` bigint      NOT NULL DEFAULT -1,
+    `ExpiresAt`     timestamp   NULL     DEFAULT NULL,
+    PRIMARY KEY (`Id`),
+    UNIQUE KEY (`Code`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PromoCodeItems`
+--
+
+DROP TABLE IF EXISTS `PromoCodeItems`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PromoCodeItems`
+(
+    `Id`          bigint NOT NULL,
+    `PromoCodeId` bigint NOT NULL,
+    `Quantity`    int    NOT NULL,
+    PRIMARY KEY (`PromoCodeId`, `Id`),
+    FOREIGN KEY (`PromoCodeId`) REFERENCES `PromoCodes` (`Id`) ON DELETE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PromoCodeRedemptions`
+--
+
+DROP TABLE IF EXISTS `PromoCodeRedemptions`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PromoCodeRedemptions`
+(
+    `Id`          bigint    NOT NULL AUTO_INCREMENT,
+    `PromoCodeId` bigint    NOT NULL,
+    `PlayerId`    bigint    NOT NULL,
+    `RedeemedAt`  timestamp NOT NULL,
+    PRIMARY KEY (`Id`, `PromoCodeId`, `PlayerId`),
+    UNIQUE KEY (`PromoCodeId`, `PlayerId`),
+    FOREIGN KEY (`PromoCodeId`) REFERENCES `PromoCodes` (`Id`) ON DELETE CASCADE,
+    FOREIGN KEY (`PlayerId`) REFERENCES `Players` (`Id`) ON DELETE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Punishments`
 --
 

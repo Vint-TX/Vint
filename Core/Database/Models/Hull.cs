@@ -4,7 +4,6 @@ namespace Vint.Core.Database.Models;
 
 [Table("Hulls")]
 public class Hull {
-    [NotColumn] readonly Player _player = null!;
     [Column] public required long SkinId { get; init; } // ??
     [Column] public long Xp { get; set; }
     [Column] public long Kills { get; set; }
@@ -12,14 +11,14 @@ public class Hull {
 
     [PrimaryKey(1)] public required long Id { get; init; }
 
-    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {
-        get => _player;
+        get;
         init {
-            _player = value;
+            field = value;
             PlayerId = value.Id;
         }
-    }
+    } = null!;
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -7,13 +8,11 @@ namespace Vint.Core.ECS.Components.Battle.Rewards;
 public class ChestBattleRewardComponent(
     string chestName
 ) : IComponent {
-    IEntity? _chest;
-
-    public IEntity Chest {
+    [field: AllowNull, MaybeNull] public IEntity Chest {
         get {
-            _chest ??= GlobalEntities.GetEntity("containers", chestName);
-            return _chest;
+            field ??= GlobalEntities.GetEntity("containers", chestName);
+            return field;
         }
-        private set => _chest = value;
+        private set;
     }
 }

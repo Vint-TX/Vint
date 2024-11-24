@@ -4,7 +4,6 @@ namespace Vint.Core.Database.Models;
 
 [Table("Weapons")]
 public class Weapon {
-    [NotColumn] readonly Player _player = null!;
     [PrimaryKey(1)] public required long Id { get; init; }
 
     [Column] public required long SkinId { get; init; } // ??
@@ -13,14 +12,14 @@ public class Weapon {
     [Column] public long Kills { get; set; }
     [Column] public long BattlesPlayed { get; set; }
 
-    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {
-        get => _player;
+        get;
         init {
-            _player = value;
+            field = value;
             PlayerId = value.Id;
         }
-    }
+    } = null!;
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 }

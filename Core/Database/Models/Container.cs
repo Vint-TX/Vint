@@ -4,17 +4,16 @@ namespace Vint.Core.Database.Models;
 
 [Table("Containers")]
 public class Container {
-    [NotColumn] readonly Player _player = null!;
     [PrimaryKey(1)] public required long Id { get; init; }
 
-    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))]
+    [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public Player Player {
-        get => _player;
+        get;
         init {
-            _player = value;
+            field = value;
             PlayerId = value.Id;
         }
-    }
+    } = null!;
 
     [PrimaryKey(0)] public long PlayerId { get; private set; }
 
