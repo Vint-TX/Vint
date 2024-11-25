@@ -40,10 +40,7 @@ public class BattlePlayer {
         get;
         set {
             field = value;
-
-            TeamColor = field?.GetComponent<TeamColorComponent>()
-                            .TeamColor ??
-                        TeamColor.None;
+            TeamColor = field?.GetComponent<TeamColorComponent>().TeamColor ?? TeamColor.None;
         }
     }
 

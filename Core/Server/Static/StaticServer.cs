@@ -18,8 +18,6 @@ public class StaticServer {
     bool IsStarted { get; set; }
     bool IsAccepting { get; set; }
 
-    string Resources { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
-
     public async Task Start() {
         if (IsStarted) return;
 
@@ -152,15 +150,6 @@ public class StaticServer {
         if (ConfigManager.TryGetConfig(locale, out byte[]? config))
             await SendResponse(response, config);
         else SendError(response, 404);
-    }
-
-    static async Task ProcessTextRequest(HttpListenerResponse response, string requestedEntry) {
-        if (!File.Exists(requestedEntry)) {
-            SendError(response, 404);
-            return;
-        }
-
-        await SendResponse(response, await File.ReadAllTextAsync(requestedEntry));
     }
 
     static void SendError(HttpListenerResponse response, int statusCode) {

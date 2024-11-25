@@ -23,6 +23,7 @@ public class ApiServer {
 
         WithController<InviteController>("/invites/");
         WithController<PlayerController>("/players/");
+        WithController<PromoCodeController>("/promoCodes/");
 
         Server.StateChanged += (_, e) => Logger.Debug("State changed: {Old} => {New}", e.OldState, e.NewState);
     }

@@ -22,34 +22,41 @@ public class ActivatePromoCodeEvent : IServerEvent {
             return;
 
         await using DbConnection db = new();
+        await db.BeginTransactionAsync();
 
-        long promoCodeId = await db.PromoCodes
+        var promo = await db.PromoCodes
             .Where(promoCode => promoCode.Code == Code)
-            .Select(promoCode => promoCode.Id)
+            .LoadWith(promoCode => promoCode.Items)
+            .Select(promoCode => new { promoCode.Id, promoCode.Items })
             .SingleAsync();
 
         await db.PromoCodes
-            .Where(promoCode => promoCode.Id == promoCodeId)
+            .Where(promoCode => promoCode.Id == promo.Id)
             .Set(promoCode => promoCode.Uses, promoCode => promoCode.Uses + 1)
             .UpdateAsync();
 
         PromoCodeRedemption redemption = new() {
             PlayerId = connection.Player.Id,
-            PromoCodeId = promoCodeId,
+            PromoCodeId = promo.Id,
             RedeemedAt = DateTimeOffset.UtcNow
         };
 
         redemption.Id = await db.InsertWithInt64IdentityAsync(redemption);
-
         IEntity user = connection.User;
 
-        foreach (PromoCodeItem item in db.PromoCodeItems.Where(item => item.PromoCodeId == promoCodeId)) {
-            IEntity entity = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == item.Id);
+        await db.CommitTransactionAsync();
 
-            if (await connection.CanOwnItem(entity))
-                await connection.PurchaseItem(entity, item.Quantity, 0, false, false);
+        foreach (PromoCodeItem item in promo.Items) {
+            try {
+                IEntity entity = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == item.Id);
 
-            await connection.Share(new NewItemNotificationTemplate().CreateRegular(user, entity, item.Quantity));
+                if (await connection.CanOwnItem(entity))
+                    await connection.PurchaseItem(entity, item.Quantity, 0, false, false);
+
+                await connection.Share(new NewItemNotificationTemplate().CreateRegular(user, entity, item.Quantity));
+            } catch (Exception e) {
+                connection.Logger.Error(e, "An error occured while trying to redeem item {Id} from promo code {PromoId}", item.Id, promo.Id);
+            }
         }
 
         await connection.Send(new ShowNotificationGroupEvent(), user);

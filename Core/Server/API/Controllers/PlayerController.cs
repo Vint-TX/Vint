@@ -39,12 +39,14 @@ public class PlayerController : WebApiController { // todo registration
 public record PlayerListDTO(
     long Id,
     string Username,
-    string Email
+    string Email,
+    ulong DiscordId
 ) {
     public static PlayerListDTO FromPlayer(Player player) =>
         new(player.Id,
             player.Username,
-            player.Email);
+            player.Email,
+            player.DiscordUserId);
 }
 
 public record PlayerDetailDTO(

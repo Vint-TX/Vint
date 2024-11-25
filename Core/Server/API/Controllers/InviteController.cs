@@ -28,10 +28,15 @@ public class InviteController : WebApiController {
     }
 
     [Get("/")]
-    public async Task<IEnumerable<Invite>> GetInvites() {
-        await using DbConnection db = new();
+    public async Task<IEnumerable<Invite>> GetInvites([FromQuery] int from, [FromQuery(@default: 20)] int count) {
+        from = Math.Max(0, from - 1);
 
-        Invite[] invites = await db.Invites.ToArrayAsync();
+        await using DbConnection db = new();
+        Invite[] invites = await db.Invites
+            .Skip(from)
+            .Take(count)
+            .ToArrayAsync();
+
         return invites;
     }
 

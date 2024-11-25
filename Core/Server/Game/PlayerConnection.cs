@@ -573,10 +573,7 @@ public abstract class PlayerConnection : IPlayerConnection {
             }
 
             default:
-                Logger.Error("{Name} purchase is not implemented",
-                    template?.GetType()
-                        .Name);
-
+                Logger.Error("{Name} purchase is not implemented", template?.GetType().FullName);
                 throw new NotImplementedException();
         }
 
