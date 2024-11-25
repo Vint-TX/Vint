@@ -17,7 +17,7 @@ public class GameServer(
     IArcadeProcessor arcadeProcessor,
     IMatchmakingProcessor matchmakingProcessor
 ) {
-    const ushort Port = 5050;
+    public const ushort Port = 5050;
 
     public TimeSpan DeltaTime { get; private set; }
     public Dictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();

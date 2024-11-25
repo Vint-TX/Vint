@@ -1,8 +1,10 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
+using System.Text;
 using Serilog;
 using Vint.Core.Config;
 using Vint.Core.Discord;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Static;
@@ -77,20 +79,20 @@ public class StaticServer {
             return;
         }
 
-        string requestedEntry = Path.Join(Resources, url.AbsolutePath);
-
         switch (urlParts[0]) {
+            case "init.yml": {
+                InitConfig initConfig = GenerateInitConfig(request.LocalEndPoint);
+                await SendResponse(response, initConfig.ToString());
+                break;
+            }
+
             case "state": {
                 await SendResponse(response, "state: 0");
                 break;
             }
 
             case "config": {
-                if (urlParts[1] == "init.yml")
-                    await ProcessTextRequest(response, requestedEntry);
-                else
-                    await ProcessConfigRequest(response, urlParts);
-
+                await ProcessConfigRequest(response, urlParts);
                 break;
             }
 
@@ -179,5 +181,38 @@ public class StaticServer {
             await output.WriteAsync(content);
 
         response.Close();
+    }
+
+    static InitConfig GenerateInitConfig(IPEndPoint localEndPoint) =>
+        new(localEndPoint.Address,
+            GameServer.Port,
+            "Vint-17",
+            "https://cdn.vint-official.site/resources",
+            $"http://{localEndPoint}/config",
+            "https://cdn.vint-official.site/update/{BuildTarget}.yml",
+            "https://cdn.vint-official.site/resources/discord");
+
+    readonly record struct InitConfig(
+        IPAddress Host,
+        ushort AcceptorPort,
+        string BundleDbVersion,
+        string ResourcesUrl,
+        string ConfigsUrl,
+        string UpdateConfigUrl,
+        string DiscordRpcResourcesUrl
+    ) {
+        public override string ToString() {
+            StringBuilder builder = new();
+
+            builder.AppendLine($"host: {Host}");
+            builder.AppendLine($"acceptorPort: {AcceptorPort}");
+            builder.AppendLine($"bundleDbVersion: {BundleDbVersion}");
+            builder.AppendLine($"resourcesUrl: {ResourcesUrl}");
+            builder.AppendLine($"configsUrl: {ConfigsUrl}");
+            builder.AppendLine($"updateConfigUrl: {UpdateConfigUrl}");
+            builder.AppendLine($"discordRpcResourcesUrl: {DiscordRpcResourcesUrl}");
+
+            return builder.ToString();
+        }
     }
 }
