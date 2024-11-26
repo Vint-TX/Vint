@@ -1,7 +1,6 @@
 ﻿using System.Buffers;
 using System.Collections.Concurrent;
 using System.Reflection;
-using System.Runtime.Intrinsics.X86;
 using JetBrains.Annotations;
 using Vint.Core.ECS.Components;
 using Vint.Core.Exceptions;

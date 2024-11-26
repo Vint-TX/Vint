@@ -1,6 +1,7 @@
 using EmbedIO;
 using EmbedIO.WebApi;
 using LinqToDB;
+using LinqToDB.Data;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Group;
@@ -151,34 +152,33 @@ public class PromoCodeController : WebApiController {
         if (promoCode == null)
             throw HttpException.NotFound("Promo code does not exist");
 
+        List<PromoCodeItem> items = new(itemModels.Length);
+
+        foreach (PromoCodeItemDTO model in itemModels) {
+            bool entityExists = GlobalEntities.AllMarketTemplateEntities.Any(entity => entity.Id == model.Id &&
+                                                                                       entity.HasComponent<MarketItemGroupComponent>());
+
+            if (!entityExists)
+                throw HttpException.BadRequest($"Invalid item id {model.Id}");
+
+            PromoCodeItem item = new() {
+                PromoCodeId = id,
+                Id = model.Id,
+                Quantity = model.Quantity
+            };
+
+            items.Add(item);
+            promoCode.Items.Add(item);
+        }
+
         await db.BeginTransactionAsync();
         await db.PromoCodeItems
             .Where(item => item.PromoCodeId == id)
             .DeleteAsync();
 
-        try {
-            foreach (PromoCodeItemDTO model in itemModels) {
-                bool entityExists = GlobalEntities.AllMarketTemplateEntities.Any(entity => entity.Id == model.Id &&
-                                                                                           entity.HasComponent<MarketItemGroupComponent>());
-
-                if (!entityExists)
-                    throw HttpException.BadRequest($"Invalid item id {model.Id}");
-
-                PromoCodeItem item = new() {
-                    PromoCodeId = id,
-                    Id = model.Id,
-                    Quantity = model.Quantity
-                };
-
-                await db.InsertAsync(item);
-                promoCode.Items.Add(item);
-            }
-        } catch {
-            await db.RollbackTransactionAsync();
-            throw;
-        }
-
+        await db.BulkCopyAsync(items);
         await db.CommitTransactionAsync();
+
         return PromoCodeDetailDTO.FromPromoCode(promoCode);
     }
 }
