@@ -7,6 +7,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.API.Attributes.Deserialization;
 using Vint.Core.Server.API.Attributes.Methods;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Server.API.Controllers;
 
@@ -133,80 +134,52 @@ public class PromoCodeController : WebApiController {
             throw HttpException.NotFound($"Promo code {id} does not exist");
     }
 
-    [Put("/{id}/items")]
-    public async Task<PromoCodeDetailDTO> AddItem(long id, [FromBody] PromoCodeItemDTO addModel) {
-        addModel.AssertValid();
-
-        await using DbConnection db = new();
-        PromoCode? promoCode = await db.PromoCodes
-            .Where(promoCode => promoCode.Id == id)
-            .LoadWith(promoCode => promoCode.Items)
-            .LoadWith(promoCode => promoCode.OwnedPlayer)
-            .SingleOrDefaultAsync();
-
-        if (promoCode == null)
-            throw HttpException.NotFound("Promo code does not exist");
-
-        PromoCodeItem? item = promoCode.Items.SingleOrDefault(i => i.Id == addModel.Id);
-
-        if (item != null)
-            throw HttpException.BadRequest("Item already exists", PromoCodeItemDTO.FromItem(item));
-
-        bool entityExists = GlobalEntities.AllMarketTemplateEntities.Any(entity => entity.Id == addModel.Id &&
-                                                                                   entity.HasComponent<MarketItemGroupComponent>());
-
-        if (!entityExists)
-            throw HttpException.BadRequest($"Invalid item id {addModel.Id}");
-
-        item = new PromoCodeItem {
-            PromoCodeId = promoCode.Id,
-            Id = addModel.Id,
-            Quantity = addModel.Quantity
-        };
-
-        await db.InsertAsync(item);
-        promoCode.Items.RemoveAll(i => i.Id == item.Id);
-        promoCode.Items.Add(item);
-
-        return PromoCodeDetailDTO.FromPromoCode(promoCode);
-    }
-
     [Patch("/{id}/items")]
-    public async Task<PromoCodeDetailDTO> PatchItem(long id, [FromBody] PromoCodeItemDTO patchModel) {
-        patchModel.AssertValid();
+    public async Task<PromoCodeDetailDTO> PatchItem(long id, [FromBody] PromoCodeItemDTO[] itemModels) {
+        if (itemModels.HasDuplicatesBy(model => model.Id))
+            throw HttpException.BadRequest("Collection contains duplicate items");
+
+        foreach (PromoCodeItemDTO model in itemModels)
+            model.AssertValid();
 
         await using DbConnection db = new();
         PromoCode? promoCode = await db.PromoCodes
             .Where(promoCode => promoCode.Id == id)
-            .LoadWith(promoCode => promoCode.Items)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
             .SingleOrDefaultAsync();
 
         if (promoCode == null)
             throw HttpException.NotFound("Promo code does not exist");
 
-        int updatedCount = await db.PromoCodeItems
-            .Where(item => item.PromoCodeId == id && item.Id == patchModel.Id)
-            .Set(item => item.Quantity, patchModel.Quantity)
-            .UpdateAsync();
-
-        if (updatedCount <= 0)
-            throw HttpException.NotFound($"Item {patchModel.Id} in promo code {id} does not exist");
-
-        promoCode.Items.RemoveAll(item => item.Id == patchModel.Id);
-        promoCode.Items.Add(new PromoCodeItem { PromoCodeId = id, Id = patchModel.Id, Quantity = patchModel.Quantity });
-        return PromoCodeDetailDTO.FromPromoCode(promoCode);
-    }
-
-    [Delete("/{id}/items/{itemId}")]
-    public async Task DeleteItem(long id, long itemId) {
-        await using DbConnection db = new();
-        int deletedCount = await db.PromoCodeItems
-            .Where(item => item.PromoCodeId == id && item.Id == itemId)
+        await db.BeginTransactionAsync();
+        await db.PromoCodeItems
+            .Where(item => item.PromoCodeId == id)
             .DeleteAsync();
 
-        if (deletedCount <= 0)
-            throw HttpException.NotFound($"Promo code {id} or item {itemId} does not exist");
+        try {
+            foreach (PromoCodeItemDTO model in itemModels) {
+                bool entityExists = GlobalEntities.AllMarketTemplateEntities.Any(entity => entity.Id == model.Id &&
+                                                                                           entity.HasComponent<MarketItemGroupComponent>());
+
+                if (!entityExists)
+                    throw HttpException.BadRequest($"Invalid item id {model.Id}");
+
+                PromoCodeItem item = new() {
+                    PromoCodeId = id,
+                    Id = model.Id,
+                    Quantity = model.Quantity
+                };
+
+                await db.InsertAsync(item);
+                promoCode.Items.Add(item);
+            }
+        } catch {
+            await db.RollbackTransactionAsync();
+            throw;
+        }
+
+        await db.CommitTransactionAsync();
+        return PromoCodeDetailDTO.FromPromoCode(promoCode);
     }
 }
 
@@ -291,7 +264,7 @@ public record PromoCodeItemDTO(
     /// <remarks>Does not validate the <see cref="Id"/> field</remarks>
     public void AssertValid() {
         if (Quantity <= 0)
-            throw HttpException.BadRequest("Quantity must be greater than 0");
+            throw HttpException.BadRequest($"Quantity must be greater than 0 (id: {Id})");
     }
 
     public static PromoCodeItemDTO FromItem(PromoCodeItem item) =>

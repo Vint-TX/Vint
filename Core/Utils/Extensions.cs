@@ -1,6 +1,8 @@
 ﻿using System.Buffers;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.Intrinsics.X86;
+using JetBrains.Annotations;
 using Vint.Core.ECS.Components;
 using Vint.Core.Exceptions;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -162,4 +164,26 @@ public static class Extensions {
 
         return tcs.Task;
     }
+
+    [Pure]
+    public static bool HasDuplicates<TSource>(this IEnumerable<TSource> source) {
+        using IEnumerator<TSource> enumerator = source.GetEnumerator();
+
+        if (!enumerator.MoveNext())
+            return false;
+
+        HashSet<TSource> set = [];
+
+        do {
+            if (!set.Add(enumerator.Current))
+                return true;
+        } while (enumerator.MoveNext());
+
+        return false;
+    }
+
+    [Pure]
+    [LinqTunnel]
+    public static bool HasDuplicatesBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector) =>
+        HasDuplicates(source.Select(selector));
 }
