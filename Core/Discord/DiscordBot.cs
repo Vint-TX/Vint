@@ -35,7 +35,7 @@ public class DiscordBot(
     public string ClientSecret { get; } = Environment.GetEnvironmentVariable(DebugClientSecret) ??
                                           Environment.GetEnvironmentVariable(ProdClientSecret)!;
     int LastPlayersCount { get; set; }
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(DiscordBot));
+    ILogger Logger { get; } = Log.Logger.ForType<DiscordBot>();
     DiscordClient Client { get; set; } = null!;
     DiscordGuild Guild { get; set; } = null!;
     DiscordRole LinkedRole { get; set; } = null!;

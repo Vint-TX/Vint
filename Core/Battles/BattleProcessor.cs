@@ -35,7 +35,7 @@ public interface IBattleProcessor {
 public class BattleProcessor(
     IServiceProvider serviceProvider
 ) : IBattleProcessor {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(BattleProcessor));
+    ILogger Logger { get; } = Log.Logger.ForType<BattleProcessor>();
     ConcurrentHashSet<Battle> BattleSet { get; } = [];
 
     public IReadOnlyCollection<Battle> Battles => BattleSet;

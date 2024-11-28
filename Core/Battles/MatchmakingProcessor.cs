@@ -19,7 +19,7 @@ public interface IMatchmakingProcessor {
 public class MatchmakingProcessor(
     IBattleProcessor battleProcessor
 ) : IMatchmakingProcessor {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(MatchmakingProcessor));
+    ILogger Logger { get; } = Log.Logger.ForType<MatchmakingProcessor>();
     ConcurrentHashSet<IPlayerConnection> PlayerQueue { get; } = [];
 
     public void Tick() {

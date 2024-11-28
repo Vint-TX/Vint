@@ -11,7 +11,7 @@ public class EnterScreenEvent : IServerEvent {
     public string Screen { get; private set; } = null!;
 
     public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<EnterScreenEvent>();
         logger.Information("Entered screen {Screen}", Screen);
         return Task.CompletedTask;
     }

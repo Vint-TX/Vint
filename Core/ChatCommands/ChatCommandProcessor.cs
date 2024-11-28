@@ -17,7 +17,7 @@ public interface IChatCommandProcessor {
 public class ChatCommandProcessor(
     IServiceProvider serviceProvider
 ) : IChatCommandProcessor {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(ChatCommandProcessor));
+    ILogger Logger { get; } = Log.Logger.ForType<ChatCommandProcessor>();
     List<ChatCommand> Commands { get; set; } = [];
 
     public ChatCommand? GetOrDefault(string name) =>

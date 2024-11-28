@@ -16,7 +16,7 @@ public class ComponentAddCommand(
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
     public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<ComponentAddCommand>();
         Type type = Component.GetType();
         ClientAddableAttribute? clientAddable = type.GetCustomAttribute<ClientAddableAttribute>();
 

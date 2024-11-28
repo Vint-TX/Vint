@@ -19,7 +19,7 @@ public class AutoLoginUserEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.IsOnline) return;
 
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<AutoLoginUserEvent>();
         logger.Warning("Autologin '{Username}'", Username);
 
         await using DbConnection db = new();

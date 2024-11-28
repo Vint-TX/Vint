@@ -96,11 +96,7 @@ public static class Extensions {
 
         return list.Count == 0
             ? "Empty"
-            : string.Join(", ",
-                list.Select(obj => extended
-                    ? $"{obj}"
-                    : obj!.GetType()
-                        .Name));
+            : string.Join(", ", list.Select(obj => extended ? $"{obj}" : obj!.GetType().Name));
     }
 
     public static Task Catch(this Task task) => task.ContinueWith(t => t.Exception!

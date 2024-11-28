@@ -6,7 +6,7 @@ using Vint.Core.Utils;
 namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class CommandCodec : Codec {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(CommandCodec));
+    ILogger Logger { get; } = Log.Logger.ForType<CommandCodec>();
     Dictionary<Type, CommandCode> CommandToCode { get; } = new();
     Dictionary<CommandCode, Type> CodeToCommand { get; } = new();
 

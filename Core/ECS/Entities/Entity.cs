@@ -18,7 +18,7 @@ public class Entity : IEntity {
         ComponentStorage = new EntityComponentStorage(this, components);
     }
 
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(Entity));
+    ILogger Logger { get; } = Log.Logger.ForType<Entity>();
     EntityComponentStorage ComponentStorage { get; }
 
     public ConcurrentHashSet<IPlayerConnection> SharedPlayers { get; } = [];

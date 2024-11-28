@@ -88,14 +88,12 @@ public class SelfHitEvent : HitEvent, IServerEvent {
 
     bool Validate(IPlayerConnection connection, IWeaponHandler weaponHandler) {
         if (Targets?.Count > weaponHandler.MaxHitTargets) {
-            connection
-                .Logger
+            connection.Logger
                 .ForType(GetType())
                 .Warning("Suspicious behaviour: hit targets count is greater than max hit targets count: {Current} > {Max} ({WeaponHandlerName})",
                     Targets?.Count,
                     weaponHandler.MaxHitTargets,
-                    weaponHandler.GetType()
-                        .Name);
+                    weaponHandler.GetType().Name);
 
             return false;
         }

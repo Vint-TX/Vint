@@ -15,7 +15,7 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
     public string Email { get; private set; } = null!;
 
     public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<IntroduceUserByEmailEvent>();
 
         logger.Information("Login by email '{Email}'", Email);
 

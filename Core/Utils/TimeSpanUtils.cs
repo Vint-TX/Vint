@@ -62,7 +62,7 @@ public static class TimeSpanUtils {
             ? left
             : right;
 
-    public static TimeSpan Max(TimeSpan value, TimeSpan min, TimeSpan max) {
+    public static TimeSpan Clamp(TimeSpan value, TimeSpan min, TimeSpan max) {
         if (min > max)
             throw new ArgumentException("min should not be bigger than max");
 

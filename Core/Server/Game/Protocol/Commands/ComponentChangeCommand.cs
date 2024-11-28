@@ -16,7 +16,7 @@ public class ComponentChangeCommand(
     [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
 
     public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<ComponentChangeCommand>();
         Type type = Component.GetType();
         ClientChangeableAttribute? clientChangeable = type.GetCustomAttribute<ClientChangeableAttribute>();
 

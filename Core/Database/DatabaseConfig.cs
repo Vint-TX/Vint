@@ -14,7 +14,7 @@ public readonly record struct DatabaseConfig(
 ) {
     public string ConnectionString => $"server={Host};port={Port};database={Database};uid={Username};pwd={Password}";
 
-    static ILogger Logger { get; } = Log.Logger.ForType(typeof(DatabaseConfig));
+    static ILogger Logger { get; } = Log.Logger.ForType<DatabaseConfig>();
 
     static string ConfigPath { get; } = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "database.json");
 

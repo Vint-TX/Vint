@@ -16,7 +16,7 @@ public class ComponentRemoveCommand(
     [ProtocolVaried, ProtocolPosition(1)] public Type Component { get; private set; } = component;
 
     public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<ComponentRemoveCommand>();
         ClientRemovableAttribute? clientRemovable = Component.GetCustomAttribute<ClientRemovableAttribute>();
 
         if (clientRemovable == null) {

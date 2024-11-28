@@ -14,8 +14,6 @@ using ILogger = Serilog.ILogger;
 namespace Vint.Core.Utils;
 
 public static class LoggerUtils {
-    static ILogger Logger { get; set; } = null!;
-
     static TemplateTheme Theme { get; } = new(new Dictionary<TemplateThemeStyle, string> {
         [TemplateThemeStyle.Text] = "\u001B[38;5;0253m",
         [TemplateThemeStyle.SecondaryText] = "\u001B[38;5;0246m",
@@ -54,25 +52,23 @@ public static class LoggerUtils {
         LogEventLevel = logEventLevel;
 
         Log.Logger = new LoggerConfiguration()
-            .Enrich
-            .FromLogContext()
-            .WriteTo
-            .Console(new ExpressionTemplate(template, theme: Theme))
-            .WriteTo
-            .File(new ExpressionTemplate(template), "Vint.log", rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
-            .MinimumLevel
-            .Is(LogEventLevel)
+            .Enrich.FromLogContext()
+            .WriteTo.Console(new ExpressionTemplate(template, theme: Theme))
+            .WriteTo.File(new ExpressionTemplate(template), "Vint.log", rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
+            .MinimumLevel.Is(LogEventLevel)
             .CreateLogger();
 
         Swan.Logging.Logger.UnregisterLogger<ConsoleLogger>();
         Swan.Logging.Logger.RegisterLogger<SerilogLogger>();
 
-        Logger = Log.Logger.ForType(typeof(LoggerUtils));
-        Logger.Information("Logger initialized");
+        Log.Logger.ForType(typeof(LoggerUtils)).Information("Logger initialized");
     }
 
     public static ILogger ForType(this ILogger logger, Type type) =>
         logger.ForContext(Constants.SourceContextPropertyName, type.Name);
+
+    public static ILogger ForType<T>(this ILogger logger) =>
+        logger.ForType(typeof(T));
 
     public static ILogger WithEndPoint(this ILogger logger, IPEndPoint endPoint) =>
         logger.ForContext("SessionEndpoint", endPoint);
@@ -87,8 +83,7 @@ public static class LoggerUtils {
 [UsedImplicitly]
 public sealed class SerilogLogger : Swan.Logging.ILogger {
     Dictionary<string, ILogger> SourceToLogger { get; } = new();
-    public LogLevel LogLevel { get; } = LoggerUtils.SwanToSerilogLogLevels.First(pair => pair.Value == LoggerUtils.LogEventLevel)
-        .Key;
+    public LogLevel LogLevel { get; } = LoggerUtils.SwanToSerilogLogLevels.First(pair => pair.Value == LoggerUtils.LogEventLevel).Key;
 
     public void Log(LogMessageReceivedEventArgs logEvent) {
         LogEventLevel logLevel = LoggerUtils.SwanToSerilogLogLevels[logEvent.MessageType];

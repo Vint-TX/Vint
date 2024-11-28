@@ -25,7 +25,7 @@ public class QuestManager {
     }
 
     static QuestsInfo QuestsInfo => ConfigManager.QuestsInfo;
-    static ILogger Logger { get; } = Log.Logger.ForType(typeof(QuestManager));
+    static ILogger Logger { get; } = Log.Logger.ForType<QuestManager>();
 
     IServiceProvider ServiceProvider { get; }
     DateTimeOffset NextUpdate { get; set; }

@@ -12,7 +12,7 @@ namespace Vint.Core.Server.Static;
 public class StaticServer {
     const ushort Port = 8080;
 
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(StaticServer));
+    ILogger Logger { get; } = Log.Logger.ForType<StaticServer>();
     HttpListener Listener { get; } = new();
 
     bool IsStarted { get; set; }

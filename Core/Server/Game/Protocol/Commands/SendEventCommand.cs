@@ -16,7 +16,7 @@ public class SendEventCommand(
     [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<SendEventCommand>();
 
         if (Event is not IServerEvent serverEvent) {
             logger.Warning("Event {Event} is not IServerEvent",

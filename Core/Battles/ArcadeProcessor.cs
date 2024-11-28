@@ -20,7 +20,7 @@ public interface IArcadeProcessor {
 public class ArcadeProcessor( // todo replace with MatchmakingProcessor
     IBattleProcessor battleProcessor
 ) : IArcadeProcessor {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(ArcadeProcessor));
+    ILogger Logger { get; } = Log.Logger.ForType<ArcadeProcessor>();
 
     ConcurrentDictionary<IPlayerConnection, ArcadeModeType> PlayerQueue { get; } = new();
 

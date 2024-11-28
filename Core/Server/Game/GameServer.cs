@@ -22,7 +22,7 @@ public class GameServer(
     public TimeSpan DeltaTime { get; private set; }
     public Dictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();
 
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(GameServer));
+    ILogger Logger { get; } = Log.Logger.ForType<GameServer>();
     TcpListener Listener { get; } = new(IPAddress.Any, Port);
 
     bool IsStarted { get; set; }

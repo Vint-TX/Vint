@@ -20,7 +20,7 @@ public class RestorePasswordByDiscordEvent : IServerEvent {
     public string DiscordID { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<RestorePasswordByDiscordEvent>();
         logger.Warning("Restoring password '{Id}'", DiscordID);
 
         DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();

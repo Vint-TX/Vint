@@ -20,9 +20,8 @@ abstract class Program {
     static async Task Main() {
         LoggerUtils.Initialize(LogEventLevel.Information);
 
-        Log
-            .Logger
-            .ForType(typeof(Program))
+        Log.Logger
+            .ForType<Program>()
             .Information("Welcome to Vint!");
 
         DatabaseConfig.Initialize();

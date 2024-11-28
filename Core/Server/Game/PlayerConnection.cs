@@ -153,7 +153,7 @@ public abstract class PlayerConnection : IPlayerConnection {
     public Guid Id { get; } = Guid.NewGuid();
     ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
-    public ILogger Logger { get; protected set; } = Log.Logger.ForType(typeof(PlayerConnection));
+    public ILogger Logger { get; protected set; } = Log.Logger.ForType<PlayerConnection>();
 
     public Player Player { get; set; } = null!;
     public IEntity User { get; private set; } = null!;

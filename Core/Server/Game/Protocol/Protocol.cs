@@ -67,7 +67,7 @@ public class Protocol {
             .ForEach(type => Types[type.GetCustomAttribute<ProtocolIdAttribute>()!.Id] = type);
     }
 
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(Protocol));
+    ILogger Logger { get; } = Log.Logger.ForType<Protocol>();
 
     Dictionary<long, Type> Types { get; } = new();
     Dictionary<ICodecInfo, ICodec> Codecs { get; } = new();

@@ -437,7 +437,7 @@ public static class ConfigManager {
 
 // Copied from https://github.com/Assasans/TXServer-Public/blob/database/TXServer/Core/Configuration/ComponentDeserializer.cs
 public partial class ComponentDeserializer : INodeTypeResolver, INodeDeserializer {
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(ComponentDeserializer));
+    ILogger Logger { get; } = Log.Logger.ForType<ComponentDeserializer>();
     Type? Type { get; set; }
 
     IEnumerable<Type> Types { get; } = Assembly

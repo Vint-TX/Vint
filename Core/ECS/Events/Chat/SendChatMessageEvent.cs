@@ -41,9 +41,8 @@ public class SendChatMessageEvent : IServerEvent {
         }
 
         if (!Validate(chat.TemplateAccessor!.ConfigPath!)) {
-            sender
-                .Logger
-                .ForType(GetType())
+            sender.Logger
+                .ForType<SendChatMessageEvent>()
                 .Warning("Message failed validation: '{Message}'", Message);
 
             return;

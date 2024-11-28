@@ -31,7 +31,7 @@ public class ApiServer {
         Server.StateChanged += (_, e) => Logger.Debug("State changed: {Old} => {New}", e.OldState, e.NewState);
     }
 
-    ILogger Logger { get; } = Log.Logger.ForType(typeof(ApiServer));
+    ILogger Logger { get; } = Log.Logger.ForType<ApiServer>();
     IServiceProvider ServiceProvider { get; }
     WebServer Server { get; }
     ResponseJsonSerializer ResponseJsonSerializer { get; } = new();

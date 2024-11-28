@@ -11,7 +11,7 @@ public class ClientInfoSendEvent : IServerEvent {
     public string Settings { get; private set; } = null!;
 
     public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        ILogger logger = connection.Logger.ForType(GetType());
+        ILogger logger = connection.Logger.ForType<ClientInfoSendEvent>();
 
         logger.Information("Client settings: {Settings}", Settings);
         return Task.CompletedTask;
