@@ -25,6 +25,7 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Events.Battle;
 using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.ECS.Templates.Battle.Mode;
@@ -38,6 +39,8 @@ namespace Vint.Core.Battles;
 
 public sealed class Battle : IDisposable {
     public Battle(IServiceProvider serviceProvider) { // Matchmaking battle
+        Type = BattleType.MatchMaking;
+
         ServiceProvider = serviceProvider;
         Properties = null!;
 
@@ -54,6 +57,8 @@ public sealed class Battle : IDisposable {
     }
 
     public Battle(IServiceProvider serviceProvider, ArcadeModeType arcadeMode) { // Arcade battle
+        Type = BattleType.Arcade;
+
         ServiceProvider = serviceProvider;
         Properties = null!;
 
@@ -70,6 +75,7 @@ public sealed class Battle : IDisposable {
     }
 
     public Battle(IServiceProvider serviceProvider, BattleProperties properties, IPlayerConnection owner) { // Custom battle
+        Type = BattleType.Custom;
         properties.DamageEnabled = true;
 
         ServiceProvider = serviceProvider;
@@ -109,6 +115,7 @@ public sealed class Battle : IDisposable {
     public BattleStateManager StateManager { get; }
     public BattleProperties Properties { get; set; }
     public MapInfo MapInfo { get; set; }
+    public BattleType Type { get; }
 
     public IEntity LobbyEntity { get; set; } = null!;
     public IEntity MapEntity { get; set; } = null!;

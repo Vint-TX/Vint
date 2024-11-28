@@ -160,30 +160,17 @@ public class Player {
     public List<Punishment> Punishments { get; private set; } = null!;
 
     public async Task InitializeNew() {
-        CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist")
-            .Id;
-
+        CurrentAvatarId = GlobalEntities.GetEntity("avatars", "Tankist").Id;
         Reputation = 100;
 
-        long weaponId = GlobalEntities.GetEntity("weapons", "Smoky")
-            .Id;
-
-        long hullId = GlobalEntities.GetEntity("hulls", "Hunter")
-            .Id;
-
+        long weaponId = GlobalEntities.GetEntity("weapons", "Smoky").Id;
+        long hullId = GlobalEntities.GetEntity("hulls", "Hunter").Id;
         long shellId = GlobalEntities.DefaultShells[weaponId];
         long weaponSkinId = GlobalEntities.DefaultSkins[weaponId];
-
-        long coverId = GlobalEntities.GetEntity("covers", "None")
-            .Id;
-
+        long coverId = GlobalEntities.GetEntity("covers", "None").Id;
         long hullSkinId = GlobalEntities.DefaultSkins[hullId];
-
-        long paintId = GlobalEntities.GetEntity("paints", "Green")
-            .Id;
-
-        long graffitiId = GlobalEntities.GetEntity("graffities", "Logo")
-            .Id;
+        long paintId = GlobalEntities.GetEntity("paints", "Green").Id;
+        long graffitiId = GlobalEntities.GetEntity("graffities", "Logo").Id;
 
         await using (DbConnection db = new()) {
             await db.BeginTransactionAsync();

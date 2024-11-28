@@ -7,7 +7,7 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battles;
 
 public interface IBattleProcessor {
-    int BattlesCount { get; }
+    IReadOnlyCollection<Battle> Battles { get; }
 
     Task Tick(TimeSpan deltaTime);
 
@@ -35,20 +35,19 @@ public interface IBattleProcessor {
 public class BattleProcessor(
     IServiceProvider serviceProvider
 ) : IBattleProcessor {
-    ConcurrentHashSet<Battle> Battles { get; } = [];
-
     ILogger Logger { get; } = Log.Logger.ForType(typeof(BattleProcessor));
+    ConcurrentHashSet<Battle> BattleSet { get; } = [];
 
-    public int BattlesCount => Battles.Count;
+    public IReadOnlyCollection<Battle> Battles => BattleSet;
 
     public async Task Tick(TimeSpan deltaTime) {
-        foreach (Battle battle in Battles) {
+        foreach (Battle battle in BattleSet) {
             try {
                 await battle.Tick(deltaTime);
 
                 if (battle is { WasPlayers: true, Players.Count: 0 }) {
                     Logger.Warning("Removing battle {Id}", battle.LobbyId);
-                    Battles.TryRemove(battle);
+                    BattleSet.TryRemove(battle);
                     battle.Dispose();
                 }
             } catch (Exception e) {
@@ -72,33 +71,33 @@ public class BattleProcessor(
         await battle.AddPlayer(connection);
     }
 
-    public Battle? SingleOrDefault(Func<Battle, bool> predicate) => Battles.SingleOrDefault(predicate);
+    public Battle? SingleOrDefault(Func<Battle, bool> predicate) => BattleSet.SingleOrDefault(predicate);
 
-    public Battle? FirstOrDefault(Func<Battle, bool> predicate) => Battles.FirstOrDefault(predicate);
+    public Battle? FirstOrDefault(Func<Battle, bool> predicate) => BattleSet.FirstOrDefault(predicate);
 
     public Battle? FindByBattleId(long id) => SingleOrDefault(battle => battle.Id == id);
 
     public Battle? FindByLobbyId(long id) => SingleOrDefault(battle => battle.LobbyId == id);
 
-    public Battle? FindByIndex(int index) => Battles.ElementAtOrDefault(index);
+    public Battle? FindByIndex(int index) => BattleSet.ElementAtOrDefault(index);
 
     public Battle CreateMatchmakingBattle() {
         Battle battle = new(serviceProvider);
-        Battles.Add(battle);
+        BattleSet.Add(battle);
 
         return battle;
     }
 
     public Battle CreateArcadeBattle(ArcadeModeType mode) {
         Battle battle = new(serviceProvider, mode);
-        Battles.Add(battle);
+        BattleSet.Add(battle);
 
         return battle;
     }
 
     public Battle CreateCustomBattle(BattleProperties properties, IPlayerConnection owner) {
         Battle battle = new(serviceProvider, properties, owner);
-        Battles.Add(battle);
+        BattleSet.Add(battle);
 
         return battle;
     }

@@ -5,6 +5,7 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Server.API.Attributes.Deserialization;
 using Vint.Core.Server.API.Attributes.Methods;
+using Vint.Core.Server.API.DTO.Invite;
 
 namespace Vint.Core.Server.API.Controllers;
 
@@ -64,8 +65,3 @@ public class InviteController : WebApiController {
         await db.DeleteAsync(invite);
     }
 }
-
-public record InviteDTO(
-    string Code,
-    ushort Uses
-);

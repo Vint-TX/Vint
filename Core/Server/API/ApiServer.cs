@@ -1,11 +1,10 @@
-﻿using System.Globalization;
-using System.Text;
-using EmbedIO;
+﻿using EmbedIO;
 using EmbedIO.WebApi;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Server.API.Controllers;
+using Vint.Core.Server.API.DTO;
+using Vint.Core.Server.API.Serialization;
 using Vint.Core.Utils;
 using ILogger = Serilog.ILogger;
 
@@ -14,21 +13,26 @@ namespace Vint.Core.Server.API;
 public class ApiServer {
     const ushort Port = 5051;
 
-    public ApiServer() {
+    public ApiServer(IServiceProvider serviceProvider) {
+        ServiceProvider = serviceProvider;
+
         Server = new WebServer(options => options
                 .WithUrlPrefix($"http://localhost:{Port}/")
                 .WithMode(HttpListenerMode.Microsoft))
             .HandleHttpException(HandleHttpException)
             .HandleUnhandledException(HandleUnhandledException);
 
-        WithController<InviteController>("/invites/");
-        WithController<PlayerController>("/players/");
-        WithController<PromoCodeController>("/promoCodes/");
+        WithController<InviteController>("/invites");
+        WithController<PlayerController>("/players");
+        WithController<PromoCodeController>("/promoCodes");
+        WithController<BattleController>("/battles");
+        WithController<ServerController>("/server");
 
         Server.StateChanged += (_, e) => Logger.Debug("State changed: {Old} => {New}", e.OldState, e.NewState);
     }
 
     ILogger Logger { get; } = Log.Logger.ForType(typeof(ApiServer));
+    IServiceProvider ServiceProvider { get; }
     WebServer Server { get; }
     ResponseJsonSerializer ResponseJsonSerializer { get; } = new();
 
@@ -52,7 +56,7 @@ public class ApiServer {
         context.Response.StatusCode = exception.StatusCode;
         exception.PrepareResponse(context);
 
-        ErrorResponse error = new(exception.Message ?? "Unknown error", exception.DataObject);
+        ExceptionDTO error = new(exception.Message ?? "Unknown error", exception.DataObject);
         await SerializeAndSend(context, error);
     }
 
@@ -62,45 +66,16 @@ public class ApiServer {
         Type type = exception.GetType();
         string message = exception.Message;
 
-        await SerializeAndSend(context, new ErrorResponse($"{type.FullName}: {message}", exception.Data));
+        await SerializeAndSend(context, new ExceptionDTO($"{type.FullName}: {message}", exception.Data));
     }
 
-    void WithController<TController>(string baseRoute) where TController : WebApiController, new() =>
-        Server.WithWebApi(baseRoute, SerializeAndSend, module => module.WithController<TController>());
+    void WithController<TController>(string baseRoute) where TController : WebApiController =>
+        Server.WithWebApi(baseRoute, SerializeAndSend,
+            module => module.WithController(() => ActivatorUtilities.GetServiceOrCreateInstance<TController>(ServiceProvider)));
 
-    void WithController<TController>(string baseRoute, Action<WebApiModule> configure) where TController : WebApiController, new() =>
+    void WithController<TController>(string baseRoute, Action<WebApiModule> configure) where TController : WebApiController =>
         Server.WithWebApi(baseRoute, SerializeAndSend, module => {
-            module.WithController<TController>();
+            module.WithController(() => ActivatorUtilities.GetServiceOrCreateInstance<TController>(ServiceProvider));
             configure(module);
         });
 }
-
-class ResponseJsonSerializer {
-    public ResponseJsonSerializer() {
-        JsonSerializerSettings settings = new() {
-            Formatting = Formatting.None,
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-
-        Serializer = JsonSerializer.CreateDefault(settings);
-    }
-
-    JsonSerializer Serializer { get; }
-
-    public async Task<string> Serialize(object? value) {
-        StringBuilder sb = new(256);
-        StringWriter sw = new(sb, CultureInfo.InvariantCulture);
-
-        await using (JsonTextWriter jsonWriter = new(sw)) {
-            jsonWriter.Formatting = Serializer.Formatting;
-            Serializer.Serialize(jsonWriter, value, null);
-        }
-
-        return sw.ToString();
-    }
-}
-
-readonly record struct ErrorResponse(
-    string Message,
-    object? Data
-);

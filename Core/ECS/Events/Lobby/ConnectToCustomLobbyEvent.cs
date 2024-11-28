@@ -26,7 +26,7 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
 
         if (connection.Player.IsAdmin &&
             LobbyId >= 0 &&
-            LobbyId < battleProcessor.BattlesCount) {
+            LobbyId < battleProcessor.Battles.Count) {
             battle = battleProcessor.FindByIndex((int)LobbyId);
 
             if (await ValidateAndJoin(connection, battle)) return;

@@ -15,7 +15,7 @@ public class BattleResultForClient {
 
         MatchMakingModeType = battle.TypeHandler is ArcadeHandler
             ? BattleType.Arcade
-            : BattleType.Rating;
+            : BattleType.MatchMaking;
 
         switch (battle.ModeHandler) {
             case TeamHandler teamHandler:

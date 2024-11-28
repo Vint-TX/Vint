@@ -16,7 +16,7 @@ public class StatisticsModule(
         await ctx.DeferResponseAsync();
 
         int players = gameServer.PlayerConnections.Count;
-        int battles = battleProcessor.BattlesCount;
+        int battles = battleProcessor.Battles.Count;
 
         DiscordEmbedBuilder embed = Embeds
             .GetNotificationEmbed("")

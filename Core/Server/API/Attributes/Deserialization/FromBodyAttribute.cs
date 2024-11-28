@@ -1,8 +1,7 @@
-using System.Reflection;
 using EmbedIO;
 using EmbedIO.WebApi;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Vint.Core.Server.API.Serialization;
 
 namespace Vint.Core.Server.API.Attributes.Deserialization;
 
@@ -23,14 +22,5 @@ public class FromBodyAttribute : Attribute, IRequestDataAttribute<WebApiControll
         } catch (JsonSerializationException e) {
             throw HttpException.BadRequest(e.Message);
         }
-    }
-}
-
-public class RequiredFieldsContractResolver : DefaultContractResolver {
-    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization) {
-        JsonProperty property = base.CreateProperty(member, memberSerialization);
-
-        property.Required = Required.AllowNull;
-        return property;
     }
 }

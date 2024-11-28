@@ -66,7 +66,7 @@ public class UserModule(
     public async Task Battles(ChatCommandContext ctx) {
         IBattleProcessor battleProcessor = ctx.ServiceProvider.GetRequiredService<IBattleProcessor>();
 
-        await ctx.SendPrivateResponse($"{battleProcessor.BattlesCount} battles");
+        await ctx.SendPrivateResponse($"{battleProcessor.Battles.Count} battles");
     }
 
     [ChatCommand("ping", "Show ping")]

@@ -61,6 +61,7 @@ public interface IPlayerConnection {
     IEntity ClientSession { get; }
 
     bool IsOnline { get; }
+    [MemberNotNullWhen(true, nameof(BattlePlayer))]
     bool InLobby { get; }
     DateTimeOffset PingSendTime { set; }
     DateTimeOffset PongReceiveTime { set; }

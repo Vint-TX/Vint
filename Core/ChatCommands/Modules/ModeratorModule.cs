@@ -70,8 +70,7 @@ public class ModeratorModule(
 
         await ctx.SendPrivateResponse($"Punishment Id: {punishment.Id}");
 
-        if (notifyChat == null ||
-            notifiedConnections == null)
+        if (notifyChat == null || notifiedConnections == null)
             await ctx.SendPublicResponse(punishMessage);
         else {
             await ctx.SendResponse(punishMessage, notifyChat, notifiedConnections);

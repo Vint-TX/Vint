@@ -164,6 +164,8 @@ public class WarmUp(
         await base.Finish();
         await Battle.ModeHandler.OnWarmUpCompleted();
     }
+
+    public override string ToString() => $"{GetType().Name} ({WarmUpStateManager.CurrentState})";
 }
 
 public class Running(

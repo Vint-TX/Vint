@@ -7,7 +7,6 @@ using Vint.Core.Server.Game;
 namespace Vint.Core.ChatCommands;
 
 public sealed class ChatCommand(
-    string methodName,
     IChatCommandProcessor processor,
     ChatCommandAttribute chatCommandAttribute,
     ChatCommandGroupAttribute? chatCommandGroupAttribute,
@@ -16,7 +15,6 @@ public sealed class ChatCommand(
     MethodInfo method,
     List<ParameterInfo> parameters
 ) {
-    public string MethodName { get; } = methodName;
     public IChatCommandProcessor Processor { get; } = processor;
     public ChatCommandAttribute Info { get; } = chatCommandAttribute;
     public ChatCommandGroupAttribute? ChatCommandGroupAttribute { get; } = chatCommandGroupAttribute;
@@ -92,15 +90,8 @@ public sealed class ChatCommand(
                 OptionAttribute option = Options[parameterInfo.Name!];
 
                 if (e.InnerException is OverflowException) {
-                    object? minValue = parameterInfo
-                        .ParameterType
-                        .GetField("MinValue")
-                        ?.GetValue(null);
-
-                    object? maxValue = parameterInfo
-                        .ParameterType
-                        .GetField("MaxValue")
-                        ?.GetValue(null);
+                    object? minValue = parameterInfo.ParameterType.GetField("MinValue")?.GetValue(null);
+                    object? maxValue = parameterInfo.ParameterType.GetField("MaxValue")?.GetValue(null);
 
                     await context.SendPrivateResponse($"'{option}' must be in range from '{minValue}' to '{maxValue}'");
                     return;

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LinqToDB;
 using Vint.Core.Battles.Effects;
 using Vint.Core.Battles.Mode;
@@ -62,6 +63,7 @@ public class BattlePlayer {
     } = TeamColor.None;
 
     public bool IsSpectator { get; }
+    [MemberNotNullWhen(true, nameof(Tank))]
     public bool InBattleAsTank => InBattle && Tank != null;
     public bool InBattle { get; set; }
     public bool IsPaused { get; set; }

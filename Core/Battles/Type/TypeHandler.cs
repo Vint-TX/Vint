@@ -22,4 +22,10 @@ public abstract class TypeHandler(
         < 1 => BattleMode.DM,
         _ => throw new UnreachableException()
     };
+
+    public override string ToString() {
+        const int handlerLength = 7; // "Handler".Length
+
+        return GetType().Name[..^handlerLength];
+    }
 }
