@@ -47,6 +47,25 @@ public class PlayerController(
         return PlayerDetailDTO.FromPlayer(player);
     }
 
+    [Post("/{id}/dmsg")]
+    public async Task DisplayMessage(long playerId, [FromBody] string message) {
+        if (playerId == -1) {
+            foreach (IPlayerConnection connection in server.PlayerConnections.Values)
+                await connection.DisplayMessage(message);
+
+            return;
+        }
+
+        IPlayerConnection? target = server.PlayerConnections.Values
+            .Where(conn => conn.IsOnline)
+            .SingleOrDefault(conn => conn.Player.Id == playerId);
+
+        if (target == null)
+            throw HttpException.NotFound($"Player '{playerId}' not found");
+
+        await target.DisplayMessage(message);
+    }
+
     [Get("/{id}/restorePasswordCode")]
     public object GetRestorePasswordCode(long id) {
         IPlayerConnection? connection = server.PlayerConnections.Values

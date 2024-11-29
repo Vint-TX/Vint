@@ -1,6 +1,7 @@
 using EmbedIO;
 using EmbedIO.WebApi;
 using Vint.Core.Battles;
+using Vint.Core.Config;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server.API.Attributes.Methods;
 using Vint.Core.Server.API.DTO.Server;
@@ -29,24 +30,12 @@ public class ServerController(
         return new CountDTO(connectionsCount, playersCount, matchmakingCount, arcadeCount, customCount);
     }
 
-    [Post("/dmsg")]
-    public async Task DisplayMessage(DMsgRequestDTO request) {
-        (long playerId, string? message) = request;
+    [Get("/globalEntities")]
+    public IEnumerable<string> GetEntitiesTypeNames() =>
+        ConfigManager.GlobalEntitiesTypeNames;
 
-        if (playerId == -1) {
-            foreach (IPlayerConnection connection in server.PlayerConnections.Values)
-                await connection.DisplayMessage(message);
-
-            return;
-        }
-
-        IPlayerConnection? target = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Id == playerId);
-
-        if (target == null)
-            throw HttpException.NotFound($"Player '{playerId}' not found");
-
-        await target.DisplayMessage(message);
-    }
+    [Get("/globalEntities/{typeName}")]
+    public async Task<string> GetEntities(string typeName) =>
+        await ConfigManager.GetGlobalEntitiesJson(typeName) ??
+        throw HttpException.NotFound($"No entities found for '{typeName}'");
 }

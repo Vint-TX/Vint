@@ -36,6 +36,7 @@ abstract class Program {
             }));
 
         IServiceProvider serviceProvider = new ServiceCollection()
+            .AddLogging(builder => builder.AddSerilog())
             .AddSingleton<ApiServer>()
             .AddSingleton<StaticServer>()
             .AddSingleton<GameServer>()

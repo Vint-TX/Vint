@@ -375,9 +375,15 @@ public static class ConfigManager {
     public static IEntity GetGlobalEntity(string path, string entityName) {
         ConfigNode node = GetNode(path)!.Value;
 
-        return node
-            .Entities[entityName]
-            .Clone();
+        return node.Entities[entityName].Clone();
+    }
+
+    public static async Task<string?> GetGlobalEntitiesJson(string typeName) {
+        if (!GlobalEntitiesTypeNames.Contains(typeName))
+            return null;
+
+        string path = Path.Combine(ResourcesPath, "GlobalEntities", $"{typeName}.json");
+        return await File.ReadAllTextAsync(path);
     }
 
     public static IEnumerable<IEntity> GetGlobalEntities(string path) {
