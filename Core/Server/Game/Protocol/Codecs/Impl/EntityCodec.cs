@@ -5,14 +5,10 @@ namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class EntityCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) =>
-        Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Encode(buffer, ((IEntity)value).Id);
+        buffer.Writer.Write(((IEntity)value).Id);
 
     public override object Decode(ProtocolBuffer buffer) {
-        long id = (long)Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Decode(buffer);
+        long id = buffer.Reader.ReadInt64();
 
         return buffer.GetSharedEntity(id) ??
                (EntityRegistry.TryGetTemp(id, out IEntity? entity)

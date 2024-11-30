@@ -1,31 +1,28 @@
-﻿using Vint.Core.ECS.Entities;
+﻿using Serilog.Events;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
-public class ProtocolBuffer(
+public sealed class ProtocolBuffer(
+    MemoryStream stream,
     OptionalMap optionalMap,
     IPlayerConnection connection
-) {
-    public MemoryStream Stream { get; private set; } = new();
-    public BinaryReader Reader => new BigEndianBinaryReader(Stream);
-    public BinaryWriter Writer => new BigEndianBinaryWriter(Stream);
-    public OptionalMap OptionalMap { get; private set; } = optionalMap;
+) : IAsyncDisposable, IDisposable {
+    public ProtocolBuffer(IPlayerConnection connection) : this(new MemoryStream(), new OptionalMap(), connection) { }
 
+    bool _disposed;
+
+    public MemoryStream Stream { get; } = stream;
+    public OptionalMap OptionalMap { get; } = optionalMap;
     public IPlayerConnection Connection { get; } = connection;
+
+    public BinaryReader Reader { get; } = new BigEndianBinaryReader(stream);
+    public BinaryWriter Writer { get; } = new BigEndianBinaryWriter(stream);
 
     public IEntity? GetSharedEntity(long id) => Connection.SharedEntities.SingleOrDefault(entity => entity.Id == id);
 
-    public void Clear() {
-        OptionalMap = new OptionalMap();
-
-        Stream.Close();
-        Stream = new MemoryStream();
-    }
-
-    public bool Unwrap(BinaryReader reader) {
-        Clear();
-
+    public static ProtocolBuffer Unwrap(BinaryReader reader, IPlayerConnection connection) {
         // Header
         byte firstByte = reader.ReadByte();
         byte secondByte = reader.ReadByte();
@@ -34,26 +31,32 @@ public class ProtocolBuffer(
         if (secondByte != byte.MinValue) throw new InvalidDataException($"Invalid second header byte: {secondByte}");
 
         // Sizes
-        int optionalMapBits = reader.ReadInt32();
-        int optionalMapBytes = GetSizeInBytes(optionalMapBits);
-
+        int optionalMapBitsSize = reader.ReadInt32();
+        int optionalMapBytesSize = GetSizeInBytes(optionalMapBitsSize);
         int dataSize = (int)reader.ReadUInt32();
 
         // Optional map
-        OptionalMap = new OptionalMap(reader.ReadBytes(optionalMapBytes), optionalMapBits);
+        byte[] optionalMapBytes = reader.ReadBytes(optionalMapBytesSize);
+        OptionalMap optionalMap = new(optionalMapBytes, optionalMapBitsSize);
 
         // Data
-        reader.BaseStream.CopyTo(Stream, limit: dataSize);
-        Stream.Seek(0, SeekOrigin.Begin);
+        MemoryStream stream = new(dataSize);
+        reader.BaseStream.CopyTo(stream, limit: dataSize);
+        stream.Seek(0, SeekOrigin.Begin);
 
-        byte[] array = Stream.ToArray();
-        List<byte> bytes = new((int)(OptionalMap.Length + Stream.Length));
+        ProtocolBuffer buffer = new(stream, optionalMap, connection);
 
-        bytes.AddRange(OptionalMap.GetBytes());
-        bytes.AddRange(array);
+        if (!connection.Logger.IsEnabled(LogEventLevel.Verbose))
+            return buffer;
 
-        Connection.Logger.Verbose("Unwrapped {Size} bytes ({Hex})", bytes.Count, Convert.ToHexString(bytes.ToArray()));
-        return true;
+        byte[] streamBytes = stream.ToArray();
+        List<byte> bytes = new(optionalMapBytes.Length + streamBytes.Length);
+
+        bytes.AddRange(optionalMapBytes);
+        bytes.AddRange(streamBytes);
+
+        connection.Logger.Verbose("Unwrapped {Size} bytes ({Hex})", bytes.Count, Convert.ToHexString(bytes.ToArray()));
+        return buffer;
     }
 
     public void Wrap(BinaryWriter writer) {
@@ -75,6 +78,37 @@ public class ProtocolBuffer(
         Connection.Logger.Verbose("Wrapped {Size} bytes ({Hex})", Stream.Length, Convert.ToHexString(Stream.ToArray()));
     }
 
-    int GetSizeInBytes(int size) =>
+    static int GetSizeInBytes(int size) =>
         (int)Math.Ceiling(size / 8.0);
+
+    public void Dispose() {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public async ValueTask DisposeAsync() {
+        await DisposeAsyncCore();
+        Dispose(false);
+        GC.SuppressFinalize(this);
+    }
+
+    void Dispose(bool disposing) {
+        if (_disposed) return;
+
+        if (disposing) {
+            Reader.Dispose();
+            Writer.Dispose();
+            Stream.Dispose();
+        }
+
+        _disposed = true;
+    }
+
+    async ValueTask DisposeAsyncCore() {
+        Reader.Dispose();
+        await Writer.DisposeAsync();
+        await Stream.DisposeAsync();
+    }
+
+    ~ProtocolBuffer() => Dispose(false);
 }

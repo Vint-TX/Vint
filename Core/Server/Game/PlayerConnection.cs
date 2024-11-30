@@ -138,10 +138,6 @@ public interface IPlayerConnection {
 
     Task UnshareIfShared(IEntity entity);
 
-    void Schedule(TimeSpan delay, Action action);
-
-    void Schedule(DateTimeOffset time, Action action);
-
     void Schedule(TimeSpan delay, Func<Task> action);
 
     void Schedule(DateTimeOffset time, Func<Task> action);
@@ -149,9 +145,10 @@ public interface IPlayerConnection {
     Task Tick();
 }
 
-public abstract class PlayerConnection : IPlayerConnection {
-    public Guid Id { get; } = Guid.NewGuid();
-    ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
+public abstract class PlayerConnection(
+    int id
+) : IPlayerConnection {
+    public int Id { get; } = id;
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
     public ILogger Logger { get; protected set; } = Log.Logger.ForType<PlayerConnection>();
 
@@ -1173,12 +1170,6 @@ public abstract class PlayerConnection : IPlayerConnection {
             await Unshare(entity);
     }
 
-    public void Schedule(TimeSpan delay, Action action) =>
-        DelayedActions.Add(new DelayedAction(DateTimeOffset.UtcNow + delay, action));
-
-    public void Schedule(DateTimeOffset time, Action action) =>
-        DelayedActions.Add(new DelayedAction(time, action));
-
     public void Schedule(TimeSpan delay, Func<Task> action) =>
         DelayedTasks.Add(new DelayedTask(DateTimeOffset.UtcNow + delay, action));
 
@@ -1186,14 +1177,9 @@ public abstract class PlayerConnection : IPlayerConnection {
         DelayedTasks.Add(new DelayedTask(time, action));
 
     public virtual async Task Tick() {
-        if (PingSendTime + TimeSpan.FromSeconds(5) <= DateTimeOffset.UtcNow) {
+        if (PingSendTime.AddSeconds(5) <= DateTimeOffset.UtcNow) {
             await Send(new PingEvent(DateTimeOffset.UtcNow));
             PingSendTime = DateTimeOffset.UtcNow;
-        }
-
-        foreach (DelayedAction delayedAction in DelayedActions.Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
-            delayedAction.Action();
-            DelayedActions.TryRemove(delayedAction);
         }
 
         foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
@@ -1202,7 +1188,7 @@ public abstract class PlayerConnection : IPlayerConnection {
         }
     }
 
-    public override int GetHashCode() => Id.GetHashCode();
+    public override int GetHashCode() => Id;
 
     [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
     public override string ToString() =>
@@ -1210,9 +1196,10 @@ public abstract class PlayerConnection : IPlayerConnection {
 }
 
 public class SocketPlayerConnection(
+    int id,
     IServiceProvider serviceProvider,
     Socket socket
-) : PlayerConnection {
+) : PlayerConnection(id) {
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
     public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
@@ -1239,6 +1226,8 @@ public class SocketPlayerConnection(
         ClientSession = new ClientSessionTemplate().Create();
         Logger.Information("New socket connected");
 
+        _ = Task.Run(ReceiveAndExecute);
+
         await Send(new InitTimeCommand(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         await Share(ClientSession);
 
@@ -1252,7 +1241,7 @@ public class SocketPlayerConnection(
         try {
             Logger.Verbose("Encoding {Command}", command);
 
-            ProtocolBuffer buffer = new(new OptionalMap(), this);
+            await using ProtocolBuffer buffer = new(this);
 
             Protocol
                 .GetCodec(new TypeCodecInfo(typeof(ICommand)))
@@ -1263,11 +1252,7 @@ public class SocketPlayerConnection(
             buffer.Wrap(writer);
 
             byte[] bytes = stream.ToArray();
-
-            CancellationTokenSource cts = new();
-            cts.CancelAfter(TimeSpan.FromSeconds(2));
-
-            await Socket.SendAsync(bytes, cts.Token);
+            await Socket.SendAsync(bytes);
 
             Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
         } catch (Exception e) {
@@ -1286,7 +1271,7 @@ public class SocketPlayerConnection(
         }
     }
 
-    async Task OnDisconnected() {
+    async Task OnDisconnected() { // todo rewrite :skull:
         if (!IsConnected) return;
 
         IsConnected = false;
@@ -1349,7 +1334,6 @@ public class SocketPlayerConnection(
         }
 
         await base.Tick();
-        await ReceiveAndExecute();
     }
 
     async Task ReceiveAndExecute() {
@@ -1357,32 +1341,28 @@ public class SocketPlayerConnection(
             return;
 
         try {
-            if (Socket.Available <= 0)
-                return;
-
-            await using NetworkStream stream = new(Socket);
+            await using NetworkStream stream = new(Socket, FileAccess.Read);
             using BinaryReader reader = new BigEndianBinaryReader(stream);
-            ProtocolBuffer buffer = new(new OptionalMap(), this);
 
-            if (!buffer.Unwrap(reader))
-                throw new InvalidDataException("Failed to unwrap packet");
+            while (true) {
+                await using ProtocolBuffer buffer = ProtocolBuffer.Unwrap(reader, this);
+                long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
 
-            long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+                while (availableForRead > 0) {
+                    Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
 
-            while (availableForRead > 0) {
-                Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
+                    ICommand command = (ICommand)Protocol
+                        .GetCodec(new TypeCodecInfo(typeof(ICommand)))
+                        .Decode(buffer);
 
-                ICommand command = (ICommand)Protocol
-                    .GetCodec(new TypeCodecInfo(typeof(ICommand)))
-                    .Decode(buffer);
+                    try {
+                        await command.Execute(this, serviceProvider);
+                    } catch (Exception e) {
+                        Logger.Error(e, "Failed to execute {Command}", command);
+                    }
 
-                try {
-                    await command.Execute(this, serviceProvider);
-                } catch (Exception e) {
-                    Logger.Error(e, "Failed to execute {Command}", command);
+                    availableForRead = buffer.Stream.Length - buffer.Stream.Position;
                 }
-
-                availableForRead = buffer.Stream.Length - buffer.Stream.Position;
             }
         } catch {
             await Disconnect();

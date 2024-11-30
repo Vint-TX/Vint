@@ -23,7 +23,7 @@ public class CommandCodec : Codec {
             .Encode(buffer, value);
     }
 
-    public override ICommand Decode(ProtocolBuffer buffer) {
+    public override object Decode(ProtocolBuffer buffer) {
         CommandCode code = (CommandCode)Protocol
             .GetCodec(new TypeCodecInfo(typeof(CommandCode)))
             .Decode(buffer);
@@ -32,9 +32,9 @@ public class CommandCodec : Codec {
 
         //Logger.Debug("Decoding command of type {Type}", code);
 
-        return (Protocol
+        return Protocol
             .GetCodec(new TypeCodecInfo(type))
-            .Decode(buffer) as ICommand)!;
+            .Decode(buffer);
     }
 
     public CommandCodec Register<T>(CommandCode code) where T : ICommand {

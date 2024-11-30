@@ -10,7 +10,4 @@ public abstract class Codec : ICodec {
     public abstract void Encode(ProtocolBuffer buffer, object value);
 
     public abstract object Decode(ProtocolBuffer buffer);
-
-    public override string ToString() => GetType()
-        .Name;
 }

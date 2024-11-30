@@ -18,9 +18,10 @@ public class GameServer(
     IMatchmakingProcessor matchmakingProcessor
 ) {
     public const ushort Port = 5050;
+    int _lastClientId = -1;
 
     public TimeSpan DeltaTime { get; private set; }
-    public Dictionary<Guid, IPlayerConnection> PlayerConnections { get; } = new();
+    public Dictionary<int, IPlayerConnection> PlayerConnections { get; } = new();
 
     ILogger Logger { get; } = Log.Logger.ForType<GameServer>();
     TcpListener Listener { get; } = new(IPAddress.Any, Port);
@@ -39,26 +40,22 @@ public class GameServer(
         await TickLoop();
     }
 
-    static Task OnConnected(SocketPlayerConnection connection) => connection.OnConnected();
-
     async Task AcceptNewSockets() {
         for (int i = 0; i < 20 && Listener.Pending(); i++) {
             try {
+                int id = Interlocked.Increment(ref _lastClientId);
                 Socket socket = await Listener.AcceptSocketAsync();
-                SocketPlayerConnection connection = new(serviceProvider, socket);
-                await OnConnected(connection);
+                SocketPlayerConnection connection = new(id, serviceProvider, socket);
 
-                if (PlayerConnections.TryAdd(connection.Id, connection)) continue;
-
-                Logger.Error("Cannot add {Connection}", connection);
-                await connection.Kick("Internal error");
+                PlayerConnections[id] = connection;
+                await connection.OnConnected();
             } catch (Exception e) {
                 Logger.Error(e, "Exception while accepting socket");
             }
         }
     }
 
-    public void RemovePlayer(Guid id) => PlayerConnections.Remove(id, out _);
+    public void RemovePlayer(int id) => PlayerConnections.Remove(id, out _);
 
     async Task TickPlayers() {
         await AcceptNewSockets();

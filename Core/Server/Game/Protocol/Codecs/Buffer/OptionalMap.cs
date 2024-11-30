@@ -1,7 +1,7 @@
 ﻿namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
 public class OptionalMap {
-    public OptionalMap() => Data = new List<byte>();
+    public OptionalMap() => Data = [];
 
     public OptionalMap(IEnumerable<byte> data, int length) {
         Data = data.ToList();

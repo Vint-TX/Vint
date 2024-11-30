@@ -6,36 +6,19 @@ namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class GroupComponentCodec : Codec {
     public override void Encode(ProtocolBuffer buffer, object value) {
-        Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Encode(buffer,
-                value
-                    .GetType()
-                    .GetProtocolId());
-
-        Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Encode(buffer, ((GroupComponent)value).Key);
+        buffer.Writer.Write(value.GetType().GetProtocolId());
+        buffer.Writer.Write(((GroupComponent)value).Key);
     }
 
-    public override GroupComponent Decode(ProtocolBuffer buffer) {
-        object id = Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Decode(buffer);
+    public override object Decode(ProtocolBuffer buffer) {
+        long id = buffer.Reader.ReadInt64();
+        long key = buffer.Reader.ReadInt64();
 
-        object key = Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Decode(buffer);
+        Type type = Protocol.GetTypeById(id);
 
-        Type type = Protocol.GetTypeById((long)id);
-
-        return (type
+        return type
             .GetConstructors()
-            .Single(c => c
-                             .GetParameters()
-                             .Single()
-                             .ParameterType ==
-                         typeof(long))
-            .Invoke([key]) as GroupComponent)!;
+            .Single(c => c.GetParameters().Single().ParameterType == typeof(long))
+            .Invoke([key]);
     }
 }

@@ -10,13 +10,7 @@ public class TemplateAccessorCodec : Codec {
         if (value is not TemplateAccessor templateAccessor)
             throw new ArgumentException("Value must be TemplateAccessor");
 
-        Protocol
-            .GetCodec(new TypeCodecInfo(typeof(long)))
-            .Encode(buffer,
-                templateAccessor
-                    .Template
-                    .GetType()
-                    .GetProtocolId());
+        buffer.Writer.Write(templateAccessor.Template.GetType().GetProtocolId());
 
         Protocol
             .GetCodec(new TypeCodecInfo(typeof(string), true))

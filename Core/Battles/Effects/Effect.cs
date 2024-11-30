@@ -30,15 +30,9 @@ public abstract class Effect(
 
     protected TimeSpan Duration { get; set; } = TimeSpan.Zero;
 
-    ConcurrentHashSet<DelayedAction> DelayedActions { get; } = [];
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
     public virtual async Task Tick(TimeSpan deltaTime) {
-        foreach (DelayedAction delayedAction in DelayedActions.Where(delayedAction => delayedAction.InvokeAtTime <= DateTimeOffset.UtcNow)) {
-            DelayedActions.TryRemove(delayedAction);
-            delayedAction.Action();
-        }
-
         foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
             DelayedTasks.TryRemove(delayedTask);
             await delayedTask.Task();
@@ -92,21 +86,12 @@ public abstract class Effect(
         }
     }
 
-    protected void Schedule(TimeSpan delay, Action action) =>
-        DelayedActions.Add(new DelayedAction(DateTimeOffset.UtcNow + delay, action));
-
     protected void Schedule(TimeSpan delay, Func<Task> task) =>
         DelayedTasks.Add(new DelayedTask(DateTimeOffset.UtcNow + delay, task));
 
-    public void UnScheduleAll() {
-        DelayedActions.Clear();
-        DelayedTasks.Clear();
-    }
+    public void UnScheduleAll() => DelayedTasks.Clear();
 
-    public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this),
-        GetType()
-            .Name,
-        Tank);
+    public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this), GetType().Name, Tank);
 }
 
 public abstract class DurationEffect : Effect {
