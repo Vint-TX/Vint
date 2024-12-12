@@ -510,7 +510,7 @@ public class BattleTank {
         await UpdateKillStreak();
     }
 
-    public async Task AddAssists(int delta) =>
+    public Task AddAssists(int delta) =>
         RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.KillAssists = Math.Max(0, component.KillAssists + delta));
 
     public async Task AddDeaths(int delta, BattleTank? killer) {

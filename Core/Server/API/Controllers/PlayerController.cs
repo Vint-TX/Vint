@@ -204,7 +204,7 @@ public class PlayerController(
                            throw HttpException.NotFound($"Player with id {id} does not exists");
         }
 
-        if (targetPlayer.IsAdmin)
+        if (targetPlayer!.IsAdmin)
             throw HttpException.BadRequest($"Player with id {id} is an admin");
 
         string? ipAddress = null;

@@ -18,8 +18,8 @@ public record struct MapInfo(
 ) {
     static Vector3 GltfToUnity { get; } = new(-1, 1, 1);
 
-    Lock Lock { get; set; }
-    string ConfigPath { get; set; }
+    Lock Lock { get; set; } = null!;
+    string ConfigPath { get; set; } = null!;
     Triangle[]? Triangles { get; set; }
 
     public void Init() {
