@@ -23,6 +23,6 @@ public class InviteToLobbyEvent : IServerEvent {
         foreach (IPlayerConnection receiver in InvitedUsersIds
                      .Select(userId => connections.SingleOrDefault(conn => conn.Player.Id == userId))
                      .OfType<IPlayerConnection>())
-            await receiver.Send(new InvitedToLobbyEvent(connection.Player.Username, connection.BattlePlayer!.Battle.LobbyId), receiver.User);
+            await receiver.Send(new InvitedToLobbyEvent(connection.Player.Username, connection.BattlePlayer!.Battle.LobbyId), receiver.UserContainer.Entity);
     }
 }

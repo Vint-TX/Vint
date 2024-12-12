@@ -17,17 +17,17 @@ public class ShaftAimingWorkingStateComponent : IComponent {
     public bool IsActive { get; private set; }
     public int ClientTime { get; private set; }
 
-    public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft) return Task.CompletedTask;
+    public async Task Added(IPlayerConnection connection, IEntity entity) {
+        if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft)
+            return;
 
-        shaft.Aim();
-        return Task.CompletedTask;
+        await shaft.Aim();
     }
 
-    public Task Removed(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft) return Task.CompletedTask;
+    public async Task Removed(IPlayerConnection connection, IEntity entity) {
+        if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft)
+            return;
 
-        shaft.Idle();
-        return Task.CompletedTask;
+        await shaft.Idle();
     }
 }

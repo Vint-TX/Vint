@@ -21,7 +21,8 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
         if (targetPlayer == null) return;
 
         Relation? thisToTargetRelation =
-            await db.Relations.SingleOrDefaultAsync(relation => relation.SourcePlayerId == connection.User.Id && relation.TargetPlayerId == UserId);
+            await db.Relations.SingleOrDefaultAsync(relation => relation.SourcePlayerId == connection.UserContainer.Id &&
+                                                                relation.TargetPlayerId == UserId);
 
         await db.BeginTransactionAsync();
 
@@ -38,7 +39,7 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
                 thisToTargetRelation.Types |= RelationTypes.Blocked;
 
                 Relation? targetToThisRelation = await db.Relations.SingleOrDefaultAsync(relation => relation.SourcePlayerId == UserId &&
-                    relation.TargetPlayerId == connection.User.Id);
+                    relation.TargetPlayerId == connection.UserContainer.Id);
 
                 if (targetToThisRelation != null) {
                     targetToThisRelation.Types &= ~(RelationTypes.Friend | RelationTypes.IncomingRequest | RelationTypes.OutgoingRequest);

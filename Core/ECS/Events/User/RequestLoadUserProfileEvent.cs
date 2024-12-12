@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.User;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -14,40 +13,20 @@ public class RequestLoadUserProfileEvent : IServerEvent {
     public long UserId { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
-
-        IEntity? user = server
-            .PlayerConnections
-            .Values
-            .Where(conn => conn.IsOnline)
-            .SingleOrDefault(conn => conn.Player.Id == UserId)
-            ?.User;
-
-        if (EntityRegistry.TryGetTemp(UserId, out IEntity? tempUser)) { // temp user exists..
-            if (user != null) { // ..but player is online
-                foreach (IPlayerConnection shared in tempUser.SharedPlayers) {
-                    await shared.Unshare(tempUser);
-                    await shared.Share(user);
-                }
-
-                await connection.ShareIfUnshared(user);
-                EntityRegistry.TryRemoveTemp(UserId);
-            } else { // ..and player is offline
-                await connection.ShareIfUnshared(tempUser);
-                user = tempUser;
-            }
-        } else if (user != null) { // player is online
-            await connection.ShareIfUnshared(user);
-        } else { // player is offline
+        if (!UserRegistry.TryGetContainer(UserId, out UserContainer? container)) {
+            GameServer server = serviceProvider.GetRequiredService<GameServer>();
             await using DbConnection db = new();
-            Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
-            if (player == null) return;
+            Player? player = server.PlayerConnections.Values.Where(conn => conn.IsOnline).SingleOrDefault(conn => conn.Player.Id == UserId)?.Player ??
+                             await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
-            user = new UserTemplate().CreateFake(connection, player);
-            await connection.Share(user);
+            if (player == null)
+                throw new InvalidOperationException($"Player {UserId} not found");
+
+            container = UserRegistry.GetOrCreateContainer(UserId, player);
         }
 
-        await connection.Send(new UserProfileLoadedEvent(), user);
+        await connection.Share(container.Entity);
+        await connection.Send(new UserProfileLoadedEvent(), container.Entity);
     }
 }

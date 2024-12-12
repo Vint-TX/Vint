@@ -57,6 +57,6 @@ public class UserQuestReadyEvent : IServerEvent { // todo premium
             connection.Schedule(quest.CompletedQuestChangeTime!.Value, async () => await questManager.ChangeQuest(connection, entity));
         }
 
-        await connection.Share(new QuestDailyBonusTemplate().Create(connection.User, noChanges));
+        await connection.Share(new QuestDailyBonusTemplate().Create(connection.UserContainer.Entity, noChanges));
     }
 }

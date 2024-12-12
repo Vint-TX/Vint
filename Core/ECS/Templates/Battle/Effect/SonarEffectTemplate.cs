@@ -10,7 +10,7 @@ public class SonarEffectTemplate : EffectBaseTemplate {
     public IEntity Create(BattlePlayer battlePlayer, TimeSpan duration) {
         IEntity entity = Create("battle/effect/sonar", battlePlayer, duration, true, false);
 
-        entity.AddGroupComponent<UserGroupComponent>(battlePlayer.PlayerConnection.User);
+        entity.AddGroupComponent<UserGroupComponent>(battlePlayer.PlayerConnection.UserContainer.Entity);
         return entity;
     }
 }

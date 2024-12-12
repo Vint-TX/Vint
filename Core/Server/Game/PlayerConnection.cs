@@ -42,7 +42,6 @@ using Vint.Core.ECS.Templates.Premium;
 using Vint.Core.ECS.Templates.Preset;
 using Vint.Core.ECS.Templates.Shells;
 using Vint.Core.ECS.Templates.Skins;
-using Vint.Core.ECS.Templates.User;
 using Vint.Core.ECS.Templates.Weapons.Market;
 using Vint.Core.ECS.Templates.Weapons.User;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
@@ -57,7 +56,7 @@ public interface IPlayerConnection {
 
     Player Player { get; set; }
     BattlePlayer? BattlePlayer { get; set; }
-    IEntity User { get; }
+    UserContainer UserContainer { get; }
     IEntity ClientSession { get; }
 
     bool IsOnline { get; }
@@ -153,7 +152,7 @@ public abstract class PlayerConnection(
     public ILogger Logger { get; protected set; } = Log.Logger.ForType<PlayerConnection>();
 
     public Player Player { get; set; } = null!;
-    public IEntity User { get; private set; } = null!;
+    public UserContainer UserContainer { get; private set; } = null!;
     public IEntity ClientSession { get; protected set; } = null!;
     public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
@@ -232,17 +231,11 @@ public abstract class PlayerConnection(
             await Send(new SaveAutoLoginTokenEvent(Player.Username, encryptedAutoLoginToken));
         }
 
-        User = new UserTemplate().Create(Player);
-        await Share(User);
+        UserContainer = UserRegistry.GetOrCreateContainer(Player.Id, Player);
+        await Share(UserContainer.Entity);
 
-        await ClientSession.AddGroupComponent<UserGroupComponent>(User);
-
-        if (EntityRegistry.TryGetTemp(Player.Id, out IEntity? tempUser)) { // todo bugs
-            foreach (IPlayerConnection connection in tempUser.SharedPlayers) {
-                await connection.Unshare(tempUser);
-                await connection.Share(User);
-            }
-        }
+        await ClientSession.AddGroupComponent<UserGroupComponent>(UserContainer.Entity);
+        await UserContainer.Entity.AddComponent<UserOnlineComponent>();
 
         Logger.Warning("Logged in");
 
@@ -290,11 +283,11 @@ public abstract class PlayerConnection(
         seasonStats.Reputation = reputation;
         reputationStats.Reputation = reputation;
 
-        await User.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
+        await UserContainer.Entity.ChangeComponent<UserReputationComponent>(component => component.Reputation = reputation);
 
         if (oldLeagueIndex != Player.League) {
-            await User.RemoveComponent<LeagueGroupComponent>();
-            await User.AddGroupComponent<LeagueGroupComponent>(Player.LeagueEntity);
+            await UserContainer.Entity.RemoveComponent<LeagueGroupComponent>();
+            await UserContainer.Entity.AddGroupComponent<LeagueGroupComponent>(Player.LeagueEntity);
         }
 
         if (seasonStats.Reputation != oldReputation)
@@ -338,7 +331,7 @@ public abstract class PlayerConnection(
 
         await db.CommitTransactionAsync();
         Player.Experience += delta;
-        await User.ChangeComponent<UserExperienceComponent>(component => component.Experience = Player.Experience);
+        await UserContainer.Entity.ChangeComponent<UserExperienceComponent>(component => component.Experience = Player.Experience);
     }
 
     public async Task ChangeGameplayChestScore(int delta) {
@@ -366,15 +359,15 @@ public abstract class PlayerConnection(
             return;
         }
 
-        await User.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
+        await UserContainer.Entity.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
     }
 
     public async Task CheckRankUp() {
-        UserRankComponent rankComponent = User.GetComponent<UserRankComponent>();
+        UserRankComponent rankComponent = UserContainer.Entity.GetComponent<UserRankComponent>();
 
         while (rankComponent.Rank < Player.Rank) {
             rankComponent.Rank++;
-            await User.ChangeComponent(rankComponent);
+            await UserContainer.Entity.ChangeComponent(rankComponent);
 
             int rankIndex = rankComponent.Rank - 1;
             int crystals = CalculateCrystals(rankIndex);
@@ -576,7 +569,7 @@ public abstract class PlayerConnection(
         }
 
         userItem ??= marketItem.GetUserEntity(this);
-        await userItem.AddComponentIfAbsent(new UserGroupComponent(User));
+        await userItem.AddComponentIfAbsent(new UserGroupComponent(UserContainer.Entity));
 
         if (price > 0) {
             if (forXCrystals) await ChangeXCrystals(-price);
@@ -606,7 +599,7 @@ public abstract class PlayerConnection(
                     await userItem.AddComponent<MountedItemComponent>();
 
                     Player.CurrentAvatarId = marketItem.Id;
-                    await User.ChangeComponent(new UserAvatarComponent(this, Player.CurrentAvatarId));
+                    await UserContainer.Entity.ChangeComponent(new UserAvatarComponent(Player.CurrentAvatarId));
 
                     await db.UpdateAsync(Player);
                     break;
@@ -913,10 +906,10 @@ public abstract class PlayerConnection(
         }
 
         if (!changeEquipment ||
-            !User.HasComponent<UserEquipmentComponent>()) return;
+            !UserContainer.Entity.HasComponent<UserEquipmentComponent>()) return;
 
-        await User.RemoveComponent<UserEquipmentComponent>();
-        await User.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
+        await UserContainer.Entity.RemoveComponent<UserEquipmentComponent>();
+        await UserContainer.Entity.AddComponent(new UserEquipmentComponent(Player.CurrentPreset.Weapon.Id, Player.CurrentPreset.Hull.Id));
     }
 
     public async Task AssembleModule(IEntity marketItem) {
@@ -944,7 +937,7 @@ public abstract class PlayerConnection(
 
         await card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
         await userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
-        await userItem.AddGroupComponent<UserGroupComponent>(User);
+        await userItem.AddGroupComponent<UserGroupComponent>(UserContainer.Entity);
 
         await Send(new ModuleAssembledEvent(), userItem);
     }
@@ -1051,7 +1044,7 @@ public abstract class PlayerConnection(
     public virtual async Task SetUsername(string username) {
         Logger.Warning("Changed username => '{New}'", username);
         Player.Username = username;
-        await User.ChangeComponent<UserUidComponent>(component => component.Username = username);
+        await UserContainer.Entity.ChangeComponent<UserUidComponent>(component => component.Username = username);
 
         await using DbConnection db = new();
 
@@ -1090,7 +1083,7 @@ public abstract class PlayerConnection(
 
         await db.CommitTransactionAsync();
         Player.Crystals += delta;
-        await User.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
+        await UserContainer.Entity.ChangeComponent<UserMoneyComponent>(component => component.Money = Player.Crystals);
     }
 
     public async Task ChangeXCrystals(long delta) {
@@ -1119,7 +1112,7 @@ public abstract class PlayerConnection(
 
         await db.CommitTransactionAsync();
         Player.XCrystals += delta;
-        await User.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
+        await UserContainer.Entity.ChangeComponent<UserXCrystalsComponent>(component => component.Money = Player.XCrystals);
     }
 
     public async Task SetGoldBoxes(int goldBoxes) {
@@ -1143,7 +1136,7 @@ public abstract class PlayerConnection(
 
     public async Task SetClipboard(string content) {
         await Send(new SetClipboardEvent(content));
-        await Share(new ClipboardSetNotificationTemplate().Create(User));
+        await Share(new ClipboardSetNotificationTemplate().Create(UserContainer.Entity));
     }
 
     public Task OpenURL(string url) => Send(new OpenURLEvent(url));
@@ -1202,7 +1195,7 @@ public class SocketPlayerConnection(
 ) : PlayerConnection(id) {
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
-    public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && User != null! && Player != null!;
+    public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && UserContainer != null! && Player != null!;
     bool IsSocketConnected => Socket.Connected;
     bool IsConnected { get; set; }
 
@@ -1224,7 +1217,7 @@ public class SocketPlayerConnection(
         Logger = Logger.WithEndPoint(EndPoint);
 
         ClientSession = new ClientSessionTemplate().Create();
-        Logger.Information("New socket connected");
+        Logger.Information("New socket connected ({Id})", Id);
 
         _ = Task.Run(ReceiveAndExecute);
 
@@ -1278,32 +1271,19 @@ public class SocketPlayerConnection(
         Logger.Information("Socket disconnected");
 
         try {
-            if (User != null!) {
-                foreach (IPlayerConnection connection in User.SharedPlayers.Where(connection => !connection.InLobby)) {
-                    try {
-                        await connection.Unshare(User);
-                    } catch { /**/
-                    }
-                }
+            if (UserContainer != null!) {
+                await UserContainer.Entity.RemoveComponent<UserOnlineComponent>();
 
-                try {
-                    EntityRegistry.Remove(User.Id);
-                } catch (Exception e) {
-                    Logger.Error(e, "User is already removed from registry");
-                }
-
-                foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == User.Id)) {
+                foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == UserContainer.Id)) {
                     try {
                         ConfigManager.DiscordLinkRequests.TryRemove(request);
-                    } catch { /**/
-                    }
+                    } catch { /**/ }
                 }
             }
 
             if (!InLobby) return;
 
-            if (BattlePlayer!.InBattleAsTank ||
-                BattlePlayer.IsSpectator)
+            if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
                 await BattlePlayer.Battle.RemovePlayer(BattlePlayer);
             else
                 await BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
@@ -1312,16 +1292,8 @@ public class SocketPlayerConnection(
         } finally {
             Server.RemovePlayer(Id);
 
-            foreach (IEntity entity in SharedEntities) {
+            foreach (IEntity entity in SharedEntities)
                 entity.SharedPlayers.TryRemove(this);
-
-                try {
-                    if (entity.SharedPlayers.Count == 0 &&
-                        !EntityRegistry.TryRemoveTemp(entity.Id))
-                        EntityRegistry.Remove(entity.Id);
-                } catch { /**/
-                }
-            }
 
             SharedEntities.Clear();
         }

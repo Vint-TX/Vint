@@ -45,10 +45,7 @@ public class UnitTargetComponent : IComponent {
         effect.State = SpiderState.Idling;
 
     static WeaponEffect? GetEffect(IPlayerConnection connection, IEntity entity) =>
-        connection
-            .BattlePlayer
-            ?.Tank
-            ?.Effects
+        connection.BattlePlayer?.Tank?.Effects
             .OfType<WeaponEffect>()
             .Single(effect => effect.Entity == entity);
 }

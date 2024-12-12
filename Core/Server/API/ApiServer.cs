@@ -18,7 +18,7 @@ public class ApiServer {
 
         Server = new WebServer(options => options
                 .WithUrlPrefix($"http://localhost:{Port}/")
-                .WithMode(HttpListenerMode.Microsoft))
+                .WithMode(HttpListenerMode.EmbedIO))
             .HandleHttpException(HandleHttpException)
             .HandleUnhandledException(HandleUnhandledException);
 

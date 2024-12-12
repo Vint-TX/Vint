@@ -10,13 +10,13 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 [ProtocolId(1496829083447)]
 public class MatchMakingUserReadyEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        await connection.User.AddComponentIfAbsent<MatchMakingUserReadyComponent>();
+        await connection.UserContainer.Entity.AddComponentIfAbsent<MatchMakingUserReadyComponent>();
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
 
         if (battlePlayer.Battle.StateManager.CurrentState is not (Running or WarmUp)) return;
 
         battlePlayer.BattleJoinTime = DateTimeOffset.UtcNow.AddSeconds(3);
-        await connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), connection.User);
+        await connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), connection.UserContainer.Entity);
     }
 }

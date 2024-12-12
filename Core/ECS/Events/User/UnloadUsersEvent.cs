@@ -1,19 +1,16 @@
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.User;
 
 [ProtocolId(1458555309592)]
 public class UnloadUsersEvent : IServerEvent {
-    public HashSet<long /*IEntity*/> Users { get; private set; } = null!;
+    public HashSet<IEntity> Users { get; private set; } = null!;
 
-    public Task Execute(
-        IPlayerConnection connection,
-        IServiceProvider serviceProvider,
-        IEnumerable<IEntity> entities) => // bug: client crashes while scrolling friends list
-        // todo temporary solution: do not unshare the players
-        // Users.RemoveWhere(user => connection.BattlePlayer?.Battle.Players.Any(battlePlayer => battlePlayer.PlayerConnection.User == user) ?? false);
-        // connection.Unshare(Users);
-        Task.CompletedTask;
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        Users.RemoveWhere(user => connection.BattlePlayer?.Battle.Players.Any(battlePlayer => battlePlayer.PlayerConnection.UserContainer.Id == user.Id) ?? false);
+        await connection.Unshare(Users);
+    }
 }

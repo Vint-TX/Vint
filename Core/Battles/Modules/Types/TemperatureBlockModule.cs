@@ -21,8 +21,7 @@ public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, 
     public bool IsActive { get; private set; }
 
     public Task Deactivate() {
-        if (!IsActive ||
-            !CanBeDeactivated) return Task.CompletedTask;
+        if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
 
         IsActive = false;
         Tank.TemperatureProcessor.ChangeTemperatureConfig(-Increment, -Decrement);

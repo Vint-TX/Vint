@@ -5,7 +5,6 @@ using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Templates.User;
@@ -15,9 +14,9 @@ public class UserTemplate : EntityTemplate {
     public IEntity Create(Player player) => Entity(null,
         builder => builder
             .AddComponent<UserComponent>()
-            .AddComponent<UserOnlineComponent>()
             .AddComponent<UserPublisherComponent>()
             .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
+            .AddComponent(new UserAvatarComponent(player.CurrentAvatarId))
             .AddComponent(new UserUidComponent(player.Username))
             .AddComponent(new UserCountryComponent(player.CountryCode))
             .AddComponent(new UserSubscribeComponent(player.Subscribed))
@@ -47,26 +46,4 @@ public class UserTemplate : EntityTemplate {
                     entity.AddComponent<UserTesterComponent>();
                 })
             .WithId(player.Id));
-
-    public IEntity CreateFake(IPlayerConnection connection, Player player) => Entity(null,
-        builder => builder
-            .AddComponent<UserComponent>()
-            .AddComponent<UserPublisherComponent>()
-            .AddComponent(new RegistrationDateComponent(player.RegistrationTime))
-            .AddComponent(new UserUidComponent(player.Username))
-            .AddComponent(new UserExperienceComponent(player.Experience))
-            .AddComponent(new UserRankComponent(player.Rank))
-            .AddComponent(new UserReputationComponent(player.Reputation))
-            .AddComponent(new FractionUserScoreComponent(player.FractionScore))
-            .AddComponent(new UserStatisticsComponent(player.Id))
-            .AddComponent(new FavoriteEquipmentStatisticsComponent(player.Id))
-            .AddComponent(new KillsEquipmentStatisticsComponent(player.Id))
-            .AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId))
-            .ThenExecuteIf(_ => player.IsAdmin, entity => entity.AddComponent<UserAdminComponent>())
-            .ThenExecuteIf(_ => player.IsModerator, entity => entity.AddComponent<ModeratorComponent>())
-            .ThenExecuteIf(_ => player.IsTester, entity => entity.AddComponent<UserTesterComponent>())
-            .AddGroupComponent<LeagueGroupComponent>(player.LeagueEntity)
-            .AddGroupComponent<UserGroupComponent>()
-            .WithId(player.Id),
-        true);
 }

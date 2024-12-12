@@ -69,6 +69,6 @@ public class RequestFriendshipByUserIdEvent : IServerEvent {
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 
         if (targetConnection != null)
-            await targetConnection.Send(new IncomingFriendAddedEvent(connection.Player.Id), targetConnection.User);
+            await targetConnection.Send(new IncomingFriendAddedEvent(connection.Player.Id), targetConnection.UserContainer.Entity);
     }
 }

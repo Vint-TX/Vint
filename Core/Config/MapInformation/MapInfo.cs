@@ -76,21 +76,10 @@ public record struct MapInfo(
             Triangle[] triangles = mapRoot
                 .DefaultScene // todo create a mesh immediately instead of store list of triangles
                 .EvaluateTriangles()
-                .Select(tuple => new Triangle(tuple
-                                                  .A
-                                                  .GetGeometry()
-                                                  .GetPosition() *
-                                              GltfToUnity,
-                    tuple
-                        .B
-                        .GetGeometry()
-                        .GetPosition() *
-                    GltfToUnity,
-                    tuple
-                        .C
-                        .GetGeometry()
-                        .GetPosition() *
-                    GltfToUnity))
+                .Select(tuple => new Triangle(
+                    tuple.A.GetGeometry().GetPosition() * GltfToUnity,
+                    tuple.B.GetGeometry().GetPosition() * GltfToUnity,
+                    tuple.C.GetGeometry().GetPosition() * GltfToUnity))
                 .ToArray();
 
             Triangles = triangles;

@@ -41,7 +41,7 @@ public class ArcadeHandler : TypeHandler {
         await ModeHandler.PlayerEntered(battlePlayer);
 
         IPlayerConnection connection = battlePlayer.PlayerConnection;
-        IEntity user = connection.User;
+        IEntity user = connection.UserContainer.Entity;
 
         await user.AddComponent<MatchMakingUserComponent>();
 
@@ -55,7 +55,7 @@ public class ArcadeHandler : TypeHandler {
         await ModeHandler.PlayerExited(battlePlayer);
 
         WaitingPlayers.TryRemove(battlePlayer);
-        await battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
+        await battlePlayer.PlayerConnection.UserContainer.Entity.RemoveComponentIfPresent<MatchMakingUserComponent>();
     }
 
     static ArcadeModeHandler GetHandlerByType(Battle battle, ArcadeModeType modeType) => modeType switch {

@@ -3,4 +3,4 @@ errorText: |
   If the update wasn't downloaded and installed automatically, please restart Steam.
 reConnectTime: 999999 # hack: hides restart button
 reportButtonLabel: DETAILS
-reportUrl: https://vint-official.site/
+reportUrl: https://vint.win/

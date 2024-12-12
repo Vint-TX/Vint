@@ -15,7 +15,7 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         // todo rework for admins
         if (connection.InLobby) {
-            await connection.Send(new EnterBattleLobbyFailedEvent(true, false), connection.User);
+            await connection.Send(new EnterBattleLobbyFailedEvent(true, false), connection.UserContainer.Entity);
             return;
         }
 
@@ -32,19 +32,19 @@ public class ConnectToCustomLobbyEvent : IServerEvent {
             if (await ValidateAndJoin(connection, battle)) return;
         }
 
-        await connection.Send(new CustomLobbyNotExistsEvent(), connection.User);
+        await connection.Send(new CustomLobbyNotExistsEvent(), connection.UserContainer.Entity);
     }
 
     static async Task<bool> ValidateAndJoin(IPlayerConnection connection, Battles.Battle? battle) {
         if (battle is not { CanAddPlayers: true } ||
             !battle.LobbyEntity.HasComponent<OpenToConnectLobbyComponent>()) {
-            await connection.Send(new EnterBattleLobbyFailedEvent(false, true), connection.User);
+            await connection.Send(new EnterBattleLobbyFailedEvent(false, true), connection.UserContainer.Entity);
             return false;
         }
 
         if (battle is not { TypeHandler: CustomHandler } &&
             !connection.Player.IsAdmin) {
-            await connection.Send(new CustomLobbyNotExistsEvent(), connection.User);
+            await connection.Send(new CustomLobbyNotExistsEvent(), connection.UserContainer.Entity);
             return false;
         }
 

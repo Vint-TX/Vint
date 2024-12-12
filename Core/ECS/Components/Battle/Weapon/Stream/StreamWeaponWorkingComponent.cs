@@ -10,15 +10,12 @@ namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
 public class StreamWeaponWorkingComponent : IComponent {
     public int Time { get; private set; }
 
-    public Task Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank)
-            return Task.CompletedTask;
+    public async Task Added(IPlayerConnection connection, IEntity entity) {
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+            return;
 
         foreach (IShotModule shotModule in connection.BattlePlayer.Tank!.Modules.OfType<IShotModule>())
-            shotModule.OnShot();
-
-        return Task.CompletedTask;
+            await shotModule.OnShot();
     }
 
     public Task Removed(IPlayerConnection connection, IEntity entity) {

@@ -216,7 +216,7 @@ public class DiscordBot(
                 if (await connection.OwnsItem(linkReward.MarketEntity)) continue;
 
                 await connection.PurchaseItem(linkReward.MarketEntity, linkReward.Amount, 0, false, false);
-                await connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.User, linkReward.MarketEntity, linkReward.Amount));
+                await connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.UserContainer.Entity, linkReward.MarketEntity, linkReward.Amount));
             }
 
             await db

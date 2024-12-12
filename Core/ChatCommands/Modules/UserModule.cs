@@ -121,7 +121,7 @@ public class UserModule(
             }
         }
 
-        long userId = ctx.Connection.User.Id;
+        long userId = ctx.Connection.UserContainer.Id;
         DiscordLinkRequest linkRequest = ConfigManager.DiscordLinkRequests.SingleOrDefault(req => req.UserId == userId);
 
         if (linkRequest == default) {

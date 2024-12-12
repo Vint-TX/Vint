@@ -18,7 +18,7 @@ public class PauseEvent : IServerEvent {
         BattlePlayer battlePlayer = connection.BattlePlayer;
 
         battlePlayer.IsPaused = true;
-        battlePlayer.KickTime = DateTimeOffset.UtcNow.AddMinutes(2);
+        battlePlayer.KickTime = DateTimeOffset.UtcNow.AddMinutes(2); // todo from config
 
         await user.AddComponent<PauseComponent>();
         await user.AddComponent(new IdleCounterComponent(0));

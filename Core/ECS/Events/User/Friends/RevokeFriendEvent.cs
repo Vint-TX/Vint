@@ -31,7 +31,7 @@ public class RevokeFriendEvent : FriendBaseEvent, IServerEvent {
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
-        await connection.Send(new OutgoingFriendRemovedEvent(player.Id), connection.User);
+        await connection.Send(new OutgoingFriendRemovedEvent(player.Id), connection.UserContainer.Entity);
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 

@@ -25,10 +25,7 @@ public class UserResult {
         Username = player.Username;
         UserId = player.Id;
         BattleUserId = battlePlayer.BattleUser.Id;
-
-        AvatarId = connection.User.GetComponent<UserAvatarComponent>()
-            .Id;
-
+        AvatarId = connection.UserContainer.Entity.GetComponent<UserAvatarComponent>().Id;
         Rank = player.Rank;
         ReputationInBattle = player.Reputation;
         EnterTime = battleTank.BattleEnterTime.ToUnixTimeMilliseconds();

@@ -47,7 +47,7 @@ public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {
         if (dropped) {
             await Connection.SetGoldBoxes(PlayerGoldsCount - 1);
             await CounterEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = PlayerGoldsCount);
-            await Connection.Send(new GoldBonusesCountChangedEvent(PlayerGoldsCount), Connection.User);
+            await Connection.Send(new GoldBonusesCountChangedEvent(PlayerGoldsCount), Connection.UserContainer.Entity);
         }
     }
 

@@ -16,7 +16,6 @@ public class ChangeScreenEvent : IServerEvent {
         ILogger logger = connection.Logger.ForType<ChangeScreenEvent>();
 
         logger.Information("Changed screen {Current} to {Next}", CurrentScreen, NextScreen);
-
         return Task.CompletedTask;
     }
 }

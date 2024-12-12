@@ -42,7 +42,7 @@ public class ActivatePromoCodeEvent : IServerEvent {
         };
 
         redemption.Id = await db.InsertWithInt64IdentityAsync(redemption);
-        IEntity user = connection.User;
+        IEntity user = connection.UserContainer.Entity;
 
         await db.CommitTransactionAsync();
 

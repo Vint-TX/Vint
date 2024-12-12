@@ -176,10 +176,10 @@ public class StaticServer {
         new(localEndPoint.Address,
             GameServer.Port,
             "Vint-17",
-            "https://cdn.vint-official.site/resources",
+            "https://cdn.vint.win/resources",
             $"http://{localEndPoint}/config",
-            "https://cdn.vint-official.site/update/{BuildTarget}.yml",
-            "https://cdn.vint-official.site/resources/discord");
+            "https://cdn.vint.win/update/{BuildTarget}.yml",
+            "https://cdn.vint.win/resources/discord");
 
     readonly record struct InitConfig(
         IPAddress Host,

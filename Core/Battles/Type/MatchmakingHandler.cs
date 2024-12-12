@@ -57,7 +57,7 @@ public class MatchmakingHandler : TypeHandler {
 
     public override async Task PlayerEntered(BattlePlayer battlePlayer) {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
-        IEntity user = connection.User;
+        IEntity user = connection.UserContainer.Entity;
 
         await user.AddComponent<MatchMakingUserComponent>();
 
@@ -71,7 +71,7 @@ public class MatchmakingHandler : TypeHandler {
         bool battleEnded = Battle.StateManager.CurrentState is Ended;
 
         WaitingPlayers.TryRemove(battlePlayer);
-        await battlePlayer.PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserComponent>();
+        await battlePlayer.PlayerConnection.UserContainer.Entity.RemoveComponentIfPresent<MatchMakingUserComponent>();
 
         await UpdateDeserterStatus(battlePlayer, battleEnded);
         await CheckLoginReward(battlePlayer, battleEnded);
@@ -80,7 +80,7 @@ public class MatchmakingHandler : TypeHandler {
     async Task UpdateDeserterStatus(BattlePlayer battlePlayer, bool battleEnded) {
         IPlayerConnection connection = battlePlayer.PlayerConnection;
         Database.Models.Player player = connection.Player;
-        IEntity user = connection.User;
+        IEntity user = connection.UserContainer.Entity;
 
         BattleLeaveCounterComponent battleLeaveCounter = user.GetComponent<BattleLeaveCounterComponent>();
         long lefts = battleLeaveCounter.Value;

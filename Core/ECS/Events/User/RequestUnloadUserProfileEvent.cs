@@ -6,14 +6,8 @@ namespace Vint.Core.ECS.Events.User;
 
 [ProtocolId(1451368523887)]
 public class RequestUnloadUserProfileEvent : IServerEvent {
-    public long UserId { get; private set; }
+    public IEntity User { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        IEntity? user = connection.SharedEntities.SingleOrDefault(entity => entity.Id == UserId);
-
-        if (user == null) return Task.CompletedTask;
-
-        connection.Unshare(user);
-        return Task.CompletedTask;
-    }
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
+        await connection.Unshare(User);
 }

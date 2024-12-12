@@ -47,7 +47,7 @@ public class CustomHandler(
 
         Owner = players.First();
         await Battle.LobbyEntity.RemoveComponent<UserGroupComponent>();
-        await Battle.LobbyEntity.AddGroupComponent<UserGroupComponent>(Owner.User);
+        await Battle.LobbyEntity.AddGroupComponent<UserGroupComponent>(Owner.UserContainer.Entity);
     }
 
     public async Task OpenLobby() {

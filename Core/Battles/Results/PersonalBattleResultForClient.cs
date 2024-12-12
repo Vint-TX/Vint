@@ -111,7 +111,7 @@ public class PersonalBattleResultForClient {
         ItemsExpDelta = battleScore;
         Reward = reward;
 
-        UserTeamColor = connection.User.GetComponent<TeamColorComponent>()
+        UserTeamColor = connection.UserContainer.Entity.GetComponent<TeamColorComponent>()
             .TeamColor;
 
         TeamBattleResult = battlePlayer.TeamBattleResult;

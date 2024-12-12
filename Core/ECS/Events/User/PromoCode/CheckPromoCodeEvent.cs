@@ -12,6 +12,6 @@ public class CheckPromoCodeEvent : IServerEvent {
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         PromoCodeCheckResult checkResult = await PromoCodeHelper.Check(connection.Player.Id, Code);
-        await connection.Send(new PromoCodeCheckResultEvent(Code, checkResult), connection.User);
+        await connection.Send(new PromoCodeCheckResultEvent(Code, checkResult), connection.UserContainer.Entity);
     }
 }

@@ -70,7 +70,7 @@ public class BattleTank {
         IEntity paint = preset.Paint;
         IEntity graffiti = preset.Graffiti;
 
-        BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.User, Battle.Entity, battlePlayer.Team);
+        BattleUser = battlePlayer.BattleUser = new BattleUserTemplate().CreateAsTank(playerConnection.UserContainer.Entity, Battle.Entity, battlePlayer.Team);
 
         Tank = new TankTemplate().Create(hull, BattlePlayer.BattleUser);
 
@@ -510,7 +510,7 @@ public class BattleTank {
         await UpdateKillStreak();
     }
 
-    public Task AddAssists(int delta) =>
+    public async Task AddAssists(int delta) =>
         RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.KillAssists = Math.Max(0, component.KillAssists + delta));
 
     public async Task AddDeaths(int delta, BattleTank? killer) {

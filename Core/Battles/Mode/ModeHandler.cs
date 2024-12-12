@@ -48,7 +48,7 @@ public abstract class ModeHandler(
     public abstract BattlePlayer SetupBattlePlayer(IPlayerConnection player);
 
     public virtual async Task RemoveBattlePlayer(BattlePlayer player) =>
-        await player.PlayerConnection.User.RemoveComponent<TeamColorComponent>();
+        await player.PlayerConnection.UserContainer.Entity.RemoveComponent<TeamColorComponent>();
 
     public abstract Task PlayerEntered(BattlePlayer player);
 

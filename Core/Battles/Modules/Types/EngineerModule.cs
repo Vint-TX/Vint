@@ -18,8 +18,7 @@ public class EngineerModule : PassiveBattleModule, IAlwaysActiveModule, IModuleW
     public bool IsActive { get; private set; }
 
     public Task Deactivate() {
-        if (!IsActive ||
-            !CanBeDeactivated) return Task.CompletedTask;
+        if (!IsActive || !CanBeDeactivated) return Task.CompletedTask;
 
         IsActive = false;
         Tank.SupplyDurationMultiplier /= Multiplier;

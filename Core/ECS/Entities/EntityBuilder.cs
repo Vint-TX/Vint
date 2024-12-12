@@ -65,7 +65,7 @@ public class EntityBuilder() : IEntityBuilder {
         return this;
     }
 
-    public IEntity Build(bool temp) {
+    public IEntity Build(bool addToRegistry = true) {
         if (Id == 0)
             Id = EntityRegistry.GenerateId();
 
@@ -76,8 +76,8 @@ public class EntityBuilder() : IEntityBuilder {
                      .Select(tuple => tuple.action))
             action(entity);
 
-        if (temp) EntityRegistry.AddTemp(entity);
-        else EntityRegistry.Add(entity);
+        if (addToRegistry)
+            EntityRegistry.Add(entity);
 
         return entity;
     }

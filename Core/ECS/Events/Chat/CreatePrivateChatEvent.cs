@@ -11,9 +11,9 @@ namespace Vint.Core.ECS.Events.Chat;
 public class CreatePrivateChatEvent : IServerEvent {
     [ProtocolName("UserUid")] public string Username { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         if (connection.Player.Username == Username)
-            return Task.CompletedTask;
+            return;
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
@@ -24,33 +24,28 @@ public class CreatePrivateChatEvent : IServerEvent {
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 
         if (targetConnection == null) {
-            connection.DisplayMessage($"{Username} is offline");
-            return Task.CompletedTask;
+            await connection.DisplayMessage($"{Username} is offline");
+            return;
         }
 
-        IEntity? chat = connection
-            .User
-            .GetComponent<PersonalChatOwnerComponent>()
-            .Chats
-            .Concat(targetConnection.User.GetComponent<PersonalChatOwnerComponent>()
-                .Chats)
+        IEntity? chat = connection.UserContainer.Entity
+            .GetComponent<PersonalChatOwnerComponent>().Chats
+            .Concat(targetConnection.UserContainer.Entity.GetComponent<PersonalChatOwnerComponent>().Chats)
             .Select(chat => new {
-                Chat = chat, chat.GetComponent<ChatParticipantsComponent>()
-                    .Users
+                Chat = chat, chat.GetComponent<ChatParticipantsComponent>().Users
             })
-            .FirstOrDefault(x => x.Users.Contains(connection.User) && x.Users.Contains(targetConnection.User))
+            .FirstOrDefault(x => x.Users.Contains(connection.UserContainer.Entity) && x.Users.Contains(targetConnection.UserContainer.Entity))
             ?.Chat;
 
         if (chat == null) {
-            chat = new PersonalChatTemplate().Create(connection.User, targetConnection.User);
-            connection.ShareIfUnshared(targetConnection.User);
+            chat = new PersonalChatTemplate().Create(connection.UserContainer.Entity, targetConnection.UserContainer.Entity);
+            await connection.ShareIfUnshared(targetConnection.UserContainer.Entity);
         } else {
-            connection.User.ChangeComponent<PersonalChatOwnerComponent>(component => component.Chats.Remove(chat));
-            connection.Unshare(chat);
+            await connection.UserContainer.Entity.ChangeComponent<PersonalChatOwnerComponent>(component => component.Chats.Remove(chat));
+            await connection.Unshare(chat);
         }
 
-        connection.User.ChangeComponent<PersonalChatOwnerComponent>(component => component.Chats.Add(chat));
-        connection.Share(chat);
-        return Task.CompletedTask;
+        await connection.UserContainer.Entity.ChangeComponent<PersonalChatOwnerComponent>(component => component.Chats.Add(chat));
+        await connection.Share(chat);
     }
 }

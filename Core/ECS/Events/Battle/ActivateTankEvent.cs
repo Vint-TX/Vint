@@ -9,7 +9,8 @@ public class ActivateTankEvent : IServerEvent {
     public long Phase { get; private set; }
 
     public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (connection.BattlePlayer is not { InBattleAsTank: true }) return Task.CompletedTask;
+        if (connection.BattlePlayer is not { InBattleAsTank: true })
+            return Task.CompletedTask;
 
         connection.BattlePlayer.Tank!.CollisionsPhase = Phase;
         return Task.CompletedTask;

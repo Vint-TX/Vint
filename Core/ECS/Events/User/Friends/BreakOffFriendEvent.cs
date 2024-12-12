@@ -31,7 +31,7 @@ public class BreakOffFriendEvent : FriendBaseEvent, IServerEvent {
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
-        await connection.Send(new AcceptedFriendRemovedEvent(player.Id), connection.User);
+        await connection.Send(new AcceptedFriendRemovedEvent(player.Id), connection.UserContainer.Entity);
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 

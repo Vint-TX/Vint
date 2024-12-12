@@ -32,7 +32,7 @@ public class BattlePlayer {
         IsSpectator = isSpectator;
 
         if (IsSpectator)
-            BattleUser = new BattleUserTemplate().CreateAsSpectator(PlayerConnection.User, Battle.Entity);
+            BattleUser = new BattleUserTemplate().CreateAsSpectator(PlayerConnection.UserContainer.Entity, Battle.Entity);
     }
 
     public IPlayerConnection PlayerConnection { get; }
@@ -55,10 +55,10 @@ public class BattlePlayer {
         private set {
             field = value;
 
-            if (PlayerConnection.User.HasComponent<TeamColorComponent>())
-                PlayerConnection.User.ChangeComponent<TeamColorComponent>(component => component.TeamColor = field);
+            if (PlayerConnection.UserContainer.Entity.HasComponent<TeamColorComponent>())
+                PlayerConnection.UserContainer.Entity.ChangeComponent<TeamColorComponent>(component => component.TeamColor = field);
             else
-                PlayerConnection.User.AddComponent(new TeamColorComponent(field));
+                PlayerConnection.UserContainer.Entity.AddComponent(new TeamColorComponent(field));
         }
     } = TeamColor.None;
 
@@ -108,8 +108,8 @@ public class BattlePlayer {
                      .SelectMany(battlePlayer => battlePlayer.Tank!.Effects))
             await effect.Share(this);
 
-        await PlayerConnection.User.AddGroupComponent<BattleGroupComponent>(Battle.Entity);
-        await PlayerConnection.User.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
+        await PlayerConnection.UserContainer.Entity.AddGroupComponent<BattleGroupComponent>(Battle.Entity);
+        await PlayerConnection.UserContainer.Entity.RemoveComponentIfPresent<MatchMakingUserReadyComponent>();
         await Battle.ModeHandler.PlayerEntered(this);
 
         if (IsSpectator) {
@@ -140,7 +140,7 @@ public class BattlePlayer {
 
         if (IsSpectator) {
             BattleResultForClient specResult = new(Battle, IsSpectator, null);
-            await PlayerConnection.Send(new BattleResultForClientEvent(specResult), PlayerConnection.User);
+            await PlayerConnection.Send(new BattleResultForClientEvent(specResult), PlayerConnection.UserContainer.Entity);
             return;
         }
 
@@ -223,7 +223,7 @@ public class BattlePlayer {
 
         BattleResultForClient battleResult = new(Battle, IsSpectator, personalBattleResult);
 
-        await PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.User);
+        await PlayerConnection.Send(new BattleResultForClientEvent(battleResult), PlayerConnection.UserContainer.Entity);
     }
 
     public async Task OnAntiCheatSuspected(DiscordBot? discordBot) {
@@ -260,7 +260,7 @@ public class BattlePlayer {
 
     public async Task RankUp() {
         foreach (BattlePlayer battlePlayer in Battle.Players.Where(player => player.InBattle))
-            await battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.User);
+            await battlePlayer.PlayerConnection.Send(new UpdateRankEvent(), PlayerConnection.UserContainer.Entity);
     }
 
     public async Task Tick(TimeSpan deltaTime) {

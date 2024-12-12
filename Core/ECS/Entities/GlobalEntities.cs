@@ -227,7 +227,7 @@ public static class GlobalEntities {
     static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) {
         foreach (IEntity entity in GetEntities(path)) {
             Player player = connection.Player;
-            IEntity user = connection.User;
+            IEntity user = connection.UserContainer.Entity;
             long marketEntityId = entity.Id;
 
             if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue;

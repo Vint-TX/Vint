@@ -2,7 +2,6 @@
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
-using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Payment;
 using Vint.Core.ECS.Events.User.Friends;
@@ -64,7 +63,6 @@ public class UserOnlineEvent : IServerEvent {
             await slot.AddComponentFrom<ModuleGroupComponent>(module);
         }
 
-        await connection.User.AddComponent(new UserAvatarComponent(connection, player.CurrentAvatarId));
         await connection.Send(new PaymentSectionLoadedEvent());
 
         IQueryable<Relation> relations = db.Relations.Where(relation => relation.SourcePlayerId == player.Id);

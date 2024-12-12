@@ -13,24 +13,25 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 public class ExitFromMatchmakingEvent : IServerEvent {
     public bool InBattle { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby) return Task.CompletedTask;
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+        if (!connection.InLobby)
+            return;
 
         IEntity lobby = entities.Single();
         Battles.Battle battle = connection.BattlePlayer!.Battle;
 
         if (battle.StateManager.CurrentState is Starting)
-            return Task.CompletedTask;
+            return;
 
         switch (battle.TypeHandler) {
             case MatchmakingHandler:
                 IMatchmakingProcessor matchmakingProcessor = serviceProvider.GetRequiredService<IMatchmakingProcessor>();
-                matchmakingProcessor.RemovePlayerFromMatchmaking(connection, lobby, true);
+                await matchmakingProcessor.RemovePlayerFromMatchmaking(connection, lobby, true);
                 break;
 
             case ArcadeHandler:
                 IArcadeProcessor arcadeProcessor = serviceProvider.GetRequiredService<IArcadeProcessor>();
-                arcadeProcessor.RemoveArcadePlayer(connection, lobby, true);
+                await arcadeProcessor.RemoveArcadePlayer(connection, lobby, true);
                 break;
 
             case CustomHandler:
@@ -43,7 +44,5 @@ public class ExitFromMatchmakingEvent : IServerEvent {
 
                 break;
         }
-
-        return Task.CompletedTask;
     }
 }

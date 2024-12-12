@@ -31,7 +31,7 @@ public class RejectFriendEvent : FriendBaseEvent, IServerEvent {
             .UpdateAsync();
 
         await db.CommitTransactionAsync();
-        await connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.User);
+        await connection.Send(new IncomingFriendRemovedEvent(player.Id), connection.UserContainer.Entity);
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
 

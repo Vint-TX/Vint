@@ -282,7 +282,7 @@ public sealed class Battle : IDisposable {
         connection.Logger.Warning("Joining battle {Id} (spectator: {Bool})", LobbyId, spectator);
 
         foreach (BattlePlayer battlePlayer in Players.Where(player => !player.IsSpectator))
-            await connection.ShareIfUnshared(battlePlayer.PlayerConnection.User);
+            await connection.ShareIfUnshared(battlePlayer.PlayerConnection.UserContainer.Entity);
 
         if (spectator) {
             connection.BattlePlayer = new BattlePlayer(connection, this, null, true);
@@ -290,11 +290,11 @@ public sealed class Battle : IDisposable {
             Preset preset = connection.Player.CurrentPreset;
 
             await connection.Share(LobbyEntity, LobbyChatEntity);
-            await connection.User.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
-            await connection.User.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
+            await connection.UserContainer.Entity.AddGroupComponent<BattleLobbyGroupComponent>(LobbyEntity);
+            await connection.UserContainer.Entity.AddComponent(new UserEquipmentComponent(preset.Weapon.Id, preset.Hull.Id));
 
             foreach (BattlePlayer battlePlayer in Players)
-                await battlePlayer.PlayerConnection.ShareIfUnshared(connection.User);
+                await battlePlayer.PlayerConnection.ShareIfUnshared(connection.UserContainer.Entity);
 
             connection.BattlePlayer = ModeHandler.SetupBattlePlayer(connection);
             await TypeHandler.PlayerEntered(connection.BattlePlayer);
@@ -309,7 +309,7 @@ public sealed class Battle : IDisposable {
 
     public async Task RemovePlayer(BattlePlayer battlePlayer) { // todo squads
         IPlayerConnection connection = battlePlayer.PlayerConnection;
-        IEntity user = connection.User;
+        IEntity user = connection.UserContainer.Entity;
 
         if (battlePlayer.InBattleAsTank)
             await battlePlayer.Tank!.RoundUser.RemoveComponent<RoundUserComponent>();
@@ -371,9 +371,9 @@ public sealed class Battle : IDisposable {
 
         if (battlePlayer.IsSpectator) {
             foreach (BattlePlayer player in Players.Where(player => !player.IsSpectator))
-                await connection.Unshare(player.PlayerConnection.User);
+                await connection.Unshare(player.PlayerConnection.UserContainer.Entity);
         } else {
-            IEntity user = connection.User;
+            IEntity user = connection.UserContainer.Entity;
 
             await TypeHandler.PlayerExited(battlePlayer);
             await ModeHandler.RemoveBattlePlayer(battlePlayer);
@@ -385,7 +385,7 @@ public sealed class Battle : IDisposable {
 
             foreach (BattlePlayer player in Players) {
                 await player.PlayerConnection.Unshare(user);
-                await connection.UnshareIfShared(player.PlayerConnection.User);
+                await connection.UnshareIfShared(player.PlayerConnection.UserContainer.Entity);
             }
 
             if (Players.All(player => player.IsSpectator)) {

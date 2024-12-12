@@ -2,5 +2,5 @@ headerText: Error
 errorText: An error occurred while updating the game
 exitButtonLabel: QUIT
 reportButtonLabel: REPORT
-reportUrl: https://vint-official.site/
+reportUrl: https://vint.win/
 reConnectTime: 999999 # hack: hides restart button

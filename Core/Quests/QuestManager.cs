@@ -42,7 +42,7 @@ public class QuestManager {
             .ToList();
 
         await connection.Unshare(removedEntities);
-        await connection.Share(quests.Select(quest => GetQuestEntity(connection.User, quest)));
+        await connection.Share(quests.Select(quest => GetQuestEntity(connection.UserContainer.Entity, quest)));
 
         while (quests.Count < MaxQuests) {
             int index = 0;
@@ -220,7 +220,7 @@ public class QuestManager {
         bool canBeCondition,
         IEnumerable<QuestType> usedTypes) {
         Quest quest = GenerateQuest(connection.Player, index, canBeRare, canBeCondition, usedTypes);
-        IEntity questEntity = GetQuestEntity(connection.User, quest);
+        IEntity questEntity = GetQuestEntity(connection.UserContainer.Entity, quest);
 
         await using DbConnection db = new();
         await db.InsertAsync(quest);

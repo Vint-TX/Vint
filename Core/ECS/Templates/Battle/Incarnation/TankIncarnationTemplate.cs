@@ -13,7 +13,7 @@ public class TankIncarnationTemplate : EntityTemplate {
             .AddComponent<TankIncarnationComponent>()
             .AddComponent(new TankIncarnationKillStatisticsComponent(0))
             .AddGroupComponent<TankGroupComponent>(battleTank.Tank)
-            .AddGroupComponent<UserGroupComponent>(battleTank.BattlePlayer.PlayerConnection.User)
+            .AddGroupComponent<UserGroupComponent>(battleTank.BattlePlayer.PlayerConnection.UserContainer.Entity)
             .ThenExecuteIf(_ => battleTank.BattlePlayer.Team != null,
                 entity => entity.AddGroupComponent<TeamGroupComponent>(battleTank.BattlePlayer.Team)));
 }

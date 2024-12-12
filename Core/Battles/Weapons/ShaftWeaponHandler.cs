@@ -24,23 +24,23 @@ public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
 
     public override int MaxHitTargets => 1;
 
-    public void Aim() {
+    public async Task Aim() {
         Aiming = true;
         AimingBeginTime = DateTimeOffset.UtcNow;
 
-        BattleEntity.ChangeComponent<WeaponRotationComponent>(component => { // vertical speed controlled by client, but horizontal is not
+        await BattleEntity.ChangeComponent<WeaponRotationComponent>(component => { // vertical speed controlled by client, but horizontal is not
             component.Speed = AimingSpeedComponent.MaxHorizontalSpeed;
             component.Acceleration = AimingSpeedComponent.HorizontalAcceleration;
         });
     }
 
-    public void Idle() {
+    public async Task Idle() {
         double durationMs = Math.Clamp((DateTimeOffset.UtcNow - (AimingBeginTime ?? DateTimeOffset.UtcNow)).TotalMilliseconds,
             0,
             1 / EnergyDrainPerMs);
 
         AimingDuration = TimeSpan.FromMilliseconds(durationMs);
-        BattleEntity.ChangeComponent(WeaponRotationComponent.Clone());
+        await BattleEntity.ChangeComponent(WeaponRotationComponent.Clone());
     }
 
     public void Reset() {
