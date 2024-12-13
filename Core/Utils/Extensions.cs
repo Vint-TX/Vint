@@ -154,7 +154,7 @@ public static class Extensions {
         };
 
         foreach (Task task in tasks) {
-            task.ContinueWith(check, default, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+            task.ContinueWith(check, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
         }
 
         return tcs.Task;

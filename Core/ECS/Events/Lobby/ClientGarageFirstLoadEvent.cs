@@ -22,14 +22,14 @@ public class ClientGarageFirstLoadEvent : IServerEvent {
         if (player.DiscordLinked) {
             if (player.DiscordLink == null!) {
                 player.DiscordLinked = false;
-                player.DiscordUserId = default;
+                player.DiscordUserId = 0;
 
                 await using (DbConnection db = new())
                     await db
                         .Players
                         .Where(p => p.Id == player.Id)
                         .Set(p => p.DiscordLinked, false)
-                        .Set(p => p.DiscordUserId, default(ulong))
+                        .Set(p => p.DiscordUserId, 0UL)
                         .UpdateAsync();
 
                 await connection.DisplayMessage("Your Discord account has been deauthorized");

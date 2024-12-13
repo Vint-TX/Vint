@@ -20,7 +20,7 @@ public static class TimeSpanUtils {
             return false;
         }
 
-        TimeSpan result = new();
+        TimeSpan result = TimeSpan.Zero;
 
         try {
             foreach ((string abbreviation, TimeSpan initialTimeSpan) in TimeSpanInfos) {

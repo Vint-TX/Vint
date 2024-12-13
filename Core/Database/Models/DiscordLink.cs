@@ -94,7 +94,7 @@ public class DiscordLink {
         await db
             .Players
             .Where(player => player.Id == PlayerId && player.DiscordUserId == UserId)
-            .Set(player => player.DiscordUserId, default(ulong))
+            .Set(player => player.DiscordUserId, 0UL)
             .Set(player => player.DiscordLinked, false)
             .UpdateAsync();
 
@@ -108,7 +108,7 @@ public class DiscordLink {
         if (connection != null &&
             connection.Player.Id == PlayerId) {
             connection.Player.DiscordLinked = false;
-            connection.Player.DiscordUserId = default;
+            connection.Player.DiscordUserId = 0;
             connection.Player.DiscordLink = null!;
         }
 

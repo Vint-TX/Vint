@@ -308,7 +308,7 @@ public class QuestManager {
             .First();
 
     static (QuestConditionType?, long) GenerateCondition(bool withCondition) {
-        if (!withCondition) return (null, default);
+        if (!withCondition) return (null, 0);
 
         QuestConditionType conditionType = Enum
             .GetValues<QuestConditionType>()

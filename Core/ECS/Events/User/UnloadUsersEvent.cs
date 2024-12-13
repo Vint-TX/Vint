@@ -11,6 +11,6 @@ public class UnloadUsersEvent : IServerEvent {
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
         Users.RemoveWhere(user => connection.BattlePlayer?.Battle.Players.Any(battlePlayer => battlePlayer.PlayerConnection.UserContainer.Id == user.Id) ?? false);
-        await connection.Unshare(Users);
+        await connection.UnshareIfShared(Users);
     }
 }

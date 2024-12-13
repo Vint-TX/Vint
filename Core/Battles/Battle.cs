@@ -371,7 +371,7 @@ public sealed class Battle : IDisposable {
 
         if (battlePlayer.IsSpectator) {
             foreach (BattlePlayer player in Players.Where(player => !player.IsSpectator))
-                await connection.Unshare(player.PlayerConnection.UserContainer.Entity);
+                await connection.UnshareIfShared(player.PlayerConnection.UserContainer.Entity);
         } else {
             IEntity user = connection.UserContainer.Entity;
 
@@ -384,7 +384,7 @@ public sealed class Battle : IDisposable {
             await connection.Unshare(LobbyEntity, LobbyChatEntity);
 
             foreach (BattlePlayer player in Players) {
-                await player.PlayerConnection.Unshare(user);
+                await player.PlayerConnection.UnshareIfShared(user);
                 await connection.UnshareIfShared(player.PlayerConnection.UserContainer.Entity);
             }
 

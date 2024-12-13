@@ -9,5 +9,5 @@ public class RequestUnloadUserProfileEvent : IServerEvent {
     public IEntity User { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
-        await connection.Unshare(User);
+        await connection.UnshareIfShared(User);
 }

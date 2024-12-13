@@ -55,7 +55,7 @@ public class RequestFriendEvent : FriendBaseEvent, IServerEvent {
 
         await db.CommitTransactionAsync();
 
-        await connection.Unshare(User);
+        await connection.UnshareIfShared(User);
         await connection.Send(new OutgoingFriendAddedEvent(player.Id), connection.UserContainer.Entity);
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
