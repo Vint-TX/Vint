@@ -175,7 +175,7 @@ public class StaticServer {
     static InitConfig GenerateInitConfig(IPEndPoint localEndPoint) =>
         new(localEndPoint.Address,
             GameServer.Port,
-            "Vint-17",
+            "Vint-18",
             "https://cdn.vint.win/resources",
             $"http://{localEndPoint}/config",
             "https://cdn.vint.win/update/{BuildTarget}.yml",
