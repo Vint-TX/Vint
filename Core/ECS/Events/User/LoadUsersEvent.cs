@@ -23,7 +23,7 @@ public class LoadUsersEvent : IServerEvent {
 
         foreach (long userId in UsersId) {
             if (UserRegistry.TryGetContainer(userId, out UserContainer? container)) {
-                await connection.Share(container.Entity);
+                await connection.ShareIfUnshared(container.Entity);
                 continue;
             }
 
@@ -33,7 +33,7 @@ public class LoadUsersEvent : IServerEvent {
             if (player == null)
                 throw new InvalidOperationException($"Player {userId} not found");
 
-            await connection.Share(UserRegistry.GetOrCreateContainer(userId, player).Entity);
+            await connection.ShareIfUnshared(UserRegistry.GetOrCreateContainer(userId, player).Entity);
         }
 
         await connection.Send(new UsersLoadedEvent(RequestEntityId));
