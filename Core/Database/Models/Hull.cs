@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Hulls")]
+[Table(DbConstants.Hulls)]
 public class Hull {
     [Column] public required long SkinId { get; init; } // ??
     [Column] public long Xp { get; set; }

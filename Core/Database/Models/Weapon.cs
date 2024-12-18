@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Weapons")]
+[Table(DbConstants.Weapons)]
 public class Weapon {
     [PrimaryKey(1)] public required long Id { get; init; }
 

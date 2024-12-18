@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Graffities")]
+[Table(DbConstants.Graffities)]
 public class Graffiti {
     [PrimaryKey(1)] public required long Id { get; init; }
 

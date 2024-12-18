@@ -6,7 +6,7 @@ using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Database.Models;
 
-[Table("Quests")]
+[Table(DbConstants.Quests)]
 public class Quest {
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {

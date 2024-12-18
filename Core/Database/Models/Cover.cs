@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Covers")]
+[Table(DbConstants.Covers)]
 public class Cover {
     [PrimaryKey(1)] public required long Id { get; init; }
 

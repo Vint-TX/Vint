@@ -1,3 +1,5 @@
+using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
@@ -5,6 +7,7 @@ using Vint.Core.Battles;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database;
+using Vint.Core.Database.Migrations;
 using Vint.Core.Discord;
 using Vint.Core.Quests;
 using Vint.Core.Server;
@@ -37,6 +40,13 @@ abstract class Program {
 
         IServiceProvider serviceProvider = new ServiceCollection()
             .AddLogging(builder => builder.AddSerilog())
+            .AddFluentMigratorCore()
+            .ConfigureRunner(builder => builder
+                .AddMySql8()
+                .WithGlobalConnectionString(DatabaseConfig.Get().ConnectionString)
+                .ScanIn(typeof(Initial).Assembly).For.Migrations()
+            )
+            .Configure<RunnerOptions>(opt => opt.AllowBreakingChange = false) // SET TO TRUE ONLY IF YOU'RE SURE THAT YOU WANT TO ALLOW BREAKING CHANGES TO THE DATABASE!
             .AddSingleton<ApiServer>()
             .AddSingleton<StaticServer>()
             .AddSingleton<GameServer>()

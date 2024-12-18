@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Paints")]
+[Table(DbConstants.Paints)]
 public class Paint {
     [PrimaryKey(1)] public required long Id { get; init; }
 

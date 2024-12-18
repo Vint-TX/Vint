@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Relations")]
+[Table(DbConstants.Relations)]
 public class Relation {
     [Association(ThisKey = nameof(SourcePlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player SourcePlayer {

@@ -2,7 +2,7 @@ using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[Table("Containers")]
+[Table(DbConstants.Containers)]
 public class Container {
     [PrimaryKey(1)] public required long Id { get; init; }
 

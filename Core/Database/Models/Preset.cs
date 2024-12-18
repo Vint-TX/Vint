@@ -4,7 +4,7 @@ using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Database.Models;
 
-[Table("Presets")]
+[Table(DbConstants.Presets)]
 public class Preset {
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {

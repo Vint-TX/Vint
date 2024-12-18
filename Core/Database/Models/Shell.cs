@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Shells")]
+[Table(DbConstants.Shells)]
 public class Shell {
     [PrimaryKey(2)] public required long Id { get; init; }
 

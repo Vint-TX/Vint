@@ -7,7 +7,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Database.Models;
 
-[Table("Players")]
+[Table(DbConstants.Players)]
 public class Player {
     [PrimaryKey] public required long Id { get; init; }
 

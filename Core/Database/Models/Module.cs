@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Modules")]
+[Table(DbConstants.Modules)]
 public class Module {
     [PrimaryKey(1)] public required long Id { get; init; }
 

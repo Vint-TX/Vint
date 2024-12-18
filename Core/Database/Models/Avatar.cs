@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("Avatars")]
+[Table(DbConstants.Avatars)]
 public class Avatar {
     [PrimaryKey(1)] public required long Id { get; init; }
 

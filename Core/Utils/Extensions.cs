@@ -125,41 +125,6 @@ public static class Extensions {
         return list;
     }
 
-    public static Task WhenAllFastFail(params Task[] input) {
-        if (input == null! ||
-            input.Length == 0)
-            return Task.CompletedTask;
-
-        Task[] tasks = (Task[])input.Clone();
-
-        TaskCompletionSource tcs = new();
-        int remaining = tasks.Length;
-
-        Action<Task> check = t => {
-            switch (t.Status) {
-                case TaskStatus.Faulted:
-                    tcs.TrySetException(t.Exception?.InnerException!);
-                    break;
-
-                case TaskStatus.Canceled:
-                    tcs.TrySetCanceled();
-                    break;
-
-                default:
-                    if (Interlocked.Decrement(ref remaining) == 0)
-                        tcs.SetResult();
-
-                    break;
-            }
-        };
-
-        foreach (Task task in tasks) {
-            task.ContinueWith(check, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
-        }
-
-        return tcs.Task;
-    }
-
     [Pure]
     public static bool HasDuplicates<TSource>(this IEnumerable<TSource> source) {
         using IEnumerator<TSource> enumerator = source.GetEnumerator();

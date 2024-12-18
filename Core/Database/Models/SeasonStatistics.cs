@@ -3,7 +3,7 @@ using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Database.Models;
 
-[Table("SeasonStatistics")]
+[Table(DbConstants.SeasonStatistics)]
 public class SeasonStatistics {
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {

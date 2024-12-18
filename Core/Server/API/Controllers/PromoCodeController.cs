@@ -137,7 +137,7 @@ public class PromoCodeController : WebApiController {
     }
 
     [Patch("/{id}/items")]
-    public async Task<PromoCodeDetailDTO> PatchItem(long id, [FromBody] PromoCodeItemDTO[] itemModels) {
+    public async Task<PromoCodeDetailDTO> PatchItems(long id, [FromBody] PromoCodeItemDTO[] itemModels) {
         if (itemModels.HasDuplicatesBy(model => model.Id))
             throw HttpException.BadRequest("Collection contains duplicate items");
 

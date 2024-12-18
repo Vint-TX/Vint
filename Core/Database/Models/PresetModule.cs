@@ -7,7 +7,7 @@ using Vint.Core.Server.Game;
 
 namespace Vint.Core.Database.Models;
 
-[Table("PresetModules")]
+[Table(DbConstants.PresetModules)]
 public class PresetModule {
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {

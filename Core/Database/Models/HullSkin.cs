@@ -2,7 +2,7 @@
 
 namespace Vint.Core.Database.Models;
 
-[Table("HullSkins")]
+[Table(DbConstants.HullSkins)]
 public class HullSkin {
     [PrimaryKey(2)] public required long Id { get; init; }
 

@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[Table("Punishments")]
+[Table(DbConstants.Punishments)]
 public class Punishment {
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {
@@ -14,8 +14,8 @@ public class Punishment {
         }
     } = null!;
 
-    [PrimaryKey(0)] public long PlayerId { get; private set; }
-    [PrimaryKey(1), Identity] public long Id { get; set; }
+    [PrimaryKey(0), Identity] public long Id { get; set; }
+    [PrimaryKey(1)] public long PlayerId { get; private set; }
 
     [Column] public string? IPAddress { get; init; }
     [Column] public required string HardwareFingerprint { get; init; }

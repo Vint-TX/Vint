@@ -9,7 +9,7 @@ using Vint.Core.Server.Game;
 
 namespace Vint.Core.Database.Models;
 
-[Table("DiscordLinks")]
+[Table(DbConstants.DiscordLinks)]
 public class DiscordLink {
     [PrimaryKey(0)] public required long PlayerId { get; init; }
     [PrimaryKey(1)] public required ulong UserId { get; init; }

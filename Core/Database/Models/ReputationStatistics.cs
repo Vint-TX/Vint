@@ -2,7 +2,7 @@ using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[Table("ReputationStatistics")]
+[Table(DbConstants.ReputationStatistics)]
 public class ReputationStatistics {
     [Association(ThisKey = nameof(PlayerId), OtherKey = nameof(Player.Id))] [field: NotColumn]
     public required Player Player {

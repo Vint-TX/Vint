@@ -397,7 +397,10 @@ public abstract class PlayerConnection(
         };
 
         static int CalculateXCrystals(int rankIndex) =>
-            rankIndex == 100 ? 100 : rankIndex % 10 == 0 ? 50 : rankIndex % 5 == 0 ? 20 : 0;
+            rankIndex == 100 ? 100
+                : rankIndex % 10 == 0 ? 50
+                    : rankIndex % 5 == 0 ? 20
+                        : 0;
     }
 
     public async Task PurchaseItem(IEntity marketItem, int amount, int price, bool forXCrystals, bool mount) {

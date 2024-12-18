@@ -2,7 +2,7 @@ using LinqToDB.Mapping;
 
 namespace Vint.Core.Database.Models;
 
-[Table("PromoCodes")]
+[Table(DbConstants.PromoCodes)]
 public class PromoCode {
     [PrimaryKey, Identity] public long Id { get; set; }
     [Column] public required string Code { get; init; }
