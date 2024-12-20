@@ -12,7 +12,7 @@ public class DetachWeaponEvent : IServerEvent {
     public Vector3 AngularVelocity { get; private set; }
     public Vector3 Velocity { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         IEntity tank = entities.Single();
 
         if (!connection.InLobby ||

@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Events.Quest;
 
 [ProtocolId(1476874341214)]
 public class ResetQuestProgressEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         IEntity quest = entities.Single();
 
         QuestProgressComponent progressComponent = quest.GetComponent<QuestProgressComponent>();

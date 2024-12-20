@@ -1,4 +1,5 @@
 using Vint.Core.Battles.Weapons;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -6,7 +7,9 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 [ProtocolId(8070042425022831807)]
-public class SelfShaftAimingHitEvent : SelfHitEvent {
+public class SelfShaftAimingHitEvent(
+    DiscordBot? discordBot
+) : SelfHitEvent(discordBot) {
     public float HitPower { get; set; }
 
     [ProtocolIgnore] protected override RemoteShaftAimingHitEvent RemoteEvent => new() {
@@ -17,8 +20,8 @@ public class SelfShaftAimingHitEvent : SelfHitEvent {
         ClientTime = ClientTime
     };
 
-    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        await base.Execute(connection, serviceProvider, entities);
+    public override async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        await base.Execute(connection, entities);
 
         if (WeaponHandler is not ShaftWeaponHandler shaft) return;
 

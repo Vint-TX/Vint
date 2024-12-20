@@ -14,7 +14,7 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 public class IntroduceUserByUidEvent : IntroduceUserEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
-    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         ILogger logger = connection.Logger.ForType<IntroduceUserByUidEvent>();
 
         logger.Information("Login by username '{Username}'", Username);

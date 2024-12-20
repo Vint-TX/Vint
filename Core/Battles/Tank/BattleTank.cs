@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Numerics;
 using ConcurrentCollections;
 using LinqToDB;
@@ -86,7 +85,7 @@ public class BattleTank {
             FlamethrowerMarketItemTemplate => new FlamethrowerBattleItemTemplate().Create(Tank, BattlePlayer),
             ShaftMarketItemTemplate => new ShaftBattleItemTemplate().Create(Tank, BattlePlayer),
             HammerMarketItemTemplate => new HammerBattleItemTemplate().Create(Tank, BattlePlayer),
-            _ => throw new UnreachableException()
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         HullSkin = new HullSkinBattleItemTemplate().Create(hullSkin, Tank);
@@ -113,7 +112,7 @@ public class BattleTank {
             FlamethrowerBattleItemTemplate => new FlamethrowerWeaponHandler(this),
             ShaftBattleItemTemplate => new ShaftWeaponHandler(this),
             HammerBattleItemTemplate => new HammerWeaponHandler(this),
-            _ => throw new UnreachableException()
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         SpeedComponent = Tank

@@ -17,7 +17,7 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         ClientTime = ClientTime
     };
 
-    public virtual async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public virtual async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank) return;
 

@@ -1,5 +1,4 @@
 ﻿using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
@@ -11,10 +10,10 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1479879892222)]
-public class ClientGarageFirstLoadEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
-
+public class ClientGarageFirstLoadEvent(
+    DiscordBot? discordBot
+) : IServerEvent {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (discordBot == null) return;
 
         Player player = connection.Player;

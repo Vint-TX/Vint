@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battles;
 using Vint.Core.Discord;
@@ -44,8 +45,10 @@ public class GameServer(
         for (int i = 0; i < 20 && Listener.Pending(); i++) {
             try {
                 int id = Interlocked.Increment(ref _lastClientId);
+                IServiceScope serviceScope = serviceProvider.CreateAsyncScope();
+
                 Socket socket = await Listener.AcceptSocketAsync();
-                SocketPlayerConnection connection = new(id, serviceProvider, socket);
+                SocketPlayerConnection connection = new(id, serviceScope, socket);
 
                 PlayerConnections[id] = connection;
                 await connection.OnConnected();

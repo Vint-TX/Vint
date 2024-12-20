@@ -12,7 +12,7 @@ namespace Vint.Core.ECS.Events.User.Settings;
 public class ConfirmUserCountryEvent : IServerEvent {
     public string CountryCode { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         IEntity user = entities.Single();
         Player player = connection.Player;
 

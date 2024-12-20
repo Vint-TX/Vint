@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1547630520757)]
 public class OpenCustomLobbyEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             connection.BattlePlayer!.Battle.TypeHandler is not CustomHandler customHandler) return;
 

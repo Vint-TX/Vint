@@ -13,7 +13,7 @@ namespace Vint.Core.ECS.Events.Entrance.Lobby;
 
 [ProtocolId(1507022246767)]
 public class UserOnlineEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await connection.Share(connection.GetEntities());
 
         await using DbConnection db = new();

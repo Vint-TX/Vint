@@ -1,5 +1,4 @@
 using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -9,12 +8,13 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.User;
 
 [ProtocolId(1451368548585)]
-public class RequestLoadUserProfileEvent : IServerEvent {
+public class RequestLoadUserProfileEvent(
+    GameServer server
+) : IServerEvent {
     public long UserId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!UserRegistry.TryGetContainer(UserId, out UserContainer? container)) {
-            GameServer server = serviceProvider.GetRequiredService<GameServer>();
             await using DbConnection db = new();
 
             Player? player = server.PlayerConnections.Values.Where(conn => conn.IsOnline).SingleOrDefault(conn => conn.Player.Id == UserId)?.Player ??

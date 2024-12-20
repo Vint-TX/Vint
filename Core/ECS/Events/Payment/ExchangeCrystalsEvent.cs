@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.Payment;
 public class ExchangeCrystalsEvent : IServerEvent {
     public long XCrystals { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         int price = (int)XCrystals;
         await connection.PurchaseItem(GlobalEntities.GetEntity("misc", "Crystal"), price * 50, price, true, false);
     }

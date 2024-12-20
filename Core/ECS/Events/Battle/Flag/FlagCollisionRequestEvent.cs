@@ -15,7 +15,7 @@ namespace Vint.Core.ECS.Events.Battle.Flag;
 
 [ProtocolId(1463741053998)]
 public class FlagCollisionRequestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;
@@ -26,9 +26,8 @@ public class FlagCollisionRequestEvent : IServerEvent {
             battle.StateManager.CurrentState is not Running ||
             battle.ModeHandler is not CTFHandler ctf) return;
 
-        entities = entities.ToList();
-        IEntity tankEntity = entities.ElementAt(0);
-        IEntity flagEntity = entities.ElementAt(1);
+        IEntity tankEntity = entities[0];
+        IEntity flagEntity = entities[1];
 
         Battles.Flags.Flag collisionFlag = ctf.Flags.Single(flag => flag.Entity == flagEntity);
         Battles.Flags.Flag oppositeFlag = ctf.Flags.Single(flag => flag != collisionFlag);

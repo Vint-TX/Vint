@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.User;
 public class SearchUserIdByUidEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
 
         Player searcherPlayer = connection.Player;

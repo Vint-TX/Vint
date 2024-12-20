@@ -13,11 +13,9 @@ namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(1485777098598)]
 public class ModuleMountEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        entities = (IEntity[])entities;
-
-        IEntity moduleUserItem = entities.ElementAt(0);
-        IEntity slotUserItem = entities.ElementAt(1);
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        IEntity moduleUserItem = entities[0];
+        IEntity slotUserItem = entities[1];
 
         if (moduleUserItem.HasComponent<MountedItemComponent>() ||
             slotUserItem.HasComponent<ModuleGroupComponent>()) return;
@@ -29,12 +27,10 @@ public class ModuleMountEvent : IServerEvent {
 
         Database.Models.Module? module = player.Modules.SingleOrDefault(module => module.Id == marketItemId);
 
-        if (module == null ||
-            module.Level < 0) return;
+        if (module == null || module.Level < 0)
+            return;
 
-        Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>()
-            .Slot;
-
+        Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
         await using DbConnection db = new();
 
         PresetModule? presetModule = await db.PresetModules.SingleOrDefaultAsync(pModule =>

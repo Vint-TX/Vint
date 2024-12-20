@@ -12,7 +12,7 @@ public class CheckEmailEvent : IServerEvent {
     public string Email { get; private set; } = null!;
     public bool IncludeUnconfirmed { get; private set; } //todo
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         try {
             MailAddress email = new(Email);
 

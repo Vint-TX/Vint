@@ -6,6 +6,6 @@ namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(636329559762986136)]
 public class UpgradeModuleWithCrystalsEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) =>
         await connection.UpgradeModule(entities.Single(), false);
 }

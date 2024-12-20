@@ -13,20 +13,16 @@ namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(1485777830853)]
 public class UnmountModuleFromSlotEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        entities = (IEntity[])entities;
-
-        IEntity moduleUserItem = entities.ElementAt(0);
-        IEntity slotUserItem = entities.ElementAt(1);
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        IEntity moduleUserItem = entities[0];
+        IEntity slotUserItem = entities[1];
 
         if (!moduleUserItem.HasComponent<MountedItemComponent>() ||
             !slotUserItem.HasComponent<ModuleGroupComponent>()) return;
 
         Player player = connection.Player;
 
-        Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>()
-            .Slot;
-
+        Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
         await using DbConnection db = new();
 
         await db

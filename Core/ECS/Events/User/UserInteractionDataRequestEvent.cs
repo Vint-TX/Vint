@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.User;
 public class UserInteractionDataRequestEvent : IServerEvent {
     public long UserId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
         Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 

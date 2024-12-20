@@ -1,6 +1,5 @@
 using LinqToDB;
 using LinqToDB.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Quest;
@@ -13,16 +12,15 @@ namespace Vint.Core.ECS.Events.Quest;
 
 // og name: UseBonusEvent
 [ProtocolId(1504703762311)]
-public class RequestChangeQuestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+public class RequestChangeQuestEvent(
+    QuestManager questManager
+) : IServerEvent {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.IsOnline) return;
 
-        entities = entities.ToList();
-
-        QuestManager questManager = serviceProvider.GetRequiredService<QuestManager>();
         Player player = connection.Player;
-        IEntity bonus = entities.ElementAt(0);
-        IEntity quest = entities.ElementAt(1);
+        IEntity bonus = entities[0];
+        IEntity quest = entities[1];
 
         await using DbConnection db = new();
 

@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.Battle.Module;
 
 [ProtocolId(1486015564167)]
 public class ActivateModuleEvent : TimeEvent, IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Battle.Properties.DisabledModules)

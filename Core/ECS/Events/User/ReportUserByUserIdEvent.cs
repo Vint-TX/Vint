@@ -1,5 +1,4 @@
 using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
@@ -11,19 +10,19 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.User;
 
 [ProtocolId(1506939739582)]
-public class ReportUserByUserIdEvent : IServerEvent {
+public class ReportUserByUserIdEvent(
+    DiscordBot? discordBot
+) : IServerEvent {
     public InteractionSource InteractionSource { get; set; }
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) { // todo improve
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) { // todo improve
         await using DbConnection db = new();
 
         Player? targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
         if (targetPlayer == null) return;
-
-        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
 
         if (discordBot != null)
             await discordBot.SendReport($"{targetPlayer.Username} has been reported", connection.Player.Username);

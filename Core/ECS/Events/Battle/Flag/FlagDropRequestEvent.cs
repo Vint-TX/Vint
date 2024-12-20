@@ -9,16 +9,16 @@ namespace Vint.Core.ECS.Events.Battle.Flag;
 
 [ProtocolId(-1910863908782544246)]
 public class FlagDropRequestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank) return;
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+            return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer;
         Battles.Battle battle = battlePlayer.Battle;
 
         if (battle.ModeHandler is not CTFHandler ctf) return;
 
-        Battles.Flags.Flag? flag = ctf.Flags.SingleOrDefault(flag => flag.Entity == entities.ElementAt(0));
+        Battles.Flags.Flag? flag = ctf.Flags.SingleOrDefault(flag => flag.Entity == entities[0]);
 
         if (flag?.StateManager.CurrentState is not Captured ||
             flag.TeamColor == battlePlayer.TeamColor) return;

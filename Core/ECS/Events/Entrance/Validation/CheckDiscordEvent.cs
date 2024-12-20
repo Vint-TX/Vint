@@ -1,5 +1,4 @@
 using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
@@ -9,12 +8,12 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.Entrance.Validation;
 
 [ProtocolId(31221)]
-public class CheckDiscordEvent : IServerEvent {
+public class CheckDiscordEvent(
+    DiscordBot? discordBot
+) : IServerEvent {
     public string DiscordID { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        DiscordBot? discordBot = serviceProvider.GetService<DiscordBot>();
-
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (discordBot == null ||
             DiscordID.Length is < 17 or > 18 ||
             !ulong.TryParse(DiscordID, out ulong discordId)) {

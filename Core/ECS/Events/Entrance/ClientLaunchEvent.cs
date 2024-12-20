@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.Entrance;
 
 [ProtocolId(1478774431678)]
 public class ClientLaunchEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         ILogger logger = connection.Logger.ForType<ClientLaunchEvent>();
 
         await connection.ClientSession.AddComponent<WebIdComponent>();

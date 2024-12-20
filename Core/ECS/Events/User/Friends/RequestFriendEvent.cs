@@ -1,5 +1,4 @@
 using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -9,8 +8,10 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.User.Friends;
 
 [ProtocolId(1450168139800)]
-public class RequestFriendEvent : FriendBaseEvent, IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+public class RequestFriendEvent(
+    GameServer server
+) : FriendBaseEvent, IServerEvent {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
         Player? player = db.Players.SingleOrDefault(player => player.Id == User.Id);
 
@@ -57,8 +58,6 @@ public class RequestFriendEvent : FriendBaseEvent, IServerEvent {
 
         await connection.UnshareIfShared(User);
         await connection.Send(new OutgoingFriendAddedEvent(player.Id), connection.UserContainer.Entity);
-
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
         IPlayerConnection? targetConnection = server
             .PlayerConnections

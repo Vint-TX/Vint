@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -6,13 +5,13 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1497002374017)]
-public class InviteToLobbyEvent : IServerEvent {
+public class InviteToLobbyEvent(
+    GameServer server
+) : IServerEvent {
     public long[] InvitedUsersIds { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby) return;
-
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
         List<IPlayerConnection> connections = server
             .PlayerConnections

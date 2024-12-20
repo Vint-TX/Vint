@@ -1,4 +1,5 @@
-﻿using Serilog.Events;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog.Events;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Utils;
 
@@ -20,7 +21,15 @@ public sealed class ProtocolBuffer(
     public BinaryReader Reader { get; } = new BigEndianBinaryReader(stream);
     public BinaryWriter Writer { get; } = new BigEndianBinaryWriter(stream);
 
+    List<AsyncServiceScope> Scopes { get; } = [];
+
     public IEntity? GetSharedEntity(long id) => Connection.SharedEntities.SingleOrDefault(entity => entity.Id == id);
+
+    public IServiceScope CreateServiceScope() {
+        AsyncServiceScope serviceScope = Connection.ServiceProvider.CreateAsyncScope();
+        Scopes.Add(serviceScope);
+        return serviceScope;
+    }
 
     public static ProtocolBuffer Unwrap(BinaryReader reader, IPlayerConnection connection) {
         // Header
@@ -108,6 +117,11 @@ public sealed class ProtocolBuffer(
         Reader.Dispose();
         await Writer.DisposeAsync();
         await Stream.DisposeAsync();
+
+        foreach (AsyncServiceScope serviceScope in Scopes)
+            await serviceScope.DisposeAsync();
+
+        Scopes.Clear();
     }
 
     ~ProtocolBuffer() => Dispose(false);

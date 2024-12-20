@@ -1,5 +1,4 @@
 ﻿using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -11,12 +10,14 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1437480091995)]
-public class LoginByPasswordEvent : IServerEvent {
+public class LoginByPasswordEvent(
+    GameServer server
+) : IServerEvent {
     public bool RememberMe { get; private set; }
     public string PasswordEncipher { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.IsOnline) return;
 
         Punishment? ban = await connection.Player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
@@ -34,8 +35,6 @@ public class LoginByPasswordEvent : IServerEvent {
             await connection.Send(new LoginFailedEvent());
             return;
         }
-
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
         List<IPlayerConnection> connections = server
             .PlayerConnections

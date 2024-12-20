@@ -14,7 +14,7 @@ namespace Vint.Core.ECS.Events.Battle.Movement;
 public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank)
             return;

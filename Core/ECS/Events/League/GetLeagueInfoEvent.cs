@@ -9,6 +9,6 @@ namespace Vint.Core.ECS.Events.League;
 public class GetLeagueInfoEvent : IServerEvent {
     public long UserId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) =>
         await connection.Send(new UpdateTopLeagueInfoEvent(UserId, await Leveling.GetSeasonPlace(UserId)), entities.Single());
 }

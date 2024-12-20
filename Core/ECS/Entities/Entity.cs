@@ -92,7 +92,7 @@ public class Entity : IEntity {
             this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            await playerConnection.Send(new ComponentAddCommand(this, component));
+            await playerConnection.Send(new ComponentAddCommand { Entity = this, Component = component });
     }
 
     public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() =>
@@ -153,7 +153,7 @@ public class Entity : IEntity {
             this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            await playerConnection.Send(new ComponentChangeCommand(this, component));
+            await playerConnection.Send(new ComponentChangeCommand { Entity = this, Component = component });
     }
 
     public Task RemoveComponent<T>(IPlayerConnection? excluded) where T : class, IComponent =>
@@ -167,7 +167,7 @@ public class Entity : IEntity {
         Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
         foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            await playerConnection.Send(new ComponentRemoveCommand(this, type));
+            await playerConnection.Send(new ComponentRemoveCommand { Entity = this, Component = type });
     }
 
     public override string ToString() => $"Entity {{ " +

@@ -6,6 +6,6 @@ namespace Vint.Core.ECS.Events.Battle;
 
 [ProtocolId(1461735527769)]
 public class InitializeTimeCheckerEvent : IServerEvent {
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) =>
         Task.CompletedTask; // todo ??
 }

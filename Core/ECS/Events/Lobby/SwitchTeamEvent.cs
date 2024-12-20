@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1499172594697)]
 public class SwitchTeamEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby)
             return;
 

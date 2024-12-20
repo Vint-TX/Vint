@@ -12,7 +12,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class UpdateBattleParamsEvent : IServerEvent {
     public BattleProperties Params { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

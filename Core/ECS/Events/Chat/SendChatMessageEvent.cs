@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
@@ -14,14 +13,16 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Events.Chat;
 
 [ProtocolId(1446035600297)]
-public class SendChatMessageEvent : IServerEvent {
+public class SendChatMessageEvent(
+    GameServer server,
+    IChatCommandProcessor chatCommandProcessor,
+    IServiceProvider serviceProvider
+) : IServerEvent {
     static Dictionary<string, ChatConfigComponent> ConfigPathToConfig { get; } = new();
 
     public string Message { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection sender, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        IChatCommandProcessor chatCommandProcessor = serviceProvider.GetRequiredService<IChatCommandProcessor>();
+    public async Task Execute(IPlayerConnection sender, IEntity[] entities) {
         IEntity chat = entities.Single();
 
         if (chatCommandProcessor.TryParseCommand(Message, out ChatCommand? chatCommand)) {

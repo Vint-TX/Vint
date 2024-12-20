@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.Battle.Bonus;
 
 [ProtocolId(-4179984519411113540)]
 public class BonusTakingRequestEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         BattlePlayer? battlePlayer = connection.BattlePlayer;
         IBonusProcessor? bonusProcessor = battlePlayer?.Battle.BonusProcessor;
 

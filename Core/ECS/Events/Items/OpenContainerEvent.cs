@@ -16,17 +16,18 @@ public class OpenContainerEvent : IServerEvent {
     const int MaxAmount = 250;
     public long Amount { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
 
         IEntity userEntity = entities.Single();
         IEntity marketEntity = userEntity.GetMarketEntity(connection);
-        Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id && cont.Id == marketEntity.Id);
+        Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id &&
+                                                                                cont.Id == marketEntity.Id);
 
-        if (container == null ||
-            container.Count < Amount) return;
+        if (container == null || container.Count < Amount)
+            return;
 
-        Amount = Math.Clamp(container.Count, 1, MaxAmount); /*Math.Min(Amount, MaxAmount);*/
+        Amount = Math.Clamp(container.Count, 1, MaxAmount);
 
         container.Count -= Amount;
         await userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);

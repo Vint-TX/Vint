@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Battle.Effect.EMP;
 public class ApplyTargetsForEMPEffectEvent : IServerEvent {
     public IEntity[] Targets { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         IEntity emp = entities.Single();
         BattleTank? tank = connection.BattlePlayer?.Tank;
         Battles.Battle battle = tank?.Battle!;

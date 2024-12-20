@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Numerics;
 using BepuPhysics;
 using BepuPhysics.Collidables;
@@ -139,7 +138,7 @@ public sealed class Battle : IDisposable {
             BattleMode.DM => new DMTemplate(),
             BattleMode.TDM => new TDMTemplate(),
             BattleMode.CTF => new CTFTemplate(),
-            _ => throw new UnreachableException()
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         Entity = battleModeTemplate.Create(TypeHandler, LobbyEntity, Properties.TimeLimit * 60, Properties.MaxPlayers, 60);
@@ -149,7 +148,7 @@ public sealed class Battle : IDisposable {
             BattleMode.DM => new DMHandler(this),
             BattleMode.TDM => new TDMHandler(this),
             BattleMode.CTF => new CTFHandler(this),
-            _ => throw new UnreachableException()
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         Properties.DamageEnabled = TypeHandler is not ArcadeHandler { ModeHandler: WithoutDamageHandler };

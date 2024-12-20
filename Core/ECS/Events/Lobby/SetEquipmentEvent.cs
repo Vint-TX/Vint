@@ -9,5 +9,5 @@ public class SetEquipmentEvent : IServerEvent { // todo ??
     public long WeaponId { get; private set; }
     public long HullId { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) => Task.CompletedTask;
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) => Task.CompletedTask;
 }

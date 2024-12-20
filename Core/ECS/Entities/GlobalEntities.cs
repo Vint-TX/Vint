@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using LinqToDB;
+﻿using LinqToDB;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -346,7 +345,7 @@ public static class GlobalEntities {
                             break;
                         }
 
-                        default: throw new UnreachableException();
+                        default: throw new ArgumentOutOfRangeException();
                     }
 
                     Module? module = player.Modules.SingleOrDefault(module => module.Id == marketEntityId);
@@ -383,7 +382,7 @@ public static class GlobalEntities {
                                 presetEntity.Id = EntityRegistry.GenerateId();
 
                                 presetEntity.AddComponent(new PresetEquipmentComponent(preset));
-                                presetEntity.AddComponent(new PresetNameComponent(preset.Name));
+                                presetEntity.AddComponent(new PresetNameComponent { Name = preset.Name });
 
                                 if (preset.Index == player.CurrentPresetIndex)
                                     presetEntity.AddComponent<MountedItemComponent>();

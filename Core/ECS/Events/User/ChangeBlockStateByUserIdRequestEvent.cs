@@ -14,7 +14,7 @@ public class ChangeBlockStateByUserIdRequestEvent : IServerEvent {
     public long SourceId { get; set; }
     public long UserId { get; set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
         Player? targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 

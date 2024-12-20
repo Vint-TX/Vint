@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.Invite;
 
 [ProtocolId(1439810001590)]
 public class InviteEnteredEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         string? code = connection.ClientSession.GetComponent<InviteComponent>()
             .InviteCode;
 

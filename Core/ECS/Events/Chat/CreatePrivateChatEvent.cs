@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.ECS.Components.Chat;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Chat;
@@ -8,14 +7,14 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.Chat;
 
 [ProtocolId(636469080057216111)]
-public class CreatePrivateChatEvent : IServerEvent {
+public class CreatePrivateChatEvent(
+    GameServer server
+) : IServerEvent {
     [ProtocolName("UserUid")] public string Username { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.Player.Username == Username)
             return;
-
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
 
         IPlayerConnection? targetConnection = server
             .PlayerConnections

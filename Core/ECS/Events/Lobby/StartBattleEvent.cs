@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1497356545125)]
 public class StartBattleEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         Battles.Battle battle = connection.BattlePlayer!.Battle;
         BattleStateManager stateManager = battle.StateManager;
 

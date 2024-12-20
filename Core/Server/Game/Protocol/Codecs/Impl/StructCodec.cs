@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
@@ -19,7 +19,9 @@ public class StructCodec(
     }
 
     public override object Decode(ProtocolBuffer buffer) {
-        object value = RuntimeHelpers.GetUninitializedObject(type);
+        IServiceScope serviceScope = buffer.CreateServiceScope();
+        object value = ActivatorUtilities.CreateInstance(serviceScope.ServiceProvider, type);
+        //object value = RuntimeHelpers.GetUninitializedObject(type);
 
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
             object item = Protocol

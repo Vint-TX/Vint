@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battles;
 using Vint.Core.Battles.States;
 using Vint.Core.Battles.Type;
@@ -10,10 +9,13 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Events.Matchmaking;
 
 [ProtocolId(1495176527022)]
-public class ExitFromMatchmakingEvent : IServerEvent {
+public class ExitFromMatchmakingEvent(
+    IArcadeProcessor arcadeProcessor,
+    IMatchmakingProcessor matchmakingProcessor
+) : IServerEvent {
     public bool InBattle { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby)
             return;
 
@@ -25,12 +27,10 @@ public class ExitFromMatchmakingEvent : IServerEvent {
 
         switch (battle.TypeHandler) {
             case MatchmakingHandler:
-                IMatchmakingProcessor matchmakingProcessor = serviceProvider.GetRequiredService<IMatchmakingProcessor>();
                 await matchmakingProcessor.RemovePlayerFromMatchmaking(connection, lobby, true);
                 break;
 
             case ArcadeHandler:
-                IArcadeProcessor arcadeProcessor = serviceProvider.GetRequiredService<IArcadeProcessor>();
                 await arcadeProcessor.RemoveArcadePlayer(connection, lobby, true);
                 break;
 

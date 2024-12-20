@@ -20,7 +20,7 @@ public class RequestRegisterUserEvent : IServerEvent {
     public bool Steam { get; private set; }
     public bool QuickRegistration { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!RegexUtils.IsLoginValid(Username) ||
             !RegexUtils.IsEmailValid(Email)) {
             await connection.Send(new RegistrationFailedEvent());

@@ -8,10 +8,8 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Components.Preset;
 
 [ProtocolId(1493974995307), ClientChangeable]
-public class PresetNameComponent(
-    string name
-) : IComponent {
-    public string Name { get; private set; } = name;
+public class PresetNameComponent : IComponent {
+    public required string Name { get; init; }
 
     public async Task Changed(IPlayerConnection connection, IEntity entity) {
         if (string.IsNullOrWhiteSpace(Name) ||

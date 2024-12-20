@@ -51,13 +51,14 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game;
 
-public interface IPlayerConnection {
+public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     ILogger Logger { get; }
 
     Player Player { get; set; }
     BattlePlayer? BattlePlayer { get; set; }
     UserContainer UserContainer { get; }
     IEntity ClientSession { get; }
+    IServiceProvider ServiceProvider { get; }
 
     bool IsOnline { get; }
     [MemberNotNullWhen(true, nameof(BattlePlayer))]
@@ -145,15 +146,17 @@ public interface IPlayerConnection {
 }
 
 public abstract class PlayerConnection(
-    int id
+    int id,
+    IServiceProvider serviceProvider
 ) : IPlayerConnection {
+    protected ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
     public int Id { get; } = id;
-    ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
     public ILogger Logger { get; protected set; } = Log.Logger.ForType<PlayerConnection>();
 
     public Player Player { get; set; } = null!;
     public UserContainer UserContainer { get; private set; } = null!;
     public IEntity ClientSession { get; protected set; } = null!;
+    public IServiceProvider ServiceProvider { get; } = serviceProvider;
     public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
     public ConcurrentHashSet<IEntity> SharedEntities { get; } = [];
@@ -188,8 +191,7 @@ public abstract class PlayerConnection(
             Id = EntityRegistry.GenerateId(),
             Username = username,
             Email = email,
-            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>()
-                .LocaleCode,
+            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
             HardwareFingerprint = hardwareFingerprint,
             Subscribed = subscribed,
             RegistrationTime = DateTimeOffset.UtcNow,
@@ -556,7 +558,7 @@ public abstract class PlayerConnection(
                 userItem.Id = EntityRegistry.GenerateId();
 
                 await userItem.AddComponent(new PresetEquipmentComponent(preset));
-                await userItem.AddComponent(new PresetNameComponent(preset.Name));
+                await userItem.AddComponent(new PresetNameComponent { Name = preset.Name });
 
                 preset.Entity = userItem;
                 Player.UserPresets.Add(preset);
@@ -1150,7 +1152,7 @@ public abstract class PlayerConnection(
 
     public Task Send(IEvent @event) => Send(@event, ClientSession);
 
-    public Task Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand(@event, entities));
+    public Task Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand { Event = @event, Entities = entities });
 
     public Task Share(IEntity entity) => entity.Share(this);
 
@@ -1189,13 +1191,19 @@ public abstract class PlayerConnection(
     [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract")]
     public override string ToString() =>
         $"PlayerConnection {{ " + $"ClientSession Id: '{ClientSession?.Id}'; " + $"Username: '{Player?.Username}' }}";
+
+    public abstract void Dispose();
+
+    public abstract ValueTask DisposeAsync();
 }
 
 public class SocketPlayerConnection(
     int id,
-    IServiceProvider serviceProvider,
+    IServiceScope serviceScope,
     Socket socket
-) : PlayerConnection(id) {
+) : PlayerConnection(id, serviceScope.ServiceProvider) {
+    bool _disposed;
+
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
     public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && UserContainer != null! && Player != null!;
@@ -1203,8 +1211,8 @@ public class SocketPlayerConnection(
     bool IsConnected { get; set; }
 
     Socket Socket { get; } = socket;
-    Protocol.Protocol Protocol { get; } = serviceProvider.GetRequiredService<Protocol.Protocol>();
-    GameServer Server { get; } = serviceProvider.GetRequiredService<GameServer>();
+    Protocol.Protocol Protocol { get; } = serviceScope.ServiceProvider.GetRequiredService<Protocol.Protocol>();
+    GameServer Server { get; } = serviceScope.ServiceProvider.GetRequiredService<GameServer>();
 
     public override async Task SetUsername(string username) {
         await base.SetUsername(username);
@@ -1277,11 +1285,8 @@ public class SocketPlayerConnection(
             if (UserContainer != null!) {
                 await UserContainer.Entity.RemoveComponent<UserOnlineComponent>();
 
-                foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == UserContainer.Id)) {
-                    try {
-                        ConfigManager.DiscordLinkRequests.TryRemove(request);
-                    } catch { /**/ }
-                }
+                foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == UserContainer.Id))
+                    ConfigManager.DiscordLinkRequests.TryRemove(request);
             }
 
             if (!InLobby) return;
@@ -1300,6 +1305,8 @@ public class SocketPlayerConnection(
 
             SharedEntities.Clear();
         }
+
+        await DisposeAsync();
     }
 
     public override async Task Tick() {
@@ -1326,12 +1333,12 @@ public class SocketPlayerConnection(
                 while (availableForRead > 0) {
                     Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
 
-                    ICommand command = (ICommand)Protocol
+                    IServerCommand command = (IServerCommand)Protocol
                         .GetCodec(new TypeCodecInfo(typeof(ICommand)))
                         .Decode(buffer);
 
                     try {
-                        await command.Execute(this, serviceProvider);
+                        await command.Execute(this, ServiceProvider);
                     } catch (Exception e) {
                         Logger.Error(e, "Failed to execute {Command}", command);
                     }
@@ -1339,9 +1346,46 @@ public class SocketPlayerConnection(
                     availableForRead = buffer.Stream.Length - buffer.Stream.Position;
                 }
             }
-        } catch {
+        } catch (Exception e) {
+            //Logger.Error(e, "Caught an exception while reading socket");
             await Disconnect();
             throw;
         }
     }
+
+    public override void Dispose() {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public override async ValueTask DisposeAsync() {
+        await DisposeAsyncCore();
+        Dispose(false);
+        GC.SuppressFinalize(this);
+    }
+
+    void Dispose(bool disposing) {
+        if (_disposed) return;
+
+        if (disposing) {
+            Socket.Dispose();
+            DelayedTasks.Clear();
+            SharedEntities.Clear();
+            serviceScope.Dispose();
+        }
+
+        _disposed = true;
+    }
+
+    async ValueTask DisposeAsyncCore() {
+        Socket.Dispose();
+        DelayedTasks.Clear();
+        SharedEntities.Clear();
+
+        if (serviceScope is IAsyncDisposable ad)
+            await ad.DisposeAsync();
+        else serviceScope.Dispose();
+    }
+
+    ~SocketPlayerConnection() => Dispose(false);
 }

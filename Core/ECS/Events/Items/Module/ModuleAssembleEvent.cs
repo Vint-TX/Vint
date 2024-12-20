@@ -6,6 +6,6 @@ namespace Vint.Core.ECS.Events.Items.Module;
 
 [ProtocolId(1485504324992)]
 public class ModuleAssembleEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) =>
         await connection.AssembleModule(entities.First());
 }

@@ -8,7 +8,7 @@ namespace Vint.Core.ECS.Events.Battle.Pause;
 
 [ProtocolId(-1316093147997460626)]
 public class PauseEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.IsPaused)

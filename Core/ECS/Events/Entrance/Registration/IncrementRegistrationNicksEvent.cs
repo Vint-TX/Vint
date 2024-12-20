@@ -8,5 +8,5 @@ namespace Vint.Core.ECS.Events.Entrance.Registration;
 public class IncrementRegistrationNicksEvent : IServerEvent { // TODO statistics?
     [ProtocolName("Nick")] public string Nickname { get; private set; } = null!;
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) => Task.CompletedTask;
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) => Task.CompletedTask;
 }

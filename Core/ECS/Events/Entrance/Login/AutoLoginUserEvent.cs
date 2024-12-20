@@ -1,5 +1,4 @@
 ﻿using LinqToDB;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -11,12 +10,14 @@ using Vint.Core.Utils;
 namespace Vint.Core.ECS.Events.Entrance.Login;
 
 [ProtocolId(1438075609642)]
-public class AutoLoginUserEvent : IServerEvent {
+public class AutoLoginUserEvent(
+    GameServer server
+) : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public byte[] EncryptedToken { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.IsOnline) return;
 
         ILogger logger = connection.Logger.ForType<AutoLoginUserEvent>();
@@ -35,7 +36,6 @@ public class AutoLoginUserEvent : IServerEvent {
             return;
         }
 
-        GameServer server = serviceProvider.GetRequiredService<GameServer>();
         Punishment? ban = await player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
         int connections = server.PlayerConnections.Values.Count(conn => conn.IsOnline && conn.Player.Username == Username);
 

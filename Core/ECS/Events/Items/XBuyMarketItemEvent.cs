@@ -9,8 +9,8 @@ public class XBuyMarketItemEvent : IServerEvent {
     public int Price { get; private set; }
     public int Amount { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        IEntity marketItem = entities.ElementAt(1);
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        IEntity marketItem = entities[1];
 
         if (!await GlobalEntities.ValidatePurchase(connection, marketItem, Amount, Price, true)) return;
 

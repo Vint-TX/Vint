@@ -9,13 +9,11 @@ using Vint.Core.Utils;
 namespace Vint.Core.Server.Game.Protocol.Commands;
 
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Local")]
-public class ComponentChangeCommand(
-    IEntity entity,
-    IComponent component
-) : EntityCommand(entity) {
-    [ProtocolVaried, ProtocolPosition(1)] public IComponent Component { get; private set; } = component;
+public class ComponentChangeCommand : IServerCommand {
+    [ProtocolPosition(0)] public required IEntity Entity { get; init; }
+    [ProtocolVaried, ProtocolPosition(1)] public required IComponent Component { get; init; }
 
-    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
+    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
         ILogger logger = connection.Logger.ForType<ComponentChangeCommand>();
         Type type = Component.GetType();
         ClientChangeableAttribute? clientChangeable = type.GetCustomAttribute<ClientChangeableAttribute>();

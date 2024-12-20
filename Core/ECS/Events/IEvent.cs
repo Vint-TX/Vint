@@ -8,5 +8,5 @@ public interface IEvent;
 
 [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
 public interface IServerEvent : IEvent {
-    Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities);
+    Task Execute(IPlayerConnection connection, IEntity[] entities);
 }

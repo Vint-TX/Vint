@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Vint.Core.ECS.Components;
+﻿using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
@@ -15,8 +14,6 @@ public class EntityShareCommand(
     [ProtocolPosition(1)] public TemplateAccessor? TemplateAccessor => templateAccessor;
     [ProtocolPosition(2), ProtocolCollection(varied: true)]
     public IComponent[] Components => components;
-
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) => throw new UnreachableException();
 
     public override string ToString() => $"EntityShare command {{ " +
                                          $"EntityId: {EntityId}, " +

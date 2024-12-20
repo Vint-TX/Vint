@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.User.PromoCode;
 public class CheckPromoCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         PromoCodeCheckResult checkResult = await PromoCodeHelper.Check(connection.Player.Id, Code);
         await connection.Send(new PromoCodeCheckResultEvent(Code, checkResult), connection.UserContainer.Entity);
     }

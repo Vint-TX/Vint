@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Events.Battle;
 
 [ProtocolId(-4669704207166218448)]
 public class ExitBattleEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattle) return;
 

@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.User;
 public class UnloadUsersEvent : IServerEvent {
     public HashSet<IEntity> Users { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         Users.RemoveWhere(user => connection.BattlePlayer?.Battle.Players.Any(battlePlayer => battlePlayer.PlayerConnection.UserContainer.Id == user.Id) ?? false);
         await connection.UnshareIfShared(Users);
     }

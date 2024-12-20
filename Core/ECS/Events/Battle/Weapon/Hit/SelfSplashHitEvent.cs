@@ -1,6 +1,7 @@
 using LinqToDB;
 using Vint.Core.Battles.Weapons;
 using Vint.Core.Database;
+using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -8,7 +9,9 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 [ProtocolId(196833391289212110)]
-public class SelfSplashHitEvent : SelfHitEvent {
+public class SelfSplashHitEvent(
+    DiscordBot? discordBot
+) : SelfHitEvent(discordBot) {
     public List<HitTarget>? SplashTargets { get; private set; }
 
     [ProtocolIgnore] protected override RemoteSplashHitEvent RemoteEvent => new() {
@@ -19,8 +22,8 @@ public class SelfSplashHitEvent : SelfHitEvent {
         Targets = Targets
     };
 
-    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
-        await base.Execute(connection, serviceProvider, entities);
+    public override async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        await base.Execute(connection, entities);
 
         if (WeaponHandler is IMineWeaponHandler mineHandler)
             await mineHandler.Explode();

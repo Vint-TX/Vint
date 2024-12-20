@@ -8,30 +8,21 @@ using Vint.Core.Utils;
 namespace Vint.Core.Server.Game.Protocol.Commands;
 
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Local")]
-public class SendEventCommand(
-    IEvent @event,
-    params IEntity[] entities
-) : ICommand {
-    [ProtocolVaried, ProtocolPosition(0)] public IEvent Event { get; private set; } = @event;
-    [ProtocolPosition(1)] public IEntity[] Entities { get; private set; } = entities;
+public class SendEventCommand : IServerCommand {
+    [ProtocolVaried, ProtocolPosition(0)] public required IEvent Event { get; init; }
+    [ProtocolPosition(1)] public required IEntity[] Entities { get; init; }
 
     public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider) {
         ILogger logger = connection.Logger.ForType<SendEventCommand>();
 
         if (Event is not IServerEvent serverEvent) {
-            logger.Warning("Event {Event} is not IServerEvent",
-                Event.GetType()
-                    .Name);
-
+            logger.Warning("Event {Event} is not IServerEvent", Event.GetType().Name);
             return;
         }
 
-        logger.Debug("Executing event {Name} with {Count} entities",
-            serverEvent.GetType()
-                .Name,
-            Entities.Length);
+        logger.Debug("Executing event {Name} with {Count} entities", serverEvent.GetType().Name, Entities.Length);
 
-        await serverEvent.Execute(connection, serviceProvider, Entities);
+        await serverEvent.Execute(connection, Entities);
     }
 
     public override string ToString() => $"SendEvent command {{ " +

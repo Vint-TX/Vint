@@ -6,6 +6,6 @@ namespace Vint.Core.ECS.Events.Items;
 
 [ProtocolId(1434530333851)]
 public class MountItemEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) =>
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) =>
         await connection.MountItem(entities.Single());
 }

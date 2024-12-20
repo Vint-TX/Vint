@@ -12,7 +12,7 @@ public class ChangeScreenEvent : IServerEvent {
     public string NextScreen { get; private set; } = null!;
     public double Duration { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) {
         ILogger logger = connection.Logger.ForType<ChangeScreenEvent>();
 
         logger.Information("Changed screen {Current} to {Next}", CurrentScreen, NextScreen);

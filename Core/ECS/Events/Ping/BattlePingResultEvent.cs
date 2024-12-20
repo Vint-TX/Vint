@@ -9,5 +9,5 @@ public class BattlePingResultEvent : IServerEvent { // todo ??
     public float ClientSendRealTime { get; private set; }
     public float ClientReceiveRealTime { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) => Task.CompletedTask;
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) => Task.CompletedTask;
 }

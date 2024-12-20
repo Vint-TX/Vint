@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Events.User.Settings;
 public class SubscribeChangeEvent : IServerEvent {
     public bool Subscribed { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         connection.Player.Subscribed = Subscribed;
 
         if (Subscribed) await connection.UserContainer.Entity.AddComponent(new UserSubscribeComponent(true));

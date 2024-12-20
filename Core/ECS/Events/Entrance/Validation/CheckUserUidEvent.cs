@@ -10,7 +10,7 @@ namespace Vint.Core.ECS.Events.Entrance.Validation;
 public class CheckUserUidEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
 
         if (await db.Players.AnyAsync(player => player.Username == Username))

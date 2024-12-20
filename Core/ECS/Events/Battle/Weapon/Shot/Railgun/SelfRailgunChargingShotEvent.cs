@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Events.Battle.Weapon.Shot.Railgun;
 
 [ProtocolId(4963057750170414217)]
 public class SelfRailgunChargingShotEvent : RailgunChargingShotEvent, IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank ||
             connection.BattlePlayer.Tank!.WeaponHandler is not RailgunWeaponHandler)

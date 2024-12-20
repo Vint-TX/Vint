@@ -11,7 +11,7 @@ namespace Vint.Core.ECS.Events.Battle.Movement;
 public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
     UnitMoveRemoteEvent RemoteEvent => new(UnitMove);
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
             !connection.BattlePlayer!.InBattleAsTank)
             return;

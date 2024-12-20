@@ -14,7 +14,7 @@ public class BuyUsernameChangeEvent : IServerEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public long Price { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!RegexUtils.IsLoginValid(Username)) return;
 
         IEntity user = entities.Single();

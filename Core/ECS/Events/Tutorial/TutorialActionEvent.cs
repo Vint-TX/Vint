@@ -11,5 +11,5 @@ public class TutorialActionEvent : IServerEvent { // todo
     public long StepId { get; private set; }
     public TutorialAction Action { get; private set; }
 
-    public Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) => Task.CompletedTask;
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) => Task.CompletedTask;
 }

@@ -14,7 +14,7 @@ namespace Vint.Core.ECS.Events.Entrance.Login;
 public class IntroduceUserByEmailEvent : IntroduceUserEvent {
     public string Email { get; private set; } = null!;
 
-    public override async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public override async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         ILogger logger = connection.Logger.ForType<IntroduceUserByEmailEvent>();
 
         logger.Information("Login by email '{Email}'", Email);

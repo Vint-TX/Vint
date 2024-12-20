@@ -7,7 +7,7 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1496753144455)]
 public class ClientExitLobbyEvent : IServerEvent {
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby) return;
 
         BattlePlayer battlePlayer = connection.BattlePlayer!;

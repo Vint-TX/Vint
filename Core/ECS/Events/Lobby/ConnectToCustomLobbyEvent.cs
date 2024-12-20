@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battles;
 using Vint.Core.Battles.Type;
 using Vint.Core.ECS.Components.Lobby;
@@ -9,17 +8,18 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1547616531111)]
-public class ConnectToCustomLobbyEvent : IServerEvent {
+public class ConnectToCustomLobbyEvent(
+    IBattleProcessor battleProcessor
+) : IServerEvent {
     public long LobbyId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IServiceProvider serviceProvider, IEnumerable<IEntity> entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         // todo rework for admins
         if (connection.InLobby) {
             await connection.Send(new EnterBattleLobbyFailedEvent(true, false), connection.UserContainer.Entity);
             return;
         }
 
-        IBattleProcessor battleProcessor = serviceProvider.GetRequiredService<IBattleProcessor>();
         Battles.Battle? battle = battleProcessor.FindByLobbyId(LobbyId);
 
         if (await ValidateAndJoin(connection, battle)) return;
