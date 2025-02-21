@@ -31,9 +31,9 @@ public class UserResult {
 
         Kills = statisticsComponent.Kills;
         KillAssists =  tankStatistics.KillAssists;
-        KillStrike = tankStatistics.KillStrike;
+        KillStrike = tankStatistics.MaxKillStrike;
         Deaths = statisticsComponent.Deaths;
-        Damage = (int)battleTank.DealtDamage;
+        Damage = (int)tankStatistics.DealtDamage;
 
         ScoreWithoutPremium = statisticsComponent.ScoreWithoutBonuses;
 

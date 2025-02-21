@@ -89,8 +89,6 @@ public class BattleTank : IDisposable {
     public BattleTankStatistics Statistics { get; }
     public UserResult Result { get; private set; } = null!;
     public Dictionary<BattleTank, float> KillAssistants { get; } = new();
-    public float DealtDamage { get; set; }
-    public float TakenDamage { get; set; }
 
     public float Health { get; private set; }
     public float TotalHealth { get; set; }
@@ -404,7 +402,10 @@ public class BattleTank : IDisposable {
         if (Round.ModeHandler is SoloHandler soloHandler)
             await soloHandler.TryUpdateScore();
 
-        if (deltaWithoutBonus <= 0 || Round.Properties.Type != BattleType.Rating) return;
+        if (deltaWithoutBonus <= 0 ||
+            Round.Properties.Type != BattleType.Rating ||
+            Round.StateManager.CurrentState is not Running)
+            return;
 
         int deltaWithBonus = Tanker.GetScoreWithBonus(deltaWithoutBonus);
         IPlayerConnection connection = Tanker.Connection;
@@ -422,13 +423,14 @@ public class BattleTank : IDisposable {
 
     async Task UpdateKillStreak() {
         int killStreak = Entities.Incarnation.GetComponent<TankIncarnationKillStatisticsComponent>().Kills;
-        Statistics.KillStrike = Math.Max(Statistics.KillStrike, killStreak);
+        Statistics.MaxKillStrike = Math.Max(Statistics.MaxKillStrike, killStreak);
 
         if (killStreak < 2) return;
 
         int score = KillStreakToScore.GetValueOrDefault(killStreak, KillStreakToScore.Values.Last());
 
-        await Entities.RoundUser.ChangeComponent<RoundUserStatisticsComponent>(component => component.ScoreWithoutBonuses += score);
+        await AddScore(score);
+        await CommitStatistics();
         await Tanker.Send(new VisualScoreStreakEvent(Tanker.GetScoreWithBonus(score)), Entities.BattleUser);
 
         if (killStreak < 5 || killStreak % 5 == 0)
@@ -441,6 +443,12 @@ public class BattleTank : IDisposable {
         if (targetKillStreak < 2) return;
 
         await Tanker.Send(new StreakTerminationEvent(target.Tanker.Connection.Player.Username), Tanker.BattleUser);
+    }
+
+    public async Task ResetStatistics() {
+        Statistics.Reset();
+        await Entities.RoundUser.ChangeComponent(new RoundUserStatisticsComponent());
+        await Round.Players.Send(new RoundUserStatisticsUpdatedEvent(), Entities.RoundUser);
     }
 
     public void CreateUserResult() =>

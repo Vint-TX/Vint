@@ -11,6 +11,7 @@ using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Mode.Team;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
+using Vint.Core.Battle.Tank;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Battle.Round;
 using Vint.Core.ECS.Entities;
@@ -118,6 +119,9 @@ public class Round : IDisposable {
     }
 
     public async Task OnWarmUpEnded() {
+        foreach (BattleTank tank in Tankers.Select(tanker => tanker.Tank))
+            await tank.ResetStatistics();
+
         await ModeHandler.OnWarmUpEnded();
 
         if (BonusProcessor != null)

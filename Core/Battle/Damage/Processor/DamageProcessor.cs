@@ -13,7 +13,7 @@ public class DamageProcessor : IDamageProcessor {
 
         DamageType type = await Damage(target, damage);
         IPlayerConnection sourcePlayerConnection = source.Tanker.Connection;
-        source.DealtDamage += damage.Value;
+        source.Statistics.DealtDamage += damage.Value;
         await target.Tanker.Send(new DamageInfoTargetEvent(), battleWeapon, target.Entities.Tank);
 
         // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
@@ -52,7 +52,7 @@ public class DamageProcessor : IDamageProcessor {
             return DamageType.Normal;
 
         await target.SetHealth(target.Health - damage.Value);
-        target.TakenDamage += damage.Value;
+        target.Statistics.TakenDamage += damage.Value;
 
         return target.Health switch {
             <= 0 => DamageType.Kill,

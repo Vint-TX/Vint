@@ -48,6 +48,11 @@ public class GoldProcessor(
         CalculateNextThreshold();
     }
 
+    public void OnWarmUpEnded() {
+        PlayersCount = round.Tankers.Count();
+        CalculateNextThreshold();
+    }
+
     public async Task<bool> DropRandom(Tanker? tanker, bool force = false) {
         foreach (GoldBox gold in goldBoxes.Shuffle()) {
             if (await Drop(gold, tanker, force))

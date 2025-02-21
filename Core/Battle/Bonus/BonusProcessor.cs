@@ -74,8 +74,10 @@ public class BonusProcessor : IBonusProcessor {
         }
     }
 
-    public async Task OnWarmUpEnded() =>
+    public async Task OnWarmUpEnded() {
         await ResetBonusesState();
+        GoldProcessor.OnWarmUpEnded();
+    }
 
     public async Task Tick(TimeSpan deltaTime) {
         foreach (BonusBox bonus in Bonuses)

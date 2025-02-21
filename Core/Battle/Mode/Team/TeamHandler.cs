@@ -69,6 +69,8 @@ public abstract class TeamHandler : ModeHandler {
     }
 
     public override async Task OnWarmUpEnded() {
+        await base.OnWarmUpEnded();
+
         await UpdateScore(TeamColor.Blue, int.MinValue);
         await UpdateScore(TeamColor.Red, int.MinValue);
     }

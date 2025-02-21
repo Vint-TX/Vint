@@ -47,4 +47,9 @@ public abstract class SoloHandler(
         if (player is Tanker)
             await TryUpdateScore();
     }
+
+    public override async Task OnWarmUpEnded() {
+        await base.OnWarmUpEnded();
+        await TryUpdateScore();
+    }
 }
