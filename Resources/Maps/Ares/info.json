@@ -1621,7 +1621,7 @@
       "repair": [
         {
           "number": 4,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 76.01000213623047,
             "y": 5.708988666534424,
@@ -1630,7 +1630,7 @@
         },
         {
           "number": 5,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -72.75000762939453,
             "y": 5.708988666534424,
@@ -1639,7 +1639,7 @@
         },
         {
           "number": 6,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 8.300003051757812,
             "y": 5.975733280181885,
@@ -1650,7 +1650,7 @@
       "armor": [
         {
           "number": 10,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -47.88999938964844,
             "y": -0.3620305061340332,
@@ -1659,7 +1659,7 @@
         },
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -135.24000549316406,
             "y": 6.177989482879639,
@@ -1668,7 +1668,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -7.3499979972839355,
             "y": -0.31202173233032227,
@@ -1677,7 +1677,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -46.0099983215332,
             "y": -0.06602145731449127,
@@ -1686,7 +1686,7 @@
         },
         {
           "number": 14,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 139.25,
             "y": 5.537978649139404,
@@ -1695,7 +1695,7 @@
         },
         {
           "number": 15,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 9.739997863769531,
             "y": -0.1320214420557022,
@@ -1706,7 +1706,7 @@
       "damage": [
         {
           "number": 8,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -51.209999084472656,
             "y": -0.25802087783813477,
@@ -1715,7 +1715,7 @@
         },
         {
           "number": 9,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 37.689998626708984,
             "y": -0.19202090799808502,
@@ -1724,7 +1724,7 @@
         },
         {
           "number": 10,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -135.13999938964844,
             "y": 6.145982265472412,
@@ -1733,7 +1733,7 @@
         },
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -33.849998474121094,
             "y": 0.6019787788391113,
@@ -1742,7 +1742,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 139.14999389648438,
             "y": 5.4599785804748535,
@@ -1751,7 +1751,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 34.4630012512207,
             "y": -0.2510209083557129,
@@ -1762,7 +1762,7 @@
       "speed": [
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -1.8000030517578125,
             "y": -1.642031192779541,
@@ -1771,7 +1771,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -112.5,
             "y": 0.8769783973693848,
@@ -1780,7 +1780,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -104.19999694824219,
             "y": 1.5779786109924316,
@@ -1789,7 +1789,7 @@
         },
         {
           "number": 14,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 85.26000213623047,
             "y": 1.8979783058166504,
@@ -1798,7 +1798,7 @@
         },
         {
           "number": 15,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 89.6500015258789,
             "y": -1.6060223579406738,
@@ -1807,7 +1807,7 @@
         },
         {
           "number": 16,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -2.5,
             "y": 2.1579785346984863,
@@ -1816,7 +1816,7 @@
         },
         {
           "number": 17,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 118.4260025024414,
             "y": 1.1479783058166504,
@@ -1827,7 +1827,7 @@
       "gold": [
         {
           "number": 23,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 66.7300033569336,
             "y": 5.677978992462158,
@@ -1836,7 +1836,7 @@
         },
         {
           "number": 24,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 34.22999954223633,
             "y": 6.269992351531982,
@@ -1845,7 +1845,7 @@
         },
         {
           "number": 25,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -70.20999908447266,
             "y": 5.757978916168213,
@@ -1854,7 +1854,7 @@
         },
         {
           "number": 26,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -124.12999725341797,
             "y": 6.853571891784668,
@@ -1863,7 +1863,7 @@
         },
         {
           "number": 27,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -32.040000915527344,
             "y": 6.279994487762451,
@@ -1872,7 +1872,7 @@
         },
         {
           "number": 28,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -6.470001220703125,
             "y": 5.837988376617432,
@@ -1881,7 +1881,7 @@
         },
         {
           "number": 29,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 14.569999694824219,
             "y": 5.70797872543335,
@@ -1890,7 +1890,7 @@
         },
         {
           "number": 30,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -59.06999969482422,
             "y": 7.451985836029053,
@@ -1899,7 +1899,7 @@
         },
         {
           "number": 31,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 65.66000366210938,
             "y": 5.677978992462158,
@@ -1908,7 +1908,7 @@
         },
         {
           "number": 32,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 56.439998626708984,
             "y": 5.760988712310791,
@@ -1921,7 +1921,7 @@
       "repair": [
         {
           "number": 4,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 76.01000213623047,
             "y": 5.708988666534424,
@@ -1930,7 +1930,7 @@
         },
         {
           "number": 5,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -72.75000762939453,
             "y": 5.708988666534424,
@@ -1939,7 +1939,7 @@
         },
         {
           "number": 6,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 8.300003051757812,
             "y": 5.975733280181885,
@@ -1950,7 +1950,7 @@
       "armor": [
         {
           "number": 10,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -47.88999938964844,
             "y": -0.3620305061340332,
@@ -1959,7 +1959,7 @@
         },
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -135.24000549316406,
             "y": 6.177989482879639,
@@ -1968,7 +1968,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -7.3499979972839355,
             "y": -0.31202173233032227,
@@ -1977,7 +1977,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -46.0099983215332,
             "y": -0.06602145731449127,
@@ -1986,7 +1986,7 @@
         },
         {
           "number": 14,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 139.25,
             "y": 5.537978649139404,
@@ -1995,7 +1995,7 @@
         },
         {
           "number": 15,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 9.739997863769531,
             "y": -0.1320214420557022,
@@ -2006,7 +2006,7 @@
       "damage": [
         {
           "number": 8,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -51.209999084472656,
             "y": -0.25802087783813477,
@@ -2015,7 +2015,7 @@
         },
         {
           "number": 9,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 37.689998626708984,
             "y": -0.19202090799808502,
@@ -2024,7 +2024,7 @@
         },
         {
           "number": 10,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -135.13999938964844,
             "y": 6.145982265472412,
@@ -2033,7 +2033,7 @@
         },
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -33.849998474121094,
             "y": 0.6019787788391113,
@@ -2042,7 +2042,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 139.14999389648438,
             "y": 5.4599785804748535,
@@ -2051,7 +2051,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 34.4630012512207,
             "y": -0.2510209083557129,
@@ -2062,7 +2062,7 @@
       "speed": [
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -1.8000030517578125,
             "y": -1.642031192779541,
@@ -2071,7 +2071,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -112.5,
             "y": 0.8769783973693848,
@@ -2080,7 +2080,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -104.19999694824219,
             "y": 1.5779786109924316,
@@ -2089,7 +2089,7 @@
         },
         {
           "number": 14,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 85.26000213623047,
             "y": 1.8979783058166504,
@@ -2098,7 +2098,7 @@
         },
         {
           "number": 15,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 89.6500015258789,
             "y": -1.6060223579406738,
@@ -2107,7 +2107,7 @@
         },
         {
           "number": 16,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -2.5,
             "y": 2.1579785346984863,
@@ -2116,7 +2116,7 @@
         },
         {
           "number": 17,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 118.4260025024414,
             "y": 1.1479783058166504,
@@ -2127,7 +2127,7 @@
       "gold": [
         {
           "number": 23,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 66.7300033569336,
             "y": 5.677978992462158,
@@ -2136,7 +2136,7 @@
         },
         {
           "number": 24,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 34.22999954223633,
             "y": 6.269992351531982,
@@ -2145,7 +2145,7 @@
         },
         {
           "number": 25,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -70.20999908447266,
             "y": 5.757978916168213,
@@ -2154,7 +2154,7 @@
         },
         {
           "number": 26,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -124.12999725341797,
             "y": 6.853571891784668,
@@ -2163,7 +2163,7 @@
         },
         {
           "number": 27,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -32.040000915527344,
             "y": 6.279994487762451,
@@ -2172,7 +2172,7 @@
         },
         {
           "number": 28,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -6.470001220703125,
             "y": 5.837988376617432,
@@ -2181,7 +2181,7 @@
         },
         {
           "number": 29,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 14.569999694824219,
             "y": 5.70797872543335,
@@ -2190,7 +2190,7 @@
         },
         {
           "number": 30,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -59.06999969482422,
             "y": 7.451985836029053,
@@ -2199,7 +2199,7 @@
         },
         {
           "number": 31,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 65.66000366210938,
             "y": 5.677978992462158,
@@ -2208,7 +2208,7 @@
         },
         {
           "number": 32,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 56.439998626708984,
             "y": 5.760988712310791,
@@ -2221,7 +2221,7 @@
       "speed": [
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -1.8000030517578125,
             "y": -1.642031192779541,
@@ -2230,7 +2230,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -112.5,
             "y": 0.8769783973693848,
@@ -2239,7 +2239,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -104.19999694824219,
             "y": 1.5779786109924316,
@@ -2248,7 +2248,7 @@
         },
         {
           "number": 14,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 85.26000213623047,
             "y": 1.8979783058166504,
@@ -2257,7 +2257,7 @@
         },
         {
           "number": 15,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 89.6500015258789,
             "y": -1.6060223579406738,
@@ -2266,7 +2266,7 @@
         },
         {
           "number": 16,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -2.5,
             "y": 2.1579785346984863,
@@ -2275,7 +2275,7 @@
         },
         {
           "number": 17,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 118.4260025024414,
             "y": 1.1479783058166504,
@@ -2286,7 +2286,7 @@
       "repair": [
         {
           "number": 4,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 76.01000213623047,
             "y": 5.708988666534424,
@@ -2295,7 +2295,7 @@
         },
         {
           "number": 5,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -72.75000762939453,
             "y": 5.708988666534424,
@@ -2304,7 +2304,7 @@
         },
         {
           "number": 6,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 8.300003051757812,
             "y": 5.975733280181885,
@@ -2315,7 +2315,7 @@
       "gold": [
         {
           "number": 23,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 66.7300033569336,
             "y": 5.677978992462158,
@@ -2324,7 +2324,7 @@
         },
         {
           "number": 24,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 34.22999954223633,
             "y": 6.269992351531982,
@@ -2333,7 +2333,7 @@
         },
         {
           "number": 25,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -70.20999908447266,
             "y": 5.757978916168213,
@@ -2342,7 +2342,7 @@
         },
         {
           "number": 26,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -124.12999725341797,
             "y": 6.853571891784668,
@@ -2351,7 +2351,7 @@
         },
         {
           "number": 27,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -32.040000915527344,
             "y": 6.279994487762451,
@@ -2360,7 +2360,7 @@
         },
         {
           "number": 28,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -6.470001220703125,
             "y": 5.837988376617432,
@@ -2369,7 +2369,7 @@
         },
         {
           "number": 29,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 14.569999694824219,
             "y": 5.70797872543335,
@@ -2378,7 +2378,7 @@
         },
         {
           "number": 30,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -59.06999969482422,
             "y": 7.451985836029053,
@@ -2387,7 +2387,7 @@
         },
         {
           "number": 31,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 65.66000366210938,
             "y": 5.677978992462158,
@@ -2396,7 +2396,7 @@
         },
         {
           "number": 32,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 56.439998626708984,
             "y": 5.760988712310791,
@@ -2407,7 +2407,7 @@
       "damage": [
         {
           "number": 8,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -51.209999084472656,
             "y": -0.25802087783813477,
@@ -2416,7 +2416,7 @@
         },
         {
           "number": 9,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 37.689998626708984,
             "y": -0.19202090799808502,
@@ -2425,7 +2425,7 @@
         },
         {
           "number": 10,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -135.13999938964844,
             "y": 6.145982265472412,
@@ -2434,7 +2434,7 @@
         },
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -33.849998474121094,
             "y": 0.6019787788391113,
@@ -2443,7 +2443,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 139.14999389648438,
             "y": 5.4599785804748535,
@@ -2452,7 +2452,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 34.4630012512207,
             "y": -0.2510209083557129,
@@ -2463,7 +2463,7 @@
       "armor": [
         {
           "number": 10,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -47.88999938964844,
             "y": -0.3620305061340332,
@@ -2472,7 +2472,7 @@
         },
         {
           "number": 11,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -135.24000549316406,
             "y": 6.177989482879639,
@@ -2481,7 +2481,7 @@
         },
         {
           "number": 12,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -7.3499979972839355,
             "y": -0.31202173233032227,
@@ -2490,7 +2490,7 @@
         },
         {
           "number": 13,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": -46.0099983215332,
             "y": -0.06602145731449127,
@@ -2499,7 +2499,7 @@
         },
         {
           "number": 14,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 139.25,
             "y": 5.537978649139404,
@@ -2508,7 +2508,7 @@
         },
         {
           "number": 15,
-          "hasParachute": true,
+          "hasParachute": false,
           "position": {
             "x": 9.739997863769531,
             "y": -0.1320214420557022,

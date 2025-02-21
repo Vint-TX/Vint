@@ -1,4 +1,3 @@
-using System.Numerics;
 using LinqToDB;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
@@ -15,22 +14,19 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Bonus.Type;
 
-public sealed class GoldBox(
-    Round round,
-    Vector3 regionPosition,
-    bool hasParachute
-) : BonusBox(round, regionPosition, hasParachute) {
+public sealed class GoldBox : BonusBox {
+    public GoldBox(Round round, BonusInfo bonusInfo) : base(round, bonusInfo) =>
+        RegionEntity = new Lazy<IEntity>(new BonusRegionTemplate().CreateGold(RegionPosition));
+
     public override BonusType Type => BonusType.Gold;
     public override IEntity? Entity { get; protected set; }
-    public override Lazy<IEntity> RegionEntity { get; protected set; } = new(new BonusRegionTemplate().CreateGold(regionPosition));
+    public override Lazy<IEntity> RegionEntity { get; protected set; }
     public override BonusConfigComponent ConfigComponent { get; } = ConfigManager.GetComponent<BonusConfigComponent>("battle/bonus/gold/cry");
 
     static GoldMapInfo Info => ConfigManager.CommonMapInfo.Gold;
 
     public override async Task Take(BattleTank battleTank) {
         await base.Take(battleTank);
-
-        if (!CanTake) return;
 
         ICollection<BattlePlayer> players = Round.Players;
         await players.Send(new GoldTakenNotificationEvent(), battleTank.Entities.BattleUser);

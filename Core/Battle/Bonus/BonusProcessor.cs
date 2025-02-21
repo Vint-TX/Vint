@@ -5,10 +5,10 @@ using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config;
+using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
-using BonusInfo = Vint.Core.Config.MapInformation.Bonus;
 
 namespace Vint.Core.Battle.Bonus;
 
@@ -16,6 +16,8 @@ public interface IBonusProcessor {
     GoldProcessor GoldProcessor { get; }
 
     Task Init();
+
+    Task OnWarmUpEnded();
 
     Task Tick(TimeSpan deltaTime);
 
@@ -42,11 +44,11 @@ public class BonusProcessor : IBonusProcessor {
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach ((BonusType type, IEnumerable<BonusInfo> bonusesInfo) in bonusInfos) {
             IEnumerable<BonusBox> bonusBoxes = type switch {
-                BonusType.Repair => bonusesInfo.Select(bonusInfo => new RepairBox(round, bonusInfo.Position, bonusInfo.HasParachute)),
-                BonusType.Armor => bonusesInfo.Select(bonusInfo => new ArmorBox(round, bonusInfo.Position, bonusInfo.HasParachute)),
-                BonusType.Damage => bonusesInfo.Select(bonusInfo => new DamageBox(round, bonusInfo.Position, bonusInfo.HasParachute)),
-                BonusType.Speed => bonusesInfo.Select(bonusInfo => new SpeedBox(round, bonusInfo.Position, bonusInfo.HasParachute)),
-                BonusType.Gold => bonusesInfo.Select(bonusInfo => new GoldBox(round, bonusInfo.Position, bonusInfo.HasParachute)),
+                BonusType.Repair => bonusesInfo.Select(bonusInfo => new RepairBox(round, bonusInfo)),
+                BonusType.Armor => bonusesInfo.Select(bonusInfo => new ArmorBox(round, bonusInfo)),
+                BonusType.Damage => bonusesInfo.Select(bonusInfo => new DamageBox(round, bonusInfo)),
+                BonusType.Speed => bonusesInfo.Select(bonusInfo => new SpeedBox(round, bonusInfo)),
+                BonusType.Gold => bonusesInfo.Select(bonusInfo => new GoldBox(round, bonusInfo)),
                 _ => throw new InvalidOperationException($"Unexpected bonus type {type}")
             };
 
@@ -68,9 +70,12 @@ public class BonusProcessor : IBonusProcessor {
             if (bonus is not SupplyBox supply)
                 continue;
 
-            await supply.StateManager.SetState(new Cooldown(supply.StateManager, GetRandomCooldown()));
+            await supply.StateManager.SetState(GetInitIdleState(supply));
         }
     }
+
+    public async Task OnWarmUpEnded() =>
+        await ResetBonusesState();
 
     public async Task Tick(TimeSpan deltaTime) {
         foreach (BonusBox bonus in Bonuses)
@@ -124,6 +129,19 @@ public class BonusProcessor : IBonusProcessor {
         await bonus.Drop();
         return true;
     }
+
+    async Task ResetBonusesState() {
+        foreach (BonusBox bonus in Bonuses) {
+            if (await bonus.TryDestroy())
+                await bonus.StateManager.SetState(GetInitIdleState(bonus));
+        }
+    }
+
+    static BonusState GetInitIdleState(BonusBox box) => box switch {
+        SupplyBox => new Cooldown(box.StateManager, GetRandomCooldown()),
+        GoldBox => new None(box.StateManager),
+        _ => throw new InvalidOperationException($"Unexpected bonus type {box.Type}")
+    };
 
     static TimeSpan GetRandomCooldown() =>
         TimeSpan.FromSeconds(Random.Shared.Next(60));

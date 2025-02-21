@@ -1,8 +1,8 @@
-using System.Numerics;
 using Vint.Core.Battle.Effects;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config;
+using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Battle.Bonus;
@@ -11,15 +11,12 @@ namespace Vint.Core.Battle.Bonus.Type;
 
 public abstract class SupplyBox<T>(
     Round round,
-    Vector3 regionPosition,
-    bool hasParachute
-) : SupplyBox(round, regionPosition, hasParachute) where T : Effect, ISupplyEffect {
+    BonusInfo bonusInfo
+) : SupplyBox(round, bonusInfo) where T : Effect, ISupplyEffect {
     protected abstract T GetEffect(BattleTank battleTank);
 
     public override async Task Take(BattleTank battleTank) {
         await base.Take(battleTank);
-
-        if (!CanTake) return;
 
         await StateManager.SetState(new Cooldown(StateManager));
 
@@ -41,7 +38,7 @@ public abstract class SupplyBox<T>(
 }
 
 public abstract class SupplyBox : BonusBox {
-    protected SupplyBox(Round round, Vector3 regionPosition, bool hasParachute) : base(round, regionPosition, hasParachute) {
+    protected SupplyBox(Round round, BonusInfo bonusInfo) : base(round, bonusInfo) {
         // ReSharper disable VirtualMemberCallInConstructor
         ConfigComponent = ConfigManager.GetComponent<BonusConfigComponent>($"battle/bonus/{Type.ToString().ToLower()}");
         RegionEntity = new Lazy<IEntity>(new BonusRegionTemplate().CreateRegular(Type, RegionPosition));

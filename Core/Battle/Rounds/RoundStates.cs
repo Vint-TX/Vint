@@ -50,7 +50,7 @@ public class WarmUp(
 
     public override async Task Finish() {
         await Round.Entity.RemoveComponent<RoundWarmingUpStateComponent>();
-        await Round.ModeHandler.OnWarmUpEnded();
+        await Round.OnWarmUpEnded();
         await base.Finish();
     }
 

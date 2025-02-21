@@ -117,6 +117,13 @@ public class Round : IDisposable {
         await RoundEnded();
     }
 
+    public async Task OnWarmUpEnded() {
+        await ModeHandler.OnWarmUpEnded();
+
+        if (BonusProcessor != null)
+            await BonusProcessor.OnWarmUpEnded();
+    }
+
     public async Task AddTanker(LobbyPlayer player) {
         int tankersCount = Tankers.Count();
 

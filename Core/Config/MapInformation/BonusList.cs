@@ -3,13 +3,13 @@ using Vint.Core.Battle.Bonus;
 namespace Vint.Core.Config.MapInformation;
 
 public readonly record struct BonusList(
-    List<Bonus> Repair,
-    List<Bonus> Armor,
-    List<Bonus> Damage,
-    List<Bonus> Speed,
-    List<Bonus> Gold
+    List<BonusInfo> Repair,
+    List<BonusInfo> Armor,
+    List<BonusInfo> Damage,
+    List<BonusInfo> Speed,
+    List<BonusInfo> Gold
 ) {
-    public Dictionary<BonusType, IEnumerable<Bonus>> ToDictionary() => new() {
+    public Dictionary<BonusType, IEnumerable<BonusInfo>> ToDictionary() => new() {
         { BonusType.Repair, Repair },
         { BonusType.Armor, Armor },
         { BonusType.Damage, Damage },

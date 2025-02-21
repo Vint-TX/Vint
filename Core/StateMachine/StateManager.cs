@@ -10,6 +10,7 @@ public abstract class StateManager<T> : IStateManager where T : State {
         Logger = Log.Logger.ForType(GetType());
 
     ILogger Logger { get; }
+    bool StateInitialized { get; set; }
 
     public T CurrentState { get; private set; } = null!;
 
@@ -19,9 +20,14 @@ public abstract class StateManager<T> : IStateManager where T : State {
         await state.Start();
         CurrentState = state;
         await state.Started();
+
+        StateInitialized = true;
     }
 
     public virtual async Task SetState(T state) {
+        if (!StateInitialized)
+            throw new InvalidOperationException("State manager is not initialized");
+
         Logger.Debug("Set state from {Current} to {Next}", CurrentState, state);
 
         T prevState = CurrentState;
@@ -34,7 +40,10 @@ public abstract class StateManager<T> : IStateManager where T : State {
     }
 
     public virtual async Task Tick(TimeSpan deltaTime) {
-        if (CurrentState != null! && !CurrentState.IsFinished)
+        if (!StateInitialized)
+            throw new InvalidOperationException("State manager is not initialized");
+
+        if (!CurrentState.IsFinished)
             await CurrentState.Tick(deltaTime);
     }
 

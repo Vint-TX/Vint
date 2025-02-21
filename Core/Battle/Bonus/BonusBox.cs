@@ -1,8 +1,8 @@
 using System.Numerics;
-using Serilog;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Bonus;
@@ -11,17 +11,15 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battle.Bonus;
 
 public abstract class BonusBox {
-    protected BonusBox(Round round, Vector3 regionPosition, bool hasParachute) {
+    protected BonusBox(Round round, BonusInfo bonusInfo) {
         Round = round;
-        RegionPosition = regionPosition;
-        if (!hasParachute) SpawnHeight = 0;
+        BonusInfo = bonusInfo;
+
+        RegionPosition = BonusInfo.Position;
+        if (!BonusInfo.HasParachute) SpawnHeight = 0;
 
         StateManager = new BonusStateManager(this);
-        Logger = Log.Logger.ForType(GetType());
     }
-
-    protected ILogger Logger { get; }
-    protected bool CanTake { get; private set; }
 
     public abstract BonusType Type { get; }
     public abstract IEntity? Entity { get; protected set; }
@@ -35,22 +33,28 @@ public abstract class BonusBox {
     public Vector3 RegionPosition { get; }
     public Vector3 SpawnPosition => RegionPosition with { Y = RegionPosition.Y + SpawnHeight };
 
+    BonusInfo BonusInfo { get; }
+
     public virtual async Task Init() =>
         await StateManager.Init();
 
     public virtual async Task Take(BattleTank battleTank) {
-        if (Entity == null) {
-            Logger.Error("{Connection} wanted to take nonexistent bonus", battleTank.Tanker.Connection);
-            return;
-        }
+        if (!await TryDestroy())
+            throw new InvalidOperationException("Bonus does not exist");
+
+        battleTank.Statistics.BonusesTaken++;
+    }
+
+    public async Task<bool> TryDestroy() {
+        if (Entity == null)
+            return false;
 
         ICollection<BattlePlayer> players = Round.Players;
         await players.Send(new BonusTakenEvent(), Entity);
         await players.Unshare(Entity);
 
-        battleTank.Statistics.BonusesTaken++;
         Entity = null;
-        CanTake = true;
+        return true;
     }
 
     public abstract Task Spawn();
