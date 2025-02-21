@@ -42,7 +42,7 @@ public class DamageCalculator : IDamageCalculator {
             RailgunWeaponHandler railgunHandler => GetRailgunDamage(railgunHandler, GetDiscreteDamage(railgunHandler), targetHitIndex),
             HammerWeaponHandler hammerHandler => hammerHandler.DamagePerPellet,
             SmokyWeaponHandler smokyHandler => smokyHandler.GetProgressedDamage(target.Entities.Incarnation.Id, out smokyProgressionIsBig),
-            IStreamWeaponHandler streamHandler => GetStreamDamage(streamHandler, target.Entities.Incarnation.Id),
+            IStreamWeaponHandler streamHandler => GetStreamDamage(streamHandler),
             IDiscreteWeaponHandler discreteHandler => GetDiscreteDamage(discreteHandler),
             _ => throw new InvalidOperationException($"Cannot find base damage for {weaponHandler.GetType().Name}")
         };
@@ -78,7 +78,7 @@ public class DamageCalculator : IDamageCalculator {
     static float GetRailgunDamage(RailgunWeaponHandler railgunHandler, float baseDamage, int targetHitIndex) =>
         baseDamage * MathF.Pow(railgunHandler.DamageWeakeningByTargetPercent, targetHitIndex);
 
-    static float GetStreamDamage(IStreamWeaponHandler streamHandler, long incarnationId) =>
+    static float GetStreamDamage(IStreamWeaponHandler streamHandler) =>
         (float)(streamHandler.DamagePerSecond * streamHandler.Cooldown.TotalSeconds);
 
     float GetDiscreteDamage(IDiscreteWeaponHandler discreteHandler) {
