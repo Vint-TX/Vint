@@ -1,4 +1,4 @@
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -7,16 +7,17 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1498554483631)]
 public class EnterBattleAsSpectatorFromLobbyRequestEvent(
-    IBattleProcessor battleProcessor
+    LobbyProcessor lobbyProcessor
 ) : IServerEvent {
     public long BattleId { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        Battles.Battle? battle = battleProcessor.FindByBattleId(BattleId);
+        if (connection.InLobby) return;
 
-        if (connection.InLobby ||
-            battle == null) return;
+        LobbyBase? lobby = lobbyProcessor.FindByBattleId(BattleId);
 
-        await battle.AddPlayer(connection, true);
+        if (lobby?.StateManager.CurrentState is not Running running) return;
+
+        await running.Round.AddSpectator(connection);
     }
 }

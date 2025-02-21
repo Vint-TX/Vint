@@ -1,6 +1,5 @@
 ﻿using LinqToDB;
-using Vint.Core.Battles;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Chat;
@@ -76,18 +75,14 @@ public static class ChatUtils {
         }
     }
 
-    // todo squads
+    // todo REWRITE, squads
     public static IEnumerable<IPlayerConnection> GetReceivers(GameServer server, IPlayerConnection from, IEntity chat) =>
         chat.TemplateAccessor?.Template switch {
-            GeneralChatTemplate => server.PlayerConnections.Values.Where(conn => conn.IsOnline),
+            GeneralChatTemplate => server.PlayerConnections.Values.Where(conn => conn.IsLoggedIn),
 
-            BattleLobbyChatTemplate => from.BattlePlayer!.Battle.Players.Select(battlePlayer => battlePlayer.PlayerConnection),
+            BattleLobbyChatTemplate => from.LobbyPlayer!.Lobby.Players.Select(player => player.Connection),
 
-            GeneralBattleChatTemplate => from.BattlePlayer!
-                .Battle
-                .Players
-                .Where(battlePlayer => battlePlayer.InBattle)
-                .Select(battlePlayer => battlePlayer.PlayerConnection),
+            GeneralBattleChatTemplate => from.LobbyPlayer!.Round!.Players.Select(player => player.Connection),
 
             PersonalChatTemplate => chat
                 .GetComponent<ChatParticipantsComponent>().Users
@@ -96,7 +91,7 @@ public static class ChatUtils {
                     IPlayerConnection? connection = server
                         .PlayerConnections
                         .Values
-                        .Where(conn => conn.IsOnline)
+                        .Where(conn => conn.IsLoggedIn)
                         .SingleOrDefault(conn => conn.UserContainer.Id == user.Id);
 
                     connection?.ShareIfUnshared(chat, from.UserContainer.Entity);
@@ -104,11 +99,9 @@ public static class ChatUtils {
                 })
                 .Where(conn => conn != null!),
 
-            TeamBattleChatTemplate => from.BattlePlayer!
-                .Battle
-                .Players
-                .Where(battlePlayer => battlePlayer.TeamColor == from.BattlePlayer.TeamColor)
-                .Select(battlePlayer => battlePlayer.PlayerConnection),
+            TeamBattleChatTemplate => from.LobbyPlayer!.Round!.Tankers
+                .Where(tanker => tanker.TeamColor == from.LobbyPlayer.TeamColor)
+                .Select(tanker => tanker.Connection),
 
             _ => []
         };
@@ -117,11 +110,10 @@ public static class ChatUtils {
         if (!connection.InLobby)
             return GlobalChat;
 
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        Battle battle = battlePlayer.Battle;
+        LobbyPlayer lobbyPlayer = connection.LobbyPlayer;
 
-        return battlePlayer.InBattle
-            ? battle.BattleChatEntity
-            : battle.LobbyChatEntity;
+        return lobbyPlayer.InRound
+            ? lobbyPlayer.Round.ChatEntity
+            : lobbyPlayer.Lobby.ChatEntity;
     }
 }

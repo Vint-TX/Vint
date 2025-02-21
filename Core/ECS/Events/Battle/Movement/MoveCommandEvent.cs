@@ -1,6 +1,7 @@
 using System.Numerics;
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Tank;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Components.Battle.Movement;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Movement;
@@ -15,24 +16,20 @@ public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank)
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+        Round round = tanker?.Round!;
+
+        if (tanker == null)
             return;
 
-        IEntity tank = entities.Single();
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        BattleTank battleTank = battlePlayer.Tank!;
-        Battles.Battle battle = battlePlayer.Battle;
+        BattleTank tank = tanker.Tank;
+        IEntity tankEntity = tank.Entities.Tank;
 
-        MoveCommandServerEvent serverEvent = new(MoveCommand);
+        await round.Players
+            .Where(player => player != tanker)
+            .Send(new MoveCommandServerEvent(MoveCommand), tankEntity);
 
-        foreach (IPlayerConnection playerConnection in battle
-                     .Players
-                     .Where(player => player != battlePlayer)
-                     .Select(player => player.PlayerConnection))
-            await playerConnection.Send(serverEvent, tank);
-
-        await tank.ChangeComponent<TankMovementComponent>(component => {
+        await tankEntity.ChangeComponent<TankMovementComponent>(component => {
             MoveControl moveControl = new() {
                 MoveAxis = MoveCommand.TankControlVertical ?? component.MoveControl.MoveAxis,
                 TurnAxis = MoveCommand.TankControlHorizontal ?? component.MoveControl.TurnAxis
@@ -51,7 +48,7 @@ public class MoveCommandEvent : IServerEvent {
         });
 
         if (!MoveCommand.Movement.HasValue ||
-            battleTank.StateManager.CurrentState is Dead)
+            tank.StateManager.CurrentState is Dead)
             return;
 
         ECS.Movement.Movement movement = MoveCommand.Movement.Value;
@@ -61,15 +58,17 @@ public class MoveCommandEvent : IServerEvent {
         // Reasons:
         // - velocity sent by client may be corrupted by overflow
         // - latest position may be corrupted too
-        Vector3 velocity = battleTank.Position - battleTank.PreviousPosition;
+        Vector3 velocity = tank.Position - tank.PreviousPosition;
 
-        battleTank.PreviousPosition = battleTank.Position;
-        battleTank.Position = movement.Position;
-        battleTank.Orientation = movement.Orientation;
+        tank.PreviousPosition = tank.Position;
+        tank.Position = movement.Position;
+        tank.Orientation = movement.Orientation;
 
-        battleTank.ForceSelfDestruct =
-            PhysicsUtils.IsOutsideMap(battle.MapInfo.PuntativeGeoms, battleTank.Position, velocity, battle.Properties.KillZoneEnabled);
+        if (PhysicsUtils.IsOutsideMap(round.Properties.MapInfo.PuntativeGeoms, tank.Position, velocity, round.Properties.KillZoneEnabled)) {
+            await tank.SelfDestruct();
+            return;
+        }
 
-        battle.MineProcessor.TryTriggerSingle(battleTank);
+        round.MineProcessor.TryTriggerSingle(tank);
     }
 }

@@ -8,30 +8,25 @@ public class StructCodec(
     Type type,
     List<PropertyRequest> properties
 ) : Codec {
-    public override void Encode(ProtocolBuffer buffer, object value) {
+    public override void Encode(ProtocolBuffer buffer, object obj) {
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
-            object? item = property.GetValue(value);
+            object? value = property.GetValue(obj);
 
-            Protocol
-                .GetCodec(codecInfo)
-                .Encode(buffer, item!);
+            Protocol.GetCodec(codecInfo).Encode(buffer, value!);
         }
     }
 
     public override object Decode(ProtocolBuffer buffer) {
         IServiceScope serviceScope = buffer.CreateServiceScope();
-        object value = ActivatorUtilities.CreateInstance(serviceScope.ServiceProvider, type);
-        //object value = RuntimeHelpers.GetUninitializedObject(type);
+        object obj = ActivatorUtilities.CreateInstance(serviceScope.ServiceProvider, type);
 
         foreach ((PropertyInfo property, ICodecInfo codecInfo) in properties) {
-            object item = Protocol
-                .GetCodec(codecInfo)
-                .Decode(buffer);
+            object value = Protocol.GetCodec(codecInfo).Decode(buffer);
 
-            property.SetValue(value, item, null);
+            property.SetValue(obj, value, null);
         }
 
-        return value;
+        return obj;
     }
 }
 

@@ -1,5 +1,6 @@
-using Vint.Core.Battles.Modules.Interfaces;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Modules.Interfaces;
+using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -11,17 +12,21 @@ public class StreamWeaponWorkingComponent : IComponent {
     public int Time { get; private set; }
 
     public async Task Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+        BattleTank? tank = connection.LobbyPlayer?.Tanker?.Tank;
+
+        if (tank == null)
             return;
 
-        foreach (IShotModule shotModule in connection.BattlePlayer.Tank!.Modules.OfType<IShotModule>())
+        foreach (IShotModule shotModule in tank.Modules.OfType<IShotModule>())
             await shotModule.OnShot();
     }
 
     public Task Removed(IPlayerConnection connection, IEntity entity) {
-        StreamWeaponHandler? streamWeaponHandler = connection.BattlePlayer?.Tank?.WeaponHandler as StreamWeaponHandler;
-        streamWeaponHandler?.IncarnationIdToHitTime.Clear();
-        streamWeaponHandler?.IncarnationIdToLastHitTime.Clear();
+        if (connection.LobbyPlayer?.Tanker?.Tank.WeaponHandler is not StreamWeaponHandler streamHandler)
+            return Task.CompletedTask;
+
+        streamHandler.IncarnationIdToHitTime.Clear();
+        streamHandler.IncarnationIdToLastHitTime.Clear();
         return Task.CompletedTask;
     }
 }

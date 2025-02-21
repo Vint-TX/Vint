@@ -1,6 +1,4 @@
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
-using Vint.Core.ECS.Components.Matchmaking;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -10,13 +8,14 @@ namespace Vint.Core.ECS.Events.Matchmaking;
 [ProtocolId(1496829083447)]
 public class MatchMakingUserReadyEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        await connection.UserContainer.Entity.AddComponentIfAbsent<MatchMakingUserReadyComponent>();
+        if (!connection.InLobby)
+            return;
 
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
+        LobbyPlayer lobbyPlayer = connection.LobbyPlayer;
 
-        if (battlePlayer.Battle.StateManager.CurrentState is not (Running or WarmUp)) return;
+        if (lobbyPlayer.InRound || lobbyPlayer.Ready)
+            return;
 
-        battlePlayer.BattleJoinTime = DateTimeOffset.UtcNow.AddSeconds(3);
-        await connection.Send(new MatchMakingLobbyStartTimeEvent(battlePlayer.BattleJoinTime), connection.UserContainer.Entity);
+        await lobbyPlayer.Lobby.PlayerReady(lobbyPlayer);
     }
 }

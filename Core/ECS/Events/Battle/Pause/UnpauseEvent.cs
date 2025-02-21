@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Pause;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
@@ -9,16 +9,13 @@ namespace Vint.Core.ECS.Events.Battle.Pause;
 [ProtocolId(-3944419188146485646)]
 public class UnpauseEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank ||
-            !connection.BattlePlayer.IsPaused)
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+
+        if (tanker is not { IsPaused: true })
             return;
 
         IEntity user = entities.Single();
-        BattlePlayer battlePlayer = connection.BattlePlayer;
-
-        battlePlayer.IsPaused = false;
-        battlePlayer.KickTime = null;
+        tanker.IsPaused = false;
 
         await user.RemoveComponent<PauseComponent>();
         await user.RemoveComponent<IdleCounterComponent>();

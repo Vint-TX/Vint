@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Group;
@@ -9,7 +9,7 @@ namespace Vint.Core.ECS.Templates.Battle.Weapon;
 
 [ProtocolId(1430285417001)]
 public abstract class WeaponTemplate : EntityTemplate {
-    protected virtual IEntity Create(string configPath, IEntity tank, BattlePlayer battlePlayer) => Entity(configPath.Replace("garage", "battle"),
+    protected virtual IEntity Create(string configPath, IEntity tank, Tanker tanker) => Entity(configPath.Replace("garage", "battle"),
         builder => builder
             .AddComponent<WeaponComponent>()
             .AddComponent<WeaponRotationComponent>(tank.TemplateAccessor!.ConfigPath!.Replace("battle", "garage"))
@@ -17,8 +17,8 @@ public abstract class WeaponTemplate : EntityTemplate {
             .AddComponentFrom<TankPartComponent>(tank)
             .AddComponentFrom<UserGroupComponent>(tank)
             .AddComponentFrom<BattleGroupComponent>(tank)
-            .AddComponentFrom<MarketItemGroupComponent>(battlePlayer.PlayerConnection.Player.CurrentPreset.Weapon)
+            .AddComponentFrom<MarketItemGroupComponent>(tanker.Connection.Player.CurrentPreset.Weapon)
             .AddGroupComponent<TankGroupComponent>(tank)
             .ThenExecuteIf(_ => this is not HammerBattleItemTemplate, entity => entity.AddComponent(new WeaponEnergyComponent(1)))
-            .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team!)));
+            .ThenExecuteIf(_ => tanker.Team != null, entity => entity.AddGroupComponent<TeamGroupComponent>(tanker.Team!)));
 }

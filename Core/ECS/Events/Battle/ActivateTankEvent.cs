@@ -1,3 +1,4 @@
+using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -9,10 +10,12 @@ public class ActivateTankEvent : IServerEvent {
     public long Phase { get; private set; }
 
     public Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (connection.BattlePlayer is not { InBattleAsTank: true })
+        BattleTank? tank = connection.LobbyPlayer?.Tanker?.Tank;
+
+        if (tank == null)
             return Task.CompletedTask;
 
-        connection.BattlePlayer.Tank!.CollisionsPhase = Phase;
+        tank.CollisionsPhase = Phase;
         return Task.CompletedTask;
     }
 }

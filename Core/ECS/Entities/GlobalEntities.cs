@@ -477,14 +477,10 @@ public static class GlobalEntities {
 
     public static IEntity GetUserModule(this IEntity marketEntity, IPlayerConnection connection) =>
         connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
-                                                   entity.GetComponent<MarketItemGroupComponent>()
-                                                       .Key ==
-                                                   marketEntity.Id);
+                                                   entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
 
     public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>()
-                                    .Key ==
-                                marketEntity.Id;
+        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;
 
         return marketEntity.TemplateAccessor!.Template switch {
             UserEntityTemplate => marketEntity,
@@ -495,9 +491,7 @@ public static class GlobalEntities {
     }
 
     public static IEntity GetMarketEntity(this IEntity userEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.Id ==
-                                userEntity.GetComponent<MarketItemGroupComponent>()
-                                    .Key;
+        predicate ??= entity => entity.Id == userEntity.GetComponent<MarketItemGroupComponent>().Key;
 
         return userEntity.TemplateAccessor!.Template switch {
             MarketEntityTemplate => userEntity,
@@ -545,7 +539,6 @@ public static class GlobalEntities {
             }*/
 
             ItemsAutoIncreasePriceComponent increasePriceComponent = ConfigManager.GetComponent<ItemsAutoIncreasePriceComponent>(configPath);
-
             configPrice += CalculateAdditionalPrice(increasePriceComponent, count);
         }
 
@@ -553,8 +546,7 @@ public static class GlobalEntities {
 
         bool crystalsEnough = (forXCrystals
                                   ? connection.Player.XCrystals
-                                  : connection.Player.Crystals) >=
-                              price;
+                                  : connection.Player.Crystals) >= price;
 
         return crystalsEnough &&
                (forXCrystals ||
@@ -571,14 +563,11 @@ public static class GlobalEntities {
         if (itemCount <= increasePrice.StartCount)
             return 0;
 
-        long num = itemCount - increasePrice.StartCount;
-        int num2 = (int)num * increasePrice.PriceIncreaseAmount;
-        int maxAdditionalPrice = increasePrice.MaxAdditionalPrice;
+        int currentItem = itemCount - increasePrice.StartCount;
+        int additionalPrice = currentItem * increasePrice.PriceIncreaseAmount;
 
-        if (maxAdditionalPrice <= 0 ||
-            num2 < maxAdditionalPrice)
-            return num2;
-
-        return maxAdditionalPrice;
+        return increasePrice.MaxAdditionalPrice <= 0
+            ? additionalPrice
+            : Math.Min(additionalPrice, increasePrice.MaxAdditionalPrice);
     }
 }

@@ -9,7 +9,7 @@ static class Embeds {
                 .AddEmbed(embed)
                 .AsEphemeral(ephemeral));
 
-    public static DiscordEmbedBuilder AddFields(this DiscordEmbedBuilder builder, params (string name, string value, bool inline)[] fields) {
+    public static DiscordEmbedBuilder AddFields(this DiscordEmbedBuilder builder, params IEnumerable<(string name, string value, bool inline)> fields) {
         foreach ((string name, string value, bool inline) in fields)
             builder.AddField(name, value, inline);
 

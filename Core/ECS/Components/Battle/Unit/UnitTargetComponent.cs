@@ -1,5 +1,6 @@
-using Vint.Core.Battles.Effects;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -12,7 +13,12 @@ public class UnitTargetComponent : IComponent {
     public IEntity TargetIncarnation { get; private set; } = null!;
 
     public Task Added(IPlayerConnection connection, IEntity entity) {
-        switch (GetEffect(connection, entity)) {
+        if (!connection.InLobby || !connection.LobbyPlayer.InRound)
+            return Task.CompletedTask;
+
+        Tanker tanker = connection.LobbyPlayer.Tanker;
+
+        switch (GetEffect(tanker, entity)) {
             case DroneEffect drone:
                 DroneAdded(drone);
                 break;
@@ -26,7 +32,12 @@ public class UnitTargetComponent : IComponent {
     }
 
     public Task Removed(IPlayerConnection connection, IEntity entity) {
-        switch (GetEffect(connection, entity)) {
+        if (!connection.InLobby || !connection.LobbyPlayer.InRound)
+            return Task.CompletedTask;
+
+        Tanker tanker = connection.LobbyPlayer.Tanker;
+
+        switch (GetEffect(tanker, entity)) {
             case SpiderMineEffect spider:
                 SpiderRemoved(spider);
                 break;
@@ -44,8 +55,8 @@ public class UnitTargetComponent : IComponent {
     static void SpiderRemoved(SpiderMineEffect effect) =>
         effect.State = SpiderState.Idling;
 
-    static WeaponEffect? GetEffect(IPlayerConnection connection, IEntity entity) =>
-        connection.BattlePlayer?.Tank?.Effects
+    static WeaponEffect GetEffect(Tanker tanker, IEntity entity) =>
+        tanker.Tank.Effects
             .OfType<WeaponEffect>()
             .Single(effect => effect.Entity == entity);
 }

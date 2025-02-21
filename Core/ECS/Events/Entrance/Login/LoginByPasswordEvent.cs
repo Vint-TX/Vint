@@ -18,7 +18,7 @@ public class LoginByPasswordEvent(
     public string HardwareFingerprint { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (connection.IsOnline) return;
+        if (connection.IsLoggedIn) return;
 
         Punishment? ban = await connection.Player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
 
@@ -39,7 +39,7 @@ public class LoginByPasswordEvent(
         List<IPlayerConnection> connections = server
             .PlayerConnections
             .Values
-            .Where(player => player.IsOnline && player.Player.Id == connection.Player.Id)
+            .Where(player => player.IsLoggedIn && player.Player.Id == connection.Player.Id)
             .ToList();
 
         if (connections.Count != 0) {

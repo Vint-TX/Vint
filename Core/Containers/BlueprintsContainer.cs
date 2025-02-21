@@ -83,9 +83,7 @@ public class BlueprintsContainer : Container {
     }
 
     async IAsyncEnumerable<IEntity> SaveRewards(IPlayerConnection connection, Dictionary<IEntity, int> entityToAmount) {
-        foreach ((IEntity marketItem, int amount) in entityToAmount
-                     .ToList()
-                     .Shuffle()) {
+        foreach ((IEntity marketItem, int amount) in entityToAmount.ToList().Shuffle()) {
             await connection.PurchaseItem(marketItem, amount, 0, false, false);
             yield return new NewItemNotificationTemplate().CreateCard(MarketItem, marketItem, amount);
         }

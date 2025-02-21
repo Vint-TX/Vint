@@ -13,7 +13,7 @@ public class RejectFriendEvent(
 ) : FriendBaseEvent, IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
-        Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == User.Id);
+        Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == User);
 
         if (player == null) return;
 
@@ -37,10 +37,10 @@ public class RejectFriendEvent(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 
         if (targetConnection != null)
-            await targetConnection.Send(new OutgoingFriendRemovedEvent(connection.Player.Id), User);
+            await targetConnection.Send(new OutgoingFriendRemovedEvent(connection.Player.Id), UserContainer.Entity);
     }
 }

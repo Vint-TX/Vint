@@ -12,8 +12,6 @@ public sealed class ProtocolBuffer(
 ) : IAsyncDisposable, IDisposable {
     public ProtocolBuffer(IPlayerConnection connection) : this(new MemoryStream(), new OptionalMap(), connection) { }
 
-    bool _disposed;
-
     public MemoryStream Stream { get; } = stream;
     public OptionalMap OptionalMap { get; } = optionalMap;
     public IPlayerConnection Connection { get; } = connection;
@@ -102,15 +100,11 @@ public sealed class ProtocolBuffer(
     }
 
     void Dispose(bool disposing) {
-        if (_disposed) return;
-
         if (disposing) {
             Reader.Dispose();
             Writer.Dispose();
             Stream.Dispose();
         }
-
-        _disposed = true;
     }
 
     async ValueTask DisposeAsyncCore() {

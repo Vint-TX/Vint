@@ -41,7 +41,6 @@ public class DroppedItem(
             field ??= GlobalEntities.GetEntity(marketEntityType, marketEntityName);
             return field;
         }
-        private set;
     }
 
     public int Amount { get; private set; } = amount;

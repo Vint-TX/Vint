@@ -1,9 +1,9 @@
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Vint.Core.Battles;
-using Vint.Core.Battles.Tank;
-using Vint.Core.Battles.Type;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -33,12 +33,9 @@ public class QuestManager {
     public async Task<List<Quest>> SetupQuests(IPlayerConnection connection, bool deleteAllUncompleted) {
         List<Quest> quests = await GetCurrentQuests(connection.Player.Id, deleteAllUncompleted);
 
-        List<IEntity> removedEntities = connection
-            .SharedEntities
+        List<IEntity> removedEntities = connection.SharedEntities
             .Where(entity => entity.HasComponent<QuestComponent>() && entity.HasComponent<SlotIndexComponent>())
-            .DistinctBy(entity => quests.Any(quest => quest.Index ==
-                                                      entity.GetComponent<SlotIndexComponent>()
-                                                          .Index))
+            .DistinctBy(entity => quests.Any(quest => quest.Index == entity.GetComponent<SlotIndexComponent>().Index))
             .ToList();
 
         await connection.Unshare(removedEntities);
@@ -75,14 +72,13 @@ public class QuestManager {
 
         GameServer server = ServiceProvider.GetRequiredService<GameServer>();
 
-        foreach (IPlayerConnection connection in server.PlayerConnections.Values.Where(conn => conn.IsOnline)) {
+        foreach (IPlayerConnection connection in server.PlayerConnections.Values.Where(conn => conn.IsLoggedIn)) {
             try {
                 await SetupQuests(connection, true);
 
                 DateTimeOffset now = DateTimeOffset.UtcNow;
 
-                await db
-                    .Players
+                await db.Players
                     .Where(player => player.Id == connection.Player.Id)
                     .Set(player => player.LastQuestUpdateTime, now)
                     .UpdateAsync();
@@ -99,30 +95,23 @@ public class QuestManager {
         Logger.Warning("Quests have been updated");
     }
 
-    public async Task BattleFinished(IPlayerConnection connection, bool hasEnemies) {
-        if (!hasEnemies ||
-            !connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Battle.TypeHandler is not MatchmakingHandler) return;
-
-        BattleTank tank = connection.BattlePlayer.Tank!;
-        Battle battle = tank.Battle;
-        Preset preset = connection.Player.CurrentPreset;
+    public async Task BattleFinished(Tanker tanker) {
+        IPlayerConnection connection = tanker.Connection;
+        Player player = connection.Player;
+        Preset preset = player.CurrentPreset;
+        BattleTank tank = tanker.Tank;
+        Round round = tanker.Round;
 
         await using DbConnection db = new();
-
-        List<Quest> quests = await db
-            .Quests
-            .Where(quest => quest.PlayerId == connection.Player.Id)
+        List<Quest> quests = await db.Quests
+            .Where(quest => quest.PlayerId == player.Id)
             .ToListAsync();
 
         foreach (Quest quest in quests.Where(quest => !quest.IsCompleted &&
-                                                      quest.ConditionMet(preset.Weapon, preset.Hull, battle.Properties.BattleMode))) {
+                                                      quest.ConditionMet(preset.Weapon, preset.Hull, round.Properties.BattleMode))) {
             IEntity? entity = connection.SharedEntities.SingleOrDefault(entity => entity.HasComponent<QuestComponent>() &&
                                                                                   entity.HasComponent<SlotIndexComponent>() &&
-                                                                                  entity.GetComponent<SlotIndexComponent>()
-                                                                                      .Index ==
-                                                                                  quest.Index);
+                                                                                  entity.GetComponent<SlotIndexComponent>().Index == quest.Index);
 
             if (entity == null) continue;
 
@@ -130,11 +119,9 @@ public class QuestManager {
                 QuestType.Battles => 1,
                 QuestType.Flags => tank.Result.Flags,
                 QuestType.Frags => tank.Result.Kills,
-                QuestType.Scores => tank.Result.Score,
+                QuestType.Scores => tank.Tanker.GetScoreWithBonus(tank.Result.ScoreWithoutPremium),
                 QuestType.Supply => tank.Result.BonusesTaken,
-                QuestType.Victories => tank.BattlePlayer.TeamBattleResult == TeamBattleResult.Win
-                    ? 1
-                    : 0,
+                QuestType.Victories => tank.Tanker.TeamResult == TeamBattleResult.Win ? 1 : 0,
                 _ => 0
             };
 
@@ -152,15 +139,11 @@ public class QuestManager {
 
     public async Task ChangeQuest(IPlayerConnection connection, IEntity questEntity) {
         await using DbConnection db = new();
-
-        List<Quest> quests = await db
-            .Quests
+        List<Quest> quests = await db.Quests
             .Where(quest => quest.PlayerId == connection.Player.Id)
             .ToListAsync();
 
-        Quest? quest = quests.SingleOrDefault(quest => quest.Index ==
-                                                       questEntity.GetComponent<SlotIndexComponent>()
-                                                           .Index);
+        Quest? quest = quests.SingleOrDefault(quest => quest.Index == questEntity.GetComponent<SlotIndexComponent>().Index);
 
         if (quest == null) return;
 
@@ -179,9 +162,7 @@ public class QuestManager {
         player.QuestChangesResetTime = null;
 
         await using DbConnection db = new();
-
-        await db
-            .Players
+        await db.Players
             .Where(p => p.Id == player.Id)
             .Set(p => p.QuestChangesResetTime, player.QuestChangesResetTime)
             .Set(p => p.QuestChanges, player.QuestChanges)
@@ -209,7 +190,6 @@ public class QuestManager {
 
     void UpdateNextTime() {
         NextUpdate = DateTimeOffset.UtcNow + QuestsInfo.Updates.GetDurationToNextUpdate();
-
         Logger.Information("Quests will be updated on {Time}", NextUpdate);
     }
 
@@ -231,9 +211,7 @@ public class QuestManager {
 
     static async Task<List<Quest>> GetCurrentQuests(long playerId, bool deleteAllUncompleted) {
         await using DbConnection db = new();
-
-        List<Quest> quests = await db
-            .Quests
+        List<Quest> quests = await db.Quests
             .Where(quest => quest.PlayerId == playerId)
             .ToListAsync();
 
@@ -271,7 +249,7 @@ public class QuestManager {
             QuestType.Scores => new ScoreQuestTemplate(),
             QuestType.Supply => new SupplyQuestTemplate(),
             QuestType.Victories => new WinQuestTemplate(),
-            _ => throw new ArgumentOutOfRangeException(nameof(type))
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
     static Quest GenerateQuest(Player player, int index, bool canBeRare, bool canBeCondition, IEnumerable<QuestType> usedTypes) {
@@ -300,8 +278,7 @@ public class QuestManager {
     }
 
     static KeyValuePair<QuestType, QuestTypeInfo> GetRandomQuestInfo(IEnumerable<QuestType> usedTypes) =>
-        QuestsInfo
-            .Types
+        QuestsInfo.Types
             .Where(info => !usedTypes.Contains(info.Key))
             .ToList()
             .Shuffle()
@@ -359,8 +336,7 @@ public class QuestManager {
         withCondition ? QuestRarityType.Condition : isRare ? QuestRarityType.Rare : QuestRarityType.Common;
 
     static QuestRewardInfo GetRandomReward(QuestRewardType rewardType) =>
-        QuestsInfo
-            .Rewards[rewardType]
+        QuestsInfo.Rewards[rewardType]
             .Shuffle()
             .First();
 }

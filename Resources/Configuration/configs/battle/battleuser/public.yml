@@ -8,5 +8,7 @@ upsideDownConfig:
   maxRankForMessage: 6
 selfDestructionConfig:
   suicideDurationTime: 5
+reservationConfig:
+  reservationDurationTimeSec: 120
 userDowngradeConfig:
   downgradeXPRatio: 0.33

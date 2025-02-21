@@ -85,14 +85,9 @@ public class Entity : IEntity {
             component = GroupComponentRegistry.FindOrRegisterGroup(groupComponent);
 
         ComponentStorage.AddComponent(component);
+        Logger.Debug("Added {Name} component to the {Entity}", component.GetType().Name, this);
 
-        Logger.Debug("Added {Name} component to the {Entity}",
-            component.GetType()
-                .Name,
-            this);
-
-        foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            await playerConnection.Send(new ComponentAddCommand { Entity = this, Component = component });
+        await SharedPlayers.Where(pc => pc != excluded).Send(new ComponentAddCommand { Entity = this, Component = component });
     }
 
     public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() =>
@@ -146,14 +141,9 @@ public class Entity : IEntity {
 
     public async Task ChangeComponent(IComponent component, IPlayerConnection? excluded) {
         ComponentStorage.ChangeComponent(component);
+        Logger.Debug("Changed {Name} component in the {Entity}", component.GetType().Name, this);
 
-        Logger.Debug("Changed {Name} component in the {Entity}",
-            component.GetType()
-                .Name,
-            this);
-
-        foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            await playerConnection.Send(new ComponentChangeCommand { Entity = this, Component = component });
+        await SharedPlayers.Where(pc => pc != excluded).Send(new ComponentChangeCommand { Entity = this, Component = component });
     }
 
     public Task RemoveComponent<T>(IPlayerConnection? excluded) where T : class, IComponent =>
@@ -166,8 +156,7 @@ public class Entity : IEntity {
         ComponentStorage.RemoveComponent(type);
         Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
-        foreach (IPlayerConnection playerConnection in SharedPlayers.Where(pc => pc != excluded))
-            await playerConnection.Send(new ComponentRemoveCommand { Entity = this, Component = type });
+        await SharedPlayers.Where(pc => pc != excluded).Send(new ComponentRemoveCommand { Entity = this, Component = type });
     }
 
     public override string ToString() => $"Entity {{ " +

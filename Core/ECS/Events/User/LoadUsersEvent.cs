@@ -18,22 +18,21 @@ public class LoadUsersEvent(
         await using DbConnection db = new();
 
         List<IPlayerConnection> playerConnections = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .ToList();
 
         foreach (long userId in UsersId) {
-            if (UserRegistry.TryGetContainer(userId, out UserContainer? container)) {
-                await connection.ShareIfUnshared(container.Entity);
-                continue;
+            if (!UserRegistry.TryGetContainer(userId, out UserContainer? container)) {
+                Player? player = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)?.Player ??
+                                 await db.Players.SingleOrDefaultAsync(player => player.Id == userId);
+
+                if (player == null)
+                    throw new InvalidOperationException($"Player {userId} not found");
+
+                container = UserRegistry.GetOrCreateContainer(userId, player);
             }
 
-            Player? player = playerConnections.SingleOrDefault(conn => conn.Player.Id == userId)?.Player ??
-                             await db.Players.SingleOrDefaultAsync(player => player.Id == userId);
-
-            if (player == null)
-                throw new InvalidOperationException($"Player {userId} not found");
-
-            await connection.ShareIfUnshared(UserRegistry.GetOrCreateContainer(userId, player).Entity);
+            await container.ShareTo(connection);
         }
 
         await connection.Send(new UsersLoadedEvent(RequestEntityId));

@@ -26,6 +26,7 @@ public static class PhysicsUtils {
                                                                                    point.Z < center.Z + size.Z / 2;
 
     public static bool IsOutsideMap(IEnumerable<PuntativeGeometry> puntativeGeometries, Vector3 position, Vector3 velocity, bool killZonesEnabled) =>
+        !IsValidVector3(position) ||
         CheckOverflow(position + velocity) ||
         killZonesEnabled && puntativeGeometries.Any(geometry => IsInsideBox(position, geometry.Position, geometry.Size));
 }

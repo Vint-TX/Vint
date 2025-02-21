@@ -24,10 +24,10 @@ public class LoadSortedFriendsIdsWithNicknamesEvent(
                 relation.Id,
                 relation.Username,
                 IsOnline = connections
-                    .Where(conn => conn.IsOnline)
+                    .Where(conn => conn.IsLoggedIn)
                     .Any(conn => conn.Player.Id == relation.Id),
                 InLobby = connections
-                    .Where(conn => conn is { IsOnline: true, InLobby: true })
+                    .Where(conn => conn is { IsLoggedIn: true, InLobby: true })
                     .Any(conn => conn.Player.Id == relation.Id)
             })
             .OrderByDescending(player => player.IsOnline)

@@ -112,7 +112,6 @@ public static class ConfigManager {
 
             MapInfo mapInfo = JsonConvert.DeserializeObject<MapInfo>(await File.ReadAllTextAsync(mapInfoPath));
             mapInfo.Name = mapName;
-
             mapInfo.Init();
 
             mapInfos.Add(mapInfo);
@@ -278,13 +277,8 @@ public static class ConfigManager {
                     entityId = EntityRegistry.GenerateId();
 
                 JArray templateComponents = jToken["template"]!.ToObject<JArray>()!;
-
-                string templateName = templateComponents[0]
-                    .ToObject<string>()!;
-
-                string configPath = templateComponents[1]
-                    .ToObject<string>()!;
-
+                string templateName = templateComponents[0].ToObject<string>()!;
+                string configPath = templateComponents[1].ToObject<string>()!;
                 JObject rawComponents = jToken["components"]!.ToObject<JObject>()!;
 
                 List<IComponent> components = new(rawComponents.Count);
@@ -302,8 +296,7 @@ public static class ConfigManager {
                         .Select(ctorParameter => {
                             JToken? rawComponentProperty = rawComponentProperties![ctorParameter.Name!];
 
-                            if (rawComponentProperty == null &&
-                                ctorParameter.HasDefaultValue)
+                            if (rawComponentProperty == null && ctorParameter.HasDefaultValue)
                                 return ctorParameter.DefaultValue;
 
                             return rawComponentProperty?.ToObject(ctorParameter.ParameterType);
@@ -396,7 +389,7 @@ public static class ConfigManager {
         Root.Children.SelectMany(child => child.Value.Entities.Values.Select(entity => entity.Clone()));
 
     public static T GetComponent<T>(string path) where T : class, IComponent =>
-        GetComponentOrNull<T>(path)!;
+        GetComponentOrNull<T>(path) ?? throw new KeyNotFoundException($"Component of type {typeof(T)} not found at path {path}");
 
     public static T? GetComponentOrNull<T>(string path) where T : class, IComponent {
         ConfigNode? node = GetNode(path);

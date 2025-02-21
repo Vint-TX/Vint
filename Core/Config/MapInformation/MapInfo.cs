@@ -1,7 +1,7 @@
 using System.Numerics;
 using BepuPhysics.Collidables;
 using SharpGLTF.Schema2;
-using Vint.Core.Battles;
+using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Config.MapInformation;
 
@@ -18,13 +18,12 @@ public record struct MapInfo(
 ) {
     static Vector3 GltfToUnity { get; } = new(-1, 1, 1);
 
-    Lock Lock { get; set; } = null!;
     string ConfigPath { get; set; } = null!;
-    Triangle[]? Triangles { get; set; }
+    public Lazy<Triangle[]> Triangles { get; private set; }
 
     public void Init() {
-        Lock = new Lock();
         ConfigPath = Path.Combine(ConfigManager.ResourcesPath, "Maps", Name);
+        Triangles = new Lazy<Triangle[]>(GetTriangles, LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     public bool HasSpawnPoints(BattleMode mode) => mode switch {
@@ -34,7 +33,9 @@ public record struct MapInfo(
         _ => false
     };
 
-    public void InitializeDefaultSpawnPoints(BattleMode mode) {
+    public void InitDefaultSpawnPointsIfAbsent(BattleMode mode) {
+        if (HasSpawnPoints(mode)) return;
+
         switch (mode) {
             case BattleMode.DM:
                 SpawnPoints = SpawnPoints with { Deathmatch = [new SpawnPoint()] };
@@ -62,29 +63,19 @@ public record struct MapInfo(
         }
     }
 
-    public Triangle[] GetTriangles() {
-        if (Triangles != null)
-            return Triangles;
+    Triangle[] GetTriangles() {
+        string mapModelPath = Path.Combine(ConfigPath, "model.glb");
+        ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
 
-        lock (Lock) {
-            if (Triangles != null)
-                return Triangles;
+        Triangle[] triangles = mapRoot
+            .DefaultScene // todo create a mesh immediately instead of store list of triangles
+            .EvaluateTriangles()
+            .Select(tuple => new Triangle(
+                tuple.A.GetGeometry().GetPosition() * GltfToUnity,
+                tuple.B.GetGeometry().GetPosition() * GltfToUnity,
+                tuple.C.GetGeometry().GetPosition() * GltfToUnity))
+            .ToArray();
 
-            string mapModelPath = Path.Combine(ConfigPath, "model.glb");
-            ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
-
-            Triangle[] triangles = mapRoot
-                .DefaultScene // todo create a mesh immediately instead of store list of triangles
-                .EvaluateTriangles()
-                .Select(tuple => new Triangle(
-                    tuple.A.GetGeometry().GetPosition() * GltfToUnity,
-                    tuple.B.GetGeometry().GetPosition() * GltfToUnity,
-                    tuple.C.GetGeometry().GetPosition() * GltfToUnity))
-                .ToArray();
-
-            Triangles = triangles;
-        }
-
-        return Triangles;
+        return triangles;
     }
 }

@@ -1,4 +1,4 @@
-using Vint.Core.Battles;
+using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -6,7 +6,7 @@ namespace Vint.Core.ECS.Templates.Battle;
 
 [ProtocolId(1498569137147)]
 public class ClientBattleParamsComponent(
-    BattleProperties properties
+    ClientBattleParams clientParams
 ) : IComponent {
-    public BattleProperties Params { get; private set; } = properties;
+    public ClientBattleParams Params { get; private set; } = clientParams;
 }

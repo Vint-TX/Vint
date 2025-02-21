@@ -125,5 +125,7 @@ public sealed class SerilogLogger : Swan.Logging.ILogger {
         }
     }
 
-    public void Dispose() { }
+    public void Dispose() {
+        SourceToLogger.Clear();
+    }
 }

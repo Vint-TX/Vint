@@ -8,11 +8,10 @@ namespace Vint.Core.ECS.Templates.Battle;
 
 [ProtocolId(1429761302402)]
 public class TeamTemplate : EntityTemplate {
-    public IEntity Create(TeamColor teamColor, IEntity battle) => Entity(null,
+    public IEntity Create(TeamColor teamColor) => Entity(null,
         builder => builder
             .AddComponent<TeamComponent>()
             .AddComponent(new TeamScoreComponent())
             .AddComponent(new TeamColorComponent(teamColor))
-            .AddGroupComponent<BattleGroupComponent>(battle)
             .AddGroupComponent<TeamGroupComponent>());
 }

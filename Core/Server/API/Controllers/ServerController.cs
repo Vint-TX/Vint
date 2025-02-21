@@ -1,6 +1,6 @@
 using EmbedIO;
 using EmbedIO.WebApi;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
 using Vint.Core.Config;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server.API.Attributes.Methods;
@@ -11,19 +11,19 @@ namespace Vint.Core.Server.API.Controllers;
 
 public class ServerController(
     GameServer server,
-    IBattleProcessor battleProcessor
+    LobbyProcessor lobbyProcessor
 ) : WebApiController {
     [Get("/count")]
     public CountDTO GetCount() {
         IPlayerConnection[] connections = server.PlayerConnections.Values.ToArray();
-        Dictionary<BattleType, int> battles = battleProcessor.Battles
-            .GroupBy(battle => battle.Type)
+        Dictionary<BattleType, int> battles = lobbyProcessor.Lobbies
+            .GroupBy(battle => battle.Properties.Type)
             .ToDictionary(g => g.Key, g => g.Count());
 
         int connectionsCount = connections.Length;
-        int playersCount = connections.Count(connection => connection.IsOnline);
+        int playersCount = connections.Count(connection => connection.IsLoggedIn);
 
-        int matchmakingCount = battles.GetValueOrDefault(BattleType.MatchMaking, 0);
+        int matchmakingCount = battles.GetValueOrDefault(BattleType.Rating, 0);
         int arcadeCount = battles.GetValueOrDefault(BattleType.Arcade, 0);
         int customCount = battles.GetValueOrDefault(BattleType.Custom, 0);
 

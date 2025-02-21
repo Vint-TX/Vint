@@ -18,7 +18,7 @@ public class AutoLoginUserEvent(
     public string HardwareFingerprint { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (connection.IsOnline) return;
+        if (connection.IsLoggedIn) return;
 
         ILogger logger = connection.Logger.ForType<AutoLoginUserEvent>();
         logger.Warning("Autologin '{Username}'", Username);
@@ -37,7 +37,7 @@ public class AutoLoginUserEvent(
         }
 
         Punishment? ban = await player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
-        int connections = server.PlayerConnections.Values.Count(conn => conn.IsOnline && conn.Player.Username == Username);
+        int connections = server.PlayerConnections.Values.Count(conn => conn.IsLoggedIn && conn.Player.Username == Username);
 
         if (!player.RememberMe ||
             connections != 0 ||

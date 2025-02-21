@@ -1,8 +1,10 @@
 ﻿using System.Buffers;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Reflection;
 using JetBrains.Annotations;
 using Vint.Core.ECS.Components;
+using Vint.Core.ECS.Enums;
 using Vint.Core.Exceptions;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -41,29 +43,17 @@ public static class Extensions {
         ArrayPool<byte>.Shared.Return(buffer);
     }
 
-    public static List<T> Shuffle<T>(this List<T> list) {
-        int n = list.Count;
-
-        while (n > 1) {
-            n--;
-            int k = Random.Shared.Next(n + 1);
-            (list[k], list[n]) = (list[n], list[k]);
+    public static TList Shuffle<TList>(this TList list) where TList : IList {
+        for (int i = list.Count - 1; i > 0; i--) {
+            int n = Random.Shared.Next(i + 1);
+            (list[i], list[n]) = (list[n], list[i]);
         }
 
         return list;
     }
 
-    public static T[] Shuffle<T>(this T[] list) {
-        int n = list.Length;
-
-        while (n > 1) {
-            n--;
-            int k = Random.Shared.Next(n + 1);
-            (list[k], list[n]) = (list[n], list[k]);
-        }
-
-        return list;
-    }
+    public static TElement RandomElement<TElement>(this IList<TElement> list) =>
+        list[Random.Shared.Next(list.Count)];
 
     public static bool IsNullable(this PropertyInfo property) {
         if (NullabilityPool.TryGetValue(property, out bool isNullable))
@@ -77,18 +67,15 @@ public static class Extensions {
     }
 
     public static bool IsList(this Type type) => type.IsGenericType &&
-                                                 type
-                                                     .GetGenericTypeDefinition()
+                                                 type.GetGenericTypeDefinition()
                                                      .IsAssignableFrom(typeof(List<>));
 
     public static bool IsDictionary(this Type type) => type.IsGenericType &&
-                                                       type
-                                                           .GetGenericTypeDefinition()
+                                                       type.GetGenericTypeDefinition()
                                                            .IsAssignableFrom(typeof(Dictionary<,>));
 
     public static bool IsHashSet(this Type type) => type.IsGenericType &&
-                                                    type
-                                                        .GetGenericTypeDefinition()
+                                                    type.GetGenericTypeDefinition()
                                                         .IsAssignableFrom(typeof(HashSet<>));
 
     public static string ToString<T>(this IEnumerable<T> enumerable, bool extended) {
@@ -98,13 +85,6 @@ public static class Extensions {
             ? "Empty"
             : string.Join(", ", list.Select(obj => extended ? $"{obj}" : obj!.GetType().Name));
     }
-
-    public static Task Catch(this Task task) => task.ContinueWith(t => t.Exception!
-            .Flatten()
-            .InnerExceptions
-            .ToList()
-            .ForEach(Console.Error.WriteLine),
-        TaskContinuationOptions.OnlyOnFaulted);
 
     public static T? SingleOrDefaultSafe<T>(this IEnumerable<T> enumerable, T? defaultValue = default) {
         try {
@@ -146,4 +126,9 @@ public static class Extensions {
     [LinqTunnel]
     public static bool HasDuplicatesBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector) =>
         HasDuplicates(source.Select(selector));
+
+    public static bool IsTeamMode(this BattleMode mode) => mode is
+        BattleMode.TDM or
+        BattleMode.CTF or
+        BattleMode.CP;
 }

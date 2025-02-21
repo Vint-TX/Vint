@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
 using Vint.Core.Discord;
 using Vint.Core.Quests;
 using Vint.Core.Utils;
@@ -14,9 +14,7 @@ public class GameServer(
     IServiceProvider serviceProvider,
     DiscordBot discordBot,
     QuestManager questManager,
-    IBattleProcessor battleProcessor,
-    IArcadeProcessor arcadeProcessor,
-    IMatchmakingProcessor matchmakingProcessor
+    LobbyProcessor lobbyProcessor
 ) {
     public const ushort Port = 5050;
     int _lastClientId = -1;
@@ -75,10 +73,7 @@ public class GameServer(
     }
 
     async Task Update() {
-        matchmakingProcessor.Tick();
-        arcadeProcessor.Tick();
-
-        await battleProcessor.Tick(DeltaTime);
+        await lobbyProcessor.Tick(DeltaTime);
         await TickPlayers();
 
         await questManager.Tick();

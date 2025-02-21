@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Stream;
 using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
@@ -9,9 +9,9 @@ namespace Vint.Core.ECS.Templates.Battle.Weapon;
 
 [ProtocolId(-3936735916503799349)]
 public class VulcanBattleItemTemplate : StreamWeaponTemplate {
-    public IEntity Create(IEntity tank, BattlePlayer battlePlayer) {
+    public IEntity Create(IEntity tank, Tanker tanker) {
         const string configPath = "garage/weapon/vulcan";
-        IEntity entity = Create(configPath, tank, battlePlayer);
+        IEntity entity = Create(configPath, tank, tanker);
 
         entity.AddComponent<VulcanComponent>();
         entity.AddComponent<StreamHitConfigComponent>("battle/weapon/vulcan");

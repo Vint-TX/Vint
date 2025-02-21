@@ -17,10 +17,8 @@ public class EntityComponentStorage {
     IEntity Entity { get; }
     ConcurrentDictionary<Type, ComponentWithIndex> TypeToComponent { get; }
 
-    public IEnumerable<IComponent> SortedComponents => TypeToComponent
-        .Values
-        .OrderBy(c => c.Index)
-        .Select(c => c.Component);
+    public IEnumerable<IComponent> SortedComponents => TypeToComponent.Values.OrderBy(c => c.Index).Select(c => c.Component);
+
     public IEnumerable<IComponent> Components => TypeToComponent.Values.Select(c => c.Component);
 
     int GenerateIndex() => Interlocked.Increment(ref _lastIndex);
@@ -61,13 +59,10 @@ public class EntityComponentStorage {
             throw new ComponentNotFoundException(Entity, componentType);
     }
 
-    readonly struct ComponentWithIndex(
-        IComponent component,
-        int index
-    ) {
-        public IComponent Component { get; } = component;
-        public int Index { get; } = index;
-    }
+    readonly record struct ComponentWithIndex(
+        IComponent Component,
+        int Index
+    );
 }
 
 public class ComponentAlreadyExistsInEntityException(

@@ -16,7 +16,7 @@ public class RequestChangeQuestEvent(
     QuestManager questManager
 ) : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.IsOnline) return;
+        if (!connection.IsLoggedIn) return;
 
         Player player = connection.Player;
         IEntity bonus = entities[0];

@@ -1,11 +1,9 @@
 using System.Numerics;
-using Vint.Core.Battles.Flags;
-using Vint.Core.Battles.Mode;
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.States;
-using Vint.Core.Battles.Tank;
-using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Flags;
+using Vint.Core.Battle.Mode.Team.Impl;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game;
@@ -16,50 +14,47 @@ namespace Vint.Core.ECS.Events.Battle.Flag;
 [ProtocolId(1463741053998)]
 public class FlagCollisionRequestEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby) return;
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+        Round round = tanker?.Round!;
 
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        Battles.Battle battle = battlePlayer.Battle;
+        if (tanker?.Tank.StateManager.CurrentState is not Active ||
+            round.StateManager.CurrentState is not Running ||
+            round.ModeHandler is not CTFHandler ctf) return;
 
-        if (!battlePlayer.InBattleAsTank ||
-            battlePlayer.Tank!.StateManager.CurrentState is not Active ||
-            battle.StateManager.CurrentState is not Running ||
-            battle.ModeHandler is not CTFHandler ctf) return;
-
-        IEntity tankEntity = entities[0];
         IEntity flagEntity = entities[1];
+        Core.Battle.Flags.Flag flag = ctf.Flags.Values.Single(flag => flag.Entity == flagEntity);
 
-        Battles.Flags.Flag collisionFlag = ctf.Flags.Single(flag => flag.Entity == flagEntity);
-        Battles.Flags.Flag oppositeFlag = ctf.Flags.Single(flag => flag != collisionFlag);
-
-        TeamColor tankTeamColor = battlePlayer.PlayerConnection.UserContainer.Entity.GetComponent<TeamColorComponent>().TeamColor;
-        TeamColor flagTeamColor = collisionFlag.TeamColor;
+        TeamColor tankTeamColor = tanker.TeamColor;
+        TeamColor flagTeamColor = flag.TeamColor;
         bool isAllyFlag = tankTeamColor == flagTeamColor;
 
-        switch (collisionFlag.StateManager.CurrentState) {
-            case OnPedestal: {
-                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.PedestalPosition) > 5) return;
+        switch (flag.StateManager.CurrentState) {
+            case OnPedestal onPedestal: {
+                if (Vector3.Distance(tanker.Tank.Position, flag.PedestalPosition) > 5) return;
 
                 if (isAllyFlag) {
-                    if (oppositeFlag.StateManager.CurrentState is not Captured ||
-                        !oppositeFlag.Entity.HasComponent<TankGroupComponent>() ||
-                        oppositeFlag.Entity.GetComponent<TankGroupComponent>().Key != tankEntity.Id)
-                        return;
-
-                    await oppositeFlag.Deliver(battlePlayer);
-                } else await collisionFlag.Capture(battlePlayer);
+                    Core.Battle.Flags.Flag oppositeFlag = ctf.Flags.Values.Single(f => f != flag);
+                    await TryDeliver(oppositeFlag, tanker);
+                } else await onPedestal.Capture(tanker);
 
                 break;
             }
 
-            case OnGround: {
-                if (Vector3.Distance(battlePlayer.Tank!.Position, collisionFlag.Position) > 5) return;
+            case OnGround onGround: {
+                if (Vector3.Distance(tanker.Tank.Position, flag.Position) > 5) return;
 
-                if (isAllyFlag) await collisionFlag.Return(battlePlayer);
-                else await collisionFlag.Pickup(battlePlayer);
+                if (isAllyFlag) await onGround.Return(tanker);
+                else await onGround.Pickup(tanker);
 
                 break;
             }
         }
+    }
+
+    static async Task TryDeliver(Core.Battle.Flags.Flag flag, Tanker tanker) {
+        if (flag.StateManager.CurrentState is not Captured captured || captured.Carrier != tanker)
+            return;
+
+        await captured.Deliver();
     }
 }

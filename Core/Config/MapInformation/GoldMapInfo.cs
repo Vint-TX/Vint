@@ -3,7 +3,8 @@ using Vint.Core.ECS.Entities;
 namespace Vint.Core.Config.MapInformation;
 
 public readonly record struct GoldMapInfo(
-    double ProbabilityInTick,
+    double BaseThresholdDelta,
+    double DropProbability,
     Reward Reward
 );
 

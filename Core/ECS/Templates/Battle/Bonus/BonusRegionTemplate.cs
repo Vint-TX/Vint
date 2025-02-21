@@ -1,5 +1,5 @@
 using System.Numerics;
-using Vint.Core.Battles.Bonus;
+using Vint.Core.Battle.Bonus;
 using Vint.Core.ECS.Components.Battle.Bonus;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;

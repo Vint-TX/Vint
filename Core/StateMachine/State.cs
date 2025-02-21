@@ -2,7 +2,7 @@ namespace Vint.Core.StateMachine;
 
 public abstract class State {
     public abstract IStateManager StateManager { get; }
-    public bool IsFinished { get; protected set; }
+    public bool IsFinished { get; private set; }
 
     public virtual Task Start() => Task.FromResult(IsFinished = false);
 

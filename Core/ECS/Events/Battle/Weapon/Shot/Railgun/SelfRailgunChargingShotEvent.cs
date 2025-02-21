@@ -1,27 +1,30 @@
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Shot.Railgun;
 
 [ProtocolId(4963057750170414217)]
 public class SelfRailgunChargingShotEvent : RailgunChargingShotEvent, IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.WeaponHandler is not RailgunWeaponHandler)
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+
+        if (tanker?.Tank.WeaponHandler is not RailgunWeaponHandler)
             return;
 
-        IEntity weapon = entities.Single();
-        Battles.Battle battle = connection.BattlePlayer.Battle;
+        IEntity weaponEntity = entities.Single();
+        Round round = tanker.Round;
 
-        RemoteRailgunChargingShotEvent serverEvent = new() { ClientTime = ClientTime };
+        RemoteRailgunChargingShotEvent remoteEvent = new() {
+            ClientTime = ClientTime
+        };
 
-        foreach (IPlayerConnection playerConnection in battle
-                     .Players
-                     .Where(player => player != connection.BattlePlayer)
-                     .Select(player => player.PlayerConnection))
-            await playerConnection.Send(serverEvent, weapon);
+        await round.Players
+            .Where(player => player != tanker)
+            .Send(remoteEvent, weaponEntity);
     }
 }

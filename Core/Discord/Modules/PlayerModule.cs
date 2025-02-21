@@ -3,7 +3,7 @@ using DSharpPlus.Commands;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
 using LinqToDB;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
@@ -33,17 +33,17 @@ public class PlayerModule(
         IPlayerConnection? connection = gameServer
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == player.Username);
 
         bool isOnline = connection != null;
 
-        Battle? battle = connection?.BattlePlayer?.Battle;
-        bool inBattle = battle != null;
+        LobbyBase? lobby = connection?.LobbyPlayer?.Lobby;
+        bool inBattle = lobby != null;
 
         string status = isOnline
             ? inBattle
-                ? $"In battle: {battle!.MapInfo.Name}, {battle.Properties.BattleMode}"
+                ? $"In battle: {lobby!.Properties.MapInfo.Name}, {lobby.Properties.BattleMode}"
                 : "Online"
             : "Offline";
 

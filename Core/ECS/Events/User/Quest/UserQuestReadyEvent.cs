@@ -16,7 +16,7 @@ public class UserQuestReadyEvent(
     QuestManager questManager
 ) : IServerEvent { // todo premium
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.IsOnline) return;
+        if (!connection.IsLoggedIn) return;
 
         Player player = connection.Player;
 
@@ -27,9 +27,7 @@ public class UserQuestReadyEvent(
 
         if (updateQuests) {
             await using DbConnection db = new();
-
-            await db
-                .Players
+            await db.Players
                 .Where(p => p.Id == player.Id)
                 .Set(p => p.LastQuestUpdateTime, DateTimeOffset.UtcNow)
                 .UpdateAsync();
@@ -44,16 +42,12 @@ public class UserQuestReadyEvent(
             }
         }
 
-        List<IEntity> questEntities = connection
-            .SharedEntities
+        List<IEntity> questEntities = connection.SharedEntities
             .Where(entity => entity.HasComponent<QuestComponent>() && entity.HasComponent<SlotIndexComponent>())
             .ToList();
 
         foreach (Database.Models.Quest quest in quests.Where(quest => quest.IsCompleted)) {
-            IEntity entity = questEntities.First(entity => entity.GetComponent<SlotIndexComponent>()
-                                                               .Index ==
-                                                           quest.Index);
-
+            IEntity entity = questEntities.First(entity => entity.GetComponent<SlotIndexComponent>().Index == quest.Index);
             connection.Schedule(quest.CompletedQuestChangeTime!.Value, async () => await questManager.ChangeQuest(connection, entity));
         }
 

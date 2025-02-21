@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Effect.Type;
 using Vint.Core.ECS.Components.Battle.Weapon;
@@ -11,14 +11,14 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1542270967570)]
 public class ExternalImpactEffectTemplate : EffectBaseTemplate {
     public IEntity Create(
-        BattlePlayer battlePlayer,
+        Tanker tanker,
         TimeSpan duration,
         bool canTargetTeammates,
         float impactForce,
         float minSplashDamagePercent,
         float radiusOfMaxSplashDamage,
         float radiusOfMinSplashDamage) {
-        IEntity entity = Create("battle/effect/externalimpact", battlePlayer, duration, true, true);
+        IEntity entity = Create("battle/effect/externalimpact", tanker, duration, true, true);
 
         entity.AddComponent<ExternalImpactEffectComponent>();
         entity.AddComponent<DiscreteWeaponComponent>();

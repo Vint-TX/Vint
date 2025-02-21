@@ -1,5 +1,5 @@
 using System.Numerics;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Effect.Type.Mine;
 using Vint.Core.ECS.Components.Battle.Weapon;
@@ -15,7 +15,7 @@ public class MineEffectTemplate : EffectBaseTemplate {
     protected virtual string ConfigPath => "battle/effect/mine";
 
     public IEntity Create(
-        BattlePlayer battlePlayer,
+        Tanker tanker,
         TimeSpan duration,
         Vector3 position,
         bool canTargetTeammates,
@@ -26,7 +26,7 @@ public class MineEffectTemplate : EffectBaseTemplate {
         float minSplashDamagePercent,
         float radiusOfMaxSplashDamage,
         float radiusOfMinSplashDamage) {
-        IEntity entity = Create(ConfigPath, battlePlayer, duration, true, true);
+        IEntity entity = Create(ConfigPath, tanker, duration, true, true);
 
         entity.AddComponent(new MineConfigComponent(beginHideDistance, hideRange));
         entity.AddComponent(new MineEffectTriggeringAreaComponent(triggeringArea));
@@ -38,7 +38,7 @@ public class MineEffectTemplate : EffectBaseTemplate {
 
         entity.AddComponent(new DamageWeakeningByDistanceComponent(minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage));
         entity.AddComponent<DiscreteWeaponComponent>();
-        entity.AddComponentFrom<UserGroupComponent>(battlePlayer.BattleUser);
+        entity.AddComponentFrom<UserGroupComponent>(tanker.BattleUser);
         return entity;
     }
 }

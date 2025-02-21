@@ -1,6 +1,5 @@
 using LinqToDB;
-using Vint.Core.Battles;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -25,7 +24,7 @@ public class ModeratorModule(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -34,11 +33,11 @@ public class ModeratorModule(
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -91,7 +90,7 @@ public class ModeratorModule(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -100,11 +99,11 @@ public class ModeratorModule(
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -155,7 +154,7 @@ public class ModeratorModule(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -164,11 +163,11 @@ public class ModeratorModule(
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -209,7 +208,7 @@ public class ModeratorModule(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -218,11 +217,11 @@ public class ModeratorModule(
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -266,7 +265,7 @@ public class ModeratorModule(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         IEntity? notifyChat = null;
@@ -289,11 +288,11 @@ public class ModeratorModule(
         }
 
         if (targetConnection.InLobby) {
-            Battle battle = targetConnection.BattlePlayer!.Battle;
+            LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-            notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                ? battle.BattleChatEntity
-                : battle.LobbyChatEntity;
+            notifyChat = lobbyPlayer.InRound
+                ? lobbyPlayer.Round.ChatEntity
+                : lobbyPlayer.Lobby.ChatEntity;
 
             notifiedConnections = ChatUtils
                 .GetReceivers(server, targetConnection, notifyChat)
@@ -328,19 +327,17 @@ public class ModeratorModule(
             }
 
             case "@b":
-                if (!ctx.Connection.InLobby ||
-                    !ctx.Connection.BattlePlayer!.InBattle) return;
+                if (!ctx.Connection.InLobby || !ctx.Connection.LobbyPlayer.InRound)
+                    return;
 
-                foreach (BattlePlayer battlePlayer in ctx.Connection.BattlePlayer.Battle.Players.Where(player => player.InBattleAsTank))
-                    await battlePlayer.PlayerConnection.DisplayMessage(message);
+                foreach (Tanker tanker in ctx.Connection.LobbyPlayer.Round.Tankers)
+                    await tanker.Connection.DisplayMessage(message);
 
                 break;
 
             default: {
-                IPlayerConnection? target = server
-                    .PlayerConnections
-                    .Values
-                    .Where(conn => conn.IsOnline)
+                IPlayerConnection? target = server.PlayerConnections.Values
+                    .Where(conn => conn.IsLoggedIn)
                     .SingleOrDefault(conn => conn.Player.Username == username);
 
                 if (target == null) {

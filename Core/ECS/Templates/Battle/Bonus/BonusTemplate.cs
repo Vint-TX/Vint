@@ -8,12 +8,12 @@ namespace Vint.Core.ECS.Templates.Battle.Bonus;
 
 [ProtocolId(7553964914512142106)]
 public abstract class BonusTemplate : EntityTemplate {
-    protected IEntity Create(string configPath, Vector3 position, IEntity regionEntity, IEntity battleEntity) => Entity(configPath,
+    protected IEntity Create(string configPath, Vector3 position, IEntity regionEntity, IEntity roundEntity) => Entity(configPath,
         builder => builder
             .AddComponent<BonusComponent>()
             .AddComponent(new RotationComponent(default))
             .AddComponent(new PositionComponent(position))
             .AddComponent(new BonusDropTimeComponent(DateTimeOffset.UtcNow))
-            .AddGroupComponent<BattleGroupComponent>(battleEntity)
+            .AddGroupComponent<BattleGroupComponent>(roundEntity)
             .AddGroupComponent<BonusRegionGroupComponent>(regionEntity));
 }

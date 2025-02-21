@@ -1,9 +1,9 @@
 using System.Text;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
-using Vint.Core.Battles;
-using Vint.Core.Battles.Bonus;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Bonus;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -27,9 +27,8 @@ public class AdminModule(
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
         IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
-            .Where(conn => conn.IsOnline)
+            .PlayerConnections.Values
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -38,11 +37,11 @@ public class AdminModule(
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -91,7 +90,7 @@ public class AdminModule(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -100,11 +99,11 @@ public class AdminModule(
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -159,13 +158,18 @@ public class AdminModule(
         await ctx.SendPrivateResponse($"{invite}");
     }
 
-    [ChatCommand("kickAllFromBattle", "Kicks all players in battle to lobby"), RequireConditions(ChatCommandConditions.InLobby)]
-    public async Task KickAllFromBattle(ChatCommandContext ctx) {
-        Battle battle = ctx.Connection.BattlePlayer!.Battle;
+    [ChatCommand("kickAllFromRound", "Kicks all players in round to lobby"), RequireConditions(ChatCommandConditions.InLobby)]
+    public async Task KickAllFromRound(ChatCommandContext ctx) {
+        Round? round = ctx.Connection.LobbyPlayer!.Round;
 
-        foreach (BattlePlayer battlePlayer in battle.Players.Where(battlePlayer => battlePlayer.InBattleAsTank)) {
-            await battlePlayer.PlayerConnection.Send(new KickFromBattleEvent(), battlePlayer.BattleUser);
-            await battle.RemovePlayer(battlePlayer);
+        if (round == null) {
+            await ctx.SendPrivateResponse("Round is not started");
+            return;
+        }
+
+        foreach (Tanker tanker in round.Tankers) {
+            await tanker.Send(new KickFromBattleEvent(), tanker.BattleUser);
+            await round.RemoveTanker(tanker);
         }
     }
 
@@ -175,7 +179,7 @@ public class AdminModule(
         List<IPlayerConnection> connections = server.PlayerConnections.Values.ToList();
 
         List<string> onlineUsernames = connections
-            .Where(connection => connection.IsOnline)
+            .Where(connection => connection.IsLoggedIn)
             .Select(connection => connection.Player.Username)
             .ToList();
 
@@ -184,23 +188,22 @@ public class AdminModule(
         await ctx.SendPrivateResponse(builder.ToString());
     }
 
-    [ChatCommand("dropBonus", "Drop bonus"), RequireConditions(ChatCommandConditions.InBattle)]
+    [ChatCommand("dropBonus", "Drop bonus"), RequireConditions(ChatCommandConditions.InRound)]
     public async Task DropBonus(
         ChatCommandContext ctx,
         [Option("type", "Type of the bonus")] BonusType bonusType,
         [Option("anonymous", "Drop the gold anonymously", true)] bool anon = true) {
-        IBonusProcessor? bonusProcessor = ctx.Connection.BattlePlayer?.Battle.BonusProcessor;
+        LobbyPlayer lobbyPlayer = ctx.Connection.LobbyPlayer!;
+        Round round = lobbyPlayer.Round!; // todo
+        IBonusProcessor? bonusProcessor = round.BonusProcessor;
 
         if (bonusProcessor == null) {
             await ctx.SendPrivateResponse("Bonuses are disabled in this battle");
             return;
         }
 
-        BattlePlayer? player = anon
-            ? null
-            : ctx.Connection.BattlePlayer;
-
-        bool dropped = await bonusProcessor.ForceDropBonus(bonusType, player);
+        Tanker? tanker = anon ? null : lobbyPlayer.Tanker;
+        bool dropped = await bonusProcessor.ForceDropBonus(bonusType, tanker);
 
         if (!dropped) {
             await ctx.SendPrivateResponse($"{bonusType} is not dropped");

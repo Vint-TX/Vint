@@ -1,5 +1,5 @@
-using Vint.Core.Battles;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -8,25 +8,25 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1497349612322)]
 public class AcceptInviteEvent(
-    IBattleProcessor battleProcessor
+    LobbyProcessor lobbyProcessor
 ) : IServerEvent {
     [ProtocolName("lobbyId")] public long LobbyId { get; private set; }
-    [ProtocolName("engineId")] public long EngineId { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        LobbyBase? lobby = lobbyProcessor.FindByLobbyId(LobbyId);
+
+        if (lobby == null)
+            return;
+
         if (connection.InLobby) {
-            BattlePlayer battlePlayer = connection.BattlePlayer!;
+            LobbyPlayer lobbyPlayer = connection.LobbyPlayer;
 
-            if (battlePlayer.InBattleAsTank ||
-                battlePlayer.IsSpectator)
-                await battlePlayer.Battle.RemovePlayer(battlePlayer);
+            if (lobbyPlayer.InRound)
+                await lobbyPlayer.Round.RemoveTanker(lobbyPlayer.Tanker);
 
-            await battlePlayer.Battle.RemovePlayerFromLobby(battlePlayer);
+            await lobbyPlayer.Lobby.RemovePlayer(lobbyPlayer);
         }
 
-        Battles.Battle? battle = battleProcessor.FindByLobbyId(LobbyId);
-
-        if (battle != null)
-            await battle.AddPlayer(connection);
+        await lobby.AddPlayer(connection);
     }
 }

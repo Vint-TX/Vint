@@ -1,6 +1,5 @@
-using Vint.Core.Battles;
-using Vint.Core.Battles.Type;
-using Vint.Core.ECS.Components.Lobby;
+using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -9,46 +8,33 @@ namespace Vint.Core.ECS.Events.Lobby;
 
 [ProtocolId(1547616531111)]
 public class ConnectToCustomLobbyEvent(
-    IBattleProcessor battleProcessor
+    LobbyProcessor lobbyProcessor
 ) : IServerEvent {
     public long LobbyId { get; private set; }
 
-    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        // todo rework for admins
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) { // todo rework for admins
+        IEntity user = connection.UserContainer.Entity;
+
         if (connection.InLobby) {
-            await connection.Send(new EnterBattleLobbyFailedEvent(true, false), connection.UserContainer.Entity);
+            await connection.Send(new EnterBattleLobbyFailedEvent(true, false), user);
             return;
         }
 
-        Battles.Battle? battle = battleProcessor.FindByLobbyId(LobbyId);
-
-        if (await ValidateAndJoin(connection, battle)) return;
-
-        if (connection.Player.IsAdmin &&
-            LobbyId >= 0 &&
-            LobbyId < battleProcessor.Battles.Count) {
-            battle = battleProcessor.FindByIndex((int)LobbyId);
-
-            if (await ValidateAndJoin(connection, battle)) return;
+        if (lobbyProcessor.FindByLobbyId(LobbyId) is not CustomLobby lobby) {
+            await connection.Send(new CustomLobbyNotExistsEvent(), user);
+            return;
         }
 
-        await connection.Send(new CustomLobbyNotExistsEvent(), connection.UserContainer.Entity);
-    }
-
-    static async Task<bool> ValidateAndJoin(IPlayerConnection connection, Battles.Battle? battle) {
-        if (battle is not { CanAddPlayers: true } ||
-            !battle.LobbyEntity.HasComponent<OpenToConnectLobbyComponent>()) {
-            await connection.Send(new EnterBattleLobbyFailedEvent(false, true), connection.UserContainer.Entity);
-            return false;
+        if (!lobby.IsOpened) {
+            await connection.Send(new EnterBattleLobbyFailedEvent(false, false), user);
+            return;
         }
 
-        if (battle is not { TypeHandler: CustomHandler } &&
-            !connection.Player.IsAdmin) {
-            await connection.Send(new CustomLobbyNotExistsEvent(), connection.UserContainer.Entity);
-            return false;
+        if (lobby.Players.Count >= lobby.Properties.MaxPlayers) {
+            await connection.Send(new EnterBattleLobbyFailedEvent(false, true), user);
+            return;
         }
 
-        await battle.AddPlayer(connection);
-        return true;
+        await lobby.AddPlayer(connection);
     }
 }

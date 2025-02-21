@@ -11,11 +11,14 @@ public abstract class StateManager<T> : IStateManager where T : State {
 
     ILogger Logger { get; }
 
-    public T CurrentState { get; protected set; } = null!;
+    public T CurrentState { get; private set; } = null!;
 
-    public virtual async Task Tick(TimeSpan deltaTime) {
-        if (!CurrentState.IsFinished)
-            await CurrentState.Tick(deltaTime);
+    public abstract Task Init();
+
+    protected async Task InitState(T state) {
+        await state.Start();
+        CurrentState = state;
+        await state.Started();
     }
 
     public virtual async Task SetState(T state) {
@@ -28,6 +31,11 @@ public abstract class StateManager<T> : IStateManager where T : State {
         CurrentState = state;
         await state.Started();
         await prevState.Finished();
+    }
+
+    public virtual async Task Tick(TimeSpan deltaTime) {
+        if (CurrentState != null! && !CurrentState.IsFinished)
+            await CurrentState.Tick(deltaTime);
     }
 
     public override string ToString() => $"{GetType().Name}: {CurrentState}";

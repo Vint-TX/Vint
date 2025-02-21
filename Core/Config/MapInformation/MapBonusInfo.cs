@@ -1,4 +1,4 @@
-using Vint.Core.Battles;
+using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Config.MapInformation;
 

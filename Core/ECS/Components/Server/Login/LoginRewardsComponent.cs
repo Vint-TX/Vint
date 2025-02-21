@@ -8,4 +8,7 @@ public class LoginRewardsComponent : IComponent {
     public List<LoginRewardItem> Rewards { get; private set; } = null!;
 
     public int MaxDay => Rewards.Max(reward => reward.Day);
+
+    public IEnumerable<LoginRewardItem> GetRewardsByDay(int day) =>
+        Rewards.Where(reward => reward.Day == day);
 }

@@ -7,10 +7,10 @@ namespace Vint.Core.ECS.Templates.Battle;
 
 [ProtocolId(1429256309752)]
 public class RoundTemplate : EntityTemplate {
-    public IEntity Create(IEntity battle) => Entity(null,
+    public IEntity Create(DateTimeOffset stopTime) => Entity(null,
         builder => builder
             .AddComponent<RoundComponent>()
-            .AddComponent(new RoundStopTimeComponent(DateTimeOffset.UtcNow.AddSeconds(40)))
             .AddComponent<RoundActiveStateComponent>()
-            .AddGroupComponent<BattleGroupComponent>(battle));
+            .AddComponent(new RoundStopTimeComponent(stopTime))
+            .AddGroupComponent<BattleGroupComponent>());
 }

@@ -1,32 +1,31 @@
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
 [ProtocolId(1430210549752)]
 public class SelfUpdateStreamHitEvent : UpdateStreamHitEvent, IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank ||
-            connection.BattlePlayer.Tank!.WeaponHandler is not StreamWeaponHandler)
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+
+        if (tanker?.Tank.WeaponHandler is not StreamWeaponHandler)
             return;
 
-        BattlePlayer battlePlayer = connection.BattlePlayer;
-        IEntity weapon = entities.Single();
-        Battles.Battle battle = battlePlayer.Battle;
+        IEntity weaponEntity = entities.Single();
+        Round round = tanker.Round;
 
-        RemoteUpdateStreamHitEvent serverEvent = new() {
+        RemoteUpdateStreamHitEvent remoteEvent = new() {
             StaticHit = StaticHit,
             TankHit = TankHit
         };
 
-        foreach (IPlayerConnection playerConnection in battle
-                     .Players
-                     .Where(player => player != battlePlayer)
-                     .Select(player => player.PlayerConnection))
-            await playerConnection.Send(serverEvent, weapon);
+        await round.Players
+            .Where(player => player != tanker)
+            .Send(remoteEvent, weaponEntity);
     }
 }

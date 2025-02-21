@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Splash;
@@ -10,14 +10,14 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1554279538858)]
 public class KamikadzeEffectTemplate : EffectBaseTemplate {
     public IEntity Create(
-        BattlePlayer battlePlayer,
+        Tanker tanker,
         TimeSpan duration,
         bool canTargetTeammates,
         float impactForce,
         float minSplashDamagePercent,
         float radiusOfMaxSplashDamage,
         float radiusOfMinSplashDamage) {
-        IEntity entity = Create("battle/effect/kamikadze", battlePlayer, duration, true, true);
+        IEntity entity = Create("battle/effect/kamikadze", tanker, duration, true, true);
 
         entity.AddComponent<DiscreteWeaponComponent>();
 

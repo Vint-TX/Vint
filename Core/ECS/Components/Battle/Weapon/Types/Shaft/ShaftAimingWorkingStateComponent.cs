@@ -1,5 +1,5 @@
 using System.Numerics;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -18,14 +18,14 @@ public class ShaftAimingWorkingStateComponent : IComponent {
     public int ClientTime { get; private set; }
 
     public async Task Added(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft)
+        if (connection.LobbyPlayer?.Tanker?.Tank.WeaponHandler is not ShaftWeaponHandler shaft)
             return;
 
         await shaft.Aim();
     }
 
     public async Task Removed(IPlayerConnection connection, IEntity entity) {
-        if (connection.BattlePlayer?.Tank?.WeaponHandler is not ShaftWeaponHandler shaft)
+        if (connection.LobbyPlayer?.Tanker?.Tank.WeaponHandler is not ShaftWeaponHandler shaft)
             return;
 
         await shaft.Idle();

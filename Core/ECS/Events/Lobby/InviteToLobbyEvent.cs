@@ -1,3 +1,4 @@
+using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -8,20 +9,19 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class InviteToLobbyEvent(
     GameServer server
 ) : IServerEvent {
-    public long[] InvitedUsersIds { get; private set; } = null!;
+    public long InvitedUserId { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby) return;
+        if (connection.LobbyPlayer?.Lobby is not CustomLobby lobby)
+            return;
 
-        List<IPlayerConnection> connections = server
-            .PlayerConnections
-            .Values
-            .Where(conn => conn.IsOnline)
-            .ToList();
+        IPlayerConnection? target = server.PlayerConnections.Values
+            .Where(conn => conn.IsLoggedIn)
+            .FirstOrDefault(conn => conn.Player.Id == InvitedUserId);
 
-        foreach (IPlayerConnection receiver in InvitedUsersIds
-                     .Select(userId => connections.SingleOrDefault(conn => conn.Player.Id == userId))
-                     .OfType<IPlayerConnection>())
-            await receiver.Send(new InvitedToLobbyEvent(connection.Player.Username, connection.BattlePlayer!.Battle.LobbyId), receiver.UserContainer.Entity);
+        if (target == null)
+            return;
+
+        await target.Send(new InvitedToLobbyEvent(connection.Player.Username, lobby.Entity.Id), target.UserContainer.Entity);
     }
 }

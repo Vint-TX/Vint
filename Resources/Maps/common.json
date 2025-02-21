@@ -1,9 +1,15 @@
 {
   "gold": {
-    "probabilityInTick": 0.0000045144045183,
+    "baseThresholdDelta": 150,
+    "dropProbability": 0.05,
     "reward": {
       "id": 947348559,
       "amount": 100
     }
+  },
+  "modesProbability": {
+    "DM": 20,
+    "TDM": 35,
+    "CTF": 45
   }
 }

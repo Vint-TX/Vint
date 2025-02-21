@@ -23,13 +23,8 @@ public class StructCodecFactory : ICodecFactory {
         return new StructCodec(typeCodecInfo.Type, properties);
     }
 
-    static IOrderedEnumerable<PropertyInfo> GetSortedProperties(Type type) => type
-        .GetProperties()
+    static IOrderedEnumerable<PropertyInfo> GetSortedProperties(Type type) => type.GetProperties()
         .Where(property => property.GetCustomAttribute<ProtocolIgnoreAttribute>() == null)
-        .OrderBy(property => property.GetCustomAttribute<ProtocolPositionAttribute>()
-            ?.Position)
-        .ThenBy(property => property.GetCustomAttribute<ProtocolNameAttribute>()
-                                ?.Name ??
-                            property.Name,
-            StringComparer.Ordinal);
+        .OrderBy(property => property.GetCustomAttribute<ProtocolPositionAttribute>()?.Position)
+        .ThenBy(property => property.GetCustomAttribute<ProtocolNameAttribute>()?.Name ?? property.Name, StringComparer.Ordinal);
 }

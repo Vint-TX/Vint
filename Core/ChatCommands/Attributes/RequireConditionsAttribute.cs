@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Type;
+using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.Server.Game;
 
 namespace Vint.Core.ChatCommands.Attributes;
@@ -22,21 +22,23 @@ public class RequireConditionsAttribute(
 
             if ((Conditions & condition) == condition) {
                 returnValue &= condition switch {
-                    ChatCommandConditions.InGarage => !connection.InLobby,
+                    ChatCommandConditions.InGarage => connection is { InLobby: false, Spectating: false },
 
-                    ChatCommandConditions.InLobby => connection.InLobby,
+                    ChatCommandConditions.InLobby => connection.InLobby &&
+                                                     !connection.LobbyPlayer.InRound,
 
-                    ChatCommandConditions.InBattle => connection.InLobby && connection.BattlePlayer!.InBattle,
+                    ChatCommandConditions.InRound => connection.InLobby &&
+                                                     connection.LobbyPlayer.InRound,
 
                     ChatCommandConditions.AllInLobby => connection.InLobby &&
-                                                        connection.BattlePlayer!.Battle.Players.All(battlePlayer => !battlePlayer.InBattleAsTank),
+                                                        connection.LobbyPlayer.Lobby.Players.All(player => !player.InRound),
 
-                    ChatCommandConditions.AllInBattle => connection.InLobby &&
-                                                         connection.BattlePlayer!.Battle.Players.All(battlePlayer => battlePlayer.InBattle),
+                    ChatCommandConditions.AllInRound => connection.InLobby &&
+                                                        connection.LobbyPlayer.Lobby.Players.All(player => player.InRound),
 
-                    ChatCommandConditions.BattleOwner => connection.InLobby &&
-                                                         connection.BattlePlayer!.Battle.TypeHandler is CustomHandler customHandler &&
-                                                         customHandler.Owner == connection,
+                    ChatCommandConditions.LobbyOwner => connection.InLobby &&
+                                                        connection.LobbyPlayer.Lobby is CustomLobby custom &&
+                                                        custom.Owner == connection,
 
                     _ => throw new ArgumentOutOfRangeException()
                 };

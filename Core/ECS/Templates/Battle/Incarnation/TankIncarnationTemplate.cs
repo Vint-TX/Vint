@@ -1,4 +1,3 @@
-using Vint.Core.Battles.Tank;
 using Vint.Core.ECS.Components.Battle.Incarnation;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
@@ -8,12 +7,12 @@ namespace Vint.Core.ECS.Templates.Battle.Incarnation;
 
 [ProtocolId(1478091203635)]
 public class TankIncarnationTemplate : EntityTemplate {
-    public IEntity Create(BattleTank battleTank) => Entity(null,
+    public IEntity Create(IEntity tank, IEntity user, IEntity? team) => Entity(null,
         builder => builder
             .AddComponent<TankIncarnationComponent>()
             .AddComponent(new TankIncarnationKillStatisticsComponent(0))
-            .AddGroupComponent<TankGroupComponent>(battleTank.Tank)
-            .AddGroupComponent<UserGroupComponent>(battleTank.BattlePlayer.PlayerConnection.UserContainer.Entity)
-            .ThenExecuteIf(_ => battleTank.BattlePlayer.Team != null,
-                entity => entity.AddGroupComponent<TeamGroupComponent>(battleTank.BattlePlayer.Team)));
+            .AddGroupComponent<TankGroupComponent>(tank)
+            .AddGroupComponent<UserGroupComponent>(user)
+            .ThenExecuteIf(_ => team != null,
+                entity => entity.AddGroupComponent<TeamGroupComponent>(team)));
 }

@@ -1,4 +1,5 @@
-using Vint.Core.Battles.Modules.Interfaces;
+using Vint.Core.Battle.Modules.Interfaces;
+using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 using Vint.Core.Server.Game;
@@ -12,10 +13,12 @@ public class StreamHitComponent : IComponent {
     public StaticHit? StaticHit { get; private set; }
 
     public async Task Added(IPlayerConnection connection, IEntity entity) {
-        if (!connection.InLobby || !connection.BattlePlayer!.InBattleAsTank)
+        BattleTank? tank = connection.LobbyPlayer?.Tanker?.Tank;
+
+        if (tank == null)
             return;
 
-        foreach (IShotModule shotModule in connection.BattlePlayer.Tank!.Modules.OfType<IShotModule>())
+        foreach (IShotModule shotModule in tank.Modules.OfType<IShotModule>())
             await shotModule.OnShot();
     }
 }

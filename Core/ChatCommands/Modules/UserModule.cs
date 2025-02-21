@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
 using Vint.Core.ChatCommands.Attributes;
 using Vint.Core.Config;
 using Vint.Core.Database;
@@ -64,9 +64,9 @@ public class UserModule(
 
     [ChatCommand("battles", "Show current battles count")]
     public async Task Battles(ChatCommandContext ctx) {
-        IBattleProcessor battleProcessor = ctx.ServiceProvider.GetRequiredService<IBattleProcessor>();
+        LobbyProcessor lobbyProcessor = ctx.ServiceProvider.GetRequiredService<LobbyProcessor>();
 
-        await ctx.SendPrivateResponse($"{battleProcessor.Battles.Count} battles");
+        await ctx.SendPrivateResponse($"{lobbyProcessor.Count} battles");
     }
 
     [ChatCommand("ping", "Show ping")]

@@ -1,11 +1,14 @@
 using LinqToDB;
-using Vint.Core.Battles.Modules.Interfaces;
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Modules.Interfaces;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Weapon.Shot;
 
@@ -18,29 +21,26 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
     };
 
     public virtual async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank) return;
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
 
-        IEntity tank = entities.Single();
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        Battles.Battle battle = battlePlayer.Battle;
+        if (tanker == null) return;
 
-        foreach (IPlayerConnection playerConnection in battle
-                     .Players
-                     .Where(player => player != battlePlayer)
-                     .Select(player => player.PlayerConnection))
-            await playerConnection.Send(RemoteEvent, tank);
+        IEntity tankEntity = entities.Single();
+        Round round = tanker.Round;
+        BattleTank tank = tanker.Tank;
 
-        if (battlePlayer.Tank?.WeaponHandler is SmokyWeaponHandler smokyHandler)
+        await round.Players
+            .Where(player => player != tanker)
+            .Send(RemoteEvent, tankEntity);
+
+        if (tank.WeaponHandler is SmokyWeaponHandler smokyHandler)
             smokyHandler.OnShot(ShotId);
 
-        foreach (IShotModule shotModule in battlePlayer.Tank!.Modules.OfType<IShotModule>())
+        foreach (IShotModule shotModule in tank.Modules.OfType<IShotModule>())
             await shotModule.OnShot();
 
         await using DbConnection db = new();
-
-        await db
-            .Statistics
+        await db.Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Shots, stats => stats.Shots + 1)
             .UpdateAsync();

@@ -7,6 +7,5 @@ public class RoundUserStatisticsComponent : IComponent {
     public int Place { get; set; }
     public int ScoreWithoutBonuses { get; set; }
     public int Kills { get; set; }
-    public int KillAssists { get; set; }
     public int Deaths { get; set; }
 }

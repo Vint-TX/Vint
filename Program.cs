@@ -3,7 +3,8 @@ using FluentMigrator.Runner.Initialization;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Matchmaking;
 using Vint.Core.ChatCommands;
 using Vint.Core.Config;
 using Vint.Core.Database;
@@ -54,9 +55,9 @@ abstract class Program {
             .AddSingleton<Runner>()
             .AddSingleton<Protocol>()
             .AddSingleton<QuestManager>()
-            .AddSingleton<IBattleProcessor, BattleProcessor>()
-            .AddSingleton<IArcadeProcessor, ArcadeProcessor>()
-            .AddSingleton<IMatchmakingProcessor, MatchmakingProcessor>()
+            .AddSingleton<LobbyProcessor>()
+            .AddSingleton<RatingMatchmakingProcessor>()
+            .AddSingleton<ArcadeMatchmakingProcessor>()
             .AddSingleton<IChatCommandProcessor>(serviceProvider => {
                 ChatCommandProcessor chatCommandProcessor = new(serviceProvider);
                 chatCommandProcessor.RegisterCommands();

@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Bonus;
+using Vint.Core.Battle.Bonus;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Components.Battle.Bonus;

@@ -1,7 +1,7 @@
 using System.Numerics;
-using Vint.Core.Battles.Bonus;
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Tank;
+using Vint.Core.Battle.Bonus;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -12,13 +12,13 @@ namespace Vint.Core.ECS.Events.Battle.Bonus;
 [ProtocolId(-4179984519411113540)]
 public class BonusTakingRequestEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        BattlePlayer? battlePlayer = connection.BattlePlayer;
-        IBonusProcessor? bonusProcessor = battlePlayer?.Battle.BonusProcessor;
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+        IBonusProcessor? bonusProcessor = tanker?.Round.BonusProcessor;
 
-        if (battlePlayer is not { InBattleAsTank: true } ||
-            bonusProcessor == null) return;
+        if (tanker == null || bonusProcessor == null)
+            return;
 
-        BattleTank battleTank = battlePlayer.Tank!;
+        BattleTank battleTank = tanker.Tank;
         IEntity bonus = entities.First();
         BonusBox? bonusBox = bonusProcessor.FindByEntity(bonus);
 

@@ -5,9 +5,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Components.Experience;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
-using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Components.Server.Experience;
-using Vint.Core.ECS.Components.Server.Login;
 using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
@@ -79,21 +77,20 @@ public static class Leveling {
 
         await using DbConnection db = new();
 
-        var hulls = await db
-            .Hulls
+        var hulls = await db.Hulls
             .Where(hull => hull.PlayerId == player.Id)
             .Select(hull => new { hull.Id, hull.Xp })
             .ToListAsync();
 
-        var weapons = await db
-            .Weapons
+        var weapons = await db.Weapons
             .Where(weapon => weapon.PlayerId == player.Id)
             .Select(weapon => new { weapon.Id, weapon.Xp })
             .ToListAsync();
 
-        foreach (IEntity child in entities.Where(entity =>
-                     entity.TemplateAccessor?.Template is ChildGraffitiMarketItemTemplate or HullSkinMarketItemTemplate
-                         or WeaponSkinMarketItemTemplate)) {
+        foreach (IEntity child in entities.Where(entity => entity.TemplateAccessor?.Template is
+                     ChildGraffitiMarketItemTemplate or
+                     HullSkinMarketItemTemplate or
+                     WeaponSkinMarketItemTemplate)) {
             if (await connection.OwnsItem(child)) continue;
 
             int rewardLevel = ConfigManager.GetComponent<MountUpgradeLevelRestrictionComponent>(child.TemplateAccessor!.ConfigPath!)
@@ -101,14 +98,9 @@ public static class Leveling {
 
             if (rewardLevel == 0) continue;
 
-            long parentId = child.GetComponent<ParentGroupComponent>()
-                .Key;
-
-            long parentXp = hulls.SingleOrDefault(hull => hull.Id == parentId)
-                                ?.Xp ??
-                            weapons.SingleOrDefault(weapon => weapon.Id == parentId)
-                                ?.Xp ??
-                            0;
+            long parentId = child.GetComponent<ParentGroupComponent>().Key;
+            long parentXp = hulls.SingleOrDefault(hull => hull.Id == parentId)?.Xp ??
+                            weapons.SingleOrDefault(weapon => weapon.Id == parentId)?.Xp ?? 0;
 
             if (parentXp == 0) continue;
 
@@ -131,17 +123,13 @@ public static class Leveling {
         if (!userItem.HasComponent<UserGroupComponent>()) return;
 
         EntityTemplate? template = marketItem.TemplateAccessor?.Template;
-
-        long playerId = userItem.GetComponent<UserGroupComponent>()
-            .Key;
-
+        long playerId = userItem.GetComponent<UserGroupComponent>().Key;
         long xp = 0;
 
-        await using (DbConnection db = new())
+        await using (DbConnection db = new()) {
             switch (template) {
                 case TankMarketItemTemplate:
-                    await db
-                        .Hulls
+                    await db.Hulls
                         .Where(hull => hull.PlayerId == playerId && hull.Id == marketItem.Id)
                         .Set(hull => hull.Xp, hull => hull.Xp + delta)
                         .UpdateAsync();
@@ -149,14 +137,14 @@ public static class Leveling {
                     break;
 
                 case WeaponMarketItemTemplate:
-                    await db
-                        .Weapons
+                    await db.Weapons
                         .Where(weapon => weapon.PlayerId == playerId && weapon.Id == marketItem.Id)
                         .Set(weapon => weapon.Xp, weapon => weapon.Xp + delta)
                         .UpdateAsync();
 
                     break;
             }
+        }
 
         await userItem.ChangeComponent<ExperienceItemComponent>(component => xp = component.Experience += delta);
         await userItem.RemoveComponent<ExperienceToLevelUpItemComponent>();
@@ -170,12 +158,6 @@ public static class Leveling {
         League.Silver => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardssilver"), 5 } },
         League.Gold => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsgold"), 5 } },
         League.Master => new Dictionary<IEntity, int> { { GlobalEntities.GetEntity("containers", "Cardsmaster"), 5 } },
-        _ => new Dictionary<IEntity, int>()
+        _ => []
     };
-
-    public static IEnumerable<LoginRewardItem> GetLoginRewards(int day) =>
-        ConfigManager
-            .GetComponent<LoginRewardsComponent>("login_rewards")
-            .Rewards
-            .Where(reward => reward.Day == day);
 }

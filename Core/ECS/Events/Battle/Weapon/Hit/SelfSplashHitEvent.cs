@@ -1,5 +1,5 @@
 using LinqToDB;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.Database;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;

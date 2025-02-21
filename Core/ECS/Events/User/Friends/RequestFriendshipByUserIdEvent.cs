@@ -64,7 +64,7 @@ public class RequestFriendshipByUserIdEvent(
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 
         if (targetConnection != null)

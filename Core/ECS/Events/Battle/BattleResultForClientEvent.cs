@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Results;
+using Vint.Core.Battle.Results;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.ECS.Events.Battle;

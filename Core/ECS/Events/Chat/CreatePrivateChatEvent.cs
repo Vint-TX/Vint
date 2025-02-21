@@ -12,14 +12,14 @@ public class CreatePrivateChatEvent(
 ) : IServerEvent {
     [ProtocolName("UserUid")] public string Username { get; private set; } = null!;
 
-    public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+    public async Task Execute(IPlayerConnection connection, IEntity[] entities) { // TODO REWRITE
         if (connection.Player.Username == Username)
             return;
 
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(playerConnection => playerConnection.IsOnline)
+            .Where(playerConnection => playerConnection.IsLoggedIn)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 
         if (targetConnection == null) {
@@ -38,7 +38,7 @@ public class CreatePrivateChatEvent(
 
         if (chat == null) {
             chat = new PersonalChatTemplate().Create(connection.UserContainer.Entity, targetConnection.UserContainer.Entity);
-            await connection.ShareIfUnshared(targetConnection.UserContainer.Entity);
+            await targetConnection.UserContainer.ShareTo(connection);
         } else {
             await connection.UserContainer.Entity.ChangeComponent<PersonalChatOwnerComponent>(component => component.Chats.Remove(chat));
             await connection.Unshare(chat);

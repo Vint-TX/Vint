@@ -8,14 +8,14 @@ namespace Vint.Core.ECS.Templates.Battle.User;
 
 [ProtocolId(-2043703779834243389)]
 public class BattleUserTemplate : EntityTemplate {
-    IEntity Create(IEntity user, IEntity battle) => Entity("battle/battleuser",
+    IEntity Create(IEntity user, IEntity round) => Entity("battle/battleuser",
         builder => builder
             .AddComponent<BattleUserComponent>()
             .AddGroupComponent<UserGroupComponent>(user)
-            .AddGroupComponent<BattleGroupComponent>(battle));
+            .AddGroupComponent<BattleGroupComponent>(round));
 
-    public IEntity CreateAsTank(IEntity user, IEntity battle, IEntity? team) {
-        IEntity entity = Create(user, battle);
+    public IEntity CreateAsTank(IEntity user, IEntity round, IEntity? team) {
+        IEntity entity = Create(user, round);
 
         if (team != null)
             entity.AddGroupComponent<TeamGroupComponent>(team);
@@ -25,8 +25,8 @@ public class BattleUserTemplate : EntityTemplate {
         return entity;
     }
 
-    public IEntity CreateAsSpectator(IEntity user, IEntity battle) {
-        IEntity entity = Create(user, battle);
+    public IEntity CreateAsSpectator(IEntity user, IEntity round) {
+        IEntity entity = Create(user, round);
 
         entity.AddComponent<UserInBattleAsSpectatorComponent>();
         return entity;

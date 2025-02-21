@@ -6,5 +6,5 @@ namespace Vint.Core.ECS.Events.Battle.Damage;
 public class StreakTerminationEvent(
     string targetUsername
 ) : IEvent {
-    public string VictimUid { get; set; } = targetUsername;
+    public string VictimUid { get; } = targetUsername;
 }

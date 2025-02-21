@@ -16,7 +16,6 @@ public class TankTemplate : EntityTemplate {
             builder => builder
                 .AddComponent<TankComponent>()
                 .AddComponent<TankPartComponent>()
-                .AddComponent<TankNewStateComponent>()
                 .AddComponent<TemperatureComponent>()
                 .AddComponent<HealthComponent>(configPath)
                 .AddComponent<HealthConfigComponent>(configPath)

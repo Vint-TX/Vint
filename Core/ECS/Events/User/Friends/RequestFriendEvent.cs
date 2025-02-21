@@ -13,7 +13,7 @@ public class RequestFriendEvent(
 ) : FriendBaseEvent, IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
-        Player? player = db.Players.SingleOrDefault(player => player.Id == User.Id);
+        Player? player = db.Players.SingleOrDefault(player => player.Id == User);
 
         if (player == null) return;
 
@@ -56,16 +56,16 @@ public class RequestFriendEvent(
 
         await db.CommitTransactionAsync();
 
-        await connection.UnshareIfShared(User);
+        await UserContainer.UnshareFrom(connection);
         await connection.Send(new OutgoingFriendAddedEvent(player.Id), connection.UserContainer.Entity);
 
         IPlayerConnection? targetConnection = server
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == player.Id);
 
         if (targetConnection != null)
-            await targetConnection.Send(new IncomingFriendAddedEvent(connection.Player.Id), User);
+            await targetConnection.Send(new IncomingFriendAddedEvent(connection.Player.Id), UserContainer.Entity);
     }
 }

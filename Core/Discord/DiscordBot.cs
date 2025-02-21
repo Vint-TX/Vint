@@ -10,7 +10,7 @@ using DSharpPlus.Net;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Lobby;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -54,7 +54,7 @@ public class DiscordBot(
             .ConfigureLogging(builder => builder.AddSerilog(Logger))
             .ConfigureServices(serviceCollection => serviceCollection
                 .AddSingleton(serviceProvider.GetRequiredService<GameServer>())
-                .AddSingleton<IBattleProcessor, BattleProcessor>(_ => (BattleProcessor)serviceProvider.GetRequiredService<IBattleProcessor>()))
+                .AddSingleton(serviceProvider.GetRequiredService<LobbyProcessor>()))
             .UseCommands((_, commands) => {
                     commands.AddCommands(Assembly.GetExecutingAssembly());
                     commands.AddProcessor<SlashCommandProcessor>();
@@ -90,7 +90,7 @@ public class DiscordBot(
         ConfigManager.NewLinkRequest = NewLinkRequest;
 
         Guild = await Client.GetGuildAsync(ConfigManager.Discord.GuildId);
-        LinkedRole = await Guild.GetRoleAsync(ConfigManager.Discord.LinkedRoleId)!;
+        LinkedRole = await Guild.GetRoleAsync(ConfigManager.Discord.LinkedRoleId);
         ReportsChannel = await Client.GetChannelAsync(ConfigManager.Discord.ReportsChannelId);
         await Client.ConnectAsync(new DiscordActivity("Vint", DiscordActivityType.Competing));
 
@@ -190,7 +190,7 @@ public class DiscordBot(
         };
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        IPlayerConnection? connection = server.PlayerConnections.Values.FirstOrDefault(conn => conn.IsOnline && conn.Player.Id == playerId);
+        IPlayerConnection? connection = server.PlayerConnections.Values.FirstOrDefault(conn => conn.IsLoggedIn && conn.Player.Id == playerId);
 
         if (connection == null) {
             await discordLink.Revoke(this, connection);
@@ -234,7 +234,7 @@ public class DiscordBot(
         return true;
     }
 
-    public Uri GetOAuth2Uri(string redirectUri, string state, params string[] scopes) {
+    public Uri GetOAuth2Uri(string redirectUri, string state, params IEnumerable<string> scopes) {
         const string baseUrl = "https://discord.com/oauth2/authorize?response_type=code&prompt=consent";
 
         StringBuilder builder = new(baseUrl);

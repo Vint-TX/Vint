@@ -1,5 +1,4 @@
 using LinqToDB.Mapping;
-using Vint.Core.Battles;
 using Vint.Core.Config;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;

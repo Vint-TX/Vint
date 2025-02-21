@@ -13,6 +13,5 @@ public class ChestBattleRewardComponent(
             field ??= GlobalEntities.GetEntity("containers", chestName);
             return field;
         }
-        private set;
     }
 }

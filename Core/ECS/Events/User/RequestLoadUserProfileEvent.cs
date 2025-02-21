@@ -17,7 +17,7 @@ public class RequestLoadUserProfileEvent(
         if (!UserRegistry.TryGetContainer(UserId, out UserContainer? container)) {
             await using DbConnection db = new();
 
-            Player? player = server.PlayerConnections.Values.Where(conn => conn.IsOnline).SingleOrDefault(conn => conn.Player.Id == UserId)?.Player ??
+            Player? player = server.PlayerConnections.Values.Where(conn => conn.IsLoggedIn).SingleOrDefault(conn => conn.Player.Id == UserId)?.Player ??
                              await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
 
             if (player == null)
@@ -26,7 +26,7 @@ public class RequestLoadUserProfileEvent(
             container = UserRegistry.GetOrCreateContainer(UserId, player);
         }
 
-        await connection.Share(container.Entity);
+        await container.ShareTo(connection);
         await connection.Send(new UserProfileLoadedEvent(), container.Entity);
     }
 }

@@ -1,34 +1,32 @@
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Tank;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Components.Battle.Unit;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Utils;
 
 namespace Vint.Core.ECS.Events.Battle.Movement;
 
 [ProtocolId(1486036000129)]
 public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
-    UnitMoveRemoteEvent RemoteEvent => new(UnitMove);
-
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!connection.InLobby ||
-            !connection.BattlePlayer!.InBattleAsTank)
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+
+        if (tanker == null)
             return;
 
         IEntity unit = entities.Single();
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        BattleTank battleTank = battlePlayer.Tank!;
-        Battles.Battle battle = battlePlayer.Battle;
+        BattleTank tank = tanker.Tank;
+        Round round = tanker.Round;
 
-        if (battleTank.Effects.All(effect => effect.Entity != unit))
+        if (tank.Effects.All(effect => effect.Entity != unit))
             return;
 
-        foreach (IPlayerConnection playerConnection in battle
-                     .Players
-                     .Where(player => player != battlePlayer)
-                     .Select(player => player.PlayerConnection))
-            await playerConnection.Send(RemoteEvent, unit);
+        await round.Players
+            .Where(player => player != tanker)
+            .Send(new UnitMoveRemoteEvent(UnitMove), unit);
 
         await unit.ChangeComponent<UnitMoveComponent>(component => component.Movement = UnitMove);
     }

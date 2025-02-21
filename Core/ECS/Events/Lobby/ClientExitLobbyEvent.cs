@@ -1,4 +1,5 @@
-﻿using Vint.Core.Battles.Player;
+﻿using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -10,13 +11,14 @@ public class ClientExitLobbyEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby) return;
 
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        Battles.Battle battle = battlePlayer.Battle;
+        LobbyPlayer lobbyPlayer = connection.LobbyPlayer;
 
-        if (battlePlayer.InBattleAsTank ||
-            battlePlayer.IsSpectator)
-            await battle.RemovePlayer(battlePlayer);
-        else
-            await battle.RemovePlayerFromLobby(battlePlayer);
+        if (lobbyPlayer.Lobby.StateManager.CurrentState is Starting)
+            return;
+
+        if (lobbyPlayer.InRound)
+            await lobbyPlayer.Round.RemoveTanker(lobbyPlayer.Tanker);
+
+        await lobbyPlayer.Lobby.RemovePlayer(lobbyPlayer);
     }
 }

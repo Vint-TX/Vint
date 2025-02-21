@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;

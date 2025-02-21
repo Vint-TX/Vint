@@ -1,5 +1,5 @@
 using System.Numerics;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Effect;
 using Vint.Core.ECS.Components.Battle.Effect.Type;
 using Vint.Core.ECS.Components.Battle.Effect.Type.Mine;
@@ -15,7 +15,7 @@ namespace Vint.Core.ECS.Templates.Battle.Effect;
 [ProtocolId(1485337553359)]
 public class SpiderEffectTemplate : EffectBaseTemplate {
     public IEntity Create(
-        BattlePlayer battlePlayer,
+        Tanker tanker,
         TimeSpan duration,
         Vector3 position,
         bool canTargetTeammates,
@@ -28,7 +28,7 @@ public class SpiderEffectTemplate : EffectBaseTemplate {
         float targetingDistance,
         float speed,
         float acceleration) {
-        IEntity entity = Create("battle/effect/spidermine", battlePlayer, duration, true, true);
+        IEntity entity = Create("battle/effect/spidermine", tanker, duration, true, true);
 
         entity.AddComponent(new MineConfigComponent(beginHideDistance, hideRange));
         entity.AddComponent(new SpiderMineConfigComponent(speed, acceleration));
@@ -38,13 +38,13 @@ public class SpiderEffectTemplate : EffectBaseTemplate {
         entity.AddComponent(new SplashWeaponComponent(minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage));
 
         entity.AddComponent<UnitComponent>();
-        entity.AddComponent(new UnitMoveComponent(position, battlePlayer.Tank!.Orientation));
+        entity.AddComponent(new UnitMoveComponent(position, tanker.Tank.Orientation));
         entity.AddComponent(new UnitTargetingConfigComponent(targetingDistance));
 
         entity.AddComponent<DiscreteWeaponComponent>();
         entity.AddComponent(new DamageWeakeningByDistanceComponent(minSplashDamagePercent, radiusOfMaxSplashDamage, radiusOfMinSplashDamage));
 
-        entity.AddComponentFrom<UserGroupComponent>(battlePlayer.BattleUser);
+        entity.AddComponentFrom<UserGroupComponent>(tanker.BattleUser);
         entity.AddGroupComponent<UnitGroupComponent>();
         return entity;
     }

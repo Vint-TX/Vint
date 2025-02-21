@@ -1,7 +1,7 @@
 using EmbedIO;
 using EmbedIO.WebApi;
 using LinqToDB;
-using Vint.Core.Battles;
+using Vint.Core.Battle.Player;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -33,7 +33,7 @@ public class PlayerController(
     [Get("/online")]
     public IEnumerable<PlayerSummaryDTO> GetOnlinePlayers() =>
         server.PlayerConnections.Values
-            .Where(connection => connection.IsOnline)
+            .Where(connection => connection.IsLoggedIn)
             .Select(connection => PlayerSummaryDTO.FromPlayer(connection.Player));
 
     [Get("/{id}")]
@@ -57,7 +57,7 @@ public class PlayerController(
         }
 
         IPlayerConnection? target = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == playerId);
 
         if (target == null)
@@ -94,7 +94,7 @@ public class PlayerController(
     [Post("/{id}/kick")]
     public async Task KickPlayer(long id, [FromBody] string reason) {
         IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == id);
 
         if (targetConnection == null)
@@ -109,7 +109,7 @@ public class PlayerController(
     [Post("/{id}/warn")]
     public async Task WarnPlayer(long id, [FromBody] PunishDTO punish) {
         IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == id);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -121,11 +121,11 @@ public class PlayerController(
             ipAddress = ((SocketPlayerConnection)targetConnection).EndPoint.Address.ToString();
 
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -151,7 +151,7 @@ public class PlayerController(
     [Post("/{id}/mute")]
     public async Task MutePlayer(long id, [FromBody] PunishDTO punish) {
         IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == id);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -163,11 +163,11 @@ public class PlayerController(
             ipAddress = ((SocketPlayerConnection)targetConnection).EndPoint.Address.ToString();
 
             if (targetConnection.InLobby) {
-                Battle battle = targetConnection.BattlePlayer!.Battle;
+                LobbyPlayer lobbyPlayer = targetConnection.LobbyPlayer;
 
-                notifyChat = targetConnection.BattlePlayer.InBattleAsTank
-                    ? battle.BattleChatEntity
-                    : battle.LobbyChatEntity;
+                notifyChat = lobbyPlayer.InRound
+                    ? lobbyPlayer.Round.ChatEntity
+                    : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
                     .GetReceivers(server, targetConnection, notifyChat)
@@ -193,7 +193,7 @@ public class PlayerController(
     [Post("/{id}/ban")]
     public async Task BanPlayer(long id, [FromBody] PunishDTO punish) {
         IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == id);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -220,7 +220,7 @@ public class PlayerController(
     [Post("/{id}/unmute")]
     public async Task UnmutePlayer(long id) {
         Player? targetPlayer = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == id)?.Player;
 
         if (targetPlayer == null) {
@@ -238,7 +238,7 @@ public class PlayerController(
     [Post("/{id}/unban")]
     public async Task UnbanPlayer(long id) {
         Player? targetPlayer = server.PlayerConnections.Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Id == id)?.Player;
 
         if (targetPlayer == null) {

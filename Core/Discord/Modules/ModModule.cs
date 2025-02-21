@@ -26,7 +26,7 @@ public class ModModule(
                 IPlayerConnection? target = gameServer
                     .PlayerConnections
                     .Values
-                    .Where(conn => conn.IsOnline)
+                    .Where(conn => conn.IsLoggedIn)
                     .SingleOrDefault(conn => conn.Player.Username == username);
 
                 if (target == null) {
@@ -51,7 +51,7 @@ public class ModModule(
         IPlayerConnection? targetConnection = gameServer
             .PlayerConnections
             .Values
-            .Where(conn => conn.IsOnline)
+            .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         DiscordEmbedBuilder? error = null;

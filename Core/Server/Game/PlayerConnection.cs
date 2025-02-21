@@ -5,7 +5,9 @@ using ConcurrentCollections;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
@@ -16,12 +18,15 @@ using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Components.Modules;
+using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Components.Preset;
 using Vint.Core.ECS.Components.Server.Experience;
+using Vint.Core.ECS.Components.Server.Login;
 using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Events.Action;
+using Vint.Core.ECS.Events.Battle.Score;
 using Vint.Core.ECS.Events.Entrance.Login;
 using Vint.Core.ECS.Events.Items;
 using Vint.Core.ECS.Events.Items.Module;
@@ -55,14 +60,17 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     ILogger Logger { get; }
 
     Player Player { get; set; }
-    BattlePlayer? BattlePlayer { get; set; }
+    LobbyPlayer? LobbyPlayer { get; set; }
+    Spectator? Spectator { get; set; }
     UserContainer UserContainer { get; }
     IEntity ClientSession { get; }
     IServiceProvider ServiceProvider { get; }
 
-    bool IsOnline { get; }
-    [MemberNotNullWhen(true, nameof(BattlePlayer))]
+    bool IsLoggedIn { get; }
+    [MemberNotNullWhen(true, nameof(LobbyPlayer))]
     bool InLobby { get; }
+    [MemberNotNullWhen(true, nameof(Spectator))]
+    bool Spectating { get; }
     DateTimeOffset PingSendTime { set; }
     DateTimeOffset PongReceiveTime { set; }
     long Ping { get; }
@@ -90,8 +98,6 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     Task ChangeReputation(int delta);
 
-    Task CheckRankUp();
-
     Task ChangeExperience(int delta);
 
     Task ChangeGameplayChestScore(int delta);
@@ -103,6 +109,10 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     Task AssembleModule(IEntity marketItem);
 
     Task UpgradeModule(IEntity userItem, bool forXCrystals);
+
+    Task CheckLoginRewards();
+
+    Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies);
 
     Task<bool> OwnsItem(IEntity marketItem);
 
@@ -128,7 +138,7 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     Task Send(IEvent @event);
 
-    Task Send(IEvent @event, params IEntity[] entities);
+    Task Send(IEvent @event, params IEnumerable<IEntity> entities);
 
     Task Share(IEntity entity);
 
@@ -154,18 +164,20 @@ public abstract class PlayerConnection(
     public ILogger Logger { get; protected set; } = Log.Logger.ForType<PlayerConnection>();
 
     public Player Player { get; set; } = null!;
+    public LobbyPlayer? LobbyPlayer { get; set; }
+    public Spectator? Spectator { get; set; }
     public UserContainer UserContainer { get; private set; } = null!;
     public IEntity ClientSession { get; protected set; } = null!;
     public IServiceProvider ServiceProvider { get; } = serviceProvider;
-    public BattlePlayer? BattlePlayer { get; set; }
     public int BattleSeries { get; set; }
     public ConcurrentHashSet<IEntity> SharedEntities { get; } = [];
 
     public string? RestorePasswordCode { get; set; }
     public bool RestorePasswordCodeValid { get; set; }
 
-    public abstract bool IsOnline { get; }
-    public bool InLobby => BattlePlayer != null;
+    public abstract bool IsLoggedIn { get; }
+    public bool InLobby => LobbyPlayer != null;
+    public bool Spectating => Spectator != null;
     public DateTimeOffset PingSendTime { get; set; }
 
     public DateTimeOffset PongReceiveTime {
@@ -234,7 +246,7 @@ public abstract class PlayerConnection(
         }
 
         UserContainer = UserRegistry.GetOrCreateContainer(Player.Id, Player);
-        await Share(UserContainer.Entity);
+        await UserContainer.ShareTo(this);
 
         await ClientSession.AddGroupComponent<UserGroupComponent>(UserContainer.Entity);
         await UserContainer.Entity.AddComponent<UserOnlineComponent>();
@@ -334,6 +346,8 @@ public abstract class PlayerConnection(
         await db.CommitTransactionAsync();
         Player.Experience += delta;
         await UserContainer.Entity.ChangeComponent<UserExperienceComponent>(component => component.Experience = Player.Experience);
+
+        await CheckRankUp();
     }
 
     public async Task ChangeGameplayChestScore(int delta) {
@@ -364,7 +378,7 @@ public abstract class PlayerConnection(
         await UserContainer.Entity.ChangeComponent<GameplayChestScoreComponent>(component => component.Current = Player.GameplayChestScore);
     }
 
-    public async Task CheckRankUp() {
+    async Task CheckRankUp() {
         UserRankComponent rankComponent = UserContainer.Entity.GetComponent<UserRankComponent>();
 
         while (rankComponent.Rank < Player.Rank) {
@@ -383,7 +397,9 @@ public abstract class PlayerConnection(
             await ChangeCrystals(crystals);
             await ChangeXCrystals(xCrystals);
             await Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
-            BattlePlayer?.RankUp();
+
+            if (InLobby && LobbyPlayer!.InRound)
+                await LobbyPlayer.Round.Players.Send(new UpdateRankEvent(), UserContainer.Entity);
         }
 
         return;
@@ -997,6 +1013,85 @@ public abstract class PlayerConnection(
         await Send(new ModuleUpgradedEvent(), userItem);
     }
 
+public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
+        IEntity user = UserContainer.Entity;
+
+        BattleLeaveCounterComponent battleLeaveCounter = user.GetComponent<BattleLeaveCounterComponent>();
+        long lefts = battleLeaveCounter.Value;
+        int needGoodBattles = battleLeaveCounter.NeedGoodBattles;
+
+        if (roundEnded) { // player played the battle to the end
+            if (needGoodBattles > 0)
+                needGoodBattles--;
+
+            if (needGoodBattles == 0)
+                lefts = 0;
+        } else if (hasEnemies) { // player left the battle before it ended and there were enemies
+            BattleSeries = 0;
+            lefts++;
+
+            if (lefts >= 2)
+                needGoodBattles = needGoodBattles > 0
+                    ? (int)lefts / 2
+                    : 2;
+        }
+
+        battleLeaveCounter.Value = lefts;
+        battleLeaveCounter.NeedGoodBattles = needGoodBattles;
+
+        Player.DesertedBattlesCount = battleLeaveCounter.Value;
+        Player.NeedGoodBattlesCount = battleLeaveCounter.NeedGoodBattles;
+
+        await using DbConnection db = new();
+        await db.Players
+            .Where(p => p.Id == Player.Id)
+            .Set(p => p.DesertedBattlesCount, Player.DesertedBattlesCount)
+            .Set(p => p.NeedGoodBattlesCount, Player.NeedGoodBattlesCount)
+            .UpdateAsync();
+
+        await user.ChangeComponent(battleLeaveCounter);
+    }
+
+    public async Task CheckLoginRewards() {
+        LoginRewardsComponent loginRewardsComponent = ConfigManager.GetComponent<LoginRewardsComponent>("login_rewards");
+
+        await using DbConnection db = new();
+        long battles = await db.Statistics
+            .Where(stats => stats.PlayerId == Player.Id)
+            .Select(stats => stats.BattlesParticipated)
+            .SingleOrDefaultAsync();
+
+        if (Player.NextLoginRewardTime > DateTimeOffset.UtcNow ||
+            Player.LastLoginRewardDay >= loginRewardsComponent.MaxDay ||
+            battles < loginRewardsComponent.BattleCountToUnlock) return;
+
+        int day = Player.LastLoginRewardDay + 1;
+
+        List<LoginRewardItem> loginRewards = loginRewardsComponent
+            .GetRewardsByDay(day)
+            .ToList();
+
+        foreach (LoginRewardItem reward in loginRewards) {
+            IEntity? entity = this.GetEntity(reward.MarketItemEntity);
+
+            if (entity == null || await OwnsItem(entity)) continue;
+
+            await PurchaseItem(entity, reward.Amount, 0, false, false);
+        }
+
+        Player.LastLoginRewardDay = day;
+        Player.LastLoginRewardTime = DateTimeOffset.UtcNow;
+
+        await db.Players
+            .Where(p => p.Id == Player.Id)
+            .Set(p => p.LastLoginRewardDay, Player.LastLoginRewardDay)
+            .Set(p => p.LastLoginRewardTime, Player.LastLoginRewardTime)
+            .UpdateAsync();
+
+        IEntity notification = new LoginRewardNotificationTemplate().Create(loginRewards, loginRewardsComponent.Rewards, day);
+        await Share(notification);
+    }
+
     public async Task<bool> OwnsItem(IEntity marketItem) {
         await using DbConnection db = new();
 
@@ -1152,7 +1247,10 @@ public abstract class PlayerConnection(
 
     public Task Send(IEvent @event) => Send(@event, ClientSession);
 
-    public Task Send(IEvent @event, params IEntity[] entities) => Send(new SendEventCommand { Event = @event, Entities = entities });
+    public Task Send(IEvent @event, params IEnumerable<IEntity> entities) => Send(new SendEventCommand {
+        Event = @event,
+        Entities = entities as IEntity[] ?? entities.ToArray()
+    });
 
     public Task Share(IEntity entity) => entity.Share(this);
 
@@ -1202,11 +1300,9 @@ public class SocketPlayerConnection(
     IServiceScope serviceScope,
     Socket socket
 ) : PlayerConnection(id, serviceScope.ServiceProvider) {
-    bool _disposed;
-
     public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
 
-    public override bool IsOnline => IsConnected && IsSocketConnected && ClientSession != null! && UserContainer != null! && Player != null!;
+    public override bool IsLoggedIn => IsConnected && IsSocketConnected && ClientSession != null! && UserContainer != null! && Player != null!;
     bool IsSocketConnected => Socket.Connected;
     bool IsConnected { get; set; }
 
@@ -1275,7 +1371,7 @@ public class SocketPlayerConnection(
         }
     }
 
-    async Task OnDisconnected() { // todo rewrite :skull:
+    async Task OnDisconnected() {
         if (!IsConnected) return;
 
         IsConnected = false;
@@ -1283,18 +1379,28 @@ public class SocketPlayerConnection(
 
         try {
             if (UserContainer != null!) {
+                await UserContainer.RemoveConnection(this);
                 await UserContainer.Entity.RemoveComponent<UserOnlineComponent>();
 
                 foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == UserContainer.Id))
                     ConfigManager.DiscordLinkRequests.TryRemove(request);
             }
 
-            if (!InLobby) return;
+            if (InLobby) {
+                LobbyBase lobby = LobbyPlayer!.Lobby;
 
-            if (BattlePlayer!.InBattleAsTank || BattlePlayer.IsSpectator)
-                await BattlePlayer.Battle.RemovePlayer(BattlePlayer);
-            else
-                await BattlePlayer.Battle.RemovePlayerFromLobby(BattlePlayer);
+                if (LobbyPlayer.InRound) {
+                    Round round = LobbyPlayer.Round;
+                    await round.RemoveTanker(LobbyPlayer.Tanker);
+                }
+
+                await lobby.RemovePlayer(LobbyPlayer);
+            }
+
+            if (Spectating) {
+                Round round = Spectator!.Round;
+                await round.RemoveSpectator(Spectator);
+            }
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
         } finally {
@@ -1347,7 +1453,7 @@ public class SocketPlayerConnection(
                 }
             }
         } catch (Exception e) {
-            //Logger.Error(e, "Caught an exception while reading socket");
+            Logger.Error(e, "Caught an exception while reading socket");
             await Disconnect();
             throw;
         }
@@ -1365,16 +1471,12 @@ public class SocketPlayerConnection(
     }
 
     void Dispose(bool disposing) {
-        if (_disposed) return;
-
         if (disposing) {
             Socket.Dispose();
             DelayedTasks.Clear();
             SharedEntities.Clear();
             serviceScope.Dispose();
         }
-
-        _disposed = true;
     }
 
     async ValueTask DisposeAsyncCore() {

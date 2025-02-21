@@ -1,8 +1,9 @@
 using LinqToDB;
-using Vint.Core.Battles.Effects;
-using Vint.Core.Battles.Player;
-using Vint.Core.Battles.Tank;
-using Vint.Core.Battles.Weapons;
+using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons;
 using Vint.Core.Database;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Components.Battle.Tank;
@@ -30,35 +31,27 @@ public class SelfHitEvent(
     public virtual async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         IsProceeded = true;
 
-        if (!connection.InLobby) {
+        Tanker? tanker = connection.LobbyPlayer?.Tanker;
+
+        if (tanker == null) {
             IsProceeded = false;
             return;
         }
 
-        BattlePlayer battlePlayer = connection.BattlePlayer!;
-        Battles.Battle battle = battlePlayer.Battle;
-
-        if (!battlePlayer.InBattleAsTank ||
-            !battle.Properties.DamageEnabled) {
-            IsProceeded = false;
-            return;
-        }
-
-        BattleTank battleTank = battlePlayer.Tank!;
-        IEntity weapon = entities.Single();
-        WeaponHandler = GetWeaponHandler(battleTank, weapon);
+        Round round = tanker.Round;
+        BattleTank tank = tanker.Tank;
+        IEntity weaponEntity = entities.Single();
+        WeaponHandler = GetWeaponHandler(tank, weaponEntity);
 
         if (!Validate(connection, WeaponHandler)) {
             IsProceeded = false;
-            await battlePlayer.OnAntiCheatSuspected(discordBot);
+            await tanker.OnAntiCheatSuspected(discordBot);
             return;
         }
 
-        foreach (IPlayerConnection playerConnection in battle
-                     .Players
-                     .Where(player => player != battlePlayer)
-                     .Select(player => player.PlayerConnection))
-            await playerConnection.Send(RemoteEvent, weapon);
+        await round.Players
+            .Where(player => player != tanker)
+            .Send(RemoteEvent, weaponEntity);
 
         if (Targets == null) return;
 
@@ -78,9 +71,7 @@ public class SelfHitEvent(
         }
 
         await using DbConnection db = new();
-
-        await db
-            .Statistics
+        await db.Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Hits, stats => stats.Hits + Targets.Count)
             .UpdateAsync();
@@ -105,11 +96,9 @@ public class SelfHitEvent(
         if (weaponEntity.HasComponent<TankPartComponent>())
             return tank.WeaponHandler;
 
-        return tank
-                   .Effects
+        return tank.Effects
                    .OfType<WeaponEffect>()
-                   .SingleOrDefault(effect => effect.WeaponEntity == weaponEntity)
-                   ?.WeaponHandler ??
+                   .SingleOrDefault(effect => effect.WeaponEntity == weaponEntity)?.WeaponHandler ??
                throw new InvalidOperationException($"Not found weapon handler for {weaponEntity}");
     }
 }

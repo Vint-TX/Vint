@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Bonus;
+using Vint.Core.Battle.Bonus;
 
 namespace Vint.Core.Config.MapInformation;
 

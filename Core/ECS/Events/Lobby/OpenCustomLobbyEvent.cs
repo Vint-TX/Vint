@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Type;
+using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
@@ -10,20 +10,15 @@ namespace Vint.Core.ECS.Events.Lobby;
 public class OpenCustomLobbyEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InLobby ||
-            connection.BattlePlayer!.Battle.TypeHandler is not CustomHandler customHandler) return;
+            connection.LobbyPlayer.Lobby is not CustomLobby lobby ||
+            lobby.Owner != connection) return;
 
         Player player = connection.Player;
-
-        int price = player.IsPremium
-            ? 0
-            : 1000;
+        int price = player.IsPremium ? 0 : 1000;
 
         if (player.Crystals < price) return;
 
         await connection.ChangeCrystals(-price);
-
-        if (customHandler.Owner != connection) return;
-
-        await customHandler.OpenLobby();
+        await lobby.OpenLobby();
     }
 }

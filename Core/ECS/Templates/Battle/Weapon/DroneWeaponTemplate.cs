@@ -1,4 +1,4 @@
-using Vint.Core.Battles.Player;
+using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Battle.Weapon.Stream;
 using Vint.Core.ECS.Components.Group;
@@ -9,14 +9,14 @@ namespace Vint.Core.ECS.Templates.Battle.Weapon;
 
 [ProtocolId(1485335125183)]
 public class DroneWeaponTemplate : EntityTemplate {
-    public IEntity Create(BattlePlayer battlePlayer) =>
+    public IEntity Create(Tanker tanker) =>
         Entity("battle/effect/droneweapon",
             builder => builder
                 .AddComponent<WeaponComponent>()
                 .AddComponent<DroneWeaponComponent>()
-                .AddComponentFrom<UserGroupComponent>(battlePlayer.BattleUser)
+                .AddComponentFrom<UserGroupComponent>(tanker.BattleUser)
                 .AddGroupComponent<UnitGroupComponent>()
                 .AddComponentFromConfig<WeaponCooldownComponent>()
                 .AddComponentFromConfig<StreamHitConfigComponent>()
-                .ThenExecuteIf(_ => battlePlayer.Team != null, entity => entity.AddGroupComponent<TeamGroupComponent>(battlePlayer.Team!)));
+                .ThenExecuteIf(_ => tanker.Team != null, entity => entity.AddGroupComponent<TeamGroupComponent>(tanker.Team)));
 }
