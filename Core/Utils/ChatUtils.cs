@@ -88,14 +88,14 @@ public static class ChatUtils {
                 .GetComponent<ChatParticipantsComponent>().Users
                 .ToList()
                 .Select(user => {
-                    IPlayerConnection? connection = server
+                    IPlayerConnection connection = server
                         .PlayerConnections
                         .Values
                         .Where(conn => conn.IsLoggedIn)
-                        .SingleOrDefault(conn => conn.UserContainer.Id == user.Id);
+                        .SingleOrDefault(conn => conn.UserContainer.Id == user.Id)!;
 
-                    connection?.ShareIfUnshared(chat, from.UserContainer.Entity);
-                    return connection!;
+                    from.UserContainer.ShareTo(connection).GetAwaiter().GetResult(); // todo fuck
+                    return connection;
                 })
                 .Where(conn => conn != null!),
 
