@@ -52,4 +52,9 @@ public abstract class SoloHandler(
         await base.OnWarmUpEnded();
         await TryUpdateScore();
     }
+
+    public override async Task OnRoundEnded() {
+        await base.OnRoundEnded();
+        await Entity.ChangeComponent<ScoreLimitComponent>(component => component.ScoreLimit = 0);
+    }
 }

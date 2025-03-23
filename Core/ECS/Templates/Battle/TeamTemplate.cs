@@ -11,7 +11,7 @@ public class TeamTemplate : EntityTemplate {
     public IEntity Create(TeamColor teamColor) => Entity(null,
         builder => builder
             .AddComponent<TeamComponent>()
-            .AddComponent(new TeamScoreComponent())
+            .AddComponent<TeamScoreComponent>()
             .AddComponent(new TeamColorComponent(teamColor))
             .AddGroupComponent<TeamGroupComponent>());
 }

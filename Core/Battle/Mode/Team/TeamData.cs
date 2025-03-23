@@ -24,4 +24,7 @@ public class TeamData(
 
     public SpawnPoint GetRandomSpawnPoint(Tanker tanker) =>
         LastSpawnPoint = getRandomSpawnPoint(SpawnPoints, LastSpawnPoint, tanker.Tank.SpawnPoint, tanker.Tank.PreviousSpawnPoint);
+
+    public async Task ResetScore() =>
+        await Entity.ChangeComponent<TeamScoreComponent>(component => component.Score = 0);
 }
