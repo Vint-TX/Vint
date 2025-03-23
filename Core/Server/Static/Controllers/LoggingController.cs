@@ -54,12 +54,12 @@ public class LoggingController(
             await using (DbConnection db = new())
                 clientLog.Id = await db.InsertWithInt64IdentityAsync(clientLog);
 
-            await discordBot.SendReport($"New client log. Id: {clientLog.Id}", clientLog.Username);
+            await discordBot.SendLog(clientLog.Username, clientLog.Message, log, clientLog.Id, clientLog.Timestamp);
         } catch (Exception e) {
             Log.Logger.ForType<LoggingController>().WithEndPoint(Request).Error(e, "Failed to deserialize client log");
 
             string filePath = await SaveLogOnDisk(log);
-            await discordBot.SendReport($"New client log. Failed to deserialize. File: {filePath}", "");
+            await discordBot.SendLog($"Failed to deserialize, saved on disk: {filePath}", "", log, -1, DateTimeOffset.UtcNow);
         }
     }
 

@@ -115,6 +115,17 @@ public class DiscordBot(
         await ReportsChannel.SendMessageAsync(embed);
     }
 
+    public async Task SendLog(string username, string message, string log, long id, DateTimeOffset timestamp) {
+        if (!IsStarted) return;
+
+        using MemoryStream stream = new(Encoding.Default.GetBytes(log));
+        DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(message, "New log submitted", $"Id: {id}")
+            .WithTimestamp(timestamp)
+            .WithAuthor(username);
+
+        await ReportsChannel.SendMessageAsync(builder => builder.AddEmbed(embed).AddFile($"{id}.log", stream));
+    }
+
     public async Task GiveLinkedRole(DiscordRestClient userClient, string username, string accessToken) {
         if (!IsStarted) return;
 
