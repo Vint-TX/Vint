@@ -10,7 +10,7 @@ namespace Vint.Core.Battle.Lobby.Impl.Arcade;
 
 public sealed class QuickPlayLobby : ArcadeLobby {
     public QuickPlayLobby(MapInfo mapInfo, BattleMode battleMode, QuestManager questManager) : base(questManager) {
-        ClientBattleParams clientParams = new(battleMode, GravityType.Earth, mapInfo, false, true, false, 1);
+        ClientBattleParams clientParams = new(battleMode, GravityType.Earth, mapInfo, false, true, false, 5);
         Properties = new BattleProperties(BattleType.Arcade, TimeSpan.Zero, true, clientParams);
         Entity = new MatchMakingLobbyTemplate().Create(Properties);
     }
