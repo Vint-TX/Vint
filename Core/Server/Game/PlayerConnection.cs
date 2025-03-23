@@ -1266,9 +1266,9 @@ public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
         Entities = entities as IEntity[] ?? entities.ToArray()
     });
 
-    public Task Send<TEvent>() where TEvent : IEvent, new() => Send(EventRegistry.GetOrAdd<TEvent>());
+    public Task Send<TEvent>() where TEvent : IEvent, new() => Send(new TEvent());
 
-    public Task Send<TEvent>(params IEnumerable<IEntity> entities) where TEvent : IEvent, new() => Send(EventRegistry.GetOrAdd<TEvent>(), entities);
+    public Task Send<TEvent>(params IEnumerable<IEntity> entities) where TEvent : IEvent, new() => Send(new TEvent(), entities);
 
     public Task Share(IEntity entity) => entity.Share(this);
 
