@@ -14,7 +14,7 @@ public class DamageProcessor : IDamageProcessor {
         DamageType type = await Damage(target, damage);
         IPlayerConnection sourcePlayerConnection = source.Tanker.Connection;
         source.Statistics.DealtDamage += damage.Value;
-        await target.Tanker.Send(new DamageInfoTargetEvent(), battleWeapon, target.Entities.Tank);
+        await target.Tanker.Send<DamageInfoTargetEvent>(battleWeapon, target.Entities.Tank);
 
         // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
         switch (type) {

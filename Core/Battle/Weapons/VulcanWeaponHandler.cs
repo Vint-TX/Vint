@@ -6,6 +6,7 @@ using Vint.Core.Config;
 using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Weapons;
 
@@ -69,7 +70,7 @@ public class VulcanWeaponHandler : StreamWeaponHandler, IHeatWeaponHandler {
     }
 
     public override Task Reset() =>
-        BattleTank.Tanker.Connection.Send(new VulcanResetStateEvent(), BattleEntity);
+        BattleTank.Tanker.Send<VulcanResetStateEvent>(BattleEntity);
 
     public override async Task OnTankDisable() {
         await base.OnTankDisable();

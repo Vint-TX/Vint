@@ -29,6 +29,6 @@ public class BuyUsernameChangeEvent : IServerEvent {
         await connection.SetUsername(Username);
 
         await connection.Share(new UsernameChangedNotificationTemplate().Create(Username, user));
-        await connection.Send(new ShowNotificationGroupEvent(), user);
+        await connection.Send<ShowNotificationGroupEvent>(user);
     }
 }

@@ -28,6 +28,6 @@ public class SwitchDailyBonusZoneEvent : IServerEvent {
         player.DailyBonusZone++;
 
         await user.ChangeComponent<UserDailyBonusZoneComponent>(component => component.ZoneNumber++);
-        await connection.Send(new DailyBonusZoneSwitchedEvent(), user);
+        await connection.Send<DailyBonusZoneSwitchedEvent>(user);
     }
 }

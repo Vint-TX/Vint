@@ -59,7 +59,7 @@ public abstract class Effect(
         }
 
         if (Entity != null) {
-            await battlePlayer.Send(new RemoveEffectEvent(), Entity);
+            await battlePlayer.Send<RemoveEffectEvent>(Entity);
             await battlePlayer.Unshare(Entity);
         }
     }
@@ -72,7 +72,7 @@ public abstract class Effect(
     protected virtual async Task UnshareFromAllPlayers() {
         if (Entity != null) {
             ICollection<BattlePlayer> players = Round.Players;
-            await players.Send(new RemoveEffectEvent(), Entity);
+            await players.Send<RemoveEffectEvent>(Entity);
             await players.Unshare(Entity);
         }
     }
@@ -108,7 +108,7 @@ public abstract class WeaponEffect(
         await battlePlayer.Share(entities);
 
         if (Entity != null)
-            await battlePlayer.Send(new EffectActivationEvent(), Entity);
+            await battlePlayer.Send<EffectActivationEvent>(Entity);
     }
 
     public override async Task UnshareFrom(BattlePlayer battlePlayer) {
@@ -121,7 +121,7 @@ public abstract class WeaponEffect(
         HashSet<IEntity> entities = [WeaponEntity];
 
         if (Entity != null) {
-            await battlePlayer.Send(new RemoveEffectEvent(), Entity);
+            await battlePlayer.Send<RemoveEffectEvent>(Entity);
             entities.Add(Entity);
         }
 
@@ -138,7 +138,7 @@ public abstract class WeaponEffect(
         await players.Share(entities);
 
         if (Entity != null)
-            await players.Send(new EffectActivationEvent(), Entity);
+            await players.Send<EffectActivationEvent>(Entity);
     }
 
     protected override async Task UnshareFromAllPlayers() {
@@ -150,7 +150,7 @@ public abstract class WeaponEffect(
         ICollection<BattlePlayer> players = Round.Players;
 
         if (Entity != null)
-            await players.Send(new RemoveEffectEvent(), Entity);
+            await players.Send<RemoveEffectEvent>(Entity);
 
         await players.Unshare(entities);
     }

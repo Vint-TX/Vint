@@ -32,6 +32,6 @@ public class SwitchDailyBonusCycleEvent : IServerEvent {
         await user.ChangeComponent<UserDailyBonusZoneComponent>(component => component.ZoneNumber = 0);
         await user.ChangeComponent<UserDailyBonusCycleComponent>(component => component.CycleNumber++);
         await user.ChangeComponent<UserDailyBonusReceivedRewardsComponent>(component => component.ReceivedRewards.Clear());
-        await connection.Send(new DailyBonusCycleSwitchedEvent(), user);
+        await connection.Send<DailyBonusCycleSwitchedEvent>(user);
     }
 }

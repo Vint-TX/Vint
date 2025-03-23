@@ -114,7 +114,7 @@ public class BattleTank : IDisposable {
 
     public async Task Tick(TimeSpan deltaTime) {
         if (Tanker.IsPaused && DateTimeOffset.UtcNow > Tanker.KickTime) {
-            await Tanker.Send(new KickFromBattleEvent(), Tanker.BattleUser);
+            await Tanker.Send<KickFromBattleEvent>(Tanker.BattleUser);
             await Round.RemoveTanker(Tanker);
             return;
         }
@@ -152,7 +152,7 @@ public class BattleTank : IDisposable {
 
         TotalHealth = MaxHealth;
         await TemperatureProcessor.ResetAll();
-        await Tanker.Send(new ResetTankSpeedEvent(), Entities.Tank);
+        await Tanker.Send<ResetTankSpeedEvent>(Entities.Tank);
 
         if (Entities.Tank.HasComponent<SelfDestructionComponent>()) {
             await Entities.Tank.RemoveComponent<SelfDestructionComponent>();
@@ -177,7 +177,7 @@ public class BattleTank : IDisposable {
 
         TotalHealth = MaxHealth;
         await TemperatureProcessor.ResetAll();
-        await Tanker.Send(new ResetTankSpeedEvent(), Entities.Tank);
+        await Tanker.Send<ResetTankSpeedEvent>(Entities.Tank);
 
         if (Entities.Tank.HasComponent<SelfDestructionComponent>()) {
             await Entities.Tank.RemoveComponent<SelfDestructionComponent>();
@@ -201,7 +201,7 @@ public class BattleTank : IDisposable {
     public async Task UpdateModuleCooldownSpeed(float coeff) {
         ModuleCooldownCoeff = coeff;
         await Tanker.BattleUser.ChangeComponent<BattleUserInventoryCooldownSpeedComponent>(component => component.SpeedCoeff = coeff);
-        await Tanker.Send(new BattleUserInventoryCooldownSpeedChangedEvent(), Tanker.BattleUser);
+        await Tanker.Send<BattleUserInventoryCooldownSpeedChangedEvent>(Tanker.BattleUser);
     }
 
     public async Task EMPLock(TimeSpan duration) {
@@ -217,7 +217,7 @@ public class BattleTank : IDisposable {
         foreach (Effect effect in Effects)
             await effect.DeactivateByEMP();
 
-        await Round.Players.Send(new EMPEffectReadyEvent(), Entities.Tank);
+        await Round.Players.Send<EMPEffectReadyEvent>(Entities.Tank);
     }
 
     public async Task SetHealth(float health) {
@@ -225,7 +225,7 @@ public class BattleTank : IDisposable {
         Health = Math.Clamp(health, 0, MaxHealth);
         await Entities.Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = MathF.Ceiling(Health));
 
-        await Round.Players.Send(new HealthChangedEvent(), Entities.Tank);
+        await Round.Players.Send<HealthChangedEvent>(Entities.Tank);
 
         foreach (IHealthModule healthModule in Modules.OfType<IHealthModule>())
             await healthModule.OnHealthChanged(before, Health, MaxHealth);
@@ -255,7 +255,7 @@ public class BattleTank : IDisposable {
         } else {
             await tank.ChangeComponent(SpeedComponent.Clone());
             await weapon.ChangeComponent(WeaponHandler.WeaponRotationComponent.Clone());
-            await Tanker.Send(new ResetTankSpeedEvent(), tank);
+            await Tanker.Send<ResetTankSpeedEvent>(tank);
         }
     }
 
@@ -355,7 +355,7 @@ public class BattleTank : IDisposable {
         await SelfKill();
         SelfDestructTime = null;
 
-        await Round.Players.Send(new SelfDestructionBattleUserEvent(), Tanker.BattleUser);
+        await Round.Players.Send<SelfDestructionBattleUserEvent>(Tanker.BattleUser);
 
         await AddKills(-1);
         await AddScore(-10);
@@ -370,7 +370,7 @@ public class BattleTank : IDisposable {
         foreach (IDeathModule deathModule in Modules.OfType<IDeathModule>())
             await deathModule.OnDeath();
 
-        await Tanker.Send(new SelfTankExplosionEvent(), Entities.Tank);
+        await Tanker.Send<SelfTankExplosionEvent>(Entities.Tank);
         await StateManager.SetState(new Dead(StateManager));
         KillAssistants.Clear();
 
@@ -417,7 +417,7 @@ public class BattleTank : IDisposable {
     }
 
     public async Task CommitStatistics() {
-        await Round.Players.Send(new RoundUserStatisticsUpdatedEvent(), Entities.RoundUser);
+        await Round.Players.Send<RoundUserStatisticsUpdatedEvent>(Entities.RoundUser);
         await Round.ModeHandler.SortAllPlayers();
     }
 
@@ -448,7 +448,7 @@ public class BattleTank : IDisposable {
     public async Task ResetStatistics() {
         Statistics.Reset();
         await Entities.RoundUser.ChangeComponent(new RoundUserStatisticsComponent());
-        await Round.Players.Send(new RoundUserStatisticsUpdatedEvent(), Entities.RoundUser);
+        await Round.Players.Send<RoundUserStatisticsUpdatedEvent>(Entities.RoundUser);
     }
 
     public void CreateUserResult() =>

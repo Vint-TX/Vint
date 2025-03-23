@@ -59,6 +59,6 @@ public class ActivatePromoCodeEvent : IServerEvent {
             }
         }
 
-        await connection.Send(new ShowNotificationGroupEvent(), user);
+        await connection.Send<ShowNotificationGroupEvent>(user);
     }
 }

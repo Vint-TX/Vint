@@ -41,7 +41,7 @@ public class UserOnlineEvent : IServerEvent {
             await slot.AddComponentFrom<ModuleGroupComponent>(module);
         }
 
-        await connection.Send(new PaymentSectionLoadedEvent());
+        await connection.Send<PaymentSectionLoadedEvent>();
 
         await using DbConnection db = new();
 

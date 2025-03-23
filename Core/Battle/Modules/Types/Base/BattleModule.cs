@@ -109,7 +109,7 @@ public abstract class BattleModule {
 
         CurrentAmmo = value;
         await SlotEntity.ChangeComponent<InventoryAmmunitionComponent>(component => component.CurrentCount = CurrentAmmo);
-        await Tank.Tanker.Send(new InventoryAmmunitionChangedEvent(), SlotEntity);
+        await Tank.Tanker.Send<InventoryAmmunitionChangedEvent>(SlotEntity);
 
         await TryUnblock();
 

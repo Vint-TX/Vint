@@ -50,7 +50,7 @@ public abstract class BonusBox {
             return false;
 
         ICollection<BattlePlayer> players = Round.Players;
-        await players.Send(new BonusTakenEvent(), Entity);
+        await players.Send<BonusTakenEvent>(Entity);
         await players.Unshare(Entity);
 
         Entity = null;

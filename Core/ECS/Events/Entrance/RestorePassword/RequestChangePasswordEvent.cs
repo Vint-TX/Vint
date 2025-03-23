@@ -29,7 +29,7 @@ public class RequestChangePasswordEvent(
         await connection.ChangePassword(PasswordDigest);
 
         connection.Player = null!;
-        await connection.Send(new LoginFailedEvent());
-        await connection.Send(new AutoLoginFailedEvent());
+        await connection.Send<LoginFailedEvent>();
+        await connection.Send<AutoLoginFailedEvent>();
     }
 }

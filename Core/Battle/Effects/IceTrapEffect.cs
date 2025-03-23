@@ -44,7 +44,7 @@ public class IceTrapEffect(
             return;
 
         WaitingForExplosion = true;
-        Schedule(explosionDelay, async () => await Tank.Tanker.Send(new MineTryExplosionEvent(), Entity));
+        Schedule(explosionDelay, async () => await Tank.Tanker.Send<MineTryExplosionEvent>(Entity));
     }
 
     public override async Task Activate() {
@@ -99,7 +99,7 @@ public class IceTrapEffect(
                     await ForceDeactivate();
             });
 
-        await Round.Players.Send(new MineDropEvent(), Entity);
+        await Round.Players.Send<MineDropEvent>(Entity);
         CanBeDeactivated = false;
     }
 
@@ -123,7 +123,7 @@ public class IceTrapEffect(
         if (!WaitingForExplosion || !IsActive)
             return;
 
-        await Round.Players.Send(new MineExplosionEvent(), Entity);
+        await Round.Players.Send<MineExplosionEvent>(Entity);
         await ForceDeactivate();
     }
 }

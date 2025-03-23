@@ -24,15 +24,15 @@ public class LoginByPasswordEvent(
 
         if (ban is { Active: true }) {
             await connection.Send(new UserBlockedEvent($"You are {ban}"));
-            await connection.Send(new LoginFailedEvent());
+            await connection.Send<LoginFailedEvent>();
             return;
         }
 
         if (!new Encryption()
                 .GetLoginPasswordHash(connection.Player.PasswordHash)
                 .SequenceEqual(Convert.FromBase64String(PasswordEncipher))) {
-            await connection.Send(new InvalidPasswordEvent());
-            await connection.Send(new LoginFailedEvent());
+            await connection.Send<InvalidPasswordEvent>();
+            await connection.Send<LoginFailedEvent>();
             return;
         }
 

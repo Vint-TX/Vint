@@ -79,7 +79,7 @@ public class SpiderMineEffect(
         await ShareToAllPlayers();
         Schedule(activationTime, async () => await Entity.AddComponent<EffectActiveComponent>());
 
-        await Round.Players.Send(new MineDropEvent(), Entity);
+        await Round.Players.Send<MineDropEvent>(Entity);
         CanBeDeactivated = false;
     }
 
@@ -109,13 +109,13 @@ public class SpiderMineEffect(
     async Task TryExplode() {
         if (!IsActive) return;
 
-        await Tank.Tanker.Connection.Send(new MineTryExplosionEvent(), Entity);
+        await Tank.Tanker.Send<MineTryExplosionEvent>(Entity);
     }
 
     async Task Explode() {
         if (!IsActive) return;
 
-        await Round.Players.Send(new MineExplosionEvent(), Entity);
+        await Round.Players.Send<MineExplosionEvent>(Entity);
         await ForceDeactivate();
     }
 

@@ -82,7 +82,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
 
     public override async Task OnTankEnable() {
         await base.OnTankEnable();
-        await BattleTank.Tanker.Send(new SetMagazineReadyEvent(), BattleEntity);
+        await BattleTank.Tanker.Send<SetMagazineReadyEvent>(BattleEntity);
     }
 
     public override async Task OnTankDisable() {
@@ -126,7 +126,7 @@ public class HammerWeaponHandler : TankWeaponHandler {
         await StopReload();
         await SetCurrentCartridgeCount(MaximumCartridgeCount);
 
-        await BattleTank.Tanker.Send(new SetMagazineReadyEvent(), BattleEntity);
+        await BattleTank.Tanker.Send<SetMagazineReadyEvent>(BattleEntity);
         await BattleEntity.AddComponentIfAbsent(new ShootableComponent());
     }
 

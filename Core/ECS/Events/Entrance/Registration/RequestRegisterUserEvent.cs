@@ -23,7 +23,7 @@ public class RequestRegisterUserEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!RegexUtils.IsLoginValid(Username) ||
             !RegexUtils.IsEmailValid(Email)) {
-            await connection.Send(new RegistrationFailedEvent());
+            await connection.Send<RegistrationFailedEvent>();
             return;
         }
 
@@ -46,13 +46,13 @@ public class RequestRegisterUserEvent : IServerEvent {
             }
 
             if (banned) {
-                await connection.Send(new RegistrationFailedEvent());
+                await connection.Send<RegistrationFailedEvent>();
                 return;
             }
 
             if (await db.Players.AnyAsync(player => player.Username == Username) ||
                 await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsPerComputer) {
-                await connection.Send(new RegistrationFailedEvent());
+                await connection.Send<RegistrationFailedEvent>();
                 return;
             }
         }

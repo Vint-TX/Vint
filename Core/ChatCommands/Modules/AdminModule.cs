@@ -168,7 +168,7 @@ public class AdminModule(
         }
 
         foreach (Tanker tanker in round.Tankers) {
-            await tanker.Send(new KickFromBattleEvent(), tanker.BattleUser);
+            await tanker.Send<KickFromBattleEvent>(tanker.BattleUser);
             await round.RemoveTanker(tanker);
         }
     }

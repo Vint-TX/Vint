@@ -54,7 +54,7 @@ public abstract class TeamHandler : ModeHandler {
         };
 
         await team.ChangeComponent<TeamScoreComponent>(component => component.Score = Math.Max(0, component.Score + delta));
-        await Round.Players.Send(new RoundScoreUpdatedEvent(), Round.Entity);
+        await Round.Players.Send<RoundScoreUpdatedEvent>(Round.Entity);
 
         await DominationProcessor.ScoreUpdated();
     }

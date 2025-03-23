@@ -23,7 +23,7 @@ public class EnergyInjectionEffect(
         IEntity weaponEntity = Tank.Entities.Weapon;
 
         await ReloadWeapon();
-        await Tank.Tanker.Send(new ExecuteEnergyInjectionEvent(), Entity, weaponEntity);
+        await Tank.Tanker.Send<ExecuteEnergyInjectionEvent>(Entity, weaponEntity);
 
         await Deactivate();
     }

@@ -15,7 +15,7 @@ public class InviteEnteredEvent : IServerEvent {
             .InviteCode;
 
         if (string.IsNullOrWhiteSpace(code)) {
-            await connection.Send(new InviteDoesNotExistEvent());
+            await connection.Send<InviteDoesNotExistEvent>();
             return;
         }
 
@@ -23,11 +23,11 @@ public class InviteEnteredEvent : IServerEvent {
         Database.Models.Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
 
         if (invite is not { RemainingUses: > 0 }) {
-            await connection.Send(new InviteDoesNotExistEvent());
+            await connection.Send<InviteDoesNotExistEvent>();
             return;
         }
 
         connection.Invite = invite;
-        await connection.Send(new CommenceRegistrationEvent());
+        await connection.Send<CommenceRegistrationEvent>();
     }
 }

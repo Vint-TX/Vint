@@ -145,6 +145,10 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     Task Send(IEvent @event, params IEnumerable<IEntity> entities);
 
+    Task Send<TEvent>() where TEvent : IEvent, new();
+
+    Task Send<TEvent>(params IEnumerable<IEntity> entities) where TEvent : IEvent, new();
+
     Task Share(IEntity entity);
 
     Task ShareIfUnshared(IEntity entity);
@@ -404,7 +408,7 @@ public abstract class PlayerConnection(
             await Share(new UserRankRewardNotificationTemplate().Create(rankComponent.Rank, crystals, xCrystals));
 
             if (InLobby && LobbyPlayer!.InRound)
-                await LobbyPlayer.Round.Players.Send(new UpdateRankEvent(), UserContainer.Entity);
+                await LobbyPlayer.Round.Players.Send<UpdateRankEvent>(UserContainer.Entity);
         }
 
         return;
@@ -977,7 +981,7 @@ public abstract class PlayerConnection(
         await userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
         await userItem.AddGroupComponent<UserGroupComponent>(UserContainer.Entity);
 
-        await Send(new ModuleAssembledEvent(), userItem);
+        await Send<ModuleAssembledEvent>(userItem);
     }
 
     public async Task UpgradeModule(IEntity userItem, bool forXCrystals) {
@@ -1023,7 +1027,7 @@ public abstract class PlayerConnection(
         await card.ChangeComponent<UserItemCounterComponent>(component => component.Count = module.Cards);
         await userItem.ChangeComponent<ModuleUpgradeLevelComponent>(component => component.Level = module.Level);
 
-        await Send(new ModuleUpgradedEvent(), userItem);
+        await Send<ModuleUpgradedEvent>(userItem);
     }
 
 public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
@@ -1261,6 +1265,10 @@ public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
         Event = @event,
         Entities = entities as IEntity[] ?? entities.ToArray()
     });
+
+    public Task Send<TEvent>() where TEvent : IEvent, new() => Send(new TEvent());
+
+    public Task Send<TEvent>(params IEnumerable<IEntity> entities) where TEvent : IEvent, new() => Send(new TEvent(), entities);
 
     public Task Share(IEntity entity) => entity.Share(this);
 

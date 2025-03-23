@@ -29,7 +29,7 @@ public sealed class GoldBox : BonusBox {
         await base.Take(battleTank);
 
         ICollection<BattlePlayer> players = Round.Players;
-        await players.Send(new GoldTakenNotificationEvent(), battleTank.Entities.BattleUser);
+        await players.Send<GoldTakenNotificationEvent>(battleTank.Entities.BattleUser);
         await players.Unshare(RegionEntity.Value);
 
         await StateManager.SetState(new None(StateManager));

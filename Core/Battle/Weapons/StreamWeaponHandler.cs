@@ -8,6 +8,7 @@ using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Components.Server.Damage;
 using Vint.Core.ECS.Events.Battle.Weapon;
 using Vint.Core.ECS.Events.Battle.Weapon.Hit;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Weapons;
 
@@ -71,5 +72,5 @@ public abstract class StreamWeaponHandler : TankWeaponHandler, IStreamWeaponHand
     }
 
     public virtual Task Reset() =>
-        BattleTank.Tanker.Connection.Send(new StreamWeaponResetStateEvent(), BattleEntity);
+        BattleTank.Tanker.Send<StreamWeaponResetStateEvent>(BattleEntity);
 }

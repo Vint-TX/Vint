@@ -88,9 +88,9 @@ public class Captured(
 
     public async Task Deliver() {
         if (!ModeHandler.RedTeam.Players.Any() || !ModeHandler.BlueTeam.Players.Any())
-            await Round.Players.Send(new FlagNotCountedDeliveryEvent(), Entity, ModeHandler.Entity);
+            await Round.Players.Send<FlagNotCountedDeliveryEvent>(Entity, ModeHandler.Entity);
         else {
-            await Round.Players.Send(new FlagDeliveryEvent(), Entity);
+            await Round.Players.Send<FlagDeliveryEvent>(Entity);
             await ModeHandler.UpdateScore(Carrier.TeamColor, 1);
 
             BattleTank tank = Carrier.Tank;
@@ -153,7 +153,7 @@ public class Captured(
 
     public override async Task Start() {
         await Entity.AddGroupComponent<TankGroupComponent>(Carrier.Tank.Entities.Tank);
-        await Round.Players.Send(new FlagPickupEvent(), Entity);
+        await Round.Players.Send<FlagPickupEvent>(Entity);
 
         await base.Start();
     }
@@ -221,7 +221,7 @@ public class OnGround : FlagState<FlagGroundedStateComponent> {
             await Entity.AddGroupComponent<TankGroupComponent>(returnerTank.Entities.Tank);
         }
 
-        await Round.Players.Send(new FlagReturnEvent(), Entity);
+        await Round.Players.Send<FlagReturnEvent>(Entity);
         await StateManager.SetState(new OnPedestal(StateManager));
 
         if (returner != null)

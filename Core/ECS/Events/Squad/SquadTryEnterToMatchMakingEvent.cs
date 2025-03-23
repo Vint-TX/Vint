@@ -32,10 +32,10 @@ public class SquadTryEnterToMatchMakingEvent(
             if (!Enum.TryParse(configPathParts[3], true, out ArcadeModeType mode))
                 return;
 
-            await squad.Members.Send(new EnteredToMatchmakingEvent(), selectedMode);
+            await squad.Members.Send<EnteredToMatchmakingEvent>(selectedMode);
             await arcade.EnqueueSquad(squad, mode);
         } else {
-            await squad.Members.Send(new EnteredToMatchmakingEvent(), selectedMode);
+            await squad.Members.Send<EnteredToMatchmakingEvent>(selectedMode);
             await rating.EnqueueSquad(squad);
         }
     }

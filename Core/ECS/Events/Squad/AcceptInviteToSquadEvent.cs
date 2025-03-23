@@ -36,7 +36,7 @@ public class AcceptInviteToSquadEvent(
 
         if (!squad.HasSpace && SquadRegistry.Invites.RemoveAll(FromUserId, out FrozenSet<long>? targets)) {
             foreach (IPlayerConnection target in server.FindConnections(targets))
-                await target.Send(new InviteToSquadCanceledEvent(), target.UserContainer.Entity);
+                await target.Send<InviteToSquadCanceledEvent>(target.UserContainer.Entity);
         }
     }
 }

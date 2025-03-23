@@ -67,6 +67,12 @@ public static class PlayerConnectionUtils {
             await connection.Send(@event, entities);
     }
 
+    public static async Task Send<TEvent>(this IEnumerable<IPlayerConnection> connections) where TEvent : IEvent, new() =>
+        await connections.Send(new TEvent());
+
+    public static async Task Send<TEvent>(this IEnumerable<IPlayerConnection> connections, params IEnumerable<IEntity> entities)
+        where TEvent : IEvent, new() => await connections.Send(new TEvent(), entities);
+
     public static async Task Send(this IEnumerable<IPlayerConnection> connections, ICommand command) {
         foreach (IPlayerConnection connection in connections)
             await connection.Send(command);
@@ -116,11 +122,23 @@ public static class PlayerWithConnectionUtils {
     public static async Task Send(this IWithConnection player, IEvent @event, params IEnumerable<IEntity> entities) =>
         await player.Connection.Send(@event, entities);
 
+    public static async Task Send<TEvent>(this IWithConnection player) where TEvent : IEvent, new() =>
+        await player.Send(new TEvent());
+
+    public static async Task Send<TEvent>(this IWithConnection player, params IEnumerable<IEntity> entities) where TEvent : IEvent, new() =>
+        await player.Send(new TEvent(), entities);
+
     public static async Task Send(this IEnumerable<IWithConnection> players, IEvent @event) =>
         await players.Select(player => player.Connection).Send(@event);
 
     public static async Task Send(this IEnumerable<IWithConnection> players, IEvent @event, params IEnumerable<IEntity> entities) =>
         await players.Select(player => player.Connection).Send(@event, entities);
+
+    public static async Task Send<TEvent>(this IEnumerable<IWithConnection> players) where TEvent : IEvent, new() =>
+        await players.Send(new TEvent());
+
+    public static async Task Send<TEvent>(this IEnumerable<IWithConnection> players, params IEnumerable<IEntity> entities)
+        where TEvent : IEvent, new() => await players.Send(new TEvent(), entities);
 
     public static async Task Send(this IEnumerable<IWithConnection> players, ICommand command) =>
         await players.Select(player => player.Connection).Send(command);

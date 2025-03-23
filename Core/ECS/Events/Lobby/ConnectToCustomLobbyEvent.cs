@@ -21,7 +21,7 @@ public class ConnectToCustomLobbyEvent(
         }
 
         if (lobbyProcessor.FindByLobbyId(LobbyId) is not CustomLobby lobby) {
-            await connection.Send(new CustomLobbyNotExistsEvent(), user);
+            await connection.Send<CustomLobbyNotExistsEvent>(user);
             return;
         }
 

@@ -27,10 +27,10 @@ public class EnterToMatchmakingEvent(
             if (!Enum.TryParse(configPathParts[3], true, out ArcadeModeType mode))
                 return;
 
-            await connection.Send(new EnteredToMatchmakingEvent(), selectedMode);
+            await connection.Send<EnteredToMatchmakingEvent>(selectedMode);
             await arcade.EnqueuePlayer(connection, mode);
         } else {
-            await connection.Send(new EnteredToMatchmakingEvent(), selectedMode);
+            await connection.Send<EnteredToMatchmakingEvent>(selectedMode);
             await rating.EnqueuePlayer(connection);
         }
     }

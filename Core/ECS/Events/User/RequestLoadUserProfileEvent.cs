@@ -27,6 +27,6 @@ public class RequestLoadUserProfileEvent(
         }
 
         await container.ShareTo(connection);
-        await connection.Send(new UserProfileLoadedEvent(), container.Entity);
+        await connection.Send<UserProfileLoadedEvent>(container.Entity);
     }
 }

@@ -49,6 +49,6 @@ public class AutoLoginUserEvent(
 
     static async Task Fail(IPlayerConnection connection) {
         connection.Player = null!;
-        await connection.Send(new AutoLoginFailedEvent());
+        await connection.Send<AutoLoginFailedEvent>();
     }
 }

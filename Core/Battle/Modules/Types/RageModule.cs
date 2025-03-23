@@ -5,6 +5,7 @@ using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Components.Server.Modules.Effect.Rage;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events.Battle.Module;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Modules.Types;
 
@@ -43,7 +44,7 @@ public class RageModule : TriggerBattleModule, IKillModule {
         effect = GetEffect();
         await effect.Activate();
 
-        await Tank.Tanker.Connection.Send(new TriggerEffectExecuteEvent(), effect.Entity!);
+        await Tank.Tanker.Send<TriggerEffectExecuteEvent>(effect.Entity!);
         await base.Activate();
     }
 }
