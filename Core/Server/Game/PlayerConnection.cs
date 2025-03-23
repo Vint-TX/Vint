@@ -53,6 +53,7 @@ using Vint.Core.ECS.Templates.Weapons.User;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 using Vint.Core.Server.Game.Protocol.Commands;
+using Vint.Core.Squads;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game;
@@ -61,6 +62,7 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     ILogger Logger { get; }
 
     Player Player { get; set; }
+    Squad? Squad { get; set; }
     LobbyPlayer? LobbyPlayer { get; set; }
     Spectator? Spectator { get; set; }
     UserContainer UserContainer { get; }
@@ -68,6 +70,8 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     IServiceProvider ServiceProvider { get; }
 
     bool IsLoggedIn { get; }
+    [MemberNotNullWhen(true, nameof(Squad))]
+    bool InSquad { get; }
     [MemberNotNullWhen(true, nameof(LobbyPlayer))]
     bool InLobby { get; }
     [MemberNotNullWhen(true, nameof(Spectator))]
@@ -165,6 +169,7 @@ public abstract class PlayerConnection(
     public ILogger Logger { get; protected set; } = Log.Logger.ForType<PlayerConnection>();
 
     public Player Player { get; set; } = null!;
+    public Squad? Squad { get; set; }
     public LobbyPlayer? LobbyPlayer { get; set; }
     public Spectator? Spectator { get; set; }
     public UserContainer UserContainer { get; private set; } = null!;
@@ -177,6 +182,7 @@ public abstract class PlayerConnection(
     public bool RestorePasswordCodeValid { get; set; }
 
     public abstract bool IsLoggedIn { get; }
+    public bool InSquad => Squad != null;
     public bool InLobby => LobbyPlayer != null;
     public bool Spectating => Spectator != null;
     public DateTimeOffset PingSendTime { get; set; }
@@ -332,14 +338,12 @@ public abstract class PlayerConnection(
         await using DbConnection db = new();
         await db.BeginTransactionAsync();
 
-        await db
-            .Players
+        await db.Players
             .Where(player => player.Id == Player.Id)
             .Set(player => player.Experience, player => player.Experience + delta)
             .UpdateAsync();
 
-        await db
-            .SeasonStatistics
+        await db.SeasonStatistics
             .Where(stats => stats.PlayerId == Player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
             .Set(stats => stats.ExperienceEarned, stats => stats.ExperienceEarned + delta)
             .UpdateAsync();
@@ -632,7 +636,8 @@ public abstract class PlayerConnection(
                     await userItem.AddComponent<MountedItemComponent>();
 
                     Player.CurrentAvatarId = marketItem.Id;
-                    await UserContainer.Entity.ChangeComponent(new UserAvatarComponent(Player.CurrentAvatarId));
+                    await UserContainer.Entity.RemoveComponent<UserAvatarComponent>();
+                    await UserContainer.Entity.AddComponent(new UserAvatarComponent(Player.CurrentAvatarId));
 
                     await db.UpdateAsync(Player);
                     break;
@@ -1389,6 +1394,9 @@ public class SocketPlayerConnection(
 
                 foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == UserContainer.Id))
                     ConfigManager.DiscordLinkRequests.TryRemove(request);
+
+                if (InSquad)
+                    await Squad!.RemoveMember(UserContainer.Id);
             }
 
             if (InLobby) {

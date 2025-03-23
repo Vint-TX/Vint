@@ -1,2 +1,3 @@
 squadConfig:
   maxSquadSize: 4
+  rankRestriction: 4

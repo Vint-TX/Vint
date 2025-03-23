@@ -115,7 +115,6 @@ public class Round : IDisposable {
             await player.OnRoundEnded(ended.WasEnemies, QuestManager);
 
         await Entity.AddComponentIfAbsent(new RoundRestartingStateComponent());
-
         await RoundEnded();
     }
 

@@ -38,9 +38,7 @@ public static class ChatUtils {
                 .GetComponent<ChatParticipantsComponent>().Users
                 .ToList()
                 .Select(user => {
-                    IPlayerConnection connection = server
-                        .PlayerConnections
-                        .Values
+                    IPlayerConnection connection = server.PlayerConnections.Values
                         .Where(conn => conn.IsLoggedIn)
                         .SingleOrDefault(conn => conn.UserContainer.Id == user.Id)!;
 
@@ -52,6 +50,8 @@ public static class ChatUtils {
             TeamBattleChatTemplate => from.LobbyPlayer!.Round!.Tankers
                 .Where(tanker => tanker.TeamColor == from.LobbyPlayer.TeamColor)
                 .Select(tanker => tanker.Connection),
+
+            SquadChatTemplate => from.Squad!.Members,
 
             _ => []
         };

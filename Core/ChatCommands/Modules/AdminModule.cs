@@ -194,7 +194,7 @@ public class AdminModule(
         [Option("type", "Type of the bonus")] BonusType bonusType,
         [Option("anonymous", "Drop the gold anonymously", true)] bool anon = true) {
         LobbyPlayer lobbyPlayer = ctx.Connection.LobbyPlayer!;
-        Round round = lobbyPlayer.Round!; // todo
+        Round round = lobbyPlayer.Round!;
         IBonusProcessor? bonusProcessor = round.BonusProcessor;
 
         if (bonusProcessor == null) {

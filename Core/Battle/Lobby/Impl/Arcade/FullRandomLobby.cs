@@ -12,11 +12,11 @@ namespace Vint.Core.Battle.Lobby.Impl.Arcade;
 public sealed class FullRandomLobby : ArcadeLobby {
     public FullRandomLobby(MapInfo mapInfo, BattleMode battleMode, QuestManager questManager) : base(questManager) {
         ClientBattleParams clientParams = new(battleMode, GetRandomGravity(), mapInfo.Id, GetRandomBool(), GetRandomBool(), false, GetRandomMaxPlayers(), GetRandomTimer());
-        Properties = new BattleProperties(BattleType.Arcade, TimeSpan.Zero, false, clientParams);
+        Properties = new BattleProperties(BattleType.Arcade, TimeSpan.Zero, true, clientParams);
         Entity = new MatchMakingLobbyTemplate().Create(Properties);
     }
 
-    public override ArcadeModeType ArcadeType => ArcadeModeType.WithoutDamage;
+    public override ArcadeModeType ArcadeType => ArcadeModeType.FullRandom;
     public override BattleProperties Properties { get; protected set; }
     public override IEntity Entity { get; }
 

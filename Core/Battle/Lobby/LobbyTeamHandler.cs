@@ -6,6 +6,7 @@ using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates.Battle;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Lobby;
@@ -67,6 +68,47 @@ public class LobbyTeamHandler(
     public async Task ChooseAndSetTeamFor(LobbyPlayer player) {
         IEntity? team = CalculateTeamFor(player);
         await player.SetTeam(team);
+    }
+
+    public FrozenDictionary<long, IEntity?> CalculateTeamsForSquad(IEnumerable<IPlayerConnection> squadMembers) {
+        if (!IsTeamLobby)
+            return squadMembers.ToFrozenDictionary(member => member.UserContainer.Id, IEntity? (_) => null);
+
+        List<IPlayerConnection> members = squadMembers.ToList();
+
+        int bluePlayers = BluePlayers.Count();
+        int redPlayers = RedPlayers.Count();
+
+        int availableSpaceInBlue = TeamLimit - bluePlayers;
+        int availableSpaceInRed = TeamLimit - redPlayers;
+
+        bool hasSpaceInBlue = availableSpaceInBlue >= members.Count;
+        bool hasSpaceInRed = availableSpaceInRed >= members.Count;
+
+        if (hasSpaceInBlue && hasSpaceInRed) {
+            IEntity team = bluePlayers > redPlayers ? RedTeam : BlueTeam;
+            return members.ToFrozenDictionary(member => member.UserContainer.Id, _ => team)!;
+        }
+
+        if (hasSpaceInBlue)
+            return members.ToFrozenDictionary(member => member.UserContainer.Id, _ => BlueTeam)!;
+
+        if (hasSpaceInRed)
+            return members.ToFrozenDictionary(member => member.UserContainer.Id, _ => RedTeam)!;
+
+        Dictionary<long, IEntity?> teams = new(members.Count);
+
+        foreach (IPlayerConnection connection in members.Shuffle()) {
+            if (availableSpaceInBlue > 0) {
+                teams[connection.UserContainer.Id] = BlueTeam;
+                availableSpaceInBlue--;
+            } else if (availableSpaceInRed > 0) {
+                teams[connection.UserContainer.Id] = RedTeam;
+                availableSpaceInRed--;
+            } else throw new InvalidOperationException("No available space in teams");
+        }
+
+        return teams.ToFrozenDictionary();
     }
 
     public IEntity? GetOppositeTeamFor(LobbyPlayer player) =>

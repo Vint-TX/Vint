@@ -6,6 +6,7 @@ using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game;
+using Vint.Core.Squads;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Matchmaking;
@@ -24,6 +25,17 @@ public class RatingMatchmakingProcessor( // todo matchmaking system
         }
 
         await lobby.AddPlayer(connection);
+    }
+
+    public async Task EnqueueSquad(Squad squad) {
+        RatingLobby? lobby = AvailableLobbies.FirstOrDefault(lobby => FilterForSquad(lobby, squad));
+
+        if (lobby == null) {
+            BattleProperties properties = GenerateProperties();
+            lobby = await lobbyProcessor.CreateRating(properties);
+        }
+
+        await lobby.AddSquad(squad);
     }
 
     public async Task TryDequeuePlayer(IPlayerConnection connection) { // right now it is just removing player from its lobby
@@ -45,6 +57,9 @@ public class RatingMatchmakingProcessor( // todo matchmaking system
         lobby.Players.Count < lobby.Properties.MaxPlayers &&
         lobby.StateManager.CurrentState is not Ended &&
         lobby.StateManager.CurrentState is not Running { Round.Remaining.TotalMinutes: <= 0 };
+
+    static bool FilterForSquad(RatingLobby lobby, Squad squad) =>
+        lobby.Players.Count + squad.Members.Count <= lobby.Properties.MaxPlayers;
 
     static BattleProperties GenerateProperties() {
         MapInfo mapInfo = GetRandomMapInfo();

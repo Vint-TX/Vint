@@ -11,8 +11,16 @@ public class ExitBattleEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.Spectating)
             await ExitFromRound(connection.Spectator);
-        else if (connection.InLobby && connection.LobbyPlayer.InRound)
-            await ExitFromRound(connection.LobbyPlayer);
+        else {
+            LobbyPlayer lobbyPlayer = connection.LobbyPlayer!;
+
+            if (connection.InLobby && lobbyPlayer.InRound) {
+                if (connection.InSquad && lobbyPlayer.Tanker.Round.StateManager.CurrentState is not Ended)
+                    await connection.Squad.RemoveMember(connection.UserContainer.Id);
+
+                await ExitFromRound(lobbyPlayer);
+            }
+        }
     }
 
     static async Task ExitFromRound(Spectator spectator) =>

@@ -3,12 +3,12 @@ using JetBrains.Annotations;
 
 namespace Vint.Core.Structures;
 
-public class ConcurrentList<T>(
+public class BlockingList<T>(
     List<T> inner
 ) : IList<T> {
     readonly Lock _lock = new();
 
-    public ConcurrentList() : this([]) { }
+    public BlockingList() : this([]) { }
 
     IEnumerator IEnumerable.GetEnumerator() {
         lock (_lock) {

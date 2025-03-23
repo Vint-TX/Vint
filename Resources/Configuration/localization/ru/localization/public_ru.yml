@@ -481,9 +481,9 @@ cff363b1-f7b2-4b10-ab4c-0d718e9e7bcf:
 9ab01fc6-4c02-4a10-ad73-797ce6911106:
   'friends/alreadyInLobby': 'Уже в лобби'
 c9440e92-3213-41a1-af37-069135310899:
-  'friends/cantCreateSquad': 'Ты сможешь создать отряд после того,\nкак достигнешь 4-го ранга.'
+  'friends/cantCreateSquad': 'Ты сможешь создать отряд после того,\nкак достигнешь {0}-го ранга.'
 e26976b3-b0e2-4c37-9a84-cde929eb05ba:
-  'friends/cantInviteFriendIntoSquad': 'Ты сможешь пригласить {0} в отряд после того,{1}как он достигнет 4-го ранга.'
+  'friends/cantInviteFriendIntoSquad': 'Ты сможешь пригласить {0} в отряд после того,{1}как он достигнет {2}-го ранга.'
 53eb1343-717f-4d6a-b10b-8f87e6cf3103:
   'friends/contextMenu/inviteSend': 'Приглашение отправлено!'
 eee90dd8-266e-4b59-b00f-facd6e88fa19:

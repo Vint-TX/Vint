@@ -48,9 +48,7 @@ public class AcceptFriendEvent(
         await connection.Send(new IncomingFriendRemovedEvent(UserId), connection.UserContainer.Entity);
         await connection.Send(new AcceptedFriendAddedEvent(UserId), connection.UserContainer.Entity);
 
-        IPlayerConnection? sender = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == UserId);
+        IPlayerConnection? sender = server.FindConnection(UserId);
 
         if (sender == null) return;
 

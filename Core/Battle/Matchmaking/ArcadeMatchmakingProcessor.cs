@@ -5,6 +5,7 @@ using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game;
+using Vint.Core.Squads;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Matchmaking;
@@ -14,9 +15,16 @@ public class ArcadeMatchmakingProcessor( // todo matchmaking system
 ) {
     public async Task EnqueuePlayer(IPlayerConnection connection, ArcadeModeType modeType) {
         ArcadeLobby lobby = GetAvailableLobbies(modeType).FirstOrDefault() ??
-                             await lobbyProcessor.CreateArcade(GetRandomMapInfo(), GetRandomMode(), modeType);
+                            await lobbyProcessor.CreateArcade(GetRandomMapInfo(), GetRandomMode(), modeType);
 
         await lobby.AddPlayer(connection);
+    }
+
+    public async Task EnqueueSquad(Squad squad, ArcadeModeType modeType) {
+        ArcadeLobby lobby = GetAvailableLobbies(modeType).FirstOrDefault(lobby => FilterForSquad(lobby, squad)) ??
+                            await lobbyProcessor.CreateArcade(GetRandomMapInfo(), GetRandomMode(), modeType);
+
+        await lobby.AddSquad(squad);
     }
 
     public async Task TryDequeuePlayer(IPlayerConnection connection) { // right now it is just removing player from its lobby
@@ -43,6 +51,9 @@ public class ArcadeMatchmakingProcessor( // todo matchmaking system
         lobby.Players.Count < lobby.Properties.MaxPlayers &&
         lobby.StateManager.CurrentState is not Ended &&
         lobby.StateManager.CurrentState is not Running { Round.Remaining.TotalMinutes: <= 2 };
+
+    static bool FilterForSquad(ArcadeLobby lobby, Squad squad) =>
+        lobby.Players.Count + squad.Members.Count < lobby.Properties.MaxPlayers;
 
     static MapInfo GetRandomMapInfo() => ConfigManager.MapInfos.Where(mapInfo => mapInfo.Matchmaking).ToArray().RandomElement();
 

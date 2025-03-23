@@ -1,5 +1,6 @@
 ﻿using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -12,13 +13,32 @@ public class ClientExitLobbyEvent : IServerEvent {
         if (!connection.InLobby) return;
 
         LobbyPlayer lobbyPlayer = connection.LobbyPlayer;
+        LobbyBase lobby = lobbyPlayer.Lobby;
+        Round? round = lobbyPlayer.Round;
 
-        if (lobbyPlayer.Lobby.StateManager.CurrentState is Starting)
+        if (lobby.StateManager.CurrentState is Starting)
             return;
 
-        if (lobbyPlayer.InRound)
-            await lobbyPlayer.Round.RemoveTanker(lobbyPlayer.Tanker);
+        if (connection.InSquad) {
+            Squads.Squad squad = connection.Squad;
 
-        await lobbyPlayer.Lobby.RemovePlayer(lobbyPlayer);
+            if (round != null) {
+                await squad.RemoveMember(connection.UserContainer.Id);
+                await round.RemoveTanker(lobbyPlayer.Tanker!);
+
+                await lobby.RemovePlayer(lobbyPlayer);
+            } else if (squad.Leader != connection) {
+                await squad.RemoveMember(connection.UserContainer.Id);
+                await lobby.RemovePlayer(lobbyPlayer);
+            } else {
+                foreach (IPlayerConnection member in squad.Members)
+                    await lobby.RemovePlayer(member.LobbyPlayer!);
+            }
+        } else {
+            if (round != null)
+                await round.RemoveTanker(lobbyPlayer.Tanker!);
+
+            await lobby.RemovePlayer(lobbyPlayer);
+        }
     }
 }

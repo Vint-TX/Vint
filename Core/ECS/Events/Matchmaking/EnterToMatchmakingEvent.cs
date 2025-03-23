@@ -10,9 +10,7 @@ public class EnterToMatchmakingEvent(
     RatingMatchmakingProcessor rating,
     ArcadeMatchmakingProcessor arcade
 ) : IServerEvent {
-    static IEnumerable<IEntity> Modes { get; } = GlobalEntities
-        .GetEntities("matchmakingModes")
-        .ToList();
+    static IEnumerable<IEntity> Modes { get; } = GlobalEntities.GetEntities("matchmakingModes").ToList();
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.InLobby) return;

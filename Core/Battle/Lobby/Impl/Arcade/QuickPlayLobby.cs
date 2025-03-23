@@ -10,12 +10,12 @@ namespace Vint.Core.Battle.Lobby.Impl.Arcade;
 
 public sealed class QuickPlayLobby : ArcadeLobby {
     public QuickPlayLobby(MapInfo mapInfo, BattleMode battleMode, QuestManager questManager) : base(questManager) {
-        ClientBattleParams clientParams = new(battleMode, GravityType.Earth, mapInfo, false, true, false, 5);
-        Properties = new BattleProperties(BattleType.Arcade, TimeSpan.Zero, false, clientParams);
+        ClientBattleParams clientParams = new(battleMode, GravityType.Earth, mapInfo, false, true, false, 1);
+        Properties = new BattleProperties(BattleType.Arcade, TimeSpan.Zero, true, clientParams);
         Entity = new MatchMakingLobbyTemplate().Create(Properties);
     }
 
-    public override ArcadeModeType ArcadeType => ArcadeModeType.WithoutDamage;
+    public override ArcadeModeType ArcadeType => ArcadeModeType.QuickPlay;
     public override BattleProperties Properties { get; protected set; }
     public override IEntity Entity { get; }
 }

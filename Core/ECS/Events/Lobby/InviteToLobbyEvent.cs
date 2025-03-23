@@ -15,9 +15,7 @@ public class InviteToLobbyEvent(
         if (connection.LobbyPlayer?.Lobby is not CustomLobby lobby)
             return;
 
-        IPlayerConnection? target = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .FirstOrDefault(conn => conn.Player.Id == InvitedUserId);
+        IPlayerConnection? target = server.FindConnection(InvitedUserId);
 
         if (target == null)
             return;

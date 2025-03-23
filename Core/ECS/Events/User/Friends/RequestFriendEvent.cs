@@ -42,9 +42,7 @@ public class RequestFriendEvent(
         await connection.Send(new OutgoingFriendAddedEvent(UserId), connection.UserContainer.Entity);
         await connection.Share(new FriendSentNotificationTemplate().Create(connection.UserContainer.Entity));
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.UserContainer.Id == UserId);
+        IPlayerConnection? targetConnection = server.FindConnection(UserId);
 
         if (targetConnection != null)
             await targetConnection.Send(new IncomingFriendAddedEvent(senderId), UserContainer.Entity);

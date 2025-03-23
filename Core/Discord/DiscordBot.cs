@@ -193,7 +193,7 @@ public class DiscordBot(
         };
 
         GameServer server = serviceProvider.GetRequiredService<GameServer>();
-        IPlayerConnection? connection = server.PlayerConnections.Values.FirstOrDefault(conn => conn.IsLoggedIn && conn.Player.Id == playerId);
+        IPlayerConnection? connection = server.FindConnection(playerId);
 
         if (connection == null) {
             await discordLink.Revoke(this, connection);

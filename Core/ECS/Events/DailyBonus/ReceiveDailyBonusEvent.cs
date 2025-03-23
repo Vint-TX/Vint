@@ -38,7 +38,7 @@ public class ReceiveDailyBonusEvent : IServerEvent {
         if (bonus == null)
             return;
 
-        switch (bonus.DailyBonusType) { // todo DailyBonusReceivedEvent after ChangeComponent
+        switch (bonus.DailyBonusType) {
             case DailyBonusType.Cry: {
                 long crystals = bonus.CryAmount!.Value;
                 await connection.ChangeCrystals(crystals);

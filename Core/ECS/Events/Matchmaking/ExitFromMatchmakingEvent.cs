@@ -15,9 +15,24 @@ public class ExitFromMatchmakingEvent(
         if (connection.InLobby && connection.LobbyPlayer.Lobby.StateManager.CurrentState is Starting)
             return;
 
-        await rating.TryDequeuePlayer(connection); // fkin bruh
-        await arcade.TryDequeuePlayer(connection);
+        if (connection.InSquad) {
+            Squads.Squad squad = connection.Squad;
 
+            if (squad.Leader == connection) {
+                foreach (IPlayerConnection member in squad.Members.Where(member => member != connection)) {
+                    await TryDequeue(member);
+                    await member.Send(new ExitedFromMatchmakingEvent(false), [..entities, member.UserContainer.Entity]);
+                }
+            } else
+                await squad.RemoveMember(connection.UserContainer.Id);
+        }
+
+        await TryDequeue(connection);
         await connection.Send(new ExitedFromMatchmakingEvent(true), [..entities, connection.UserContainer.Entity]);
+    }
+
+    async Task TryDequeue(IPlayerConnection connection) {
+        await rating.TryDequeuePlayer(connection);
+        await arcade.TryDequeuePlayer(connection);
     }
 }

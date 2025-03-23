@@ -9,11 +9,7 @@ public class UnloadUsersEvent : IServerEvent {
     public HashSet<long> Users { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        // if (connection.InLobby)
-        //     Users = Users.Except(connection.LobbyPlayer.Lobby.Players.Select(player => player.Connection.UserContainer.Id)).ToHashSet();
-
-        foreach (UserContainer container in Users.Select(UserRegistry.GetContainer)) {
+        foreach (UserContainer container in Users.Select(UserRegistry.GetContainer))
             await container.UnshareFrom(connection);
-        }
     }
 }

@@ -42,7 +42,7 @@ public class UserDailyBonusReadyEvent : IServerEvent {
         await user.AddComponent<UserDailyBonusInitializedComponent>();
     }
 
-    static async Task Cleanup(IEntity user) { // todo create separate entity for this components
+    static async Task Cleanup(IEntity user) {
         await user.RemoveComponentIfPresent<UserDailyBonusCycleComponent>();
         await user.RemoveComponentIfPresent<UserDailyBonusZoneComponent>();
         await user.RemoveComponentIfPresent<UserDailyBonusNextReceivingDateComponent>();

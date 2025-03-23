@@ -56,9 +56,7 @@ public class PlayerController(
             return;
         }
 
-        IPlayerConnection? target = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == playerId);
+        IPlayerConnection? target = server.FindConnection(playerId);
 
         if (target == null)
             throw HttpException.NotFound($"Player '{playerId}' not found");
@@ -68,8 +66,7 @@ public class PlayerController(
 
     [Get("/{id}/restorePasswordCode")]
     public object GetRestorePasswordCode(long id) {
-        IPlayerConnection? connection = server.PlayerConnections.Values
-            .SingleOrDefault(conn => conn.Player.Id == id);
+        IPlayerConnection? connection = server.FindConnection(id);
 
         if (connection == null)
             throw HttpException.NotFound($"Player with id {id} is offline or does not exists");
@@ -93,9 +90,7 @@ public class PlayerController(
 
     [Post("/{id}/kick")]
     public async Task KickPlayer(long id, [FromBodyAsJson] string reason) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == id);
+        IPlayerConnection? targetConnection = server.FindConnection(id);
 
         if (targetConnection == null)
             throw HttpException.NotFound($"Player with id {id} does not exists");
@@ -108,9 +103,7 @@ public class PlayerController(
 
     [Post("/{id}/warn")]
     public async Task WarnPlayer(long id, [FromBodyAsJson] PunishDTO punish) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == id);
+        IPlayerConnection? targetConnection = server.FindConnection(id);
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
@@ -150,9 +143,7 @@ public class PlayerController(
 
     [Post("/{id}/mute")]
     public async Task MutePlayer(long id, [FromBodyAsJson] PunishDTO punish) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == id);
+        IPlayerConnection? targetConnection = server.FindConnection(id);
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
@@ -192,9 +183,7 @@ public class PlayerController(
 
     [Post("/{id}/ban")]
     public async Task BanPlayer(long id, [FromBodyAsJson] PunishDTO punish) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == id);
+        IPlayerConnection? targetConnection = server.FindConnection(id);
 
         Player? targetPlayer = targetConnection?.Player;
 
@@ -219,9 +208,7 @@ public class PlayerController(
 
     [Post("/{id}/unmute")]
     public async Task UnmutePlayer(long id) {
-        Player? targetPlayer = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == id)?.Player;
+        Player? targetPlayer = server.FindConnection(id)?.Player;
 
         if (targetPlayer == null) {
             await using DbConnection db = new();
@@ -237,9 +224,7 @@ public class PlayerController(
 
     [Post("/{id}/unban")]
     public async Task UnbanPlayer(long id) {
-        Player? targetPlayer = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == id)?.Player;
+        Player? targetPlayer = server.FindConnection(id)?.Player;
 
         if (targetPlayer == null) {
             await using DbConnection db = new();

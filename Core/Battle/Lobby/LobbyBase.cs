@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Collections.Frozen;
 using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
@@ -11,6 +12,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
+using Vint.Core.Squads;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Lobby;
@@ -85,6 +87,40 @@ public abstract class LobbyBase : IDisposable {
 
         PlayersDict[player.Id] = player;
         await PlayerJoined(player);
+    }
+
+    public async Task AddSquad(Squad squad) {
+        List<IPlayerConnection> members = squad.Members.ToList();
+
+        if (Players.Count + members.Count > Properties.MaxPlayers)
+            return;
+
+        FrozenDictionary<long, IEntity?> teams = TeamHandler.CalculateTeamsForSquad(members);
+
+        foreach (IPlayerConnection connection in members) {
+            connection.Logger.Information("Joining lobby {Id}", Entity.Id);
+
+            Preset preset = connection.Player.CurrentPreset;
+            IEntity user = connection.UserContainer.Entity;
+
+            LobbyPlayer player = new(connection, this);
+            connection.LobbyPlayer = player;
+
+            await connection.Share(Entity, ChatEntity);
+
+            foreach (LobbyPlayer otherPlayer in Players) {
+                await otherPlayer.Connection.UserContainer.ShareTo(connection);
+                await connection.UserContainer.ShareTo(otherPlayer.Connection);
+            }
+
+            await player.SetTeam(teams[connection.UserContainer.Id]);
+
+            await user.AddGroupComponent<BattleLobbyGroupComponent>(Entity);
+            await user.AddComponent(new UserEquipmentComponent(preset.Weapon, preset.Hull));
+
+            PlayersDict[player.Id] = player;
+            await PlayerJoined(player);
+        }
     }
 
     public async Task RemovePlayer(LobbyPlayer player) {

@@ -481,9 +481,9 @@ cff363b1-f7b2-4b10-ab4c-0d718e9e7bcf:
 9ab01fc6-4c02-4a10-ad73-797ce6911106:
   'friends/alreadyInLobby': 'In lobby'
 c9440e92-3213-41a1-af37-069135310899:
-  'friends/cantCreateSquad': 'You can create squad after you reach rank 4.'
+  'friends/cantCreateSquad': 'You can create squad after you reach rank {0}.'
 e26976b3-b0e2-4c37-9a84-cde929eb05ba:
-  'friends/cantInviteFriendIntoSquad': 'You can invite {0} to a squad{1}only after he reaches rank 4.'
+  'friends/cantInviteFriendIntoSquad': 'You can invite {0} to a squad{1}only after he reaches rank {2}.'
 53eb1343-717f-4d6a-b10b-8f87e6cf3103:
   'friends/contextMenu/inviteSend': 'Invite sent!'
 eee90dd8-266e-4b59-b00f-facd6e88fa19:

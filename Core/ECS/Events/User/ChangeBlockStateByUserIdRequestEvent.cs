@@ -39,8 +39,7 @@ public class ChangeBlockStateByUserIdRequestEvent(
         bool outgoingRequestRemoved = false;
 
         if (needToBlock) {
-            blockedConnection = server.PlayerConnections.Values
-                .FirstOrDefault(conn => conn.IsLoggedIn && conn.UserContainer.Id == BlockedUserId);
+            blockedConnection = server.FindConnection(BlockedUserId);
 
             Block block = new() {
                 BlockerId = blockerUserId,

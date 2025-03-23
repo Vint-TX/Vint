@@ -22,9 +22,7 @@ public class RejectFriendEvent(
 
         await connection.Send(new IncomingFriendRemovedEvent(UserId), connection.UserContainer.Entity);
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Id == UserId);
+        IPlayerConnection? targetConnection = server.FindConnection(UserId);
 
         if (targetConnection != null)
             await targetConnection.Send(new OutgoingFriendRemovedEvent(receiverId), UserContainer.Entity);

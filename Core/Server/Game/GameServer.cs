@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -26,6 +27,14 @@ public class GameServer(
     TcpListener Listener { get; } = new(IPAddress.Any, Port);
 
     bool IsStarted { get; set; }
+
+    public IPlayerConnection? FindConnection(long id) =>
+        PlayerConnections.Values.FirstOrDefault(connection => connection.IsLoggedIn &&
+                                                              connection.UserContainer.Id == id);
+
+    public IEnumerable<IPlayerConnection> FindConnections(params FrozenSet<long> ids) =>
+        PlayerConnections.Values.Where(connection => connection.IsLoggedIn &&
+                                                     ids.Contains(connection.UserContainer.Id));
 
     public async Task Start() {
         if (IsStarted) return;

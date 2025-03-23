@@ -16,7 +16,15 @@ public class CreateCustomBattleLobbyEvent(
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.InLobby) return;
 
+        Squads.Squad? squad = connection.Squad;
+        if (squad != null && squad.Members.Count > Params.MaxPlayers)
+            return;
+
         CustomLobby lobby = await lobbyProcessor.CreateCustom(Params, connection);
-        await lobby.AddPlayer(connection);
+
+        if (squad != null) {
+            await lobby.AddSquad(squad);
+        } else
+            await lobby.AddPlayer(connection);
     }
 }

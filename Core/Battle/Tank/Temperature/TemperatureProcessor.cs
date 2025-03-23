@@ -30,7 +30,7 @@ public class TemperatureProcessor {
     Round Round => Tank.Round;
 
     ConcurrentQueue<TemperatureAssist> NewAssists { get; } = [];
-    ConcurrentList<TemperatureAssist> Assists { get; } = [];
+    BlockingList<TemperatureAssist> Assists { get; } = [];
 
     public async Task Tick(TimeSpan deltaTime) {
         if (Tank.StateManager.CurrentState is not Active)
