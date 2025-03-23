@@ -11,7 +11,8 @@ public class DominationProcessor(
     TeamHandler teamHandler
 ) {
     bool DominationStarted { get; set; }
-    bool CanDominationBegin => round.StateManager.CurrentState is Running &&
+    bool CanDominationBegin => round.Properties.Type == BattleType.Rating &&
+                               round.StateManager.CurrentState is Running &&
                                round.Elapsed.TotalMinutes >= 1 &&
                                round.Remaining.TotalMinutes >= 2;
 
@@ -20,21 +21,17 @@ public class DominationProcessor(
     DateTimeOffset? RoundForceEndTime { get; set; }
 
     public async Task ScoreUpdated() {
-        if (DominationStarted) {
+        if (DominationStarted)
             await TryStopDomination();
-        } else if (CanDominationBegin) {
+        else if (CanDominationBegin)
             await TryStartDomination();
-        }
     }
 
     async Task TryStartDomination() {
-        if (DominationStarted)
-            return;
+        if (DominationStarted) return;
 
         TeamColor dominatedTeam = teamHandler.GetDominatedTeamColor();
-
-        if (dominatedTeam == TeamColor.None)
-            return;
+        if (dominatedTeam == TeamColor.None) return;
 
         DominatedTeam = dominatedTeam;
         RoundForceEndTime = DateTimeOffset.UtcNow + DominationDuration;
@@ -60,8 +57,7 @@ public class DominationProcessor(
     }
 
     public async Task Tick() {
-        if (!DominationStarted)
-            return;
+        if (!DominationStarted) return;
 
         if (DateTimeOffset.UtcNow >= RoundForceEndTime)
             await round.End();
