@@ -36,8 +36,8 @@ public class ClientExitLobbyEvent : IServerEvent {
                     await lobby.RemovePlayer(member.LobbyPlayer!);
             }
         } else {
-            if (round != null)
-                await round.RemoveTanker(lobbyPlayer.Tanker!);
+            if (lobbyPlayer.InRound)
+                await round!.RemoveTanker(lobbyPlayer.Tanker);
 
             await lobby.RemovePlayer(lobbyPlayer);
         }

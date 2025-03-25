@@ -153,6 +153,7 @@ public class Round : IDisposable {
         Spectator spectator = new(connection, this);
         await spectator.Init();
         await AddPlayerCommon(spectator);
+        await spectator.Share(spectator.BattleUser); // share self entities after AddPlayerCommon because ModeHandler needs to share own entities first
     }
 
     public async Task RemoveTanker(Tanker tanker) {
@@ -171,7 +172,9 @@ public class Round : IDisposable {
     }
 
     public async Task RemoveSpectator(Spectator spectator) {
+        await ModeHandler.PrePlayerExit(spectator);
         await RemovePlayerCommon(spectator);
+        await ModeHandler.PostPlayerExit(spectator);
         spectator.Dispose();
     }
 

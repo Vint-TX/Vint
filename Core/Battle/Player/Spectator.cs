@@ -16,7 +16,6 @@ public class Spectator(
 
     public override async Task Init() {
         await base.Init();
-        await Connection.Share(BattleUser);
 
         foreach (Tanker tanker in Round.Tankers)
             await tanker.Connection.UserContainer.ShareTo(Connection);
