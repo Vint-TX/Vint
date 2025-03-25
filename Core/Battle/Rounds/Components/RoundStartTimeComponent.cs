@@ -1,0 +1,10 @@
+using Vint.Core.Server.Game.Protocol.Attributes;
+
+namespace Vint.Core.ECS.Components.Battle.Time;
+
+[ProtocolId(1436521738148)]
+public class RoundStartTimeComponent(
+    DateTimeOffset? startTime
+) : IComponent {
+    public DateTimeOffset? RoundStartTime { get; } = startTime;
+}

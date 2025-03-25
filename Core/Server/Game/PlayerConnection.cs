@@ -368,12 +368,7 @@ public abstract class PlayerConnection(
         if (earned != 0) {
             Player.GameplayChestScore -= earned * scoreLimit;
 
-            await PurchaseItem(Player.LeagueEntity.GetComponent<ChestBattleRewardComponent>()
-                    .Chest,
-                earned,
-                0,
-                false,
-                false);
+            await PurchaseItem(Player.LeagueEntity.GetComponent<ChestBattleRewardComponent>().Chest, earned, 0, false, false);
         }
 
         try {
