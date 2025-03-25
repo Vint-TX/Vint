@@ -2,7 +2,7 @@ using System.Numerics;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Bonus;
+namespace Vint.Core.Battle.Bonus.Templates;
 
 [ProtocolId(-8402520789413485183)]
 public class GoldBonusTemplate : BonusTemplate {

@@ -1,10 +1,11 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Templates.User;
+using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.User.Templates;
 
-namespace Vint.Core.ECS.Entities;
+namespace Vint.Core.User;
 
 public static class UserRegistry {
     static ConcurrentDictionary<long, UserContainer> Users { get; } = [];

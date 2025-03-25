@@ -1,9 +1,10 @@
 ﻿using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
+namespace Vint.Core.Entrance.RestorePassword.Events;
 
 [ProtocolId(1460461200896)]
 public class SendAgainRestorePasswordEvent(

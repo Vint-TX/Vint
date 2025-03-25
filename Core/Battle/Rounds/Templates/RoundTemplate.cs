@@ -1,9 +1,10 @@
-using Vint.Core.ECS.Components.Battle.Round;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle;
+namespace Vint.Core.Battle.Rounds.Templates;
 
 [ProtocolId(1429256309752)]
 public class RoundTemplate : EntityTemplate {

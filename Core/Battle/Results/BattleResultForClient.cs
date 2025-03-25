@@ -1,8 +1,8 @@
+using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Mode.Solo.Impl;
 using Vint.Core.Battle.Mode.Team;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Battle.Results;
 

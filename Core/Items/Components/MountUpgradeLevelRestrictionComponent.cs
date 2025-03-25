@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Experience;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Items.Components;
 
 public class MountUpgradeLevelRestrictionComponent : IComponent {
     public int RestrictionValue { get; private set; }

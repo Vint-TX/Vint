@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Graffiti;
+namespace Vint.Core.Battle.Graffiti.Components;
 
 [ProtocolId(636100801609006236), ClientAddable, ClientRemovable]
 public class GraffitiDecalComponent : IComponent {

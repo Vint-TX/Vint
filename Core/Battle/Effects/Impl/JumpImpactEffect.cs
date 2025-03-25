@@ -1,7 +1,7 @@
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Templates.Battle.Effect;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class JumpImpactEffect(
     BattleTank tank,

@@ -1,8 +1,8 @@
-using Vint.Core.ECS.Components.Battle.Rewards;
+using Vint.Core.Battle.Rewards.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Reward;
+namespace Vint.Core.Battle.Rewards.Templates;
 
 [ProtocolId(1514196284686)]
 public class LevelUpUnlockBattleRewardTemplate : BattleResultRewardTemplate {

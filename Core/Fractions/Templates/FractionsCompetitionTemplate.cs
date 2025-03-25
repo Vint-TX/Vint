@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Fractions;
+namespace Vint.Core.Fractions.Templates;
 
 [ProtocolId(1534913762047)]
 public class FractionsCompetitionTemplate : EntityTemplate;

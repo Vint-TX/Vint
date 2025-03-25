@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Vint.Core.ECS.Movement;
+namespace Vint.Core.Battle.Tank.Movement;
 
 public struct Movement {
     public Vector3 Position { get; set; }

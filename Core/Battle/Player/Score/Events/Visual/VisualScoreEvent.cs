@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Events.Battle.Score.Visual;
+using Vint.Core.ECS.Events;
+
+namespace Vint.Core.Battle.Player.Score.Events.Visual;
 
 public abstract class VisualScoreEvent(
     int score

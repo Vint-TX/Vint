@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Squad;
+namespace Vint.Core.Squads.Events;
 
 [ProtocolId(1508315556885)]
 public class RequestToSquadRejectedEvent(

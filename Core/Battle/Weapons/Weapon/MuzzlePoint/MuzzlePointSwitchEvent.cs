@@ -1,11 +1,11 @@
 using Vint.Core.Battle.Player;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Weapon.MuzzlePoint;
+namespace Vint.Core.Battle.Weapons.Weapon.MuzzlePoint;
 
 [ProtocolId(-2650671245931951659)]
 public class MuzzlePointSwitchEvent : MuzzlePointEvent, IServerEvent {

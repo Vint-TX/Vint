@@ -1,10 +1,10 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Weapons.Components.Stream;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Weapon.Stream;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(1430285569243)]
 public abstract class StreamWeaponTemplate : WeaponTemplate {

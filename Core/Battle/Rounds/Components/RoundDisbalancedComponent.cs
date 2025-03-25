@@ -1,7 +1,8 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.Battle.Mode.Team;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Round;
+namespace Vint.Core.Battle.Rounds.Components;
 
 [ProtocolId(3051892485776042754)]
 public class RoundDisbalancedComponent(

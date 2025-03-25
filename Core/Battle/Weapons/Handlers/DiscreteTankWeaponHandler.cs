@@ -1,12 +1,13 @@
-using Vint.Core.Battle.Damage.Calculator;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
+using Vint.Core.Battle.Weapons.Damage.Components;
+using Vint.Core.Battle.Weapons.Parameters.Components;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Server.Damage;
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers;
 
 public abstract class DiscreteTankWeaponHandler : TankWeaponHandler, IDiscreteWeaponHandler {
     protected DiscreteTankWeaponHandler(BattleTank battleTank) : base(battleTank) {

@@ -2,13 +2,13 @@ using LinqToDB;
 using LinqToDB.Linq;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Quests;
+using Vint.Core.ECS.Events;
+using Vint.Core.Quests.Components;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Quest;
+namespace Vint.Core.Quests.Events;
 
 // og name: UseBonusEvent
 [ProtocolId(1504703762311)]

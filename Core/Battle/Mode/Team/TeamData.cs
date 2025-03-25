@@ -1,8 +1,7 @@
+using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Battle.Team;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Battle.Mode.Team;
 

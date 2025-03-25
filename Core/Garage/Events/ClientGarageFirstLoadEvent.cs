@@ -3,11 +3,12 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Lobby;
+namespace Vint.Core.Garage.Events;
 
 [ProtocolId(1479879892222)]
 public class ClientGarageFirstLoadEvent(

@@ -1,18 +1,19 @@
 using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Components.Config.Common;
+using Vint.Core.Battle.Modules.Common.Components;
+using Vint.Core.Battle.Modules.Common.Components.Inventory;
+using Vint.Core.Battle.Modules.Common.Components.Slot;
+using Vint.Core.Battle.Modules.Common.Events;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Modules;
-using Vint.Core.ECS.Components.Modules.Inventory;
-using Vint.Core.ECS.Components.Modules.Slot;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
+using Vint.Core.Battle.Tank.Common.Components;
+using Vint.Core.Battle.Tank.State;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Module;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Modules.Types.Base;
+namespace Vint.Core.Battle.Modules.Impl.Base;
 
 public abstract class BattleModule {
     protected BattleModule() =>

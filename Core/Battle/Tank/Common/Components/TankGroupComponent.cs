@@ -1,7 +1,8 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Group;
+namespace Vint.Core.Battle.Tank.Common.Components;
 
 [ProtocolId(4088029591333632383)]
 public class TankGroupComponent(

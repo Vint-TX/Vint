@@ -1,6 +1,4 @@
-using Vint.Core.ECS.Enums;
-
-namespace Vint.Core.ECS.Components.News;
+namespace Vint.Core.News;
 
 public class NewsItem(
     NewsItemLayout layout,

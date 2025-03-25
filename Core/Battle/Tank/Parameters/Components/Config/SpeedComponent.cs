@@ -1,8 +1,8 @@
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Tank;
+namespace Vint.Core.Battle.Tank.Parameters.Components.Config;
 
-public class SpeedComponent : RangedComponent, IConvertible<Components.Battle.Parameters.Chassis.SpeedComponent> {
-    public void Convert(Components.Battle.Parameters.Chassis.SpeedComponent component) =>
+public class SpeedComponent : RangedComponent, IConvertible<Components.SpeedComponent> {
+    public void Convert(Components.SpeedComponent component) =>
         component.Speed = FinalValue;
 }

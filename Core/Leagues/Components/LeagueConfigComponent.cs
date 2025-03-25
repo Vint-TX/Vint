@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Components;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Leagues;
+namespace Vint.Core.Leagues.Components;
 
 [ProtocolId(1502713060357)]
 public class LeagueConfigComponent(

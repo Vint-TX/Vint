@@ -1,11 +1,12 @@
 ﻿using Vint.Core.Discord;
-using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Entrance.Login;
+using Vint.Core.ECS.Events;
+using Vint.Core.Entrance.ClientSession.Components;
+using Vint.Core.Entrance.Login.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.RestorePassword;
+namespace Vint.Core.Entrance.RestorePassword.Events;
 
 [ProtocolId(1460403525230)]
 public class RequestChangePasswordEvent(

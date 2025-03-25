@@ -1,15 +1,16 @@
 using System.Numerics;
+using Vint.Core.Battle.Effects.Components;
+using Vint.Core.Battle.Effects.Events.Mine;
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Mode.Team.Impl;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
-using Vint.Core.ECS.Components.Battle.Effect;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Effect.Mine;
-using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Physics;
-using Vint.Core.Utils;
+using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class IceTrapEffect(
     int index,

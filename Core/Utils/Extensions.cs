@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Reflection;
 using JetBrains.Annotations;
+using Vint.Core.Battle.Mode;
 using Vint.Core.ECS.Components;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Exceptions;
 using Vint.Core.Server.Game.Protocol.Attributes;
 

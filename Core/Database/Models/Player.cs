@@ -1,9 +1,9 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server.DailyBonus;
-using Vint.Core.ECS.Components.Server.Login;
+using Vint.Core.DailyBonus.Components.Config;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Items.Components;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Database.Models;

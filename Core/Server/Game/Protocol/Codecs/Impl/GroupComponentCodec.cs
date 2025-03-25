@@ -1,4 +1,4 @@
-﻿using Vint.Core.ECS.Components.Group;
+﻿using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 using Vint.Core.Utils;
 

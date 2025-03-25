@@ -1,7 +1,7 @@
-﻿using Vint.Core.ECS.Enums;
+﻿using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Payment;
+namespace Vint.Core.Shop.Events;
 
 [ProtocolId(1471252962981)]
 public class PaymentStatisticsEvent : IEvent {

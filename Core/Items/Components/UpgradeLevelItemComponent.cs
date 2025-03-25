@@ -1,7 +1,8 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Components;
+using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Components.Item;
+namespace Vint.Core.Items.Components;
 
 [ProtocolId(1436343541876)]
 public class UpgradeLevelItemComponent(

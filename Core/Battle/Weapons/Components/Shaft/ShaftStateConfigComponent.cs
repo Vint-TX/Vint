@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
+namespace Vint.Core.Battle.Weapons.Components.Shaft;
 
 [ProtocolId(635950079224407790)]
 public class ShaftStateConfigComponent : IComponent {

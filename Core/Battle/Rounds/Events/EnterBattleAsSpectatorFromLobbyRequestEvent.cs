@@ -1,9 +1,10 @@
 using Vint.Core.Battle.Lobby;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Lobby;
+namespace Vint.Core.Battle.Rounds.Events;
 
 [ProtocolId(1498554483631)]
 public class EnterBattleAsSpectatorFromLobbyRequestEvent(
@@ -16,7 +17,7 @@ public class EnterBattleAsSpectatorFromLobbyRequestEvent(
 
         LobbyBase? lobby = lobbyProcessor.FindByBattleId(BattleId);
 
-        if (lobby?.StateManager.CurrentState is not Running running) return;
+        if (lobby?.StateManager.CurrentState is not Lobby.State.Running running) return;
 
         await running.Round.AddSpectator(connection);
     }

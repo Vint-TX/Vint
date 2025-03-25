@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Battle.Results;
 
 public enum TeamBattleResult : byte {
     Win = 0,

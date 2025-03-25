@@ -1,9 +1,9 @@
 using Serilog;
-using Vint.Core.Battle.Bonus.Type;
+using Vint.Core.Battle.Bonus.Impl;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Bonus;

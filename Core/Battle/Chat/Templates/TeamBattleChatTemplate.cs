@@ -1,8 +1,10 @@
-using Vint.Core.ECS.Components.Chat;
+using Vint.Core.Battle.Chat.Components;
+using Vint.Core.Chat.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Chat;
+namespace Vint.Core.Battle.Chat.Templates;
 
 [ProtocolId(1450340158222)]
 public class TeamBattleChatTemplate : EntityTemplate {

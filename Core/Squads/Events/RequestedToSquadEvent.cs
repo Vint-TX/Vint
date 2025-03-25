@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Squad;
+namespace Vint.Core.Squads.Events;
 
 [ProtocolId(1507799564788)]
 public class RequestedToSquadEvent(

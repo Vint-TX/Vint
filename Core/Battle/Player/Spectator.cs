@@ -1,8 +1,8 @@
+using Vint.Core.Battle.Player.User.Templates;
 using Vint.Core.Battle.Results;
+using Vint.Core.Battle.Results.Events;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle;
-using Vint.Core.ECS.Templates.Battle.User;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
 

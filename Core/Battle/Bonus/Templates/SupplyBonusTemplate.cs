@@ -1,9 +1,8 @@
 using System.Numerics;
-using Vint.Core.Battle.Bonus;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Bonus;
+namespace Vint.Core.Battle.Bonus.Templates;
 
 [ProtocolId(5411677468097447480)]
 public class SupplyBonusTemplate : BonusTemplate {

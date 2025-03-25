@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.DailyBonus;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.DailyBonus.Components.Config;
 
 public class DailyBonusCommonConfigComponent : IComponent {
     public int ReceivingBonusIntervalSec { get; private set; }

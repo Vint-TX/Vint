@@ -1,5 +1,5 @@
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Damage;
+namespace Vint.Core.Battle.Weapons.Damage.Components;
 
 public class DamagePerSecondPropertyComponent : RangedComponent;

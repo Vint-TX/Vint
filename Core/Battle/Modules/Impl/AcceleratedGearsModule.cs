@@ -1,11 +1,11 @@
-using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Components.Config.AcceleratedGears;
+using Vint.Core.Battle.Effects.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Server.Modules.Effect.AcceleratedGears;
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(1365914179)]
 public class AcceleratedGearsModule : PassiveBattleModule, IAlwaysActiveModule {

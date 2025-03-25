@@ -1,7 +1,8 @@
 using JetBrains.Annotations;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Splash;
+namespace Vint.Core.Battle.Weapons.Components.Splash;
 
 [ProtocolId(3169143415222756957)]
 public class SplashWeaponComponent : IComponent {

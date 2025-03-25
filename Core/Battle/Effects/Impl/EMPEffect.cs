@@ -1,11 +1,11 @@
 using System.Numerics;
+using Vint.Core.Battle.Effects.Events.EMP;
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Events.Battle.Effect.EMP;
-using Vint.Core.ECS.Templates.Battle.Effect;
-using Vint.Core.Utils;
+using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class EMPEffect : Effect {
     public EMPEffect(BattleTank tank, int level, TimeSpan duration, float radius) : base(tank, level) {

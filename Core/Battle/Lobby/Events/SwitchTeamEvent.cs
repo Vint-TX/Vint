@@ -1,10 +1,11 @@
 using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Lobby;
+namespace Vint.Core.Battle.Lobby.Events;
 
 [ProtocolId(1499172594697)]
 public class SwitchTeamEvent : IServerEvent {

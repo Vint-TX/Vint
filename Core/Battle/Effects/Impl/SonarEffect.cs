@@ -1,8 +1,8 @@
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Templates.Battle.Effect;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class SonarEffect(
     BattleTank tank,

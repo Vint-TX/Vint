@@ -1,10 +1,11 @@
-using Vint.Core.Battle.Weapons;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
+using Vint.Core.Battle.Weapons.Components.Vulcan;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
+namespace Vint.Core.Battle.Weapons.Components.Stream;
 
 [ProtocolId(6803807621463709653), ClientAddable, ClientRemovable]
 public class WeaponStreamShootingComponent : IComponent {

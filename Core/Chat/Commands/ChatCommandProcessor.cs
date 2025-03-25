@@ -1,10 +1,10 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ChatCommands;
+namespace Vint.Core.Chat.Commands;
 
 public interface IChatCommandProcessor {
     ChatCommand? GetOrDefault(string name);

@@ -1,24 +1,25 @@
 using System.Numerics;
 using ConcurrentCollections;
 using LinqToDB;
+using Vint.Core.Battle.Flags.Components;
+using Vint.Core.Battle.Flags.Events;
+using Vint.Core.Battle.Flags.State.Components;
 using Vint.Core.Battle.Mode.Team.Impl;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Player.Score.Events.Visual;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Database;
 using Vint.Core.ECS.Components;
-using Vint.Core.ECS.Components.Battle.Flag;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Flag;
-using Vint.Core.ECS.Events.Battle.Score.Visual;
 using Vint.Core.Physics;
 using Vint.Core.Server.Game;
 using Vint.Core.StateMachine;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Flags;
+namespace Vint.Core.Battle.Flags.State;
 
 public class FlagStateManager(
     Flag flag
@@ -36,7 +37,7 @@ public class FlagStateManager(
 
 public abstract class FlagState(
     FlagStateManager stateManager
-) : State {
+) : StateMachine.State {
     public override FlagStateManager StateManager { get; } = stateManager;
     protected ICollection<FlagAssist> Assists => StateManager.Assists;
     protected CTFHandler ModeHandler => StateManager.ModeHandler;

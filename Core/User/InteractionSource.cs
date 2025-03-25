@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.User;
 
 public enum InteractionSource : byte {
     Lobby = 0,

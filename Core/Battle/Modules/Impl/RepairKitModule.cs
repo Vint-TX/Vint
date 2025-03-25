@@ -1,8 +1,9 @@
 using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(-862259125)]
 public class RepairKitModule : ActiveBattleModule, IHealthModule {

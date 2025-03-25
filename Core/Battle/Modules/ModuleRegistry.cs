@@ -1,7 +1,7 @@
 using System.Collections.Frozen;
 using System.Reflection;
-using Vint.Core.Battle.Modules.Types;
-using Vint.Core.Battle.Modules.Types.Base;
+using Vint.Core.Battle.Modules.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 
 namespace Vint.Core.Battle.Modules;
 

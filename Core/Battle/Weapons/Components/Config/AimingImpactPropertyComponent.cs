@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Components.Shaft;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Weapon;
+namespace Vint.Core.Battle.Weapons.Components.Config;
 
 public class AimingImpactPropertyComponent : RangedComponent, IConvertible<ShaftAimingImpactComponent> {
     public void Convert(ShaftAimingImpactComponent component) =>

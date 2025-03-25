@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Battle;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Battle.Mode.Team.Components;
 
 public class CtfConfigComponent : IComponent {
     public float MinDistanceFromMineToBase { get; private set; }

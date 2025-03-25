@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Squads;
 
 public enum RejectRequestToSquadReason : byte {
     SquadIsFull,

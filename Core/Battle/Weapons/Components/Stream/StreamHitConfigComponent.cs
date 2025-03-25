@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
+namespace Vint.Core.Battle.Weapons.Components.Stream;
 
 [ProtocolId(-5407563795844501148)]
 public class StreamHitConfigComponent : IComponent {

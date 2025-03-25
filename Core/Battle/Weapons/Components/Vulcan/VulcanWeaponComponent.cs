@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
+namespace Vint.Core.Battle.Weapons.Components.Vulcan;
 
 [ProtocolId(4207390770640273134)]
 public class VulcanWeaponComponent : IComponent {

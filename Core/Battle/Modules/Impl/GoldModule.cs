@@ -1,16 +1,16 @@
 using Vint.Core.Battle.Bonus;
 using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Items;
+using Vint.Core.Items.Components;
+using Vint.Core.Items.Events;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(-150814762)]
 public class GoldModule : ActiveBattleModule, IModuleWithoutEffect {

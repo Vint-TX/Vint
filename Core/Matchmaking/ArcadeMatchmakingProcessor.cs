@@ -1,14 +1,15 @@
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Lobby.Impl.Arcade;
+using Vint.Core.Battle.Lobby.State;
+using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Player;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game;
 using Vint.Core.Squads;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Matchmaking;
+namespace Vint.Core.Matchmaking;
 
 public class ArcadeMatchmakingProcessor( // todo matchmaking system
     LobbyProcessor lobbyProcessor

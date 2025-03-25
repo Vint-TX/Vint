@@ -1,3 +1,3 @@
-namespace Vint.Core.ECS.Components.Server.Modules.Effect.Common;
+namespace Vint.Core.Battle.Effects.Components.Config.Common;
 
 public class ModuleEffectTemperatureDeltaPropertyComponent : ModuleEffectUpgradablePropertyComponent;

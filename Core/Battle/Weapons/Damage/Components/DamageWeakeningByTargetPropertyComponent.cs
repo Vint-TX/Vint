@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Railgun;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Components.Railgun;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Damage;
+namespace Vint.Core.Battle.Weapons.Damage.Components;
 
 public class DamageWeakeningByTargetPropertyComponent : RangedComponent, IConvertible<DamageWeakeningByTargetComponent> {
     public void Convert(DamageWeakeningByTargetComponent component) =>

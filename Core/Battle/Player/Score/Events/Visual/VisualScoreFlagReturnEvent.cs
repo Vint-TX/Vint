@@ -1,6 +1,6 @@
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Score.Visual;
+namespace Vint.Core.Battle.Player.Score.Events.Visual;
 
 [ProtocolId(1511432446237)]
 public class VisualScoreFlagReturnEvent(

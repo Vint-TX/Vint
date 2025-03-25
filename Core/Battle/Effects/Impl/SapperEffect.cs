@@ -1,7 +1,7 @@
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class SapperEffect(
     float resistance,

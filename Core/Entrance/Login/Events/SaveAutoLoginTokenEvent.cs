@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Login;
+namespace Vint.Core.Entrance.Login.Events;
 
 [ProtocolId(1438070264777)]
 public class SaveAutoLoginTokenEvent(

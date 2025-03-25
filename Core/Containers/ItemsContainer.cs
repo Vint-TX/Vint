@@ -1,8 +1,8 @@
 using Redzen.Random;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Notification;
+using Vint.Core.Items.Components;
+using Vint.Core.Notification.Templates;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 

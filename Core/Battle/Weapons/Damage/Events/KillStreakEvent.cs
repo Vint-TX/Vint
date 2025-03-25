@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Damage;
+namespace Vint.Core.Battle.Weapons.Damage.Events;
 
 [ProtocolId(1491556721814)]
 public class KillStreakEvent(

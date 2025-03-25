@@ -1,7 +1,8 @@
 ﻿using Vint.Core.Config;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Modules;
+namespace Vint.Core.Battle.Modules.Common.Components;
 
 [ProtocolId(636319924231605265)]
 public class ModuleCardsCompositionComponent : IComponent {

@@ -1,11 +1,12 @@
-using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Lobby.Impl;
+using Vint.Core.Battle.Lobby.State;
 using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Lobby;
+namespace Vint.Core.Battle.Lobby.Events;
 
 [ProtocolId(1497614958932)]
 public class UpdateBattleParamsEvent : IServerEvent {

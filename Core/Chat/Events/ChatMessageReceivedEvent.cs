@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Chat;
+namespace Vint.Core.Chat.Events;
 
 [ProtocolId(1450950140104)]
 public class ChatMessageReceivedEvent(

@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Parameters.Chassis;
+namespace Vint.Core.Battle.Tank.Parameters.Components;
 
 [ProtocolId(-177474741853856725)]
 public class SpeedConfigComponent(

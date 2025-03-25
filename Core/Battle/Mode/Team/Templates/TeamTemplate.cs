@@ -1,10 +1,9 @@
-using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle;
+namespace Vint.Core.Battle.Mode.Team.Templates;
 
 [ProtocolId(1429761302402)]
 public class TeamTemplate : EntityTemplate {

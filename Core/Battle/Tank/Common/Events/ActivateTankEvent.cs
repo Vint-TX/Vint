@@ -1,9 +1,9 @@
-using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle;
+namespace Vint.Core.Battle.Tank.Common.Events;
 
 [ProtocolId(-5086569348607290080)]
 public class ActivateTankEvent : IServerEvent {

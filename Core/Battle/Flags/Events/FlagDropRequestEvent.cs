@@ -1,12 +1,13 @@
-using Vint.Core.Battle.Flags;
+using Vint.Core.Battle.Flags.State;
 using Vint.Core.Battle.Mode.Team.Impl;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Flag;
+namespace Vint.Core.Battle.Flags.Events;
 
 [ProtocolId(-1910863908782544246)]
 public class FlagDropRequestEvent : IServerEvent {

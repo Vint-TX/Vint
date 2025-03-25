@@ -1,13 +1,14 @@
 using Vint.Core.Config;
+using Vint.Core.DailyBonus.Components;
+using Vint.Core.DailyBonus.Components.Config;
+using Vint.Core.DailyBonus.Components.Config.Cycles;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.DailyBonus;
-using Vint.Core.ECS.Components.Server.DailyBonus;
-using Vint.Core.ECS.Components.Server.DailyBonus.Cycles;
-using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.User.Components;
+using Vint.Core.Utils;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.DailyBonus;
 
 public static class DailyBonusUtils {
     static DailyBonusCommonConfigComponent CommonConfig { get; } = ConfigManager.GetComponent<DailyBonusCommonConfigComponent>("dailybonus");

@@ -1,17 +1,17 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using Vint.Core.ChatCommands;
+using Vint.Core.Chat.Commands;
+using Vint.Core.Chat.Components;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Chat;
-using Vint.Core.ECS.Components.Server.Chat;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Chat;
+namespace Vint.Core.Chat.Events;
 
 [ProtocolId(1446035600297)]
 public class SendChatMessageEvent(

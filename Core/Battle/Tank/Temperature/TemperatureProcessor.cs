@@ -1,10 +1,11 @@
 using System.Collections.Concurrent;
-using Vint.Core.Battle.Damage.Calculator;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank.Parameters.Components.Config;
+using Vint.Core.Battle.Tank.State;
+using Vint.Core.Battle.Tank.Temperature.Components;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Tank;
-using Vint.Core.ECS.Components.Server.Tank;
 using Vint.Core.Structures;
 using Vint.Core.Utils;
 

@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Pause;
+namespace Vint.Core.Battle.Player.Pause.Components;
 
 [ProtocolId(2930474294118078222)]
 public class IdleCounterComponent(

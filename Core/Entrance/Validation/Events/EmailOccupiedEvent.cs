@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Validation;
+namespace Vint.Core.Entrance.Validation.Events;
 
 [ProtocolId(635906273457089964)]
 public class EmailOccupiedEvent(

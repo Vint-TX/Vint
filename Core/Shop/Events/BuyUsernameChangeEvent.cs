@@ -1,13 +1,14 @@
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Notification;
-using Vint.Core.ECS.Templates.Notification;
+using Vint.Core.ECS.Events;
+using Vint.Core.Items.Components;
+using Vint.Core.Notification.Events;
+using Vint.Core.Notification.Templates;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.User.Settings;
+namespace Vint.Core.Shop.Events;
 
 [ProtocolId(1474537061794)]
 public class BuyUsernameChangeEvent : IServerEvent {

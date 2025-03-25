@@ -1,6 +1,6 @@
 using Vint.Core.Utils;
 
-namespace Vint.Core.ChatCommands;
+namespace Vint.Core.Chat.Commands;
 
 public abstract class ChatCommandModule {
     public virtual bool BeforeCommandExecution(ChatCommandContext context) {

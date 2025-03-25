@@ -1,9 +1,9 @@
-using Vint.Core.Battle.Matchmaking;
+using Vint.Core.Battle.Lobby.Templates;
+using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Templates.Lobby;
+using Vint.Core.Matchmaking;
 using Vint.Core.Quests;
 using Vint.Core.Utils;
 

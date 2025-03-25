@@ -2,15 +2,15 @@ using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Results;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Quest;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Templates.Quests;
+using Vint.Core.Quests.Components;
+using Vint.Core.Quests.Templates;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 

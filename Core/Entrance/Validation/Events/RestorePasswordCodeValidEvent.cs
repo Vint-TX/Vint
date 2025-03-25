@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Validation;
+namespace Vint.Core.Entrance.Validation.Events;
 
 [ProtocolId(1460402875430)]
 public class RestorePasswordCodeValidEvent(

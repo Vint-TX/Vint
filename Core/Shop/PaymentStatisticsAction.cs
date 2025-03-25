@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Shop;
 
 public enum PaymentStatisticsAction : byte {
     OpenPayment = 0,

@@ -1,15 +1,16 @@
-using Vint.Core.Battle.Damage.Calculator;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
+using Vint.Core.Battle.Weapons.Components.Hammer;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
+using Vint.Core.Battle.Weapons.Damage.Components;
+using Vint.Core.Battle.Weapons.Parameters.Components;
+using Vint.Core.Battle.Weapons.Weapon;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
-using Vint.Core.ECS.Components.Server.Damage;
-using Vint.Core.ECS.Events.Battle.Weapon;
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
-using Vint.Core.Utils;
+using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers.Impl;
 
 public class HammerWeaponHandler : TankWeaponHandler {
     public HammerWeaponHandler(BattleTank battleTank) : base(battleTank) {

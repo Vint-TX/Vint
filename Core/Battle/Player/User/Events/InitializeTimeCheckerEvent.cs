@@ -1,8 +1,9 @@
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle;
+namespace Vint.Core.Battle.Player.User.Events;
 
 [ProtocolId(1461735527769)]
 public class InitializeTimeCheckerEvent : IServerEvent {

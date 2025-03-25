@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Flag;
+namespace Vint.Core.Battle.Flags.Events;
 
 [ProtocolId(2921314315544889042)]
 public class FlagDropEvent(

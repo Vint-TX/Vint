@@ -1,9 +1,10 @@
 using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Matchmaking;
+namespace Vint.Core.Matchmaking.Events;
 
 [ProtocolId(1496829083447)]
 public class MatchMakingUserReadyEvent : IServerEvent {

@@ -1,7 +1,8 @@
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Lobby.State;
 using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Matchmaking.Components;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
 

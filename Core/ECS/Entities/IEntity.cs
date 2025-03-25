@@ -1,6 +1,5 @@
 ﻿using ConcurrentCollections;
 using Vint.Core.ECS.Components;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Commands;

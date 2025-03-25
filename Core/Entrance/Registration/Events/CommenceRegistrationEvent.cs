@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Registration;
+namespace Vint.Core.Entrance.Registration.Events;
 
 [ProtocolId(1439805537875)]
 public class CommenceRegistrationEvent : IEvent;

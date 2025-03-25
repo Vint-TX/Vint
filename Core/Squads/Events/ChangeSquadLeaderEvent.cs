@@ -1,8 +1,9 @@
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Squad;
+namespace Vint.Core.Squads.Events;
 
 [ProtocolId(1507727447201)]
 public class ChangeSquadLeaderEvent : IServerEvent {

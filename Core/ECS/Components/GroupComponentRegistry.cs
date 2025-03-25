@@ -1,5 +1,4 @@
 using System.Reflection;
-using Vint.Core.ECS.Components.Group;
 
 namespace Vint.Core.ECS.Components;
 

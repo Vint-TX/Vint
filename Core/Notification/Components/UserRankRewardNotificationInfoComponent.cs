@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Notification;
+namespace Vint.Core.Notification.Components;
 
 [ProtocolId(636147227222284613)]
 public class UserRankRewardNotificationInfoComponent(

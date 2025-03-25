@@ -2,6 +2,7 @@ using EmbedIO;
 using EmbedIO.WebApi;
 using LinqToDB;
 using Vint.Core.Battle.Player;
+using Vint.Core.Chat;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;

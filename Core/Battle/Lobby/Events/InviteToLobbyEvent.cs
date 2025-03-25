@@ -1,9 +1,10 @@
 using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Lobby;
+namespace Vint.Core.Battle.Lobby.Events;
 
 [ProtocolId(1497002374017)]
 public class InviteToLobbyEvent(

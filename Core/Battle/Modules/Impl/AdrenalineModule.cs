@@ -1,12 +1,12 @@
-using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Components.Config.Adrenaline;
+using Vint.Core.Battle.Effects.Components.Config.IncreasedDamage;
+using Vint.Core.Battle.Effects.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Adrenaline;
-using Vint.Core.ECS.Components.Server.Modules.Effect.IncreasedDamage;
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(1367280061)]
 public class AdrenalineModule : PassiveBattleModule, IHealthModule {

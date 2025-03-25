@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Parameters.Components;
 
 [ProtocolId(2869455602943064305)]
 public class DamageWeakeningByDistanceComponent(

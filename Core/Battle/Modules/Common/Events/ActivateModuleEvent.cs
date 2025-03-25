@@ -1,11 +1,13 @@
-using Vint.Core.Battle.Modules.Types.Base;
+using Vint.Core.Battle.Common.Events;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Module;
+namespace Vint.Core.Battle.Modules.Common.Events;
 
 [ProtocolId(1486015564167)]
 public class ActivateModuleEvent : TimeEvent, IServerEvent {

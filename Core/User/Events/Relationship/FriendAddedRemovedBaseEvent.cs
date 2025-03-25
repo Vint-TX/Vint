@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Events.User.Friends;
+using Vint.Core.ECS.Events;
+
+namespace Vint.Core.User.Events.Relationship;
 
 public abstract class FriendAddedRemovedBaseEvent(
     long friendId

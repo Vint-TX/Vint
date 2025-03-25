@@ -1,11 +1,11 @@
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons.Components.Config;
+using Vint.Core.Battle.Weapons.Components.Shaft;
+using Vint.Core.Battle.Weapons.Parameters.Components;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
-using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers.Impl;
 
 public class ShaftWeaponHandler : DiscreteTankWeaponHandler {
     public ShaftWeaponHandler(BattleTank battleTank) : base(battleTank) {

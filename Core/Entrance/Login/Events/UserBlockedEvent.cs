@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User;
+namespace Vint.Core.Entrance.Login.Events;
 
 [ProtocolId(1493022950509)]
 public class UserBlockedEvent(

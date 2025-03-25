@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Item;
+namespace Vint.Core.Items.Components;
 
 [ProtocolId(1479806073802)]
 public class ItemsContainerItemComponent : IComponent {

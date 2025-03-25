@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Effect.Type.Mine;
+namespace Vint.Core.Battle.Effects.Components.Impl.Mine;
 
 [ProtocolId(1431673085710)]
 public class MinePositionComponent(

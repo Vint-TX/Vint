@@ -1,8 +1,8 @@
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 
-namespace Vint.Core.Battle.Damage.Calculator;
+namespace Vint.Core.Battle.Weapons.Damage.Calculator;
 
 public class ZeroDamageCalculator : IDamageCalculator {
     public Task<CalculatedDamage> Calculate(

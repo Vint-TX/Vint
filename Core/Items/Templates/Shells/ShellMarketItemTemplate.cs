@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Shells;
+namespace Vint.Core.Items.Templates.Shells;
 
 [ProtocolId(716181447780635764)]
 public class ShellMarketItemTemplate : MarketEntityTemplate {

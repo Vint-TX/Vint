@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Battle.Quests;
 
 public enum BattleQuestReward : byte {
     CRYSTALS,

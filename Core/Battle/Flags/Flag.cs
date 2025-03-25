@@ -1,9 +1,10 @@
 using System.Numerics;
+using Vint.Core.Battle.Flags.Components;
+using Vint.Core.Battle.Flags.State;
+using Vint.Core.Battle.Flags.Templates;
+using Vint.Core.Battle.Mode.Team;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.ECS.Components.Battle.Flag;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Templates.Battle.Flag;
 
 namespace Vint.Core.Battle.Flags;
 

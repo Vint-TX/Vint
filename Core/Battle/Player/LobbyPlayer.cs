@@ -1,13 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Mode.Team;
+using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Events.Matchmaking;
+using Vint.Core.Matchmaking.Components;
+using Vint.Core.Matchmaking.Events;
 using Vint.Core.Server.Game;
-using Running = Vint.Core.Battle.Lobby.Running;
+using Running = Vint.Core.Battle.Lobby.State.Running;
 
 namespace Vint.Core.Battle.Player;
 

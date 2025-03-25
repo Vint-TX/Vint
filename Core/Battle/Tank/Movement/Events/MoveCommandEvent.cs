@@ -1,15 +1,15 @@
 using System.Numerics;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Battle.Movement;
+using Vint.Core.Battle.Tank.Movement.Components;
+using Vint.Core.Battle.Tank.State;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Movement;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Movement;
+namespace Vint.Core.Battle.Tank.Movement.Events;
 
 [ProtocolId(6959116100408127452)]
 public class MoveCommandEvent : IServerEvent {
@@ -51,7 +51,7 @@ public class MoveCommandEvent : IServerEvent {
             tank.StateManager.CurrentState is Dead)
             return;
 
-        ECS.Movement.Movement movement = MoveCommand.Movement.Value;
+        Movement movement = MoveCommand.Movement.Value;
 
         // Remarks from https://github.com/Assasans/TXServer-Public/blob/database/TXServer/ECSSystem/Events/Battle/Movement/MoveCommandEvent.cs#L24
         // Calculate velocity based on 2 previous positions and last position is kept instead

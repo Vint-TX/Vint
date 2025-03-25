@@ -1,11 +1,10 @@
 using System.Numerics;
-using Vint.Core.Battle.Bonus;
-using Vint.Core.ECS.Components.Battle.Bonus;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Bonus.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Bonus;
+namespace Vint.Core.Battle.Bonus.Templates;
 
 [ProtocolId(8116072916726390829)]
 public class BonusRegionTemplate : EntityTemplate {

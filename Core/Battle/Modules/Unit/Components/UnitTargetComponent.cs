@@ -1,11 +1,13 @@
 using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Impl;
 using Vint.Core.Battle.Player;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Unit;
+namespace Vint.Core.Battle.Modules.Unit.Components;
 
 [ProtocolId(1486455226183), ClientAddable, ClientRemovable]
 public class UnitTargetComponent : IComponent {

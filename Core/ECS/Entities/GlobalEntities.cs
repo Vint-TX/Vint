@@ -1,23 +1,21 @@
 ﻿using LinqToDB;
+using Vint.Core.Battle.Modules.Common;
+using Vint.Core.Battle.Modules.Common.Components;
+using Vint.Core.Battle.Modules.Common.Components.Slot;
+using Vint.Core.Battle.Modules.Common.Templates;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Fraction;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Item;
-using Vint.Core.ECS.Components.Modules;
-using Vint.Core.ECS.Components.Modules.Slot;
-using Vint.Core.ECS.Components.Preset;
-using Vint.Core.ECS.Components.Server.Experience;
-using Vint.Core.ECS.Components.Server.Modules;
-using Vint.Core.ECS.Components.Server.Shop;
-using Vint.Core.ECS.Enums;
 using Vint.Core.ECS.Templates;
-using Vint.Core.ECS.Templates.Gold;
-using Vint.Core.ECS.Templates.Modules;
-using Vint.Core.ECS.Templates.Money;
-using Vint.Core.ECS.Templates.Preset;
+using Vint.Core.Fractions.Components;
+using Vint.Core.Items.Components;
+using Vint.Core.Items.Templates.Gold;
+using Vint.Core.Notification.Components;
+using Vint.Core.Presets.Components;
+using Vint.Core.Presets.Templates;
 using Vint.Core.Server.Game;
+using Vint.Core.Shop.Templates;
+using Vint.Core.User.Components;
 
 namespace Vint.Core.ECS.Entities;
 

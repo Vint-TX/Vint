@@ -1,13 +1,13 @@
+using Vint.Core.Battle.Modules.Unit.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Battle.Unit;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Movement;
+namespace Vint.Core.Battle.Modules.Unit.Events;
 
 [ProtocolId(1486036000129)]
 public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {

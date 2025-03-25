@@ -2,14 +2,16 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ConcurrentCollections;
+using Vint.Core.Battle.Effects.Components.Config.Common;
+using Vint.Core.Battle.Effects.Events;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Effect;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Effects;

@@ -1,5 +1,5 @@
 using System.Collections;
-using Vint.Core.ECS.Movement;
+using Vint.Core.Battle.Tank.Movement;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;

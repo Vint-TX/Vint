@@ -1,11 +1,11 @@
-using Vint.Core.Battle.Matchmaking;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Matchmaking;
+using Vint.Core.ECS.Events;
+using Vint.Core.Matchmaking;
+using Vint.Core.Matchmaking.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Squad;
+namespace Vint.Core.Squads.Events;
 
 [ProtocolId(1510144894187)]
 public class SquadTryEnterToMatchMakingEvent(

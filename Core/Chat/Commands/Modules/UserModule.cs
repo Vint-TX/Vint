@@ -3,14 +3,14 @@ using System.Text;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battle.Lobby;
-using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.ChatCommands.Modules;
+namespace Vint.Core.Chat.Commands.Modules;
 
 [ChatCommandGroup("user", "Commands for all players", PlayerGroups.None)]
 public class UserModule(

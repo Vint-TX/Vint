@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Bonus;
+namespace Vint.Core.Battle.Bonus.Components;
 
 [ProtocolId(8960819779144518)]
 public class SpatialGeometryComponent(

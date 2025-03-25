@@ -1,15 +1,14 @@
 using Vint.Core.Battle.Mode.Team;
+using Vint.Core.Battle.Modules.Common.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Battle.Round;
-using Vint.Core.ECS.Components.Modules;
-using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
 namespace Vint.Core.Battle.Results;
 

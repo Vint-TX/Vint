@@ -1,12 +1,14 @@
-﻿using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Chat;
-using Vint.Core.ECS.Components.User;
+﻿using Vint.Core.Battle.Chat.Templates;
+using Vint.Core.Battle.Player;
+using Vint.Core.Chat.Components;
+using Vint.Core.Chat.Events;
+using Vint.Core.Chat.Templates;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Chat;
-using Vint.Core.ECS.Templates.Chat;
 using Vint.Core.Server.Game;
+using Vint.Core.Squads.Templates;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.Chat;
 
 public static class ChatUtils {
     public static bool CensorshipEnabled => false;

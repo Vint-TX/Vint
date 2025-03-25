@@ -1,8 +1,7 @@
 using LinqToDB;
-using Vint.Core.Database;
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.Database;
 
 public static class DatabaseUtils {
     public static async Task<Player?> GetSelfPlayerById(this DbConnection db, long userId) =>

@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.DailyBonus;
+namespace Vint.Core.DailyBonus.Events;
 
 [ProtocolId(636464291410970703)]
 public class TargetItemFromDailyBonusReceivedEvent(

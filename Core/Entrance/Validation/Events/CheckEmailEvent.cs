@@ -2,10 +2,11 @@
 using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Validation;
+namespace Vint.Core.Entrance.Validation.Events;
 
 [ProtocolId(635906273125139964)]
 public class CheckEmailEvent : IServerEvent {

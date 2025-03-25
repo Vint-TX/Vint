@@ -1,8 +1,8 @@
-using Vint.Core.ECS.Components.Battle.Weapon.Stream;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Components.Shaft;
+using Vint.Core.Battle.Weapons.Components.Stream;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Weapon;
+namespace Vint.Core.Battle.Weapons.Components.Config;
 
 public class EnergyRechargeSpeedPropertyComponent : RangedComponent, IConvertible<StreamWeaponEnergyComponent>, IConvertible<ShaftEnergyComponent> {
     public void Convert(ShaftEnergyComponent component) =>

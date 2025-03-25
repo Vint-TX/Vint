@@ -1,9 +1,10 @@
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Battle.Effect;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class ExternalImpactEffect(
     TimeSpan cooldown,

@@ -1,8 +1,9 @@
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Squads.Components;
 
-namespace Vint.Core.ECS.Templates.Squad;
+namespace Vint.Core.Squads.Templates;
 
 [ProtocolId(1507120664314)]
 public class SquadTemplate : EntityTemplate {

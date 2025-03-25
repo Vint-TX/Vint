@@ -1,12 +1,12 @@
 using Vint.Core.Battle.Lobby.Impl;
-using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Running = Vint.Core.Battle.Lobby.Running;
+using Running = Vint.Core.Battle.Lobby.State.Running;
 
-namespace Vint.Core.ECS.Events.Battle;
+namespace Vint.Core.Battle.Player.User.Events;
 
 [ProtocolId(1498743823980)]
 public class ReturnToCustomBattleEvent : IServerEvent {

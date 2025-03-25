@@ -1,12 +1,12 @@
 using LinqToDB;
+using Vint.Core.Battle.Mode.Team;
+using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Rewards.Components;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Battle.Rewards;
-using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.Items.Components;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 

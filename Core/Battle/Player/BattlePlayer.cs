@@ -1,6 +1,6 @@
+using Vint.Core.Battle.Common.Components;
 using Vint.Core.Battle.Effects;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;

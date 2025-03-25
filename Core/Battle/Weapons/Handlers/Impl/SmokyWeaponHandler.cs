@@ -1,10 +1,10 @@
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons.Components.Config;
+using Vint.Core.Battle.Weapons.Damage.Components;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server.Damage;
-using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers.Impl;
 
 public class SmokyWeaponHandler : DiscreteTankWeaponHandler {
     public SmokyWeaponHandler(BattleTank battleTank) : base(battleTank) {

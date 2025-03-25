@@ -1,5 +1,5 @@
+using Vint.Core.Containers.Templates;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Containers;
 
 namespace Vint.Core.Containers;
 

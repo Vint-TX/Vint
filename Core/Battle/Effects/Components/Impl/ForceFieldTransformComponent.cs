@@ -1,8 +1,10 @@
+using Vint.Core.Battle.Tank.Movement;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Effect.Type;
+namespace Vint.Core.Battle.Effects.Components.Impl;
 
 [ProtocolId(1505906670608), ClientAddable]
 public class ForceFieldTransformComponent : IComponent {
-    public ECS.Movement.Movement Movement { get; private set; }
+    public Movement Movement { get; private set; }
 }

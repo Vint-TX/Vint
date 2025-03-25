@@ -1,13 +1,13 @@
+using Vint.Core.Battle.Bonus.Components;
+using Vint.Core.Battle.Bonus.Templates;
 using Vint.Core.Battle.Effects;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Battle.Bonus;
 
-namespace Vint.Core.Battle.Bonus.Type;
+namespace Vint.Core.Battle.Bonus.Impl;
 
 public abstract class SupplyBox<T>(
     Round round,

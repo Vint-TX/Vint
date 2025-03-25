@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User.Friends;
+namespace Vint.Core.User.Events.Relationship;
 
 [ProtocolId(1451120695251)]
 public class FriendsLoadedEvent(

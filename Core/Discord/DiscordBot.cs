@@ -15,7 +15,7 @@ using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
-using Vint.Core.ECS.Templates.Notification;
+using Vint.Core.Notification.Templates;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 using ILogger = Serilog.ILogger;

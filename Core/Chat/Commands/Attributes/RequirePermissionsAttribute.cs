@@ -1,6 +1,6 @@
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.ChatCommands.Attributes;
+namespace Vint.Core.Chat.Commands.Attributes;
 
 public class RequirePermissionsAttribute(
     PlayerGroups permissions

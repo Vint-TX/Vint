@@ -1,10 +1,12 @@
 using System.Numerics;
-using Vint.Core.ECS.Components.Battle.Flag;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Flags.Components;
+using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Flag;
+namespace Vint.Core.Battle.Flags.Templates;
 
 [ProtocolId(1431941266589)]
 public class FlagTemplate : EntityTemplate {

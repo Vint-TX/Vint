@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Unit;
+namespace Vint.Core.Battle.Modules.Unit.Components;
 
 [ProtocolId(3441234123559)]
 public class DroneMoveConfigComponent : IComponent {

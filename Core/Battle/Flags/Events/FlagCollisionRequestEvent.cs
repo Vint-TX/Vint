@@ -1,15 +1,16 @@
 using System.Numerics;
-using Vint.Core.Battle.Flags;
+using Vint.Core.Battle.Flags.State;
+using Vint.Core.Battle.Mode.Team;
 using Vint.Core.Battle.Mode.Team.Impl;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Flag;
+namespace Vint.Core.Battle.Flags.Events;
 
 [ProtocolId(1463741053998)]
 public class FlagCollisionRequestEvent : IServerEvent {

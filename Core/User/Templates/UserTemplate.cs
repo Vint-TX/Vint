@@ -1,14 +1,15 @@
-﻿using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Chat;
-using Vint.Core.ECS.Components.DailyBonus;
-using Vint.Core.ECS.Components.Fraction;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Quest;
-using Vint.Core.ECS.Components.User;
+﻿using Vint.Core.Chat.Components;
+using Vint.Core.DailyBonus.Components;
+using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
+using Vint.Core.Fractions.Components;
+using Vint.Core.Leagues.Components;
+using Vint.Core.Quests.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.ECS.Templates.User;
+namespace Vint.Core.User.Templates;
 
 [ProtocolId(1433752208915)]
 public class UserTemplate : EntityTemplate {

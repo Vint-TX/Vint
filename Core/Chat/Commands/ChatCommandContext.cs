@@ -1,10 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
-using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ChatCommands;
+namespace Vint.Core.Chat.Commands;
 
 public sealed class ChatCommandContext(
     IServiceProvider serviceProvider,

@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Flag;
+namespace Vint.Core.Battle.Flags.Components;
 
 [ProtocolId(4898317045808451550)]
 public class FlagPedestalComponent(

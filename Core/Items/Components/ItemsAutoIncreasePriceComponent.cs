@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Shop;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Items.Components;
 
 public class ItemsAutoIncreasePriceComponent : IComponent {
     public int StartCount { get; private set; }

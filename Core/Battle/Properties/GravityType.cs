@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Battle.Properties;
 
 public enum GravityType : byte {
     Earth = 0,

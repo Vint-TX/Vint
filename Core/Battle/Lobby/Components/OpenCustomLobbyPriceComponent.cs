@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Lobby;
+namespace Vint.Core.Battle.Lobby.Components;
 
 [ProtocolId(1548677305789)]
 public class OpenCustomLobbyPriceComponent(

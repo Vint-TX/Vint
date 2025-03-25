@@ -1,8 +1,8 @@
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
-using Vint.Core.ECS.Templates.Battle.Effect;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class AcceleratedGearsEffect(
     BattleTank tank,

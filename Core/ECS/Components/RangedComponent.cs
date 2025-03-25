@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Components.Server.Common;
+namespace Vint.Core.ECS.Components;
 
 public abstract class RangedComponent : IComponent {
     public float InitialValue { get; protected set; }

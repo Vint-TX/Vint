@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Lobby;
+namespace Vint.Core.Battle.Lobby.Events;
 
 [ProtocolId(636147221904966270)]
 public class ClientEnterLobbyEvent : IEvent;

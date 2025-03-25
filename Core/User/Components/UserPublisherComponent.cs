@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Components;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.User;
+namespace Vint.Core.User.Components;
 
 [ProtocolId(32195187150433)]
 public class UserPublisherComponent : PrivateComponent {

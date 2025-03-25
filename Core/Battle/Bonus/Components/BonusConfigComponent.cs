@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Battle;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Battle.Bonus.Components;
 
 public class BonusConfigComponent : IComponent {
     public float FallSpeed { get; private set; }

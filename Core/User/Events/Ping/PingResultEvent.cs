@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Ping;
+namespace Vint.Core.User.Events.Ping;
 
 [ProtocolId(3963540336787160114)]
 public class PingResultEvent(

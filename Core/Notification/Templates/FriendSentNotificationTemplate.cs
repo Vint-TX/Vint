@@ -1,7 +1,7 @@
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Notification;
+namespace Vint.Core.Notification.Templates;
 
 [ProtocolId(1507711452261)]
 public class FriendSentNotificationTemplate : NotificationTemplate {

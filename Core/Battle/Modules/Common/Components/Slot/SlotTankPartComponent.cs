@@ -1,7 +1,7 @@
-﻿using Vint.Core.ECS.Enums;
+﻿using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Modules.Slot;
+namespace Vint.Core.Battle.Modules.Common.Components.Slot;
 
 [ProtocolId(636326081851010949)]
 public class SlotTankPartComponent(

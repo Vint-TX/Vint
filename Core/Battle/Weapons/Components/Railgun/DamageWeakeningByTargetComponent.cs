@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Railgun;
+namespace Vint.Core.Battle.Weapons.Components.Railgun;
 
 [ProtocolId(6707178642658066560)]
 public class DamageWeakeningByTargetComponent(

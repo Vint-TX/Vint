@@ -1,5 +1,5 @@
-using Vint.Core.Battle.Modules.Types.Base;
-using Vint.Core.ECS.Components.Modules.Inventory;
+using Vint.Core.Battle.Modules.Common.Components.Inventory;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.StateMachine;
 
 namespace Vint.Core.Battle.Modules;

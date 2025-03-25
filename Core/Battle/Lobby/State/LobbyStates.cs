@@ -1,10 +1,9 @@
+using Vint.Core.Battle.Lobby.State.Components;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Components;
-using Vint.Core.ECS.Components.Lobby;
-using Vint.Core.ECS.Components.Matchmaking;
 using Vint.Core.StateMachine;
 
-namespace Vint.Core.Battle.Lobby;
+namespace Vint.Core.Battle.Lobby.State;
 
 public class LobbyStateManager(
     LobbyBase lobby
@@ -17,7 +16,7 @@ public class LobbyStateManager(
 
 public abstract class LobbyState(
     LobbyStateManager stateManager
-) : State {
+) : StateMachine.State {
     public override LobbyStateManager StateManager { get; } = stateManager;
     protected LobbyBase Lobby => StateManager.Lobby;
 }

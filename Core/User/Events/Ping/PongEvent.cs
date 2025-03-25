@@ -1,8 +1,9 @@
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Ping;
+namespace Vint.Core.User.Events.Ping;
 
 [ProtocolId(1115422024552825915)]
 public class PongEvent : IServerEvent {

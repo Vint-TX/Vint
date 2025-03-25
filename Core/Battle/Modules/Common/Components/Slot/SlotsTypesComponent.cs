@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Modules;
+namespace Vint.Core.Battle.Modules.Common.Components.Slot;
 
 public class SlotsTypesComponent : IComponent {
-    public Dictionary<Slot, ModuleBehaviourType> Slots { get; private set; } = null!;
+    public Dictionary<Common.Slot, ModuleBehaviourType> Slots { get; private set; } = null!;
 }

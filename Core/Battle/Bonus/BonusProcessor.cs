@@ -1,5 +1,5 @@
 using System.Collections.Frozen;
-using Vint.Core.Battle.Bonus.Type;
+using Vint.Core.Battle.Bonus.Impl;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;

@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Battle.Mode;
 
 public enum BattleMode : byte {
     DM = 0,

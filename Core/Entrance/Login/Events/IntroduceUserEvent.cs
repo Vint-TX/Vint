@@ -1,7 +1,8 @@
 ﻿using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.ECS.Events.Entrance.Login;
+namespace Vint.Core.Entrance.Login.Events;
 
 public abstract class IntroduceUserEvent : IServerEvent {
     public string? Captcha { get; protected set; }

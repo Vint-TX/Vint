@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Battle.Results;
 
 public enum EnergySource : byte {
     RatingBattle = 0,

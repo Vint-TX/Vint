@@ -1,8 +1,8 @@
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Tank;
+namespace Vint.Core.Battle.Tank.Parameters.Components.Config;
 
-public class DampingComponent : RangedComponent, IConvertible<Components.Battle.Parameters.Chassis.DampingComponent> {
-    public void Convert(Components.Battle.Parameters.Chassis.DampingComponent component) =>
+public class DampingComponent : RangedComponent, IConvertible<Components.DampingComponent> {
+    public void Convert(Components.DampingComponent component) =>
         component.Damping = FinalValue;
 }

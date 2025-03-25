@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Notification;
 
 public enum NotificationPriority : byte {
     Warning = 1,

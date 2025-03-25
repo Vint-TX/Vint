@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Covers;
+namespace Vint.Core.Items.Templates.Covers;
 
 [ProtocolId(636287153836461132)]
 public class WeaponPaintMarketItemTemplate : MarketEntityTemplate {

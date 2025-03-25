@@ -1,8 +1,8 @@
 ﻿using Vint.Core.Config;
-using Vint.Core.ECS.Components.Experience;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Item;
+namespace Vint.Core.Items.Components;
 
 [ProtocolId(1438924983080)]
 public class ExperienceToLevelUpItemComponent : IComponent {

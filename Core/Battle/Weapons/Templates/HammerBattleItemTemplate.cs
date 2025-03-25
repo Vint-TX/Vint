@@ -1,9 +1,9 @@
 using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
+using Vint.Core.Battle.Weapons.Components.Hammer;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(4939169559170921259)]
 public class HammerBattleItemTemplate : DiscreteWeaponTemplate {

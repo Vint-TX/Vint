@@ -1,11 +1,11 @@
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
+using Vint.Core.Battle.Lobby.Components;
+using Vint.Core.Battle.Mode.Team;
+using Vint.Core.Battle.Mode.Team.Templates;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
-using Vint.Core.ECS.Components.Lobby;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Templates.Battle;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 

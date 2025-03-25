@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Railgun;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Components.Railgun;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Weapon;
+namespace Vint.Core.Battle.Weapons.Components.Config;
 
 public class ChargeTimePropertyComponent : RangedComponent, IConvertible<RailgunChargingWeaponComponent> {
     public void Convert(RailgunChargingWeaponComponent component) =>

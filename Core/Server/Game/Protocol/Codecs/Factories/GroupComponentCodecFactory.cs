@@ -1,4 +1,4 @@
-﻿using Vint.Core.ECS.Components.Group;
+﻿using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Factories;

@@ -1,5 +1,5 @@
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
+using Vint.Core.Battle.Effects.Components.Config.Common;
 
-namespace Vint.Core.ECS.Components.Server.Modules.Effect.AbsorbingArmor;
+namespace Vint.Core.Battle.Effects.Components.Config.AbsorbingArmor;
 
 public class ArmorEffectComponent : FactorComponent;

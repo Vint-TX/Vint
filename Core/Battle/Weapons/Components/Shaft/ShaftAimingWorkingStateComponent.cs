@@ -1,10 +1,11 @@
 using System.Numerics;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
+namespace Vint.Core.Battle.Weapons.Components.Shaft;
 
 [ProtocolId(4186891190183470299), ClientAddable, ClientRemovable]
 public class ShaftAimingWorkingStateComponent : IComponent {

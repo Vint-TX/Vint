@@ -1,8 +1,9 @@
 ﻿using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Registration;
+namespace Vint.Core.Entrance.Registration.Events;
 
 [ProtocolId(1453881282573)]
 public class InvalidRegistrationPasswordEvent : IServerEvent { // TODO statistics?

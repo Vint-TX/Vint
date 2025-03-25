@@ -1,9 +1,9 @@
-﻿using Vint.Core.ECS.Components.Entrance;
-using Vint.Core.ECS.Entities;
+﻿using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
+using Vint.Core.Entrance.ClientSession.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Templates.Entrance;
+namespace Vint.Core.Entrance.ClientSession.Templates;
 
 [ProtocolId(1429771189777)]
 public class ClientSessionTemplate : EntityTemplate {

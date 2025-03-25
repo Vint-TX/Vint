@@ -1,8 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Rewards;
+namespace Vint.Core.Battle.Rewards.Components;
 
 [ProtocolId(636390744977660302)]
 public class ChestBattleRewardComponent(

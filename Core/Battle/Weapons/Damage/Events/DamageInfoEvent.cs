@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Damage;
+namespace Vint.Core.Battle.Weapons.Damage.Events;
 
 [ProtocolId(1494934093730)]
 public class DamageInfoEvent(

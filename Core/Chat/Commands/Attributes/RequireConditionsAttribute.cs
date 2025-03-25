@@ -1,7 +1,7 @@
 using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.ChatCommands.Attributes;
+namespace Vint.Core.Chat.Commands.Attributes;
 
 public class RequireConditionsAttribute(
     ChatCommandConditions conditions

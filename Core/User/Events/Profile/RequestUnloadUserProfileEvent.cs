@@ -1,8 +1,9 @@
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User;
+namespace Vint.Core.User.Events.Profile;
 
 [ProtocolId(1451368523887)]
 public class RequestUnloadUserProfileEvent : IServerEvent {

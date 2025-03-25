@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Modules;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Battle.Modules.Common.Components;
 
 public class TargetTierComponent : IComponent {
     public int TargetTier { get; set; }

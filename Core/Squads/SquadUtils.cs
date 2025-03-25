@@ -1,8 +1,8 @@
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server.Squad;
 using Vint.Core.Server.Game;
+using Vint.Core.Squads.Components;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.Squads;
 
 public static class SquadUtils {
     static SquadConfigComponent Config { get; } = ConfigManager.GetComponent<SquadConfigComponent>("/squad");

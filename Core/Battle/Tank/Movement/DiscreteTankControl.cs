@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Movement;
+namespace Vint.Core.Battle.Tank.Movement;
 
 public struct DiscreteTankControl {
     public const int BitLeft = 0;

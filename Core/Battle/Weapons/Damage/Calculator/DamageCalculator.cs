@@ -4,12 +4,13 @@ using Redzen.Random;
 using Vint.Core.Battle.Effects;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 using MathUtils = Vint.Core.Utils.MathUtils;
 
-namespace Vint.Core.Battle.Damage.Calculator;
+namespace Vint.Core.Battle.Weapons.Damage.Calculator;
 
 public class DamageCalculator : IDamageCalculator {
     const float BackHitMultiplier = 1.2f;

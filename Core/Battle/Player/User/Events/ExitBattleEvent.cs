@@ -1,10 +1,10 @@
-using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle;
+namespace Vint.Core.Battle.Player.User.Events;
 
 [ProtocolId(-4669704207166218448)]
 public class ExitBattleEvent : IServerEvent {

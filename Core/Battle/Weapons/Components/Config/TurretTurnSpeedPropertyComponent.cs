@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Parameters.Components;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Weapon;
+namespace Vint.Core.Battle.Weapons.Components.Config;
 
 public class TurretTurnSpeedPropertyComponent : RangedComponent, IConvertible<WeaponRotationComponent> {
     public void Convert(WeaponRotationComponent component) {

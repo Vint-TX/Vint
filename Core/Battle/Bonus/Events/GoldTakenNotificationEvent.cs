@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Bonus;
+namespace Vint.Core.Battle.Bonus.Events;
 
 [ProtocolId(1430982132735)]
 public class GoldTakenNotificationEvent : IEvent;

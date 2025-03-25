@@ -1,13 +1,15 @@
+using Vint.Core.Battle.Tank.Movement;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Movement;
+namespace Vint.Core.Battle.Modules.Unit.Events;
 
 [ProtocolId(1485519185293)]
 public abstract class UnitMoveEvent : IEvent {
     protected UnitMoveEvent() { }
 
-    protected UnitMoveEvent(ECS.Movement.Movement unitMove) =>
+    protected UnitMoveEvent(Movement unitMove) =>
         UnitMove = unitMove;
 
-    public ECS.Movement.Movement UnitMove { get; protected set; }
+    public Movement UnitMove { get; protected set; }
 }

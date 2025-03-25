@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Vint.Core.Battle.Effects;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
 
 namespace Vint.Core.Battle.Mines;
 

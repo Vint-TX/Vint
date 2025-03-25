@@ -1,7 +1,8 @@
 using LinqToDB.Mapping;
+using Vint.Core.Battle.Mode;
 using Vint.Core.Config;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.Quests;
 
 namespace Vint.Core.Database.Models;
 

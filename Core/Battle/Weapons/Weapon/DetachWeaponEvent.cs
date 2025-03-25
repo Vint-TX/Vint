@@ -1,12 +1,13 @@
 using System.Numerics;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Weapon;
 
 [ProtocolId(1447917521601)]
 public class DetachWeaponEvent : IServerEvent {

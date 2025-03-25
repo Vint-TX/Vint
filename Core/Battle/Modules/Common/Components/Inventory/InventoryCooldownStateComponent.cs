@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Modules.Inventory;
+namespace Vint.Core.Battle.Modules.Common.Components.Inventory;
 
 [ProtocolId(1486635434064)]
 public class InventoryCooldownStateComponent(

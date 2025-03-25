@@ -1,11 +1,12 @@
+using Vint.Core.Battle.Mode.Common.Templates;
+using Vint.Core.Battle.Mode.Team.Components;
+using Vint.Core.Battle.Mode.Team.Impl.Components;
 using Vint.Core.Battle.Properties;
-using Vint.Core.ECS.Components.Battle;
-using Vint.Core.ECS.Components.Battle.Mode;
-using Vint.Core.ECS.Components.Battle.Team;
+using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Mode;
+namespace Vint.Core.Battle.Mode.Team.Impl.Templates;
 
 [ProtocolId(8215935014037697786)]
 public class TDMTemplate : BattleModeTemplate {

@@ -1,7 +1,8 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.Battle.Properties;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Lobby;
+namespace Vint.Core.Battle.Lobby.Components;
 
 [ProtocolId(1435652501758)]
 public class GravityComponent(

@@ -1,7 +1,6 @@
-using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Tank;
+namespace Vint.Core.Battle.Tank.Parameters.Components.Config;
 
 public class ReverseTurnAccelerationComponent : RangedComponent, IConvertible<SpeedConfigComponent> {
     public void Convert(SpeedConfigComponent component) =>

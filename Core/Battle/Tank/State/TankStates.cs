@@ -1,17 +1,18 @@
 using Vint.Core.Battle.Flags;
+using Vint.Core.Battle.Flags.State;
 using Vint.Core.Battle.Mode.Team.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank.Common.Components;
+using Vint.Core.Battle.Tank.Movement.Components;
+using Vint.Core.Battle.Tank.State.Components;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components;
-using Vint.Core.ECS.Components.Battle;
-using Vint.Core.ECS.Components.Battle.Movement;
-using Vint.Core.ECS.Components.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.StateMachine;
 
-namespace Vint.Core.Battle.Tank;
+namespace Vint.Core.Battle.Tank.State;
 
 public class TankStateManager(
     BattleTank tank
@@ -24,7 +25,7 @@ public class TankStateManager(
 
 public abstract class TankState(
     TankStateManager stateManager
-) : State {
+) : StateMachine.State {
     public override TankStateManager StateManager { get; } = stateManager;
     protected BattleTank Tank => StateManager.Tank;
 

@@ -1,10 +1,10 @@
 using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Battle.Weapon.Stream;
-using Vint.Core.ECS.Components.Battle.Weapon.Types;
+using Vint.Core.Battle.Weapons.Components;
+using Vint.Core.Battle.Weapons.Components.Stream;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(3413384256910001471)]
 public class IsisBattleItemTemplate : StreamWeaponTemplate {

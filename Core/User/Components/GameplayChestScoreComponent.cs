@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.User;
+namespace Vint.Core.User.Components;
 
 [ProtocolId(636389758870600269)]
 public class GameplayChestScoreComponent(

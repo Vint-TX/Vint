@@ -2,10 +2,11 @@ using System.Collections.Frozen;
 using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User.Friends;
+namespace Vint.Core.User.Events.Relationship;
 
 [ProtocolId(1450243543232)]
 public class LoadSortedFriendsIdsEvent(

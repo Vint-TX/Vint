@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Hammer;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Components.Hammer;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Weapon;
+namespace Vint.Core.Battle.Weapons.Components.Config;
 
 public class MagazineSizePropertyComponent : RangedComponent, IConvertible<MagazineWeaponComponent>, IConvertible<MagazineStorageComponent> {
     public void Convert(MagazineStorageComponent component) =>

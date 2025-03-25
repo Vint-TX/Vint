@@ -1,15 +1,15 @@
 using LinqToDB;
-using Vint.Core.Containers;
 using Vint.Core.Database;
-using Vint.Core.ECS.Components.Item;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Notification;
+using Vint.Core.ECS.Events;
+using Vint.Core.Items.Components;
+using Vint.Core.Items.Events;
+using Vint.Core.Notification.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
-using Container = Vint.Core.Database.Models.Container;
 
-namespace Vint.Core.ECS.Events.Items;
+namespace Vint.Core.Containers.Events;
 
 [ProtocolId(1480325268669)]
 public class OpenContainerEvent : IServerEvent {
@@ -21,8 +21,8 @@ public class OpenContainerEvent : IServerEvent {
 
         IEntity userEntity = entities.Single();
         IEntity marketEntity = userEntity.GetMarketEntity(connection);
-        Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id &&
-                                                                                cont.Id == marketEntity.Id);
+        Database.Models.Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id &&
+                                                                                                cont.Id == marketEntity.Id);
 
         if (container == null || container.Count < Amount)
             return;

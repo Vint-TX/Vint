@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Modules;
+namespace Vint.Core.Battle.Modules.Common.Templates;
 
 [ProtocolId(636319308428353334)]
 public class ModuleCardUserItemTemplate : UserEntityTemplate {

@@ -1,12 +1,13 @@
 ﻿using LinqToDB;
 using Vint.Core.Database;
-using Vint.Core.ECS.Components.Entrance;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Entrance.Registration;
+using Vint.Core.ECS.Events;
+using Vint.Core.Entrance.ClientSession.Components;
+using Vint.Core.Entrance.Registration.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Invite;
+namespace Vint.Core.Entrance.Invite.Events;
 
 [ProtocolId(1439810001590)]
 public class InviteEnteredEvent : IServerEvent {

@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.News;
 
 public enum NewsItemLayout : byte {
     Small = 0,

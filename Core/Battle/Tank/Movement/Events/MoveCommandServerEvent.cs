@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Movement;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Movement;
+namespace Vint.Core.Battle.Tank.Movement.Events;
 
 [ProtocolId(-4956413533647444536)]
 public class MoveCommandServerEvent(

@@ -1,9 +1,9 @@
-using Vint.Core.Battle.Damage.Calculator;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers;
 
 public abstract class ModuleWeaponHandler(
     BattleTank tank,

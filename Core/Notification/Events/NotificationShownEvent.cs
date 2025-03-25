@@ -1,10 +1,11 @@
-using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
+using Vint.Core.Notification.Components;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Notification;
+namespace Vint.Core.Notification.Events;
 
 [ProtocolId(1454667308567)]
 public class NotificationShownEvent : IServerEvent {

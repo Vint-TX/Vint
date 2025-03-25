@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Vint.Core.ECS.Components.Server.Common;
+namespace Vint.Core.ECS.Components;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers | ImplicitUseTargetFlags.WithInheritors)]
 public interface IConvertible<in T> where T : IComponent {

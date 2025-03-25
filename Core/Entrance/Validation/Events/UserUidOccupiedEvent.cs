@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Validation;
+namespace Vint.Core.Entrance.Validation.Events;
 
 [ProtocolId(1437991652726)]
 public class UserUidOccupiedEvent(

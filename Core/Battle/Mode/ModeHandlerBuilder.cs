@@ -1,13 +1,13 @@
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Mode.Solo.Impl;
+using Vint.Core.Battle.Mode.Solo.Impl.Templates;
 using Vint.Core.Battle.Mode.Team;
 using Vint.Core.Battle.Mode.Team.Impl;
+using Vint.Core.Battle.Mode.Team.Impl.Templates;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Templates.Battle.Mode;
 
 namespace Vint.Core.Battle.Mode;
 

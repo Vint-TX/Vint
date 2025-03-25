@@ -1,6 +1,6 @@
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers;
 
 public interface ITemperatureWeaponHandler {
     IEntity MarketEntity { get; }

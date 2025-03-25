@@ -1,11 +1,15 @@
-using Vint.Core.ECS.Components.Battle.Parameters.Chassis;
-using Vint.Core.ECS.Components.Battle.Parameters.Health;
-using Vint.Core.ECS.Components.Battle.Tank;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Mode.Team.Components;
+using Vint.Core.Battle.Tank.Common.Components;
+using Vint.Core.Battle.Tank.Parameters.Components;
+using Vint.Core.Battle.Tank.Temperature.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
+using Vint.Core.Items.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.ECS.Templates.Battle.Tank;
+namespace Vint.Core.Battle.Tank.Common.Templates;
 
 [ProtocolId(2012489519776979402)]
 public class TankTemplate : EntityTemplate {

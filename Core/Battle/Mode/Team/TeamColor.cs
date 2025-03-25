@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Battle.Mode.Team;
 
 public enum TeamColor : byte {
     None = 0,

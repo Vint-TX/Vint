@@ -1,12 +1,13 @@
+using Vint.Core.Battle.Effects.Components;
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
-using Vint.Core.ECS.Components.Battle.Effect;
-using Vint.Core.ECS.Components.Battle.Weapon;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
+using Vint.Core.Battle.Weapons.Parameters.Components;
+using Vint.Core.Battle.Weapons.Templates;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Battle.Effect;
-using Vint.Core.ECS.Templates.Battle.Weapon;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class DroneEffect : WeaponEffect {
     public DroneEffect(

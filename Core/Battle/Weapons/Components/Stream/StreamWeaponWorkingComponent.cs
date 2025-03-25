@@ -1,11 +1,12 @@
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Weapon.Stream;
+namespace Vint.Core.Battle.Weapons.Components.Stream;
 
 [ProtocolId(971549724137995758), ClientAddable, ClientRemovable]
 public class StreamWeaponWorkingComponent : IComponent {

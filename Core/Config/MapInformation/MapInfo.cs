@@ -1,7 +1,7 @@
 using System.Numerics;
 using BepuPhysics.Collidables;
 using SharpGLTF.Schema2;
-using Vint.Core.ECS.Enums;
+using Vint.Core.Battle.Mode;
 
 namespace Vint.Core.Config.MapInformation;
 

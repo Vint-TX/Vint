@@ -2,8 +2,8 @@
 using System.Numerics;
 using System.Reflection;
 using Serilog;
+using Vint.Core.Battle.Tank.Movement;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Movement;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Exceptions;
 using Vint.Core.Server.Game.Protocol.Attributes;

@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.Battle.Common.Events;
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
+namespace Vint.Core.Battle.Weapons.Weapon.Hit;
 
 public abstract class HitEvent : TimeEvent {
     public List<HitTarget>? Targets { get; set; }

@@ -1,12 +1,12 @@
 using LinqToDB;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Database;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Weapon.Hit;
+namespace Vint.Core.Battle.Weapons.Weapon.Hit;
 
 [ProtocolId(196833391289212110)]
 public class SelfSplashHitEvent(

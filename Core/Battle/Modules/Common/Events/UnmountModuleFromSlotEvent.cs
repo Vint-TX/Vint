@@ -1,15 +1,14 @@
 using LinqToDB;
+using Vint.Core.Battle.Modules.Common.Components;
+using Vint.Core.Battle.Modules.Common.Components.Slot;
 using Vint.Core.Database;
-using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Item;
-using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events;
+using Vint.Core.Items.Components;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Items.Module;
+namespace Vint.Core.Battle.Modules.Common.Events;
 
 [ProtocolId(1485777830853)]
 public class UnmountModuleFromSlotEvent : IServerEvent {
@@ -20,7 +19,7 @@ public class UnmountModuleFromSlotEvent : IServerEvent {
         if (!moduleUserItem.HasComponent<MountedItemComponent>() ||
             !slotUserItem.HasComponent<ModuleGroupComponent>()) return;
 
-        Player player = connection.Player;
+        Database.Models.Player player = connection.Player;
 
         Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
         await using DbConnection db = new();

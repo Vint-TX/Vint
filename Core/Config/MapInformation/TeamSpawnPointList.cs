@@ -1,4 +1,4 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.Battle.Mode.Team;
 
 namespace Vint.Core.Config.MapInformation;
 

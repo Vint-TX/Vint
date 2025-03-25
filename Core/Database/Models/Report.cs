@@ -1,5 +1,5 @@
 using LinqToDB.Mapping;
-using Vint.Core.ECS.Enums;
+using Vint.Core.User;
 
 namespace Vint.Core.Database.Models;
 

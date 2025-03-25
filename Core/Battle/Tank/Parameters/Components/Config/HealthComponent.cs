@@ -1,10 +1,9 @@
-using Vint.Core.ECS.Components.Battle.Parameters.Health;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Tank;
+namespace Vint.Core.Battle.Tank.Parameters.Components.Config;
 
-public class HealthComponent : RangedComponent, IConvertible<Components.Battle.Parameters.Health.HealthComponent>, IConvertible<HealthConfigComponent> {
-    public void Convert(Components.Battle.Parameters.Health.HealthComponent component) {
+public class HealthComponent : RangedComponent, IConvertible<Components.HealthComponent>, IConvertible<HealthConfigComponent> {
+    public void Convert(Components.HealthComponent component) {
         component.CurrentHealth = InitialValue;
         component.MaxHealth = FinalValue;
     }

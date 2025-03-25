@@ -1,4 +1,4 @@
-﻿namespace Vint.Core.ECS.Components.Group;
+﻿namespace Vint.Core.ECS.Components;
 
 public abstract class GroupComponent(
     long key

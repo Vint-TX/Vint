@@ -1,6 +1,6 @@
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers;
 
 public interface ISplashWeaponHandler : IWeaponHandler {
     float MinSplashDamagePercent { get; }

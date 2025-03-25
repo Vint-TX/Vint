@@ -1,14 +1,13 @@
 using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.User;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Events.User.Friends;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.ECS.Events.User;
+namespace Vint.Core.User.Events.Relationship;
 
 [ProtocolId(1507198221820)]
 public class ChangeBlockStateByUserIdRequestEvent(

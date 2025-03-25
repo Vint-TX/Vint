@@ -1,10 +1,9 @@
 using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
-using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Commands;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.Server.Game;
 
 public static class PlayerConnectionUtils {
     public static async Task Share(this IPlayerConnection connection, params IEnumerable<IEntity> entities) {

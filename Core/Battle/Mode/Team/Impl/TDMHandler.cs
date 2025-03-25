@@ -1,7 +1,7 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Results;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Battle.Mode.Team.Impl;
 

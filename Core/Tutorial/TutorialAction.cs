@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Tutorial;
 
 public enum TutorialAction : byte {
     Start = 0,

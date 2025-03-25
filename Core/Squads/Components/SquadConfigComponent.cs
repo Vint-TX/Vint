@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Squad;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Squads.Components;
 
 public class SquadConfigComponent : IComponent {
     public int MaxSquadSize { get; private set; }

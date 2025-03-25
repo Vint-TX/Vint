@@ -1,4 +1,4 @@
-﻿namespace Vint.Core.ECS.Enums;
+﻿namespace Vint.Core.Battle.Modules.Common;
 
 public enum Slot : byte {
     Slot1 = 0,

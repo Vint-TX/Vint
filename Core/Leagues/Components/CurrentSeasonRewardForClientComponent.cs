@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Leagues;
+namespace Vint.Core.Leagues.Components;
 
 [ProtocolId(1503654626834)]
 public class CurrentSeasonRewardForClientComponent(

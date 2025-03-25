@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Parameters.Chassis;
+namespace Vint.Core.Battle.Tank.Parameters.Components;
 
 [ProtocolId(1437725485852)]
 public class DampingComponent(

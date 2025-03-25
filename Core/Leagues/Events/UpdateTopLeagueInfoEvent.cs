@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.League;
+namespace Vint.Core.Leagues.Events;
 
 [ProtocolId(1522324991586)]
 public class UpdateTopLeagueInfoEvent(

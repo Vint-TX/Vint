@@ -1,13 +1,13 @@
-using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Components.Config.Rage;
+using Vint.Core.Battle.Effects.Impl;
+using Vint.Core.Battle.Modules.Common.Events;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Rage;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Module;
-using Vint.Core.Utils;
+using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(1215656773)]
 public class RageModule : TriggerBattleModule, IKillModule {

@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Battle.User;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Battle.Player.Config;
 
 public class IdleKickConfigComponent : IComponent {
     public int IdleKickTimeSec { get; private set; }

@@ -1,11 +1,11 @@
+using Vint.Core.Battle.Effects.Templates;
+using Vint.Core.Battle.Modules.Impl.Events;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Weapon;
-using Vint.Core.ECS.Templates.Battle.Effect;
-using Vint.Core.Utils;
+using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class EnergyInjectionEffect(
     BattleTank tank,

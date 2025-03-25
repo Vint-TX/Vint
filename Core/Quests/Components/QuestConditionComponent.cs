@@ -1,7 +1,8 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.Battle.Properties;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Quest;
+namespace Vint.Core.Quests.Components;
 
 [ProtocolId(1493901546731)]
 public class QuestConditionComponent(

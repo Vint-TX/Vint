@@ -3,14 +3,14 @@ using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Weapon.Shot;
+namespace Vint.Core.Battle.Weapons.Weapon.Shot;
 
 [ProtocolId(5440037691022467911)]
 public class SelfShotEvent : ShotEvent, IServerEvent {

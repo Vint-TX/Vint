@@ -1,8 +1,8 @@
-using Vint.Core.Battle.Damage.Calculator;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Battle.Damage.Processor;
+namespace Vint.Core.Battle.Weapons.Damage.Processor;
 
 public interface IDamageProcessor {
     Task Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage);

@@ -1,12 +1,12 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Weapons.Components;
+using Vint.Core.Battle.Weapons.Components.Config;
+using Vint.Core.Battle.Weapons.Parameters.Components;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Battle.Weapon.Types;
-using Vint.Core.ECS.Components.Server.Weapon;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(-8939173357737272930)]
 public class RicochetBattleItemTemplate : BulletWeaponTemplate {

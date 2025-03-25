@@ -1,4 +1,4 @@
-using Vint.Core.Battle.Matchmaking;
+using Vint.Core.Matchmaking;
 using Vint.Core.Quests;
 
 namespace Vint.Core.Battle.Lobby.Impl.Arcade;

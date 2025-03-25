@@ -1,3 +1,3 @@
-namespace Vint.Core.ECS.Components.Server.DailyBonus.Cycles;
+namespace Vint.Core.DailyBonus.Components.Config.Cycles;
 
 public class DailyBonusFirstCycleComponent : DailyBonusCycleComponent;

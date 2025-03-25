@@ -1,11 +1,15 @@
+using Vint.Core.Battle.Mode.Team.Components;
+using Vint.Core.Battle.Modules.Unit.Components;
 using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Battle.Weapon.Stream;
-using Vint.Core.ECS.Components.Group;
+using Vint.Core.Battle.Weapons.Components;
+using Vint.Core.Battle.Weapons.Components.Stream;
+using Vint.Core.Battle.Weapons.Parameters.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(1485335125183)]
 public class DroneWeaponTemplate : EntityTemplate {

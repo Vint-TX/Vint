@@ -1,8 +1,8 @@
 using LinqToDB.Mapping;
-using Vint.Core.ECS.Components.Modules.Slot;
+using Vint.Core.Battle.Modules.Common;
+using Vint.Core.Battle.Modules.Common.Components.Slot;
+using Vint.Core.Battle.Modules.Common.Templates;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Templates.Modules;
 using Vint.Core.Server.Game;
 
 namespace Vint.Core.Database.Models;

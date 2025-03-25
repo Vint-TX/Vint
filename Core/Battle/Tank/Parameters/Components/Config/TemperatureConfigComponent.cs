@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Tank;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Battle.Tank.Parameters.Components.Config;
 
 public class TemperatureConfigComponent : IComponent {
     public float MaxTemperature { get; private set; }

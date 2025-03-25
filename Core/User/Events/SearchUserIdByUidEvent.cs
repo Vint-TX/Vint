@@ -1,10 +1,11 @@
 using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User;
+namespace Vint.Core.User.Events;
 
 [ProtocolId(1469526368502)]
 public class SearchUserIdByUidEvent : IServerEvent {

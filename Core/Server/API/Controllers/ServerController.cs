@@ -1,8 +1,8 @@
 using EmbedIO;
 using EmbedIO.WebApi;
 using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Config;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Server.API.DTO.Server;
 using Vint.Core.Server.Common.Attributes.Methods;
 using Vint.Core.Server.Game;

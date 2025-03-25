@@ -1,8 +1,8 @@
-using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Notification.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Notification;
+namespace Vint.Core.Notification.Templates;
 
 [ProtocolId(1523947810296)]
 public class LoginRewardNotificationTemplate : NotificationTemplate {

@@ -1,10 +1,11 @@
 using System.Collections.Concurrent;
 using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.Battle.Lobby.Impl.Arcade;
-using Vint.Core.Battle.Matchmaking;
+using Vint.Core.Battle.Lobby.State;
+using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Enums;
+using Vint.Core.Matchmaking;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
 

@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.Battle.Weapons.Components.Vulcan;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Weapon;
+namespace Vint.Core.Battle.Weapons.Components.Config;
 
 public class TargetHeatMultiplierPropertyComponent : RangedComponent, IConvertible<VulcanWeaponComponent> {
     public void Convert(VulcanWeaponComponent component) => component.TargetHeatingMult = FinalValue;

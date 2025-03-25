@@ -1,7 +1,8 @@
 using Vint.Core.Battle.Effects;
-using Vint.Core.Battle.Modules.Types.Base;
+using Vint.Core.Battle.Effects.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(492941809)]
 public class AbsorbingArmorModule : ActiveBattleModule {

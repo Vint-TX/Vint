@@ -1,12 +1,12 @@
+using Vint.Core.Battle.Chat.Templates;
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Rounds.Events;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Battle.Team;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
-using Vint.Core.ECS.Events.Battle.Score;
-using Vint.Core.ECS.Templates.Chat;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Mode.Team;

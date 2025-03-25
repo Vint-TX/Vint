@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Vint.Core.ChatCommands.Attributes;
+namespace Vint.Core.Chat.Commands.Attributes;
 
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class ChatCommandAttribute(

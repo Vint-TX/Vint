@@ -1,10 +1,13 @@
-using Vint.Core.ECS.Components.Battle.User;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Modules.Inventory;
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Mode.Team.Components;
+using Vint.Core.Battle.Modules.Common.Components.Inventory;
+using Vint.Core.Battle.Player.User.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.ECS.Templates.Battle.User;
+namespace Vint.Core.Battle.Player.User.Templates;
 
 [ProtocolId(-2043703779834243389)]
 public class BattleUserTemplate : EntityTemplate {

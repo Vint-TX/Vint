@@ -1,20 +1,18 @@
 ﻿using LinqToDB;
+using Vint.Core.Battle.Effects.Components.Config.Common;
+using Vint.Core.Battle.Rewards.Templates;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Experience;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Item;
-using Vint.Core.ECS.Components.Server.Experience;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
-using Vint.Core.ECS.Templates.Battle.Reward;
-using Vint.Core.ECS.Templates.Graffiti;
-using Vint.Core.ECS.Templates.Hulls;
-using Vint.Core.ECS.Templates.Skins;
-using Vint.Core.ECS.Templates.Weapons.Market;
+using Vint.Core.Items.Components;
+using Vint.Core.Items.Templates.Graffiti;
+using Vint.Core.Items.Templates.Hulls;
+using Vint.Core.Items.Templates.Skins;
+using Vint.Core.Items.Templates.Weapons.Market;
 using Vint.Core.Server.Game;
+using Vint.Core.User.Components;
 
 namespace Vint.Core.Utils;
 

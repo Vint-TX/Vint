@@ -3,11 +3,11 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User;
+namespace Vint.Core.User.Events.Relationship;
 
 [ProtocolId(1506939739582)]
 public class ReportUserByUserIdEvent(

@@ -1,8 +1,9 @@
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle;
+namespace Vint.Core.Battle.Player.User.Events;
 
 [ProtocolId(1470658766256)]
 public class SendPerformanceStatisticDataEvent : IServerEvent { // todo: what the fuck am i supposed to do with this information?

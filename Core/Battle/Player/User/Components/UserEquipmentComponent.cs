@@ -1,7 +1,8 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.User;
+namespace Vint.Core.Battle.Player.User.Components;
 
 [ProtocolId(1496906087610)]
 public class UserEquipmentComponent(

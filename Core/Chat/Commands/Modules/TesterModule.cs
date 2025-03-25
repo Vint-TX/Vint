@@ -1,8 +1,8 @@
 using Vint.Core.Battle.Tank;
-using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.ChatCommands.Modules;
+namespace Vint.Core.Chat.Commands.Modules;
 
 [ChatCommandGroup("tester", "Commands for testers", PlayerGroups.None)] // todo PlayerGroups.None yet
 public class TesterModule : ChatCommandModule {

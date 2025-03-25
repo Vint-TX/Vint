@@ -1,6 +1,6 @@
 using FluentMigrator.Builders.Create.Table;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.Database;
 
 public static class FluentMigratorExtensions {
     public static ICreateTableColumnOptionOrWithColumnSyntax AsSByte(this ICreateTableColumnAsTypeSyntax createTableColumnAsTypeSyntax) =>

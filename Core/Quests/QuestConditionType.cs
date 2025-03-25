@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.Quests;
 
 public enum QuestConditionType : byte {
     Weapon,

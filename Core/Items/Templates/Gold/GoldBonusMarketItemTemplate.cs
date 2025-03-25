@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Gold;
+namespace Vint.Core.Items.Templates.Gold;
 
 [ProtocolId(1530005871302)]
 public class GoldBonusMarketItemTemplate : MarketEntityTemplate {

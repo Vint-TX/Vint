@@ -1,4 +1,4 @@
-namespace Vint.Core.ChatCommands;
+namespace Vint.Core.Chat.Commands;
 
 [Flags]
 public enum ChatCommandConditions {

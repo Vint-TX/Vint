@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Registration;
+namespace Vint.Core.Entrance.Registration.Events;
 
 [ProtocolId(1438592306427)]
 public class RegistrationFailedEvent : IEvent;

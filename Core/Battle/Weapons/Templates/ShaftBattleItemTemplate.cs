@@ -1,9 +1,9 @@
 using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Shaft;
+using Vint.Core.Battle.Weapons.Components.Shaft;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(-2537616944465628484)]
 public class ShaftBattleItemTemplate : DiscreteWeaponTemplate {

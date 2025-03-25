@@ -1,7 +1,7 @@
-using Vint.Core.Battle.Results;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle;
+namespace Vint.Core.Battle.Results.Events;
 
 [ProtocolId(1510029455297)]
 public class BattleResultForClientEvent(

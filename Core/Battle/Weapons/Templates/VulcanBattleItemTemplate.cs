@@ -1,11 +1,11 @@
 using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Components.Battle.Weapon.Stream;
-using Vint.Core.ECS.Components.Battle.Weapon.Types.Vulcan;
+using Vint.Core.Battle.Weapons.Components.Stream;
+using Vint.Core.Battle.Weapons.Components.Vulcan;
+using Vint.Core.Battle.Weapons.Parameters.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(-3936735916503799349)]
 public class VulcanBattleItemTemplate : StreamWeaponTemplate {

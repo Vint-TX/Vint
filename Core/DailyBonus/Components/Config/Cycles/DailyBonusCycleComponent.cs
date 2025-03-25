@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.DailyBonus.Cycles;
+namespace Vint.Core.DailyBonus.Components.Config.Cycles;
 
 public abstract class DailyBonusCycleComponent : IComponent {
     public int[] Zones { get; protected set; } = null!;

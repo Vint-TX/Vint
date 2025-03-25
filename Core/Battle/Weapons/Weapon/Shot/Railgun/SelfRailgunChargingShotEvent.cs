@@ -1,11 +1,11 @@
 using Vint.Core.Battle.Player;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Battle.Weapon.Shot.Railgun;
+namespace Vint.Core.Battle.Weapons.Weapon.Shot.Railgun;
 
 [ProtocolId(4963057750170414217)]
 public class SelfRailgunChargingShotEvent : RailgunChargingShotEvent, IServerEvent {

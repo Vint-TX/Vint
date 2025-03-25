@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Invite;
+namespace Vint.Core.Entrance.Invite.Events;
 
 [ProtocolId(1439804987347)]
 public class InviteDoesNotExistEvent : IEvent;

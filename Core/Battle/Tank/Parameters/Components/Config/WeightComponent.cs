@@ -1,8 +1,8 @@
-using Vint.Core.ECS.Components.Server.Common;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Tank;
+namespace Vint.Core.Battle.Tank.Parameters.Components.Config;
 
-public class WeightComponent : RangedComponent, IConvertible<Components.Battle.Parameters.Chassis.WeightComponent> {
-    public void Convert(Components.Battle.Parameters.Chassis.WeightComponent component) =>
+public class WeightComponent : RangedComponent, IConvertible<Components.WeightComponent> {
+    public void Convert(Components.WeightComponent component) =>
         component.Weight = FinalValue;
 }

@@ -2,11 +2,12 @@
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ECS.Events.Entrance.Registration;
+namespace Vint.Core.Entrance.Registration.Events;
 
 [ProtocolId(1438590245672)]
 public class RequestRegisterUserEvent : IServerEvent {

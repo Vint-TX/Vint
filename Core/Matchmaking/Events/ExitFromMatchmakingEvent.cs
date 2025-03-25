@@ -1,10 +1,10 @@
-using Vint.Core.Battle.Lobby;
-using Vint.Core.Battle.Matchmaking;
+using Vint.Core.Battle.Lobby.State;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Matchmaking;
+namespace Vint.Core.Matchmaking.Events;
 
 [ProtocolId(1495176527022)]
 public class ExitFromMatchmakingEvent(

@@ -1,6 +1,7 @@
-using Vint.Core.ECS.Components.Notification;
+using Vint.Core.ECS.Components;
+using Vint.Core.Notification.Components;
 
-namespace Vint.Core.ECS.Components.Server.Login;
+namespace Vint.Core.Items.Components;
 
 public class LoginRewardsComponent : IComponent {
     public float IntervalInSeconds { get; private set; }

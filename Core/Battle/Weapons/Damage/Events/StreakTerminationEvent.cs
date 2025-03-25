@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Damage;
+namespace Vint.Core.Battle.Weapons.Damage.Events;
 
 [ProtocolId(1512395506558)]
 public class StreakTerminationEvent(

@@ -1,13 +1,10 @@
 using System.Collections.Concurrent;
+using Vint.Core.Chat.Components;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Chat;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Server.Squad;
-using Vint.Core.ECS.Components.Squad;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Chat;
-using Vint.Core.ECS.Templates.Squad;
 using Vint.Core.Server.Game;
+using Vint.Core.Squads.Components;
+using Vint.Core.Squads.Templates;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Squads;

@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.User;
+namespace Vint.Core.User.Events;
 
 [ProtocolId(1412360987645)]
 public class UserInteractionDataResponseEvent : IEvent {

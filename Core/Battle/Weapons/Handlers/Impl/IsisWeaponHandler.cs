@@ -1,15 +1,16 @@
-using Vint.Core.Battle.Damage.Calculator;
+using Vint.Core.Battle.Mode;
+using Vint.Core.Battle.Player.Score.Events.Visual;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
 using Vint.Core.Battle.Tank.Temperature;
+using Vint.Core.Battle.Weapons.Components.Config;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
+using Vint.Core.Battle.Weapons.Weapon.Hit;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server.Weapon;
-using Vint.Core.ECS.Events.Battle.Score.Visual;
-using Vint.Core.ECS.Events.Battle.Weapon.Hit;
-using Vint.Core.ECS.Enums;
-using Vint.Core.Utils;
+using Vint.Core.Server.Game;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers.Impl;
 
 public class IsisWeaponHandler : StreamWeaponHandler {
     public IsisWeaponHandler(BattleTank battleTank) : base(battleTank) {

@@ -1,9 +1,9 @@
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
-using Vint.Core.ECS.Components.Battle.Weapon;
-using Vint.Core.ECS.Templates.Battle.Effect;
+using Vint.Core.Battle.Weapons.Handlers;
+using Vint.Core.Battle.Weapons.Parameters.Components;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
     public EmergencyProtectionEffect(TimeSpan duration, BattleTank tank, int level) : base(tank, level) =>

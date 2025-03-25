@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Components;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Leagues;
+namespace Vint.Core.Leagues.Components;
 
 [ProtocolId(1505728594733)]
 public class SeasonEndDateComponent(

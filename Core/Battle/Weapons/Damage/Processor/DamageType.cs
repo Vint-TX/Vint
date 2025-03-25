@@ -1,4 +1,4 @@
-namespace Vint.Core.Battle.Damage.Processor;
+namespace Vint.Core.Battle.Weapons.Damage.Processor;
 
 public enum DamageType {
     Normal,

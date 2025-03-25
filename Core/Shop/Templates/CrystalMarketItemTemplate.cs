@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Money;
+namespace Vint.Core.Shop.Templates;
 
 [ProtocolId(1479898113503)]
 public class CrystalMarketItemTemplate : MarketEntityTemplate {

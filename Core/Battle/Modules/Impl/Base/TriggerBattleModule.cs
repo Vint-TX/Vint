@@ -1,3 +1,3 @@
-namespace Vint.Core.Battle.Modules.Types.Base;
+namespace Vint.Core.Battle.Modules.Impl.Base;
 
 public abstract class TriggerBattleModule : PassiveBattleModule;

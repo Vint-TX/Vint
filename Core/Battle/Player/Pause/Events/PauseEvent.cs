@@ -1,10 +1,10 @@
-using Vint.Core.Battle.Player;
-using Vint.Core.ECS.Components.Battle.Pause;
+using Vint.Core.Battle.Player.Pause.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Battle.Pause;
+namespace Vint.Core.Battle.Player.Pause.Events;
 
 [ProtocolId(-1316093147997460626)]
 public class PauseEvent : IServerEvent {

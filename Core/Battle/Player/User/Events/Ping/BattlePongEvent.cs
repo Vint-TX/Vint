@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Ping;
+namespace Vint.Core.Battle.Player.User.Events.Ping;
 
 [ProtocolId(1480333153972)]
 public class BattlePongEvent(

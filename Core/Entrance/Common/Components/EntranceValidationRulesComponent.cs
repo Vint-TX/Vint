@@ -1,4 +1,6 @@
-namespace Vint.Core.ECS.Components.Server.Login;
+using Vint.Core.ECS.Components;
+
+namespace Vint.Core.Entrance.Common.Components;
 
 public class EntranceValidationRulesComponent : IComponent {
     public string LoginRegex { get; private set; } = null!;

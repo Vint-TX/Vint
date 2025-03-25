@@ -1,10 +1,10 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Weapons.Parameters.Components;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Weapon;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Battle.Weapon;
+namespace Vint.Core.Battle.Weapons.Templates;
 
 [ProtocolId(-1716200834009238305)]
 public abstract class DiscreteWeaponTemplate : WeaponTemplate {

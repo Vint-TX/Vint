@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Round;
+namespace Vint.Core.Battle.Rounds.Components;
 
 [ProtocolId(6921761768819133913)]
 public class RoundUserStatisticsComponent : IComponent {

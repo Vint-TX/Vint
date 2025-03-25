@@ -1,9 +1,8 @@
-using Vint.Core.ECS.Components.Quest.Type;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.Quests.Components.Type;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Quests;
+namespace Vint.Core.Quests.Templates;
 
 [ProtocolId(1493731148268)]
 public class FlagQuestTemplate : QuestTemplate {

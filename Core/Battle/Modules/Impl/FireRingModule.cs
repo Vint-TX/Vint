@@ -1,11 +1,11 @@
-using Vint.Core.Battle.Effects;
-using Vint.Core.Battle.Modules.Types.Base;
+using Vint.Core.Battle.Effects.Components.Config.Common;
+using Vint.Core.Battle.Effects.Components.Config.FireRing;
+using Vint.Core.Battle.Effects.Impl;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
-using Vint.Core.ECS.Components.Server.Modules.Effect.FireRing;
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(1896579342)]
 public class FireRingModule : ActiveBattleModule {

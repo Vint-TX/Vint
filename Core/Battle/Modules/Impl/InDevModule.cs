@@ -1,14 +1,14 @@
 using Vint.Core.Battle.Effects;
-using Vint.Core.Battle.Modules.Types.Base;
+using Vint.Core.Battle.Modules.Common.Components;
+using Vint.Core.Battle.Modules.Common.Components.Inventory;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Modules;
-using Vint.Core.ECS.Components.Modules.Inventory;
+using Vint.Core.Battle.Tank.Common.Components;
+using Vint.Core.Chat;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
-using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 public class InDevModule : BattleModule {
     public override string ConfigPath => "";

@@ -1,7 +1,8 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Group;
+namespace Vint.Core.Battle.Rewards.Components;
 
 [ProtocolId(1513677547945)]
 public class BattleRewardGroupComponent(

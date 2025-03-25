@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Templates;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Containers;
+namespace Vint.Core.Containers.Templates;
 
 [ProtocolId(1487149202122)]
 public class GameplayChestMarketItemTemplate : MarketEntityTemplate {

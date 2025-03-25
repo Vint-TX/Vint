@@ -1,8 +1,8 @@
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons.Components.Config;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Server.Weapon;
 
-namespace Vint.Core.Battle.Weapons;
+namespace Vint.Core.Battle.Weapons.Handlers.Impl;
 
 public class FreezeWeaponHandler : StreamWeaponHandler {
     public FreezeWeaponHandler(BattleTank battleTank) : base(battleTank) {

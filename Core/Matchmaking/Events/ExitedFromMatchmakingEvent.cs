@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Matchmaking;
+namespace Vint.Core.Matchmaking.Events;
 
 [ProtocolId(1509109822442)]
 public class ExitedFromMatchmakingEvent(

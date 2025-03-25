@@ -1,5 +1,5 @@
 using JetBrains.Annotations;
-using Vint.Core.Battle.Modules.Types.Base;
+using Vint.Core.Battle.Modules.Impl.Base;
 
 namespace Vint.Core.Battle.Modules;
 

@@ -1,13 +1,13 @@
 using System.Collections;
+using Vint.Core.Battle.Graffiti.Templates;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Player.User.Templates;
+using Vint.Core.Battle.Tank.Common.Templates;
+using Vint.Core.Battle.Tank.Incarnation.Templates;
+using Vint.Core.Battle.Weapons.Templates;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Templates.Battle;
-using Vint.Core.ECS.Templates.Battle.Graffiti;
-using Vint.Core.ECS.Templates.Battle.Incarnation;
-using Vint.Core.ECS.Templates.Battle.Tank;
-using Vint.Core.ECS.Templates.Battle.Weapon;
-using Vint.Core.ECS.Templates.Weapons.Market;
+using Vint.Core.Items.Templates.Weapons.Market;
 using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battle.Tank;

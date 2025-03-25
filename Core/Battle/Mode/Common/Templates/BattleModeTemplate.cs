@@ -1,14 +1,16 @@
+using Vint.Core.Battle.Common.Components;
+using Vint.Core.Battle.Lobby.Components;
+using Vint.Core.Battle.Mode.Common.Components;
 using Vint.Core.Battle.Properties;
-using Vint.Core.ECS.Components.Battle;
-using Vint.Core.ECS.Components.Battle.Limit;
-using Vint.Core.ECS.Components.Battle.Time;
-using Vint.Core.ECS.Components.Battle.Type;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Lobby;
+using Vint.Core.Battle.Properties.Components;
+using Vint.Core.Battle.Rounds.Components;
+using Vint.Core.Battle.Rounds.Type.Components;
+using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Templates;
+using Vint.Core.Maps.Components;
 
-namespace Vint.Core.ECS.Templates.Battle.Mode;
+namespace Vint.Core.Battle.Mode.Common.Templates;
 
 public abstract class BattleModeTemplate : EntityTemplate {
     protected IEntity Entity(BattleProperties properties, IEntity lobby, IEntity round, DateTimeOffset startTime) {

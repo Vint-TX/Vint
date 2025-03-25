@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Tank;
+namespace Vint.Core.Battle.Tank.Temperature.Components;
 
 [ProtocolId(6673681254298647708)]
 public class TemperatureComponent : IComponent {

@@ -1,7 +1,8 @@
 using System.Numerics;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Tank;
+namespace Vint.Core.Battle.Tank.Common.Components;
 
 [ProtocolId(1835748384321), ClientAddable, ClientChangeable, ClientRemovable]
 public class TankJumpComponent : IComponent {

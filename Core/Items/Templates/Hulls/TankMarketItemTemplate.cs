@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Hulls;
+namespace Vint.Core.Items.Templates.Hulls;
 
 [ProtocolId(1433406732656)]
 public class TankMarketItemTemplate : MarketEntityTemplate {

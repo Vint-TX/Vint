@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Entrance.Login;
+namespace Vint.Core.Entrance.Login.Events;
 
 [ProtocolId(1439531278716)]
 public class PersonalPasscodeEvent : IEvent {

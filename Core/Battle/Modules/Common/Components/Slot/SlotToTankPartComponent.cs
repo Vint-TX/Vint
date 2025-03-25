@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Components;
 
-namespace Vint.Core.ECS.Components.Server.Modules;
+namespace Vint.Core.Battle.Modules.Common.Components.Slot;
 
 public class SlotToTankPartComponent : IComponent {
-    public Dictionary<Slot, TankPartModuleType> Slots { get; private set; } = null!;
+    public Dictionary<Common.Slot, TankPartModuleType> Slots { get; private set; } = null!;
 }

@@ -1,15 +1,15 @@
+using Vint.Core.Battle.Effects.Components;
+using Vint.Core.Battle.Effects.Components.Config.Common;
+using Vint.Core.Battle.Effects.Components.Config.IncreasedDamage;
+using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
+using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Config;
-using Vint.Core.ECS.Components.Battle.Effect;
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
-using Vint.Core.ECS.Components.Server.Modules.Effect.IncreasedDamage;
-using Vint.Core.ECS.Templates.Battle.Effect;
 using Vint.Core.Utils;
-using DurationComponent = Vint.Core.ECS.Components.Battle.Effect.DurationComponent;
-using EffectDurationComponent = Vint.Core.ECS.Components.Server.Modules.Effect.Common.DurationComponent;
+using DurationComponent = Vint.Core.Battle.Effects.Components.DurationComponent;
+using EffectDurationComponent = Vint.Core.Battle.Effects.Components.Config.Common.DurationComponent;
 
-namespace Vint.Core.Battle.Effects;
+namespace Vint.Core.Battle.Effects.Impl;
 
 public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDamageMultiplierEffect, IExtendableEffect {
     const string EffectConfigPath = "battle/effect/damage";

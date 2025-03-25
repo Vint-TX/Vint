@@ -1,8 +1,7 @@
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Quests;
+namespace Vint.Core.Quests.Templates;
 
 [ProtocolId(1493115789575)]
 public abstract class QuestTemplate : BaseQuestTemplate {

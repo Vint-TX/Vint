@@ -1,10 +1,10 @@
 using System.Reflection;
 using System.Text;
-using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.ChatCommands;
+namespace Vint.Core.Chat.Commands;
 
 public sealed class ChatCommand(
     IChatCommandProcessor processor,

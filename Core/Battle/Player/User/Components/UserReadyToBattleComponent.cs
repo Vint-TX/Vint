@@ -1,9 +1,10 @@
-using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.State;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.User;
+namespace Vint.Core.Battle.Player.User.Components;
 
 [ProtocolId(1399558738794728790), ClientAddable]
 public class UserReadyToBattleComponent : IComponent {

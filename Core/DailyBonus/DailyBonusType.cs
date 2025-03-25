@@ -1,4 +1,4 @@
-namespace Vint.Core.ECS.Enums;
+namespace Vint.Core.DailyBonus;
 
 [Flags]
 public enum DailyBonusType {

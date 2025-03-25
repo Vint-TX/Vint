@@ -1,7 +1,7 @@
-using Vint.Core.ECS.Components.Notification;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Notification.Components;
 
-namespace Vint.Core.ECS.Templates.Notification;
+namespace Vint.Core.Notification.Templates;
 
 public class LeagueFirstEntranceRewardPersistentNotificationTemplate : NotificationTemplate {
     public IEntity Create(Dictionary<IEntity, int> rewards) {

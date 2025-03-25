@@ -1,5 +1,5 @@
-using Vint.Core.ECS.Components.Server.Modules.Effect.Common;
+using Vint.Core.Battle.Effects.Components.Config.Common;
 
-namespace Vint.Core.ECS.Components.Server.Modules.Effect.FireRing;
+namespace Vint.Core.Battle.Effects.Components.Config.FireRing;
 
 public class ModuleFireRingEffectHeatDamagePropertyComponent : ModuleEffectUpgradablePropertyComponent;

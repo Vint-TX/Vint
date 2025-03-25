@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.DailyBonus;
+namespace Vint.Core.DailyBonus.Components;
 
 [ProtocolId(636462622709176439)]
 public class UserDailyBonusNextReceivingDateComponent(

@@ -1,4 +1,4 @@
-using Vint.Core.ECS.Components.Modules;
+using Vint.Core.Battle.Modules.Common.Components;
 
 namespace Vint.Core.Config;
 

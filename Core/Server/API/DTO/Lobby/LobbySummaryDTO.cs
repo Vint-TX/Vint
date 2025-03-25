@@ -1,5 +1,5 @@
 using Vint.Core.Battle.Lobby;
-using Vint.Core.ECS.Enums;
+using Vint.Core.Battle.Properties;
 
 namespace Vint.Core.Server.API.DTO.Lobby;
 

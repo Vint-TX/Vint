@@ -1,11 +1,10 @@
-using Vint.Core.Battle.Damage.Calculator;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Weapons.Damage.Calculator;
+using Vint.Core.Battle.Weapons.Damage.Events;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Damage;
 using Vint.Core.Server.Game;
-using Vint.Core.Utils;
 
-namespace Vint.Core.Battle.Damage.Processor;
+namespace Vint.Core.Battle.Weapons.Damage.Processor;
 
 public class DamageProcessor : IDamageProcessor {
     public async Task Damage(BattleTank source, BattleTank target, IEntity marketWeapon, IEntity battleWeapon, CalculatedDamage damage) {

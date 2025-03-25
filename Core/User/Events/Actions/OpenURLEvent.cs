@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Action;
+namespace Vint.Core.User.Events.Actions;
 
 [ProtocolId(31218)]
 public class OpenURLEvent(

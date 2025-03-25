@@ -1,11 +1,11 @@
 using Vint.Core.Battle.Effects;
+using Vint.Core.Battle.Effects.Components.Config.TempBlock;
+using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
-using Vint.Core.Battle.Modules.Types.Base;
 using Vint.Core.Battle.Tank;
-using Vint.Core.ECS.Components.Server.Modules.Effect.TempBlock;
 using Vint.Core.ECS.Entities;
 
-namespace Vint.Core.Battle.Modules.Types;
+namespace Vint.Core.Battle.Modules.Impl;
 
 [ModuleId(596921121)]
 public class TemperatureBlockModule : PassiveBattleModule, IAlwaysActiveModule, IModuleWithoutEffect {

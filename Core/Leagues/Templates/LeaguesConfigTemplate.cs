@@ -1,6 +1,7 @@
-﻿using Vint.Core.Server.Game.Protocol.Attributes;
+﻿using Vint.Core.ECS.Templates;
+using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Templates.Leagues;
+namespace Vint.Core.Leagues.Templates;
 
 [ProtocolId(1502790438311)]
 public class LeaguesConfigTemplate : EntityTemplate;

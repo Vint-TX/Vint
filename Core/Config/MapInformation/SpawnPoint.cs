@@ -1,5 +1,5 @@
 using System.Numerics;
-using Vint.Core.ECS.Movement;
+using Vint.Core.Battle.Tank.Movement;
 
 namespace Vint.Core.Config.MapInformation;
 

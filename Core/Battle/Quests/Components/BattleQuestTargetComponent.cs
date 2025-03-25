@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Quest.Battle;
+namespace Vint.Core.Battle.Quests.Components;
 
 [ProtocolId(1516789840617)]
 public class BattleQuestTargetComponent : IComponent {

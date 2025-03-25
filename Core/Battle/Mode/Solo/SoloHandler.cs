@@ -1,10 +1,11 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties.Components;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Rounds.Components;
+using Vint.Core.Battle.Rounds.Events;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Battle.Limit;
-using Vint.Core.ECS.Components.Battle.Round;
-using Vint.Core.ECS.Events.Battle.Score;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Mode.Solo;

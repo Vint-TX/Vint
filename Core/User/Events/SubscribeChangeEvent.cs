@@ -1,9 +1,10 @@
-﻿using Vint.Core.ECS.Components.User;
-using Vint.Core.ECS.Entities;
+﻿using Vint.Core.ECS.Entities;
+using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
-namespace Vint.Core.ECS.Events.User.Settings;
+namespace Vint.Core.User.Events;
 
 [ProtocolId(1482844606270)]
 public class SubscribeChangeEvent : IServerEvent {

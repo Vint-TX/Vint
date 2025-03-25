@@ -1,11 +1,12 @@
 using System.Numerics;
+using Vint.Core.Battle.Bonus.Components;
+using Vint.Core.Battle.Bonus.Events;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Components.Server.Battle;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Events.Battle.Bonus;
+using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Bonus;

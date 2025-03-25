@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Vint.Core.ECS.Events.Entrance.Login;
+using Vint.Core.Entrance.Login.Events;
 
-namespace Vint.Core.Utils;
+namespace Vint.Core.Entrance.ClientSession;
 
 // todo what the fuck...
 

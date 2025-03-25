@@ -1,13 +1,13 @@
 using LinqToDB;
 using Vint.Core.Battle.Player;
-using Vint.Core.ChatCommands.Attributes;
+using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
 using Vint.Core.Utils;
 
-namespace Vint.Core.ChatCommands.Modules;
+namespace Vint.Core.Chat.Commands.Modules;
 
 [ChatCommandGroup("moderator", "Commands for moderators", PlayerGroups.Moderator)]
 public class ModeratorModule(

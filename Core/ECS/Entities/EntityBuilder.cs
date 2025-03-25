@@ -1,6 +1,5 @@
 ﻿using Vint.Core.Config;
 using Vint.Core.ECS.Components;
-using Vint.Core.ECS.Components.Group;
 using Vint.Core.ECS.Templates;
 
 namespace Vint.Core.ECS.Entities;

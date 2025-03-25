@@ -1,15 +1,15 @@
 using LinqToDB;
+using Vint.Core.Battle.Modules.Common.Components;
+using Vint.Core.Battle.Modules.Common.Components.Slot;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.ECS.Components.Group;
-using Vint.Core.ECS.Components.Item;
-using Vint.Core.ECS.Components.Modules.Slot;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
+using Vint.Core.ECS.Events;
+using Vint.Core.Items.Components;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Events.Items.Module;
+namespace Vint.Core.Battle.Modules.Common.Events;
 
 [ProtocolId(1485777098598)]
 public class ModuleMountEvent : IServerEvent {
@@ -20,7 +20,7 @@ public class ModuleMountEvent : IServerEvent {
         if (moduleUserItem.HasComponent<MountedItemComponent>() ||
             slotUserItem.HasComponent<ModuleGroupComponent>()) return;
 
-        Player player = connection.Player;
+        Database.Models.Player player = connection.Player;
 
         long marketItemId = moduleUserItem.GetComponent<MarketItemGroupComponent>().Key;
         Database.Models.Module? module = player.Modules.SingleOrDefault(module => module.Id == marketItemId);

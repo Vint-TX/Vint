@@ -1,6 +1,7 @@
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.Effect;
+namespace Vint.Core.Battle.Effects.Components;
 
 [ProtocolId(5192591761194414739)]
 public class DurationComponent(

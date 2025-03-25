@@ -1,5 +1,5 @@
+using Vint.Core.Battle.Mode;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.ECS.Enums;
 
 namespace Vint.Core.Battle.Properties;
 

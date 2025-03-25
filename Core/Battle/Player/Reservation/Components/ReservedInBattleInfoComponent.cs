@@ -1,8 +1,9 @@
+using Vint.Core.Battle.Mode;
+using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
-using Vint.Core.ECS.Enums;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.ECS.Components.Battle.User;
+namespace Vint.Core.Battle.Player.Reservation.Components;
 
 [ProtocolId(1490682041080)]
 public class ReservedInBattleInfoComponent(
