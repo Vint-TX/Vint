@@ -10,7 +10,6 @@ using Vint.Core.Server.API.DTO.Player;
 using Vint.Core.Server.Common.Attributes.Deserialization;
 using Vint.Core.Server.Common.Attributes.Methods;
 using Vint.Core.Server.Game;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Server.API.Controllers;
 
@@ -40,7 +39,7 @@ public class PlayerController(
     [Get("/{id}")]
     public async Task<PlayerDetailDTO> GetPlayer(long id) {
         await using DbConnection db = new();
-        Player? player = await db.Players.SingleOrDefaultAsync(player => player.Id == id);
+        Player? player = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
 
         if (player == null)
             throw HttpException.NotFound($"Player with id {id} does not exists");
@@ -81,7 +80,7 @@ public class PlayerController(
     [Get("/{id}/statistics")]
     public async Task<StatisticsDTO> GetStatistics(long id) {
         await using DbConnection db = new();
-        Statistics? statistics = await db.Statistics.SingleOrDefaultAsync(statistics => statistics.PlayerId == id);
+        Statistics? statistics = await db.Statistics.FirstOrDefaultAsync(statistics => statistics.PlayerId == id);
 
         if (statistics == null)
             throw HttpException.NotFound($"Player with id {id} does not exists");
@@ -127,7 +126,7 @@ public class PlayerController(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == id) ??
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
                            throw HttpException.NotFound($"Player with id {id} does not exists");
         }
 
@@ -167,7 +166,7 @@ public class PlayerController(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == id) ??
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
                            throw HttpException.NotFound($"Player with id {id} does not exists");
         }
 
@@ -190,7 +189,7 @@ public class PlayerController(
 
         if (targetConnection == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == id) ??
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
                            throw HttpException.NotFound($"Player with id {id} does not exists");
         }
 
@@ -213,7 +212,7 @@ public class PlayerController(
 
         if (targetPlayer == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == id) ??
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
                            throw HttpException.NotFound($"Player with id {id} does not exists");
         }
 
@@ -229,7 +228,7 @@ public class PlayerController(
 
         if (targetPlayer == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == id) ??
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
                            throw HttpException.NotFound($"Player with id {id} does not exists");
         }
 

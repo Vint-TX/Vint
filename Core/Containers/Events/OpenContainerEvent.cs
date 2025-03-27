@@ -17,24 +17,29 @@ public class OpenContainerEvent : IServerEvent {
     public long Amount { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        await using DbConnection db = new();
+        if (Amount <= 0) return;
 
         IEntity userEntity = entities.Single();
         IEntity marketEntity = userEntity.GetMarketEntity(connection);
-        Database.Models.Container? container = await db.Containers.SingleOrDefaultAsync(cont => cont.PlayerId == connection.Player.Id &&
-                                                                                                cont.Id == marketEntity.Id);
 
-        if (container == null || container.Count < Amount)
-            return;
+        long containersCount;
 
-        Amount = Math.Clamp(container.Count, 1, MaxAmount);
+        await using (DbConnection db = new()) {
+            IQueryable<Database.Models.Container> query = db.Containers.Where(cont => cont.PlayerId == connection.Player.Id &&
+                                                                                      cont.Id == marketEntity.Id);
 
-        container.Count -= Amount;
-        await userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = container.Count);
+            containersCount = await query.Select(cont => cont.Count).FirstOrDefaultAsync();
+            if (containersCount < Amount) return;
+
+            Amount = Math.Clamp(containersCount, 1, MaxAmount);
+            containersCount -= Amount;
+
+            if (containersCount == 0) await query.DeleteAsync();
+            else await query.Set(cont => cont.Count, containersCount).UpdateAsync();
+        }
+
+        await userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = containersCount);
         await connection.Send(new ItemsCountChangedEvent(-Amount), userEntity);
-
-        if (container.Count == 0) await db.DeleteAsync(container);
-        else await db.UpdateAsync(container);
 
         List<IEntity> rewards = await ContainerRegistry
             .GetContainer(marketEntity)

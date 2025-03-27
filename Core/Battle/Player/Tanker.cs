@@ -95,72 +95,71 @@ public class Tanker : BattlePlayer {
     }
 
     public override async Task OnRoundEnded(bool hasEnemies, QuestManager questManager) {
-        await using DbConnection db = new();
-
         Database.Models.Player player = Connection.Player;
         Preset preset = player.CurrentPreset;
         IEntity previousLeague = player.LeagueEntity;
         int reputationDelta;
 
-        await db.BeginTransactionAsync();
-
-        await db.SeasonStatistics
-            .Where(stats => stats.PlayerId == player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
-            .Set(stats => stats.BattlesPlayed, stats => stats.BattlesPlayed + 1)
-            .UpdateAsync();
-
-        await db.Hulls
-            .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
-            .Set(hull => hull.BattlesPlayed, hull => hull.BattlesPlayed + 1)
-            .UpdateAsync();
-
-        await db.Weapons
-            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
-            .Set(weapon => weapon.BattlesPlayed, weapon => weapon.BattlesPlayed + 1)
-            .UpdateAsync();
-
-        if (Round.Properties.Type != BattleType.Rating) {
-            await db.Statistics
-                .Where(stats => stats.PlayerId == player.Id)
-                .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
-                .Set(stats => stats.AllCustomBattlesParticipated, stats => stats.AllCustomBattlesParticipated + 1)
+        await using (DbConnection db = new()) {
+            await db.BeginTransactionAsync();
+            await db.SeasonStatistics
+                .Where(stats => stats.PlayerId == player.Id && stats.SeasonNumber == ConfigManager.ServerConfig.SeasonNumber)
+                .Set(stats => stats.BattlesPlayed, stats => stats.BattlesPlayed + 1)
                 .UpdateAsync();
 
-            await db.CommitTransactionAsync();
-            reputationDelta = 0;
-        } else {
-            await db.Statistics
-                .Where(stats => stats.PlayerId == player.Id)
-                .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
-                .Set(stats => stats.BattlesParticipated, stats => stats.BattlesParticipated + 1)
-                .Set(stats => stats.Defeats, stats => stats.Defeats + (TeamResult == TeamBattleResult.Defeat ? 1 : 0))
-                .Set(stats => stats.Victories, stats => stats.Victories + (TeamResult == TeamBattleResult.Win ? 1 : 0))
+            await db.Hulls
+                .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
+                .Set(hull => hull.BattlesPlayed, hull => hull.BattlesPlayed + 1)
                 .UpdateAsync();
 
-            await db.CommitTransactionAsync();
+            await db.Weapons
+                .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
+                .Set(weapon => weapon.BattlesPlayed, weapon => weapon.BattlesPlayed + 1)
+                .UpdateAsync();
 
-            if (!player.IsDeserter)
-                Connection.BattleSeries++;
+            if (Round.Properties.Type != BattleType.Rating) {
+                await db.Statistics
+                    .Where(stats => stats.PlayerId == player.Id)
+                    .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
+                    .Set(stats => stats.AllCustomBattlesParticipated, stats => stats.AllCustomBattlesParticipated + 1)
+                    .UpdateAsync();
 
-            int score = GetBattleUserScoreWithBonus();
+                await db.CommitTransactionAsync();
+                reputationDelta = 0;
+            } else {
+                await db.Statistics
+                    .Where(stats => stats.PlayerId == player.Id)
+                    .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
+                    .Set(stats => stats.BattlesParticipated, stats => stats.BattlesParticipated + 1)
+                    .Set(stats => stats.Defeats, stats => stats.Defeats + (TeamResult == TeamBattleResult.Defeat ? 1 : 0))
+                    .Set(stats => stats.Victories, stats => stats.Victories + (TeamResult == TeamBattleResult.Win ? 1 : 0))
+                    .UpdateAsync();
 
-            await Leveling.UpdateItemXp(preset.Hull, Connection, score);
-            await Leveling.UpdateItemXp(preset.Weapon, Connection, score);
+                await db.CommitTransactionAsync();
 
-            reputationDelta = Round.ModeHandler.CalculateReputationDelta(this);
+                if (!player.IsDeserter)
+                    Connection.BattleSeries++;
 
-            if (Tank.Result.UnfairMatching)
-                reputationDelta /= 2;
+                int score = GetBattleUserScoreWithBonus();
 
-            await Connection.ChangeReputation(reputationDelta);
-            await Connection.ChangeGameplayChestScore(score);
+                await Leveling.UpdateItemXp(preset.Hull, Connection, score);
+                await Leveling.UpdateItemXp(preset.Weapon, Connection, score);
 
-            if (hasEnemies && Round.Properties.Type == BattleType.Rating)
-                await questManager.BattleFinished(this);
+                reputationDelta = Round.ModeHandler.CalculateReputationDelta(this);
+
+                if (Tank.Result.UnfairMatching)
+                    reputationDelta /= 2;
+
+                await Connection.ChangeReputation(reputationDelta);
+                await Connection.ChangeGameplayChestScore(score);
+
+                if (hasEnemies && Round.Properties.Type == BattleType.Rating)
+                    await questManager.BattleFinished(this);
+            }
+
+            Statistics stats = await db.Statistics.FirstAsync(stats => stats.PlayerId == player.Id);
+            await Connection.UserContainer.Entity.ChangeComponent<UserStatisticsComponent>(component => component.Statistics = stats.CollectClientSide());
         }
-
-        Statistics stats = await db.Statistics.FirstAsync(stats => stats.PlayerId == player.Id);
-        await Connection.UserContainer.Entity.ChangeComponent<UserStatisticsComponent>(component => component.Statistics = stats.CollectClientSide());
 
         PersonalBattleResultForClient personalBattleResult = new(previousLeague, reputationDelta);
         await personalBattleResult.Init(Connection);

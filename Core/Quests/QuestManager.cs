@@ -143,7 +143,7 @@ public class QuestManager {
             .Where(quest => quest.PlayerId == connection.Player.Id)
             .ToListAsync();
 
-        Quest? quest = quests.SingleOrDefault(quest => quest.Index == questEntity.GetComponent<SlotIndexComponent>().Index);
+        Quest? quest = quests.FirstOrDefault(quest => quest.Index == questEntity.GetComponent<SlotIndexComponent>().Index);
 
         if (quest == null) return;
 
@@ -161,14 +161,15 @@ public class QuestManager {
         player.QuestChanges = 0;
         player.QuestChangesResetTime = null;
 
-        await using DbConnection db = new();
-        await db.Players
-            .Where(p => p.Id == player.Id)
-            .Set(p => p.QuestChangesResetTime, player.QuestChangesResetTime)
-            .Set(p => p.QuestChanges, player.QuestChanges)
-            .UpdateAsync();
+        await using (DbConnection db = new()) {
+            await db.Players
+                .Where(p => p.Id == player.Id)
+                .Set(p => p.QuestChangesResetTime, player.QuestChangesResetTime)
+                .Set(p => p.QuestChanges, player.QuestChanges)
+                .UpdateAsync();
+        }
 
-        IEntity? bonus = connection.SharedEntities.SingleOrDefault(entity => entity.TemplateAccessor?.Template is QuestDailyBonusTemplate);
+        IEntity? bonus = connection.SharedEntities.FirstOrDefault(entity => entity.TemplateAccessor?.Template is QuestDailyBonusTemplate);
 
         if (bonus == null) return;
 
@@ -179,9 +180,6 @@ public class QuestManager {
         quest.CompletionDate = DateTimeOffset.UtcNow;
 
         await connection.PurchaseItem(quest.RewardEntity, quest.RewardAmount, 0, false, false);
-
-        await using DbConnection db = new();
-        await db.UpdateAsync(quest);
 
         await entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentComplete = true);
         await entity.ChangeComponent<QuestExpireDateComponent>(component => component.Date = quest.CompletedQuestChangeTime!.Value);
@@ -202,8 +200,8 @@ public class QuestManager {
         Quest quest = GenerateQuest(connection.Player, index, canBeRare, canBeCondition, usedTypes);
         IEntity questEntity = GetQuestEntity(connection.UserContainer.Entity, quest);
 
-        await using DbConnection db = new();
-        await db.InsertAsync(quest);
+        await using (DbConnection db = new())
+            await db.InsertAsync(quest);
 
         await connection.Share(questEntity);
         return quest;

@@ -13,11 +13,14 @@ public class RejectFriendEvent(
 ) : FriendBaseEvent, IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         long receiverId = connection.UserContainer.Id;
-        await using DbConnection db = new();
 
-        bool success = await db.FriendRequests
-            .Where(request => request.SenderId == UserId && request.FriendId == receiverId)
-            .DeleteAsync() > 0;
+        bool success;
+
+        await using (DbConnection db = new()) {
+            success = await db.FriendRequests
+                .Where(request => request.SenderId == UserId && request.FriendId == receiverId)
+                .DeleteAsync() > 0;
+        }
 
         if (!success) return;
 

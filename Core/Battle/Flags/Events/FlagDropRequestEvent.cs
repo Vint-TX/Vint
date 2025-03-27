@@ -18,7 +18,7 @@ public class FlagDropRequestEvent : IServerEvent {
         if (tanker == null || round.ModeHandler is not CTFHandler ctf)
             return;
 
-        Core.Battle.Flags.Flag? flag = ctf.Flags.Values.SingleOrDefault(flag => flag.Entity == entities[0]);
+        Flag? flag = ctf.Flags.Values.FirstOrDefault(flag => flag.Entity == entities[0]);
 
         if (flag?.StateManager.CurrentState is not Captured captured || captured.Carrier != tanker)
             return;

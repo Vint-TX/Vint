@@ -18,12 +18,11 @@ public class SwitchDailyBonusZoneEvent : IServerEvent {
         Player player = connection.Player;
         IEntity user = connection.UserContainer.Entity;
 
-        await using (DbConnection db = new()) {
+        await using (DbConnection db = new())
             await db.Players
                 .Where(p => p.Id == player.Id)
                 .Set(p => p.DailyBonusZone, p => p.DailyBonusZone + 1)
                 .UpdateAsync();
-        }
 
         player.DailyBonusZone++;
 

@@ -43,13 +43,14 @@ public class DiscordLink {
             OAuth2Data oAuth2Data = (await response.Content.ReadFromJsonAsync<OAuth2Data>())!;
             DateTimeOffset tokenExpirationDate = DateTimeOffset.UtcNow.AddSeconds(oAuth2Data.ExpiresIn - 300);
 
-            await using DbConnection db = new();
-            await db.DiscordLinks
-                .Where(dLink => dLink.PlayerId == PlayerId && dLink.UserId == UserId)
-                .Set(dLink => dLink.AccessToken, oAuth2Data.AccessToken)
-                .Set(dLink => dLink.RefreshToken, oAuth2Data.RefreshToken)
-                .Set(dLink => dLink.TokenExpirationDate, tokenExpirationDate)
-                .UpdateAsync();
+            await using (DbConnection db = new()) {
+                await db.DiscordLinks
+                    .Where(dLink => dLink.PlayerId == PlayerId && dLink.UserId == UserId)
+                    .Set(dLink => dLink.AccessToken, oAuth2Data.AccessToken)
+                    .Set(dLink => dLink.RefreshToken, oAuth2Data.RefreshToken)
+                    .Set(dLink => dLink.TokenExpirationDate, tokenExpirationDate)
+                    .UpdateAsync();
+            }
 
             AccessToken = oAuth2Data.AccessToken;
             RefreshToken = oAuth2Data.RefreshToken;
@@ -89,20 +90,21 @@ public class DiscordLink {
     }
 
     public async Task Revoke(DiscordBot discordBot, IPlayerConnection? connection) {
-        await using DbConnection db = new();
-        await db.BeginTransactionAsync();
+        await using (DbConnection db = new()) {
+            await db.BeginTransactionAsync();
 
-        await db.Players
-            .Where(player => player.Id == PlayerId && player.DiscordUserId == UserId)
-            .Set(player => player.DiscordUserId, 0UL)
-            .Set(player => player.DiscordLinked, false)
-            .UpdateAsync();
+            await db.Players
+                .Where(player => player.Id == PlayerId && player.DiscordUserId == UserId)
+                .Set(player => player.DiscordUserId, 0UL)
+                .Set(player => player.DiscordLinked, false)
+                .UpdateAsync();
 
-        await db.DiscordLinks
-            .Where(dLink => dLink.PlayerId == PlayerId && dLink.UserId == UserId)
-            .DeleteAsync();
+            await db.DiscordLinks
+                .Where(dLink => dLink.PlayerId == PlayerId && dLink.UserId == UserId)
+                .DeleteAsync();
 
-        await db.CommitTransactionAsync();
+            await db.CommitTransactionAsync();
+        }
 
         if (connection != null && connection.Player.Id == PlayerId) {
             connection.Player.DiscordLinked = false;

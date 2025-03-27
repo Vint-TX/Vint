@@ -1,5 +1,4 @@
 using System.Diagnostics.Contracts;
-using Vint.Core.Battle.Weapons;
 using Vint.Core.Battle.Weapons.Handlers;
 
 namespace Vint.Core.Battle.Tank.Temperature;

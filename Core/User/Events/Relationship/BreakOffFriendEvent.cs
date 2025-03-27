@@ -14,12 +14,14 @@ public class BreakOffFriendEvent(
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         long senderId = connection.UserContainer.Id;
 
-        await using DbConnection db = new();
+        bool success;
 
-        bool success = await db.Friends
-            .Where(friend => (friend.UserId == senderId && friend.FriendId == UserId) ||
-                             (friend.UserId == UserId && friend.FriendId == senderId))
-            .DeleteAsync() > 0;
+        await using (DbConnection db = new()) {
+            success = await db.Friends
+                .Where(friend => (friend.UserId == senderId && friend.FriendId == UserId) ||
+                                 (friend.UserId == UserId && friend.FriendId == senderId))
+                .DeleteAsync() > 0;
+        }
 
         if (!success) return;
 

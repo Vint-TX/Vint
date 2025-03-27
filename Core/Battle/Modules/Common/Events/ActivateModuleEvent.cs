@@ -19,7 +19,7 @@ public class ActivateModuleEvent : TimeEvent, IServerEvent {
             return;
 
         IEntity slot = entities.Single();
-        BattleModule? module = tanker.Tank.Modules.SingleOrDefault(module => module.SlotEntity == slot);
+        BattleModule? module = tanker.Tank.Modules.FirstOrDefault(module => module.SlotEntity == slot);
 
         if (module == null)
             return;

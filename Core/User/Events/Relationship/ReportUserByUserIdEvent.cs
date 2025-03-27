@@ -25,7 +25,7 @@ public class ReportUserByUserIdEvent(
         string? reportedUsername = await db.Players
             .Where(player => player.Id == UserId)
             .Select(player => player.Username)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
         if (reportedUsername == null) return;
 

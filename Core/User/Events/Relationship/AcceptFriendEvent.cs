@@ -16,35 +16,36 @@ public class AcceptFriendEvent(
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         long receiverId = connection.UserContainer.Id;
 
-        await using DbConnection db = new();
-        await db.BeginTransactionAsync();
+        await using (DbConnection db = new()) {
+            await db.BeginTransactionAsync();
 
-        FriendRequest? request = (await db.FriendRequests
-            .Where(request => request.SenderId == UserId && request.FriendId == receiverId)
-            .DeleteWithOutputAsync()
-            .ToListAsync())
-            .SingleOrDefault();
+            FriendRequest? request = (await db.FriendRequests
+                    .Where(request => request.SenderId == UserId && request.FriendId == receiverId)
+                    .DeleteWithOutputAsync()
+                    .ToListAsync())
+                .SingleOrDefault();
 
-        if (request == null) return;
+            if (request == null) return;
 
-        Friend senderToReceiver = new() {
-            UserId = UserId,
-            FriendId = receiverId,
-            RequestedAt = request.CreatedAt,
-            AcceptedAt = DateTimeOffset.UtcNow
-        };
+            Friend senderToReceiver = new() {
+                UserId = UserId,
+                FriendId = receiverId,
+                RequestedAt = request.CreatedAt,
+                AcceptedAt = DateTimeOffset.UtcNow
+            };
 
-        Friend receiverToSender = new() {
-            UserId = receiverId,
-            FriendId = UserId,
-            RequestedAt = request.CreatedAt,
-            AcceptedAt = DateTimeOffset.UtcNow
-        };
+            Friend receiverToSender = new() {
+                UserId = receiverId,
+                FriendId = UserId,
+                RequestedAt = request.CreatedAt,
+                AcceptedAt = DateTimeOffset.UtcNow
+            };
 
-        await db.InsertAsync(senderToReceiver);
-        await db.InsertAsync(receiverToSender);
+            await db.InsertAsync(senderToReceiver);
+            await db.InsertAsync(receiverToSender);
 
-        await db.CommitTransactionAsync();
+            await db.CommitTransactionAsync();
+        }
 
         await connection.Send(new IncomingFriendRemovedEvent(UserId), connection.UserContainer.Entity);
         await connection.Send(new AcceptedFriendAddedEvent(UserId), connection.UserContainer.Entity);

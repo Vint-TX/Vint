@@ -75,8 +75,10 @@ public class UserModule(
 
     [ChatCommand("stats", "Get statistics")]
     public async Task Stats(ChatCommandContext ctx) {
-        await using DbConnection db = new();
-        Statistics? statistics = await db.Statistics.SingleOrDefaultAsync(stats => stats.PlayerId == ctx.Connection.Player.Id);
+        Statistics? statistics;
+
+        await using (DbConnection db = new())
+            statistics = await db.Statistics.FirstOrDefaultAsync(stats => stats.PlayerId == ctx.Connection.Player.Id);
 
         if (statistics == null) return;
 

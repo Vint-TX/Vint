@@ -18,9 +18,9 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
 
         logger.Information("Login by username '{Username}'", Username);
 
-        await using DbConnection db = new();
-
+        DbConnection db = new();
         Player? player = await db.GetSelfPlayerByUsername(Username);
+        await db.DisposeAsync();
 
         if (player == null) {
             connection.Player = null!;

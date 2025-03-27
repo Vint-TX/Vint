@@ -4,6 +4,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Squads;
 
 namespace Vint.Core.Battle.Lobby.Events;
 
@@ -16,7 +17,7 @@ public class CreateCustomBattleLobbyEvent(
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.InLobby) return;
 
-        Squads.Squad? squad = connection.Squad;
+        Squad? squad = connection.Squad;
         if (squad != null && squad.Members.Count > Params.MaxPlayers)
             return;
 

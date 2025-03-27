@@ -1,11 +1,12 @@
-﻿using Vint.Core.ECS.Components;
+﻿using Vint.Core.Database.Models;
+using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Presets.Components;
 
 [ProtocolId(1502886877871)]
 public class PresetEquipmentComponent(
-    Database.Models.Preset preset
+    Preset preset
 ) : IComponent {
     public long WeaponId { get; private set; } = preset.Weapon.Id;
     public long HullId { get; private set; } = preset.Hull.Id;

@@ -16,13 +16,12 @@ public class RequestLoadUserProfileEvent(
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!UserRegistry.TryGetContainer(UserId, out UserContainer? container)) {
-            await using DbConnection db = new();
+            Player? player = server.FindConnection(UserId)?.Player;
 
-            Player? player = server.FindConnection(UserId)?.Player ??
-                             await db.Players.SingleOrDefaultAsync(player => player.Id == UserId);
-
-            if (player == null)
-                throw new InvalidOperationException($"Player {UserId} not found");
+            if (player == null) {
+                await using DbConnection db = new();
+                player = await db.Players.FirstAsync(p => p.Id == UserId);
+            }
 
             container = UserRegistry.GetOrCreateContainer(UserId, player);
         }

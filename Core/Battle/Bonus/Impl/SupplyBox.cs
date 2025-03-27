@@ -17,11 +17,9 @@ public abstract class SupplyBox<T>(
 
     public override async Task Take(BattleTank battleTank) {
         await base.Take(battleTank);
-
         await StateManager.SetState(new Cooldown(StateManager));
 
-        T? effect = battleTank
-            .Effects
+        T? effect = battleTank.Effects
             .OfType<T>()
             .SingleOrDefault();
 

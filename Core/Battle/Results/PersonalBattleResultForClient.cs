@@ -59,24 +59,25 @@ public class PersonalBattleResultForClient(
             await connection.Share(reward);
 
         int battleScore = tanker.GetBattleUserScoreWithBonus();
-        await using DbConnection db = new();
+
+        await using (DbConnection db = new()) {
+            TankExp = await db.Hulls
+                .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
+                .Select(hull => (int)hull.Xp)
+                .FirstAsync();
+
+            WeaponExp = await db.Weapons
+                .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
+                .Select(weapon => (int)weapon.Xp)
+                .FirstAsync();
+        }
 
         TankInitExp = (int)userHull.GetComponent<ExperienceItemComponent>().Experience - battleScore;
         TankFinalExp = userHull.GetComponent<ExperienceToLevelUpItemComponent>().FinalLevelExperience;
-        TankExp = await db.Hulls
-            .Where(hull => hull.PlayerId == player.Id && hull.Id == preset.Hull.Id)
-            .Select(hull => (int)hull.Xp)
-            .SingleAsync();
-
         TankLevel = Leveling.GetLevel(TankExp);
 
         WeaponInitExp = (int)userWeapon.GetComponent<ExperienceItemComponent>().Experience - battleScore;
         WeaponFinalExp = userWeapon.GetComponent<ExperienceToLevelUpItemComponent>().FinalLevelExperience;
-        WeaponExp = await db.Weapons
-            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == preset.Weapon.Id)
-            .Select(weapon => (int)weapon.Xp)
-            .SingleAsync();
-
         WeaponLevel = Leveling.GetLevel(WeaponExp);
 
         RankExp = (int)player.Experience;

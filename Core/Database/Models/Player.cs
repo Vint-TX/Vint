@@ -44,7 +44,7 @@ public class Player {
     [Column] public int CurrentPresetIndex { get; set; }
 
     [NotColumn] public List<Preset> UserPresets { get; set; } = [];
-    [NotColumn] public Preset CurrentPreset => UserPresets.Single(preset => preset.Index == CurrentPresetIndex);
+    [NotColumn] public Preset CurrentPreset => UserPresets.First(preset => preset.Index == CurrentPresetIndex);
 
     [Column] public long Crystals { get; set; } = 1000000;
     [Column] public long XCrystals { get; set; } = 1000000;
@@ -226,8 +226,8 @@ public class Player {
         };
 
         await using DbConnection db = new();
-
         punishment.Id = await db.InsertWithInt64IdentityAsync(punishment);
+
         return punishment;
     }
 
@@ -246,8 +246,8 @@ public class Player {
         };
 
         await using DbConnection db = new();
-
         punishment.Id = await db.InsertWithInt64IdentityAsync(punishment);
+
         return punishment;
     }
 
@@ -266,71 +266,49 @@ public class Player {
         };
 
         await using DbConnection db = new();
-
         punishment.Id = await db.InsertWithInt64IdentityAsync(punishment);
+
         return punishment;
     }
 
     public async Task<bool> UnWarn(long warnId) {
         await using DbConnection db = new();
-
-        IQueryable<Punishment> punishments = db.Punishments.Where(punishment =>
-            punishment.PlayerId == Id && punishment.Type == PunishmentType.Warn && punishment.Id == warnId);
-
-        Punishment? punishment = await punishments.SingleOrDefaultAsync();
-
-        if (punishment == null) return false;
-
-        punishment.Active = false;
-
-        await punishments
-            .Set(p => p.Active, punishment.Active)
-            .UpdateAsync();
-
-        return true;
+        return await db.Punishments
+            .Where(punishment => punishment.PlayerId == Id &&
+                                 punishment.Type == PunishmentType.Warn &&
+                                 punishment.Id == warnId &&
+                                 punishment.Active)
+            .Set(punishment => punishment.Active, false)
+            .UpdateAsync() > 0;
     }
 
     public async Task<bool> UnMute() {
         await using DbConnection db = new();
-
-        Punishment? punishment = await db
-            .Punishments
-            .Where(punishment => punishment.PlayerId == Id && punishment.Type == PunishmentType.Mute && punishment.Active)
+        return await db.Punishments
+            .Where(punishment => punishment.PlayerId == Id &&
+                                 punishment.Type == PunishmentType.Mute &&
+                                 punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
-            .FirstOrDefaultAsync();
-
-        if (punishment == null) return false;
-
-        punishment.Active = false;
-        await db.UpdateAsync(punishment);
-        return true;
+            .Set(punishment => punishment.Active, false)
+            .UpdateAsync() > 0;
     }
 
     public async Task<bool> UnBan() {
         await using DbConnection db = new();
-
-        Punishment? punishment = await db
-            .Punishments
+        return await db.Punishments
             .Where(punishment => (punishment.PlayerId == Id || punishment.HardwareFingerprint == HardwareFingerprint) &&
                                  punishment.Type == PunishmentType.Ban &&
                                  punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
-            .FirstOrDefaultAsync();
-
-        if (punishment == null) return false;
-
-        punishment.Active = false;
-        await db.UpdateAsync(punishment);
-        return true;
+            .Set(punishment => punishment.Active, false)
+            .UpdateAsync() > 0;
     }
 
     public async Task<Punishment?> GetBanInfo(string hardwareFingerprint, string? ipAddress) {
         await RefreshPunishments();
 
         await using DbConnection db = new();
-
-        return await db
-            .Punishments
+        return await db.Punishments
             .Where(punishment => punishment.Active &&
                                  punishment.Type == PunishmentType.Ban &&
                                  (punishment.PlayerId == Id ||
@@ -344,36 +322,27 @@ public class Player {
         await RefreshPunishments();
 
         await using DbConnection db = new();
-
-        return await db
-            .Punishments
-            .Where(punishment => punishment.PlayerId == Id && punishment.Type == PunishmentType.Mute && punishment.Active)
+        return await db.Punishments
+            .Where(punishment => punishment.PlayerId == Id &&
+                                 punishment.Type == PunishmentType.Mute &&
+                                 punishment.Active)
             .OrderByDescending(punishment => punishment.PunishTime)
             .FirstOrDefaultAsync();
     }
 
     async Task RefreshPunishments() {
         await using DbConnection db = new();
+        await db.BeginTransactionAsync();
 
-        try {
-            await db.BeginTransactionAsync();
-
-            foreach (Punishment punishment in db
-                         .Punishments
-                         .Where(punishment => punishment.PlayerId == Id && punishment.Active)
-                         .ToList()
-                         .Where(punishment => punishment.EndTime <= DateTimeOffset.UtcNow)) {
-                punishment.Active = false;
-                await db.UpdateAsync(punishment);
-            }
-
-            await db.CommitTransactionAsync();
-        } catch {
-            await db.RollbackTransactionAsync();
-            throw;
-        } finally {
-            await db.DisposeTransactionAsync();
+        foreach (Punishment punishment in db.Punishments
+                .Where(punishment => punishment.PlayerId == Id && punishment.Active)
+                .ToList()
+                .Where(punishment => punishment.EndTime <= DateTimeOffset.UtcNow)) {
+            punishment.Active = false;
+            await db.UpdateAsync(punishment);
         }
+
+        await db.CommitTransactionAsync();
     }
 
     public void ResetNextDailyBonusTime() =>

@@ -23,24 +23,27 @@ public class ModuleMountEvent : IServerEvent {
         Database.Models.Player player = connection.Player;
 
         long marketItemId = moduleUserItem.GetComponent<MarketItemGroupComponent>().Key;
-        Database.Models.Module? module = player.Modules.SingleOrDefault(module => module.Id == marketItemId);
+        Module? module = player.Modules.FirstOrDefault(module => module.Id == marketItemId);
 
         if (module == null || module.Level < 0)
             return;
 
         Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
-        await using DbConnection db = new();
 
-        PresetModule? presetModule = await db.PresetModules.SingleOrDefaultAsync(pModule =>
-            pModule.PlayerId == player.Id && pModule.PresetIndex == player.CurrentPresetIndex && pModule.Slot == slot);
+        await using (DbConnection db = new()) {
+            PresetModule? presetModule = await db.PresetModules
+                .FirstOrDefaultAsync(pModule => pModule.PlayerId == player.Id &&
+                                                 pModule.PresetIndex == player.CurrentPresetIndex &&
+                                                 pModule.Slot == slot);
 
-        presetModule ??= new PresetModule { Player = player, Preset = player.CurrentPreset, Slot = slot };
-        presetModule.Entity = connection.GetEntity(marketItemId)!;
+            presetModule ??= new PresetModule { Player = player, Preset = player.CurrentPreset, Slot = slot };
+            presetModule.Entity = connection.GetEntity(marketItemId)!;
 
-        await db.InsertOrReplaceAsync(presetModule);
+            await db.InsertOrReplaceAsync(presetModule);
 
-        player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
-        player.CurrentPreset.Modules.Add(presetModule);
+            player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
+            player.CurrentPreset.Modules.Add(presetModule);
+        }
 
         await slotUserItem.AddComponentFrom<ModuleGroupComponent>(moduleUserItem);
         await moduleUserItem.AddComponent<MountedItemComponent>();

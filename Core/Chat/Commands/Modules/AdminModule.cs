@@ -49,7 +49,7 @@ public class AdminModule(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
@@ -111,7 +111,7 @@ public class AdminModule(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
@@ -142,7 +142,7 @@ public class AdminModule(
     [ChatCommand("createInvite", "Create new invite")]
     public async Task CreateInvite(ChatCommandContext ctx, [Option("code", "Code")] string code, [Option("uses", "Maximum uses")] ushort uses) {
         await using DbConnection db = new();
-        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
+        Invite? invite = await db.Invites.FirstOrDefaultAsync(invite => invite.Code == code);
 
         if (invite != null) {
             await ctx.SendPrivateResponse($"Already exists: {invite}");

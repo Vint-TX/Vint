@@ -56,16 +56,16 @@ public static class Leveling {
 
     public static async Task<int> GetSeasonPlace(long userId) {
         await using DbConnection db = new();
-
-        return db
-                   .SeasonStatistics
-                   .Select(seasonStats => new { Id = seasonStats.PlayerId, seasonStats.Reputation })
-                   .OrderByDescending(p => p.Reputation)
-                   .ToList()
-                   .Select((player, index) => new { player.Id, Index = index })
-                   .Single(p => p.Id == userId)
-                   .Index +
-               1;
+        return db.SeasonStatistics
+            .Select(seasonStats => new {
+                Id = seasonStats.PlayerId,
+                Place = (int)Sql.Ext.RowNumber().Over()
+                    .OrderByDesc(seasonStats.Reputation)
+                    .ToValue() + 1
+            })
+            .Where(p => p.Id == userId)
+            .Select(p => p.Place)
+            .First();
     }
 
     public static async Task<IEntity?> GetLevelUpRewards(IPlayerConnection connection) {
@@ -73,17 +73,21 @@ public static class Leveling {
         List<IEntity> entities = connection.SharedEntities.ToList();
         Player player = connection.Player;
 
-        await using DbConnection db = new();
+        Dictionary<long, long> items;
 
-        var hulls = await db.Hulls
-            .Where(hull => hull.PlayerId == player.Id)
-            .Select(hull => new { hull.Id, hull.Xp })
-            .ToListAsync();
+        await using (DbConnection db = new()) {
+            var hullsRaw = db.Hulls
+                .Where(hull => hull.PlayerId == player.Id)
+                .Select(hull => new { hull.Id, hull.Xp });
 
-        var weapons = await db.Weapons
-            .Where(weapon => weapon.PlayerId == player.Id)
-            .Select(weapon => new { weapon.Id, weapon.Xp })
-            .ToListAsync();
+            var weaponsRaw = db.Weapons
+                .Where(weapon => weapon.PlayerId == player.Id)
+                .Select(weapon => new { weapon.Id, weapon.Xp });
+
+            items = await hullsRaw
+                .UnionAll(weaponsRaw)
+                .ToDictionaryAsync(item => item.Id, item => item.Xp);
+        }
 
         foreach (IEntity child in entities.Where(entity => entity.TemplateAccessor?.Template is
                      ChildGraffitiMarketItemTemplate or
@@ -91,19 +95,13 @@ public static class Leveling {
                      WeaponSkinMarketItemTemplate)) {
             if (await connection.OwnsItem(child)) continue;
 
-            int rewardLevel = ConfigManager.GetComponent<MountUpgradeLevelRestrictionComponent>(child.TemplateAccessor!.ConfigPath!)
-                .RestrictionValue;
-
+            int rewardLevel = ConfigManager.GetComponent<MountUpgradeLevelRestrictionComponent>(child.TemplateAccessor!.ConfigPath!).RestrictionValue;
             if (rewardLevel == 0) continue;
 
             long parentId = child.GetComponent<ParentGroupComponent>().Key;
-            long parentXp = hulls.SingleOrDefault(hull => hull.Id == parentId)?.Xp ??
-                            weapons.SingleOrDefault(weapon => weapon.Id == parentId)?.Xp ?? 0;
-
-            if (parentXp == 0) continue;
+            if (!items.TryGetValue(parentId, out long parentXp) || parentXp == 0) continue;
 
             int parentLevel = GetLevel(parentXp);
-
             if (parentLevel < rewardLevel) continue;
 
             await connection.PurchaseItem(child, 1, 0, false, false);

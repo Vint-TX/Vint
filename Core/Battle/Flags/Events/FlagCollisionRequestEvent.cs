@@ -23,7 +23,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
             round.ModeHandler is not CTFHandler ctf) return;
 
         IEntity flagEntity = entities[1];
-        Core.Battle.Flags.Flag flag = ctf.Flags.Values.Single(flag => flag.Entity == flagEntity);
+        Flag flag = ctf.Flags.Values.First(flag => flag.Entity == flagEntity);
 
         TeamColor tankTeamColor = tanker.TeamColor;
         TeamColor flagTeamColor = flag.TeamColor;
@@ -34,7 +34,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
                 if (Vector3.Distance(tanker.Tank.Position, flag.PedestalPosition) > 5) return;
 
                 if (isAllyFlag) {
-                    Core.Battle.Flags.Flag oppositeFlag = ctf.Flags.Values.Single(f => f != flag);
+                    Flag oppositeFlag = ctf.Flags.Values.First(f => f != flag);
                     await TryDeliver(oppositeFlag, tanker);
                 } else await onPedestal.Capture(tanker);
 
@@ -52,7 +52,7 @@ public class FlagCollisionRequestEvent : IServerEvent {
         }
     }
 
-    static async Task TryDeliver(Core.Battle.Flags.Flag flag, Tanker tanker) {
+    static async Task TryDeliver(Flag flag, Tanker tanker) {
         if (flag.StateManager.CurrentState is not Captured captured || captured.Carrier != tanker)
             return;
 

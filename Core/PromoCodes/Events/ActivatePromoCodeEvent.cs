@@ -20,7 +20,7 @@ public class ActivatePromoCodeEvent : IServerEvent {
         if (checkResult != PromoCodeCheckResult.Valid)
             return;
 
-        await using DbConnection db = new();
+        DbConnection db = new();
         await db.BeginTransactionAsync();
 
         var promo = await db.PromoCodes
@@ -41,9 +41,10 @@ public class ActivatePromoCodeEvent : IServerEvent {
         };
 
         redemption.Id = await db.InsertWithInt64IdentityAsync(redemption);
-        IEntity user = connection.UserContainer.Entity;
-
         await db.CommitTransactionAsync();
+        await db.DisposeAsync();
+
+        IEntity user = connection.UserContainer.Entity;
 
         foreach (PromoCodeItem item in promo.Items) {
             try {

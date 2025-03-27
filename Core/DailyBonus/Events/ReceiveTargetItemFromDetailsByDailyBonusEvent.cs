@@ -22,25 +22,25 @@ public class ReceiveTargetItemFromDetailsByDailyBonusEvent : IServerEvent {
         Player player = connection.Player;
         IEntity user = connection.UserContainer.Entity;
 
-        await using DbConnection db = new();
-        Detail? detail = await db.Details.SingleOrDefaultAsync(detail => detail.PlayerId == player.Id && detail.Id == DetailMarketItemId);
-
-        if (detail == null)
-            return;
-
         IEntity marketEntity = connection.GetEntity(DetailMarketItemId)!;
-        IEntity userEntity = marketEntity.GetUserEntity(connection);
         DetailItemComponent detailItemComponent = ConfigManager.GetComponent<DetailItemComponent>(marketEntity.TemplateAccessor!.ConfigPath!);
+        int detailsCount;
 
-        if (detail.Count < detailItemComponent.RequiredCount)
-            return;
+        await using (DbConnection db = new()) {
+            IQueryable<Detail> query = db.Details.Where(detail => detail.PlayerId == player.Id && detail.Id == DetailMarketItemId);
 
-        detail.Count -= detailItemComponent.RequiredCount;
-        await userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = detail.Count);
+            detailsCount = await query.Select(detail => detail.Count).FirstOrDefaultAsync();
+            if (detailsCount == 0 || detailsCount < detailItemComponent.RequiredCount) return;
+
+            detailsCount -= detailItemComponent.RequiredCount;
+
+            if (detailsCount == 0) await query.DeleteAsync();
+            else await query.Set(detail => detail.Count, detailsCount).UpdateAsync();
+        }
+
+        IEntity userEntity = marketEntity.GetUserEntity(connection);
+        await userEntity.ChangeComponent<UserItemCounterComponent>(component => component.Count = detailsCount);
         await connection.Send(new ItemsCountChangedEvent(-detailItemComponent.RequiredCount), userEntity);
-
-        if (detail.Count == 0) await db.DeleteAsync(detail);
-        else await db.UpdateAsync(detail);
 
         IEntity targetMarketEntity = connection.GetEntity(detailItemComponent.TargetMarketItemId)!;
         await connection.PurchaseItem(targetMarketEntity, 1, 0, false, false);

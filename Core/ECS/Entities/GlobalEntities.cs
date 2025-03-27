@@ -28,156 +28,38 @@ public static class GlobalEntities {
     public static List<IEntity> AllMarketTemplateEntities { get; }
 
     public static IReadOnlyDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
-        {
-            GetEntity("weapons", "Flamethrower")
-                .Id,
-            GetEntity("weaponSkins", "FlamethrowerM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Freeze")
-                .Id,
-            GetEntity("weaponSkins", "FreezeM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Hammer")
-                .Id,
-            GetEntity("weaponSkins", "HammerM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Isis")
-                .Id,
-            GetEntity("weaponSkins", "IsisM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Railgun")
-                .Id,
-            GetEntity("weaponSkins", "RailgunM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Ricochet")
-                .Id,
-            GetEntity("weaponSkins", "RicochetM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Shaft")
-                .Id,
-            GetEntity("weaponSkins", "ShaftM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Smoky")
-                .Id,
-            GetEntity("weaponSkins", "SmokyM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Thunder")
-                .Id,
-            GetEntity("weaponSkins", "ThunderM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Twins")
-                .Id,
-            GetEntity("weaponSkins", "TwinsM0")
-                .Id
-        }, {
-            GetEntity("weapons", "Vulcan")
-                .Id,
-            GetEntity("weaponSkins", "VulcanM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Dictator")
-                .Id,
-            GetEntity("hullSkins", "DictatorM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Hornet")
-                .Id,
-            GetEntity("hullSkins", "HornetM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Hunter")
-                .Id,
-            GetEntity("hullSkins", "HunterM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Mammoth")
-                .Id,
-            GetEntity("hullSkins", "MammothM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Titan")
-                .Id,
-            GetEntity("hullSkins", "TitanM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Viking")
-                .Id,
-            GetEntity("hullSkins", "VikingM0")
-                .Id
-        }, {
-            GetEntity("hulls", "Wasp")
-                .Id,
-            GetEntity("hullSkins", "WaspM0")
-                .Id
-        }
+        { GetEntity("weapons", "Flamethrower").Id, GetEntity("weaponSkins", "FlamethrowerM0").Id },
+        { GetEntity("weapons", "Freeze").Id, GetEntity("weaponSkins", "FreezeM0").Id },
+        { GetEntity("weapons", "Hammer").Id, GetEntity("weaponSkins", "HammerM0").Id },
+        { GetEntity("weapons", "Isis").Id, GetEntity("weaponSkins", "IsisM0").Id },
+        { GetEntity("weapons", "Railgun").Id, GetEntity("weaponSkins", "RailgunM0").Id },
+        { GetEntity("weapons", "Ricochet").Id, GetEntity("weaponSkins", "RicochetM0").Id },
+        { GetEntity("weapons", "Shaft").Id, GetEntity("weaponSkins", "ShaftM0").Id },
+        { GetEntity("weapons", "Smoky").Id, GetEntity("weaponSkins", "SmokyM0").Id },
+        { GetEntity("weapons", "Thunder").Id, GetEntity("weaponSkins", "ThunderM0").Id },
+        { GetEntity("weapons", "Twins").Id, GetEntity("weaponSkins", "TwinsM0").Id },
+        { GetEntity("weapons", "Vulcan").Id, GetEntity("weaponSkins", "VulcanM0").Id },
+        { GetEntity("hulls", "Dictator").Id, GetEntity("hullSkins", "DictatorM0").Id },
+        { GetEntity("hulls", "Hornet").Id, GetEntity("hullSkins", "HornetM0").Id },
+        { GetEntity("hulls", "Hunter").Id, GetEntity("hullSkins", "HunterM0").Id },
+        { GetEntity("hulls", "Mammoth").Id, GetEntity("hullSkins", "MammothM0").Id },
+        { GetEntity("hulls", "Titan").Id, GetEntity("hullSkins", "TitanM0").Id },
+        { GetEntity("hulls", "Viking").Id, GetEntity("hullSkins", "VikingM0").Id },
+        { GetEntity("hulls", "Wasp").Id, GetEntity("hullSkins", "WaspM0").Id }
     };
 
     public static IReadOnlyDictionary<long, long> DefaultShells { get; } = new Dictionary<long, long> {
-        {
-            GetEntity("weapons", "Flamethrower")
-                .Id,
-            GetEntity("shells", "FlamethrowerOrange")
-                .Id
-        }, {
-            GetEntity("weapons", "Freeze")
-                .Id,
-            GetEntity("shells", "FreezeSkyblue")
-                .Id
-        }, {
-            GetEntity("weapons", "Hammer")
-                .Id,
-            GetEntity("shells", "HammerStandard")
-                .Id
-        }, {
-            GetEntity("weapons", "Isis")
-                .Id,
-            GetEntity("shells", "IsisStandard")
-                .Id
-        }, {
-            GetEntity("weapons", "Railgun")
-                .Id,
-            GetEntity("shells", "RailgunPaleblue")
-                .Id
-        }, {
-            GetEntity("weapons", "Ricochet")
-                .Id,
-            GetEntity("shells", "RicochetAurulent")
-                .Id
-        }, {
-            GetEntity("weapons", "Shaft")
-                .Id,
-            GetEntity("shells", "ShaftStandard")
-                .Id
-        }, {
-            GetEntity("weapons", "Smoky")
-                .Id,
-            GetEntity("shells", "SmokyStandard")
-                .Id
-        }, {
-            GetEntity("weapons", "Thunder")
-                .Id,
-            GetEntity("shells", "ThunderStandard")
-                .Id
-        }, {
-            GetEntity("weapons", "Twins")
-                .Id,
-            GetEntity("shells", "TwinsBlue")
-                .Id
-        }, {
-            GetEntity("weapons", "Vulcan")
-                .Id,
-            GetEntity("shells", "VulcanStandard")
-                .Id
-        }
+        { GetEntity("weapons", "Flamethrower").Id, GetEntity("shells", "FlamethrowerOrange").Id },
+        { GetEntity("weapons", "Freeze").Id, GetEntity("shells", "FreezeSkyblue").Id },
+        { GetEntity("weapons", "Hammer").Id, GetEntity("shells", "HammerStandard").Id },
+        { GetEntity("weapons", "Isis").Id, GetEntity("shells", "IsisStandard").Id },
+        { GetEntity("weapons", "Railgun").Id, GetEntity("shells", "RailgunPaleblue").Id },
+        { GetEntity("weapons", "Ricochet").Id, GetEntity("shells", "RicochetAurulent").Id },
+        { GetEntity("weapons", "Shaft").Id, GetEntity("shells", "ShaftStandard").Id },
+        { GetEntity("weapons", "Smoky").Id, GetEntity("shells", "SmokyStandard").Id },
+        { GetEntity("weapons", "Thunder").Id, GetEntity("shells", "ThunderStandard").Id },
+        { GetEntity("weapons", "Twins").Id, GetEntity("shells", "TwinsBlue").Id },
+        { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
     };
 
     public static IReadOnlyList<IEntity> Tier1Modules { get; } = new List<IEntity> {
@@ -232,10 +114,9 @@ public static class GlobalEntities {
             entity.Id = EntityRegistry.GenerateId();
             entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
 
-            using DbConnection db = new();
-
             switch (path) {
                 case "avatars": {
+                    using DbConnection db = new();
                     if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -243,6 +124,7 @@ public static class GlobalEntities {
                 }
 
                 case "covers": {
+                    using DbConnection db = new();
                     if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -250,6 +132,7 @@ public static class GlobalEntities {
                 }
 
                 case "graffities": {
+                    using DbConnection db = new();
                     if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -257,21 +140,29 @@ public static class GlobalEntities {
                 }
 
                 case "hulls": {
-                    Hull? hull = db.Hulls.FirstOrDefault(hull => hull.PlayerId == player.Id && hull.Id == marketEntityId);
+                    long? xp;
 
-                    if (hull != null)
+                    using (DbConnection db = new()) {
+                        var hull = db.Hulls
+                            .Where(hull => hull.PlayerId == player.Id && hull.Id == marketEntityId)
+                            .Select(hull => new { hull.Xp })
+                            .FirstOrDefault();
+
+                        xp = hull?.Xp;
+                    }
+
+                    if (xp.HasValue)
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
-                    long xp = hull?.Xp ?? 0;
-
-                    entity.AddComponent(new ExperienceItemComponent(xp));
-                    entity.AddComponent(new ExperienceToLevelUpItemComponent(xp));
-                    entity.AddComponent(new UpgradeLevelItemComponent(xp));
+                    entity.AddComponent(new ExperienceItemComponent(xp ?? 0));
+                    entity.AddComponent(new ExperienceToLevelUpItemComponent(xp ?? 0));
+                    entity.AddComponent(new UpgradeLevelItemComponent(xp ?? 0));
                     entity.AddComponent<UpgradeMaxLevelItemComponent>();
                     break;
                 }
 
                 case "hullSkins": {
+                    using DbConnection db = new();
                     if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -279,6 +170,7 @@ public static class GlobalEntities {
                 }
 
                 case "paints": {
+                    using DbConnection db = new();
                     if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -286,6 +178,7 @@ public static class GlobalEntities {
                 }
 
                 case "shells": {
+                    using DbConnection db = new();
                     if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -293,21 +186,29 @@ public static class GlobalEntities {
                 }
 
                 case "weapons": {
-                    Weapon? weapon = db.Weapons.FirstOrDefault(weapon => weapon.PlayerId == player.Id && weapon.Id == marketEntityId);
+                    long? xp;
 
-                    if (weapon != null)
+                    using (DbConnection db = new()) {
+                        var weapon = db.Weapons
+                            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == marketEntityId)
+                            .Select(weapon => new { weapon.Xp })
+                            .FirstOrDefault();
+
+                        xp = weapon?.Xp;
+                    }
+
+                    if (xp.HasValue)
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
-                    long xp = weapon?.Xp ?? 0;
-
-                    entity.AddComponent(new ExperienceItemComponent(xp));
-                    entity.AddComponent(new ExperienceToLevelUpItemComponent(xp));
-                    entity.AddComponent(new UpgradeLevelItemComponent(xp));
+                    entity.AddComponent(new ExperienceItemComponent(xp ?? 0));
+                    entity.AddComponent(new ExperienceToLevelUpItemComponent(xp ?? 0));
+                    entity.AddComponent(new UpgradeLevelItemComponent(xp ?? 0));
                     entity.AddComponent<UpgradeMaxLevelItemComponent>();
                     break;
                 }
 
                 case "weaponSkins": {
+                    using DbConnection db = new();
                     if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == marketEntityId))
                         entity.AddGroupComponent<UserGroupComponent>(user);
 
@@ -345,7 +246,7 @@ public static class GlobalEntities {
                         default: throw new ArgumentOutOfRangeException();
                     }
 
-                    Module? module = player.Modules.SingleOrDefault(module => module.Id == marketEntityId);
+                    Module? module = player.Modules.FirstOrDefault(module => module.Id == marketEntityId);
                     int moduleLevel = module?.Level ?? -1;
 
                     if (moduleLevel >= 0)
@@ -371,6 +272,7 @@ public static class GlobalEntities {
                         }
 
                         case PresetUserItemTemplate: {
+                            using DbConnection db = new();
                             foreach (Preset preset in db.Presets
                                          .LoadWith(preset => preset.Modules)
                                          .Where(preset => preset.PlayerId == player.Id)) {
@@ -392,7 +294,7 @@ public static class GlobalEntities {
                         }
 
                         case GoldBonusUserItemTemplate: {
-                            IEntity gold = connection.SharedEntities.Single(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
+                            IEntity gold = connection.SharedEntities.First(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
 
                             entity.AddComponentFrom<ModuleGroupComponent>(gold);
                             entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
@@ -431,11 +333,14 @@ public static class GlobalEntities {
                 }
 
                 case "containers": {
-                    Container? container =
-                        db.Containers.SingleOrDefault(container => container.PlayerId == player.Id && container.Id == marketEntityId);
+                    using DbConnection db = new();
+                    long count = db.Containers
+                        .Where(container => container.PlayerId == player.Id && container.Id == marketEntityId)
+                        .Select(container => container.Count)
+                        .FirstOrDefault(); // it would be 0 if not found, so no need to check
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
-                    entity.AddComponent(new UserItemCounterComponent(container?.Count ?? 0));
+                    entity.AddComponent(new UserItemCounterComponent(count));
                     entity.AddGroupComponent<NotificationGroupComponent>();
                     entity.RemoveComponentIfPresent<RestrictionByUserFractionComponent>();
                     break;
@@ -444,7 +349,7 @@ public static class GlobalEntities {
                 case "moduleCards": {
                     long moduleId = entity.GetComponent<ParentGroupComponent>().Key;
 
-                    Module? module = player.Modules.SingleOrDefault(module => module.Id == moduleId);
+                    Module? module = player.Modules.FirstOrDefault(module => module.Id == moduleId);
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
                     entity.AddComponent(new UserItemCounterComponent(module?.Cards ?? 0));
@@ -452,10 +357,14 @@ public static class GlobalEntities {
                 }
 
                 case "details": {
-                    Detail? detail = db.Details.SingleOrDefault(detail => detail.PlayerId == player.Id && detail.Id == marketEntityId);
+                    using DbConnection db = new();
+                    int count = db.Details
+                        .Where(detail => detail.PlayerId == player.Id && detail.Id == marketEntityId)
+                        .Select(detail => detail.Count)
+                        .FirstOrDefault(); // it would be 0 if not found, so no need to check
 
                     entity.AddGroupComponent<UserGroupComponent>(user);
-                    entity.AddComponent(new UserItemCounterComponent(detail?.Count ?? 0));
+                    entity.AddComponent(new UserItemCounterComponent(count));
                     break;
                 }
             }
@@ -467,23 +376,21 @@ public static class GlobalEntities {
     public static IEntity GetEntity(string typeName, string entityName) =>
         ConfigManager.GetGlobalEntity(typeName, entityName);
 
-    public static IEntity GetEntity(string typeName, Func<IEntity, bool> predicate) =>
-        GetEntities(typeName).Single(predicate);
-
     public static IEnumerable<IEntity> GetEntities(string typeName) =>
         ConfigManager.GetGlobalEntities(typeName);
 
     public static IEntity GetUserModule(this IEntity marketEntity, IPlayerConnection connection) =>
-        connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
-                                                   entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
+        connection.SharedEntities.First(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
+                                                  entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
 
     public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
         predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;
 
         return marketEntity.TemplateAccessor!.Template switch {
             UserEntityTemplate => marketEntity,
-            MarketEntityTemplate marketTemplate => connection.SharedEntities.Single(entity =>
-                entity.TemplateAccessor?.Template == marketTemplate.UserTemplate && predicate(entity)),
+            MarketEntityTemplate marketTemplate => connection.SharedEntities
+                .First(entity => entity.TemplateAccessor?.Template == marketTemplate.UserTemplate &&
+                                 predicate(entity)),
             _ => throw new KeyNotFoundException()
         };
     }
@@ -493,14 +400,15 @@ public static class GlobalEntities {
 
         return userEntity.TemplateAccessor!.Template switch {
             MarketEntityTemplate => userEntity,
-            UserEntityTemplate userTemplate => connection.SharedEntities.Single(entity =>
-                entity.TemplateAccessor?.Template == userTemplate.MarketTemplate && predicate(entity)),
+            UserEntityTemplate userTemplate => connection.SharedEntities
+                .First(entity => entity.TemplateAccessor?.Template == userTemplate.MarketTemplate &&
+                                 predicate(entity)),
             _ => throw new KeyNotFoundException()
         };
     }
 
     public static IEntity? GetEntity(this IPlayerConnection connection, long entityId) =>
-        connection.SharedEntities.SingleOrDefault(entity => entity.Id == entityId);
+        connection.SharedEntities.FirstOrDefault(entity => entity.Id == entityId);
 
     public static async Task<bool> ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
         string configPath = item.TemplateAccessor!.ConfigPath!;
@@ -526,8 +434,9 @@ public static class GlobalEntities {
         if (item.TemplateAccessor?.Template is PresetMarketItemTemplate) {
             ItemsBuyCountLimitComponent buyCountLimitComponent = ConfigManager.GetComponent<ItemsBuyCountLimitComponent>(configPath);
 
-            await using DbConnection db = new();
+            DbConnection db = new();
             int count = await db.Presets.CountAsync(preset => preset.PlayerId == connection.Player.Id);
+            await db.DisposeAsync();
 
             if (count >= buyCountLimitComponent.Limit) return false;
 

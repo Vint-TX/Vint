@@ -37,7 +37,7 @@ public class PromoCodeController : WebApiController {
             .Where(promoCode => promoCode.Code == createModel.Code)
             .LoadWith(promoCode => promoCode.Items)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
         if (promoCode != null)
             throw HttpException.BadRequest($"Promo code with code '{promoCode.Code}' already exists", PromoCodeDetailDTO.FromPromoCode(promoCode));
@@ -45,7 +45,7 @@ public class PromoCodeController : WebApiController {
         Player? ownedPlayer = null;
 
         if (createModel.OwnedPlayerId != -1) {
-            ownedPlayer = await db.Players.SingleOrDefaultAsync(player => player.Id == createModel.OwnedPlayerId);
+            ownedPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == createModel.OwnedPlayerId);
 
             if (ownedPlayer == null)
                 throw HttpException.BadRequest("Owned player does not exist");
@@ -71,7 +71,7 @@ public class PromoCodeController : WebApiController {
             .Where(promoCode => promoCode.Id == id)
             .LoadWith(promoCode => promoCode.Items)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
         if (promoCode == null)
             throw HttpException.NotFound($"Promo code {id} not found");
@@ -148,7 +148,7 @@ public class PromoCodeController : WebApiController {
         PromoCode? promoCode = await db.PromoCodes
             .Where(promoCode => promoCode.Id == id)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
         if (promoCode == null)
             throw HttpException.NotFound("Promo code does not exist");

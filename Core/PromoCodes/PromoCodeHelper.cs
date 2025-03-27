@@ -6,7 +6,7 @@ namespace Vint.Core.PromoCodes;
 public static class PromoCodeHelper {
     public static async Task<PromoCodeCheckResult> Check(long playerId, string code) {
         await using DbConnection db = new();
-        Database.Models.PromoCode? promoCode = await db.PromoCodes.SingleOrDefaultAsync(promoCode => promoCode.Code == code);
+        Database.Models.PromoCode? promoCode = await db.PromoCodes.FirstOrDefaultAsync(promoCode => promoCode.Code == code);
 
         if (promoCode == null)
             return PromoCodeCheckResult.NotFound;

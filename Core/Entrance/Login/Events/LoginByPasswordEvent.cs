@@ -1,6 +1,4 @@
-﻿using LinqToDB;
-using Vint.Core.Database;
-using Vint.Core.Database.Models;
+﻿using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Entrance.ClientSession;
@@ -36,20 +34,8 @@ public class LoginByPasswordEvent(
             return;
         }
 
-        List<IPlayerConnection> connections = server
-            .PlayerConnections
-            .Values
-            .Where(player => player.IsLoggedIn && player.Player.Id == connection.Player.Id)
-            .ToList();
-
-        if (connections.Count != 0) {
-            await using DbConnection db = new();
-
-            foreach (IPlayerConnection oldConnection in connections) {
-                await db.UpdateAsync(oldConnection.Player);
-                await oldConnection.Kick("Login from new place");
-            }
-        }
+        foreach (IPlayerConnection oldConnection in server.FindConnections(connection.Player.Id))
+            await oldConnection.Kick("Login from new place");
 
         await connection.Login(RememberMe, RememberMe, HardwareFingerprint);
     }

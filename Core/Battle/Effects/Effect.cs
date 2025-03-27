@@ -7,7 +7,6 @@ using Vint.Core.Battle.Effects.Events;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
-using Vint.Core.Battle.Weapons;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Config;
 using Vint.Core.ECS.Entities;

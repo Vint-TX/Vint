@@ -18,9 +18,9 @@ public class IntroduceUserByEmailEvent : IntroduceUserEvent {
 
         logger.Information("Login by email '{Email}'", Email);
 
-        await using DbConnection db = new();
-
+        DbConnection db = new();
         Player? player = await db.GetSelfPlayerByEmail(Email);
+        await db.DisposeAsync();
 
         if (player == null) {
             connection.Player = null!;

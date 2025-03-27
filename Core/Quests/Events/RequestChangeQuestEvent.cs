@@ -31,8 +31,7 @@ public class RequestChangeQuestEvent(
             player.QuestChangesResetTime = DateTimeOffset.UtcNow.AddDays(1);
             await bonus.AddComponentIfAbsent<TakenBonusComponent>();
 
-            await db
-                .Players
+            await db.Players
                 .Where(p => p.Id == player.Id)
                 .Set(p => p.QuestChangesResetTime, player.QuestChangesResetTime)
                 .UpdateAsync();
@@ -43,8 +42,7 @@ public class RequestChangeQuestEvent(
         await questManager.ChangeQuest(connection, quest);
         player.QuestChanges++;
 
-        IUpdatable<Player> query = db
-            .Players
+        IUpdatable<Player> query = db.Players
             .Where(p => p.Id == player.Id)
             .Set(p => p.QuestChanges, player.QuestChanges);
 

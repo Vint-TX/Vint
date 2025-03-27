@@ -45,7 +45,7 @@ public class ModeratorModule(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
@@ -111,7 +111,7 @@ public class ModeratorModule(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
@@ -175,7 +175,7 @@ public class ModeratorModule(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
@@ -229,7 +229,7 @@ public class ModeratorModule(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {

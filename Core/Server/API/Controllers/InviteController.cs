@@ -13,7 +13,7 @@ public class InviteController : WebApiController {
     [Post("/")]
     public async Task<Invite> CreateInvite([FromBodyAsJson] InviteDTO inviteDTO) {
         await using DbConnection db = new();
-        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == inviteDTO.Code);
+        Invite? invite = await db.Invites.FirstOrDefaultAsync(invite => invite.Code == inviteDTO.Code);
 
         if (invite != null) {
             throw HttpException.BadRequest($"Invite with code {inviteDTO.Code} already exists", invite);
@@ -44,7 +44,7 @@ public class InviteController : WebApiController {
     [Get("/{id}")]
     public async Task<Invite> GetInvite(long id) {
         await using DbConnection db = new();
-        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Id == id);
+        Invite? invite = await db.Invites.FirstOrDefaultAsync(invite => invite.Id == id);
 
         if (invite == null) {
             throw HttpException.NotFound($"Invite {id} not found");
@@ -56,7 +56,7 @@ public class InviteController : WebApiController {
     [Delete("/{id}")]
     public async Task DeleteInvite(long id) {
         await using DbConnection db = new();
-        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Id == id);
+        Invite? invite = await db.Invites.FirstOrDefaultAsync(invite => invite.Id == id);
 
         if (invite == null) {
             throw HttpException.NotFound($"Invite {id} not found");

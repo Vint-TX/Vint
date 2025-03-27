@@ -18,27 +18,27 @@ public class RequestFriendEvent(
 
         if (senderId == UserId) return;
 
-        await using DbConnection db = new();
-        bool canRequestFriend = !await AlreadyRequested(db, senderId, UserId) &&
-                                !await AlreadyFriends(db, senderId, UserId) &&
-                                !await SenderBlocked(db, senderId, UserId);
+        await using (DbConnection db = new()) {
+            bool canRequestFriend = !await AlreadyRequested(db, senderId, UserId) &&
+                                    !await AlreadyFriends(db, senderId, UserId) &&
+                                    !await SenderBlocked(db, senderId, UserId);
 
-        if (!canRequestFriend) return;
+            if (!canRequestFriend) return;
 
-        await db.BeginTransactionAsync();
-        await db.Blocks
-            .Where(block => block.BlockerId == senderId && block.BlockedId == UserId)
-            .DeleteAsync();
+            await db.BeginTransactionAsync();
+            await db.Blocks
+                .Where(block => block.BlockerId == senderId && block.BlockedId == UserId)
+                .DeleteAsync();
 
-        FriendRequest request = new() {
-            SenderId = senderId,
-            FriendId = UserId,
-            CreatedAt = DateTimeOffset.UtcNow
-        };
+            FriendRequest request = new() {
+                SenderId = senderId,
+                FriendId = UserId,
+                CreatedAt = DateTimeOffset.UtcNow
+            };
 
-        request.Id = await db.InsertWithInt32IdentityAsync(request);
-
-        await db.CommitTransactionAsync();
+            request.Id = await db.InsertWithInt32IdentityAsync(request);
+            await db.CommitTransactionAsync();
+        }
 
         await connection.Send(new OutgoingFriendAddedEvent(UserId), connection.UserContainer.Entity);
         await connection.Share(new FriendSentNotificationTemplate().Create(connection.UserContainer.Entity));

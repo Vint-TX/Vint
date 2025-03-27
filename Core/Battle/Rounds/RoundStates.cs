@@ -1,6 +1,5 @@
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds.Components;
-using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Tank.State;
 using Vint.Core.StateMachine;
 

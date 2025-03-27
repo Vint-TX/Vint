@@ -14,11 +14,14 @@ public class SearchUserIdByUidEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (connection.Player.Username == Username) return;
 
-        await using DbConnection db = new();
-        long id = await db.Players
-            .Where(player => player.Username == Username)
-            .Select(player => player.Id)
-            .SingleOrDefaultAsync();
+        long id;
+
+        await using (DbConnection db = new()) {
+            id = await db.Players
+                .Where(player => player.Username == Username)
+                .Select(player => player.Id)
+                .FirstOrDefaultAsync();
+        }
 
         bool found = id != default;
         await connection.Send(new SearchUserIdByUidResultEvent(found, id));

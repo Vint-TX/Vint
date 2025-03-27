@@ -24,9 +24,9 @@ public class AutoLoginUserEvent(
         ILogger logger = connection.Logger.ForType<AutoLoginUserEvent>();
         logger.Warning("Autologin '{Username}'", Username);
 
-        await using DbConnection db = new();
-
+        DbConnection db = new();
         Player? player = await db.GetSelfPlayerByUsername(Username);
+        await db.DisposeAsync();
 
         if (player == null) {
             await Fail(connection);

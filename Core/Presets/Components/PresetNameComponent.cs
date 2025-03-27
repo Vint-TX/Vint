@@ -16,7 +16,7 @@ public class PresetNameComponent : IComponent {
         if (string.IsNullOrWhiteSpace(Name) || Name.Length > 18) return;
 
         Player player = connection.Player;
-        Database.Models.Preset preset = player.UserPresets.Single(p => p.Entity!.Id == entity.Id);
+        Preset preset = player.UserPresets.Single(p => p.Entity!.Id == entity.Id);
         preset.Name = Name;
 
         await using DbConnection db = new();

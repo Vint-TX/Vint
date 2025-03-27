@@ -22,13 +22,13 @@ public class UnmountModuleFromSlotEvent : IServerEvent {
         Database.Models.Player player = connection.Player;
 
         Slot slot = slotUserItem.GetComponent<SlotUserItemInfoComponent>().Slot;
-        await using DbConnection db = new();
 
-        await db.PresetModules
-            .Where(pModule => pModule.PlayerId == player.Id &&
-                              pModule.PresetIndex == player.CurrentPresetIndex &&
-                              pModule.Slot == slot)
-            .DeleteAsync();
+        await using (DbConnection db = new())
+            await db.PresetModules
+                .Where(pModule => pModule.PlayerId == player.Id &&
+                                  pModule.PresetIndex == player.CurrentPresetIndex &&
+                                  pModule.Slot == slot)
+                .DeleteAsync();
 
         player.CurrentPreset.Modules.RemoveAll(pModule => pModule.Slot == slot);
 

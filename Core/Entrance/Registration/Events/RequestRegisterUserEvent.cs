@@ -29,8 +29,7 @@ public class RequestRegisterUserEvent : IServerEvent {
         }
 
         await using (DbConnection db = new()) {
-            List<Punishment> punishments = await db
-                .Punishments
+            List<Punishment> punishments = await db.Punishments
                 .Where(punishment => punishment.Active &&
                                      punishment.Type == PunishmentType.Ban &&
                                      punishment.HardwareFingerprint == HardwareFingerprint)

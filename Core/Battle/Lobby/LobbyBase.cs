@@ -14,7 +14,6 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
 using Vint.Core.Squads;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Lobby;
 

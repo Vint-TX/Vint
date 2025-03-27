@@ -30,7 +30,6 @@ using Vint.Core.Battle.Tank.Movement.Components;
 using Vint.Core.Battle.Tank.Movement.Events;
 using Vint.Core.Battle.Tank.State;
 using Vint.Core.Battle.Tank.Temperature;
-using Vint.Core.Battle.Weapons;
 using Vint.Core.Battle.Weapons.Damage.Events;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Battle.Weapons.Handlers.Impl;

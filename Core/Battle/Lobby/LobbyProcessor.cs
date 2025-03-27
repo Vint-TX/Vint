@@ -53,10 +53,10 @@ public class LobbyProcessor(
     public LobbyBase? FindByBattleId(long id) => Lobbies
         .Select(lobby => lobby.StateManager.CurrentState)
         .OfType<Running>()
-        .SingleOrDefault(state => state.Round.Entity.Id == id)?
+        .FirstOrDefault(state => state.Round.Entity.Id == id)?
         .StateManager.Lobby;
 
-    public LobbyBase? FindByLobbyId(long id) => Lobbies.SingleOrDefault(lobby => lobby.Entity.Id == id);
+    public LobbyBase? FindByLobbyId(long id) => Lobbies.FirstOrDefault(lobby => lobby.Entity.Id == id);
 
     ArcadeLobby CreateArcadeByModeType(MapInfo mapInfo, BattleMode battleMode, ArcadeModeType modeType) => modeType switch {
         ArcadeModeType.CosmicBattle => new CosmicLobby(mapInfo, battleMode, questManager) { PlayerRemoved = PlayerRemoved },

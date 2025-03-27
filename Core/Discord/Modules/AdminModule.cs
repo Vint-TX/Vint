@@ -28,7 +28,7 @@ public class AdminModule(
 
         if (targetConnection == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         DiscordEmbedBuilder? error = null;
@@ -74,7 +74,7 @@ public class AdminModule(
 
         if (targetConnection == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.SingleOrDefaultAsync(player => player.Username == username);
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
         }
 
         if (targetPlayer == null) {
@@ -94,7 +94,7 @@ public class AdminModule(
         await ctx.DeferResponseAsync();
 
         await using DbConnection db = new();
-        Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
+        Invite? invite = await db.Invites.FirstOrDefaultAsync(invite => invite.Code == code);
 
         if (invite != null) {
             await ctx.EditResponseAsync(Embeds.GetErrorEmbed($"Already exists: {invite}"));

@@ -5,6 +5,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.Squads;
 
 namespace Vint.Core.Battle.Lobby.Events;
 
@@ -21,7 +22,7 @@ public class ClientExitLobbyEvent : IServerEvent {
             return;
 
         if (connection.InSquad) {
-            Squads.Squad squad = connection.Squad;
+            Squad squad = connection.Squad;
 
             if (round != null) {
                 await squad.RemoveMember(connection.UserContainer.Id);

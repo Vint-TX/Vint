@@ -1,5 +1,4 @@
 using FluentMigrator;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Database.Migrations;
 

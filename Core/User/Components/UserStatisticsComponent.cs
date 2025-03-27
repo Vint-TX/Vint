@@ -10,7 +10,7 @@ public class UserStatisticsComponent : IComponent {
         using DbConnection db = new();
 
         Statistics = db.Statistics
-            .Single(stats => stats.PlayerId == playerId)
+            .First(stats => stats.PlayerId == playerId)
             .CollectClientSide();
     }
 

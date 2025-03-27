@@ -18,51 +18,50 @@ public class ChangeBlockStateByUserIdRequestEvent(
     [ProtocolName("UserId")] public long BlockedUserId { get; set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        await using DbConnection db = new();
-        bool targetPlayerExists = await db.Players.AnyAsync(player => player.Id == BlockedUserId);
-
-        if (!targetPlayerExists) return;
-
-        long blockerUserId = connection.UserContainer.Id;
-
-        await db.BeginTransactionAsync();
-
-        bool needToBlock = await db.Blocks
-            .Where(block => block.BlockerId == blockerUserId &&
-                            block.BlockedId == BlockedUserId)
-            .DeleteAsync() == 0;
-
         IPlayerConnection? blockedConnection = null;
         bool friendshipBroken = false;
         bool incomingRequestRejected = false;
         bool outgoingRequestRemoved = false;
 
-        if (needToBlock) {
-            blockedConnection = server.FindConnection(BlockedUserId);
+        long blockerUserId = connection.UserContainer.Id;
 
-            Block block = new() {
-                BlockerId = blockerUserId,
-                BlockedId = BlockedUserId,
-                CreatedAt = DateTimeOffset.UtcNow
-            };
+        await using (DbConnection db = new()) {
+            if (!await db.Players.AnyAsync(player => player.Id == BlockedUserId)) return;
 
-            await db.InsertAsync(block);
+            await db.BeginTransactionAsync();
 
-            friendshipBroken = await db.Friends
-                .Where(friend => (friend.UserId == blockerUserId && friend.FriendId == BlockedUserId) ||
-                                 (friend.UserId == BlockedUserId && friend.FriendId == blockerUserId))
-                .DeleteAsync() > 0;
+            bool needToBlock = await db.Blocks
+                .Where(block => block.BlockerId == blockerUserId &&
+                                block.BlockedId == BlockedUserId)
+                .DeleteAsync() == 0;
 
-            incomingRequestRejected = await db.FriendRequests
-                .Where(request => request.SenderId == BlockedUserId && request.FriendId == blockerUserId)
-                .DeleteAsync() > 0;
+            if (needToBlock) {
+                blockedConnection = server.FindConnection(BlockedUserId);
 
-            outgoingRequestRemoved = await db.FriendRequests
-                .Where(request => request.SenderId == blockerUserId && request.FriendId == BlockedUserId)
-                .DeleteAsync() > 0;
+                Block block = new() {
+                    BlockerId = blockerUserId,
+                    BlockedId = BlockedUserId,
+                    CreatedAt = DateTimeOffset.UtcNow
+                };
+
+                await db.InsertAsync(block);
+
+                friendshipBroken = await db.Friends
+                    .Where(friend => (friend.UserId == blockerUserId && friend.FriendId == BlockedUserId) ||
+                                     (friend.UserId == BlockedUserId && friend.FriendId == blockerUserId))
+                    .DeleteAsync() > 0;
+
+                incomingRequestRejected = await db.FriendRequests
+                    .Where(request => request.SenderId == BlockedUserId && request.FriendId == blockerUserId)
+                    .DeleteAsync() > 0;
+
+                outgoingRequestRemoved = await db.FriendRequests
+                    .Where(request => request.SenderId == blockerUserId && request.FriendId == BlockedUserId)
+                    .DeleteAsync() > 0;
+            }
+
+            await db.CommitTransactionAsync();
         }
-
-        await db.CommitTransactionAsync();
 
         await connection.UserContainer.Entity.ChangeComponent<BlackListComponent>(component => component.BlockedUsers.Add(BlockedUserId));
 

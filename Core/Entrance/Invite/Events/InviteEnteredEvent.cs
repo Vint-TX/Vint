@@ -19,8 +19,9 @@ public class InviteEnteredEvent : IServerEvent {
             return;
         }
 
-        await using DbConnection db = new();
-        Database.Models.Invite? invite = await db.Invites.SingleOrDefaultAsync(invite => invite.Code == code);
+        DbConnection db = new();
+        Database.Models.Invite? invite = await db.Invites.FirstOrDefaultAsync(invite => invite.Code == code);
+        await db.DisposeAsync();
 
         if (invite is not { RemainingUses: > 0 }) {
             await connection.Send<InviteDoesNotExistEvent>();

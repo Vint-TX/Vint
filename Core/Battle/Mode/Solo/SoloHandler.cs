@@ -6,7 +6,6 @@ using Vint.Core.Battle.Rounds.Events;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.Server.Game;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Mode.Solo;
 

@@ -30,16 +30,17 @@ public class UserDailyBonusReadyEvent : IServerEvent {
         await user.AddComponent(new UserDailyBonusZoneComponent(player.DailyBonusZone));
         await user.AddComponent(new UserDailyBonusNextReceivingDateComponent(nextDailyBonusTime, lastDailyBonusTime));
 
+        List<int> receivedRewards;
+
         await using (DbConnection db = new()) {
-            List<int> receivedRewards = await db.DailyBonusRedemptions
+            receivedRewards = await db.DailyBonusRedemptions
                 .Where(redemption => redemption.PlayerId == player.Id &&
                                      redemption.Cycle == player.DailyBonusCycle)
                 .Select(redemption => redemption.Code)
                 .ToListAsync();
-
-            await user.AddComponent(new UserDailyBonusReceivedRewardsComponent(receivedRewards) { OwnerUserId = user.Id } );
         }
 
+        await user.AddComponent(new UserDailyBonusReceivedRewardsComponent(receivedRewards) { OwnerUserId = user.Id } );
         await user.AddComponent<UserDailyBonusInitializedComponent>();
     }
 

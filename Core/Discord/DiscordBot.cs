@@ -214,8 +214,7 @@ public class DiscordBot(
         await db.BeginTransactionAsync();
         await db.InsertOrReplaceAsync(discordLink);
 
-        await db
-            .Players
+        await db.Players
             .Where(player => player.Id == playerId)
             .Set(player => player.DiscordUserId, userId)
             .Set(player => player.DiscordLinked, true)
@@ -233,8 +232,7 @@ public class DiscordBot(
                 await connection.Share(new NewItemNotificationTemplate().CreateRegular(connection.UserContainer.Entity, linkReward.MarketEntity, linkReward.Amount));
             }
 
-            await db
-                .Players
+            await db.Players
                 .Where(player => player.Id == playerId)
                 .Set(player => player.DiscordLinkRewarded, true)
                 .UpdateAsync();

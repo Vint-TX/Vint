@@ -21,8 +21,21 @@ public class PlayerModule(
     public async Task Profile(CommandContext ctx) {
         await ctx.DeferResponseAsync();
 
-        await using DbConnection db = new();
-        Player? player = await db.Players.SingleOrDefaultAsync(player => player.DiscordUserId == ctx.User.Id);
+        DbConnection db = new();
+        var player = await db.Players
+            .Select(player => new {
+                player.Id,
+                player.DiscordUserId,
+                player.Username,
+                player.Experience,
+                player.Reputation,
+                player.League,
+                player.RegistrationTime,
+                player.LastLoginTime
+            })
+            .FirstOrDefaultAsync(player => player.DiscordUserId == ctx.User.Id);
+
+        await db.DisposeAsync();
 
         if (player == null) {
             DiscordEmbedBuilder error = Embeds.GetErrorEmbed("You have not linked your Discord account with the game", critical: true);
@@ -30,12 +43,7 @@ public class PlayerModule(
             return;
         }
 
-        IPlayerConnection? connection = gameServer
-            .PlayerConnections
-            .Values
-            .Where(conn => conn.IsLoggedIn)
-            .SingleOrDefault(conn => conn.Player.Username == player.Username);
-
+        IPlayerConnection? connection = gameServer.FindConnection(player.Id);
         bool isOnline = connection != null;
 
         LobbyBase? lobby = connection?.LobbyPlayer?.Lobby;
@@ -61,13 +69,15 @@ public class PlayerModule(
     [Command("statistics")]
     public async Task Statistics(CommandContext ctx) {
         await ctx.DeferResponseAsync();
-        await using DbConnection db = new();
 
+        DbConnection db = new();
         var player = await db.Players
             .LoadWith(player => player.Stats)
             .Where(player => player.DiscordUserId == ctx.User.Id)
             .Select(player => new { player.Stats, player.Username })
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
+
+        await db.DisposeAsync();
 
         if (player == null) {
             DiscordEmbedBuilder error = Embeds.GetErrorEmbed("You have not linked your Discord account with the game", critical: true);

@@ -38,9 +38,7 @@ public class SelfSplashHitEvent(
         }
 
         await using DbConnection db = new();
-
-        await db
-            .Statistics
+        await db.Statistics
             .Where(stats => stats.PlayerId == connection.Player.Id)
             .Set(stats => stats.Hits, stats => stats.Hits + SplashTargets.Count)
             .UpdateAsync();
