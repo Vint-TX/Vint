@@ -176,29 +176,6 @@ public class Player {
         long paintId = GlobalEntities.GetEntity("paints", "Green").Id;
         long graffitiId = GlobalEntities.GetEntity("graffities", "Logo").Id;
 
-        await using (DbConnection db = new()) {
-            await db.BeginTransactionAsync();
-
-            await db.InsertAsync(new Hull { Player = this, SkinId = hullSkinId, Id = hullId });
-            await db.InsertAsync(new HullSkin { Player = this, HullId = hullId, Id = hullSkinId });
-            await db.InsertAsync(new Paint { Player = this, Id = paintId });
-
-            await db.InsertAsync(new Weapon { Player = this, Id = weaponId, SkinId = weaponSkinId, ShellId = shellId });
-            await db.InsertAsync(new WeaponSkin { Player = this, WeaponId = weaponId, Id = weaponSkinId });
-            await db.InsertAsync(new Cover { Player = this, Id = coverId });
-            await db.InsertAsync(new Shell { Player = this, Id = shellId, WeaponId = weaponId });
-
-            await db.InsertAsync(new Avatar { Player = this, Id = CurrentAvatarId });
-            await db.InsertAsync(new Graffiti { Player = this, Id = graffitiId });
-
-            await db.InsertAsync(new Preset { Player = this, Index = 0, Name = "Preset 1" });
-
-            await db.InsertAsync(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.ServerConfig.SeasonNumber });
-            await db.InsertAsync(new Statistics { Player = this });
-
-            await db.CommitTransactionAsync();
-        }
-
         List<string> admins = ["C6OI"];
         List<string> testers = ["C6OI"];
 
@@ -211,6 +188,35 @@ public class Player {
             Groups |= PlayerGroups.Tester;
 
         Modules = [];
+
+        await using DbConnection db = new();
+        await db.BeginTransactionAsync();
+
+        await db.InsertAsync(new Hull { Player = this, SkinId = hullSkinId, Id = hullId });
+        await db.InsertAsync(new HullSkin { Player = this, HullId = hullId, Id = hullSkinId });
+        await db.InsertAsync(new Paint { Player = this, Id = paintId });
+
+        await db.InsertAsync(new Weapon { Player = this, Id = weaponId, SkinId = weaponSkinId, ShellId = shellId });
+        await db.InsertAsync(new WeaponSkin { Player = this, WeaponId = weaponId, Id = weaponSkinId });
+        await db.InsertAsync(new Cover { Player = this, Id = coverId });
+        await db.InsertAsync(new Shell { Player = this, Id = shellId, WeaponId = weaponId });
+
+        await db.InsertAsync(new Avatar { Player = this, Id = CurrentAvatarId });
+        await db.InsertAsync(new Graffiti { Player = this, Id = graffitiId });
+
+        await db.InsertAsync(new Preset { Player = this, Index = 0, Name = "Preset 1" });
+
+        await db.InsertAsync(new SeasonStatistics { Player = this, Reputation = 100, SeasonNumber = ConfigManager.ServerConfig.SeasonNumber });
+        await db.InsertAsync(new Statistics { Player = this });
+
+        await db.Players
+            .Where(player => player.Id == Id)
+            .Set(player => player.CurrentAvatarId, CurrentAvatarId)
+            .Set(player => player.Reputation, Reputation)
+            .Set(player => player.Groups, Groups)
+            .UpdateAsync();
+
+        await db.CommitTransactionAsync();
     }
 
     public async Task<Punishment> Warn(string? ipAddress, string? reason, TimeSpan? duration) {
