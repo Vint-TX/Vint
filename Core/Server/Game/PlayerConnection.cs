@@ -472,7 +472,7 @@ public abstract class PlayerConnection(
 
             case TankMarketItemTemplate: {
                 long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
-                IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId);
+                IEntity skin = GlobalEntities.AllMarketTemplateEntities.First(entity => entity.Id == skinId);
 
                 await using (DbConnection db = new())
                     await db.InsertAsync(new Hull { Player = Player, Id = marketItem.Id, SkinId = skinId });
@@ -486,8 +486,8 @@ public abstract class PlayerConnection(
                 long skinId = GlobalEntities.DefaultSkins[marketItem.Id];
                 long shellId = GlobalEntities.DefaultShells[marketItem.Id];
 
-                IEntity skin = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == skinId);
-                IEntity shell = GlobalEntities.AllMarketTemplateEntities.Single(entity => entity.Id == shellId);
+                IEntity skin = GlobalEntities.AllMarketTemplateEntities.First(entity => entity.Id == skinId);
+                IEntity shell = GlobalEntities.AllMarketTemplateEntities.First(entity => entity.Id == shellId);
 
                 await using (DbConnection db = new())
                     await db.InsertAsync(new Weapon { Player = Player, Id = marketItem.Id, SkinId = skinId, ShellId = shellId });
@@ -686,7 +686,7 @@ public abstract class PlayerConnection(
 
                 await using (DbConnection db = new()) {
                     long skinId = await db.Hulls
-                        .Where(hull => hull.PlayerId == Player.Id && hull.Id == currentPreset.Hull.Id)
+                        .Where(hull => hull.PlayerId == Player.Id && hull.Id == marketItem.Id)
                         .Select(hull => hull.SkinId)
                         .FirstAsync();
 
@@ -695,6 +695,7 @@ public abstract class PlayerConnection(
                     await db.Presets
                         .Where(preset => preset.PlayerId == Player.Id &&
                                          preset.Index == currentPreset.Index)
+                        .Set(preset => preset.Hull, marketItem)
                         .Set(preset => preset.HullSkin, skin)
                         .UpdateAsync();
                 }
@@ -718,7 +719,7 @@ public abstract class PlayerConnection(
 
                 await using (DbConnection db = new()) {
                     var items = await db.Weapons
-                        .Where(weapon => weapon.PlayerId == Player.Id && weapon.Id == currentPreset.Hull.Id)
+                        .Where(weapon => weapon.PlayerId == Player.Id && weapon.Id == marketItem.Id)
                         .Select(weapon => new { weapon.SkinId, weapon.ShellId })
                         .FirstAsync();
 
@@ -728,6 +729,7 @@ public abstract class PlayerConnection(
                     await db.Presets
                         .Where(preset => preset.PlayerId == Player.Id &&
                                          preset.Index == currentPreset.Index)
+                        .Set(preset => preset.Weapon, marketItem)
                         .Set(preset => preset.WeaponSkin, skin)
                         .Set(preset => preset.Shell, shell)
                         .UpdateAsync();

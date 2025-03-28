@@ -11,7 +11,12 @@ namespace Vint.Core.Entrance.Registration.Events;
 
 [ProtocolId(1438590245672)]
 public class RequestRegisterUserEvent : IServerEvent {
-    const int MaxRegistrationsPerComputer = 5;
+    const int MaxRegistrationsPerComputer =
+#if DEBUG
+        100;
+#else
+        5;
+#endif
 
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
     public string EncryptedPasswordDigest { get; private set; } = null!;
