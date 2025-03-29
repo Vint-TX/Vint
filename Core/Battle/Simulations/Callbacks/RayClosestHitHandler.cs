@@ -3,7 +3,7 @@ using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuPhysics.Trees;
 
-namespace Vint.Core.Physics;
+namespace Vint.Core.Battle.Simulations.Callbacks;
 
 public struct RayClosestHitHandler : IRayHitHandler {
     public Vector3? ClosestHit { get; private set; }

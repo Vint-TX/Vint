@@ -1,12 +1,11 @@
 using System.Runtime.CompilerServices;
-using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuPhysics.CollisionDetection;
 
-namespace Vint.Core.Physics;
+namespace Vint.Core.Battle.Simulations.Callbacks;
 
 public struct CollisionCallbacks : INarrowPhaseCallbacks {
-    public void Initialize(Simulation simulation) { }
+    public void Initialize(BepuPhysics.Simulation simulation) { }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool AllowContactGeneration(int workerIndex, CollidableReference a, CollidableReference b, ref float speculativeMargin) => false;

@@ -1,8 +1,4 @@
 using System.Collections.Concurrent;
-using System.Numerics;
-using BepuPhysics;
-using BepuPhysics.Collidables;
-using BepuUtilities.Memory;
 using Vint.Core.Battle.Bonus;
 using Vint.Core.Battle.Chat.Templates;
 using Vint.Core.Battle.Mines;
@@ -13,12 +9,11 @@ using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.Battle.Rounds.Templates;
+using Vint.Core.Battle.Simulations;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Weapons.Damage.Calculator;
 using Vint.Core.Battle.Weapons.Damage.Processor;
-using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Physics;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
 
@@ -34,7 +29,7 @@ public class Round : IDisposable {
         Properties = properties;
 
         StateManager = new RoundStateManager(this, sm => Properties.WarmUpDuration > TimeSpan.Zero ? new WarmUp(sm) : new Running(sm));
-        Simulation = CreateSimulation(Properties.MapInfo);
+        RoundSimulation = new RoundSimulation(this);
 
         WarmUpStartTime = DateTimeOffset.UtcNow;
         WarmUpEndTime = StartTime = WarmUpStartTime + Properties.WarmUpDuration;
@@ -71,7 +66,7 @@ public class Round : IDisposable {
     public TimeSpan ElapsedWarmUp => DateTimeOffset.UtcNow - WarmUpStartTime;
 
     public RoundStateManager StateManager { get; }
-    public Simulation Simulation { get; }
+    public RoundSimulation RoundSimulation { get; }
 
     public ModeHandler ModeHandler { get; }
 
@@ -200,22 +195,8 @@ public class Round : IDisposable {
 
         foreach (BattlePlayer player in Players)
             await player.Tick(deltaTime);
-    }
 
-    static Simulation CreateSimulation(MapInfo mapInfo) {
-        Triangle[] triangles = mapInfo.Triangles.Value;
-
-        Simulation simulation =
-            Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
-        simulation.BufferPool.Take(triangles.Length, out Buffer<Triangle> buffer);
-
-        buffer.CopyFrom(triangles, 0, 0, triangles.Length);
-
-        Mesh map = new(buffer, Vector3.One, simulation.BufferPool);
-        StaticDescription mapDescription = new(Vector3.Zero, simulation.Shapes.Add(map));
-        simulation.Statics.Add(mapDescription);
-
-        return simulation;
+        RoundSimulation.Tick(deltaTime);
     }
 
     public bool IsUnfair() => Tankers.Count() < 4 ||
@@ -224,7 +205,7 @@ public class Round : IDisposable {
 
     void Dispose(bool disposing) {
         if (disposing) { // todo dispose entities
-            Simulation.Dispose();
+            RoundSimulation.Dispose();
             ModeHandler.Dispose();
 
             foreach (BattlePlayer player in Players)
