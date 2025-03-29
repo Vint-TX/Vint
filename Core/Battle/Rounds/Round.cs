@@ -1,4 +1,8 @@
 using System.Collections.Concurrent;
+using System.Numerics;
+using BepuPhysics;
+using BepuPhysics.Collidables;
+using BepuUtilities.Memory;
 using Vint.Core.Battle.Bonus;
 using Vint.Core.Battle.Chat.Templates;
 using Vint.Core.Battle.Mines;
@@ -10,12 +14,15 @@ using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.Battle.Rounds.Templates;
 using Vint.Core.Battle.Simulations;
+using Vint.Core.Battle.Simulations.Callbacks;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Weapons.Damage.Calculator;
 using Vint.Core.Battle.Weapons.Damage.Processor;
+using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
+using Vector3 = OpenTK.Mathematics.Vector3;
 
 namespace Vint.Core.Battle.Rounds;
 
@@ -45,6 +52,8 @@ public class Round : IDisposable {
         DamageCalculator = Properties.DamageEnabled
             ? new DamageCalculator()
             : new ZeroDamageCalculator();
+
+        RoundSimulation.AddStaticMesh(Properties.MapInfo.Triangles.Value, Vector3.One);
     }
 
     public BattleProperties Properties { get; }

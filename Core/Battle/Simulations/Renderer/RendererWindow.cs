@@ -9,9 +9,19 @@ using Vint.Core.Battle.Simulations.Renderer.Shaders;
 namespace Vint.Core.Battle.Simulations.Renderer;
 
 public class RendererWindow : NativeWindow {
-    public RendererWindow(string title, Simulation simulation) : base(GetNativeWindowSettings(title)) {
+    static RendererWindow() =>
+        GLFWProvider.CheckForMainThread = false;
+
+    public RendererWindow(
+        string title,
+        Simulation simulation,
+        Dictionary<StaticHandle, Mesh> statics,
+        Dictionary<BodyHandle, Mesh> bodies
+    ) : base(GetNativeWindowSettings(title)) {
         InputManager = new InputManager(KeyboardState, MouseState);
         Simulation = simulation;
+        Statics = statics;
+        Bodies = bodies;
 
         Camera.Fov = 90;
         Camera.Near = 0.01f;
@@ -21,11 +31,15 @@ public class RendererWindow : NativeWindow {
 
     Simulation Simulation { get; }
     InputManager InputManager { get; }
-    Shader Shader { get; } = new("shader.vert", "shader.frag");
+    Shader Shader { get; set; }
     Camera Camera { get; } = new();
+
+    Dictionary<StaticHandle, Mesh> Statics { get; }
+    Dictionary<BodyHandle, Mesh> Bodies { get; }
 
     public void OnLoad() {
         Context?.MakeCurrent();
+        Shader = new Shader("shader.vert", "shader.frag");
 
         GL.Enable(EnableCap.DepthTest);
         GL.DepthMask(true);
@@ -34,48 +48,79 @@ public class RendererWindow : NativeWindow {
 
         GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-        // GameObject tank = new();
-        // _tank = tank.AddComponent<MeshRenderer>();
-        // _tank.SetMesh(MeshParser.Parse(ResourcesManager.GetResourcePath("Models/moon_silence.glb")));
-
         CursorState = CursorState.Grabbed;
     }
 
     public void Tick(TimeSpan deltaTime) {
+        if (Context == null) return;
+
         NewInputFrame();
         ProcessWindowEvents(IsEventDriven);
+
+        if (!Context.IsCurrent) return;
 
         OnUpdateFrame(deltaTime);
         OnRenderFrame(deltaTime);
     }
 
     void OnUpdateFrame(TimeSpan deltaTime) {
-        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
         float speed = (float)(deltaTime.TotalSeconds * InputManager.GetLinearSpeed());
 
         Camera.AspectRatio = Size.X / (float)Size.Y;
         Camera.AddPosition(InputManager.MovementVector, speed);
         Camera.AddRotation(InputManager.MouseVector, deltaTime);
         Camera.UpdateDirections();
+    }
 
-        // Shader.Use();
-        // Shader.SetMatrix4("model", _tank.Transform.GetMatrix());
-        // Shader.SetMatrix4("view", Camera.GetViewMatrix());
-        // Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
-        // Shader.SetVector3("viewPos", Camera.Transform.Position);
-        // Shader.SetVector3("lightColor", Vector3.One * 0.3f);
-        // _tank.Draw();
+    void OnRenderFrame(TimeSpan deltaTime) {
+        if (Context is not { IsCurrent: true }) return;
+
+        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+        Shader.Use();
+        Shader.SetMatrix4("view", Camera.GetViewMatrix());
+        Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+
+        RenderStatics();
+        RenderBodies();
 
         Context.SwapBuffers();
     }
 
-    void OnRenderFrame(TimeSpan deltaTime) { }
+    void RenderStatics() {
+        foreach ((StaticHandle handle, Mesh value) in Statics) {
+            ref RigidPose pose = ref Simulation.Statics[handle].Pose;
+            Matrix4 model = ConvertTransform(pose.Position, pose.Orientation, value.Scale);
+            Shader.SetMatrix4("model", model);
+
+            value.Draw();
+        }
+    }
+
+    void RenderBodies() {
+        foreach ((BodyHandle handle, Mesh value) in Bodies) {
+            ref RigidPose pose = ref Simulation.Bodies[handle].Pose;
+            Matrix4 model = ConvertTransform(pose.Position, pose.Orientation, value.Scale);
+            Shader.SetMatrix4("model", model);
+
+            value.Draw();
+        }
+    }
 
     protected override void OnFramebufferResize(FramebufferResizeEventArgs e) {
         base.OnFramebufferResize(e);
         GL.Viewport(0, 0, e.Width, e.Height);
     }
+
+    static Matrix4 ConvertTransform(System.Numerics.Vector3 position, System.Numerics.Quaternion orientation, Vector3 scale) =>
+        Matrix4.CreateFromQuaternion((Quaternion)orientation) * Matrix4.CreateTranslation((Vector3)position) * Matrix4.CreateScale(scale);
+
+    static NativeWindowSettings GetNativeWindowSettings(string title) => new() {
+        Title = title,
+        ClientSize = (1280, 720),
+        NumberOfSamples = 8,
+        Vsync = VSyncMode.Adaptive
+    };
 
     protected override void Dispose(bool disposing) {
         base.Dispose(disposing);
@@ -85,11 +130,4 @@ public class RendererWindow : NativeWindow {
         CursorState = CursorState.Normal;
         Shader.Dispose();
     }
-
-    static NativeWindowSettings GetNativeWindowSettings(string title) => new() {
-        Title = title,
-        ClientSize = (1280, 720),
-        NumberOfSamples = 8,
-        Vsync = VSyncMode.Adaptive
-    };
 }

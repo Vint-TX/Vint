@@ -1,7 +1,8 @@
-using System.Numerics;
-using BepuPhysics.Collidables;
+using OpenTK.Mathematics;
+using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Schema2;
 using Vint.Core.Battle.Mode;
+using Vint.Core.Battle.Simulations.Geometry;
 
 namespace Vint.Core.Config.MapInformation;
 
@@ -16,8 +17,6 @@ public record struct MapInfo(
     List<TeleportPoint> TeleportPoints,
     MapBonusInfo BonusRegions
 ) {
-    static Vector3 GltfToUnity { get; } = new(-1, 1, 1);
-
     string ConfigPath { get; set; } = null!;
     public Lazy<Triangle[]> Triangles { get; private set; }
 
@@ -64,18 +63,23 @@ public record struct MapInfo(
     }
 
     Triangle[] GetTriangles() {
-        string mapModelPath = Path.Combine(ConfigPath, "model.glb");
-        ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
+        ModelRoot meshRoot = ModelRoot.Load(Path.Combine(ConfigPath, "model.glb"));
 
-        Triangle[] triangles = mapRoot
-            .DefaultScene // todo create a mesh immediately instead of store list of triangles
+        Triangle[] triangles = meshRoot.DefaultScene
             .EvaluateTriangles()
             .Select(tuple => new Triangle(
-                tuple.A.GetGeometry().GetPosition() * GltfToUnity,
-                tuple.B.GetGeometry().GetPosition() * GltfToUnity,
-                tuple.C.GetGeometry().GetPosition() * GltfToUnity))
+                CreateVertex(tuple.A.GetGeometry()),
+                CreateVertex(tuple.B.GetGeometry()),
+                CreateVertex(tuple.C.GetGeometry())))
             .ToArray();
 
         return triangles;
+    }
+
+    static Vertex CreateVertex(IVertexGeometry vertexBuilder) {
+        Vector3 position = (Vector3)vertexBuilder.GetPosition();
+        vertexBuilder.TryGetNormal(out System.Numerics.Vector3 normal);
+
+        return new Vertex(position, (Vector3)normal);
     }
 }

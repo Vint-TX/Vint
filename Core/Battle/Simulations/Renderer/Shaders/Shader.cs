@@ -1,12 +1,16 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using Serilog;
 using Vint.Core.Config;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Simulations.Renderer.Shaders;
 
 public class Shader : IDisposable {
     readonly int _handle;
     bool _disposed;
+
+    static ILogger Logger { get; } = Log.Logger.ForType<Shader>();
 
     static string GetShaderPath(string shaderName) => Path.Combine(ConfigManager.ResourcesPath, "Renderer", "Shaders", shaderName);
 
@@ -24,7 +28,7 @@ public class Shader : IDisposable {
 
         if (status == 0) {
             string infoLog = GL.GetProgramInfoLog(_handle);
-            Console.WriteLine(infoLog);
+            Logger.Error(infoLog);
         }
 
         ClearShaders(_handle, vertex, fragment);
@@ -46,7 +50,7 @@ public class Shader : IDisposable {
 
     static int PrepareShader(string name, ShaderType type) {
         string source = File.ReadAllText(GetShaderPath(name));
-        int shader = GL.CreateShader(ShaderType.VertexShader);
+        int shader = GL.CreateShader(type);
 
         GL.ShaderSource(shader, source);
 
@@ -56,7 +60,7 @@ public class Shader : IDisposable {
         if (status != 0) return shader;
 
         GL.GetShaderInfoLog(shader, out string infoLog);
-        Console.WriteLine(infoLog);
+        Logger.Error(infoLog);
         return shader;
     }
 

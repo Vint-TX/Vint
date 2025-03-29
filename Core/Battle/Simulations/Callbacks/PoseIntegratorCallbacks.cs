@@ -5,7 +5,7 @@ using BepuUtilities;
 namespace Vint.Core.Battle.Simulations.Callbacks;
 
 public struct PoseIntegratorCallbacks : IPoseIntegratorCallbacks {
-    public void Initialize(BepuPhysics.Simulation simulation) { }
+    public void Initialize(Simulation simulation) { }
 
     public void PrepareForIntegration(float dt) { }
 

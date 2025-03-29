@@ -49,7 +49,7 @@ public class MineEffect(
         if (IsActive) return;
 
         RayClosestHitHandler hitHandler = new();
-        Round.Simulation.RayCast(Tank.Position, -Vector3.UnitY, 655.36f, ref hitHandler);
+        Round.RoundSimulation.Simulation.RayCast(Tank.Position, -Vector3.UnitY, 655.36f, ref hitHandler);
 
         if (!hitHandler.ClosestHit.HasValue ||
             Round.ModeHandler is CTFHandler ctf && !ctf.CanPlaceMine(hitHandler.ClosestHit.Value))

@@ -142,7 +142,7 @@ public class Captured(
 
     public async Task Drop(bool isUserAction) {
         RayClosestHitHandler hitHandler = new();
-        Round.Simulation.RayCast(Carrier.Tank.Position, -Vector3.UnitY, 655.36f, ref hitHandler);
+        Round.RoundSimulation.Simulation.RayCast(Carrier.Tank.Position, -Vector3.UnitY, 655.36f, ref hitHandler);
         Vector3 newPosition = hitHandler.ClosestHit ?? Vector3.NaN;
 
         FlagAssist assist = Assists.First(assist => assist.Tank == Carrier.Tank);
