@@ -21,7 +21,7 @@ public class Camera : RenderObject {
     public float PitchClamp { get; set; }
 
     public void AddPosition(Vector3 position, float speed) {
-        Vector3 movement = Right * position.X + Up * position.Y + Forward * position.Z;
+        Vector3 movement = Right * position.X + Vector3.UnitY * position.Y + Forward * position.Z;
 
         if (movement.Length != 0)
             Position += movement.Normalized() * speed;

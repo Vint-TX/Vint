@@ -71,7 +71,7 @@ public class Shader : IDisposable {
         }
     }
 
-    protected virtual void Dispose(bool disposing) {
+    protected void Dispose(bool disposing) {
         if (_disposed) return;
 
         GL.DeleteProgram(_handle);

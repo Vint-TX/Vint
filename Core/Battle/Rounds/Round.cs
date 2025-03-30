@@ -205,7 +205,7 @@ public class Round : IDisposable {
         foreach (BattlePlayer player in Players)
             await player.Tick(deltaTime);
 
-        RoundSimulation.Tick(deltaTime);
+        await RoundSimulation.Tick(deltaTime);
     }
 
     public bool IsUnfair() => Tankers.Count() < 4 ||

@@ -14,8 +14,6 @@ using Triangle = Vint.Core.Battle.Simulations.Geometry.Triangle;
 namespace Vint.Core.Battle.Simulations;
 
 public class RoundSimulation : IDisposable {
-    bool _firstTick = true;
-
     public RoundSimulation(Round round) {
         Round = round;
 
@@ -51,14 +49,11 @@ public class RoundSimulation : IDisposable {
         Statics.Add(meshHandle, mesh);
     }
 
-    public void Tick(TimeSpan deltaTime) {
-        if (_firstTick) {
-            Renderer?.OnLoad(); // needs to be called from update thread
-            _firstTick = false;
-        }
-
+    public async Task Tick(TimeSpan deltaTime) {
         Simulation.Timestep((float)deltaTime.TotalSeconds, ThreadDispatcher);
-        Renderer?.Tick(deltaTime);
+
+        if (Renderer != null)
+            await Renderer.Tick(deltaTime);
     }
 
     static void ConvertTriangles(in Triangle[] triangles, in Buffer<BepuTriangle> bepuTriangles) {

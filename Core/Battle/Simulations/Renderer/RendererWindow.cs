@@ -3,14 +3,22 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using Serilog;
 using Vint.Core.Battle.Simulations.Renderer.Objects;
 using Vint.Core.Battle.Simulations.Renderer.Shaders;
+using Vint.Core.Structures;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Simulations.Renderer;
 
 public class RendererWindow : NativeWindow {
-    static RendererWindow() =>
+    bool _firstTick = true;
+
+    static RendererWindow() {
+        GLFWProvider.SetErrorCallback((error, description) =>
+            Log.Logger.ForType(typeof(GLFWProvider)).Error("{Code}\n{Description}", error, description));
         GLFWProvider.CheckForMainThread = false;
+    }
 
     public RendererWindow(
         string title,
@@ -29,9 +37,13 @@ public class RendererWindow : NativeWindow {
         Camera.PitchClamp = MathHelper.DegToRad * 89;
     }
 
+    static ILogger Logger { get; } = Log.Logger.ForType<RendererWindow>();
+
+    public Dispatcher Dispatcher { get; } = new();
+
     Simulation Simulation { get; }
     InputManager InputManager { get; }
-    Shader Shader { get; set; }
+    Shader Shader { get; set; } = null!;
     Camera Camera { get; } = new();
 
     Dictionary<StaticHandle, Mesh> Statics { get; }
@@ -51,17 +63,21 @@ public class RendererWindow : NativeWindow {
         CursorState = CursorState.Grabbed;
     }
 
-    public void Tick(TimeSpan deltaTime) {
-        if (Context == null) return;
+    public async Task Tick(TimeSpan deltaTime) => await Dispatcher.InvokeAsync(() => {
+        if (_firstTick) {
+            OnLoad();
+            _firstTick = false;
+        }
+
+        if (Context is not { IsCurrent: true })
+            throw new InvalidOperationException("Context is not current");
 
         NewInputFrame();
         ProcessWindowEvents(IsEventDriven);
 
-        if (!Context.IsCurrent) return;
-
         OnUpdateFrame(deltaTime);
         OnRenderFrame(deltaTime);
-    }
+    });
 
     void OnUpdateFrame(TimeSpan deltaTime) {
         float speed = (float)(deltaTime.TotalSeconds * InputManager.GetLinearSpeed());
@@ -73,8 +89,6 @@ public class RendererWindow : NativeWindow {
     }
 
     void OnRenderFrame(TimeSpan deltaTime) {
-        if (Context is not { IsCurrent: true }) return;
-
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
         Shader.Use();
@@ -129,5 +143,6 @@ public class RendererWindow : NativeWindow {
 
         CursorState = CursorState.Normal;
         Shader.Dispose();
+        Dispatcher.Dispose();
     }
 }
