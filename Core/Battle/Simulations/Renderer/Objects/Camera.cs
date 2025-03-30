@@ -3,7 +3,7 @@ using OpenTK.Mathematics;
 namespace Vint.Core.Battle.Simulations.Renderer.Objects;
 
 public class Camera : RenderObject {
-    const float LerpSpeed = 5f;
+    const float LerpSpeed = 0.7f;
     float _fovRad;
 
     public float Fov {
@@ -29,11 +29,12 @@ public class Camera : RenderObject {
 
     public void AddRotation(Vector3 rotation, TimeSpan deltaTime) {
         Vector3 oldRotation = Rotation;
+        Vector3 targetRotation = oldRotation + rotation * InputManager.AngularSpeed;
+        Vector3 newRotation = Vector3.Lerp(oldRotation, targetRotation, (float)(LerpSpeed * deltaTime.TotalSeconds));
 
-        Vector3 newRotation = Vector3.Lerp(oldRotation, oldRotation + rotation * InputManager.AngularSpeed, (float)(1 * deltaTime.TotalSeconds));
-        newRotation.X = Math.Clamp(newRotation.X, -PitchClamp, PitchClamp);
-
-        Rotation = newRotation;
+        Rotation = newRotation with {
+            X = Math.Clamp(newRotation.X, -PitchClamp, PitchClamp)
+        };
     }
 
     public void UpdateDirections() {

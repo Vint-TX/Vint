@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using Serilog;
 using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Battle.Simulations.Renderer.Objects;
@@ -45,8 +46,6 @@ public class RendererWindow : IDisposable {
             GL.DepthFunc(DepthFunction.Less);
 
             GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
-            Window.CursorState = CursorState.Grabbed;
         });
     }
 
@@ -85,12 +84,20 @@ public class RendererWindow : IDisposable {
     });
 
     void OnUpdateFrame(TimeSpan deltaTime) {
-        float speed = (float)(deltaTime.TotalSeconds * InputManager.GetLinearSpeed());
-
         Camera.AspectRatio = Window.Size.X / (float)Window.Size.Y;
-        Camera.AddPosition(InputManager.MovementVector, speed);
-        Camera.AddRotation(InputManager.MouseVector, deltaTime);
-        Camera.UpdateDirections();
+
+        if (Window.CursorState == CursorState.Grabbed) {
+            float speed = (float)(deltaTime.TotalSeconds * InputManager.GetLinearSpeed());
+
+            Camera.AddPosition(InputManager.MovementVector, speed);
+            Camera.AddRotation(InputManager.MouseVector, deltaTime);
+            Camera.UpdateDirections();
+        }
+
+        if (InputManager.IsButtonPressed(MouseButton.Left))
+            Window.CursorState = CursorState.Grabbed;
+        else if (InputManager.IsKeyPressed(Keys.Escape))
+            Window.CursorState = CursorState.Normal;
     }
 
     void OnRenderFrame(TimeSpan deltaTime) {

@@ -15,9 +15,9 @@ public class InputManager(
 
     public Vector3 MovementVector {
         get {
-            int xAxis = keyboardInputs.IsKeyDown(Keys.D) ? 1 : keyboardInputs.IsKeyDown(Keys.A) ? -1 : 0;
-            int yAxis = keyboardInputs.IsKeyDown(Keys.R) ? 1 : keyboardInputs.IsKeyDown(Keys.F) ? -1 : 0;
-            int zAxis = keyboardInputs.IsKeyDown(Keys.W) ? 1 : keyboardInputs.IsKeyDown(Keys.S) ? -1 : 0;
+            int xAxis = IsKeyDown(Keys.D) ? 1 : IsKeyDown(Keys.A) ? -1 : 0;
+            int yAxis = IsKeyDown(Keys.R) ? 1 : IsKeyDown(Keys.F) ? -1 : 0;
+            int zAxis = IsKeyDown(Keys.W) ? 1 : IsKeyDown(Keys.S) ? -1 : 0;
 
             return new Vector3(xAxis, yAxis, zAxis);
         }
@@ -25,8 +25,13 @@ public class InputManager(
 
     public Vector3 MouseVector => new(-mouseInputs.Delta.Y, mouseInputs.Delta.X, 0f);
 
-    public bool IsSpeedUp => keyboardInputs.IsKeyDown(Keys.LeftShift) || keyboardInputs.IsKeyDown(Keys.RightShift);
-    public bool IsSlowDown => keyboardInputs.IsKeyDown(Keys.LeftControl) || keyboardInputs.IsKeyDown(Keys.RightControl);
+    public bool IsSpeedUp => IsKeyDown(Keys.LeftShift) || IsKeyDown(Keys.RightShift);
+    public bool IsSlowDown => IsKeyDown(Keys.LeftControl) || IsKeyDown(Keys.RightControl);
+
+    public bool IsKeyDown(Keys key) => keyboardInputs.IsKeyDown(key);
+    public bool IsKeyPressed(Keys key) => keyboardInputs.IsKeyPressed(key);
+
+    public bool IsButtonPressed(MouseButton button) => mouseInputs.IsButtonPressed(button);
 
     public float GetLinearSpeed() {
         float speed = BaseSpeed;
