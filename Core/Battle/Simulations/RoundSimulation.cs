@@ -21,7 +21,7 @@ public class RoundSimulation : IDisposable {
         ThreadDispatcher = new ThreadDispatcher(Environment.ProcessorCount);
 
 #if DEBUG
-        Renderer = new RendererWindow($"Simulation", Simulation, Statics, Bodies);
+        Renderer = new RendererWindow($"Simulation {Round.Entity.Id}", Simulation);
 #endif
     }
 
@@ -33,9 +33,6 @@ public class RoundSimulation : IDisposable {
 
     IThreadDispatcher? ThreadDispatcher { get; }
 
-    Dictionary<StaticHandle, Mesh> Statics { get; } = [];
-    Dictionary<BodyHandle, Mesh> Bodies { get; } = [];
-
     public void AddStaticMesh(Triangle[] triangles, Vector3 scale) {
         Simulation.BufferPool.TakeAtLeast(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
         ConvertTriangles(triangles, bepuTriangles);
@@ -45,8 +42,7 @@ public class RoundSimulation : IDisposable {
         StaticDescription meshDescription = new(ConvertVector3(Vector3.Zero), meshIndex);
         StaticHandle meshHandle = Simulation.Statics.Add(meshDescription);
 
-        Mesh mesh = new(triangles, scale);
-        Statics.Add(meshHandle, mesh);
+        Renderer?.AddStatic(triangles, scale, meshHandle);
     }
 
     public async Task Tick(TimeSpan deltaTime) {

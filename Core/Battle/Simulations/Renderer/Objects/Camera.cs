@@ -28,10 +28,9 @@ public class Camera : RenderObject {
     }
 
     public void AddRotation(Vector3 rotation, TimeSpan deltaTime) {
-        Vector3 newRotation = Rotation;
+        Vector3 oldRotation = Rotation;
 
-        newRotation += rotation * InputManager.AngularSpeed;
-        newRotation = Vector3.Lerp(Rotation, newRotation, (float)(LerpSpeed * deltaTime.TotalSeconds));
+        Vector3 newRotation = Vector3.Lerp(oldRotation, oldRotation + rotation * InputManager.AngularSpeed, (float)(1 * deltaTime.TotalSeconds));
         newRotation.X = Math.Clamp(newRotation.X, -PitchClamp, PitchClamp);
 
         Rotation = newRotation;

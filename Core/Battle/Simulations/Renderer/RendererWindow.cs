@@ -4,6 +4,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using Serilog;
+using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Battle.Simulations.Renderer.Objects;
 using Vint.Core.Battle.Simulations.Renderer.Shaders;
 using Vint.Core.Structures;
@@ -11,9 +12,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Simulations.Renderer;
 
-public class RendererWindow : NativeWindow {
-    bool _firstTick = true;
-
+public class RendererWindow : IDisposable {
     static RendererWindow() {
         GLFWProvider.SetErrorCallback((error, description) =>
             Log.Logger.ForType(typeof(GLFWProvider)).Error("{Code}\n{Description}", error, description));
@@ -22,19 +21,33 @@ public class RendererWindow : NativeWindow {
 
     public RendererWindow(
         string title,
-        Simulation simulation,
-        Dictionary<StaticHandle, Mesh> statics,
-        Dictionary<BodyHandle, Mesh> bodies
-    ) : base(GetNativeWindowSettings(title)) {
-        InputManager = new InputManager(KeyboardState, MouseState);
+        Simulation simulation
+    ) {
         Simulation = simulation;
-        Statics = statics;
-        Bodies = bodies;
 
         Camera.Fov = 90;
         Camera.Near = 0.01f;
         Camera.Far = 20000f;
         Camera.PitchClamp = MathHelper.DegToRad * 89;
+
+        Dispatcher.Invoke(() => {
+            Window = new NativeWindow(GetNativeWindowSettings(title));
+            Window.FramebufferResize += OnFramebufferResize;
+
+            InputManager = new InputManager(Window.KeyboardState, Window.MouseState);
+
+            Window.Context?.MakeCurrent();
+            Shader = new Shader("shader.vert", "shader.frag");
+
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthMask(true);
+            GL.DepthRange(0, 1);
+            GL.DepthFunc(DepthFunction.Less);
+
+            GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
+            Window.CursorState = CursorState.Grabbed;
+        });
     }
 
     static ILogger Logger { get; } = Log.Logger.ForType<RendererWindow>();
@@ -42,38 +55,30 @@ public class RendererWindow : NativeWindow {
     public Dispatcher Dispatcher { get; } = new();
 
     Simulation Simulation { get; }
-    InputManager InputManager { get; }
-    Shader Shader { get; set; } = null!;
     Camera Camera { get; } = new();
+    InputManager InputManager { get; set; } = null!;
+    Shader Shader { get; set; } = null!;
+    NativeWindow Window { get; set; } = null!;
 
-    Dictionary<StaticHandle, Mesh> Statics { get; }
-    Dictionary<BodyHandle, Mesh> Bodies { get; }
+    Dictionary<StaticHandle, Mesh> Statics { get; } = [];
+    Dictionary<BodyHandle, Mesh> Bodies { get; } = [];
 
-    public void OnLoad() {
-        Context?.MakeCurrent();
-        Shader = new Shader("shader.vert", "shader.frag");
+    public void AddStatic(Triangle[] triangles, Vector3 scale, StaticHandle handle) => Dispatcher.Invoke(() => {
+        Mesh mesh = new(triangles, scale);
+        Statics.Add(handle, mesh);
+    });
 
-        GL.Enable(EnableCap.DepthTest);
-        GL.DepthMask(true);
-        GL.DepthRange(0, 1);
-        GL.DepthFunc(DepthFunction.Less);
-
-        GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
-        CursorState = CursorState.Grabbed;
-    }
+    public void AddBody(Triangle[] triangles, Vector3 scale, BodyHandle handle) => Dispatcher.Invoke(() => {
+        Mesh mesh = new(triangles, scale);
+        Bodies.Add(handle, mesh);
+    });
 
     public async Task Tick(TimeSpan deltaTime) => await Dispatcher.InvokeAsync(() => {
-        if (_firstTick) {
-            OnLoad();
-            _firstTick = false;
-        }
-
-        if (Context is not { IsCurrent: true })
+        if (Window.Context is not { IsCurrent: true })
             throw new InvalidOperationException("Context is not current");
 
-        NewInputFrame();
-        ProcessWindowEvents(IsEventDriven);
+        Window.NewInputFrame();
+        NativeWindow.ProcessWindowEvents(Window.IsEventDriven);
 
         OnUpdateFrame(deltaTime);
         OnRenderFrame(deltaTime);
@@ -82,7 +87,7 @@ public class RendererWindow : NativeWindow {
     void OnUpdateFrame(TimeSpan deltaTime) {
         float speed = (float)(deltaTime.TotalSeconds * InputManager.GetLinearSpeed());
 
-        Camera.AspectRatio = Size.X / (float)Size.Y;
+        Camera.AspectRatio = Window.Size.X / (float)Window.Size.Y;
         Camera.AddPosition(InputManager.MovementVector, speed);
         Camera.AddRotation(InputManager.MouseVector, deltaTime);
         Camera.UpdateDirections();
@@ -98,7 +103,7 @@ public class RendererWindow : NativeWindow {
         RenderStatics();
         RenderBodies();
 
-        Context.SwapBuffers();
+        Window.Context.SwapBuffers();
     }
 
     void RenderStatics() {
@@ -121,10 +126,8 @@ public class RendererWindow : NativeWindow {
         }
     }
 
-    protected override void OnFramebufferResize(FramebufferResizeEventArgs e) {
-        base.OnFramebufferResize(e);
+    static void OnFramebufferResize(FramebufferResizeEventArgs e) =>
         GL.Viewport(0, 0, e.Width, e.Height);
-    }
 
     static Matrix4 ConvertTransform(System.Numerics.Vector3 position, System.Numerics.Quaternion orientation, Vector3 scale) =>
         Matrix4.CreateFromQuaternion((Quaternion)orientation) * Matrix4.CreateTranslation((Vector3)position) * Matrix4.CreateScale(scale);
@@ -136,13 +139,20 @@ public class RendererWindow : NativeWindow {
         Vsync = VSyncMode.Adaptive
     };
 
-    protected override void Dispose(bool disposing) {
-        base.Dispose(disposing);
-
+    protected void Dispose(bool disposing) {
         if (!disposing) return;
 
-        CursorState = CursorState.Normal;
-        Shader.Dispose();
+        Dispatcher.Invoke(() => {
+            Window.CursorState = CursorState.Normal;
+            Shader.Dispose();
+            Window.Dispose();
+        });
+
         Dispatcher.Dispose();
+    }
+
+    public void Dispose() {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

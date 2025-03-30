@@ -36,7 +36,6 @@ public class Round : IDisposable {
         Properties = properties;
 
         StateManager = new RoundStateManager(this, sm => Properties.WarmUpDuration > TimeSpan.Zero ? new WarmUp(sm) : new Running(sm));
-        RoundSimulation = new RoundSimulation(this);
 
         WarmUpStartTime = DateTimeOffset.UtcNow;
         WarmUpEndTime = StartTime = WarmUpStartTime + Properties.WarmUpDuration;
@@ -53,6 +52,7 @@ public class Round : IDisposable {
             ? new DamageCalculator()
             : new ZeroDamageCalculator();
 
+        RoundSimulation = new RoundSimulation(this);
         RoundSimulation.AddStaticMesh(Properties.MapInfo.Triangles.Value, Vector3.One);
     }
 
