@@ -5,4 +5,7 @@ namespace Vint.Core.Battle.Mode.Team.Components;
 public class CtfConfigComponent : IComponent {
     public float MinDistanceFromMineToBase { get; private set; }
     public float EnemyFlagActionMinIntervalSec { get; private set; }
+
+    public string FlagModelPath { get; private set; } = null!;
+    public string PedestalModelPath { get; private set; } = null!;
 }

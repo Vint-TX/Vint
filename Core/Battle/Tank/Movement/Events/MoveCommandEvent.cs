@@ -47,8 +47,7 @@ public class MoveCommandEvent : IServerEvent {
                 component.WeaponControl = MoveCommand.WeaponRotationControl.Value;
         });
 
-        if (!MoveCommand.Movement.HasValue ||
-            tank.StateManager.CurrentState is Dead)
+        if (!MoveCommand.Movement.HasValue || tank.StateManager.CurrentState is Dead)
             return;
 
         Movement movement = MoveCommand.Movement.Value;

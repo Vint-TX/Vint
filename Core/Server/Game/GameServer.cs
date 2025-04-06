@@ -1,5 +1,4 @@
 using System.Collections.Frozen;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,22 +10,43 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game;
 
-public class GameServer(
-    IServiceProvider serviceProvider,
-    DiscordBot discordBot,
-    QuestManager questManager,
-    LobbyProcessor lobbyProcessor
-) {
+public class GameServer {
     public const ushort Port = 5050;
     int _lastClientId = -1;
 
-    public TimeSpan DeltaTime { get; private set; }
+    public GameServer(IServiceProvider serviceProvider, DiscordBot discordBot, QuestManager questManager, LobbyProcessor lobbyProcessor) {
+        ServiceProvider = serviceProvider;
+        DiscordBot = discordBot;
+        QuestManager = questManager;
+        LobbyProcessor = lobbyProcessor;
+
+        Looper = new Looper(Update, 60);
+    }
+
+    public Looper Looper { get; }
     public Dictionary<int, IPlayerConnection> PlayerConnections { get; } = new();
 
     ILogger Logger { get; } = Log.Logger.ForType<GameServer>();
     TcpListener Listener { get; } = new(IPAddress.Any, Port);
 
+    IServiceProvider ServiceProvider { get; }
+    DiscordBot DiscordBot { get; }
+    QuestManager QuestManager { get; }
+    LobbyProcessor LobbyProcessor { get; }
+
     bool IsStarted { get; set; }
+
+    public async Task Start() {
+        if (IsStarted) return;
+
+        IsStarted = true;
+        Listener.Start();
+
+        await DiscordBot.TryStart();
+
+        Logger.Information("Started");
+        await Looper.RunAsync();
+    }
 
     public IPlayerConnection? FindConnection(long id) =>
         PlayerConnections.Values.FirstOrDefault(connection => connection.IsLoggedIn &&
@@ -36,36 +56,13 @@ public class GameServer(
         PlayerConnections.Values.Where(connection => connection.IsLoggedIn &&
                                                      ids.Contains(connection.UserContainer.Id));
 
-    public async Task Start() {
-        if (IsStarted) return;
-
-        IsStarted = true;
-        Listener.Start();
-
-        await discordBot.TryStart();
-
-        Logger.Information("Started");
-        await TickLoop();
-    }
-
-    async Task AcceptNewSockets() {
-        for (int i = 0; i < 20 && Listener.Pending(); i++) {
-            try {
-                int id = Interlocked.Increment(ref _lastClientId);
-                IServiceScope serviceScope = serviceProvider.CreateAsyncScope();
-
-                Socket socket = await Listener.AcceptSocketAsync();
-                SocketPlayerConnection connection = new(id, serviceScope, socket);
-
-                PlayerConnections[id] = connection;
-                await connection.OnConnected();
-            } catch (Exception e) {
-                Logger.Error(e, "Exception while accepting socket");
-            }
-        }
-    }
-
     public void RemovePlayer(int id) => PlayerConnections.Remove(id, out _);
+
+    async Task Update(TimeSpan deltaTime) {
+        await LobbyProcessor.Tick(deltaTime);
+        await TickPlayers();
+        await QuestManager.Tick();
+    }
 
     async Task TickPlayers() {
         await AcceptNewSockets();
@@ -78,44 +75,23 @@ public class GameServer(
             }
         }
 
-        await discordBot.SetPlayersCount(PlayerConnections.Count);
+        await DiscordBot.SetPlayersCount(PlayerConnections.Count);
     }
 
-    async Task Update() {
-        await lobbyProcessor.Tick(DeltaTime);
-        await TickPlayers();
-
-        await questManager.Tick();
-    }
-
-    async Task TickLoop() { // https://stackoverflow.com/q/78850638
-        const int tps = 60;
-        //const int maxTPS = 3;
-
-        //Logger.Information("HPET enabled: {Value}", Stopwatch.IsHighResolution);
-
-        TimeSpan targetDeltaTime = TimeSpan.FromSeconds(1d / tps);
-        //TimeSpan maximumDeltaTime = TimeSpan.FromSeconds(1d / maxTPS);
-
-        Stopwatch stopwatch = Stopwatch.StartNew();
-        TimeSpan lastTick = stopwatch.Elapsed;
-
-        while (IsStarted) {
-            TimeSpan currentTick = stopwatch.Elapsed;
-            //DeltaTime = TimeSpanUtils.Min(currentTick - lastTick, maximumDeltaTime);
-            DeltaTime = currentTick - lastTick;
-            lastTick = currentTick;
-
+    async Task AcceptNewSockets() {
+        for (int i = 0; i < 20 && Listener.Pending(); i++) {
             try {
-                await Update();
+                int id = Interlocked.Increment(ref _lastClientId);
+                IServiceScope serviceScope = ServiceProvider.CreateAsyncScope();
+
+                Socket socket = await Listener.AcceptSocketAsync();
+                SocketPlayerConnection connection = new(id, serviceScope, socket);
+
+                PlayerConnections[id] = connection;
+                await connection.OnConnected();
             } catch (Exception e) {
-                Logger.Error(e, "Caught an exception in game loop");
+                Logger.Error(e, "Exception while accepting socket");
             }
-
-            TimeSpan freeTime = targetDeltaTime - (stopwatch.Elapsed - currentTick);
-
-            if (freeTime > TimeSpan.Zero)
-                await Task.Delay(freeTime);
         }
     }
 }

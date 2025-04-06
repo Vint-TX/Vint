@@ -57,14 +57,10 @@ public class IceTrapModule : ActiveBattleModule {
         if (!CanBeActivated) return;
 
         await base.Activate();
-
-        await GetEffect()
-            .Activate();
+        await GetEffect().Activate();
 
         while (Mines.Count() > CountLimit)
-            await MinesSorted
-                .First()
-                .ForceDeactivate();
+            await MinesSorted.First().ForceDeactivate();
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

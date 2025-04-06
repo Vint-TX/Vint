@@ -3,7 +3,9 @@ using Vint.Core.Battle.Effects.Components;
 using Vint.Core.Battle.Effects.Events.Mine;
 using Vint.Core.Battle.Effects.Templates;
 using Vint.Core.Battle.Mode.Team.Impl;
+using Vint.Core.Battle.Simulations;
 using Vint.Core.Battle.Simulations.Callbacks;
+using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Battle.Weapons.Handlers.Impl;
@@ -51,16 +53,30 @@ public class IceTrapEffect(
     public override async Task Activate() {
         if (IsActive) return;
 
-        RayClosestHitHandler hitHandler = new();
-        Round.RoundSimulation.Simulation.RayCast(Tank.Position, -Vector3.UnitY, 655.36f, ref hitHandler);
+        RoundSimulation roundSimulation = Round.RoundSimulation;
 
-        if (!hitHandler.ClosestHit.HasValue ||
-            Round.ModeHandler is CTFHandler ctf && !ctf.CanPlaceMine(hitHandler.ClosestHit.Value))
+        Vector3? closestHit = await roundSimulation.Dispatcher.InvokeAsync(() => {
+            Vector3 tankPosition = Tank.Position;
+            Triangle[] triangles = ModelRegistry.GetOrLoad("Flag/pedestal.glb");
+
+            Round.RoundSimulation.AddStaticMesh(triangles, new MeshDescription {
+                Name = "Debug",
+                ColorName = "teamNone",
+                Position = tankPosition
+            });
+
+            RayClosestHitHandler hitHandler = new();
+            roundSimulation.Simulation.RayCast(tankPosition, -Vector3.UnitY, 655.36f, ref hitHandler);
+            return hitHandler.ClosestHit;
+        });
+
+        if (!closestHit.HasValue ||
+            Round.ModeHandler is CTFHandler ctf && !ctf.CanPlaceMine(closestHit.Value))
             return;
 
         Tank.Effects.Add(this);
 
-        Position = hitHandler.ClosestHit.Value + Vector3.UnitY;
+        Position = closestHit.Value + Vector3.UnitY;
 
         WeaponEntity = Entity = new IceTrapEffectTemplate().Create(Tank.Tanker,
             Duration,

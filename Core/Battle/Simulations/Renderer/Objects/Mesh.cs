@@ -2,29 +2,36 @@ using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using Vint.Core.Battle.Simulations.Geometry;
+using Vint.Core.Battle.Simulations.Renderer.Shaders;
 
 namespace Vint.Core.Battle.Simulations.Renderer.Objects;
 
-public class Mesh : RenderObject, IDisposable {
-    readonly int _vertexBufferId;
-    readonly int _vertexArrayId;
+public class Mesh : IRenderObject, IDisposable {
+    int VertexBufferId { get; }
+    int VertexArrayId { get; }
 
-    readonly Triangle[] _triangles;
+    string Name { get; }
 
-    public Mesh(Triangle[] triangles, Vector3 scale) {
-        Scale = scale;
-        _triangles = triangles;
+    Triangle[] Triangles { get; }
+    IShader Shader { get; }
+    Vector3 Color { get; }
 
-        _vertexBufferId = GL.GenBuffer();
-        _vertexArrayId = GL.GenVertexArray();
+    public Mesh(string name, Triangle[] triangles, Vector3 color, IShader shader) {
+        Name = name;
+        Triangles = triangles;
+        Shader = shader;
+        Color = color;
+
+        VertexBufferId = GL.GenBuffer();
+        VertexArrayId = GL.GenVertexArray();
 
         int triangleSize = Marshal.SizeOf<Triangle>();
 
-        GL.BindVertexArray(_vertexArrayId);
-        GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
+        GL.BindVertexArray(VertexArrayId);
+        GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferId);
         GL.BufferData(BufferTarget.ArrayBuffer,
-            _triangles.Length * triangleSize,
-            _triangles,
+            Triangles.Length * triangleSize,
+            Triangles,
             BufferUsageHint.StaticDraw);
 
         int normalOffset = (int)Marshal.OffsetOf<Vertex>("Normal");
@@ -39,14 +46,16 @@ public class Mesh : RenderObject, IDisposable {
     }
 
     public void Draw() {
-        GL.BindVertexArray(_vertexArrayId);
-        GL.DrawArrays(PrimitiveType.Triangles, 0, _triangles.Length * 3);
+        Shader.SetVector3("objectColor", Color);
+
+        GL.BindVertexArray(VertexArrayId);
+        GL.DrawArrays(PrimitiveType.Triangles, 0, Triangles.Length * 3);
         GL.BindVertexArray(0);
     }
 
     public void Dispose() {
-        GL.DeleteVertexArray(_vertexArrayId);
-        GL.DeleteBuffer(_vertexBufferId);
+        GL.DeleteVertexArray(VertexArrayId);
+        GL.DeleteBuffer(VertexBufferId);
         GC.SuppressFinalize(this);
     }
 }

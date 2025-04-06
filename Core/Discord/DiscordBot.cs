@@ -118,6 +118,13 @@ public class DiscordBot(
     public async Task SendLog(string username, string message, string log, long id, DateTimeOffset timestamp) {
         if (!IsStarted) return;
 
+        if (message.Length > 4096) {
+            const string warning = "...\n\nMessage is too long, truncated to 4096 characters";
+            int length = 4096 - warning.Length;
+
+            message = message[..length] + warning;
+        }
+
         using MemoryStream stream = new(Encoding.Default.GetBytes(log));
         DiscordEmbedBuilder embed = Embeds.GetNotificationEmbed(message, "New log submitted", $"Id: {id}")
             .WithTimestamp(timestamp)

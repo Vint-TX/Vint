@@ -2,7 +2,7 @@ using OpenTK.Mathematics;
 
 namespace Vint.Core.Battle.Simulations.Renderer.Objects;
 
-public class Camera : RenderObject {
+public class Camera : IRenderObject {
     const float LerpSpeed = 0.7f;
     float _fovRad;
 
@@ -10,6 +10,9 @@ public class Camera : RenderObject {
         get => MathHelper.RadiansToDegrees(_fovRad);
         set => _fovRad = MathHelper.DegreesToRadians(value);
     }
+
+    public Vector3 Position { get; set; } = Vector3.Zero;
+    public Vector3 Rotation { get; set; } = Vector3.Zero;
 
     public Vector3 Up { get; private set; } = Vector3.UnitY;
     public Vector3 Right { get; private set; } = Vector3.UnitX;

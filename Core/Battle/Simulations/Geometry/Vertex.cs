@@ -1,4 +1,4 @@
-using OpenTK.Mathematics;
+using System.Numerics;
 
 namespace Vint.Core.Battle.Simulations.Geometry;
 

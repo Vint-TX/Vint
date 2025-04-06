@@ -215,8 +215,7 @@ public class AdminModule(
 
     [ChatCommand("tps", "Show TPS")]
     public async Task TPS(ChatCommandContext ctx) {
-        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>()
-            .DeltaTime;
+        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>().Looper.DeltaTime;
 
         await ctx.SendPrivateResponse($"{1 / deltaTime.TotalSeconds} TPS");
     }

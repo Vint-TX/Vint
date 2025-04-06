@@ -6,6 +6,8 @@ using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Results;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Simulations;
+using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
@@ -44,6 +46,11 @@ public class CTFHandler : TeamHandler {
 
         foreach (Flag flag in Flags.Values)
             await flag.Init();
+
+        AddPedestalsToSimulation();
+
+        if (CanShareFlags)
+            AddFlagsToSimulation();
     }
 
     public override async Task PostPlayerJoin(BattlePlayer player) {
@@ -76,6 +83,8 @@ public class CTFHandler : TeamHandler {
 
         if (!CanShareFlags) {
             CanShareFlags = true;
+            AddFlagsToSimulation();
+
             await Round.Players.Share(Flags.Values.Select(flag => flag.Entity));
         }
     }
@@ -117,4 +126,36 @@ public class CTFHandler : TeamHandler {
 
     public bool CanPlaceMine(Vector3 position) =>
         Flags.Values.All(flag => Vector3.Distance(position, flag.PedestalPosition) >= CTFConfig.MinDistanceFromMineToBase);
+
+    void AddPedestalsToSimulation() {
+        Triangle[] pedestal = ModelRegistry.GetOrLoad(CTFConfig.PedestalModelPath);
+
+        Round.RoundSimulation.AddStaticMesh(pedestal, new MeshDescription {
+            Name = "Blue Pedestal",
+            ColorName = "blueFlag",
+            Position = Round.Properties.MapInfo.Flags.Blue
+        });
+
+        Round.RoundSimulation.AddStaticMesh(pedestal, new MeshDescription {
+            Name = "Red Pedestal",
+            ColorName = "redFlag",
+            Position = Round.Properties.MapInfo.Flags.Red
+        });
+    }
+
+    void AddFlagsToSimulation() {
+        Triangle[] flag = ModelRegistry.GetOrLoad(CTFConfig.FlagModelPath);
+
+        Round.RoundSimulation.AddStaticMesh(flag, new MeshDescription {
+            Name = "Blue Flag",
+            ColorName = "blueFlag",
+            Position = Round.Properties.MapInfo.Flags.Blue
+        });
+
+        Round.RoundSimulation.AddStaticMesh(flag, new MeshDescription {
+            Name = "Red Flag",
+            ColorName = "redFlag",
+            Position = Round.Properties.MapInfo.Flags.Red
+        });
+    }
 }

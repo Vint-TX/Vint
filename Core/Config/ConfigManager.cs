@@ -111,7 +111,7 @@ public static class ConfigManager {
 
             MapInfo mapInfo = JsonConvert.DeserializeObject<MapInfo>(await File.ReadAllTextAsync(mapInfoPath));
             mapInfo.Name = mapName;
-            mapInfo.Init();
+            mapInfo.ModelPath = Path.Combine(map, "model.glb");
 
             mapInfos.Add(mapInfo);
         }

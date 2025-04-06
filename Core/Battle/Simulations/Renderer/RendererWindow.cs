@@ -1,15 +1,22 @@
+using System.Collections.Frozen;
 using BepuPhysics;
+using BepuPhysics.Collidables;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using Serilog;
-using Vint.Core.Battle.Simulations.Geometry;
+using Vint.Core.Battle.Simulations.Components;
 using Vint.Core.Battle.Simulations.Renderer.Objects;
 using Vint.Core.Battle.Simulations.Renderer.Shaders;
+using Vint.Core.Battle.Simulations.Renderer.Utils;
+using Vint.Core.Config;
 using Vint.Core.Structures;
 using Vint.Core.Utils;
+using Mesh = Vint.Core.Battle.Simulations.Renderer.Objects.Mesh;
+using Triangle = Vint.Core.Battle.Simulations.Geometry.Triangle;
+using BepuMesh = BepuPhysics.Collidables.Mesh;
 
 namespace Vint.Core.Battle.Simulations.Renderer;
 
@@ -22,8 +29,10 @@ public class RendererWindow : IDisposable {
 
     public RendererWindow(
         string title,
-        Simulation simulation
+        Simulation simulation,
+        Dispatcher dispatcher
     ) {
+        Dispatcher = dispatcher;
         Simulation = simulation;
 
         Camera.Fov = 90;
@@ -50,25 +59,27 @@ public class RendererWindow : IDisposable {
     }
 
     static ILogger Logger { get; } = Log.Logger.ForType<RendererWindow>();
+    static FrozenDictionary<string, string> Colors { get; } =
+        ConfigManager.GetComponent<ColorConfigComponent>("battle/simulation/renderer").Colors.ToFrozenDictionary();
 
-    public Dispatcher Dispatcher { get; } = new();
-
+    Dispatcher Dispatcher { get; }
     Simulation Simulation { get; }
     Camera Camera { get; } = new();
     InputManager InputManager { get; set; } = null!;
     Shader Shader { get; set; } = null!;
     NativeWindow Window { get; set; } = null!;
+    Vector3 LightColor { get; } = Vector3.One * 0.3f;
 
     Dictionary<StaticHandle, Mesh> Statics { get; } = [];
     Dictionary<BodyHandle, Mesh> Bodies { get; } = [];
 
-    public void AddStatic(Triangle[] triangles, Vector3 scale, StaticHandle handle) => Dispatcher.Invoke(() => {
-        Mesh mesh = new(triangles, scale);
+    public void AddStatic(string name, string? colorName, Triangle[] triangles, StaticHandle handle) => Dispatcher.Invoke(() => {
+        Mesh mesh = new(name, triangles, GetColor(colorName), Shader);
         Statics.Add(handle, mesh);
     });
 
-    public void AddBody(Triangle[] triangles, Vector3 scale, BodyHandle handle) => Dispatcher.Invoke(() => {
-        Mesh mesh = new(triangles, scale);
+    public void AddBody(string name, string? colorName, Triangle[] triangles, BodyHandle handle) => Dispatcher.Invoke(() => {
+        Mesh mesh = new(name, triangles, GetColor(colorName), Shader);
         Bodies.Add(handle, mesh);
     });
 
@@ -106,6 +117,8 @@ public class RendererWindow : IDisposable {
         Shader.Use();
         Shader.SetMatrix4("view", Camera.GetViewMatrix());
         Shader.SetMatrix4("projection", Camera.GetProjectionMatrix());
+        Shader.SetVector3("viewPos", Camera.Position);
+        Shader.SetVector3("lightColor", LightColor);
 
         RenderStatics();
         RenderBodies();
@@ -114,30 +127,44 @@ public class RendererWindow : IDisposable {
     }
 
     void RenderStatics() {
-        foreach ((StaticHandle handle, Mesh value) in Statics) {
-            ref RigidPose pose = ref Simulation.Statics[handle].Pose;
-            Matrix4 model = ConvertTransform(pose.Position, pose.Orientation, value.Scale);
+        foreach ((StaticHandle handle, Mesh mesh) in Statics) {
+            StaticReference reference = Simulation.Statics[handle];
+
+            ref RigidPose pose = ref reference.Pose;
+            ref BepuMesh bepuMesh = ref Simulation.Shapes.GetShape<BepuMesh>(reference.Shape.Index);
+
+            Matrix4 model = ConvertTransform((Vector3)pose.Position, (Quaternion)pose.Orientation, (Vector3)bepuMesh.Scale);
             Shader.SetMatrix4("model", model);
 
-            value.Draw();
+            mesh.Draw();
         }
     }
 
     void RenderBodies() {
         foreach ((BodyHandle handle, Mesh value) in Bodies) {
-            ref RigidPose pose = ref Simulation.Bodies[handle].Pose;
-            Matrix4 model = ConvertTransform(pose.Position, pose.Orientation, value.Scale);
+            BodyReference reference = Simulation.Bodies[handle];
+
+            ref RigidPose pose = ref reference.Pose;
+            ref Collidable collidable = ref reference.Collidable;
+            ref BepuMesh bepuMesh = ref Simulation.Shapes.GetShape<BepuMesh>(collidable.Shape.Index);
+
+            Matrix4 model = ConvertTransform((Vector3)pose.Position, (Quaternion)pose.Orientation, (Vector3)bepuMesh.Scale);
             Shader.SetMatrix4("model", model);
 
             value.Draw();
         }
     }
 
+    static Vector3 GetColor(string? colorName) =>
+        !string.IsNullOrWhiteSpace(colorName) && Colors.TryGetValue(colorName, out string? hex)
+            ? ColorUtils.HexToRgb(hex)
+            : Vector3.One;
+
     static void OnFramebufferResize(FramebufferResizeEventArgs e) =>
         GL.Viewport(0, 0, e.Width, e.Height);
 
-    static Matrix4 ConvertTransform(System.Numerics.Vector3 position, System.Numerics.Quaternion orientation, Vector3 scale) =>
-        Matrix4.CreateFromQuaternion((Quaternion)orientation) * Matrix4.CreateTranslation((Vector3)position) * Matrix4.CreateScale(scale);
+    static Matrix4 ConvertTransform(Vector3 position, Quaternion orientation, Vector3 scale) =>
+        Matrix4.CreateFromQuaternion(orientation) * Matrix4.CreateTranslation(position) * Matrix4.CreateScale(scale);
 
     static NativeWindowSettings GetNativeWindowSettings(string title) => new() {
         Title = title,

@@ -4,7 +4,9 @@ using BepuUtilities;
 
 namespace Vint.Core.Battle.Simulations.Callbacks;
 
-public struct PoseIntegratorCallbacks : IPoseIntegratorCallbacks {
+public struct PoseIntegratorCallbacks(
+    float gravity
+) : IPoseIntegratorCallbacks {
     public void Initialize(Simulation simulation) { }
 
     public void PrepareForIntegration(float dt) { }
@@ -17,7 +19,9 @@ public struct PoseIntegratorCallbacks : IPoseIntegratorCallbacks {
         Vector<int> integrationMask,
         int workerIndex,
         Vector<float> dt,
-        ref BodyVelocityWide velocity) { }
+        ref BodyVelocityWide velocity) {
+
+    }
 
     public AngularIntegrationMode AngularIntegrationMode => AngularIntegrationMode.Nonconserving;
     public bool AllowSubstepsForUnconstrainedBodies => false;

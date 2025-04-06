@@ -1,13 +1,10 @@
-using OpenTK.Mathematics;
-using SharpGLTF.Geometry.VertexTypes;
-using SharpGLTF.Schema2;
 using Vint.Core.Battle.Mode;
-using Vint.Core.Battle.Simulations.Geometry;
 
 namespace Vint.Core.Config.MapInformation;
 
 public record struct MapInfo(
     string Name,
+    string ModelPath,
     long Id,
     int MaxPlayers,
     bool Matchmaking,
@@ -17,15 +14,7 @@ public record struct MapInfo(
     List<TeleportPoint> TeleportPoints,
     MapBonusInfo BonusRegions
 ) {
-    string ConfigPath { get; set; } = null!;
-    public Lazy<Triangle[]> Triangles { get; private set; }
-
-    public void Init() {
-        ConfigPath = Path.Combine(ConfigManager.ResourcesPath, "Maps", Name);
-        Triangles = new Lazy<Triangle[]>(GetTriangles, LazyThreadSafetyMode.ExecutionAndPublication);
-    }
-
-    public bool HasSpawnPoints(BattleMode mode) => mode switch {
+    bool HasSpawnPoints(BattleMode mode) => mode switch {
         BattleMode.DM => SpawnPoints.Deathmatch != null!,
         BattleMode.TDM => SpawnPoints.TeamDeathmatch != null,
         BattleMode.CTF => SpawnPoints.CaptureTheFlag != null,
@@ -60,26 +49,5 @@ public record struct MapInfo(
 
                 break;
         }
-    }
-
-    Triangle[] GetTriangles() {
-        ModelRoot meshRoot = ModelRoot.Load(Path.Combine(ConfigPath, "model.glb"));
-
-        Triangle[] triangles = meshRoot.DefaultScene
-            .EvaluateTriangles()
-            .Select(tuple => new Triangle(
-                CreateVertex(tuple.A.GetGeometry()),
-                CreateVertex(tuple.B.GetGeometry()),
-                CreateVertex(tuple.C.GetGeometry())))
-            .ToArray();
-
-        return triangles;
-    }
-
-    static Vertex CreateVertex(IVertexGeometry vertexBuilder) {
-        Vector3 position = (Vector3)vertexBuilder.GetPosition();
-        vertexBuilder.TryGetNormal(out System.Numerics.Vector3 normal);
-
-        return new Vertex(position, (Vector3)normal);
     }
 }

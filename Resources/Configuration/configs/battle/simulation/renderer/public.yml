@@ -1,0 +1,12 @@
+colorConfig:
+  colors:
+    blueFlag: "#0002EC"
+    redFlag: "#EC0000"
+    teamNone: "#008000"
+    teamRed: "#E93939"
+    teamBlue: "#3AC4E9"
+    repairKit: "#00FF17"
+    armor: "#964B00"
+    damage: "#FF0000"
+    nitro: "#FFFF00"
+    gold: "#FFD700"

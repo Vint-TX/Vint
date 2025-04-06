@@ -14,3 +14,5 @@ ctfConfig:
   upsideDownMarkSpeed: 0.0
   upsideDownMarkTimer: 2.0
   upsideDownMarkOrigin: 5
+  flagModelPath: "Flag/flag.glb"
+  pedestalModelPath: "Flag/pedestal.glb"

@@ -1,14 +1,16 @@
+using System.Numerics;
 using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuUtilities;
 using BepuUtilities.Memory;
-using OpenTK.Mathematics;
+using Vint.Core.Battle.Lobby.Components;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Simulations.Callbacks;
+using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Battle.Simulations.Renderer;
+using Vint.Core.Structures;
 using BepuMesh = BepuPhysics.Collidables.Mesh;
 using BepuTriangle = BepuPhysics.Collidables.Triangle;
-using Mesh = Vint.Core.Battle.Simulations.Renderer.Objects.Mesh;
 using Triangle = Vint.Core.Battle.Simulations.Geometry.Triangle;
 
 namespace Vint.Core.Battle.Simulations;
@@ -17,11 +19,13 @@ public class RoundSimulation : IDisposable {
     public RoundSimulation(Round round) {
         Round = round;
 
-        Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(), new SolveDescription(1, 1));
+        float gravity = Round.ModeHandler.Entity.GetComponent<GravityComponent>().Gravity;
+
+        Simulation = Simulation.Create(new BufferPool(), new CollisionCallbacks(), new PoseIntegratorCallbacks(gravity), new SolveDescription(1, 1));
         ThreadDispatcher = new ThreadDispatcher(Environment.ProcessorCount);
 
 #if DEBUG
-        Renderer = new RendererWindow($"Simulation {Round.Entity.Id}", Simulation);
+        Renderer = new RendererWindow($"Simulation {Round.Entity.Id}", Simulation, Dispatcher);
 #endif
     }
 
@@ -30,27 +34,48 @@ public class RoundSimulation : IDisposable {
     public Round Round { get; }
     public Simulation Simulation { get; }
     public RendererWindow? Renderer { get; }
+    public Dispatcher Dispatcher { get; } = new();
 
     IThreadDispatcher? ThreadDispatcher { get; }
 
-    public void AddStaticMesh(Triangle[] triangles, Vector3 scale) {
+    public StaticHandle AddStaticMesh(Triangle[] triangles, MeshDescription description) => Dispatcher.Invoke(() => {
         Simulation.BufferPool.TakeAtLeast(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
         ConvertTriangles(triangles, bepuTriangles);
 
-        BepuMesh bepuMesh = new(bepuTriangles, ConvertVector3(scale), Simulation.BufferPool, ThreadDispatcher);
+        BepuMesh bepuMesh = new(bepuTriangles, description.Scale, Simulation.BufferPool, ThreadDispatcher);
         TypedIndex meshIndex = Simulation.Shapes.Add(bepuMesh);
-        StaticDescription meshDescription = new(ConvertVector3(Vector3.Zero), meshIndex);
+        StaticDescription meshDescription = new(description.Position, description.Orientation, meshIndex);
         StaticHandle meshHandle = Simulation.Statics.Add(meshDescription);
 
-        Renderer?.AddStatic(triangles, scale, meshHandle);
-    }
+        Renderer?.AddStatic(description.Name, description.ColorName, triangles, meshHandle);
+        return meshHandle;
+    });
 
-    public async Task Tick(TimeSpan deltaTime) {
+    public BodyHandle AddBodyMesh(Triangle[] triangles, MeshDescription description) => Dispatcher.Invoke(() => {
+        Simulation.BufferPool.TakeAtLeast(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
+        ConvertTriangles(triangles, bepuTriangles);
+
+        BepuMesh bepuMesh = new(bepuTriangles, description.Scale, Simulation.BufferPool, ThreadDispatcher);
+        TypedIndex meshIndex = Simulation.Shapes.Add(bepuMesh);
+
+        BodyDescription meshDescription = BodyDescription.CreateDynamic(
+            new RigidPose(description.Position, description.Orientation),
+            bepuMesh.ComputeClosedInertia(100),
+            meshIndex,
+            0.01f);
+
+        BodyHandle meshHandle = Simulation.Bodies.Add(meshDescription);
+
+        Renderer?.AddBody(description.Name, description.ColorName, triangles, meshHandle);
+        return meshHandle;
+    });
+
+    public async Task Tick(TimeSpan deltaTime) => await Dispatcher.InvokeAsync(async () => {
         Simulation.Timestep((float)deltaTime.TotalSeconds, ThreadDispatcher);
 
         if (Renderer != null)
             await Renderer.Tick(deltaTime);
-    }
+    });
 
     static void ConvertTriangles(in Triangle[] triangles, in Buffer<BepuTriangle> bepuTriangles) {
         for (int i = 0; i < triangles.Length; i++)
@@ -59,16 +84,15 @@ public class RoundSimulation : IDisposable {
         return;
 
         BepuTriangle ConvertTriangle(Triangle triangle) =>
-            new(ConvertVector3(triangle.A.Position * GltfToUnity),
-                ConvertVector3(triangle.B.Position * GltfToUnity),
-                ConvertVector3(triangle.C.Position * GltfToUnity));
+            new(triangle.A.Position * GltfToUnity,
+                triangle.B.Position * GltfToUnity,
+                triangle.C.Position * GltfToUnity);
     }
-
-    static System.Numerics.Vector3 ConvertVector3(Vector3 vector3) => (System.Numerics.Vector3)vector3;
 
     public void Dispose() {
         Simulation.Dispose();
         Renderer?.Dispose();
+        Dispatcher.Dispose();
 
         GC.SuppressFinalize(this);
     }

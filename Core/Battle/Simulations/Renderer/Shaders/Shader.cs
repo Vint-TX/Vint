@@ -6,47 +6,48 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Simulations.Renderer.Shaders;
 
-public class Shader : IDisposable {
-    readonly int _handle;
+public class Shader : IShader, IDisposable {
     bool _disposed;
 
     static ILogger Logger { get; } = Log.Logger.ForType<Shader>();
 
-    static string GetShaderPath(string shaderName) => Path.Combine(ConfigManager.ResourcesPath, "Renderer", "Shaders", shaderName);
+    int Handle { get; }
 
     public Shader(string vertexName, string fragmentName) {
-        _handle = GL.CreateProgram();
+        Handle = GL.CreateProgram();
 
         int vertex = PrepareShader(vertexName, ShaderType.VertexShader);
         int fragment = PrepareShader(fragmentName, ShaderType.FragmentShader);
 
-        GL.AttachShader(_handle, vertex);
-        GL.AttachShader(_handle, fragment);
+        GL.AttachShader(Handle, vertex);
+        GL.AttachShader(Handle, fragment);
 
-        GL.LinkProgram(_handle);
-        GL.GetProgram(_handle, GetProgramParameterName.LinkStatus, out int status);
+        GL.LinkProgram(Handle);
+        GL.GetProgram(Handle, GetProgramParameterName.LinkStatus, out int status);
 
         if (status == 0) {
-            string infoLog = GL.GetProgramInfoLog(_handle);
+            string infoLog = GL.GetProgramInfoLog(Handle);
             Logger.Error(infoLog);
         }
 
-        ClearShaders(_handle, vertex, fragment);
+        ClearShaders(Handle, vertex, fragment);
     }
 
-    public void Use() => GL.UseProgram(_handle);
+    public void Use() => GL.UseProgram(Handle);
 
     public void SetMatrix4(string name, Matrix4 matrix) {
-        int location = GL.GetUniformLocation(_handle, name);
+        int location = GL.GetUniformLocation(Handle, name);
 
         GL.UniformMatrix4(location, true, ref matrix);
     }
 
     public void SetVector3(string name, Vector3 vector) {
-        int location = GL.GetUniformLocation(_handle, name);
+        int location = GL.GetUniformLocation(Handle, name);
 
         GL.Uniform3(location, ref vector);
     }
+
+    static string GetShaderPath(string shaderName) => Path.Combine(ConfigManager.ResourcesPath, "Simulation", "Renderer", "Shaders", shaderName);
 
     static int PrepareShader(string name, ShaderType type) {
         string source = File.ReadAllText(GetShaderPath(name));
@@ -74,7 +75,7 @@ public class Shader : IDisposable {
     protected void Dispose(bool disposing) {
         if (_disposed) return;
 
-        GL.DeleteProgram(_handle);
+        GL.DeleteProgram(Handle);
         _disposed = true;
     }
 

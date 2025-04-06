@@ -6,7 +6,7 @@ namespace Vint.Core.Structures;
 /// Executes tasks on a single dedicated thread, allowing callers to block or await for completion.
 /// </summary>
 public class Dispatcher : IDisposable {
-    readonly BlockingCollection<WorkItem> _workItems = new();
+    readonly BlockingCollection<IWorkItem> _workItems = new();
     readonly Thread _dispatcherThread;
     bool _isDisposed;
 
@@ -102,15 +102,11 @@ public class Dispatcher : IDisposable {
     /// <returns>A task that completes when the action completes.</returns>
     public Task InvokeAsync(Action action) {
         if (CheckAccess()) {
-            try {
-                action();
-                return Task.CompletedTask;
-            } catch (Exception ex) {
-                return Task.FromException(ex);
-            }
+            action();
+            return Task.CompletedTask;
         }
 
-        TaskCompletionSource tcs = new();
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         _workItems.Add(new WorkItem(() => {
             try {
@@ -131,15 +127,10 @@ public class Dispatcher : IDisposable {
     /// <param name="func">The function to execute.</param>
     /// <returns>A task that completes with the result of the function.</returns>
     public Task<TResult> InvokeAsync<TResult>(Func<TResult> func) {
-        if (CheckAccess()) {
-            try {
-                return Task.FromResult(func());
-            } catch (Exception ex) {
-                return Task.FromException<TResult>(ex);
-            }
-        }
+        if (CheckAccess())
+            return Task.FromResult(func());
 
-        TaskCompletionSource<TResult> tcs = new();
+        TaskCompletionSource<TResult> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         _workItems.Add(new WorkItem(() => {
             try {
@@ -155,41 +146,15 @@ public class Dispatcher : IDisposable {
     /// <summary>
     /// Executes a task-returning function on the dispatcher thread asynchronously.
     /// </summary>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="func">The function that returns a task.</param>
-    /// <returns>A task that completes with the result of the function.</returns>
-    public async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> func) {
-        if (CheckAccess())
-            return await func();
-
-        TaskCompletionSource<TResult> tcs = new();
-
-        _workItems.Add(new WorkItem(async () => {
-            try {
-                TResult result = await func();
-                tcs.SetResult(result);
-            } catch (Exception ex) {
-                tcs.SetException(ex);
-            }
-        }));
-
-        return await tcs.Task;
-    }
-
-    /// <summary>
-    /// Executes a task-returning function on the dispatcher thread asynchronously.
-    /// </summary>
     /// <param name="func">The function that returns a task.</param>
     /// <returns>A task that completes when the function's task completes.</returns>
-    public async Task InvokeAsync(Func<Task> func) {
-        if (CheckAccess()) {
-            await func();
-            return;
-        }
+    public Task InvokeAsync(Func<Task> func) {
+        if (CheckAccess())
+            return func();
 
-        TaskCompletionSource tcs = new();
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        _workItems.Add(new WorkItem(async () => {
+        _workItems.Add(new AsyncWorkItem(async () => {
             try {
                 await func();
                 tcs.SetResult();
@@ -198,7 +163,31 @@ public class Dispatcher : IDisposable {
             }
         }));
 
-        await tcs.Task;
+        return tcs.Task;
+    }
+
+    /// <summary>
+    /// Executes a task-returning function on the dispatcher thread asynchronously.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
+    /// <param name="func">The function that returns a task.</param>
+    /// <returns>A task that completes with the result of the function.</returns>
+    public Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> func) {
+        if (CheckAccess())
+            return func();
+
+        TaskCompletionSource<TResult> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        _workItems.Add(new AsyncWorkItem(async () => {
+            try {
+                TResult result = await func();
+                tcs.SetResult(result);
+            } catch (Exception ex) {
+                tcs.SetException(ex);
+            }
+        }));
+
+        return tcs.Task;
     }
 
     /// <summary>
@@ -221,7 +210,7 @@ public class Dispatcher : IDisposable {
 
     void ProcessWorkItems() {
         try {
-            foreach (WorkItem workItem in _workItems.GetConsumingEnumerable()) {
+            foreach (IWorkItem workItem in _workItems.GetConsumingEnumerable()) {
                 if (_isDisposed)
                     break;
 
@@ -234,30 +223,19 @@ public class Dispatcher : IDisposable {
         }
     }
 
-    /// <summary>
-    /// Represents a work item to be executed on the dispatcher thread.
-    /// </summary>
-    class WorkItem {
-        readonly Delegate _action;
+    interface IWorkItem {
+        void Execute();
+    }
 
-        public WorkItem(Action action) => _action = action;
+    class WorkItem(
+        Action action
+    ) : IWorkItem {
+        public void Execute() => action();
+    }
 
-        public WorkItem(Func<Task> asyncAction) => _action = asyncAction;
-
-        public void Execute() {
-            switch (_action) {
-                case Action action:
-                    action();
-                    break;
-
-                case Func<Task> asyncAction:
-                    // Fire and forget, but with error handling
-                    asyncAction().ContinueWith(t => {
-                        if (t.IsFaulted)
-                            Console.Error.WriteLine($"Unhandled exception in async dispatcher task: {t.Exception}");
-                    }, TaskContinuationOptions.OnlyOnFaulted);
-                    break;
-            }
-        }
+    class AsyncWorkItem(
+        Func<Task> action
+    ) : IWorkItem {
+        public void Execute() => action().GetAwaiter().GetResult();
     }
 }
