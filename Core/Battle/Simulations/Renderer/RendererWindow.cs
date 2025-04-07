@@ -83,6 +83,18 @@ public class RendererWindow : IDisposable {
         Bodies.Add(handle, mesh);
     });
 
+    public void RemoveStatic(StaticHandle handle) => Dispatcher.Invoke(() => {
+        if (!Statics.Remove(handle, out Mesh? mesh)) return;
+
+        mesh.Dispose();
+    });
+
+    public void RemoveBody(BodyHandle handle) => Dispatcher.Invoke(() => {
+        if (!Bodies.Remove(handle, out Mesh? mesh)) return;
+
+        mesh.Dispose();
+    });
+
     public async Task Tick(TimeSpan deltaTime) => await Dispatcher.InvokeAsync(() => {
         if (Window.Context is not { IsCurrent: true })
             throw new InvalidOperationException("Context is not current");
@@ -178,6 +190,13 @@ public class RendererWindow : IDisposable {
 
         Dispatcher.Invoke(() => {
             Window.CursorState = CursorState.Normal;
+
+            foreach (Mesh mesh in Statics.Values.Concat(Bodies.Values))
+                mesh.Dispose();
+
+            Statics.Clear();
+            Bodies.Clear();
+
             Shader.Dispose();
             Window.Dispose();
         });

@@ -11,7 +11,6 @@ using Vint.Core.Battle.Player.Score.Events.Visual;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Simulations;
 using Vint.Core.Battle.Simulations.Callbacks;
-using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Database;
@@ -146,17 +145,8 @@ public class Captured(
         RoundSimulation roundSimulation = Round.RoundSimulation;
 
         Vector3? closestHit = await roundSimulation.Dispatcher.InvokeAsync(() => {
-            Vector3 tankPosition = Carrier.Tank.Position;
-            Triangle[] triangles = ModelRegistry.GetOrLoad("Flag/pedestal.glb");
-
-            Round.RoundSimulation.AddStaticMesh(triangles, new MeshDescription {
-                Name = "Debug",
-                ColorName = "teamNone",
-                Position = tankPosition
-            });
-
             RayClosestHitHandler hitHandler = new();
-            roundSimulation.Simulation.RayCast(tankPosition, -Vector3.UnitY, 655.36f, ref hitHandler);
+            roundSimulation.Simulation.RayCast(Carrier.Tank.Position, -Vector3.UnitY, float.MaxValue, ref hitHandler);
             return hitHandler.ClosestHit;
         });
 
