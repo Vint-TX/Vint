@@ -1,4 +1,3 @@
-using System.Numerics;
 using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuUtilities;
@@ -8,6 +7,7 @@ using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Simulations.Callbacks;
 using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Battle.Simulations.Renderer;
+using Vint.Core.Battle.Simulations.Utils;
 using Vint.Core.Structures;
 using BepuMesh = BepuPhysics.Collidables.Mesh;
 using BepuTriangle = BepuPhysics.Collidables.Triangle;
@@ -28,8 +28,6 @@ public class RoundSimulation : IDisposable {
         Renderer = new RendererWindow($"Simulation {Round.Entity.Id}", Simulation, Dispatcher);
 #endif
     }
-
-    static Vector3 GltfToUnity { get; } = new(-1, 1, 1);
 
     public Round Round { get; }
     public Simulation Simulation { get; }
@@ -106,9 +104,9 @@ public class RoundSimulation : IDisposable {
         return;
 
         BepuTriangle ConvertTriangle(Triangle triangle) =>
-            new(triangle.A.Position * GltfToUnity,
-                triangle.B.Position * GltfToUnity,
-                triangle.C.Position * GltfToUnity);
+            new(triangle.A.Position * GeometryUtils.GltfToUnity,
+                triangle.B.Position * GeometryUtils.GltfToUnity,
+                triangle.C.Position * GeometryUtils.GltfToUnity);
     }
 
     public void Dispose() {

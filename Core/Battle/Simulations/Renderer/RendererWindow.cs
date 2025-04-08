@@ -11,6 +11,7 @@ using Vint.Core.Battle.Simulations.Components;
 using Vint.Core.Battle.Simulations.Renderer.Objects;
 using Vint.Core.Battle.Simulations.Renderer.Shaders;
 using Vint.Core.Battle.Simulations.Renderer.Utils;
+using Vint.Core.Battle.Simulations.Utils;
 using Vint.Core.Config;
 using Vint.Core.Structures;
 using Vint.Core.Utils;
@@ -176,7 +177,9 @@ public class RendererWindow : IDisposable {
         GL.Viewport(0, 0, e.Width, e.Height);
 
     static Matrix4 ConvertTransform(Vector3 position, Quaternion orientation, Vector3 scale) =>
-        Matrix4.CreateFromQuaternion(orientation) * Matrix4.CreateTranslation(position) * Matrix4.CreateScale(scale);
+        Matrix4.CreateTranslation(position * (Vector3)GeometryUtils.GltfToUnity) *
+        Matrix4.CreateFromQuaternion(orientation) *
+        Matrix4.CreateScale(scale);
 
     static NativeWindowSettings GetNativeWindowSettings(string title) => new() {
         Title = title,
@@ -185,7 +188,7 @@ public class RendererWindow : IDisposable {
         Vsync = VSyncMode.Adaptive
     };
 
-    protected void Dispose(bool disposing) {
+    void Dispose(bool disposing) {
         if (!disposing) return;
 
         Dispatcher.Invoke(() => {

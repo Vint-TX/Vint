@@ -7,7 +7,6 @@ using Vint.Core.Battle.Simulations.Geometry;
 namespace Vint.Core.Battle.Simulations;
 
 public static class ModelRegistry {
-    static Vector3 GltfToUnity { get; } = new(-1, 1, 1);
     static ConcurrentDictionary<string, Triangle[]> Cache { get; } = [];
     static string ModelsPath { get; } = Path.Combine("Resources", "Simulation", "Models");
 

@@ -8,8 +8,7 @@ uniform vec3 lightColor;
 uniform vec3 viewPos;
 float specularStrength = 0.5;
 
-void main()
-{
+void main() {
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(vec3(5, 12, 7));
 
