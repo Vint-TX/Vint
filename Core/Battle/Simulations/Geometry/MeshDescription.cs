@@ -4,6 +4,7 @@ namespace Vint.Core.Battle.Simulations.Geometry;
 
 public readonly struct MeshDescription() {
     public string Name { get; init; } = "Mesh";
+    public required string ModelPath { get; init; } = null!;
     public string? ColorName { get; init; } = null;
     public Vector3 Position { get; init; } = Vector3.Zero;
     public Quaternion Orientation { get; init; } = Quaternion.Identity;

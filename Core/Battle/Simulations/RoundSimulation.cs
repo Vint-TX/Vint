@@ -37,13 +37,19 @@ public class RoundSimulation : IDisposable {
     public Dispatcher Dispatcher { get; } = new();
 
     IThreadDispatcher? ThreadDispatcher { get; }
+    Dictionary<string, TypedIndex> ShapeCache { get; } = [];
 
-    public StaticHandle AddStaticMesh(Triangle[] triangles, MeshDescription description) => Dispatcher.Invoke(() => {
-        Simulation.BufferPool.Take(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
-        ConvertTriangles(triangles, bepuTriangles);
+    public StaticHandle AddStaticMesh(MeshDescription description) => Dispatcher.Invoke(() => {
+        Triangle[] triangles = ModelRegistry.GetOrLoad(description.ModelPath);
 
-        BepuMesh bepuMesh = new(bepuTriangles, description.Scale, Simulation.BufferPool, ThreadDispatcher);
-        TypedIndex meshIndex = Simulation.Shapes.Add(bepuMesh); // todo use single shape for all same meshes
+        if (!ShapeCache.TryGetValue(description.ModelPath, out TypedIndex meshIndex)) {
+            Simulation.BufferPool.Take(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
+            ConvertTriangles(triangles, bepuTriangles);
+
+            BepuMesh bepuMesh = new(bepuTriangles, description.Scale, Simulation.BufferPool, ThreadDispatcher);
+            ShapeCache[description.ModelPath] = meshIndex = Simulation.Shapes.Add(bepuMesh);
+        }
+
         StaticDescription meshDescription = new(description.Position, description.Orientation, meshIndex);
         StaticHandle meshHandle = Simulation.Statics.Add(meshDescription);
 
@@ -51,12 +57,18 @@ public class RoundSimulation : IDisposable {
         return meshHandle;
     });
 
-    public BodyHandle AddBodyMesh(Triangle[] triangles, MeshDescription description) => Dispatcher.Invoke(() => {
-        Simulation.BufferPool.Take(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
-        ConvertTriangles(triangles, bepuTriangles);
+    public BodyHandle AddBodyMesh(MeshDescription description) => Dispatcher.Invoke(() => {
+        Triangle[] triangles = ModelRegistry.GetOrLoad(description.ModelPath);
+        BepuMesh bepuMesh;
 
-        BepuMesh bepuMesh = new(bepuTriangles, description.Scale, Simulation.BufferPool, ThreadDispatcher);
-        TypedIndex meshIndex = Simulation.Shapes.Add(bepuMesh); // todo use single shape for all same meshes
+        if (!ShapeCache.TryGetValue(description.ModelPath, out TypedIndex meshIndex)) {
+            Simulation.BufferPool.Take(triangles.Length, out Buffer<BepuTriangle> bepuTriangles);
+            ConvertTriangles(triangles, bepuTriangles);
+
+            bepuMesh = new BepuMesh(bepuTriangles, description.Scale, Simulation.BufferPool, ThreadDispatcher);
+            ShapeCache[description.ModelPath] = meshIndex = Simulation.Shapes.Add(bepuMesh);
+        } else
+            bepuMesh = Simulation.Shapes.GetShape<BepuMesh>(meshIndex.Index);
 
         BodyDescription meshDescription = BodyDescription.CreateDynamic(
             new RigidPose(description.Position, description.Orientation),

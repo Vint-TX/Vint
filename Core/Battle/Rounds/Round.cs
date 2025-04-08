@@ -50,7 +50,10 @@ public class Round : IDisposable {
         MapInfo mapInfo = Properties.MapInfo;
 
         RoundSimulation = new RoundSimulation(this);
-        RoundSimulation.AddStaticMesh(ModelRegistry.GetOrLoad(mapInfo.ModelPath, false), new MeshDescription { Name = mapInfo.Name });
+        RoundSimulation.AddStaticMesh(new MeshDescription {
+            Name = mapInfo.Name,
+            ModelPath = mapInfo.ModelPath
+        });
     }
 
     public BattleProperties Properties { get; }

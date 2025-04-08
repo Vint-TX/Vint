@@ -6,7 +6,6 @@ using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Results;
 using Vint.Core.Battle.Rounds;
-using Vint.Core.Battle.Simulations;
 using Vint.Core.Battle.Simulations.Geometry;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
@@ -128,32 +127,32 @@ public class CTFHandler : TeamHandler {
         Flags.Values.All(flag => Vector3.Distance(position, flag.PedestalPosition) >= CTFConfig.MinDistanceFromMineToBase);
 
     void AddPedestalsToSimulation() {
-        Triangle[] pedestal = ModelRegistry.GetOrLoad(CTFConfig.PedestalModelPath);
-
-        Round.RoundSimulation.AddStaticMesh(pedestal, new MeshDescription {
+        Round.RoundSimulation.AddStaticMesh(new MeshDescription {
             Name = "Blue Pedestal",
+            ModelPath = CTFConfig.PedestalModelPath,
             ColorName = "blueFlag",
             Position = Round.Properties.MapInfo.Flags.Blue
         });
 
-        Round.RoundSimulation.AddStaticMesh(pedestal, new MeshDescription {
+        Round.RoundSimulation.AddStaticMesh(new MeshDescription {
             Name = "Red Pedestal",
+            ModelPath = CTFConfig.PedestalModelPath,
             ColorName = "redFlag",
             Position = Round.Properties.MapInfo.Flags.Red
         });
     }
 
     void AddFlagsToSimulation() {
-        Triangle[] flag = ModelRegistry.GetOrLoad(CTFConfig.FlagModelPath);
-
-        Round.RoundSimulation.AddStaticMesh(flag, new MeshDescription {
+        Round.RoundSimulation.AddStaticMesh(new MeshDescription {
             Name = "Blue Flag",
+            ModelPath = CTFConfig.FlagModelPath,
             ColorName = "blueFlag",
             Position = Round.Properties.MapInfo.Flags.Blue
         });
 
-        Round.RoundSimulation.AddStaticMesh(flag, new MeshDescription {
+        Round.RoundSimulation.AddStaticMesh(new MeshDescription {
             Name = "Red Flag",
+            ModelPath = CTFConfig.FlagModelPath,
             ColorName = "redFlag",
             Position = Round.Properties.MapInfo.Flags.Red
         });

@@ -11,16 +11,14 @@ public static class ModelRegistry {
     static ConcurrentDictionary<string, Triangle[]> Cache { get; } = [];
     static string ModelsPath { get; } = Path.Combine("Resources", "Simulation", "Models");
 
-    // todo thread safety
-    // todo refactor maps and remove isRelative
-    public static Triangle[] GetOrLoad(string path, bool isRelative = true) {
+    // todo thread safety (prevent multiple threads from loading the same model at the same time)
+    public static Triangle[] GetOrLoad(string path) {
         if (Cache.TryGetValue(path, out Triangle[]? triangles))
             return triangles;
 
-        if (isRelative)
-            path = Path.Combine(ModelsPath, path);
+        string realPath = Path.Combine(ModelsPath, path);
 
-        triangles = LoadModel(path);
+        triangles = LoadModel(realPath);
         Cache[path] = triangles;
         return triangles;
     }
