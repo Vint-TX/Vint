@@ -35,7 +35,7 @@ class ResponseJsonSerializer {
         return sw.ToString();
     }
 
-    string? TryGetJsonString(object? value) {
+    static string? TryGetJsonString(object? value) {
         if (value is not string str || string.IsNullOrWhiteSpace(str))
             return null;
 
