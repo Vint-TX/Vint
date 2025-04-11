@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using System.Net;
 using EmbedIO;
+using EmbedIO.WebSockets;
 using JetBrains.Annotations;
 using Serilog;
 using Serilog.Core;
@@ -79,6 +80,15 @@ public static class LoggerUtils {
 
         if (string.IsNullOrWhiteSpace(ip) || !IPEndPoint.TryParse(ip, out IPEndPoint? endPoint))
             endPoint = request.RemoteEndPoint;
+
+        return logger.ForContext("SessionEndpoint", endPoint);
+    }
+
+    public static ILogger WithEndPoint(this ILogger logger, IWebSocketContext context) {
+        string? ip = context.Headers["X-Real-IP"];
+
+        if (string.IsNullOrWhiteSpace(ip) || !IPEndPoint.TryParse(ip, out IPEndPoint? endPoint))
+            endPoint = context.RemoteEndPoint;
 
         return logger.ForContext("SessionEndpoint", endPoint);
     }
