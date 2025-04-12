@@ -36,12 +36,12 @@ public class ServerController(
         new(ConfigManager.GlobalEntitiesTypeNames);
 
     [MessageId(6)]
-    public async Task<EnumerableClientDTO<JToken>> GetEntities(string typeName) {
+    public async Task<IClientDTO> GetEntities(string typeName) {
         string? json = await ConfigManager.GetGlobalEntitiesJson(typeName);
 
-        // if (json == null)
-        //     return new ErrorDTO(404, $"No entities found for '{typeName}'", null);
+        if (json == null)
+            return new ErrorDTO(404, $"No entities found for '{typeName}'", null);
 
-        return new EnumerableClientDTO<JToken>(JArray.Parse(json!));
+        return new EnumerableClientDTO<JToken>(JArray.Parse(json));
     }
 }
