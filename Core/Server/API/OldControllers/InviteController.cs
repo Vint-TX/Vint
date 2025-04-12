@@ -3,11 +3,11 @@ using EmbedIO.WebApi;
 using LinqToDB;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.Server.API.DTO.Invite;
+using Vint.Core.Server.API.OldDTO.Invite;
 using Vint.Core.Server.Common.Attributes.Deserialization;
 using Vint.Core.Server.Common.Attributes.Methods;
 
-namespace Vint.Core.Server.API.Controllers;
+namespace Vint.Core.Server.API.OldControllers;
 
 public class InviteController : WebApiController {
     [Post("/")]

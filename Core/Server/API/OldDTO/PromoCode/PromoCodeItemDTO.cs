@@ -1,7 +1,7 @@
 using EmbedIO;
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.Server.API.DTO.PromoCode;
+namespace Vint.Core.Server.API.OldDTO.PromoCode;
 
 public record PromoCodeItemDTO(
     long Id,

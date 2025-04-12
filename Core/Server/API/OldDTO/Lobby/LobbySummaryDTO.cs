@@ -1,7 +1,7 @@
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Properties;
 
-namespace Vint.Core.Server.API.DTO.Lobby;
+namespace Vint.Core.Server.API.OldDTO.Lobby;
 
 public record LobbySummaryDTO(
     long Id,

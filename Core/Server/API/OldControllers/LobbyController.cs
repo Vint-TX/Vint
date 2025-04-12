@@ -1,10 +1,10 @@
 using EmbedIO;
 using EmbedIO.WebApi;
 using Vint.Core.Battle.Lobby;
-using Vint.Core.Server.API.DTO.Lobby;
+using Vint.Core.Server.API.OldDTO.Lobby;
 using Vint.Core.Server.Common.Attributes.Methods;
 
-namespace Vint.Core.Server.API.Controllers;
+namespace Vint.Core.Server.API.OldControllers;
 
 public class LobbyController(
     LobbyProcessor lobbyProcessor

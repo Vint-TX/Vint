@@ -1,6 +1,6 @@
-using Vint.Core.Server.API.DTO.Player;
+using Vint.Core.Server.API.OldDTO.Player;
 
-namespace Vint.Core.Server.API.DTO.PromoCode;
+namespace Vint.Core.Server.API.OldDTO.PromoCode;
 
 public record PromoCodeDetailDTO(
     long Id,
