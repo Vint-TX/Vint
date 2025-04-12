@@ -1,6 +1,6 @@
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.Server.API.DTO.Player;
+namespace Vint.Core.Server.API.OldDTO.Player;
 
 public record StatisticsDTO(
     long BattlesParticipated,

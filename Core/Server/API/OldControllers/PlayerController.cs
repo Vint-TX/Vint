@@ -6,12 +6,12 @@ using Vint.Core.Chat;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.API.DTO.Player;
+using Vint.Core.Server.API.OldDTO.Player;
 using Vint.Core.Server.Common.Attributes.Deserialization;
 using Vint.Core.Server.Common.Attributes.Methods;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.Server.API.Controllers;
+namespace Vint.Core.Server.API.OldControllers;
 
 public class PlayerController(
     GameServer server

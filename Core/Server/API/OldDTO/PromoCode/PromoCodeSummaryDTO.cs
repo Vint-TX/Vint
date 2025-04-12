@@ -1,4 +1,4 @@
-namespace Vint.Core.Server.API.DTO.PromoCode;
+namespace Vint.Core.Server.API.OldDTO.PromoCode;
 
 public record PromoCodeSummaryDTO(
     long Id,

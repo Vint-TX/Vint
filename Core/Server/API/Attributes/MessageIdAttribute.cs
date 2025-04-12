@@ -1,8 +1,11 @@
 using JetBrains.Annotations;
+using Vint.Core.Server.API.DTO.Base;
 
 namespace Vint.Core.Server.API.Attributes;
 
-[AttributeUsage(AttributeTargets.Class), MeansImplicitUse(ImplicitUseKindFlags.Access)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+[MeansImplicitUse(ImplicitUseKindFlags.Access)]
+[BaseTypeRequired(typeof(IClientDTO))]
 public class MessageIdAttribute(
     int id
 ) : Attribute {

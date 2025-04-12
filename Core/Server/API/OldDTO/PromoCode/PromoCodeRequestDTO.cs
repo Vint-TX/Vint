@@ -1,6 +1,6 @@
 using EmbedIO;
 
-namespace Vint.Core.Server.API.DTO.PromoCode;
+namespace Vint.Core.Server.API.OldDTO.PromoCode;
 
 public record PromoCodeRequestDTO(
     string Code,

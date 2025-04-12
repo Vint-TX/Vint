@@ -6,12 +6,12 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Items.Components;
-using Vint.Core.Server.API.DTO.PromoCode;
+using Vint.Core.Server.API.OldDTO.PromoCode;
 using Vint.Core.Server.Common.Attributes.Deserialization;
 using Vint.Core.Server.Common.Attributes.Methods;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Server.API.Controllers;
+namespace Vint.Core.Server.API.OldControllers;
 
 public class PromoCodeController : WebApiController {
     [Get("/")]

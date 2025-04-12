@@ -1,4 +1,4 @@
-namespace Vint.Core.Server.API.DTO.Player;
+namespace Vint.Core.Server.API.OldDTO.Player;
 
 public record PlayerDetailDTO(
     long Id,

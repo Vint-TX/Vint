@@ -42,8 +42,7 @@ public static class ConfigManager {
     public static QuestsInfo QuestsInfo { get; private set; }
     public static CommonMapInfo CommonMapInfo { get; private set; }
 
-    public static IEnumerable<string> GlobalEntitiesTypeNames => Root
-        .Children
+    public static IEnumerable<string> GlobalEntitiesTypeNames => Root.Children
         .Where(child => child.Value.Entities.Count != 0)
         .Select(child => child.Key);
 

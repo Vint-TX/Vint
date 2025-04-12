@@ -16,7 +16,7 @@ class ResponseJsonSerializer {
         Serializer = JsonSerializer.CreateDefault(settings);
     }
 
-    JsonSerializer Serializer { get; }
+    public JsonSerializer Serializer { get; }
 
     public async Task<string> Serialize(object? value) {
         string? json = TryGetJsonString(value);

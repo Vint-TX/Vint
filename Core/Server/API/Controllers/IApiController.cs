@@ -1,8 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Vint.Core.Server.API.Data;
+namespace Vint.Core.Server.API.Controllers;
 
 [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
-public interface IServerData : IData {
-    Task<IClientData> Process();
-}
+public interface IApiController;
