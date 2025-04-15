@@ -1,9 +1,9 @@
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Properties;
 
-namespace Vint.Core.Server.API.OldDTO.Lobby;
+namespace Vint.Core.Server.API.Data.Lobby;
 
-public record LobbySummaryDTO(
+public record LobbySummaryData(
     long Id,
     long MapId,
     int PlayersCount,
@@ -12,7 +12,7 @@ public record LobbySummaryDTO(
     string Mode,
     BattleType Type
 ) {
-    public static LobbySummaryDTO FromLobby(LobbyBase lobby) =>
+    public static LobbySummaryData FromLobby(LobbyBase lobby) =>
         new(lobby.Entity.Id,
             lobby.Properties.MapInfo.Id,
             lobby.Players.Count,

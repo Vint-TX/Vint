@@ -1,5 +1,5 @@
 using JetBrains.Annotations;
-using Vint.Core.Server.API.DTO.Base;
+using Vint.Core.Server.API.Data;
 
 namespace Vint.Core.Server.API.Attributes;
 

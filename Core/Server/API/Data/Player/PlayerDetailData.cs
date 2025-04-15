@@ -1,6 +1,6 @@
-namespace Vint.Core.Server.API.OldDTO.Player;
+namespace Vint.Core.Server.API.Data.Player;
 
-public record PlayerDetailDTO(
+public record PlayerDetailData(
     long Id,
     string Username,
     string Email,
@@ -18,7 +18,7 @@ public record PlayerDetailDTO(
     DateTimeOffset RegistrationTime,
     DateTimeOffset LastLoginTime
 ) {
-    public static PlayerDetailDTO FromPlayer(Database.Models.Player player) =>
+    public static PlayerDetailData FromPlayer(Database.Models.Player player) =>
         new(player.Id,
             player.Username,
             player.Email,

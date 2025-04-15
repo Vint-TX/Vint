@@ -1,108 +1,109 @@
-using EmbedIO;
-using EmbedIO.WebApi;
 using LinqToDB;
 using Vint.Core.Battle.Player;
 using Vint.Core.Chat;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.API.OldDTO.Player;
-using Vint.Core.Server.Common.Attributes.Deserialization;
-using Vint.Core.Server.Common.Attributes.Methods;
+using Vint.Core.Server.API.Attributes;
+using Vint.Core.Server.API.Data;
+using Vint.Core.Server.API.Data.Player;
+using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.Game;
 
-namespace Vint.Core.Server.API.OldControllers;
+namespace Vint.Core.Server.API.Controllers;
 
 public class PlayerController(
     GameServer server
-) : WebApiController { // todo registration
-    [Get("/")]
-    public async Task<IEnumerable<PlayerSummaryDTO>> GetPlayers([FromQuery] int from, [FromQuery(@default: 500)] int count) {
+) : IApiController { // todo registration
+    [MessageId(10)]
+    public async Task<IClientDTO> GetPlayers(int from, int count = 500) {
         from = Math.Max(0, from - 1);
 
         await using DbConnection db = new();
-        PlayerSummaryDTO[] players = await db.Players
+        List<PlayerSummaryData> players = await db.Players
             .Skip(from)
             .Take(count)
-            .Select(player => PlayerSummaryDTO.FromPlayer(player))
-            .ToArrayAsync();
+            .Select(player => PlayerSummaryData.FromPlayer(player))
+            .ToListAsync();
 
-        return players;
+        return SuccessDTO.Ok(players);
     }
 
-    [Get("/online")]
-    public IEnumerable<PlayerSummaryDTO> GetOnlinePlayers() =>
-        server.PlayerConnections.Values
+    [MessageId(11)]
+    public IClientDTO GetOnlinePlayers() =>
+        SuccessDTO.Ok(server.PlayerConnections.Values
             .Where(connection => connection.IsLoggedIn)
-            .Select(connection => PlayerSummaryDTO.FromPlayer(connection.Player));
+            .Select(connection => PlayerSummaryData.FromPlayer(connection.Player)));
 
-    [Get("/{id}")]
-    public async Task<PlayerDetailDTO> GetPlayer(long id) {
+    [MessageId(12)]
+    public async Task<IClientDTO> GetPlayer(long id) {
         await using DbConnection db = new();
         Player? player = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
 
         if (player == null)
-            throw HttpException.NotFound($"Player with id {id} does not exists");
+            return ErrorDTO.NotFound($"Player with id {id} does not exists");
 
-        return PlayerDetailDTO.FromPlayer(player);
+        return SuccessDTO.Ok(PlayerDetailData.FromPlayer(player));
     }
 
-    [Post("/{id}/dmsg")]
-    public async Task DisplayMessage(long playerId, [FromBodyAsJson] string message) {
+    [MessageId(14)]
+    public async Task<IClientDTO> DisplayMessage(long playerId, string message) {
         if (playerId == -1) {
             foreach (IPlayerConnection connection in server.PlayerConnections.Values)
                 await connection.DisplayMessage(message);
 
-            return;
+            return SuccessDTO.NoContent();
         }
 
         IPlayerConnection? target = server.FindConnection(playerId);
 
         if (target == null)
-            throw HttpException.NotFound($"Player '{playerId}' not found");
+            return ErrorDTO.NotFound($"Player {playerId} not found");
 
         await target.DisplayMessage(message);
+        return SuccessDTO.NoContent();
     }
 
-    [Get("/{id}/restorePasswordCode")]
-    public object GetRestorePasswordCode(long id) {
+    [MessageId(15)]
+    public IClientDTO GetRestorePasswordCode(long id) {
         IPlayerConnection? connection = server.FindConnection(id);
 
         if (connection == null)
-            throw HttpException.NotFound($"Player with id {id} is offline or does not exists");
+            return ErrorDTO.NotFound($"Player with id {id} is offline or does not exists");
 
         if (connection.RestorePasswordCode == null)
-            throw HttpException.BadRequest("Player did not request password recovery");
+            return ErrorDTO.BadRequest("Player did not request password recovery");
 
-        return new { Code = connection.RestorePasswordCode };
+        return SuccessDTO.Ok(new { Code = connection.RestorePasswordCode });
     }
 
-    [Get("/{id}/statistics")]
-    public async Task<StatisticsDTO> GetStatistics(long id) {
+    [MessageId(16)]
+    public async Task<IClientDTO> GetStatistics(long id) {
         await using DbConnection db = new();
         Statistics? statistics = await db.Statistics.FirstOrDefaultAsync(statistics => statistics.PlayerId == id);
 
         if (statistics == null)
-            throw HttpException.NotFound($"Player with id {id} does not exists");
+            return ErrorDTO.NotFound($"Player with id {id} does not exists");
 
-        return StatisticsDTO.FromStatistics(statistics);
+        return SuccessDTO.Ok(StatisticsData.FromStatistics(statistics));
     }
 
-    [Post("/{id}/kick")]
-    public async Task KickPlayer(long id, [FromBodyAsJson] string reason) {
+    [MessageId(18)]
+    public async Task<IClientDTO> KickPlayer(long id, string? reason = null) {
         IPlayerConnection? targetConnection = server.FindConnection(id);
 
         if (targetConnection == null)
-            throw HttpException.NotFound($"Player with id {id} does not exists");
+            return ErrorDTO.NotFound($"Player with id {id} is offline or does not exists");
 
         if (targetConnection.Player.IsAdmin)
-            throw HttpException.BadRequest($"Player with id {id} is an admin");
+            return ErrorDTO.BadRequest($"Player with id {id} is an admin");
 
         await targetConnection.Kick(reason);
+        return SuccessDTO.NoContent();
     }
 
-    [Post("/{id}/warn")]
-    public async Task WarnPlayer(long id, [FromBodyAsJson] PunishDTO punish) {
+    [MessageId(19)]
+    public async Task<IClientDTO> WarnPlayer(long id, string? reason = null, TimeSpan? duration = null) {
         IPlayerConnection? targetConnection = server.FindConnection(id);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -126,23 +127,27 @@ public class PlayerController(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
-                           throw HttpException.NotFound($"Player with id {id} does not exists");
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
+
+            if (targetPlayer == null)
+                return ErrorDTO.NotFound($"Player with id {id} does not exists");
         }
 
         if (targetPlayer!.IsAdmin)
-            throw HttpException.BadRequest($"Player with id {id} is an admin");
+            return ErrorDTO.BadRequest($"Player with id {id} is an admin");
 
-        Punishment punishment = await targetPlayer.Warn(ipAddress, punish.Reason, punish.Duration);
+        Punishment punishment = await targetPlayer.Warn(ipAddress, reason, duration);
 
         if (notifyChat != null && notifiedConnections != null) {
             string punishMessage = $"{targetPlayer.Username} was {punishment}";
             await ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
         }
+
+        return SuccessDTO.Created(new { punishment.Id }, $"Player {targetPlayer.Username} warned");
     }
 
-    [Post("/{id}/mute")]
-    public async Task MutePlayer(long id, [FromBodyAsJson] PunishDTO punish) {
+    [MessageId(20)]
+    public async Task<IClientDTO> MutePlayer(long id, string? reason = null, TimeSpan? duration = null) {
         IPlayerConnection? targetConnection = server.FindConnection(id);
 
         Player? targetPlayer = targetConnection?.Player;
@@ -166,75 +171,89 @@ public class PlayerController(
             }
         } else {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
-                           throw HttpException.NotFound($"Player with id {id} does not exists");
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
+
+            if (targetPlayer == null)
+                return ErrorDTO.NotFound($"Player with id {id} does not exists");
         }
 
         if (targetPlayer!.IsAdmin)
-            throw HttpException.BadRequest($"Player with id {id} is an admin");
+            return ErrorDTO.BadRequest($"Player with id {id} is an admin");
 
-        Punishment punishment = await targetPlayer.Mute(ipAddress, punish.Reason, punish.Duration);
+        Punishment punishment = await targetPlayer.Mute(ipAddress, reason, duration);
 
         if (notifyChat != null && notifiedConnections != null) {
             string punishMessage = $"{targetPlayer.Username} was {punishment}";
             await ChatUtils.SendMessage(punishMessage, notifyChat, notifiedConnections, null);
         }
+
+        return SuccessDTO.Created(new { punishment.Id }, $"Player {targetPlayer.Username} muted");
     }
 
-    [Post("/{id}/ban")]
-    public async Task BanPlayer(long id, [FromBodyAsJson] PunishDTO punish) {
+    [MessageId(21)]
+    public async Task<IClientDTO> BanPlayer(long id, string? reason = null, TimeSpan? duration = null) {
         IPlayerConnection? targetConnection = server.FindConnection(id);
-
         Player? targetPlayer = targetConnection?.Player;
 
         if (targetConnection == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
-                           throw HttpException.NotFound($"Player with id {id} does not exists");
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
+
+            if (targetPlayer == null)
+                return ErrorDTO.NotFound($"Player with id {id} does not exists");
         }
 
         if (targetPlayer!.IsAdmin)
-            throw HttpException.BadRequest($"Player with id {id} is an admin");
+            return ErrorDTO.BadRequest($"Player with id {id} is an admin");
 
         string? ipAddress = null;
 
         if (targetConnection != null) {
             ipAddress = ((SocketPlayerConnection)targetConnection).EndPoint.Address.ToString();
-            await targetConnection.Kick(punish.Reason);
+            await targetConnection.Kick(reason);
         }
 
-        await targetPlayer.Ban(ipAddress, punish.Reason, punish.Duration);
+        Punishment punishment = await targetPlayer.Ban(ipAddress, reason, duration);
+        return SuccessDTO.Created(new { punishment.Id }, $"Player {targetPlayer.Username} banned");
     }
 
-    [Post("/{id}/unmute")]
-    public async Task UnmutePlayer(long id) {
+    [MessageId(22)]
+    public async Task<IClientDTO> UnmutePlayer(long id) {
         Player? targetPlayer = server.FindConnection(id)?.Player;
 
         if (targetPlayer == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
-                           throw HttpException.NotFound($"Player with id {id} does not exists");
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
+
+            if (targetPlayer == null)
+                return ErrorDTO.NotFound($"Player with id {id} does not exists");
         }
 
         bool successful = await targetPlayer.UnMute();
 
         if (!successful)
-            throw HttpException.BadRequest("Player is not muted");
+            return ErrorDTO.BadRequest("Player is not muted");
+
+        return SuccessDTO.NoContent();
     }
 
-    [Post("/{id}/unban")]
-    public async Task UnbanPlayer(long id) {
+    [MessageId(23)]
+    public async Task<IClientDTO> UnbanPlayer(long id) {
         Player? targetPlayer = server.FindConnection(id)?.Player;
 
         if (targetPlayer == null) {
             await using DbConnection db = new();
-            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id) ??
-                           throw HttpException.NotFound($"Player with id {id} does not exists");
+            targetPlayer = await db.Players.FirstOrDefaultAsync(player => player.Id == id);
+
+            if (targetPlayer == null)
+                return ErrorDTO.NotFound($"Player with id {id} does not exists");
         }
 
         bool successful = await targetPlayer.UnBan();
 
         if (!successful)
-            throw HttpException.BadRequest("Player is not banned");
+            return ErrorDTO.BadRequest("Player is not banned");
+
+        return SuccessDTO.NoContent();
     }
 }

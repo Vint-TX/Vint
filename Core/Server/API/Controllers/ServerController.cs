@@ -3,9 +3,9 @@ using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Config;
 using Vint.Core.Server.API.Attributes;
-using Vint.Core.Server.API.DTO.Base;
-using Vint.Core.Server.API.DTO.Error;
-using Vint.Core.Server.API.DTO.Server;
+using Vint.Core.Server.API.Data;
+using Vint.Core.Server.API.Data.Server;
+using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.Game;
 
 namespace Vint.Core.Server.API.Controllers;
@@ -28,20 +28,20 @@ public class ServerController(
         int arcadeCount = battles.GetValueOrDefault(BattleType.Arcade, 0);
         int customCount = battles.GetValueOrDefault(BattleType.Custom, 0);
 
-        return new CountDTO(connectionsCount, playersCount, matchmakingCount, arcadeCount, customCount);
+        return SuccessDTO.Ok(data: new CountData(connectionsCount, playersCount, matchmakingCount, arcadeCount, customCount));
     }
 
     [MessageId(5)]
-    public EnumerableClientDTO<string> GetEntitiesTypeNames() =>
-        new(ConfigManager.GlobalEntitiesTypeNames);
+    public IClientDTO GetEntitiesTypeNames() =>
+        SuccessDTO.Ok(data: ConfigManager.GlobalEntitiesTypeNames);
 
     [MessageId(6)]
     public async Task<IClientDTO> GetEntities(string typeName) {
         string? json = await ConfigManager.GetGlobalEntitiesJson(typeName);
 
         if (json == null)
-            return new ErrorDTO(404, $"No entities found for '{typeName}'", null);
+            return ErrorDTO.NotFound($"No entities found for '{typeName}'");
 
-        return new EnumerableClientDTO<JToken>(JArray.Parse(json));
+        return SuccessDTO.Ok(data: JArray.Parse(json));
     }
 }

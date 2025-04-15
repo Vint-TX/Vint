@@ -1,12 +1,12 @@
-namespace Vint.Core.Server.API.OldDTO.Player;
+namespace Vint.Core.Server.API.Data.Player;
 
-public record PlayerSummaryDTO(
+public record PlayerSummaryData(
     long Id,
     string Username,
     string Email,
     ulong DiscordId
 ) {
-    public static PlayerSummaryDTO FromPlayer(Database.Models.Player player) =>
+    public static PlayerSummaryData FromPlayer(Database.Models.Player player) =>
         new(player.Id,
             player.Username,
             player.Email,
