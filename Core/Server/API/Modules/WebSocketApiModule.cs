@@ -109,21 +109,21 @@ public class WebSocketApiModule : WebSocketModule {
                 return;
             }
 
-            JToken data = message["data"]!;
+            JToken? data = message["data"];
 
             ParameterInfo[] parameters = handler.Method.GetParameters();
             object?[] args = new object?[parameters.Length];
 
             for (int i = 0; i < parameters.Length; i++) {
                 ParameterInfo parameter = parameters[i];
-                JToken? token = data[parameter.Name!];
+                JToken? token = data?[parameter.Name!];
                 object? value;
 
                 if (token == null) {
                     if (parameter.HasDefaultValue)
                         value = parameter.DefaultValue;
                     else {
-                        logger.Error("Missing parameter '{Parameter}' in message: {Message}", parameter.Name, rawMessage);
+                        logger.Error("Missing parameter '{Parameter}' in message data: {Message}", parameter.Name, rawMessage);
                         await SendAsync(context, ErrorDTO.BadRequest($"Missing parameter '{parameter.Name}'"), requestId.Value);
                         return;
                     }
@@ -133,7 +133,7 @@ public class WebSocketApiModule : WebSocketModule {
                 try {
                     args[i] = value;
                 } catch (Exception e) {
-                    logger.Error(e, "Failed to deserialize parameter '{Parameter}' in message: {Message}", parameter.Name, rawMessage);
+                    logger.Error(e, "Failed to deserialize parameter '{Parameter}' in message data: {Message}", parameter.Name, rawMessage);
                     await SendAsync(context, ErrorDTO.BadRequest($"Failed to deserialize parameter '{parameter.Name}'", e), requestId.Value);
                     return;
                 }
