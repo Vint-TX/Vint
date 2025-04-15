@@ -1,8 +1,8 @@
 using Vint.Core.Database.Models;
 
-namespace Vint.Core.Server.API.OldDTO.Player;
+namespace Vint.Core.Server.API.Data.Player;
 
-public record StatisticsDTO(
+public record StatisticsData(
     long BattlesParticipated,
     long AllBattlesParticipated,
     long AllCustomBattlesParticipated,
@@ -18,7 +18,7 @@ public record StatisticsDTO(
     uint Shots,
     uint Hits
 ) {
-    public static StatisticsDTO FromStatistics(Statistics statistics) =>
+    public static StatisticsData FromStatistics(Statistics statistics) =>
         new(statistics.BattlesParticipated,
             statistics.AllBattlesParticipated,
             statistics.AllCustomBattlesParticipated,

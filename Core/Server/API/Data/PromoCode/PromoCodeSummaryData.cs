@@ -1,13 +1,13 @@
-namespace Vint.Core.Server.API.OldDTO.PromoCode;
+namespace Vint.Core.Server.API.Data.PromoCode;
 
-public record PromoCodeSummaryDTO(
+public record PromoCodeSummaryData(
     long Id,
     string Code,
     int Uses,
     int MaxUses,
     bool CanBeUsed
 ) {
-    public static PromoCodeSummaryDTO FromPromoCode(Database.Models.PromoCode promoCode) =>
+    public static PromoCodeSummaryData FromPromoCode(Database.Models.PromoCode promoCode) =>
         new(promoCode.Id,
             promoCode.Code,
             promoCode.Uses,

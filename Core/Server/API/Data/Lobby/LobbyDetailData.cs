@@ -1,10 +1,10 @@
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Properties;
-using Vint.Core.Server.API.OldDTO.Player;
+using Vint.Core.Server.API.Data.Player;
 
-namespace Vint.Core.Server.API.OldDTO.Lobby;
+namespace Vint.Core.Server.API.Data.Lobby;
 
-public record LobbyDetailDTO(
+public record LobbyDetailData(
     long Id,
     long MapId,
     int PlayersCount,
@@ -18,9 +18,9 @@ public record LobbyDetailDTO(
     string Gravity,
     string State,
     BattleType Type,
-    IEnumerable<PlayerSummaryDTO> Players
+    IEnumerable<PlayerSummaryData> Players
 ) {
-    public static LobbyDetailDTO FromLobby(LobbyBase lobby) =>
+    public static LobbyDetailData FromLobby(LobbyBase lobby) =>
         new(lobby.Entity.Id,
             lobby.Properties.MapInfo.Id,
             lobby.Players.Count,
@@ -34,5 +34,5 @@ public record LobbyDetailDTO(
             lobby.Properties.Gravity.ToString(),
             lobby.StateManager.CurrentState.ToString(),
             lobby.Properties.Type,
-            lobby.Players.Select(lobbyPlayer => PlayerSummaryDTO.FromPlayer(lobbyPlayer.Connection.Player)));
+            lobby.Players.Select(lobbyPlayer => PlayerSummaryData.FromPlayer(lobbyPlayer.Connection.Player)));
 }
