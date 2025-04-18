@@ -23,7 +23,7 @@ public class WebSocketApiModule : WebSocketModule {
         Logger = Log.Logger.ForType<WebSocketApiModule>();
         ResponseJsonSerializer = new ResponseJsonSerializer();
 
-        Dictionary<int, Delegate> handlers = [];
+        Dictionary<int, Handler> handlers = [];
 
         IEnumerable<Type> controllers = Assembly
             .GetExecutingAssembly()
@@ -37,19 +37,9 @@ public class WebSocketApiModule : WebSocketModule {
                 .GetRuntimeMethods()
                 .Where(method => method.IsDefined(typeof(MessageIdAttribute)));
 
-            foreach (MethodInfo handlerInfo in handlerInfos) {
-                int messageId = handlerInfo.GetCustomAttribute<MessageIdAttribute>()!.Id;
-
-                List<Type> typeArgs = handlerInfo
-                    .GetParameters()
-                    .Select(parameter => parameter.ParameterType)
-                    .ToList();
-
-                typeArgs.Add(handlerInfo.ReturnType);
-                Type handlerType = GetFuncType(typeArgs.Count).MakeGenericType(typeArgs.ToArray());
-                Delegate handler = handlerInfo.CreateDelegate(handlerType, controller);
-
-                handlers.Add(messageId, handler);
+            foreach (MethodInfo handler in handlerInfos) {
+                int messageId = handler.GetCustomAttribute<MessageIdAttribute>()!.Id;
+                handlers.Add(messageId, new Handler(handler, controller));
             }
         }
 
@@ -58,7 +48,7 @@ public class WebSocketApiModule : WebSocketModule {
 
     ILogger Logger { get; }
     ResponseJsonSerializer ResponseJsonSerializer { get; }
-    FrozenDictionary<int, Delegate> Handlers { get; }
+    FrozenDictionary<int, Handler> Handlers { get; }
 
     protected override Task OnClientConnectedAsync(IWebSocketContext context) {
         GetLogger(context).Information("New client connected");
@@ -82,7 +72,7 @@ public class WebSocketApiModule : WebSocketModule {
             try {
                 message = JObject.Parse(rawMessage);
             } catch (Exception e) {
-                logger.Warning(e, "Failed to parse message: {Message}", rawMessage);
+                logger.Error(e, "Failed to parse message: {Message}", rawMessage);
                 await SendAsync(context, ErrorDTO.BadRequest("Failed to parse message", e));
                 return;
             }
@@ -90,7 +80,7 @@ public class WebSocketApiModule : WebSocketModule {
             requestId = message["requestId"]?.ToObject<int>();
 
             if (requestId == null) {
-                logger.Warning("Missing requestId in message: {Message}", message);
+                logger.Error("Missing requestId in message: {Message}", message);
                 await SendAsync(context, ErrorDTO.BadRequest("Missing requestId"));
                 return;
             }
@@ -98,78 +88,29 @@ public class WebSocketApiModule : WebSocketModule {
             int? id = message["id"]?.ToObject<int>();
 
             if (id == null) {
-                logger.Warning("Missing id in message: {Message}", message);
+                logger.Error("Missing id in message: {Message}", message);
                 await SendAsync(context, ErrorDTO.BadRequest("Missing id"), requestId.Value);
                 return;
             }
 
-            if (!Handlers.TryGetValue(id.Value, out Delegate? handler)) {
-                logger.Warning("Unknown id: {Id}", id);
+            if (!Handlers.TryGetValue(id.Value, out Handler? handler)) {
+                logger.Error("Unknown id: {Id}", id);
                 await SendAsync(context, ErrorDTO.BadRequest("Unknown id"), requestId.Value);
                 return;
             }
 
-            JToken? data = message["data"];
-
-            ParameterInfo[] parameters = handler.Method.GetParameters();
-            object?[] args = new object?[parameters.Length];
-
-            for (int i = 0; i < parameters.Length; i++) {
-                ParameterInfo parameter = parameters[i];
-                JToken? token = data?[parameter.Name!];
-                object? value;
-
-                if (token == null) {
-                    if (parameter.HasDefaultValue)
-                        value = parameter.DefaultValue;
-                    else {
-                        logger.Error("Missing parameter '{Parameter}' in message data: {Message}", parameter.Name, rawMessage);
-                        await SendAsync(context, ErrorDTO.BadRequest($"Missing parameter '{parameter.Name}'"), requestId.Value);
-                        return;
-                    }
-                } else
-                    value = token.ToObject(parameter.ParameterType);
-
-                try {
-                    args[i] = value;
-                } catch (Exception e) {
-                    logger.Error(e, "Failed to deserialize parameter '{Parameter}' in message data: {Message}", parameter.Name, rawMessage);
-                    await SendAsync(context, ErrorDTO.BadRequest($"Failed to deserialize parameter '{parameter.Name}'", e), requestId.Value);
-                    return;
-                }
-            }
-
-            IClientDTO clientDTO;
+            object?[] args;
 
             try {
-                object? result = handler.DynamicInvoke(args);
-
-                switch (result) {
-                    case IClientDTO dto: {
-                        clientDTO = dto;
-                        break;
-                    }
-
-                    case Task task: {
-                        Task<IClientDTO> dtoTask = Unsafe.As<Task<IClientDTO>>(task);
-                        clientDTO = await dtoTask;
-                        break;
-                    }
-
-                    default: {
-                        string resType = result?.GetType().ToString() ?? "null";
-
-                        logger.Error("Invalid handler return type: {Type}", resType);
-                        await SendAsync(context, ErrorDTO.InternalServerError("Invalid handler return type, this should not happen", resType), requestId.Value);
-                        return;
-                    }
-                }
+                JToken? data = message["data"];
+                args = handler.ParseArgs(data);
             } catch (Exception e) {
-                logger.Error(e, "Caught exception while executing handler");
-                await SendAsync(context, ErrorDTO.InternalServerError("Internal server error", e), requestId.Value);
+                logger.Error(e, "Failed to parse arguments");
+                await SendAsync(context, ErrorDTO.BadRequest("Failed to parse arguments", e), requestId.Value);
                 return;
             }
 
+            IClientDTO clientDTO = await handler.ExecuteAsync(args);
             await SendAsync(context, clientDTO, requestId.Value);
         } catch (Exception e) {
             logger.Error(e, "Caught exception while processing message");
@@ -197,34 +138,6 @@ public class WebSocketApiModule : WebSocketModule {
     }
 
     ILogger GetLogger(IWebSocketContext context) => Logger.WithEndPoint(context);
-
-    [UsedImplicitly(ImplicitUseKindFlags.Access, ImplicitUseTargetFlags.Members)]
-    record ClientMessage(
-        int Id,
-        int RequestId,
-        IClientDTO Data
-    );
-
-    static Type GetFuncType(int typeArgsCount) => typeArgsCount switch {
-        1 => typeof(Func<>),
-        2 => typeof(Func<,>),
-        3 => typeof(Func<,,>),
-        4 => typeof(Func<,,,>),
-        5 => typeof(Func<,,,,>),
-        6 => typeof(Func<,,,,,>),
-        7 => typeof(Func<,,,,,,>),
-        8 => typeof(Func<,,,,,,,>),
-        9 => typeof(Func<,,,,,,,,>),
-        10 => typeof(Func<,,,,,,,,,>),
-        11 => typeof(Func<,,,,,,,,,,>),
-        12 => typeof(Func<,,,,,,,,,,,>),
-        13 => typeof(Func<,,,,,,,,,,,,>),
-        14 => typeof(Func<,,,,,,,,,,,,,>),
-        15 => typeof(Func<,,,,,,,,,,,,,,>),
-        16 => typeof(Func<,,,,,,,,,,,,,,,>),
-        17 => typeof(Func<,,,,,,,,,,,,,,,,>),
-        _ => throw new ArgumentException("Too many parameters for Func<> delegate")
-    };
 
     [Conditional("DEBUG")]
     static void EnsureSchemaValid() {
@@ -291,6 +204,62 @@ public class WebSocketApiModule : WebSocketModule {
             }
 
             return false;
+        }
+    }
+
+    [UsedImplicitly(ImplicitUseKindFlags.Access, ImplicitUseTargetFlags.Members)]
+    record ClientMessage(
+        int Id,
+        int RequestId,
+        IClientDTO Data
+    );
+
+    class Handler(
+        MethodBase method,
+        object? instance
+    ) {
+        public object?[] ParseArgs(JToken? data) {
+            ParameterInfo[] parameters = method.GetParameters();
+            object?[] args = new object?[parameters.Length];
+
+            for (int i = 0; i < parameters.Length; i++) {
+                ParameterInfo parameter = parameters[i];
+
+                bool allData = parameter.IsDefined(typeof(AllDataAttribute));
+                JToken? token = allData ? data : data?[parameter.Name!];
+
+                args[i] = GetArgument(token, parameter);
+            }
+
+            return args;
+        }
+
+        public async Task<IClientDTO> ExecuteAsync(object?[] args) => method.Invoke(instance, args) switch {
+            IClientDTO dto => dto,
+            Task task => await Unsafe.As<Task<IClientDTO>>(task),
+            _ => throw new UnreachableException("Invalid handler return type")
+        };
+
+        static object? GetArgument(JToken? token, ParameterInfo parameter) {
+            if (token != null)
+                return token.ToObject(parameter.ParameterType);
+
+            if (parameter.HasDefaultValue)
+                return parameter.DefaultValue;
+
+            if (IsNullable(parameter))
+                return null;
+
+            throw new ArgumentException($"Failed to parse argument, token: {token?.Path ?? "null"}", parameter.Name);
+        }
+
+        static bool IsNullable(ParameterInfo parameter) {
+            if (Nullable.GetUnderlyingType(parameter.ParameterType) != null)
+                return true;
+
+            NullabilityInfoContext nullabilityContext = new();
+            NullabilityInfo nullability = nullabilityContext.Create(parameter);
+            return nullability.ReadState == NullabilityState.Nullable;
         }
     }
 }
