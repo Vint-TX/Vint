@@ -1,0 +1,8 @@
+namespace Vint.Core.Server.API;
+
+[Flags]
+public enum Subscriptions : uint {
+    None = 0,
+    Reports = 1 << 0,
+    Logs = 1 << 1,
+}
