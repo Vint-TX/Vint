@@ -1,6 +1,5 @@
 ﻿using EmbedIO;
 using Serilog;
-using Vint.Core.Server.API.Modules;
 using Vint.Core.Server.Common.Middlewares;
 using Vint.Core.Utils;
 using ILogger = Serilog.ILogger;
@@ -26,7 +25,8 @@ public class ApiServer {
 
     ILogger Logger { get; } = Log.Logger.ForType<ApiServer>();
     WebServer Server { get; }
-    WebSocketApiModule WebSocketApiModule { get; }
+
+    public WebSocketApiModule WebSocketApiModule { get; }
 
     public async Task Start() => await Server.RunAsync();
 

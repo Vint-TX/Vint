@@ -1,10 +1,10 @@
+using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using EmbedIO.WebSockets;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using Vint.Core.Server.API.Attributes;
@@ -14,7 +14,7 @@ using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.Common.Serialization;
 using Vint.Core.Utils;
 
-namespace Vint.Core.Server.API.Modules;
+namespace Vint.Core.Server.API;
 
 public class WebSocketApiModule : WebSocketModule {
     public WebSocketApiModule(IServiceProvider serviceProvider, string urlPath) : base(urlPath, true) {
@@ -22,6 +22,11 @@ public class WebSocketApiModule : WebSocketModule {
 
         Logger = Log.Logger.ForType<WebSocketApiModule>();
         ResponseJsonSerializer = new ResponseJsonSerializer();
+        RequestSerializer = new JsonSerializer {
+            Converters = {
+                new StrictEnumConverter<Subscriptions>() // todo better way to do this
+            }
+        };
 
         Dictionary<int, Handler> handlers = [];
 
@@ -39,7 +44,7 @@ public class WebSocketApiModule : WebSocketModule {
 
             foreach (MethodInfo handler in handlerInfos) {
                 int messageId = handler.GetCustomAttribute<MessageIdAttribute>()!.Id;
-                handlers.Add(messageId, new Handler(handler, controller));
+                handlers.Add(messageId, new Handler(handler, controller, RequestSerializer));
             }
         }
 
@@ -48,15 +53,27 @@ public class WebSocketApiModule : WebSocketModule {
 
     ILogger Logger { get; }
     ResponseJsonSerializer ResponseJsonSerializer { get; }
+    JsonSerializer RequestSerializer { get; }
     FrozenDictionary<int, Handler> Handlers { get; }
 
-    protected override Task OnClientConnectedAsync(IWebSocketContext context) {
-        GetLogger(context).Information("New client connected");
-        return Task.CompletedTask;
+    ConcurrentDictionary<string, ApiConnection> Connections { get; } = [];
+
+    protected override async Task OnClientConnectedAsync(IWebSocketContext context) {
+        ILogger logger = GetLogger(context);
+
+        if (!Connections.TryAdd(context.Id, new ApiConnection(context))) {
+            logger.Error("Client with Id '{Id}' is already connected", context.Id);
+            await CloseAsync(context);
+            return;
+        }
+
+        logger.Information("({Id}) New client connected", context.Id);
     }
 
     protected override Task OnClientDisconnectedAsync(IWebSocketContext context) {
-        GetLogger(context).Information("Client disconnected");
+        ILogger logger = GetLogger(context);
+        Connections.TryRemove(context.Id, out _);
+        logger.Information("({Id}) Client disconnected", context.Id);
         return Task.CompletedTask;
     }
 
@@ -65,6 +82,12 @@ public class WebSocketApiModule : WebSocketModule {
         int? requestId = -1;
 
         try {
+            if (!Connections.TryGetValue(context.Id, out ApiConnection? connection)) {
+                logger.Error("Client with Id '{Id}' is not connected", context.Id);
+                await CloseAsync(context);
+                return;
+            }
+
             string rawMessage = Encoding.GetString(buffer);
             logger.Verbose("RX: {Message}", rawMessage);
             JObject message;
@@ -103,7 +126,7 @@ public class WebSocketApiModule : WebSocketModule {
 
             try {
                 JToken? data = message["data"];
-                args = handler.ParseArgs(data);
+                args = handler.ParseArgs(data, connection);
             } catch (Exception e) {
                 logger.Error(e, "Failed to parse arguments");
                 await SendAsync(context, ErrorDTO.BadRequest("Failed to parse arguments", e), requestId.Value);
@@ -118,18 +141,34 @@ public class WebSocketApiModule : WebSocketModule {
         }
     }
 
+    public async Task BroadcastAsync(IClientDTO clientDTO) {
+        Subscriptions? subscriptions = clientDTO.GetType().GetCustomAttribute<SubscriptionsAttribute>()?.Subscriptions;
+
+        if (subscriptions.HasValue) {
+            await BroadcastAsync(clientDTO, subscriptions.Value);
+            return;
+        }
+
+        string json = await GetJson(clientDTO, -1);
+
+        Logger.Verbose("(Broadcast) TX: {Message}", json);
+        await BroadcastAsync(json);
+    }
+
+    public async Task BroadcastAsync(IClientDTO clientDTO, Subscriptions subscriptions) {
+        string json = await GetJson(clientDTO, -1);
+
+        Logger.Verbose("(Broadcast {Subscriptions}) TX: {Message}", subscriptions, json);
+        await Task.WhenAll(Connections.Values
+            .Where(conn => conn.Subscriptions.HasFlag(subscriptions))
+            .Select(conn => SendAsync(conn.Context, json)));
+    }
+
     async Task SendAsync(IWebSocketContext context, IClientDTO clientDTO, int requestId = -1) {
         string json = await GetJson(clientDTO, requestId);
 
         GetLogger(context).Verbose("TX: {Message}", json);
         await SendAsync(context, json);
-    }
-
-    async Task BroadcastAsync(IClientDTO clientDTO) {
-        string json = await GetJson(clientDTO, -1);
-
-        Logger.Verbose("(Broadcast) TX: {Message}", json);
-        await BroadcastAsync(json);
     }
 
     async Task<string> GetJson(IClientDTO dto, int requestId) {
@@ -204,62 +243,6 @@ public class WebSocketApiModule : WebSocketModule {
             }
 
             return false;
-        }
-    }
-
-    [UsedImplicitly(ImplicitUseKindFlags.Access, ImplicitUseTargetFlags.Members)]
-    record ClientMessage(
-        int Id,
-        int RequestId,
-        IClientDTO Data
-    );
-
-    class Handler(
-        MethodBase method,
-        object? instance
-    ) {
-        public object?[] ParseArgs(JToken? data) {
-            ParameterInfo[] parameters = method.GetParameters();
-            object?[] args = new object?[parameters.Length];
-
-            for (int i = 0; i < parameters.Length; i++) {
-                ParameterInfo parameter = parameters[i];
-
-                bool allData = parameter.IsDefined(typeof(AllDataAttribute));
-                JToken? token = allData ? data : data?[parameter.Name!];
-
-                args[i] = GetArgument(token, parameter);
-            }
-
-            return args;
-        }
-
-        public async Task<IClientDTO> ExecuteAsync(object?[] args) => method.Invoke(instance, args) switch {
-            IClientDTO dto => dto,
-            Task task => await Unsafe.As<Task<IClientDTO>>(task),
-            _ => throw new UnreachableException("Invalid handler return type")
-        };
-
-        static object? GetArgument(JToken? token, ParameterInfo parameter) {
-            if (token != null)
-                return token.ToObject(parameter.ParameterType);
-
-            if (parameter.HasDefaultValue)
-                return parameter.DefaultValue;
-
-            if (IsNullable(parameter))
-                return null;
-
-            throw new ArgumentException($"Failed to parse argument, token: {token?.Path ?? "null"}", parameter.Name);
-        }
-
-        static bool IsNullable(ParameterInfo parameter) {
-            if (Nullable.GetUnderlyingType(parameter.ParameterType) != null)
-                return true;
-
-            NullabilityInfoContext nullabilityContext = new();
-            NullabilityInfo nullability = nullabilityContext.Create(parameter);
-            return nullability.ReadState == NullabilityState.Nullable;
         }
     }
 }

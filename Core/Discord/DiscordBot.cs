@@ -22,7 +22,7 @@ using ILogger = Serilog.ILogger;
 
 namespace Vint.Core.Discord;
 
-public class DiscordBot(
+public class DiscordBot( // todo move to microservice
     IServiceProvider serviceProvider
 ) {
     const string DebugToken = "VINT_DISCORD_BOT_DEBUG_TOKEN",
