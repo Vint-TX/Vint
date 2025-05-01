@@ -19,7 +19,7 @@
     }
   },
   {
-    "name": "NewVideo",
+    "name": "WebsiteUpdate",
     "id": 0,
     "template": [
       "ConfiguredNewsItemTemplate",
@@ -29,11 +29,11 @@
       "NewsItemComponent": {
         "newsItem": {
           "layout": "Large",
-          "headerText": "New video!",
-          "tooltip": "How to build a good preset?",
-          "externalUrl": "https://youtu.be/xcJevuHeCLo",
-          "previewImageUrl": "https://cdn.vint.win/resources/News/Images/Video_Preview.png",
-          "date": "2024-05-14T17:20:00Z"
+          "headerText": "Website update",
+          "tooltip": "Our website is now more modern and user-friendly, with a news section and upcoming account integration for more community features",
+          "externalUrl": "https://vint.win/en/news/website-update",
+          "previewImageUrl": "https://cdn.vint.win/resources/News/website-update/en.png",
+          "date": "2025-05-01T17:00:00Z"
         }
       }
     }
