@@ -14,7 +14,7 @@ namespace Vint.Core.Server.API.Controllers;
 
 public class PlayerController(
     GameServer server
-) : IApiController { // todo registration
+) : IApiController {
     [MessageId(10)]
     public async Task<IClientDTO> GetPlayers(int from, int count = 500) {
         from = Math.Max(0, from - 1);
@@ -255,5 +255,25 @@ public class PlayerController(
             return ErrorDTO.BadRequest("Player is not banned");
 
         return SuccessDTO.NoContent();
+    }
+
+    [MessageId(24)]
+    public async Task<IClientDTO> ValidateCredentials(string usernameOrEmail, string passwordHash) {
+        await using DbConnection db = new();
+        var player = await db.Players
+            .Where(player => player.Username == usernameOrEmail || player.Email == usernameOrEmail)
+            .Select(player => new {
+                player.Id,
+                player.PasswordHash
+            })
+            .FirstOrDefaultAsync();
+
+        if (player == null)
+            return ErrorDTO.NotFound($"Player with username or email {usernameOrEmail} does not exists");
+
+        if (!Convert.ToHexString(player.PasswordHash).Equals(passwordHash, StringComparison.OrdinalIgnoreCase))
+            return ErrorDTO.BadRequest("Invalid password");
+
+        return SuccessDTO.Ok(new { player.Id });
     }
 }
