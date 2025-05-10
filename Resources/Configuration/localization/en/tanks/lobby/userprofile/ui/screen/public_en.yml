@@ -13,7 +13,7 @@ viewUserEmailScreen:
 enterUserEmailScreen:
   header: RESTORE ACCESS
   continueButton: CONTINUE
-  rightPanelHint: "If you have any problems, contact the project administrators on the Discord server Vint: https://discord.gg/6WzrtVSs6G."
+  rightPanelHint: "If you have any problems, contact the project administrators on the Discord server Vint: https://discord.gg/4begdWsmbg"
 enterConfirmationCodeScreen:
   header: RESTORE ACCESS
   continueButton: CONFIRM

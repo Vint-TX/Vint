@@ -1,4 +1,4 @@
-[![Discord](https://img.shields.io/discord/1196050317607972934?style=for-the-badge&label=Discord&link=https%3A%2F%2Fdiscord.gg%2F2ZdJYbj7pt)](https://discord.gg/2ZdJYbj7pt)
+[![Discord](https://img.shields.io/discord/1196050317607972934?style=for-the-badge&label=Discord&link=https%3A%2F%2Fdiscord.gg%2F4begdWsmbg)](https://discord.gg/4begdWsmbg)
 
 # Vint
 

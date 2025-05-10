@@ -13,7 +13,7 @@ viewUserEmailScreen:
 enterUserEmailScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА
   continueButton: ПРОДОЛЖИТЬ
-  rightPanelHint: "Если у тебя возникли какие-то проблемы, напиши администраторам проекта на Discord сервере Vint: https://discord.gg/6WzrtVSs6G"
+  rightPanelHint: "Если у тебя возникли какие-то проблемы, напиши администраторам проекта на Discord сервере Vint: https://discord.gg/4begdWsmbg"
 enterConfirmationCodeScreen:
   header: ВОССТАНОВЛЕНИЕ ДОСТУПА
   continueButton: ПОДТВЕРДИТЬ
