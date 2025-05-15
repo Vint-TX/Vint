@@ -43,6 +43,19 @@ public class BattleProperties {
             ? (T)value
             : property.DefaultValue;
 
+    public bool HasValue<T>(IBattleProperty<T> property) where T : notnull =>
+        Properties.ContainsKey(property);
+
+    public bool TryGetValue<T>(IBattleProperty<T> property, out T value) where T : notnull {
+        if (Properties.TryGetValue(property, out object? obj)) {
+            value = (T)obj;
+            return true;
+        }
+
+        value = default!;
+        return false;
+    }
+
     public void SetValue<T>(IBattleProperty<T> property, T value) where T : notnull =>
         Properties[property] = value;
 
