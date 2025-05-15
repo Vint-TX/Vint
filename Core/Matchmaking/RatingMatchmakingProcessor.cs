@@ -66,7 +66,10 @@ public class RatingMatchmakingProcessor( // todo matchmaking system
         MapInfo mapInfo = GetRandomMapInfo();
         ClientBattleParams battleParams = new(GetRandomMode(), GravityType.Earth, mapInfo, false, true, false, 10);
 
-        return new BattleProperties(BattleType.Rating, TimeSpan.FromMinutes(1), true, battleParams);
+        BattleProperties properties = new(BattleType.Rating, battleParams);
+        properties.SetValue(BattleProperty.WarmUpDuration, TimeSpan.FromMinutes(1));
+
+        return properties;
     }
 
     static MapInfo GetRandomMapInfo() => ConfigManager.MapInfos.Where(mapInfo => mapInfo.Matchmaking).ToArray().RandomElement();

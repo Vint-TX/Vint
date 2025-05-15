@@ -26,7 +26,7 @@ public class LobbyProcessor(
     }
 
     public async Task<CustomLobby> CreateCustom(ClientBattleParams clientParams, IPlayerConnection owner) {
-        BattleProperties properties = new(BattleType.Custom, TimeSpan.Zero, true, clientParams);
+        BattleProperties properties = new(BattleType.Custom, clientParams);
         CustomLobby lobby = new(properties, owner, questManager) { PlayerRemoved = PlayerRemoved };
         await lobby.Init();
 

@@ -11,7 +11,8 @@ namespace Vint.Core.Battle.Lobby.Impl.Arcade;
 public sealed class WithoutDamageLobby : ArcadeLobby {
     public WithoutDamageLobby(MapInfo mapInfo, BattleMode battleMode, QuestManager questManager) : base(questManager) {
         ClientBattleParams clientParams = new(battleMode, GravityType.Earth, mapInfo, false, true, false, 15);
-        Properties = new BattleProperties(BattleType.Arcade, TimeSpan.Zero, false, clientParams);
+        Properties = new BattleProperties(BattleType.Arcade, clientParams);
+        Properties.SetValue(BattleProperty.DamageEnabled, false);
         Entity = new MatchMakingLobbyTemplate().Create(Properties);
     }
 

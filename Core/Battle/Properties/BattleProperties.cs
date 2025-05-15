@@ -6,11 +6,8 @@ using Vint.Core.ECS.Entities;
 namespace Vint.Core.Battle.Properties;
 
 public class BattleProperties {
-    public BattleProperties(BattleType type, TimeSpan warmUpDuration, bool damageEnabled, ClientBattleParams clientParams) {
+    public BattleProperties(BattleType type, ClientBattleParams clientParams) {
         SetValue(BattleProperty.Type, type);
-        SetValue(BattleProperty.WarmUpDuration, warmUpDuration);
-        SetValue(BattleProperty.DamageEnabled, damageEnabled);
-
         SetParams(clientParams);
     }
 
@@ -74,7 +71,7 @@ public static class BattleProperty {
     public static BattleProperty<MapInfo> MapInfo { get; } = new("MapInfo");
 
     public static BattleProperty<BattleType> Type { get; } = new("Type");
-    public static BattleProperty<TimeSpan> WarmUpDuration { get; } = new("WarmUpDuration");
+    public static BattleProperty<TimeSpan> WarmUpDuration { get; } = new("WarmUpDuration", TimeSpan.Zero);
     public static BattleProperty<bool> DamageEnabled { get; } = new("DamageEnabled", true);
 
     public static BattleProperty<bool> FriendlyFire { get; } = new("FriendlyFire", false);
