@@ -62,7 +62,7 @@ public abstract class LobbyBase : IDisposable {
     public abstract Task PlayerReady(LobbyPlayer player);
 
     public async Task AddPlayer(IPlayerConnection connection) {
-        if (Players.Count >= Properties.MaxPlayers)
+        if (Players.Count >= Properties.GetValue(BattleProperty.MaxPlayers))
             return;
 
         connection.Logger.Information("Joining lobby {Id}", Entity.Id);
@@ -92,7 +92,7 @@ public abstract class LobbyBase : IDisposable {
     public async Task AddSquad(Squad squad) {
         List<IPlayerConnection> members = squad.Members.ToList();
 
-        if (Players.Count + members.Count > Properties.MaxPlayers)
+        if (Players.Count + members.Count > Properties.GetValue(BattleProperty.MaxPlayers))
             return;
 
         FrozenDictionary<long, IEntity?> teams = TeamHandler.CalculateTeamsForSquad(members);

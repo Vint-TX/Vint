@@ -266,8 +266,8 @@ public class BattleTank : IDisposable {
 
     public bool IsEnemy(BattleTank other) => other != null! &&
                                              this != other &&
-                                             (Round.Properties.FriendlyFire ||
-                                              Round.Properties.BattleMode == BattleMode.DM ||
+                                             (Round.Properties.GetValue(BattleProperty.FriendlyFire) ||
+                                              Round.Properties.GetValue(BattleProperty.BattleMode) == BattleMode.DM ||
                                               !IsSameTeam(other));
 
     public bool IsSameTeam(BattleTank other) => other != null! &&
@@ -324,7 +324,7 @@ public class BattleTank : IDisposable {
         if (Round.ModeHandler is TDMHandler tdm)
             await tdm.UpdateScore(killer.Tanker.TeamColor, 1);
 
-        if (Round.Properties.Type is not BattleType.Rating)
+        if (Round.Properties.GetValue(BattleProperty.Type) is not BattleType.Rating)
             return;
 
         Database.Models.Player player = killer.Tanker.Connection.Player;
@@ -379,7 +379,7 @@ public class BattleTank : IDisposable {
         await StateManager.SetState(new Dead(StateManager));
         KillAssistants.Clear();
 
-        if (Round.Properties.Type != BattleType.Rating) return;
+        if (Round.Properties.GetValue(BattleProperty.Type) != BattleType.Rating) return;
 
         await using DbConnection db = new();
         await db.Statistics
@@ -408,7 +408,7 @@ public class BattleTank : IDisposable {
             await soloHandler.TryUpdateScore();
 
         if (deltaWithoutBonus <= 0 ||
-            Round.Properties.Type != BattleType.Rating ||
+            Round.Properties.GetValue(BattleProperty.Type) != BattleType.Rating ||
             Round.StateManager.CurrentState is not Running)
             return;
 
@@ -462,12 +462,12 @@ public class BattleTank : IDisposable {
     public async Task Init() {
         await StateManager.Init();
 
-        if (!Round.Properties.DisabledModules)
+        if (!Round.Properties.GetValue(BattleProperty.DisabledModules))
             await InitModules();
     }
 
     public async Task DeInit() {
-        if (!Round.Properties.DisabledModules) {
+        if (!Round.Properties.GetValue(BattleProperty.DisabledModules)) {
             foreach (BattleModule module in Modules)
                 await module.SwitchToUserEntities();
         }

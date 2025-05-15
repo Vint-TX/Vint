@@ -18,7 +18,7 @@ public class GoldProcessor(
 
     ILogger Logger { get; } = Log.Logger.ForType<GoldProcessor>();
 
-    bool CanRandomDrop => round.Properties.Type == BattleType.Rating &&
+    bool CanRandomDrop => round.Properties.GetValue(BattleProperty.Type) == BattleType.Rating &&
                           round.StateManager.CurrentState is Running;
 
     double LastAchievedScoreThreshold { get; set; }

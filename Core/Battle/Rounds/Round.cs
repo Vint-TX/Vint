@@ -33,21 +33,21 @@ public class Round : IDisposable {
         QuestManager = questManager;
         Properties = properties;
 
-        StateManager = new RoundStateManager(this, sm => Properties.WarmUpDuration > TimeSpan.Zero ? new WarmUp(sm) : new Running(sm));
-        Simulation = CreateSimulation(Properties.MapInfo);
+        StateManager = new RoundStateManager(this, sm => Properties.GetValue(BattleProperty.WarmUpDuration) > TimeSpan.Zero ? new WarmUp(sm) : new Running(sm));
+        Simulation = CreateSimulation(Properties.GetValue(BattleProperty.MapInfo));
 
         WarmUpStartTime = DateTimeOffset.UtcNow;
-        WarmUpEndTime = StartTime = WarmUpStartTime + Properties.WarmUpDuration;
-        EndTime = StartTime + TimeSpan.FromMinutes(Properties.TimeLimit);
+        WarmUpEndTime = StartTime = WarmUpStartTime + Properties.GetValue(BattleProperty.WarmUpDuration);
+        EndTime = StartTime + TimeSpan.FromMinutes(Properties.GetValue(BattleProperty.TimeLimit));
 
         Entity = new RoundTemplate().Create(EndTime);
         ModeHandler = modeHandlerBuilder.BuildModeHandler(this);
         ChatEntity = new GeneralBattleChatTemplate().Create();
 
-        if (!Properties.DisabledModules)
+        if (!Properties.GetValue(BattleProperty.DisabledModules))
             BonusProcessor = new BonusProcessor(this);
 
-        DamageCalculator = Properties.DamageEnabled
+        DamageCalculator = Properties.GetValue(BattleProperty.DamageEnabled)
             ? new DamageCalculator()
             : new ZeroDamageCalculator();
     }
@@ -130,7 +130,7 @@ public class Round : IDisposable {
     public async Task AddTanker(LobbyPlayer player) {
         int tankersCount = Tankers.Count();
 
-        if (StateManager.CurrentState is Ended || tankersCount >= Properties.MaxPlayers)
+        if (StateManager.CurrentState is Ended || tankersCount >= Properties.GetValue(BattleProperty.MaxPlayers))
             return;
 
         await player.JoinRound(this);

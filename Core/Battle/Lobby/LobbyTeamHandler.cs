@@ -25,7 +25,7 @@ public class LobbyTeamHandler(
     public FrozenDictionary<TeamColor, IEntity?> ColorToEntity { get; private set; } = null!;
 
     [MemberNotNullWhen(true, nameof(RedTeam), nameof(BlueTeam), nameof(RedPlayers), nameof(BluePlayers))]
-    public bool IsTeamLobby => Properties.BattleMode.IsTeamMode();
+    public bool IsTeamLobby => Properties.GetValue(BattleProperty.BattleMode).IsTeamMode();
 
     public IEnumerable<LobbyPlayer>? RedPlayers => IsTeamLobby ? Lobby.Players.Where(player => player.TeamColor == TeamColor.Red) : null;
     public IEnumerable<LobbyPlayer>? BluePlayers => IsTeamLobby ? Lobby.Players.Where(player => player.TeamColor == TeamColor.Blue) : null;
@@ -35,11 +35,11 @@ public class LobbyTeamHandler(
         TeamLimit = Lobby.Entity.GetComponent<UserLimitComponent>().TeamLimit;
     }
 
-    public async Task LobbyUpdated(ClientBattleParams oldParams, ClientBattleParams newParams) {
+    public async Task LobbyUpdated(BattleProperties oldProperties, BattleProperties newProperties) {
         CreateTeams();
         TeamLimit = Lobby.Entity.GetComponent<UserLimitComponent>().TeamLimit;
 
-        Func<LobbyPlayer, IEntity?> teamSelector = oldParams.BattleMode.IsTeamMode() == newParams.BattleMode.IsTeamMode()
+        Func<LobbyPlayer, IEntity?> teamSelector = oldProperties.GetValue(BattleProperty.BattleMode).IsTeamMode() == newProperties.GetValue(BattleProperty.BattleMode).IsTeamMode()
             ? player => ColorToEntity[player.TeamColor]
             : CalculateTeamFor;
 

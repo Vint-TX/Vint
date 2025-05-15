@@ -11,7 +11,7 @@ public class DominationProcessor(
     TeamHandler teamHandler
 ) {
     bool DominationStarted { get; set; }
-    bool CanDominationBegin => round.Properties.Type == BattleType.Rating &&
+    bool CanDominationBegin => round.Properties.GetValue(BattleProperty.Type) == BattleType.Rating &&
                                round.StateManager.CurrentState is Running &&
                                round.Elapsed.TotalMinutes >= 1 &&
                                round.Remaining.TotalMinutes >= 2;

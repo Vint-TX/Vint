@@ -2,6 +2,7 @@ using System.Numerics;
 using Vint.Core.Battle.Effects.Components;
 using Vint.Core.Battle.Effects.Events.Mine;
 using Vint.Core.Battle.Effects.Templates;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Battle.Weapons.Handlers.Impl;
@@ -53,7 +54,7 @@ public class SpiderMineEffect(
         WeaponEntity = Entity = new SpiderEffectTemplate().Create(Tank.Tanker,
             Duration,
             position,
-            Round.Properties.FriendlyFire,
+            Round.Properties.GetValue(BattleProperty.FriendlyFire),
             beginHideDistance,
             hideRange,
             impact,

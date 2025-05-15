@@ -4,6 +4,7 @@ using Vint.Core.Battle.Flags;
 using Vint.Core.Battle.Flags.State;
 using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Results;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Config;
@@ -22,7 +23,7 @@ public class CTFHandler : TeamHandler {
         Entity = entityFactory();
         CTFConfig = ConfigManager.GetComponent<CtfConfigComponent>("battle/modes/ctf");
 
-        MapFlags flagPoints = Round.Properties.MapInfo.Flags;
+        MapFlags flagPoints = Round.Properties.GetValue(BattleProperty.MapInfo).Flags;
         TimeSpan enemyFlagActionInterval = TimeSpan.FromSeconds(CTFConfig.EnemyFlagActionMinIntervalSec);
 
         Flags = new Dictionary<TeamColor, Flag> {
@@ -30,7 +31,7 @@ public class CTFHandler : TeamHandler {
             { TeamColor.Red, new Flag(Round, RedTeam.Entity, TeamColor.Red, flagPoints.Red, enemyFlagActionInterval) }
         }.ToFrozenDictionary();
 
-        CanShareFlags = Round.Properties.WarmUpDuration == TimeSpan.Zero || Round.StateManager.CurrentState is Running;
+        CanShareFlags = Round.Properties.GetValue(BattleProperty.WarmUpDuration) == TimeSpan.Zero || Round.StateManager.CurrentState is Running;
     }
 
     bool CanShareFlags { get; set; }

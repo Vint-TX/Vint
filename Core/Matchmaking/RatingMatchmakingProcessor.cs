@@ -55,12 +55,12 @@ public class RatingMatchmakingProcessor( // todo matchmaking system
     }
 
     static bool FilterLobbies(RatingLobby lobby) =>
-        lobby.Players.Count < lobby.Properties.MaxPlayers &&
+        lobby.Players.Count < lobby.Properties.GetValue(BattleProperty.MaxPlayers) &&
         lobby.StateManager.CurrentState is not Ended &&
         lobby.StateManager.CurrentState is not Running { Round.Remaining.TotalMinutes: <= 0 };
 
     static bool FilterForSquad(RatingLobby lobby, Squad squad) =>
-        lobby.Players.Count + squad.Members.Count <= lobby.Properties.MaxPlayers;
+        lobby.Players.Count + squad.Members.Count <= lobby.Properties.GetValue(BattleProperty.MaxPlayers);
 
     static BattleProperties GenerateProperties() {
         MapInfo mapInfo = GetRandomMapInfo();

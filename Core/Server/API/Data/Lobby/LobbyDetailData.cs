@@ -22,17 +22,17 @@ public record LobbyDetailData(
 ) {
     public static LobbyDetailData FromLobby(LobbyBase lobby) =>
         new(lobby.Entity.Id,
-            lobby.Properties.MapInfo.Id,
+            lobby.Properties.GetValue(BattleProperty.MapInfo).Id,
             lobby.Players.Count,
-            lobby.Properties.MaxPlayers,
-            lobby.Properties.FriendlyFire,
-            lobby.Properties.KillZoneEnabled,
-            lobby.Properties.DamageEnabled,
-            !lobby.Properties.DisabledModules,
-            lobby.Properties.MapInfo.Name,
-            lobby.Properties.BattleMode.ToString(),
-            lobby.Properties.Gravity.ToString(),
+            lobby.Properties.GetValue(BattleProperty.MaxPlayers),
+            lobby.Properties.GetValue(BattleProperty.FriendlyFire),
+            lobby.Properties.GetValue(BattleProperty.KillZoneEnabled),
+            lobby.Properties.GetValue(BattleProperty.DamageEnabled),
+            !lobby.Properties.GetValue(BattleProperty.DisabledModules),
+            lobby.Properties.GetValue(BattleProperty.MapInfo).Name,
+            lobby.Properties.GetValue(BattleProperty.BattleMode).ToString(),
+            lobby.Properties.GetValue(BattleProperty.Gravity).ToString(),
             lobby.StateManager.CurrentState.ToString(),
-            lobby.Properties.Type,
+            lobby.Properties.GetValue(BattleProperty.Type),
             lobby.Players.Select(lobbyPlayer => PlayerSummaryData.FromPlayer(lobbyPlayer.Connection.Player)));
 }

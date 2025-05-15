@@ -18,7 +18,7 @@ public class ServerController(
     public IClientDTO GetCount() {
         IPlayerConnection[] connections = server.PlayerConnections.Values.ToArray();
         Dictionary<BattleType, int> battles = lobbyProcessor.Lobbies
-            .GroupBy(battle => battle.Properties.Type)
+            .GroupBy(battle => battle.Properties.GetValue(BattleProperty.Type))
             .ToDictionary(g => g.Key, g => g.Count());
 
         int connectionsCount = connections.Length;

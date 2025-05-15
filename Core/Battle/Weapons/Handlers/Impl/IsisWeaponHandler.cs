@@ -1,5 +1,6 @@
 using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Player.Score.Events.Visual;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Tank.State;
@@ -43,7 +44,7 @@ public class IsisWeaponHandler : StreamWeaponHandler {
 
         if (targetTank.StateManager.CurrentState is not Active) return;
 
-        bool isEnemy = BattleTank.IsEnemy(targetTank) && !BattleTank.IsSameTeam(targetTank) || (BattleTank.Round.Properties.BattleMode == BattleMode.DM);
+        bool isEnemy = BattleTank.IsEnemy(targetTank) && !BattleTank.IsSameTeam(targetTank) || (BattleTank.Round.Properties.GetValue(BattleProperty.BattleMode) == BattleMode.DM);
         CalculatedDamage damage = await DamageCalculator.Calculate(BattleTank, targetTank, this, target, targetIndex);
 
         if (isEnemy) {

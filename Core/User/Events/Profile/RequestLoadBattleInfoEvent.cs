@@ -1,4 +1,5 @@
 using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
@@ -17,7 +18,7 @@ public class RequestLoadBattleInfoEvent(
 
         if (lobby == null) return;
 
-        await connection.Send(new BattleInfoForLabelLoadedEvent(lobby.Properties.ClientParams.MapId, BattleId, lobby.Properties.BattleMode),
+        await connection.Send(new BattleInfoForLabelLoadedEvent(lobby.Properties.GetValue(BattleProperty.MapInfo).Id, BattleId, lobby.Properties.GetValue(BattleProperty.BattleMode)),
             connection.UserContainer.Entity);
     }
 }

@@ -35,8 +35,8 @@ public interface IBonusProcessor {
 public class BonusProcessor : IBonusProcessor {
     public BonusProcessor(Round round) {
         BattleProperties properties = round.Properties;
-        Dictionary<BonusType, IEnumerable<BonusInfo>> bonusInfos = properties.MapInfo.BonusRegions
-            .Get(properties.BattleMode)
+        Dictionary<BonusType, IEnumerable<BonusInfo>> bonusInfos = properties.GetValue(BattleProperty.MapInfo).BonusRegions
+            .Get(properties.GetValue(BattleProperty.BattleMode))
             .ToDictionary();
 
         List<BonusBox> bonuses = [];

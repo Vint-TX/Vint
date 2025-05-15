@@ -12,10 +12,10 @@ public class BattleResultForClient {
 
         Spectator = isSpectator;
         BattleId = round.Entity.Id;
-        Custom = properties.Type == BattleType.Custom;
-        MapId = properties.MapInfo.Id;
-        BattleMode = properties.BattleMode;
-        MatchMakingModeType = properties.Type;
+        Custom = properties.GetValue(BattleProperty.Type) == BattleType.Custom;
+        MapId = properties.GetValue(BattleProperty.MapInfo).Id;
+        BattleMode = properties.GetValue(BattleProperty.BattleMode);
+        MatchMakingModeType = properties.GetValue(BattleProperty.Type);
 
         switch (round.ModeHandler) {
             case TeamHandler teamHandler:

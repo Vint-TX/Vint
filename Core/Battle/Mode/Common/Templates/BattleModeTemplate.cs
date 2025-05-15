@@ -14,10 +14,10 @@ namespace Vint.Core.Battle.Mode.Common.Templates;
 
 public abstract class BattleModeTemplate : EntityTemplate {
     protected IEntity Entity(BattleProperties properties, IEntity lobby, IEntity round, DateTimeOffset startTime) {
-        BattleMode mode = properties.BattleMode;
-        BattleType type = properties.Type;
-        TimeSpan warmUpDuration = properties.WarmUpDuration;
-        int timeLimitSec = properties.TimeLimit * 60;
+        BattleMode mode = properties.GetValue(BattleProperty.BattleMode);
+        BattleType type = properties.GetValue(BattleProperty.Type);
+        TimeSpan warmUpDuration = properties.GetValue(BattleProperty.WarmUpDuration);
+        int timeLimitSec = properties.GetValue(BattleProperty.TimeLimit) * 60;
 
         return Entity($"battle/modes/{mode.ToString().ToLower()}",
             builder => builder

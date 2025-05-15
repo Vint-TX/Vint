@@ -1,4 +1,5 @@
 using Vint.Core.Battle.Effects.Templates;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Battle.Weapons.Handlers.Impl;
@@ -30,7 +31,7 @@ public class FireRingEffect(
 
         WeaponEntity = Entity = new FireRingEffectTemplate().Create(Tank.Tanker,
             Duration,
-            Round.Properties.FriendlyFire,
+            Round.Properties.GetValue(BattleProperty.FriendlyFire),
             impact,
             minDamagePercent,
             MinDamageRadius,

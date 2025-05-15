@@ -1,4 +1,5 @@
 using Vint.Core.Battle.Lobby.Impl;
+using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
@@ -30,7 +31,7 @@ public class ConnectToCustomLobbyEvent(
             return;
         }
 
-        if (lobby.Players.Count >= lobby.Properties.MaxPlayers) {
+        if (lobby.Players.Count >= lobby.Properties.GetValue(BattleProperty.MaxPlayers)) {
             await connection.Send(new EnterBattleLobbyFailedEvent(false, true), user);
             return;
         }

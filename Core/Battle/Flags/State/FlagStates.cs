@@ -8,6 +8,7 @@ using Vint.Core.Battle.Mode.Team.Impl;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Player.Score.Events.Visual;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Tank.Common.Components;
@@ -252,7 +253,7 @@ public class OnGround : FlagState<FlagGroundedStateComponent> {
         foreach (IFlagModule flagModule in LastCarrier.Tank.Modules.OfType<IFlagModule>())
             await flagModule.OnFlagAction(FlagAction.Drop);
 
-        if (PhysicsUtils.IsOutsideMap(Round.Properties.MapInfo.PuntativeGeoms, Position, Vector3.Zero, Round.Properties.KillZoneEnabled)) {
+        if (PhysicsUtils.IsOutsideMap(Round.Properties.GetValue(BattleProperty.MapInfo).PuntativeGeoms, Position, Vector3.Zero, Round.Properties.GetValue(BattleProperty.KillZoneEnabled))) {
             await Return();
             return;
         }

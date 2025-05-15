@@ -17,7 +17,7 @@ public class ModeHandlerBuilder(
     BattleProperties Properties => lobby.Properties;
     IEntity LobbyEntity => lobby.Entity;
 
-    public ModeHandler BuildModeHandler(Round round) => Properties.BattleMode switch {
+    public ModeHandler BuildModeHandler(Round round) => Properties.GetValue(BattleProperty.BattleMode) switch {
         BattleMode.DM => new DMHandler(round, BuildModeEntityFactory(round)),
         BattleMode.TDM => new TDMHandler(round, BuildModeEntityFactory(round), CreateTeamData),
         BattleMode.CTF => new CTFHandler(round, BuildModeEntityFactory(round), CreateTeamData),
@@ -25,7 +25,7 @@ public class ModeHandlerBuilder(
         _ => throw new ArgumentOutOfRangeException()
     };
 
-    public IEntity BuildModeEntity(Round round) => Properties.BattleMode switch {
+    public IEntity BuildModeEntity(Round round) => Properties.GetValue(BattleProperty.BattleMode) switch {
         BattleMode.DM => new DMTemplate().Create(Properties, LobbyEntity, round.Entity, round.StartTime),
         BattleMode.TDM => new TDMTemplate().Create(Properties, LobbyEntity, round.Entity, round.StartTime),
         BattleMode.CTF => new CTFTemplate().Create(Properties, LobbyEntity, round.Entity, round.StartTime),
@@ -37,7 +37,7 @@ public class ModeHandlerBuilder(
 
     TeamData CreateTeamData(TeamColor teamColor, Round round, Func<MapSpawnPointInfo, TeamSpawnPointList> spawnPointListFactory) {
         IEntity entity = lobby.TeamHandler.ColorToEntity[teamColor]!;
-        IList<SpawnPoint> spawnPoints = spawnPointListFactory(Properties.MapInfo.SpawnPoints).GetFor(teamColor);
+        IList<SpawnPoint> spawnPoints = spawnPointListFactory(Properties.GetValue(BattleProperty.MapInfo).SpawnPoints).GetFor(teamColor);
 
         return new TeamData(teamColor, entity, spawnPoints, ModeHandler.GetRandomSpawnPoint, () => round.Tankers);
     }

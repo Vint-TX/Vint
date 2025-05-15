@@ -1,5 +1,6 @@
 using System.Numerics;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank.Movement.Components;
 using Vint.Core.Battle.Tank.State;
@@ -64,7 +65,7 @@ public class MoveCommandEvent : IServerEvent {
         tank.Position = movement.Position;
         tank.Orientation = movement.Orientation;
 
-        if (PhysicsUtils.IsOutsideMap(round.Properties.MapInfo.PuntativeGeoms, tank.Position, velocity, round.Properties.KillZoneEnabled)) {
+        if (PhysicsUtils.IsOutsideMap(round.Properties.GetValue(BattleProperty.MapInfo).PuntativeGeoms, tank.Position, velocity, round.Properties.GetValue(BattleProperty.KillZoneEnabled))) {
             await tank.SelfDestruct();
             return;
         }

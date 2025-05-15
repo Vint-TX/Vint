@@ -4,6 +4,7 @@ using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Entities;
 using LinqToDB;
 using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.Discord.Utils;
@@ -51,7 +52,7 @@ public class PlayerModule(
 
         string status = isOnline
             ? inBattle
-                ? $"In battle: {lobby!.Properties.MapInfo.Name}, {lobby.Properties.BattleMode}"
+                ? $"In battle: {lobby!.Properties.GetValue(BattleProperty.MapInfo).Name}, {lobby.Properties.GetValue(BattleProperty.BattleMode)}"
                 : "Online"
             : "Offline";
 

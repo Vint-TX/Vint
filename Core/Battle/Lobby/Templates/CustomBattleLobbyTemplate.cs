@@ -15,7 +15,7 @@ public class CustomBattleLobbyTemplate : BattleLobbyTemplate {
 
         long price = owner.Player.IsPremium ? 0 : 1000;
 
-        entity.AddComponent(new ClientBattleParamsComponent(battleProperties.ClientParams));
+        entity.AddComponent(new ClientBattleParamsComponent(battleProperties.GetParams()));
         entity.AddComponent(new OpenCustomLobbyPriceComponent(price));
         entity.AddGroupComponent<UserGroupComponent>(owner.UserContainer.Entity);
         return entity;

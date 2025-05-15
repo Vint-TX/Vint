@@ -2,6 +2,7 @@ using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Results;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
@@ -108,7 +109,7 @@ public class QuestManager {
             .ToListAsync();
 
         foreach (Quest quest in quests.Where(quest => !quest.IsCompleted &&
-                                                      quest.ConditionMet(preset.Weapon, preset.Hull, round.Properties.BattleMode))) {
+                                                      quest.ConditionMet(preset.Weapon, preset.Hull, round.Properties.GetValue(BattleProperty.BattleMode)))) {
             IEntity? entity = connection.SharedEntities.SingleOrDefault(entity => entity.HasComponent<QuestComponent>() &&
                                                                                   entity.HasComponent<SlotIndexComponent>() &&
                                                                                   entity.GetComponent<SlotIndexComponent>().Index == quest.Index);

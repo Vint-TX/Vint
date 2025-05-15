@@ -14,10 +14,10 @@ public record LobbySummaryData(
 ) {
     public static LobbySummaryData FromLobby(LobbyBase lobby) =>
         new(lobby.Entity.Id,
-            lobby.Properties.MapInfo.Id,
+            lobby.Properties.GetValue(BattleProperty.MapInfo).Id,
             lobby.Players.Count,
-            lobby.Properties.MaxPlayers,
-            lobby.Properties.MapInfo.Name,
-            lobby.Properties.BattleMode.ToString(),
-            lobby.Properties.Type);
+            lobby.Properties.GetValue(BattleProperty.MaxPlayers),
+            lobby.Properties.GetValue(BattleProperty.MapInfo).Name,
+            lobby.Properties.GetValue(BattleProperty.BattleMode).ToString(),
+            lobby.Properties.GetValue(BattleProperty.Type));
 }

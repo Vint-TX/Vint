@@ -117,7 +117,7 @@ public class Tanker : BattlePlayer {
                 .Set(weapon => weapon.BattlesPlayed, weapon => weapon.BattlesPlayed + 1)
                 .UpdateAsync();
 
-            if (Round.Properties.Type != BattleType.Rating) {
+            if (Round.Properties.GetValue(BattleProperty.Type) != BattleType.Rating) {
                 await db.Statistics
                     .Where(stats => stats.PlayerId == player.Id)
                     .Set(stats => stats.AllBattlesParticipated, stats => stats.AllBattlesParticipated + 1)
@@ -153,7 +153,7 @@ public class Tanker : BattlePlayer {
                 await Connection.ChangeReputation(reputationDelta);
                 await Connection.ChangeGameplayChestScore(score);
 
-                if (hasEnemies && Round.Properties.Type == BattleType.Rating)
+                if (hasEnemies && Round.Properties.GetValue(BattleProperty.Type) == BattleType.Rating)
                     await questManager.BattleFinished(this);
             }
 

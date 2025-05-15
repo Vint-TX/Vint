@@ -2,6 +2,7 @@ using Vint.Core.Battle.Common.Components;
 using Vint.Core.Battle.Lobby.Components;
 using Vint.Core.Battle.Lobby.State;
 using Vint.Core.Battle.Lobby.Templates;
+using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Mode.Common.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
@@ -107,25 +108,27 @@ public sealed class CustomLobby(
     }
 
     public async Task UpdateClientProperties(ClientBattleParams clientParams) {
-        ClientBattleParams oldParams = Properties.ClientParams;
-        Properties.UpdateParams(clientParams);
+        BattleProperties oldProperties = Properties.Clone();
+        Properties.SetParams(clientParams);
+
+        BattleMode battleMode = Properties.GetValue(BattleProperty.BattleMode);
 
         await Entity.RemoveComponent<MapGroupComponent>();
-        await Entity.AddGroupComponent<MapGroupComponent>(Properties.MapEntity);
+        await Entity.AddGroupComponent<MapGroupComponent>(Properties.GetValue(BattleProperty.MapEntity));
 
         await Entity.RemoveComponent<BattleModeComponent>();
-        await Entity.AddComponent(new BattleModeComponent(Properties.BattleMode));
+        await Entity.AddComponent(new BattleModeComponent(battleMode));
 
         await Entity.RemoveComponent<UserLimitComponent>();
-        await Entity.AddComponent(new UserLimitComponent(Properties.MaxPlayers));
+        await Entity.AddComponent(new UserLimitComponent(Properties.GetValue(BattleProperty.MaxPlayers)));
 
         await Entity.RemoveComponent<GravityComponent>();
-        await Entity.AddComponent(new GravityComponent(Properties.Gravity));
+        await Entity.AddComponent(new GravityComponent(Properties.GetValue(BattleProperty.Gravity)));
 
         await Entity.RemoveComponent<ClientBattleParamsComponent>();
         await Entity.AddComponent(new ClientBattleParamsComponent(clientParams));
 
-        Properties.MapInfo.InitDefaultSpawnPointsIfAbsent(Properties.BattleMode);
-        await TeamHandler.LobbyUpdated(oldParams, clientParams);
+        Properties.GetValue(BattleProperty.MapInfo).InitDefaultSpawnPointsIfAbsent(battleMode);
+        await TeamHandler.LobbyUpdated(oldProperties, Properties);
     }
 }

@@ -1,4 +1,5 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
@@ -11,7 +12,7 @@ public class DMHandler(
     Func<IEntity> entityFactory
 ) : SoloHandler(round) {
     public override IEntity Entity { get; } = entityFactory();
-    protected override IList<SpawnPoint> SpawnPoints { get; } = round.Properties.MapInfo.SpawnPoints.Deathmatch;
+    protected override IList<SpawnPoint> SpawnPoints { get; } = round.Properties.GetValue(BattleProperty.MapInfo).SpawnPoints.Deathmatch;
 
     public override int CalculateReputationDelta(Tanker tanker) {
         List<Tanker> tankers = Round.Tankers

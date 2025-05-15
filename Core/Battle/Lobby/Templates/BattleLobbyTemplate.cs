@@ -12,9 +12,9 @@ namespace Vint.Core.Battle.Lobby.Templates;
 public class BattleLobbyTemplate : EntityTemplate {
     protected IEntity Entity(BattleProperties properties) => Entity(null,
         builder => builder
-            .AddComponent(new BattleModeComponent(properties.BattleMode))
-            .AddComponent(new UserLimitComponent(properties.MaxPlayers))
-            .AddComponent(new GravityComponent(properties.Gravity))
-            .AddGroupComponent<MapGroupComponent>(properties.MapEntity)
+            .AddComponent(new BattleModeComponent(properties.GetValue(BattleProperty.BattleMode)))
+            .AddComponent(new UserLimitComponent(properties.GetValue(BattleProperty.MaxPlayers)))
+            .AddComponent(new GravityComponent(properties.GetValue(BattleProperty.Gravity)))
+            .AddGroupComponent<MapGroupComponent>(properties.GetValue(BattleProperty.MapEntity))
             .AddGroupComponent<BattleLobbyGroupComponent>());
 }
