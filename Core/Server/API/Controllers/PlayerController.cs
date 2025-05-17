@@ -46,6 +46,17 @@ public class PlayerController(
         return SuccessDTO.Ok(PlayerDetailData.FromPlayer(player));
     }
 
+    [MessageId(13)]
+    public async Task<IClientDTO> GetPlayer(string username) {
+        await using DbConnection db = new();
+        Player? player = await db.Players.FirstOrDefaultAsync(player => player.Username == username);
+
+        if (player == null)
+            return ErrorDTO.NotFound($"Player with username {username} does not exists");
+
+        return SuccessDTO.Ok(PlayerDetailData.FromPlayer(player));
+    }
+
     [MessageId(14)]
     public async Task<IClientDTO> DisplayMessage(long playerId, string message) {
         if (playerId == -1) {
