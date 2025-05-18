@@ -61,7 +61,7 @@ public static class Leveling {
                 Id = seasonStats.PlayerId,
                 Place = (int)Sql.Ext.RowNumber().Over()
                     .OrderByDesc(seasonStats.Reputation)
-                    .ToValue() + 1
+                    .ToValue()
             })
             .Where(p => p.Id == userId)
             .Select(p => p.Place)
