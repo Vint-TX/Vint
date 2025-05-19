@@ -59,7 +59,7 @@ public class LoggingController(
                 clientLog.Id = await db.InsertWithInt64IdentityAsync(clientLog);
 
             await discordBot.SendLog(clientLog.Username, clientLog.Message, log, clientLog.Id, clientLog.Timestamp);
-            await apiServer.WebSocketApiModule.BroadcastAsync(new NewLogDTO(dto, clientLog.Timestamp, log));
+            await apiServer.WebSocketApiModule.BroadcastAsync(new NewLogDTO(dto, clientLog.Timestamp, clientLog.Id, log));
         } catch (Exception e) {
             Log.Logger.ForType<LoggingController>().WithEndPoint(Request).Error(e, "Failed to deserialize client log");
 
@@ -87,6 +87,7 @@ public class LoggingController(
     record NewLogDTO(
         ClientLogDTO ClientLog,
         DateTimeOffset Timestamp,
+        long Id,
         string RawLog
     ) : IClientDTO;
 
