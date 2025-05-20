@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using ConcurrentCollections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -17,7 +16,6 @@ using SharpCompress.Writers.GZip;
 using Vint.Core.Chat;
 using Vint.Core.Config.JsonConverters;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.Discord;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
@@ -31,14 +29,11 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace Vint.Core.Config;
 
 public static class ConfigManager {
-    public static ConcurrentHashSet<DiscordLinkRequest> DiscordLinkRequests { get; } = [];
-
     public static ServerConfig ServerConfig { get; private set; } = null!;
     public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
     public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;
     public static FrozenDictionary<string, Regex> CensorshipRegexes { get; private set; } = null!;
     public static ModulePrices ModulePrices { get; private set; }
-    public static DiscordConfig Discord { get; private set; }
     public static QuestsInfo QuestsInfo { get; private set; }
     public static CommonMapInfo CommonMapInfo { get; private set; }
 
@@ -348,7 +343,6 @@ public static class ConfigManager {
         Logger.Information("Initializing configs");
 
         ServerConfig = JsonConvert.DeserializeObject<ServerConfig>(await File.ReadAllTextAsync(ServerConfig.FilePath))!;
-        Discord = JsonConvert.DeserializeObject<DiscordConfig>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "discord.json")));
         ModulePrices = JsonConvert.DeserializeObject<ModulePrices>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "modulePrices.json")));
 
         QuestsInfo = JsonConvert.DeserializeObject<QuestsInfo>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "quests.json")),

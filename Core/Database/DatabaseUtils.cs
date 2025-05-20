@@ -14,7 +14,5 @@ public static class DatabaseUtils {
         await GetQuery(db).FirstOrDefaultAsync(player => player.Email == email);
 
     static IQueryable<Player> GetQuery(DbConnection db) =>
-        db.Players
-            .LoadWith(player => player.Modules)
-            .LoadWith(player => player.DiscordLink);
+        db.Players.LoadWith(player => player.Modules);
 }

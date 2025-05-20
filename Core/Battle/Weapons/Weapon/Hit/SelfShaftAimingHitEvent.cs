@@ -1,6 +1,6 @@
 using Vint.Core.Battle.Weapons.Handlers.Impl;
-using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Server.API;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -8,8 +8,8 @@ namespace Vint.Core.Battle.Weapons.Weapon.Hit;
 
 [ProtocolId(8070042425022831807)]
 public class SelfShaftAimingHitEvent(
-    DiscordBot? discordBot
-) : SelfHitEvent(discordBot) {
+    ApiServer apiServer
+) : SelfHitEvent(apiServer) {
     public float HitPower { get; set; }
 
     [ProtocolIgnore] protected override RemoteShaftAimingHitEvent RemoteEvent => new() {

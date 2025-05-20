@@ -1,8 +1,8 @@
 using LinqToDB;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Database;
-using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Server.API;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -10,8 +10,8 @@ namespace Vint.Core.Battle.Weapons.Weapon.Hit;
 
 [ProtocolId(196833391289212110)]
 public class SelfSplashHitEvent(
-    DiscordBot? discordBot
-) : SelfHitEvent(discordBot) {
+    ApiServer apiServer
+) : SelfHitEvent(apiServer) {
     public List<HitTarget>? SplashTargets { get; private set; }
 
     [ProtocolIgnore] protected override RemoteSplashHitEvent RemoteEvent => new() {

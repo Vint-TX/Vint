@@ -19,7 +19,6 @@ using Vint.Core.Config;
 using Vint.Core.Containers.Templates;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.ECS.Templates;
@@ -1401,9 +1400,6 @@ public class SocketPlayerConnection(
             if (UserContainer != null!) {
                 await UserContainer.RemoveConnection(this);
                 await UserContainer.Entity.RemoveComponent<UserOnlineComponent>();
-
-                foreach (DiscordLinkRequest request in ConfigManager.DiscordLinkRequests.Where(dLinkReq => dLinkReq.UserId == UserContainer.Id))
-                    ConfigManager.DiscordLinkRequests.TryRemove(request);
 
                 if (InSquad)
                     await Squad!.RemoveMember(UserContainer.Id);

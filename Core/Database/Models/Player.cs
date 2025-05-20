@@ -19,7 +19,6 @@ public class Player {
 
     [Column(DataType = DataType.Text)] public required string Username { get; set; }
     [Column(DataType = DataType.Text)] public required string Email { get; set; }
-    [Column] public ulong DiscordUserId { get; set; }
 
     [Column] public bool RememberMe { get; set; }
 
@@ -35,8 +34,6 @@ public class Player {
 
     [Column] public League RewardedLeagues { get; set; }
 
-    [Column] public bool DiscordLinkRewarded { get; set; }
-    [Column] public bool DiscordLinked { get; set; }
     [Column] public required bool Subscribed { get; set; }
     [Column(DataType = DataType.Text)] public required string CountryCode { get; set; }
 
@@ -110,10 +107,6 @@ public class Player {
     [Column] public DateTimeOffset LastLoginRewardTime { get; set; }
     [Column] public DateTimeOffset? QuestChangesResetTime { get; set; }
     [Column] public DateTimeOffset LastDailyBonusReceivingTime { get; set; }
-
-    [Association(ThisKey = $"{nameof(Id)},{nameof(DiscordUserId)}",
-        OtherKey = $"{nameof(Models.DiscordLink.PlayerId)},{nameof(Models.DiscordLink.UserId)}")]
-    public DiscordLink DiscordLink { get; set; } = null!;
 
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Statistics.PlayerId))]
     public Statistics Stats { get; private set; } = null!;

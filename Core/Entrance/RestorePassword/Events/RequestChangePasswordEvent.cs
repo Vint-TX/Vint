@@ -1,5 +1,4 @@
-﻿using Vint.Core.Discord;
-using Vint.Core.ECS.Entities;
+﻿using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Entrance.ClientSession.Components;
 using Vint.Core.Entrance.Login.Events;
@@ -9,16 +8,12 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.Entrance.RestorePassword.Events;
 
 [ProtocolId(1460403525230)]
-public class RequestChangePasswordEvent(
-    DiscordBot? discordBot
-) : IServerEvent {
+public class RequestChangePasswordEvent : IServerEvent {
     public string PasswordDigest { get; private set; } = null!;
     public string HardwareFingerprint { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (connection.RestorePasswordCode == null ||
-            !connection.RestorePasswordCodeValid ||
-            discordBot == null) {
+        if (connection.RestorePasswordCode == null || !connection.RestorePasswordCodeValid) {
             connection.Player = null!;
             return;
         }
