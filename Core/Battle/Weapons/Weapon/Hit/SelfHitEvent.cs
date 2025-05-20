@@ -7,9 +7,12 @@ using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Battle.Weapons.Handlers;
 using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.Database;
-using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Server.API;
+using Vint.Core.Server.API.Attributes;
+using Vint.Core.Server.API.Data;
+using Vint.Core.Server.API.Utils;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
@@ -18,7 +21,7 @@ namespace Vint.Core.Battle.Weapons.Weapon.Hit;
 
 [ProtocolId(8814758840778124785)]
 public class SelfHitEvent(
-    DiscordBot? discordBot
+    ApiServer apiServer
 ) : HitEvent, IServerEvent {
     [ProtocolIgnore] protected virtual RemoteHitEvent RemoteEvent => new() {
         Targets = Targets,
@@ -47,7 +50,12 @@ public class SelfHitEvent(
 
         if (!Validate(connection, WeaponHandler)) {
             IsProceeded = false;
-            await tanker.OnAntiCheatSuspected(discordBot);
+
+            if (!tanker.Reported) {
+                await apiServer.Report($"{connection.Player.Username} is suspected to be cheating", "Server");
+                tanker.Reported = true;
+            }
+
             return;
         }
 

@@ -5,15 +5,15 @@ using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battle.Lobby;
-using Vint.Core.Discord;
 using Vint.Core.Quests;
+using Vint.Core.Server.API;
+using Vint.Core.Server.API.Utils;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game;
 
 public class GameServer(
     IServiceProvider serviceProvider,
-    DiscordBot discordBot,
     QuestManager questManager,
     LobbyProcessor lobbyProcessor
 ) {
@@ -27,6 +27,7 @@ public class GameServer(
     TcpListener Listener { get; } = new(IPAddress.Any, Port);
 
     bool IsStarted { get; set; }
+    int LastPlayersCount { get; set; }
 
     public IPlayerConnection? FindConnection(long id) =>
         PlayerConnections.Values.FirstOrDefault(connection => connection.IsLoggedIn &&
@@ -41,8 +42,6 @@ public class GameServer(
 
         IsStarted = true;
         Listener.Start();
-
-        await discordBot.TryStart();
 
         Logger.Information("Started");
         await TickLoop();
@@ -78,7 +77,10 @@ public class GameServer(
             }
         }
 
-        await discordBot.SetPlayersCount(PlayerConnections.Count);
+        int currentPlayersCount = PlayerConnections.Count;
+        if (currentPlayersCount == LastPlayersCount) return;
+
+        await serviceProvider.GetRequiredService<ApiServer>().PlayersCountChanged(currentPlayersCount);
     }
 
     async Task Update() {

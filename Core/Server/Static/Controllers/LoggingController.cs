@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.Discord;
 using Vint.Core.Server.API;
 using Vint.Core.Server.API.Attributes;
 using Vint.Core.Server.API.Data;
@@ -15,7 +14,6 @@ using Vint.Core.Utils;
 namespace Vint.Core.Server.Static.Controllers;
 
 public class LoggingController(
-    DiscordBot discordBot,
     ApiServer apiServer
 ) : WebApiController {
     [Post("/")]
@@ -58,13 +56,11 @@ public class LoggingController(
             await using (DbConnection db = new())
                 clientLog.Id = await db.InsertWithInt64IdentityAsync(clientLog);
 
-            await discordBot.SendLog(clientLog.Username, clientLog.Message, log, clientLog.Id, clientLog.Timestamp);
             await apiServer.WebSocketApiModule.BroadcastAsync(new NewLogDTO(dto, clientLog.Timestamp, clientLog.Id, log));
         } catch (Exception e) {
             Log.Logger.ForType<LoggingController>().WithEndPoint(Request).Error(e, "Failed to deserialize client log");
 
             string filePath = await SaveLogOnDisk(log);
-            await discordBot.SendLog($"Failed to deserialize, saved on disk: {filePath}", "", log, -1, DateTimeOffset.UtcNow);
             await apiServer.WebSocketApiModule.BroadcastAsync(new FailedLogDTO(filePath, DateTimeOffset.UtcNow, log));
         }
     }

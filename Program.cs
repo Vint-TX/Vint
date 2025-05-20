@@ -9,7 +9,6 @@ using Vint.Core.Chat.Commands;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Migrations;
-using Vint.Core.Discord;
 using Vint.Core.Matchmaking;
 using Vint.Core.Quests;
 using Vint.Core.Server;
@@ -54,7 +53,6 @@ abstract class Program {
             .AddSingleton<ApiServer>()
             .AddSingleton<StaticServer>()
             .AddSingleton<GameServer>()
-            .AddSingleton<DiscordBot>()
             .AddSingleton<Runner>()
             .AddSingleton<Protocol>()
             .AddSingleton<QuestManager>()

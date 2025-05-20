@@ -13,7 +13,6 @@ using Vint.Core.Battle.Tank;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
-using Vint.Core.Discord;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
@@ -65,7 +64,7 @@ public class Tanker : BattlePlayer {
     public DateTimeOffset? KickTime { get; private set; }
     public DateTimeOffset? ReservationUntilTime { get; private set; }
 
-    bool Reported { get; set; }
+    public bool Reported { get; set; }
 
     public float ScoreMultiplier {
         get {
@@ -166,15 +165,6 @@ public class Tanker : BattlePlayer {
 
         BattleResultForClient battleResult = BattleResultForClient.CreateForTanker(Round, personalBattleResult);
         await Connection.Send(new BattleResultForClientEvent(battleResult), Connection.UserContainer.Entity);
-    }
-
-    public async Task OnAntiCheatSuspected(DiscordBot? discordBot) {
-        if (Reported) return;
-
-        if (discordBot != null)
-            await discordBot.SendReport($"{Connection.Player.Username} is suspected to be cheating.", "Server");
-
-        Reported = true;
     }
 
     public int GetScoreWithBonus(int score) =>

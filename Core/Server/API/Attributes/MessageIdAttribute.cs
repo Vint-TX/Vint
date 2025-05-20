@@ -4,8 +4,8 @@ using Vint.Core.Server.API.Data;
 namespace Vint.Core.Server.API.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-[MeansImplicitUse(ImplicitUseKindFlags.Access)]
 [BaseTypeRequired(typeof(IClientDTO))]
+[MeansImplicitUse]
 public class MessageIdAttribute(
     int id
 ) : Attribute {

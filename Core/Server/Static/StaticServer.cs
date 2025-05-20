@@ -25,7 +25,6 @@ public class StaticServer {
         WithController<StateController>("/state");
         WithController<InitController>("/init");
         WithController<ConfigController>("/config");
-        WithController<DiscordController>("/discord");
         WithController<LoggingController>("/log");
 
         Server.StateChanged += (_, e) => Logger.Information("State changed: {Old} => {New}", e.OldState, e.NewState);

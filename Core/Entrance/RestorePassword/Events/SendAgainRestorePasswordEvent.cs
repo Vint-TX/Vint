@@ -1,5 +1,4 @@
-﻿using Vint.Core.Discord;
-using Vint.Core.ECS.Entities;
+﻿using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -7,11 +6,9 @@ using Vint.Core.Server.Game.Protocol.Attributes;
 namespace Vint.Core.Entrance.RestorePassword.Events;
 
 [ProtocolId(1460461200896)]
-public class SendAgainRestorePasswordEvent(
-    DiscordBot? discordBot
-) : IServerEvent {
+public class SendAgainRestorePasswordEvent : IServerEvent {
     public Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (connection.RestorePasswordCode == null || discordBot == null)
+        if (connection.RestorePasswordCode == null)
             return Task.CompletedTask;
 
         byte[] codeBytes = new byte[4];
