@@ -10,8 +10,6 @@ public static class RegexUtils {
 
     static Regex EmailRegex { get; } = new(ValidationRules.EmailRegex);
 
-    static Regex DiscordUsernameRegex { get; } = new(ValidationRules.DiscordUsernameRegex);
-
     static Regex LoginBeginingRegex { get; } = new(ValidationRules.LoginBeginingRegex);
 
     static Regex LoginEndingRegex { get; } = new(ValidationRules.LoginEndingRegex);
@@ -25,8 +23,6 @@ public static class RegexUtils {
     static Regex PasswordRegex { get; } = new(ValidationRules.PasswordRegex);
 
     public static bool IsEmailValid(string email) => EmailRegex.IsMatch(email);
-
-    public static bool IsDiscordUsernameValid(string username) => DiscordUsernameRegex.IsMatch(username);
 
     static bool IsLoginSymbolsValid(string login) => LoginSymbolsRegex.IsMatch(login);
 
