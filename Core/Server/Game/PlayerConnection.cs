@@ -26,6 +26,7 @@ using Vint.Core.Entrance.ClientSession;
 using Vint.Core.Entrance.ClientSession.Components;
 using Vint.Core.Entrance.ClientSession.Templates;
 using Vint.Core.Entrance.Login.Events;
+using Vint.Core.Entrance.RestorePassword;
 using Vint.Core.Items.Components;
 using Vint.Core.Items.Events;
 using Vint.Core.Items.Templates.Avatar;
@@ -81,8 +82,7 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     long Ping { get; }
     Invite? Invite { get; set; }
 
-    string? RestorePasswordCode { get; set; }
-    bool RestorePasswordCodeValid { get; set; }
+    RestorePasswordData? RestorePasswordData { get; set; }
 
     int BattleSeries { get; set; }
 
@@ -182,8 +182,7 @@ public abstract class PlayerConnection(
     public int BattleSeries { get; set; }
     public ConcurrentHashSet<IEntity> SharedEntities { get; } = [];
 
-    public string? RestorePasswordCode { get; set; }
-    public bool RestorePasswordCodeValid { get; set; }
+    public RestorePasswordData? RestorePasswordData { get; set; }
 
     public abstract bool IsLoggedIn { get; }
     public bool InSquad => Squad != null;
@@ -239,6 +238,8 @@ public abstract class PlayerConnection(
 
     public async Task Login(bool saveAutoLoginToken, bool rememberMe, string hardwareFingerprint) {
         Logger = Logger.WithPlayer((SocketPlayerConnection)this);
+
+        RestorePasswordData = null;
 
         Player.RememberMe = rememberMe;
         Player.LastLoginTime = DateTimeOffset.UtcNow;

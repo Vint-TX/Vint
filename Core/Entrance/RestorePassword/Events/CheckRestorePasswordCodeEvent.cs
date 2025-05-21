@@ -2,6 +2,7 @@
 using System.Text;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Entrance.RestorePassword.Components;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
@@ -12,13 +13,16 @@ public class CheckRestorePasswordCodeEvent : IServerEvent {
     public string Code { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (connection.RestorePasswordCode == null) return;
+        RestorePasswordData? restorePasswordData = connection.RestorePasswordData;
 
-        if (CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(Code), Encoding.UTF8.GetBytes(connection.RestorePasswordCode))) {
-            connection.RestorePasswordCodeValid = true;
+        if (restorePasswordData == null || !connection.ClientSession.HasComponent<RestorePasswordCodeSentComponent>())
+            return;
+
+        if (CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(Code), Encoding.UTF8.GetBytes(restorePasswordData.Code))) {
+            restorePasswordData.CodeValid = true;
             await connection.Send(new RestorePasswordCodeValidEvent(Code));
         } else {
-            connection.RestorePasswordCodeValid = false;
+            restorePasswordData.CodeValid = false;
             await connection.Send(new RestorePasswordCodeInvalidEvent(Code));
         }
     }

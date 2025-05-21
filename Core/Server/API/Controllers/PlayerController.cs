@@ -77,15 +77,14 @@ public class PlayerController(
 
     [MessageId(15)]
     public IClientDTO GetRestorePasswordCode(long id) {
-        IPlayerConnection? connection = server.FindConnection(id);
+        IPlayerConnection? connection = server.PlayerConnections.Values
+            .FirstOrDefault(connection => connection.RestorePasswordData != null &&
+                                          connection.RestorePasswordData.PlayerId == id);
 
         if (connection == null)
-            return ErrorDTO.NotFound($"Player with id {id} is offline or does not exists");
+            return ErrorDTO.NotFound($"Player with id {id} does not request password recovery");
 
-        if (connection.RestorePasswordCode == null)
-            return ErrorDTO.BadRequest("Player did not request password recovery");
-
-        return SuccessDTO.Ok(new { Code = connection.RestorePasswordCode });
+        return SuccessDTO.Ok(new { connection.RestorePasswordData!.Code });
     }
 
     [MessageId(16)]
