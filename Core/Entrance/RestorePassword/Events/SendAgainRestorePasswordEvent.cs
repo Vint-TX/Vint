@@ -7,7 +7,7 @@ namespace Vint.Core.Entrance.RestorePassword.Events;
 
 [ProtocolId(1460461200896)]
 public class SendAgainRestorePasswordEvent : IServerEvent {
-    public Task Execute(IPlayerConnection connection, IEntity[] entities) {
+    public Task Execute(IPlayerConnection connection, IEntity[] entities) { // todo email service
         if (connection.RestorePasswordCode == null)
             return Task.CompletedTask;
 
@@ -16,6 +16,7 @@ public class SendAgainRestorePasswordEvent : IServerEvent {
         string code = Convert.ToHexString(codeBytes);
 
         connection.RestorePasswordCode = code;
+        connection.RestorePasswordCodeValid = false;
         return Task.CompletedTask;
     }
 }
