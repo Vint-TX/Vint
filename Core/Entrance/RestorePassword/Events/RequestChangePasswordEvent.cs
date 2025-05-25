@@ -1,5 +1,8 @@
-﻿using Vint.Core.ECS.Entities;
+﻿using LinqToDB;
+using Vint.Core.Database;
+using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Entrance.ClientSession;
 using Vint.Core.Entrance.Login.Events;
 using Vint.Core.Entrance.RestorePassword.Components;
 using Vint.Core.Server.API;
@@ -25,8 +28,16 @@ public class RequestChangePasswordEvent(
         connection.RestorePasswordData = null;
         await connection.ClientSession.RemoveComponent<RestorePasswordCodeSentComponent>();
 
-        await connection.ChangePassword(PasswordDigest);
-        await apiServer.PasswordChanged(restorePasswordData.PlayerId);
+        byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(PasswordDigest));
+
+        await using (DbConnection db = new()) {
+            await db.Players
+                .Where(player => player.Id == restorePasswordData.PlayerId)
+                .Set(player => player.PasswordHash, passwordHash)
+                .UpdateAsync();
+        }
+
+        await apiServer.PasswordChanged(restorePasswordData.PlayerId, DateTimeOffset.UtcNow);
 
         await connection.Send<LoginFailedEvent>();
         await connection.Send<AutoLoginFailedEvent>();
