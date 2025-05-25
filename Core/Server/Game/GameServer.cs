@@ -81,6 +81,7 @@ public class GameServer(
         if (currentPlayersCount == LastPlayersCount) return;
 
         await serviceProvider.GetRequiredService<ApiServer>().PlayersCountChanged(currentPlayersCount);
+        LastPlayersCount = currentPlayersCount;
     }
 
     async Task Update() {
