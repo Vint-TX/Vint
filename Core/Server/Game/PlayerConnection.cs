@@ -99,8 +99,6 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     Task Login(bool saveAutoLoginToken, bool rememberMe, string hardwareFingerprint);
 
-    Task ChangePassword(string passwordDigest);
-
     Task ChangeReputation(int delta);
 
     Task ChangeExperience(int delta);
@@ -272,17 +270,6 @@ public abstract class PlayerConnection(
             .Set(player => player.LastLoginTime, Player.LastLoginTime)
             .Set(player => player.HardwareFingerprint, Player.HardwareFingerprint)
             .Set(player => player.AutoLoginToken, Player.AutoLoginToken)
-            .UpdateAsync();
-    }
-
-    public async Task ChangePassword(string passwordDigest) {
-        byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(passwordDigest));
-        Player.PasswordHash = passwordHash;
-
-        await using DbConnection db = new();
-        await db.Players
-            .Where(player => player.Id == Player.Id)
-            .Set(player => player.PasswordHash, Player.PasswordHash)
             .UpdateAsync();
     }
 

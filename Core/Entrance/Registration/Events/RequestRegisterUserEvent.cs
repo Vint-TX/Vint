@@ -3,6 +3,9 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Server.API;
+using Vint.Core.Server.API.Data.Player;
+using Vint.Core.Server.API.Utils;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
@@ -10,7 +13,9 @@ using Vint.Core.Utils;
 namespace Vint.Core.Entrance.Registration.Events;
 
 [ProtocolId(1438590245672)]
-public class RequestRegisterUserEvent : IServerEvent {
+public class RequestRegisterUserEvent(
+    ApiServer apiServer
+) : IServerEvent {
     const int MaxRegistrationsPerComputer =
 #if DEBUG
         100;
@@ -46,16 +51,11 @@ public class RequestRegisterUserEvent : IServerEvent {
                 if (punishment.EndTime <= DateTimeOffset.UtcNow) {
                     punishment.Active = false;
                     await db.UpdateAsync(punishment);
-                } else
-                    banned = true;
+                } else banned = true;
             }
 
-            if (banned) {
-                await connection.Send<RegistrationFailedEvent>();
-                return;
-            }
-
-            if (await db.Players.AnyAsync(player => player.Username == Username) ||
+            if (banned ||
+                await db.Players.AnyAsync(player => player.Username == Username) ||
                 await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsPerComputer) {
                 await connection.Send<RegistrationFailedEvent>();
                 return;
@@ -63,5 +63,6 @@ public class RequestRegisterUserEvent : IServerEvent {
         }
 
         await connection.Register(Username, EncryptedPasswordDigest, Email, HardwareFingerprint, Subscribed, Steam, QuickRegistration);
+        await apiServer.NewPlayerRegistered(connection.Player.Id);
     }
 }
