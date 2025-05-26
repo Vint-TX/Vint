@@ -14,8 +14,9 @@ public class IntroduceUserByUidEvent : IntroduceUserEvent {
     [ProtocolName("Uid")] public string Username { get; private set; } = null!;
 
     public override async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        ILogger logger = connection.Logger.ForType<IntroduceUserByUidEvent>();
+        if (connection.IsLoggedIn) return;
 
+        ILogger logger = connection.Logger.ForType<IntroduceUserByUidEvent>();
         logger.Information("Login by username '{Username}'", Username);
 
         DbConnection db = new();

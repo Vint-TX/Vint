@@ -18,7 +18,7 @@ public class Player {
     [PrimaryKey] public required long Id { get; init; }
 
     [Column(DataType = DataType.Text)] public required string Username { get; set; }
-    [Column(DataType = DataType.Text)] public required string Email { get; set; }
+    [Column(DataType = DataType.Text)] public required string? Email { get; set; }
 
     [Column] public bool RememberMe { get; set; }
 
@@ -34,7 +34,10 @@ public class Player {
 
     [Column] public League RewardedLeagues { get; set; }
 
-    [Column] public required bool Subscribed { get; set; }
+    [Column] public bool EmailRewardsReceived { get; set; }
+    [Column] public bool EmailConfirmed { get; set; }
+    [Column] public required string? NewsletterUnsubscribeToken { get; set; }
+    [Column] public required bool NewsletterSubscribed { get; set; }
     [Column(DataType = DataType.Text)] public required string CountryCode { get; set; }
 
     [Column] public long CurrentAvatarId { get; set; }

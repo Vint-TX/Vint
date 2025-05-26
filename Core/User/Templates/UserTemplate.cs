@@ -3,6 +3,7 @@ using Vint.Core.DailyBonus.Components;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
+using Vint.Core.Email.Components;
 using Vint.Core.Fractions.Components;
 using Vint.Core.Leagues.Components;
 using Vint.Core.Quests.Components;
@@ -21,8 +22,7 @@ public class UserTemplate : EntityTemplate {
             .AddComponent(new UserAvatarComponent(player.CurrentAvatarId))
             .AddComponent(new UserUidComponent(player.Username))
             .AddComponent(new UserCountryComponent(player.CountryCode) { OwnerUserId = player.Id })
-            .AddComponent(new UserSubscribeComponent(player.Subscribed) { OwnerUserId = player.Id })
-            .AddComponent(new ConfirmedUserEmailComponent(player.Email, player.Subscribed) { OwnerUserId = player.Id })
+            .AddComponent(new UserSubscribeComponent(player.NewsletterSubscribed) { OwnerUserId = player.Id })
             .AddComponent(new PersonalChatOwnerComponent { OwnerUserId = player.Id })
             .AddComponent(new BlackListComponent { OwnerUserId = player.Id })
             .AddComponent(new UserExperienceComponent(player.Experience))
@@ -41,6 +41,8 @@ public class UserTemplate : EntityTemplate {
             .AddComponent(new GameplayChestScoreComponent(player.GameplayChestScore) { OwnerUserId = player.Id })
             .AddGroupComponent<LeagueGroupComponent>(player.LeagueEntity)
             .AddGroupComponent<UserGroupComponent>()
+            .ThenExecuteIf(_ => player is { Email: not null, EmailConfirmed: true }, entity => entity.AddComponent(new ConfirmedUserEmailComponent(player.Email!)))
+            .ThenExecuteIf(_ => player is { Email: not null, EmailConfirmed: false }, entity => entity.AddComponent(new UnconfirmedUserEmailComponent(player.Email!)))
             .ThenExecuteIf(_ => player.IsAdmin, entity => entity.AddComponent<UserAdminComponent>())
             .ThenExecuteIf(_ => player.IsModerator, entity => entity.AddComponent<ModeratorComponent>())
             .ThenExecuteIf(_ => player.IsTester,

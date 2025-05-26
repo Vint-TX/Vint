@@ -3,8 +3,8 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Email;
 using Vint.Core.Server.API;
-using Vint.Core.Server.API.Data.Player;
 using Vint.Core.Server.API.Utils;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -32,37 +32,55 @@ public class RequestRegisterUserEvent(
     public bool QuickRegistration { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        if (!RegexUtils.IsLoginValid(Username) ||
-            !RegexUtils.IsEmailValid(Email)) {
+        if (connection.IsLoggedIn) return;
+
+        Email = Email.Trim();
+        EmailValidationResult emailValidationResult = await EmailUtils.Validate(Email, false);
+
+        if (!RegexUtils.IsLoginValid(Username) || emailValidationResult != EmailValidationResult.Vacant) {
             await connection.Send<RegistrationFailedEvent>();
             return;
         }
 
-        await using (DbConnection db = new()) {
-            List<Punishment> punishments = await db.Punishments
-                .Where(punishment => punishment.Active &&
-                                     punishment.Type == PunishmentType.Ban &&
-                                     punishment.HardwareFingerprint == HardwareFingerprint)
-                .ToListAsync();
+        DbConnection db = new();
 
-            bool banned = false;
+        List<Punishment> punishments = await db.Punishments
+            .Where(punishment => punishment.Active &&
+                                 punishment.Type == PunishmentType.Ban &&
+                                 punishment.HardwareFingerprint == HardwareFingerprint)
+            .ToListAsync();
 
-            foreach (Punishment punishment in punishments) {
-                if (punishment.EndTime <= DateTimeOffset.UtcNow) {
-                    punishment.Active = false;
-                    await db.UpdateAsync(punishment);
-                } else banned = true;
-            }
+        bool banned = false;
 
-            if (banned ||
-                await db.Players.AnyAsync(player => player.Username == Username) ||
-                await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsPerComputer) {
-                await connection.Send<RegistrationFailedEvent>();
-                return;
-            }
+        foreach (Punishment punishment in punishments) {
+            if (punishment.EndTime <= DateTimeOffset.UtcNow) {
+                punishment.Active = false;
+                await db.UpdateAsync(punishment);
+            } else banned = true;
         }
 
+        if (banned ||
+            await db.Players.AnyAsync(player => player.Username == Username) ||
+            await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsPerComputer) {
+            await connection.Send<RegistrationFailedEvent>();
+            return;
+        }
+
+        await db.DisposeAsync();
         await connection.Register(Username, EncryptedPasswordDigest, Email, HardwareFingerprint, Subscribed, Steam, QuickRegistration);
-        await apiServer.NewPlayerRegistered(connection.Player.Id);
+
+        EmailConfirmation emailConfirmation = new() {
+            PlayerId = connection.Player.Id,
+            OldEmail = null,
+            NewEmail = Email,
+            Token = Guid.NewGuid().ToString("N"),
+            ExpiresAt = DateTimeOffset.UtcNow + TimeSpan.FromMinutes(15),
+        };
+
+        db = new DbConnection();
+        emailConfirmation.Id = await db.InsertWithInt64IdentityAsync(emailConfirmation);
+        await db.DisposeAsync();
+
+        await apiServer.NewPlayerRegistered(connection.Player.Id, emailConfirmation.ConfirmationUrl);
     }
 }

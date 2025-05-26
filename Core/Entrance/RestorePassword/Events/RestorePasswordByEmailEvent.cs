@@ -19,13 +19,15 @@ public class RestorePasswordByEmailEvent(
     public string Email { get; private set; } = null!;
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        Email = Email.Trim();
+
         ILogger logger = connection.Logger.ForType<RestorePasswordByEmailEvent>();
         logger.Warning("Restoring password '{Email}'", Email);
 
         DbConnection db = new();
 
         var player = await db.Players
-            .Where(player => player.Email == Email) // todo email confirmed check
+            .Where(player => player.Email == Email && player.EmailConfirmed)
             .Select(player => new {
                 player.Id,
                 player.Email
@@ -43,6 +45,6 @@ public class RestorePasswordByEmailEvent(
         connection.RestorePasswordData = new RestorePasswordData(player.Id, code);
 
         await apiServer.RestorePasswordRequested(player.Id, code);
-        await connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(player.Email));
+        await connection.ClientSession.AddComponent(new RestorePasswordCodeSentComponent(player.Email!));
     }
 }

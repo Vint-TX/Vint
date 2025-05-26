@@ -1,4 +1,5 @@
-﻿using LinqToDB;
+﻿using JetBrains.Annotations;
+using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.Mapping;
 using Vint.Core.Database.Models;
@@ -6,6 +7,7 @@ using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Database;
 
+[MustDisposeResource]
 public sealed class DbConnection() : DataConnection(Schema) {
     static DbConnection() {
         DefaultSettings = new DatabaseSettings();
@@ -57,4 +59,5 @@ public sealed class DbConnection() : DataConnection(Schema) {
     public ITable<Friend> Friends => this.GetTable<Friend>();
     public ITable<Report> Reports => this.GetTable<Report>();
     public ITable<ClientLog> ClientLogs => this.GetTable<ClientLog>();
+    public ITable<EmailConfirmation> EmailConfirmations => this.GetTable<EmailConfirmation>();
 }

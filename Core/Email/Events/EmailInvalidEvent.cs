@@ -1,10 +1,10 @@
 ﻿using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
-namespace Vint.Core.Entrance.Validation.Events;
+namespace Vint.Core.Email.Events;
 
-[ProtocolId(635906273457089964)]
-public class EmailOccupiedEvent(
+[ProtocolId(1455866538339)]
+public class EmailInvalidEvent(
     string email
 ) : IEvent {
     public string Email => email;
