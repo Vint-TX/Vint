@@ -16,7 +16,7 @@ public class AcceptRequestToSquadEvent(
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!SquadUtils.CanJoinSquad(connection) || !connection.InSquad) return;
 
-        Squads.Squad squad = connection.Squad;
+        Squad squad = connection.Squad;
         if (squad.Entity.Id != SquadId || !squad.CanAddMember) return;
 
         IPlayerConnection? fromConnection = server.FindConnection(FromUserId);

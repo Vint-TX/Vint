@@ -21,12 +21,12 @@ public class AcceptInviteToSquadEvent(
         if (fromConnection == null || !SquadRegistry.Invites.Remove(FromUserId, targetId))
             return;
 
-        Squads.Squad? squad = fromConnection.Squad;
+        Squad? squad = fromConnection.Squad;
 
         if (squad == null) {
             if (!SquadUtils.CanJoinSquad(fromConnection)) return;
 
-            squad = new Squads.Squad();
+            squad = new Squad();
             await squad.AddMember(fromConnection);
             await squad.SetLeader(fromConnection.UserContainer.Id);
         }

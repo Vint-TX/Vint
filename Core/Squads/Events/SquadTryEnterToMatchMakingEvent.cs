@@ -20,7 +20,7 @@ public class SquadTryEnterToMatchMakingEvent(
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.InSquad || connection.InLobby) return;
 
-        Squads.Squad squad = connection.Squad;
+        Squad squad = connection.Squad;
         if (squad.Leader != connection) return;
 
         IEntity? selectedMode = Modes.FirstOrDefault(mode => mode.Id == MatchMakingModeId);
