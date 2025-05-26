@@ -9,6 +9,7 @@ public static class DbConstants {
     public const string Covers = "Covers";
     public const string DailyBonusRedemptions = "DailyBonusRedemptions";
     public const string Details = "Details";
+    public const string EmailConfirmations = "EmailConfirmations";
     public const string FriendRequests = "FriendRequests";
     public const string Friends = "Friends";
     public const string Graffities = "Graffities";

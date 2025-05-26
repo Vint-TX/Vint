@@ -1,0 +1,8 @@
+emailRewards:
+  rewards:
+    - id: 1317350822 # crystals
+      amount: 500
+    - id: 947348559 # x-crystals
+      amount: 50
+    - id: -910231606 # avatar Jokerge
+      amount: 1

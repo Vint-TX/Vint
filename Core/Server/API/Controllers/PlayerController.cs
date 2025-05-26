@@ -269,9 +269,11 @@ public class PlayerController(
 
     [MessageId(24)]
     public async Task<IClientDTO> ValidateCredentials(string usernameOrEmail, string passwordHash) {
+        usernameOrEmail = usernameOrEmail.Trim();
+
         await using DbConnection db = new();
         var player = await db.Players
-            .Where(player => player.Username == usernameOrEmail || player.Email == usernameOrEmail)
+            .Where(player => player.Username == usernameOrEmail || (player.Email == usernameOrEmail && player.EmailConfirmed))
             .Select(player => new {
                 player.Id,
                 player.PasswordHash

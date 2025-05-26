@@ -12,6 +12,8 @@ namespace Vint.Core.Entrance.Invite.Events;
 [ProtocolId(1439810001590)]
 public class InviteEnteredEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
+        if (connection.IsLoggedIn) return;
+
         string? code = connection.ClientSession.GetComponent<InviteComponent>().InviteCode;
 
         if (string.IsNullOrWhiteSpace(code)) {

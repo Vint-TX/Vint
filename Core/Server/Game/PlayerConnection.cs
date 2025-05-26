@@ -84,6 +84,7 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     RestorePasswordData? RestorePasswordData { get; set; }
 
+
     int BattleSeries { get; set; }
 
     ConcurrentHashSet<IEntity> SharedEntities { get; }
@@ -206,6 +207,10 @@ public abstract class PlayerConnection(
         Logger.Information("Registering player '{Username}'", username);
 
         byte[] passwordHash = new Encryption().RsaDecrypt(Convert.FromBase64String(encryptedPasswordDigest));
+        string? unsubscribeToken = null;
+
+        if (subscribed)
+            unsubscribeToken = Guid.NewGuid().ToString("N");
 
         Player = new Player {
             Id = EntityRegistry.GenerateId(),
@@ -213,7 +218,8 @@ public abstract class PlayerConnection(
             Email = email,
             CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
             HardwareFingerprint = hardwareFingerprint,
-            Subscribed = subscribed,
+            NewsletterSubscribed = subscribed,
+            NewsletterUnsubscribeToken = unsubscribeToken,
             RegistrationTime = DateTimeOffset.UtcNow,
             LastLoginTime = DateTimeOffset.UtcNow,
             LastQuestUpdateTime = DateTimeOffset.UtcNow,
