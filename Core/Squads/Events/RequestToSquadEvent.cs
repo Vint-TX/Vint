@@ -19,7 +19,7 @@ public class RequestToSquadEvent(
         if (toConnection is not { InSquad: true } || !SquadUtils.CanJoinSquad(toConnection))
             return;
 
-        Squads.Squad squad = toConnection.Squad;
+        Squad squad = toConnection.Squad;
 
         if (!squad.CanAddMember) {
             await connection.Send(new RequestToSquadRejectedEvent(RejectRequestToSquadReason.SquadIsFull, ToUserId));
