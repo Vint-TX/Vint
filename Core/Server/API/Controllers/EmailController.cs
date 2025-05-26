@@ -89,4 +89,28 @@ public class EmailController(
 
         return SuccessDTO.NoContent();
     }
+
+    [MessageId(47)]
+    public async Task<IClientDTO> UnsubscribeFromNewsletter(long playerId, string token) {
+        await using (DbConnection db = new()) {
+            bool success = await db.Players
+                .Where(player => player.Id == playerId && player.NewsletterUnsubscribeToken == token)
+                .Set(player => player.NewsletterSubscribed, false)
+                .Set(player => player.NewsletterUnsubscribeToken, (string?)null)
+                .UpdateAsync() > 0;
+
+            if (!success)
+                return ErrorDTO.NotFound("Invalid token or player id");
+        }
+
+        IPlayerConnection? connection = server.FindConnection(playerId);
+
+        if (connection != null) {
+            connection.Player.NewsletterSubscribed = false;
+            connection.Player.NewsletterUnsubscribeToken = null;
+            await connection.UserContainer.Entity.ChangeComponent<UserSubscribeComponent>(component => component.Subscribed = false);
+        }
+
+        return SuccessDTO.NoContent();
+    }
 }
