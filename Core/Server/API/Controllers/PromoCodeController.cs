@@ -16,7 +16,7 @@ namespace Vint.Core.Server.API.Controllers;
 public class PromoCodeController : IApiController {
     [MessageId(30)]
     public async Task<IClientDTO> GetPromoCodes(int from, int count = 20) {
-        from = Math.Max(0, from - 1);
+        from = Math.Max(0, from);
 
         await using DbConnection db = new();
         List<PromoCodeSummaryData> promoCodes = await db.PromoCodes

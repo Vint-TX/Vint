@@ -27,7 +27,7 @@ public class InviteController : IApiController {
 
     [MessageId(27)]
     public async Task<IClientDTO> GetInvites(int from, int count = 20) {
-        from = Math.Max(0, from - 1);
+        from = Math.Max(0, from);
 
         await using DbConnection db = new();
         List<Invite> invites = await db.Invites

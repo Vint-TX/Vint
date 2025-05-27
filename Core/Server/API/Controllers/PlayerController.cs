@@ -17,7 +17,7 @@ public class PlayerController(
 ) : IApiController {
     [MessageId(10)]
     public async Task<IClientDTO> GetPlayers(int from, int count = 500) {
-        from = Math.Max(0, from - 1);
+        from = Math.Max(0, from);
 
         await using DbConnection db = new();
         List<PlayerSummaryData> players = await db.Players
