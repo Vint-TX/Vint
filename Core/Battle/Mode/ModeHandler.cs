@@ -38,6 +38,8 @@ public abstract class ModeHandler(
 
     public virtual Task OnRoundEnded() => Task.CompletedTask;
 
+    public abstract Task ResetScore();
+
     public abstract Task SortAllPlayers();
 
     public abstract SpawnPoint GetRandomSpawnPoint(Tanker tanker);

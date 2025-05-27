@@ -52,6 +52,7 @@ public sealed class CustomLobby(
         await player.SetReady(true);
 
     protected override async Task RoundEnded() {
+        await Round!.ModeHandler.ResetScore();
         await Entity.RemoveComponent<BattleGroupComponent>();
         await StateManager.SetState(new Awaiting(StateManager));
     }

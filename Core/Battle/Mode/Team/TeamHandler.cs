@@ -39,7 +39,9 @@ public abstract class TeamHandler : ModeHandler {
     public override async Task OnRoundEnded() {
         await BlueTeam.Entity.RemoveComponent<BattleGroupComponent>();
         await RedTeam.Entity.RemoveComponent<BattleGroupComponent>();
+    }
 
+    public override async Task ResetScore() {
         await BlueTeam.ResetScore();
         await RedTeam.ResetScore();
     }
