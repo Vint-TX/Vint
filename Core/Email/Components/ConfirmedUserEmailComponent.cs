@@ -8,7 +8,4 @@ public class ConfirmedUserEmailComponent(
     string email
 ) : IComponent {
     public string Email { get; set; } = email;
-
-    [Obsolete("Not used in client anymore; will be removed in the next client update")]
-    public bool Subscribed { get; set; }
 }
