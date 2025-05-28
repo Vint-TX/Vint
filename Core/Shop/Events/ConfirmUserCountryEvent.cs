@@ -17,17 +17,16 @@ public class ConfirmUserCountryEvent : IServerEvent {
         IEntity user = connection.UserContainer.Entity;
         Player player = connection.Player;
 
-        if (!user.HasComponent<UserCountryComponent>())
-            await user.AddComponent(new UserCountryComponent(CountryCode) { OwnerUserId = user.Id });
-        else
-            await user.ChangeComponent<UserCountryComponent>(component => component.CountryCode = CountryCode);
+        CountryCode = CountryCode.ToLower();
+
+        await using (DbConnection db = new()) {
+            await db.Players
+                .Where(p => p.Id == player.Id)
+                .Set(p => p.CountryCode, CountryCode)
+                .UpdateAsync();
+        }
 
         player.CountryCode = CountryCode;
-
-        await using DbConnection db = new();
-        await db.Players
-            .Where(p => p.Id == player.Id)
-            .Set(p => p.CountryCode, CountryCode)
-            .UpdateAsync();
+        await user.ChangeComponent<UserCountryComponent>(component => component.CountryCode = CountryCode);
     }
 }

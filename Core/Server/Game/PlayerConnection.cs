@@ -216,7 +216,7 @@ public abstract class PlayerConnection(
             Id = EntityRegistry.GenerateId(),
             Username = username,
             Email = email,
-            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode,
+            CountryCode = ClientSession.GetComponent<ClientLocaleComponent>().LocaleCode.ToLower(),
             HardwareFingerprint = hardwareFingerprint,
             NewsletterSubscribed = subscribed,
             NewsletterUnsubscribeToken = unsubscribeToken,

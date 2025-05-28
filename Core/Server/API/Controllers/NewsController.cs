@@ -42,6 +42,7 @@ public class NewsController(
     [MessageId(48)]
     public async Task<IClientDTO> GetSubscribers(string countryCode, int from, int count = 500) {
         from = Math.Max(0, from);
+        countryCode = countryCode.ToLower();
 
         await using DbConnection db = new();
         List<PlayerSummaryData> subscribers = await db.Players
