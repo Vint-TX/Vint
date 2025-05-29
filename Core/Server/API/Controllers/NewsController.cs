@@ -44,9 +44,16 @@ public class NewsController(
         from = Math.Max(0, from);
         countryCode = countryCode.ToLower();
 
+        IEnumerable<string> codes = NewsControllerUtils.GetCountryCodes(countryCode);
+        IEnumerable<string> nonDefaultCodes = NewsControllerUtils.NonDefaultCodes;
+        bool isDefaultCountryCode = NewsControllerUtils.IsDefaultCountryCode(countryCode);
+
         await using DbConnection db = new();
         List<PlayerSummaryData> subscribers = await db.Players
-            .Where(player => player.NewsletterSubscribed && player.CountryCode == countryCode)
+            .Where(player => player.NewsletterSubscribed &&
+                             (player.CountryCode == countryCode ||
+                              codes.Contains(player.CountryCode) ||
+                              (isDefaultCountryCode && !nonDefaultCodes.Contains(player.CountryCode))))
             .Skip(from)
             .Take(count)
             .Select(player => PlayerSummaryData.FromPlayer(player))
@@ -63,4 +70,18 @@ public class NewsController(
         await apiServer.NewsAvailable(title, subtitle, imageUrl, language, url);
         return SuccessDTO.NoContent();
     }
+}
+
+file static class NewsControllerUtils {
+    static IEnumerable<string> RuCodes { get; } = ["ru", "by", "kz", "ua", "am", "kg", "tj", "uz"];
+    static IEnumerable<string> EnCodes { get; } = []; // english is a default language, so no specific codes are needed
+    public static IEnumerable<string> NonDefaultCodes { get; } = [..RuCodes];
+
+    public static bool IsDefaultCountryCode(string countryCode) =>
+        countryCode.Equals("en", StringComparison.CurrentCultureIgnoreCase);
+
+    public static IEnumerable<string> GetCountryCodes(string countryCode) => countryCode.ToLower() switch {
+        "ru" => RuCodes,
+        _ => EnCodes
+    };
 }
