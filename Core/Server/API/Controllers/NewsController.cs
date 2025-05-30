@@ -50,10 +50,10 @@ public class NewsController(
 
         await using DbConnection db = new();
         List<PlayerSummaryData> subscribers = await db.Players
-            .Where(player => player.NewsletterSubscribed &&
-                             (player.CountryCode == countryCode ||
-                              codes.Contains(player.CountryCode) ||
-                              (isDefaultCountryCode && !nonDefaultCodes.Contains(player.CountryCode))))
+            .Where(player => player.NewsletterSubscribed && player.EmailConfirmed)
+            .Where(player => player.CountryCode == countryCode ||
+                             codes.Contains(player.CountryCode) ||
+                             (isDefaultCountryCode && !nonDefaultCodes.Contains(player.CountryCode)))
             .Skip(from)
             .Take(count)
             .Select(player => PlayerSummaryData.FromPlayer(player))
