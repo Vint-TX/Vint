@@ -18,11 +18,11 @@ public class ChangeBlockStateByUserIdRequestEvent(
     [ProtocolName("UserId")] public long BlockedUserId { get; set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        IPlayerConnection? blockedConnection = null;
         bool friendshipBroken = false;
         bool incomingRequestRejected = false;
         bool outgoingRequestRemoved = false;
 
+        bool needToBlock;
         long blockerUserId = connection.UserContainer.Id;
 
         await using (DbConnection db = new()) {
@@ -30,14 +30,12 @@ public class ChangeBlockStateByUserIdRequestEvent(
 
             await db.BeginTransactionAsync();
 
-            bool needToBlock = await db.Blocks
+            needToBlock = await db.Blocks
                 .Where(block => block.BlockerId == blockerUserId &&
                                 block.BlockedId == BlockedUserId)
                 .DeleteAsync() == 0;
 
             if (needToBlock) {
-                blockedConnection = server.FindConnection(BlockedUserId);
-
                 Block block = new() {
                     BlockerId = blockerUserId,
                     BlockedId = BlockedUserId,
@@ -63,7 +61,14 @@ public class ChangeBlockStateByUserIdRequestEvent(
             await db.CommitTransactionAsync();
         }
 
-        await connection.UserContainer.Entity.ChangeComponent<BlackListComponent>(component => component.BlockedUsers.Add(BlockedUserId));
+        await connection.UserContainer.Entity.ChangeComponent<BlackListComponent>(component => {
+            if (needToBlock) component.BlockedUsers.Add(BlockedUserId);
+            else component.BlockedUsers.Remove(BlockedUserId);
+        });
+
+        IPlayerConnection? blockedConnection = needToBlock
+            ? server.FindConnection(BlockedUserId)
+            : null;
 
         if (friendshipBroken) {
             await connection.Send(new AcceptedFriendRemovedEvent(BlockedUserId), connection.UserContainer.Entity);

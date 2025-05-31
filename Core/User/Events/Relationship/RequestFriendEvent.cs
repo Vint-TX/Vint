@@ -6,6 +6,7 @@ using Vint.Core.ECS.Events;
 using Vint.Core.Notification.Templates;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
+using Vint.Core.User.Components;
 
 namespace Vint.Core.User.Events.Relationship;
 
@@ -40,6 +41,8 @@ public class RequestFriendEvent(
             await db.CommitTransactionAsync();
         }
 
+        await connection.UserContainer.Entity.ChangeComponent<BlackListComponent>(component => component.BlockedUsers.Remove(UserId));
+
         await connection.Send(new OutgoingFriendAddedEvent(UserId), connection.UserContainer.Entity);
         await connection.Share(new FriendSentNotificationTemplate().Create(connection.UserContainer.Entity));
 
@@ -52,6 +55,7 @@ public class RequestFriendEvent(
     static Task<bool> AlreadyFriends(DbConnection db, long senderId, long receiverId) => db.Friends
         .AnyAsync(friend => (friend.UserId == senderId && friend.FriendId == receiverId) ||
                             (friend.UserId == receiverId && friend.FriendId == senderId));
+
     static Task<bool> AlreadyRequested(DbConnection db, long senderId, long receiverId) => db.FriendRequests
         .AnyAsync(request => (request.SenderId == senderId && request.FriendId == receiverId) ||
                              (request.SenderId == receiverId && request.FriendId == senderId));
