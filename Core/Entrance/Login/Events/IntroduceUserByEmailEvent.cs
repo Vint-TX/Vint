@@ -3,9 +3,9 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Email.Events;
+using Vint.Core.Logging;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Entrance.Login.Events;
 

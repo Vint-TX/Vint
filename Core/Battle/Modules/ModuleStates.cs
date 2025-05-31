@@ -50,7 +50,6 @@ public class Cooldown(
 
     public override async Task Finish() {
         await base.Finish();
-
         await Module.SlotEntity.RemoveComponent<InventoryCooldownStateComponent>();
     }
 

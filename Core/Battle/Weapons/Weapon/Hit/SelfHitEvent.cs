@@ -9,11 +9,11 @@ using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Logging;
 using Vint.Core.Server.API;
 using Vint.Core.Server.API.Utils;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Weapons.Weapon.Hit;
 

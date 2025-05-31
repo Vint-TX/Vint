@@ -80,14 +80,14 @@ public abstract class MatchmakingLobby(
             await player.SetRoundJoinTime(DateTimeOffset.UtcNow.AddSeconds(3));
     }
 
-    public override async Task Tick(TimeSpan deltaTime) {
+    public override async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         if (StateManager.CurrentState is Running running) {
             foreach (LobbyPlayer player in Players.Where(player => !player.InRound &&
                                                                    player.RoundJoinTime <= DateTimeOffset.UtcNow))
                 await running.Round.AddTanker(player);
         }
 
-        await base.Tick(deltaTime);
+        await base.Tick(deltaTime, cancellationToken);
     }
 
     protected virtual bool CanStartOrKeepCountdown() => Players.Count > 0;

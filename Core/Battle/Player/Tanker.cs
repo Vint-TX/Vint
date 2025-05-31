@@ -175,8 +175,8 @@ public class Tanker : BattlePlayer {
         return GetScoreWithBonus(score);
     }
 
-    public override async Task Tick(TimeSpan deltaTime) =>
-        await Tank.Tick(deltaTime);
+    public override async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) =>
+        await Tank.Tick(deltaTime, cancellationToken);
 
     float GetBattleSeriesMultiplier() {
         float[] battleSeriesMultiplier = [0f, .05f, .1f, .15f, .2f, .25f];

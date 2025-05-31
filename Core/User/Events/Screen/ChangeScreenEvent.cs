@@ -1,9 +1,9 @@
 ﻿using Serilog;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Logging;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
 namespace Vint.Core.User.Events.Screen;
 

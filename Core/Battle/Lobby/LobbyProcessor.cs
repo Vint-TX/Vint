@@ -20,9 +20,9 @@ public class LobbyProcessor(
 
     public ICollection<LobbyBase> Lobbies => LobbiesDict.Values;
 
-    public async Task Tick(TimeSpan deltaTime) {
+    public async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         foreach (LobbyBase lobby in Lobbies)
-            await lobby.Tick(deltaTime);
+            await lobby.Tick(deltaTime, cancellationToken);
     }
 
     public async Task<CustomLobby> CreateCustom(ClientBattleParams clientParams, IPlayerConnection owner) {

@@ -33,8 +33,10 @@ public abstract class Effect(
 
     ConcurrentHashSet<DelayedTask> DelayedTasks { get; } = [];
 
-    public virtual async Task Tick(TimeSpan deltaTime) {
+    public virtual async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+            if (cancellationToken.IsCancellationRequested) return;
+
             DelayedTasks.TryRemove(delayedTask);
             await delayedTask.Task();
         }

@@ -7,12 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using Vint.Core.Logging;
 using Vint.Core.Server.API.Attributes;
 using Vint.Core.Server.API.Controllers;
 using Vint.Core.Server.API.Data;
 using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.Common.Serialization;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Server.API;
 

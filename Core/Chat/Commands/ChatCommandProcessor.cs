@@ -2,7 +2,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Chat.Commands.Attributes;
-using Vint.Core.Utils;
+using Vint.Core.Logging;
 
 namespace Vint.Core.Chat.Commands;
 

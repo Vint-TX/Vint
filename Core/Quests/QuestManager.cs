@@ -10,6 +10,7 @@ using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Logging;
 using Vint.Core.Quests.Components;
 using Vint.Core.Quests.Templates;
 using Vint.Core.Server.Game;
@@ -59,7 +60,7 @@ public class QuestManager {
         return quests;
     }
 
-    public async Task Tick() {
+    public async Task Tick(CancellationToken cancellationToken = default) {
         if (NextUpdate > DateTimeOffset.UtcNow)
             return;
 
@@ -69,7 +70,7 @@ public class QuestManager {
         await ConfigManager.ServerConfig.Save();
 
         await using DbConnection db = new();
-        await db.BeginTransactionAsync();
+        await db.BeginTransactionAsync(cancellationToken);
 
         GameServer server = ServiceProvider.GetRequiredService<GameServer>();
 
@@ -82,15 +83,18 @@ public class QuestManager {
                 await db.Players
                     .Where(player => player.Id == connection.Player.Id)
                     .Set(player => player.LastQuestUpdateTime, now)
-                    .UpdateAsync();
+                    .UpdateAsync(cancellationToken);
 
                 connection.Player.LastQuestUpdateTime = now;
+            } catch (OperationCanceledException) {
+                // transaction will be rolled back automatically when the connection is disposed
+                return;
             } catch (Exception e) {
                 connection.Logger.Error(e, "Caught an error while updating the quests");
             }
         }
 
-        await db.CommitTransactionAsync();
+        await db.CommitTransactionAsync(cancellationToken);
         UpdateNextTime();
 
         Logger.Warning("Quests have been updated");

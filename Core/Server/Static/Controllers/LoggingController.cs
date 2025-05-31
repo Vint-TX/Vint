@@ -5,11 +5,11 @@ using Newtonsoft.Json;
 using Serilog;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
+using Vint.Core.Logging;
 using Vint.Core.Server.API;
 using Vint.Core.Server.API.Attributes;
 using Vint.Core.Server.API.Data;
 using Vint.Core.Server.Common.Attributes.Methods;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Static.Controllers;
 

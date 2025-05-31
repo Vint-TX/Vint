@@ -42,6 +42,7 @@ using Vint.Core.Items.Templates.Skins;
 using Vint.Core.Items.Templates.Weapons.Market;
 using Vint.Core.Items.Templates.Weapons.User;
 using Vint.Core.Leagues.Components;
+using Vint.Core.Logging;
 using Vint.Core.Notification.Components;
 using Vint.Core.Notification.Templates;
 using Vint.Core.Presets.Components;
@@ -160,7 +161,7 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     void Schedule(DateTimeOffset time, Func<Task> action);
 
-    Task Tick();
+    Task Tick(CancellationToken cancellationToken = default);
 }
 
 public abstract class PlayerConnection(
@@ -1285,13 +1286,15 @@ public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
     public void Schedule(DateTimeOffset time, Func<Task> action) =>
         DelayedTasks.Add(new DelayedTask(time, action));
 
-    public virtual async Task Tick() {
+    public virtual async Task Tick(CancellationToken cancellationToken = default) {
         if (PingSendTime.AddSeconds(5) <= DateTimeOffset.UtcNow) {
             await Send(new PingEvent(DateTimeOffset.UtcNow));
             PingSendTime = DateTimeOffset.UtcNow;
         }
 
         foreach (DelayedTask delayedTask in DelayedTasks.Where(delayedTask => delayedTask.InvokeAtTime <= DateTimeOffset.UtcNow)) {
+            if (cancellationToken.IsCancellationRequested) return;
+
             await delayedTask.Task();
             DelayedTasks.TryRemove(delayedTask);
         }
@@ -1428,13 +1431,13 @@ public class SocketPlayerConnection(
         await DisposeAsync();
     }
 
-    public override async Task Tick() {
+    public override async Task Tick(CancellationToken cancellationToken = default) {
         if (!IsSocketConnected) {
             await Kick("Zombie");
             return;
         }
 
-        await base.Tick();
+        await base.Tick(cancellationToken);
     }
 
     async Task ReceiveAndExecute() {

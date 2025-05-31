@@ -4,6 +4,7 @@ using Serilog;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Templates;
+using Vint.Core.Logging;
 using Vint.Core.Server.Game;
 using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Utils;

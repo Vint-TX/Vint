@@ -8,10 +8,8 @@ using Vint.Core.ECS.Entities;
 namespace Vint.Core.Database;
 
 [MustDisposeResource]
-public sealed class DbConnection() : DataConnection(Schema) {
+public sealed class DbConnection() : DataConnection(DefaultOptions.Options.UseMappingSchema(Schema)) {
     static DbConnection() {
-        DefaultSettings = new DatabaseSettings();
-
         Schema = new MappingSchema();
         Schema.SetConverter<IEntity, long>(entity => entity.Id);
         // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
@@ -26,6 +24,8 @@ public sealed class DbConnection() : DataConnection(Schema) {
         Schema.SetConverter<TimeSpan?, DataParameter>(timeSpan => new DataParameter(null, timeSpan?.Ticks, DataType.Int64));
         Schema.SetConverter<long?, TimeSpan?>(_ => null);
     }
+
+    public static DataOptions<DbConnection> DefaultOptions { get; set; } = null!;
 
     static MappingSchema Schema { get; set; }
 

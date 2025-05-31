@@ -154,11 +154,11 @@ public abstract class LobbyBase : IDisposable {
         player.Dispose();
     }
 
-    public virtual async Task Tick(TimeSpan deltaTime) {
+    public virtual async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         await StateManager.Tick(deltaTime);
 
         if (Round != null)
-            await Round.Tick(deltaTime);
+            await Round.Tick(deltaTime, cancellationToken);
     }
 
     protected async Task<Round> CreateRound() {

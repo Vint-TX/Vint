@@ -3,8 +3,8 @@ using System.Reflection;
 using Serilog;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Logging;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game.Protocol.Commands;
 

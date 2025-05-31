@@ -4,6 +4,7 @@ using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Config.MapInformation;
+using Vint.Core.Logging;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Bonus;

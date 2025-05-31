@@ -117,7 +117,7 @@ public class BattleTank : IDisposable {
     public TankStateManager StateManager { get; set; }
     public TankEntities Entities { get; }
 
-    public async Task Tick(TimeSpan deltaTime) {
+    public async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         if (Tanker.IsPaused && DateTimeOffset.UtcNow > Tanker.KickTime) {
             await Tanker.Send<KickFromBattleEvent>(Tanker.BattleUser);
             await Round.RemoveTanker(Tanker);
@@ -129,10 +129,10 @@ public class BattleTank : IDisposable {
 
         await StateManager.Tick(deltaTime);
         await WeaponHandler.Tick(deltaTime);
-        await TemperatureProcessor.Tick(deltaTime);
+        await TemperatureProcessor.Tick(deltaTime, cancellationToken);
 
         foreach (Effect effect in Effects)
-            await effect.Tick(deltaTime);
+            await effect.Tick(deltaTime, cancellationToken);
 
         foreach (BattleModule module in Modules)
             await module.Tick(deltaTime);

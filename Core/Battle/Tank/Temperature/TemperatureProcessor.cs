@@ -33,16 +33,16 @@ public class TemperatureProcessor {
     ConcurrentQueue<TemperatureAssist> NewAssists { get; } = [];
     BlockingList<TemperatureAssist> Assists { get; } = [];
 
-    public async Task Tick(TimeSpan deltaTime) {
+    public async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         if (Tank.StateManager.CurrentState is not Active)
             return;
 
         WasFrozen = Temperature < 0;
 
-        UpdateAssistsDuration(deltaTime);
-        NormalizeTankTemperature(deltaTime);
-        AcceptNewAssists();
-        NormalizeAllAssists();
+        UpdateAssistsDuration(deltaTime, cancellationToken);
+        NormalizeTankTemperature(deltaTime, cancellationToken);
+        AcceptNewAssists(cancellationToken);
+        NormalizeAllAssists(cancellationToken);
 
         if (RemainingPeriod > TimeSpan.Zero) {
             RemainingPeriod -= deltaTime;
@@ -51,8 +51,8 @@ public class TemperatureProcessor {
 
         RemainingPeriod += TickPeriod;
 
-        await HeatDamage();
-        await UpdateTemperatureAndSpeed();
+        await HeatDamage(cancellationToken);
+        await UpdateTemperatureAndSpeed(cancellationToken);
     }
 
     public async Task ResetAll() {
@@ -70,21 +70,24 @@ public class TemperatureProcessor {
         TemperatureConfig.AutoDecrementInMs += decrementTemperatureDelta;
     }
 
-    void UpdateAssistsDuration(TimeSpan deltaTime) {
-        foreach (TemperatureAssist assist in Assists.Where(assist => assist.CurrentDuration > TimeSpan.Zero))
+    void UpdateAssistsDuration(TimeSpan deltaTime, CancellationToken cancellationToken) {
+        foreach (TemperatureAssist assist in Assists.Where(assist => assist.CurrentDuration > TimeSpan.Zero)) {
+            if (cancellationToken.IsCancellationRequested) return;
             assist.CurrentDuration -= deltaTime;
+        }
     }
 
-    async Task HeatDamage() {
+    async Task HeatDamage(CancellationToken cancellationToken) {
         foreach (HeatTemperatureAssist assist in Assists.OfType<HeatTemperatureAssist>()) {
             float value = MathUtils.Map(assist.CurrentDelta, 0, assist.Limit, 0, assist.HeatDamage);
-
             CalculatedDamage damage = new(default, value, false, false);
+
+            if (cancellationToken.IsCancellationRequested) return;
             await Round.DamageProcessor.Damage(assist.Tank, Tank, assist.WeaponMarketEntity, assist.WeaponBattleEntity, damage);
         }
     }
 
-    void NormalizeTankTemperature(TimeSpan deltaTime) {
+    void NormalizeTankTemperature(TimeSpan deltaTime, CancellationToken cancellationToken) {
         if (Temperature == 0)
             return;
 
@@ -101,7 +104,7 @@ public class TemperatureProcessor {
 
         delta *= (float)deltaTime.TotalMilliseconds;
 
-        while (delta > 0) {
+        while (delta > 0 && !cancellationToken.IsCancellationRequested) {
             assists = assists
                 .Where(assist => assist.CurrentDelta != 0)
                 .ToArray();
@@ -113,6 +116,7 @@ public class TemperatureProcessor {
             float subtracted = 0;
 
             foreach (TemperatureAssist assist in assists) {
+                if (cancellationToken.IsCancellationRequested) return;
                 float subtract = Math.Min(Math.Abs(assist.CurrentDelta), assistDelta);
 
                 assist.Subtract(delta);
@@ -123,32 +127,32 @@ public class TemperatureProcessor {
         }
     }
 
-    void AcceptNewAssists() {
-        while (NewAssists.TryDequeue(out TemperatureAssist? assist)) {
+    void AcceptNewAssists(CancellationToken cancellationToken) {
+        while (NewAssists.TryDequeue(out TemperatureAssist? assist) && !cancellationToken.IsCancellationRequested) {
             TemperatureAssist? existingAssist =
                 Assists.FirstOrDefault(a => a.Tank == assist.Tank && a.WeaponMarketEntity == assist.WeaponMarketEntity);
 
-            if (existingAssist != null &&
-                existingAssist.CanMerge(assist)) {
+            if (existingAssist != null && existingAssist.CanMerge(assist)) {
                 Assists.Remove(existingAssist);
                 assist.MergeWith(existingAssist);
             }
 
-            NormalizeWithOpposite(assist);
+            NormalizeWithOpposite(assist, cancellationToken);
 
-            if (assist.CurrentDelta == 0 ||
-                assist.NormalizeOnly)
+            if (assist.CurrentDelta == 0 || assist.NormalizeOnly)
                 continue;
 
             Assists.Add(assist);
         }
     }
 
-    void NormalizeAllAssists() {
+    void NormalizeAllAssists(CancellationToken cancellationToken) {
         float excess = Math.Abs(Assists.Sum(assist => assist.CurrentDelta)) - TemperatureConfig.MaxTemperature;
 
         if (excess > 0) {
             foreach (TemperatureAssist assist in Assists) {
+                if (cancellationToken.IsCancellationRequested) return;
+
                 float delta = Math.Abs(assist.CurrentDelta);
                 float subtract = Math.Min(delta, excess);
 
@@ -163,7 +167,7 @@ public class TemperatureProcessor {
         Assists.RemoveAll(assist => assist.CurrentDelta == 0);
     }
 
-    void NormalizeWithOpposite(TemperatureAssist assist) {
+    void NormalizeWithOpposite(TemperatureAssist assist, CancellationToken cancellationToken) {
         int sign = Math.Sign(Temperature);
 
         if (sign == 0 ||
@@ -172,6 +176,8 @@ public class TemperatureProcessor {
             return;
 
         foreach (TemperatureAssist oppositeAssist in Assists.Where(a => a.LimitSign != assist.LimitSign)) {
+            if (cancellationToken.IsCancellationRequested) return;
+
             float ownDelta = Math.Abs(assist.CurrentDelta);
             float oppositeDelta = Math.Abs(oppositeAssist.CurrentDelta);
             float subtract = Math.Min(ownDelta, oppositeDelta);
@@ -186,9 +192,11 @@ public class TemperatureProcessor {
         Assists.RemoveAll(a => a.CurrentDelta == 0);
     }
 
-    async Task UpdateTemperatureAndSpeed() {
+    async Task UpdateTemperatureAndSpeed(CancellationToken cancellationToken = default) {
         float before = Temperature;
         Temperature = Assists.Sum(assist => assist.CurrentDelta);
+
+        if (cancellationToken.IsCancellationRequested) return;
 
         if (Math.Abs(Temperature - before) >= float.Epsilon) {
             await Tank.Entities.Tank.ChangeComponent<TemperatureComponent>(component => component.Temperature = Temperature);
@@ -196,6 +204,8 @@ public class TemperatureProcessor {
             foreach (ITemperatureModule temperatureModule in Tank.Modules.OfType<ITemperatureModule>())
                 await temperatureModule.OnTemperatureChanged(before, Temperature, TemperatureConfig.MinTemperature, TemperatureConfig.MaxTemperature);
         }
+
+        if (cancellationToken.IsCancellationRequested) return;
 
         if (WasFrozen || IsFrozen)
             await Tank.UpdateSpeed();

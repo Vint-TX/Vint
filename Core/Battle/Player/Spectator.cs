@@ -38,5 +38,5 @@ public class Spectator(
         await Connection.Send(new BattleResultForClientEvent(result), Connection.UserContainer.Entity);
     }
 
-    public override Task Tick(TimeSpan deltaTime) => Task.CompletedTask;
+    public override Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) => Task.CompletedTask;
 }

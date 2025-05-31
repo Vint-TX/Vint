@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Numerics;
 using Serilog;
+using Vint.Core.Logging;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;

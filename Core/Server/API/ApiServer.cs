@@ -1,12 +1,13 @@
 ﻿using EmbedIO;
+using Microsoft.Extensions.Hosting;
 using Serilog;
+using Vint.Core.Logging;
 using Vint.Core.Server.Common.Middlewares;
-using Vint.Core.Utils;
 using ILogger = Serilog.ILogger;
 
 namespace Vint.Core.Server.API;
 
-public class ApiServer {
+public class ApiServer : BackgroundService {
     const ushort Port = 5051;
 
     public ApiServer(IServiceProvider serviceProvider) {
@@ -28,7 +29,8 @@ public class ApiServer {
 
     public WebSocketApiModule WebSocketApiModule { get; }
 
-    public async Task Start() => await Server.RunAsync();
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+        await Server.RunAsync(stoppingToken);
 
     Task HandleHttpException(IHttpContext context, IHttpException exception) {
         ILogger logger = Logger.WithEndPoint(context.Request);
@@ -41,5 +43,14 @@ public class ApiServer {
     Task HandleUnhandledException(IHttpContext context, Exception exception) {
         Logger.WithEndPoint(context.Request).Error(exception, "Unhandled exception");
         return Task.CompletedTask;
+    }
+
+    public override void Dispose() {
+        base.Dispose();
+
+        WebSocketApiModule.Dispose();
+        Server.Dispose();
+
+        GC.SuppressFinalize(this);
     }
 }

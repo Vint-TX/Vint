@@ -2,14 +2,15 @@ using System.Net;
 using EmbedIO;
 using EmbedIO.WebApi;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
+using Vint.Core.Logging;
 using Vint.Core.Server.Common.Middlewares;
 using Vint.Core.Server.Static.Controllers;
-using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Static;
 
-public class StaticServer {
+public class StaticServer : BackgroundService {
     const ushort Port = 8080;
 
     public StaticServer(IServiceProvider serviceProvider) {
@@ -34,7 +35,8 @@ public class StaticServer {
     IServiceProvider ServiceProvider { get; }
     WebServer Server { get; }
 
-    public async Task Start() => await Server.RunAsync();
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
+        await Server.RunAsync(stoppingToken);
 
     Task HandleHttpException(IHttpContext context, IHttpException exception) {
         HttpStatusCode status = (HttpStatusCode)exception.StatusCode;
@@ -67,4 +69,11 @@ public class StaticServer {
             module.WithController(() => ActivatorUtilities.GetServiceOrCreateInstance<TController>(ServiceProvider));
             configure(module);
         });
+
+    public override void Dispose() {
+        base.Dispose();
+
+        Server.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

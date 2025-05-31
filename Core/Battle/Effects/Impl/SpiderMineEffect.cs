@@ -100,8 +100,8 @@ public class SpiderMineEffect(
         await Deactivate();
     }
 
-    public override async Task Tick(TimeSpan deltaTime) {
-        await base.Tick(deltaTime);
+    public override async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
+        await base.Tick(deltaTime, cancellationToken);
 
         if (!IsActive) return;
 
@@ -126,10 +126,10 @@ public class SpiderMineEffect(
             return;
 
         double energyDelta = State switch {
-                                 SpiderState.Idling => idleEnergyDrain,
-                                 SpiderState.Chasing => chasingEnergyDrain,
-                                 _ => 0
-                             } * deltaTime.TotalSeconds;
+            SpiderState.Idling => idleEnergyDrain,
+            SpiderState.Chasing => chasingEnergyDrain,
+            _ => 0
+        } * deltaTime.TotalSeconds;
 
         Energy -= energyDelta;
 

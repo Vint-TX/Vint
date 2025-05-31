@@ -19,8 +19,8 @@ using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
+using Vint.Core.Logging;
 using Vint.Core.Server.Game.Protocol.Attributes;
-using Vint.Core.Utils;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -114,7 +114,7 @@ public static class ConfigManager {
         Logger.Information("Map infos parsed");
     }
 
-    public static void InitializeCache() {
+    public static async Task InitializeCache() {
         Logger.Information("Generating config archives");
 
         string rootPath = Path.Combine(ResourcesPath, "Configuration");
@@ -128,7 +128,7 @@ public static class ConfigManager {
 
             Logger.Debug("Generating archive for the '{Locale}' locale", locale);
 
-            using MemoryStream outStream = new();
+            await using MemoryStream outStream = new();
 
             using (IWriter writer = WriterFactory.Open(outStream, ArchiveType.Tar, new GZipWriterOptions())) {
                 writer.WriteAll(configsPath, "*", SearchOption.AllDirectories);

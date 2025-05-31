@@ -45,7 +45,7 @@ public abstract class BattlePlayer(
 
     public abstract Task OnRoundEnded(bool hasEnemies, QuestManager questManager);
 
-    public abstract Task Tick(TimeSpan deltaTime);
+    public abstract Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken);
 
     public override int GetHashCode() => Connection.GetHashCode();
 

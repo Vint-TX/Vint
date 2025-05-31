@@ -119,8 +119,8 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         await Round.DamageProcessor.Heal(Tank, heal);
     }
 
-    public override async Task Tick(TimeSpan deltaTime) {
-        await base.Tick(deltaTime);
+    public override async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
+        await base.Tick(deltaTime, cancellationToken);
 
         TimeSpan timePassed = TimePassedFromLastTick;
 
@@ -136,6 +136,8 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         if (Tank.Health >= Tank.MaxHealth) return;
 
         CalculatedDamage heal = new(default, healHp, false, false);
+
+        if (cancellationToken.IsCancellationRequested) return;
         await Round.DamageProcessor.Heal(Tank, heal);
     }
 }

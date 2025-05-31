@@ -188,9 +188,14 @@ public class Round : IDisposable {
         PlayersDict.TryRemove(player.Id, out _);
     }
 
-    public async Task Tick(TimeSpan deltaTime) {
+    public async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
         if (StateManager.CurrentState is Ended)
             return;
+
+        if (cancellationToken.IsCancellationRequested) {
+            await End();
+            return;
+        }
 
         await ModeHandler.Tick(deltaTime);
         await StateManager.Tick(deltaTime);
@@ -199,7 +204,7 @@ public class Round : IDisposable {
             await BonusProcessor.Tick(deltaTime);
 
         foreach (BattlePlayer player in Players)
-            await player.Tick(deltaTime);
+            await player.Tick(deltaTime, cancellationToken);
     }
 
     static Simulation CreateSimulation(MapInfo mapInfo) {

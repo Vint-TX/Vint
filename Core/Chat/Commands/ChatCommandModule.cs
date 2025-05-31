@@ -1,4 +1,4 @@
-using Vint.Core.Utils;
+using Vint.Core.Logging;
 
 namespace Vint.Core.Chat.Commands;
 
