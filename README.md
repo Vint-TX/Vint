@@ -15,7 +15,7 @@ Issues and pull-requests are acceptable
 ## Setup
 
 1. Install [MariaDB Server](https://mariadb.org/download/?t=mariadb&p=mariadb&r=11.2.2)
-2. Create database and user for the server (see [database.json](./Resources/database.json))
+2. Create database and user for the server (see ConnectionStrings section in [appsettings.json](./appsettings.json))
 3. Start the server
 
 ## Information
