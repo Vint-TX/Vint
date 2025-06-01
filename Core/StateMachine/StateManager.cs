@@ -1,4 +1,5 @@
 using Serilog;
+using Serilog.Events;
 using Vint.Core.Logging;
 
 namespace Vint.Core.StateMachine;
@@ -28,7 +29,8 @@ public abstract class StateManager<T> : IStateManager where T : State {
         if (!StateInitialized)
             throw new InvalidOperationException("State manager is not initialized");
 
-        Logger.Debug("Set state from {Current} to {Next}", CurrentState, state);
+        if (Logger.IsEnabled(LogEventLevel.Debug))
+            Logger.Debug("Set state from {Current} to {Next}", CurrentState, state);
 
         T prevState = CurrentState;
 

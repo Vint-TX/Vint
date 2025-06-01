@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
@@ -12,10 +13,10 @@ public class GravityComponent(
     public float Gravity { get; private set; } = GravityToForce[gravityType];
 
     [ProtocolIgnore]
-    static Dictionary<GravityType, float> GravityToForce { get; } = new(4) {
+    static FrozenDictionary<GravityType, float> GravityToForce { get; } = new Dictionary<GravityType, float>(4) {
         { GravityType.Earth, 9.81f },
         { GravityType.Moon, 1.62f },
         { GravityType.Mars, 3.71f },
         { GravityType.SuperEarth, 30f }
-    };
+    }.ToFrozenDictionary();
 }

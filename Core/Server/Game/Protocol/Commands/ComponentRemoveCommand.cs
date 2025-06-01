@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Logging;
@@ -28,7 +29,8 @@ public class ComponentRemoveCommand : IServerCommand {
         await Entity.RemoveComponent(Component, connection);
         await component.Removed(connection, Entity);
 
-        logger.Debug("Removed {Component} from {Entity}", Component.Name, Entity);
+        if (logger.IsEnabled(LogEventLevel.Debug))
+            logger.Debug("Removed {Component} from {Entity}", Component.Name, Entity);
     }
 
     public override string ToString() =>

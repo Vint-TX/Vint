@@ -6,6 +6,7 @@ using ConcurrentCollections;
 using LinqToDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Battle.Modules.Common.Components;
 using Vint.Core.Battle.Modules.Common.Events;
@@ -1355,7 +1356,8 @@ public class SocketPlayerConnection(
             return;
 
         try {
-            Logger.Verbose("Encoding {Command}", command);
+            if (Logger.IsEnabled(LogEventLevel.Verbose))
+                Logger.Verbose("Encoding {Command}", command);
 
             await using ProtocolBuffer buffer = new(this);
 
@@ -1370,7 +1372,8 @@ public class SocketPlayerConnection(
             byte[] bytes = stream.ToArray();
             await Socket.SendAsync(bytes);
 
-            Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
+            if (Logger.IsEnabled(LogEventLevel.Verbose))
+                Logger.Verbose("Sent {Command}: {Size} bytes ({Hex})", command, bytes.Length, Convert.ToHexString(bytes));
         } catch (Exception e) {
             Logger.Error(e, "Failed to send {Command}", command);
         }

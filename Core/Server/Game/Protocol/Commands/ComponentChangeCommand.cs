@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Logging;
@@ -27,7 +28,8 @@ public class ComponentChangeCommand : IServerCommand {
         await Entity.ChangeComponent(Component, connection);
         await Component.Changed(connection, Entity);
 
-        logger.Debug("Changed {Component} in {Entity}", type.Name, Entity);
+        if (logger.IsEnabled(LogEventLevel.Debug))
+            logger.Debug("Changed {Component} in {Entity}", type.Name, Entity);
     }
 
     public override string ToString() =>

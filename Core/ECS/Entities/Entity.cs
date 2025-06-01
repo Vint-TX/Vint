@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ConcurrentCollections;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.Config;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Templates;
@@ -39,7 +40,8 @@ public class Entity : IEntity {
                                     pc.OwnerUserId == connection.UserContainer.Id);
 
     public async Task Share(IPlayerConnection connection) {
-        Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
+        if (Logger.IsEnabled(LogEventLevel.Debug))
+            Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
 
         if (!SharedPlayers.Add(connection)) {
             Logger.Warning("{Entity} is already shared to {Connection}", this, connection);
@@ -51,7 +53,8 @@ public class Entity : IEntity {
     }
 
     public async Task Unshare(IPlayerConnection connection) {
-        Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
+        if (Logger.IsEnabled(LogEventLevel.Debug))
+            Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
 
         if (!SharedPlayers.TryRemove(connection)) {
             Logger.Warning("{Entity} is not shared to {Connection}", this, connection);
@@ -89,7 +92,9 @@ public class Entity : IEntity {
             component = GroupComponentRegistry.FindOrRegisterGroup(groupComponent);
 
         ComponentStorage.AddComponent(component);
-        Logger.Debug("Added {Name} component to the {Entity}", component.GetType().Name, this);
+
+        if (Logger.IsEnabled(LogEventLevel.Debug))
+            Logger.Debug("Added {Name} component to the {Entity}", component.GetType().Name, this);
 
         IEnumerable<IPlayerConnection> connections = SharedPlayers.Where(conn => conn != excluded);
 
@@ -150,7 +155,9 @@ public class Entity : IEntity {
 
     public async Task ChangeComponent(IComponent component, IPlayerConnection? excluded) {
         ComponentStorage.ChangeComponent(component);
-        Logger.Debug("Changed {Name} component in the {Entity}", component.GetType().Name, this);
+
+        if (Logger.IsEnabled(LogEventLevel.Debug))
+            Logger.Debug("Changed {Name} component in the {Entity}", component.GetType().Name, this);
 
         IEnumerable<IPlayerConnection> connections = SharedPlayers.Where(conn => conn != excluded);
 
@@ -168,7 +175,9 @@ public class Entity : IEntity {
 
     public async Task RemoveComponent(Type type, IPlayerConnection? excluded = null) {
         ComponentStorage.RemoveComponent(type, out IComponent component);
-        Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
+
+        if (Logger.IsEnabled(LogEventLevel.Debug))
+            Logger.Debug("Removed {Name} component from the {Entity}", type.Name, this);
 
         IEnumerable<IPlayerConnection> connections = SharedPlayers.Where(conn => conn != excluded);
 

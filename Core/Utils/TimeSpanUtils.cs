@@ -1,10 +1,11 @@
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace Vint.Core.Utils;
 
 public static class TimeSpanUtils {
-    static Dictionary<string, TimeSpan> TimeSpanInfos { get; } = new() {
+    static FrozenDictionary<string, TimeSpan> TimeSpanInfos { get; } = new Dictionary<string, TimeSpan> {
         { "year", FromYears(1) },
         { "month", TimeSpan.FromDays(30) },
         { "week", TimeSpan.FromDays(7) },
@@ -12,7 +13,7 @@ public static class TimeSpanUtils {
         { "hour", TimeSpan.FromHours(1) },
         { "min", TimeSpan.FromMinutes(1) },
         { "sec", TimeSpan.FromSeconds(1) }
-    };
+    }.ToFrozenDictionary();
 
     public static bool TryParseDuration(string? format, [NotNullWhen(true)] out TimeSpan? duration) {
         if (string.IsNullOrWhiteSpace(format)) {

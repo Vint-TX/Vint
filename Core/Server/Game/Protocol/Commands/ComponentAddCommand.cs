@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Logging;
@@ -27,7 +28,8 @@ public class ComponentAddCommand : IServerCommand {
         await Entity.AddComponent(Component, connection);
         await Component.Added(connection, Entity);
 
-        logger.Debug("Added {Component} to {Entity}", type.Name, Entity);
+        if (logger.IsEnabled(LogEventLevel.Debug))
+            logger.Debug("Added {Component} to {Entity}", type.Name, Entity);
     }
 
     public override string ToString() =>

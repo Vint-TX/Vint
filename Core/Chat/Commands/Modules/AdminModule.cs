@@ -26,8 +26,7 @@ public class AdminModule(
         [WaitingForText, Option("reason", "Reason for ban", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -87,9 +86,7 @@ public class AdminModule(
 
     [ChatCommand("unban", "Remove ban from player")]
     public async Task UnBan(ChatCommandContext ctx, [Option("username", "Username of player to unban")] string username) {
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 

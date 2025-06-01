@@ -21,9 +21,7 @@ public class ModeratorModule(
         [WaitingForText, Option("reason", "Reason for warn", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -87,9 +85,7 @@ public class ModeratorModule(
         [WaitingForText, Option("reason", "Reason for mute", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -151,9 +147,7 @@ public class ModeratorModule(
         ChatCommandContext ctx,
         [Option("username", "Username of player to unwarn")] string username,
         [Option("id", "Id of warn")] long id) {
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -205,9 +199,7 @@ public class ModeratorModule(
 
     [ChatCommand("unmute", "Remove mute from player")]
     public async Task UnMute(ChatCommandContext ctx, [Option("username", "Username of player to unmute")] string username) {
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -262,9 +254,7 @@ public class ModeratorModule(
         ChatCommandContext ctx,
         [Option("username", "Username of player to kick")] string username,
         [WaitingForText, Option("reason", "Reason for kick", true)] string? reason = null) {
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 

@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Numerics;
 using ConcurrentCollections;
 using LinqToDB;
@@ -78,9 +79,9 @@ public class BattleTank : IDisposable {
         BattleEnterTime = DateTimeOffset.UtcNow;
     }
 
-    public static IReadOnlyDictionary<int, int> KillStreakToScore { get; } = new Dictionary<int, int> {
+    public static FrozenDictionary<int, int> KillStreakToScore { get; } = new Dictionary<int, int> {
         { 2, 0 }, { 3, 5 }, { 4, 7 }, { 5, 10 }, { 10, 10 }, { 15, 10 }, { 20, 20 }, { 25, 30 }, { 30, 40 }, { 35, 50 }, { 40, 60 }, { 45, 70 }
-    };
+    }.ToFrozenDictionary();
 
     public Round Round => Tanker.Round;
     public long CollisionsPhase { get; set; } = -1;

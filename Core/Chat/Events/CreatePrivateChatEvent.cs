@@ -17,9 +17,7 @@ public class CreatePrivateChatEvent(
         if (connection.Player.Username == Username)
             return;
 
-        IPlayerConnection? targetConnection = server
-            .PlayerConnections
-            .Values
+        IPlayerConnection? targetConnection = server.PlayerConnections.Values
             .Where(playerConnection => playerConnection.IsLoggedIn)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 

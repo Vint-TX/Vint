@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -64,11 +65,10 @@ public class ChatCommandProcessor(
                 ChatCommandAttribute chatCommandAttribute = command.GetCustomAttribute<ChatCommandAttribute>()!;
                 Logger.Verbose("Method name: {Method}, command name: {Command}", command.Name, chatCommandAttribute.Name);
 
-                IReadOnlyDictionary<string, OptionAttribute> options = command
+                FrozenDictionary<string, OptionAttribute> options = command
                     .GetParameters()
                     .Where(parameter => parameter.GetCustomAttribute<OptionAttribute>() != null)
-                    .ToDictionary(parameter => parameter.Name!, parameter => parameter.GetCustomAttribute<OptionAttribute>()!)
-                    .AsReadOnly();
+                    .ToFrozenDictionary(parameter => parameter.Name!, parameter => parameter.GetCustomAttribute<OptionAttribute>()!);
 
                 List<ParameterInfo> parameters = command
                     .GetParameters()

@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Reflection;
 using System.Text;
 using Vint.Core.Chat.Commands.Attributes;
@@ -11,7 +12,7 @@ public sealed class ChatCommand(
     ChatCommandAttribute chatCommandAttribute,
     ChatCommandGroupAttribute? chatCommandGroupAttribute,
     ChatCommandModule module,
-    IReadOnlyDictionary<string, OptionAttribute> options,
+    FrozenDictionary<string, OptionAttribute> options,
     MethodInfo method,
     List<ParameterInfo> parameters
 ) {
@@ -19,7 +20,7 @@ public sealed class ChatCommand(
     public ChatCommandAttribute Info { get; } = chatCommandAttribute;
     public ChatCommandGroupAttribute? ChatCommandGroupAttribute { get; } = chatCommandGroupAttribute;
     public ChatCommandModule Module { get; } = module;
-    public IReadOnlyDictionary<string, OptionAttribute> Options { get; } = options;
+    public FrozenDictionary<string, OptionAttribute> Options { get; } = options;
     public MethodInfo Method { get; } = method;
     public List<ParameterInfo> Parameters { get; } = parameters;
 

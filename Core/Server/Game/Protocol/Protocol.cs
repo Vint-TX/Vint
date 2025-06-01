@@ -1,7 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.Battle.Tank.Movement;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Templates;
@@ -12,11 +15,14 @@ using Vint.Core.Server.Game.Protocol.Codecs;
 using Vint.Core.Server.Game.Protocol.Codecs.Factories;
 using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 using Vint.Core.Server.Game.Protocol.Commands;
+using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game.Protocol;
 
 public class Protocol {
     public Protocol() {
+        Dictionary<ICodecInfo, ICodec> codecs = [];
+
         Register<bool>(new BoolCodec());
         Register<sbyte>(new SByteCodec());
         Register<byte>(new ByteCodec());
@@ -35,50 +41,55 @@ public class Protocol {
         Register<TemplateAccessor>(new TemplateAccessorCodec());
         Register<IEntity>(new EntityCodec());
 
-        Register<ICommand>(new CommandCodec()
-            .Register<InitTimeCommand>(CommandCode.InitTime)
-            .Register<CloseCommand>(CommandCode.Close)
-            .Register<ComponentAddCommand>(CommandCode.ComponentAdd)
-            .Register<ComponentChangeCommand>(CommandCode.ComponentChange)
-            .Register<ComponentRemoveCommand>(CommandCode.ComponentRemove)
-            .Register<EntityShareCommand>(CommandCode.EntityShare)
-            .Register<EntityUnshareCommand>(CommandCode.EntityUnshare)
-            .Register<SendEventCommand>(CommandCode.SendEvent));
+        Register<ICommand>(new CommandCodec(
+            (CommandCode.InitTime, typeof(InitTimeCommand)),
+            (CommandCode.Close, typeof(CloseCommand)),
+            (CommandCode.ComponentAdd, typeof(ComponentAddCommand)),
+            (CommandCode.ComponentChange, typeof(ComponentChangeCommand)),
+            (CommandCode.ComponentRemove, typeof(ComponentRemoveCommand)),
+            (CommandCode.EntityShare, typeof(EntityShareCommand)),
+            (CommandCode.EntityUnshare, typeof(EntityUnshareCommand)),
+            (CommandCode.SendEvent, typeof(SendEventCommand))
+        ));
 
         Register<Vector3>(new Vector3Codec());
         Register<MoveCommand>(new MoveCommandCodec());
         Register<Movement>(new MovementCodec());
 
-        Factories.Add(new OptionalCodecFactory());
-        Factories.Add(new VariedCodecFactory());
-        Factories.Add(new ArrayCodecFactory());
-        Factories.Add(new ListCodecFactory());
-        Factories.Add(new HashSetCodecFactory());
-        Factories.Add(new DictionaryCodecFactory());
-        Factories.Add(new EnumCodecFactory());
-        Factories.Add(new GroupComponentCodecFactory());
-        Factories.Add(new StructCodecFactory());
+        Codecs = codecs.ToFrozenDictionary();
 
-        Assembly
+        Types = Assembly
             .GetExecutingAssembly()
             .GetTypes()
-            .Where(type => type.IsDefined(typeof(ProtocolIdAttribute)))
-            .ToList()
-            .ForEach(type => Types[type.GetCustomAttribute<ProtocolIdAttribute>()!.Id] = type);
+            .Where(type => type.IsDefined(typeof(ProtocolIdAttribute)) && !type.IsAssignableTo(typeof(EntityTemplate)))
+            .ToFrozenDictionary(type => type.GetProtocolId());
+
+        Factories = [
+            new OptionalCodecFactory(),
+            new VariedCodecFactory(),
+            new ArrayCodecFactory(),
+            new ListCodecFactory(),
+            new HashSetCodecFactory(),
+            new DictionaryCodecFactory(),
+            new EnumCodecFactory(),
+            new GroupComponentCodecFactory(),
+            new StructCodecFactory()
+        ];
+
+        return;
+        void Register<T>(ICodec codec) => InitAndRegister(new TypeCodecInfo(typeof(T)), codec);
+
+        void InitAndRegister(ICodecInfo codecInfo, ICodec codec) {
+            codec.Init(this);
+            codecs[codecInfo] = codec;
+        }
     }
 
     ILogger Logger { get; } = Log.Logger.ForType<Protocol>();
 
-    Dictionary<long, Type> Types { get; } = new();
-    Dictionary<ICodecInfo, ICodec> Codecs { get; } = new();
-    List<ICodecFactory> Factories { get; } = [];
-
-    void Register<T>(ICodec codec) => InitAndRegister(new TypeCodecInfo(typeof(T)), codec);
-
-    void InitAndRegister(ICodecInfo codecInfo, ICodec codec) {
-        codec.Init(this);
-        Codecs[codecInfo] = codec;
-    }
+    FrozenDictionary<long, Type> Types { get; }
+    FrozenDictionary<ICodecInfo, ICodec> Codecs { get; }
+    ImmutableArray<ICodecFactory> Factories { get; }
 
     [SuppressMessage("ReSharper", "InvertIf")]
     public ICodec GetCodec(ICodecInfo codecInfo) {
@@ -96,7 +107,8 @@ public class Protocol {
     }
 
     public Type GetTypeById(long id) {
-        if (Types.TryGetValue(id, out Type? type)) return type;
+        if (Types.TryGetValue(id, out Type? type))
+            return type;
 
         throw new TypeNotRegisteredException(id);
     }
@@ -108,14 +120,10 @@ public class Protocol {
 
             if (codec == null) continue;
 
-            Logger.Verbose("Created {Codec} with {Factory} for {Info}",
-                codec,
-                codecFactory.GetType()
-                    .Name,
-                codecInfo);
+            if (Logger.IsEnabled(LogEventLevel.Verbose))
+                Logger.Verbose("Created {Codec} with {Factory} for {Info}", codec, codecFactory.GetType().Name, codecInfo);
 
             codec.Init(this);
-
             return codec;
         }
 

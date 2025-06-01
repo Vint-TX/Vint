@@ -1,4 +1,6 @@
-﻿using LinqToDB;
+﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
+using LinqToDB;
 using Vint.Core.Battle.Modules.Common;
 using Vint.Core.Battle.Modules.Common.Components;
 using Vint.Core.Battle.Modules.Common.Components.Slot;
@@ -27,7 +29,7 @@ public static class GlobalEntities {
 
     public static List<IEntity> AllMarketTemplateEntities { get; }
 
-    public static IReadOnlyDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
+    public static FrozenDictionary<long, long> DefaultSkins { get; } = new Dictionary<long, long> {
         { GetEntity("weapons", "Flamethrower").Id, GetEntity("weaponSkins", "FlamethrowerM0").Id },
         { GetEntity("weapons", "Freeze").Id, GetEntity("weaponSkins", "FreezeM0").Id },
         { GetEntity("weapons", "Hammer").Id, GetEntity("weaponSkins", "HammerM0").Id },
@@ -46,9 +48,9 @@ public static class GlobalEntities {
         { GetEntity("hulls", "Titan").Id, GetEntity("hullSkins", "TitanM0").Id },
         { GetEntity("hulls", "Viking").Id, GetEntity("hullSkins", "VikingM0").Id },
         { GetEntity("hulls", "Wasp").Id, GetEntity("hullSkins", "WaspM0").Id }
-    };
+    }.ToFrozenDictionary();
 
-    public static IReadOnlyDictionary<long, long> DefaultShells { get; } = new Dictionary<long, long> {
+    public static FrozenDictionary<long, long> DefaultShells { get; } = new Dictionary<long, long> {
         { GetEntity("weapons", "Flamethrower").Id, GetEntity("shells", "FlamethrowerOrange").Id },
         { GetEntity("weapons", "Freeze").Id, GetEntity("shells", "FreezeSkyblue").Id },
         { GetEntity("weapons", "Hammer").Id, GetEntity("shells", "HammerStandard").Id },
@@ -60,9 +62,9 @@ public static class GlobalEntities {
         { GetEntity("weapons", "Thunder").Id, GetEntity("shells", "ThunderStandard").Id },
         { GetEntity("weapons", "Twins").Id, GetEntity("shells", "TwinsBlue").Id },
         { GetEntity("weapons", "Vulcan").Id, GetEntity("shells", "VulcanStandard").Id }
-    };
+    }.ToFrozenDictionary();
 
-    public static IReadOnlyList<IEntity> Tier1Modules { get; } = new List<IEntity> {
+    public static ImmutableArray<IEntity> Tier1Modules { get; } = [
         GetEntity("moduleCards", "Mine"),
         GetEntity("moduleCards", "Emp"),
         GetEntity("moduleCards", "Sonar"),
@@ -74,9 +76,9 @@ public static class GlobalEntities {
         GetEntity("moduleCards", "TurboSpeed"),
         GetEntity("moduleCards", "TempBlock"),
         GetEntity("moduleCards", "BackhitDefence")
-    };
+    ];
 
-    public static IReadOnlyList<IEntity> Tier2Modules { get; } = new List<IEntity> {
+    public static ImmutableArray<IEntity> Tier2Modules { get; } = [
         GetEntity("moduleCards", "SpiderMine"),
         GetEntity("moduleCards", "IncreasedDamage"),
         GetEntity("moduleCards", "ExternalImpact"),
@@ -87,9 +89,9 @@ public static class GlobalEntities {
         GetEntity("moduleCards", "JumpImpact"),
         GetEntity("moduleCards", "AcceleratedGears"),
         GetEntity("moduleCards", "Sapper")
-    };
+    ];
 
-    public static IReadOnlyList<IEntity> Tier3Modules { get; } = new List<IEntity> {
+    public static ImmutableArray<IEntity> Tier3Modules { get; } = [
         GetEntity("moduleCards", "Drone"),
         GetEntity("moduleCards", "EnergyInjection"),
         GetEntity("moduleCards", "ExplosiveMass"),
@@ -98,7 +100,7 @@ public static class GlobalEntities {
         GetEntity("moduleCards", "Invulnerability"),
         GetEntity("moduleCards", "FireRing"),
         GetEntity("moduleCards", "EmergencyProtection")
-    };
+    ];
 
     public static IEnumerable<IEntity> GetEntities(this IPlayerConnection connection) =>
         AllMarketTemplateEntities.Concat(GetUserEntities(connection));

@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using System.Collections.Frozen;
+using Serilog;
 using Vint.Core.Logging;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 using Vint.Core.Server.Game.Protocol.Commands;
@@ -6,9 +7,21 @@ using Vint.Core.Server.Game.Protocol.Commands;
 namespace Vint.Core.Server.Game.Protocol.Codecs.Impl;
 
 public class CommandCodec : Codec {
+    public CommandCodec(params (CommandCode code, Type type)[] codes) {
+        CommandToCode = codes.ToFrozenDictionary(
+            tuple => tuple.type,
+            tuple => tuple.code
+        );
+
+        CodeToCommand = codes.ToFrozenDictionary(
+            tuple => tuple.code,
+            tuple => tuple.type
+        );
+    }
+
     ILogger Logger { get; } = Log.Logger.ForType<CommandCodec>();
-    Dictionary<Type, CommandCode> CommandToCode { get; } = new();
-    Dictionary<CommandCode, Type> CodeToCommand { get; } = new();
+    FrozenDictionary<Type, CommandCode> CommandToCode { get; }
+    FrozenDictionary<CommandCode, Type> CodeToCommand { get; }
 
     public override void Encode(ProtocolBuffer buffer, object value) {
         Type type = value.GetType();
@@ -35,12 +48,5 @@ public class CommandCodec : Codec {
         return Protocol
             .GetCodec(new TypeCodecInfo(type))
             .Decode(buffer);
-    }
-
-    public CommandCodec Register<T>(CommandCode code) where T : ICommand {
-        CommandToCode[typeof(T)] = code;
-        CodeToCommand[code] = typeof(T);
-
-        return this;
     }
 }

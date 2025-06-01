@@ -1,12 +1,15 @@
+using System.Collections.Frozen;
+using JetBrains.Annotations;
 using Serilog.Templates.Themes;
 
 namespace Vint.Core.Logging;
 
+[UsedImplicitly]
 public class CustomTemplateTheme : TemplateTheme {
     public CustomTemplateTheme() : base(AnsiStyles) { }
     public CustomTemplateTheme(TemplateTheme baseTheme) : base(baseTheme, AnsiStyles) { }
 
-    static Dictionary<TemplateThemeStyle, string> AnsiStyles { get; } = new() {
+    static FrozenDictionary<TemplateThemeStyle, string> AnsiStyles { get; } = new Dictionary<TemplateThemeStyle, string> {
         [TemplateThemeStyle.Text] = "\e[38;5;0253m",
         [TemplateThemeStyle.SecondaryText] = "\e[38;5;0246m",
         [TemplateThemeStyle.TertiaryText] = "\e[38;5;0242m",
@@ -23,5 +26,5 @@ public class CustomTemplateTheme : TemplateTheme {
         [TemplateThemeStyle.LevelWarning] = "\e[33;1m",
         [TemplateThemeStyle.LevelError] = "\e[31;1m",
         [TemplateThemeStyle.LevelFatal] = "\e[31;1m"
-    };
+    }.ToFrozenDictionary();
 }

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Serilog;
+using Serilog.Events;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Logging;
@@ -21,7 +22,8 @@ public class SendEventCommand : IServerCommand {
             return;
         }
 
-        logger.Debug("Executing event {Name} with {Count} entities", serverEvent.GetType().Name, Entities.Length);
+        if (logger.IsEnabled(LogEventLevel.Debug))
+            logger.Debug("Executing event {Name} with {Count} entities", serverEvent.GetType().Name, Entities.Length);
 
         await serverEvent.Execute(connection, Entities);
     }

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Net;
@@ -22,7 +23,7 @@ public class GameServer(
     int _lastClientId = -1;
 
     public TimeSpan DeltaTime { get; private set; }
-    public Dictionary<int, IPlayerConnection> PlayerConnections { get; } = new();
+    public ConcurrentDictionary<int, IPlayerConnection> PlayerConnections { get; } = new();
 
     ILogger Logger { get; } = Log.Logger.ForType<GameServer>();
     TcpListener Listener { get; } = new(IPAddress.Any, Port);
@@ -62,7 +63,7 @@ public class GameServer(
         }
     }
 
-    public void RemovePlayer(int id) => PlayerConnections.Remove(id, out _);
+    public void RemovePlayer(int id) => PlayerConnections.TryRemove(id, out _);
 
     async Task TickPlayers(CancellationToken cancellationToken) {
         await AcceptNewSockets(cancellationToken);
