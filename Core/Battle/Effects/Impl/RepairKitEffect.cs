@@ -26,12 +26,9 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
             ? SupplyHealingComponent.Percent
             : Leveling.GetStat<ModuleHealingEffectPercentPropertyComponent>(MarketConfigPath, Level);
 
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
-                               .Duration *
-                           Tank.SupplyDurationMultiplier;
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
 
-        TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath)
-            .Period);
+        TickPeriod = TimeSpan.FromMilliseconds(ConfigManager.GetComponent<TickComponent>(EffectConfigPath).Period);
 
         if (IsSupply)
             Duration = TimeSpan.FromMilliseconds(SupplyDurationMs);
@@ -110,10 +107,11 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity?.Dispose();
         Entity = null;
 
-        if (HealLeft <= 0 ||
-            Tank.Health >= Tank.MaxHealth) return;
+        if (HealLeft <= 0 || Tank.Health >= Tank.MaxHealth) return;
 
         CalculatedDamage heal = new(default, HealLeft, false, false);
         await Round.DamageProcessor.Heal(Tank, heal);
@@ -124,9 +122,8 @@ public sealed class RepairKitEffect : DurationEffect, ISupplyEffect, IExtendable
 
         TimeSpan timePassed = TimePassedFromLastTick;
 
-        if (!IsActive ||
-            HealLeft <= 0 ||
-            timePassed < TickPeriod) return;
+        if (!IsActive || HealLeft <= 0 || timePassed < TickPeriod)
+            return;
 
         LastTick = DateTimeOffset.UtcNow;
 

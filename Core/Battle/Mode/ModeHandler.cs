@@ -70,7 +70,7 @@ public abstract class ModeHandler(
 
     protected virtual void Dispose(bool disposing) {
         if (disposing) {
-            // todo dispose entities
+            Entity.Dispose();
         }
     }
 

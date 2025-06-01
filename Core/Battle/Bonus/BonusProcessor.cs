@@ -12,7 +12,7 @@ using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Bonus;
 
-public interface IBonusProcessor {
+public interface IBonusProcessor : IDisposable {
     GoldProcessor GoldProcessor { get; }
 
     Task Init();
@@ -147,4 +147,13 @@ public class BonusProcessor : IBonusProcessor {
 
     static TimeSpan GetRandomCooldown() =>
         TimeSpan.FromSeconds(Random.Shared.Next(60));
+
+    public void Dispose() {
+        foreach (BonusBox bonusBox in Bonuses)
+            bonusBox.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
+
+    ~BonusProcessor() => Dispose();
 }

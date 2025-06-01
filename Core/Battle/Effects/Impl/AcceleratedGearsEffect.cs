@@ -33,8 +33,8 @@ public class AcceleratedGearsEffect(
     }
 
     public override async Task Deactivate() {
-        if (!CanBeDeactivated ||
-            !IsActive) return;
+        if (!CanBeDeactivated || !IsActive)
+            return;
 
         Tank.Effects.TryRemove(this);
 
@@ -50,6 +50,7 @@ public class AcceleratedGearsEffect(
         await Tank.UpdateSpeed();
         await UnshareFromAllPlayers();
 
+        Entity.Dispose();
         Entity = null;
     }
 

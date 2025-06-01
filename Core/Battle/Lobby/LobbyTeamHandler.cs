@@ -13,7 +13,7 @@ namespace Vint.Core.Battle.Lobby;
 
 public class LobbyTeamHandler(
     LobbyBase lobby
-) {
+) : IDisposable {
     LobbyBase Lobby { get; } = lobby;
     BattleProperties Properties => Lobby.Properties;
 
@@ -39,9 +39,10 @@ public class LobbyTeamHandler(
         CreateTeams();
         TeamLimit = Lobby.Entity.GetComponent<UserLimitComponent>().TeamLimit;
 
-        Func<LobbyPlayer, IEntity?> teamSelector = oldProperties.GetValue(BattleProperty.BattleMode).IsTeamMode() == newProperties.GetValue(BattleProperty.BattleMode).IsTeamMode()
-            ? player => ColorToEntity[player.TeamColor]
-            : CalculateTeamFor;
+        Func<LobbyPlayer, IEntity?> teamSelector =
+            oldProperties.GetValue(BattleProperty.BattleMode).IsTeamMode() == newProperties.GetValue(BattleProperty.BattleMode).IsTeamMode()
+                ? player => ColorToEntity[player.TeamColor]
+                : CalculateTeamFor;
 
         foreach (LobbyPlayer player in Lobby.Players)
             await player.SetTeam(teamSelector(player));
@@ -143,7 +144,10 @@ public class LobbyTeamHandler(
         return team;
     }
 
-    void CreateTeams() { // todo dispose entities
+    void CreateTeams() {
+        RedTeam?.Dispose();
+        BlueTeam?.Dispose();
+
         if (IsTeamLobby) {
             RedTeam = new TeamTemplate().Create(TeamColor.Red);
             BlueTeam = new TeamTemplate().Create(TeamColor.Blue);
@@ -158,4 +162,13 @@ public class LobbyTeamHandler(
             { TeamColor.None, null }
         }.ToFrozenDictionary();
     }
+
+    public void Dispose() {
+        RedTeam?.Dispose();
+        BlueTeam?.Dispose();
+        ColorToEntity = null!;
+        GC.SuppressFinalize(this);
+    }
+
+    ~LobbyTeamHandler() => Dispose();
 }

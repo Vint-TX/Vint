@@ -215,7 +215,10 @@ public class BattleTank : IDisposable {
         IEntity debuffEffect = new EMPDebuffEffectTemplate().Create(Tanker, duration);
 
         await connection.Share(debuffEffect);
-        connection.Schedule(duration, async () => await connection.Unshare(debuffEffect));
+        connection.Schedule(duration, async () => {
+            await connection.Unshare(debuffEffect);
+            debuffEffect.Dispose();
+        });
 
         foreach (BattleModule module in Modules)
             await module.EMPLock(duration);
@@ -395,7 +398,8 @@ public class BattleTank : IDisposable {
         if (delta > 0)
             await Entities.Incarnation.ChangeComponent<TankIncarnationKillStatisticsComponent>(component => component.Kills += delta);
 
-        await UpdateKillStreak();
+        if (delta > 0)
+            await UpdateKillStreak();
     }
 
     public async Task AddDeaths(int delta) =>
@@ -496,10 +500,12 @@ public class BattleTank : IDisposable {
     public override int GetHashCode() => Tanker.GetHashCode();
 
     void Dispose(bool disposing) {
-        if (disposing) { // todo dispose entities
+        if (disposing) {
             Modules.Clear();
             Effects.Clear();
             KillAssistants.Clear();
+
+            Entities.Dispose();
         }
     }
 

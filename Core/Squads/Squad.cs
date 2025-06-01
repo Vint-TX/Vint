@@ -8,7 +8,7 @@ using Vint.Core.Squads.Templates;
 
 namespace Vint.Core.Squads;
 
-public class Squad {
+public class Squad : IDisposable {
     static SquadConfigComponent Config { get; } = ConfigManager.GetComponent<SquadConfigComponent>("/squad");
 
     readonly ConcurrentDictionary<long, IPlayerConnection> _members = [];
@@ -43,6 +43,8 @@ public class Squad {
 
             await HandleMemberRemove(member);
         }
+
+        Dispose();
     }
 
     public async Task AddMember(IPlayerConnection member) {
@@ -90,5 +92,11 @@ public class Squad {
         await member.Unshare(ChatEntity, Entity);
 
         await ChatEntity.ChangeComponent<ChatParticipantsComponent>(component => component.Users.Remove(member.UserContainer.Entity));
+    }
+
+    public void Dispose() {
+        ChatEntity.Dispose();
+        Entity.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

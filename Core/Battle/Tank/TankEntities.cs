@@ -12,7 +12,7 @@ using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battle.Tank;
 
-public class TankEntities : IEnumerable<IEntity> {
+public class TankEntities : IEnumerable<IEntity>, IDisposable {
     public TankEntities(BattleTank battleTank) {
         BattleTank = battleTank;
 
@@ -88,6 +88,8 @@ public class TankEntities : IEnumerable<IEntity> {
             await playerConnection.Unshare(incarnation);
             await playerConnection.Share(Incarnation);
         }
+
+        incarnation.Dispose();
     }
 
     IEnumerable<IEntity> Entities => [Incarnation, RoundUser, BattleUser, Tank, Weapon, HullSkin, WeaponSkin, Cover, Paint, Graffiti, Shell];
@@ -95,4 +97,19 @@ public class TankEntities : IEnumerable<IEntity> {
     public IEnumerator<IEntity> GetEnumerator() => Entities.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public void Dispose() {
+        Incarnation.Dispose();
+        RoundUser.Dispose();
+        Tank.Dispose();
+        Weapon.Dispose();
+        HullSkin.Dispose();
+        WeaponSkin.Dispose();
+        Cover.Dispose();
+        Paint.Dispose();
+        Graffiti.Dispose();
+        Shell.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
 }

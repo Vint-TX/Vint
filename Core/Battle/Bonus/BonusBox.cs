@@ -1,4 +1,5 @@
 using System.Numerics;
+using JetBrains.Annotations;
 using Vint.Core.Battle.Bonus.Components;
 using Vint.Core.Battle.Bonus.Events;
 using Vint.Core.Battle.Player;
@@ -10,7 +11,8 @@ using Vint.Core.Server.Game;
 
 namespace Vint.Core.Battle.Bonus;
 
-public abstract class BonusBox {
+[MustDisposeResource]
+public abstract class BonusBox : IDisposable {
     protected BonusBox(Round round, BonusInfo bonusInfo) {
         Round = round;
         BonusInfo = bonusInfo;
@@ -53,6 +55,7 @@ public abstract class BonusBox {
         await players.Send<BonusTakenEvent>(Entity);
         await players.Unshare(Entity);
 
+        Entity.Dispose();
         Entity = null;
         return true;
     }
@@ -64,4 +67,15 @@ public abstract class BonusBox {
     public virtual Task Drop() => Spawn();
 
     public virtual Task Tick(TimeSpan deltaTime) => StateManager.Tick(deltaTime);
+
+    public virtual void Dispose() {
+        Entity?.Dispose();
+
+        if (RegionEntity.IsValueCreated)
+            RegionEntity.Value.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
+
+    ~BonusBox() => Dispose();
 }

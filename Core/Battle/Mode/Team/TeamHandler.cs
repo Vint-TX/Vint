@@ -37,6 +37,9 @@ public abstract class TeamHandler : ModeHandler {
     }
 
     public override async Task OnRoundEnded() {
+        if (BlueTeam.Entity.Disposed || RedTeam.Entity.Disposed)
+            return;
+
         await BlueTeam.Entity.RemoveComponent<BattleGroupComponent>();
         await RedTeam.Entity.RemoveComponent<BattleGroupComponent>();
     }
@@ -98,4 +101,11 @@ public abstract class TeamHandler : ModeHandler {
     }
 
     public abstract TeamColor GetDominatedTeamColor();
+
+    protected override void Dispose(bool disposing) {
+        base.Dispose(disposing);
+
+        if (disposing)
+            ChatEntity.Dispose();
+    }
 }

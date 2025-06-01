@@ -106,13 +106,14 @@ public class IceTrapEffect(
     }
 
     public override async Task Deactivate() {
-        if (!IsActive ||
-            !CanBeDeactivated) return;
+        if (!IsActive || !CanBeDeactivated) return;
 
         Round.MineProcessor.RemoveMine(Index);
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity?.Dispose();
         Entity = null;
     }
 

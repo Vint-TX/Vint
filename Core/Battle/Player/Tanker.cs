@@ -187,7 +187,7 @@ public class Tanker : BattlePlayer {
     protected override void Dispose(bool disposing) {
         base.Dispose(disposing);
 
-        if (disposing) { // todo dispose entities
+        if (disposing) {
             Tank.Dispose();
         }
     }

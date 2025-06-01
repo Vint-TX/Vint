@@ -40,6 +40,9 @@ public class DroneEffect : WeaponEffect {
 
         Tank.Effects.Add(this);
 
+        if (WeaponEntity != null!)
+            WeaponEntity.Dispose();
+
         WeaponEntity = new DroneWeaponTemplate().Create(Tank.Tanker);
         Entity = new DroneEffectTemplate().Create(Tank.Tanker, Duration, WeaponEntity, TargetingDistance);
 
@@ -65,6 +68,8 @@ public class DroneEffect : WeaponEffect {
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity.Dispose();
         Entity = null;
     }
 

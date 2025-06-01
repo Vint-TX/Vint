@@ -39,6 +39,8 @@ public class ExplosiveMassEffect(
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity.Dispose();
         Entity = null;
     }
 }

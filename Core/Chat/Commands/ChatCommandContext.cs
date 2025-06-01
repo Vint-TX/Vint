@@ -24,6 +24,9 @@ public sealed class ChatCommandContext(
     public async Task SendPublicResponse(string response) =>
         await SendResponse(response, Chat, ChatUtils.GetReceivers(ServiceProvider.GetRequiredService<GameServer>(), Connection, Chat));
 
+    public async Task SendResponse(string response, IEntity chat, IAsyncEnumerable<IPlayerConnection> receivers) =>
+        await ChatUtils.SendMessage(response, chat, receivers, null);
+
     public async Task SendResponse(string response, IEntity chat, IEnumerable<IPlayerConnection> receivers) =>
         await ChatUtils.SendMessage(response, chat, receivers, null);
 }

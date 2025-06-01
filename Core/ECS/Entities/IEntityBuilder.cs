@@ -32,5 +32,5 @@ public interface IEntityBuilder {
 
     IEntityBuilder ThenExecuteIf(Func<IEntity, bool> condition, Action<IEntity> action);
 
-    IEntity Build(bool addToRegistry = true);
+    IEntity Build();
 }

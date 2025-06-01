@@ -16,12 +16,8 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
     const string MarketConfigPath = "garage/module/upgrade/properties/increaseddamage";
 
     public IncreasedDamageEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath)
-            .Factor;
-
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
-                               .Duration *
-                           Tank.SupplyDurationMultiplier;
+        SupplyMultiplier = ConfigManager.GetComponent<DamageEffectComponent>(EffectConfigPath).Factor;
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
 
         Multiplier = IsSupply
             ? SupplyMultiplier
@@ -82,6 +78,8 @@ public sealed class IncreasedDamageEffect : DurationEffect, ISupplyEffect, IDama
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity.Dispose();
         Entity = null;
     }
 }

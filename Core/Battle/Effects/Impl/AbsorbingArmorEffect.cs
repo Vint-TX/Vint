@@ -17,12 +17,8 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
     const string MarketConfigPath = "garage/module/upgrade/properties/absorbingarmor";
 
     public AbsorbingArmorEffect(BattleTank tank, int level = -1) : base(tank, level, MarketConfigPath) {
-        SupplyMultiplier = ConfigManager.GetComponent<ArmorEffectComponent>(EffectConfigPath)
-            .Factor;
-
-        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath)
-                               .Duration *
-                           Tank.SupplyDurationMultiplier;
+        SupplyMultiplier = ConfigManager.GetComponent<ArmorEffectComponent>(EffectConfigPath).Factor;
+        SupplyDurationMs = ConfigManager.GetComponent<EffectDurationComponent>(EffectConfigPath).Duration * Tank.SupplyDurationMultiplier;
 
         Multiplier = IsSupply
             ? SupplyMultiplier
@@ -83,6 +79,8 @@ public sealed class AbsorbingArmorEffect : DurationEffect, ISupplyEffect, IDamag
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity.Dispose();
         Entity = null;
     }
 }

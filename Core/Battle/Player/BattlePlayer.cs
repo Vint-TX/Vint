@@ -51,7 +51,7 @@ public abstract class BattlePlayer(
 
     protected virtual void Dispose(bool disposing) {
         if (disposing) {
-            // todo dispose entities
+            BattleUser.Dispose();
         }
     }
 

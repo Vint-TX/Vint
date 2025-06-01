@@ -113,7 +113,9 @@ public class Round : IDisposable {
         foreach (BattlePlayer player in Players)
             await player.OnRoundEnded(ended.WasEnemies, QuestManager);
 
-        await Entity.AddComponentIfAbsent(new RoundRestartingStateComponent());
+        if (!Entity.Disposed)
+            await Entity.AddComponentIfAbsent(new RoundRestartingStateComponent());
+
         await RoundEnded();
     }
 
@@ -228,14 +230,18 @@ public class Round : IDisposable {
                               teamHandler.IsUnfair());
 
     void Dispose(bool disposing) {
-        if (disposing) { // todo dispose entities
+        if (disposing) {
             Simulation.Dispose();
             ModeHandler.Dispose();
+            BonusProcessor?.Dispose();
 
             foreach (BattlePlayer player in Players)
                 player.Dispose();
 
             PlayersDict.Clear();
+
+            ChatEntity.Dispose();
+            Entity.Dispose();
         }
     }
 

@@ -24,6 +24,8 @@ public class LifeStealEffect(
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity?.Dispose();
         Entity = null;
     }
 }

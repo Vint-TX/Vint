@@ -18,6 +18,10 @@ public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
             return;
 
         IEntity unit = entities.Single();
+
+        if (unit == null!) // may be disposed
+            return;
+
         BattleTank tank = tanker.Tank;
         Round round = tanker.Round;
 

@@ -118,7 +118,7 @@ public class PlayerController(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
         string? ipAddress = null;
 
         if (targetConnection != null) {
@@ -132,8 +132,7 @@ public class PlayerController(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();
@@ -162,7 +161,7 @@ public class PlayerController(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
         string? ipAddress = null;
 
         if (targetConnection != null) {
@@ -176,8 +175,7 @@ public class PlayerController(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();

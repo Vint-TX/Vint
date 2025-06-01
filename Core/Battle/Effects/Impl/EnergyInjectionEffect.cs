@@ -34,6 +34,8 @@ public class EnergyInjectionEffect(
         Tank.Effects.TryRemove(this);
 
         await UnshareFromAllPlayers();
+
+        Entity?.Dispose();
         Entity = null;
     }
 

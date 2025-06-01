@@ -53,7 +53,7 @@ public class PersonalBattleResultForClient(
         Preset preset = player.CurrentPreset;
         IEntity userHull = preset.Hull.GetUserEntity(connection);
         IEntity userWeapon = preset.Weapon.GetUserEntity(connection);
-        IEntity? reward = await Leveling.GetLevelUpRewards(connection);
+        IEntity? reward = await Leveling.GetLevelUpRewards(connection); // todo idk when to dispose
 
         if (reward != null)
             await connection.Share(reward);

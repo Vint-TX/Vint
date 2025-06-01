@@ -17,7 +17,7 @@ public class LoggingController(
     ApiServer apiServer
 ) : WebApiController {
     [Post("/")]
-    public async Task ReceiveLog() { // todo microservice
+    public async Task ReceiveLog() {
         if (!Request.HasEntityBody)
             throw HttpException.BadRequest();
 

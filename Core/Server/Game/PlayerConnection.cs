@@ -83,9 +83,7 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
     DateTimeOffset PongReceiveTime { set; }
     long Ping { get; }
     Invite? Invite { get; set; }
-
     RestorePasswordData? RestorePasswordData { get; set; }
-
 
     int BattleSeries { get; set; }
 
@@ -1242,7 +1240,10 @@ public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
         IEntity notification = new SimpleTextNotificationTemplate().Create(message);
 
         await Share(notification);
-        Schedule(closeTime ?? TimeSpan.FromSeconds(15), async () => await UnshareIfShared(notification));
+        Schedule(closeTime ?? TimeSpan.FromSeconds(15), async () => {
+            await UnshareIfShared(notification);
+            notification.Dispose();
+        });
     }
 
     public async Task SetClipboard(string content) {
@@ -1495,6 +1496,9 @@ public class SocketPlayerConnection(
             DelayedTasks.Clear();
             SharedEntities.Clear();
             serviceScope.Dispose();
+
+            ClientSession.SharedPlayers.TryRemove(this);
+            ClientSession.Dispose();
         }
     }
 
@@ -1506,6 +1510,9 @@ public class SocketPlayerConnection(
         if (serviceScope is IAsyncDisposable ad)
             await ad.DisposeAsync();
         else serviceScope.Dispose();
+
+        ClientSession.SharedPlayers.TryRemove(this);
+        ClientSession.Dispose();
     }
 
     ~SocketPlayerConnection() => Dispose(false);

@@ -18,7 +18,7 @@ namespace Vint.Core.Battle.Effects;
 public abstract class Effect(
     BattleTank tank,
     int level
-) {
+) : IDisposable {
     protected BattleTank Tank { get; } = tank;
     protected Round Round => Tank.Round;
     public IEntity? Entity { get; protected set; }
@@ -86,6 +86,14 @@ public abstract class Effect(
     public void UnScheduleAll() => DelayedTasks.Clear();
 
     public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(this), GetType().Name, Tank);
+
+    public virtual void Dispose() {
+        UnScheduleAll();
+        Entity?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    ~Effect() => Dispose();
 }
 
 public abstract class DurationEffect : Effect {
@@ -156,6 +164,13 @@ public abstract class WeaponEffect(
             await players.Send<RemoveEffectEvent>(Entity);
 
         await players.Unshare(entities);
+    }
+
+    public override void Dispose() {
+        base.Dispose();
+
+        if (WeaponEntity != null!)
+            WeaponEntity.Dispose();
     }
 }
 

@@ -8,5 +8,5 @@ namespace Vint.Core.Chat.Components;
 public class ChatParticipantsComponent(
     params List<IEntity> participants
 ) : IComponent {
-    public List<IEntity> Users { get; private set; } = participants.ToList();
+    public List<IEntity> Users { get; set; } = participants.ToList();
 }

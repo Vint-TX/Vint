@@ -33,6 +33,8 @@ public class EmergencyProtectionEffect : Effect, IDamageMultiplierEffect {
         await Tank.Entities.Weapon.AddComponentIfAbsent<ShootableComponent>();
 
         await UnshareFromAllPlayers();
+
+        Entity.Dispose();
         Entity = null;
     }
 

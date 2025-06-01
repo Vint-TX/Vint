@@ -32,7 +32,7 @@ public class AdminModule(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
@@ -43,8 +43,7 @@ public class AdminModule(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();
@@ -92,7 +91,7 @@ public class AdminModule(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
@@ -103,8 +102,7 @@ public class AdminModule(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();

@@ -18,5 +18,6 @@ public class NotificationShownEvent : IServerEvent {
         }
 
         await connection.Unshare(notification);
+        notification.Dispose();
     }
 }

@@ -76,7 +76,7 @@ public class LobbyPlayer(
     }
 
     void Dispose(bool disposing) {
-        if (disposing) { // todo dispose entities
+        if (disposing) {
             DisposeTanker();
         }
     }

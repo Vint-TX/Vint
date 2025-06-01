@@ -9,6 +9,6 @@ public class EntityCodec : Codec {
 
     public override object Decode(ProtocolBuffer buffer) {
         long id = buffer.Reader.ReadInt64();
-        return buffer.GetSharedEntity(id) ?? EntityRegistry.Get(id);
+        return buffer.GetSharedEntity(id) ?? EntityRegistry.TryGet(id) ?? null!;
     }
 }

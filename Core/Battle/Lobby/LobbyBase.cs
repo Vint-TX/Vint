@@ -172,13 +172,16 @@ public abstract class LobbyBase : IDisposable {
     }
 
     protected virtual void Dispose(bool disposing) {
-        if (disposing) { // todo dispose entities
+        if (disposing) {
             Round?.Dispose();
 
             foreach (LobbyPlayer player in Players)
                 player.Dispose();
 
             PlayersDict.Clear();
+
+            TeamHandler.Dispose();
+            ChatEntity.Dispose();
         }
     }
 

@@ -27,6 +27,7 @@ public class SonarEffect(
         Tank.Effects.TryRemove(this);
         await UnshareFrom(Tank.Tanker);
 
+        Entity?.Dispose();
         Entity = null;
     }
 

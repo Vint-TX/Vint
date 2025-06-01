@@ -27,7 +27,7 @@ public class ModeratorModule(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
@@ -38,8 +38,7 @@ public class ModeratorModule(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();
@@ -91,7 +90,7 @@ public class ModeratorModule(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
@@ -102,8 +101,7 @@ public class ModeratorModule(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();
@@ -153,7 +151,7 @@ public class ModeratorModule(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
@@ -164,8 +162,7 @@ public class ModeratorModule(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();
@@ -205,7 +202,7 @@ public class ModeratorModule(
 
         Player? targetPlayer = targetConnection?.Player;
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection != null) {
             if (targetConnection.InLobby) {
@@ -216,8 +213,7 @@ public class ModeratorModule(
                     : lobbyPlayer.Lobby.ChatEntity;
 
                 notifiedConnections = ChatUtils
-                    .GetReceivers(server, targetConnection, notifyChat)
-                    .ToList();
+                    .GetReceivers(server, targetConnection, notifyChat);
             }
         } else {
             await using DbConnection db = new();
@@ -259,7 +255,7 @@ public class ModeratorModule(
             .SingleOrDefault(conn => conn.Player.Username == username);
 
         IEntity? notifyChat = null;
-        List<IPlayerConnection>? notifiedConnections = null;
+        IAsyncEnumerable<IPlayerConnection>? notifiedConnections = null;
 
         if (targetConnection == null) {
             await ctx.SendPrivateResponse("Player is not on the server");
@@ -285,8 +281,7 @@ public class ModeratorModule(
                 : lobbyPlayer.Lobby.ChatEntity;
 
             notifiedConnections = ChatUtils
-                .GetReceivers(server, targetConnection, notifyChat)
-                .ToList();
+                .GetReceivers(server, targetConnection, notifyChat);
         }
 
         await targetConnection.Kick(reason);

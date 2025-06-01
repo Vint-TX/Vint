@@ -64,7 +64,7 @@ public class EntityBuilder() : IEntityBuilder {
         return this;
     }
 
-    public IEntity Build(bool addToRegistry = true) {
+    public IEntity Build() {
         if (Id == 0)
             Id = EntityRegistry.GenerateId();
 
@@ -72,12 +72,11 @@ public class EntityBuilder() : IEntityBuilder {
 
         foreach (Action<IEntity> action in Actions
                      .Where(tuple => tuple.condition(entity))
-                     .Select(tuple => tuple.action))
+                     .Select(tuple => tuple.action)) {
             action(entity);
+        }
 
-        if (addToRegistry)
-            EntityRegistry.Add(entity);
-
+        EntityRegistry.Add(entity);
         return entity;
     }
 }

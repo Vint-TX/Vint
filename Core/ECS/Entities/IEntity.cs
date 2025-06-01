@@ -6,7 +6,8 @@ using Vint.Core.Server.Game.Protocol.Commands;
 
 namespace Vint.Core.ECS.Entities;
 
-public interface IEntity {
+public interface IEntity : IDisposable {
+    bool Disposed { get; }
     long Id { get; set; }
     TemplateAccessor? TemplateAccessor { get; }
     IEnumerable<IComponent> SortedComponents { get; }

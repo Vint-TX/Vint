@@ -26,10 +26,12 @@ public class CTFHandler : TeamHandler {
         MapFlags flagPoints = Round.Properties.GetValue(BattleProperty.MapInfo).Flags;
         TimeSpan enemyFlagActionInterval = TimeSpan.FromSeconds(CTFConfig.EnemyFlagActionMinIntervalSec);
 
+        // ReSharper disable NotDisposedResource
         Flags = new Dictionary<TeamColor, Flag> {
             { TeamColor.Blue, new Flag(Round, BlueTeam.Entity, TeamColor.Blue, flagPoints.Blue, enemyFlagActionInterval) },
             { TeamColor.Red, new Flag(Round, RedTeam.Entity, TeamColor.Red, flagPoints.Red, enemyFlagActionInterval) }
         }.ToFrozenDictionary();
+        // ReSharper restore NotDisposedResource
 
         CanShareFlags = Round.Properties.GetValue(BattleProperty.WarmUpDuration) == TimeSpan.Zero || Round.StateManager.CurrentState is Running;
     }
@@ -118,4 +120,13 @@ public class CTFHandler : TeamHandler {
 
     public bool CanPlaceMine(Vector3 position) =>
         Flags.Values.All(flag => Vector3.Distance(position, flag.PedestalPosition) >= CTFConfig.MinDistanceFromMineToBase);
+
+    protected override void Dispose(bool disposing) {
+        base.Dispose(disposing);
+
+        if (!disposing) return;
+
+        foreach (Flag flag in Flags.Values)
+            flag.Dispose();
+    }
 }

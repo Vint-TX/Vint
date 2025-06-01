@@ -67,8 +67,7 @@ public record struct MapInfo(
         string mapModelPath = Path.Combine(ConfigPath, "model.glb");
         ModelRoot mapRoot = ModelRoot.Load(mapModelPath);
 
-        Triangle[] triangles = mapRoot
-            .DefaultScene // todo create a mesh immediately instead of store list of triangles
+        Triangle[] triangles = mapRoot.DefaultScene // todo create a mesh immediately instead of store list of triangles
             .EvaluateTriangles()
             .Select(tuple => new Triangle(
                 tuple.A.GetGeometry().GetPosition() * GltfToUnity,

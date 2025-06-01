@@ -22,24 +22,36 @@ public class Entity : IEntity {
     ILogger Logger { get; } = Log.Logger.ForType<Entity>();
     EntityComponentStorage ComponentStorage { get; }
 
+    public bool Disposed { get; private set; }
+
     public ConcurrentHashSet<IPlayerConnection> SharedPlayers { get; } = [];
 
     public long Id { get; set; }
-
     public TemplateAccessor? TemplateAccessor { get; }
 
     public IEnumerable<IComponent> SortedComponents => ComponentStorage.SortedComponents;
     public IEnumerable<IComponent> Components => ComponentStorage.Components;
 
-    public EntityShareCommand ToShareCommand(IPlayerConnection connection) => new(Id, TemplateAccessor, GetSortedComponentsFor(connection).ToArray());
+    public EntityShareCommand ToShareCommand(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        return new EntityShareCommand(Id, TemplateAccessor, GetSortedComponentsFor(connection).ToArray());
+    }
 
-    public EntityUnshareCommand ToUnshareCommand() => new(this);
+    public EntityUnshareCommand ToUnshareCommand() {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        return new EntityUnshareCommand(this);
+    }
 
-    IEnumerable<IComponent> GetSortedComponentsFor(IPlayerConnection connection) =>
-        SortedComponents.Where(c => c is not PrivateComponent pc ||
-                                    pc.OwnerUserId == connection.UserContainer.Id);
+    IEnumerable<IComponent> GetSortedComponentsFor(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
+        return SortedComponents.Where(c => c is not PrivateComponent pc ||
+                                           pc.OwnerUserId == connection.UserContainer.Id);
+    }
 
     public async Task Share(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         if (Logger.IsEnabled(LogEventLevel.Debug))
             Logger.Debug("Sharing {Entity} to {Connection}", this, connection);
 
@@ -53,6 +65,8 @@ public class Entity : IEntity {
     }
 
     public async Task Unshare(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         if (Logger.IsEnabled(LogEventLevel.Debug))
             Logger.Debug("Unsharing {Entity} from {Connection}", this, connection);
 
@@ -67,8 +81,10 @@ public class Entity : IEntity {
 
     public T GetComponent<T>() where T : class, IComponent => (T)GetComponent(typeof(T));
 
-    public IComponent GetComponent(Type type) =>
-        ComponentStorage.GetComponent(type);
+    public IComponent GetComponent(Type type) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        return ComponentStorage.GetComponent(type);
+    }
 
     public Task RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent =>
         RemoveComponentIfPresent(typeof(T), excluded);
@@ -77,17 +93,25 @@ public class Entity : IEntity {
         RemoveComponentIfPresent(component.GetType(), excluded);
 
     public async Task RemoveComponentIfPresent(Type type, IPlayerConnection? excluded = null) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         if (HasComponent(type))
             await RemoveComponent(type, excluded);
     }
 
-    public IEntity Clone() => new Entity(Id,
-        TemplateAccessor == null
-            ? null
-            : new TemplateAccessor(TemplateAccessor.Template, TemplateAccessor.ConfigPath),
-        Components.ToHashSet());
+    public IEntity Clone() {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
+        return new Entity(Id,
+            TemplateAccessor == null
+                ? null
+                : new TemplateAccessor(TemplateAccessor.Template, TemplateAccessor.ConfigPath),
+            Components.ToHashSet());
+    }
 
     public async Task AddComponent(IComponent component, IPlayerConnection? excluded = null) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         if (component is GroupComponent groupComponent)
             component = GroupComponentRegistry.FindOrRegisterGroup(groupComponent);
 
@@ -104,29 +128,41 @@ public class Entity : IEntity {
         await connections.Send(new ComponentAddCommand { Entity = this, Component = component });
     }
 
-    public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() =>
-        AddComponent(new T(), excluded);
+    public Task AddComponent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        return AddComponent(new T(), excluded);
+    }
 
-    public Task AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent =>
-        AddComponent(ConfigManager.GetComponent<T>(configPath), excluded);
+    public Task AddComponent<T>(string configPath, IPlayerConnection? excluded = null) where T : class, IComponent {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        return AddComponent(ConfigManager.GetComponent<T>(configPath), excluded);
+    }
 
     public async Task AddGroupComponent<T>(IEntity? key = null, IPlayerConnection? excluded = null) where T : GroupComponent {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         T component = GroupComponentRegistry.FindOrCreateGroup<T>(key?.Id ?? Id);
         await AddComponent(component);
     }
 
-    public Task AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent =>
-        AddComponent(entity.GetComponent<T>(), excluded);
+    public Task AddComponentFrom<T>(IEntity entity, IPlayerConnection? excluded = null) where T : class, IComponent {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        return AddComponent(entity.GetComponent<T>(), excluded);
+    }
 
     public Task AddComponentFromConfig<T>() where T : class, IComponent =>
         AddComponent<T>(TemplateAccessor!.ConfigPath!);
 
     public async Task AddComponentIfAbsent(IComponent component, IPlayerConnection? excluded = null) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         if (!HasComponent(component))
             await AddComponent(component, excluded);
     }
 
     public async Task AddComponentIfAbsent<T>(IPlayerConnection? excluded = null) where T : class, IComponent, new() {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         if (!HasComponent<T>())
             await AddComponent<T>(excluded);
     }
@@ -140,6 +176,8 @@ public class Entity : IEntity {
     public bool HasComponent(Type type) => ComponentStorage.HasComponent(type);
 
     public async Task ChangeComponent<T>(Func<T, Task> func) where T : class, IComponent {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         T component = GetComponent<T>();
 
         await func(component);
@@ -147,6 +185,8 @@ public class Entity : IEntity {
     }
 
     public async Task ChangeComponent<T>(Action<T> action) where T : class, IComponent {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         T component = GetComponent<T>();
 
         action(component);
@@ -154,6 +194,8 @@ public class Entity : IEntity {
     }
 
     public async Task ChangeComponent(IComponent component, IPlayerConnection? excluded) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         ComponentStorage.ChangeComponent(component);
 
         if (Logger.IsEnabled(LogEventLevel.Debug))
@@ -174,6 +216,8 @@ public class Entity : IEntity {
         RemoveComponent(component.GetType(), excluded);
 
     public async Task RemoveComponent(Type type, IPlayerConnection? excluded = null) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+
         ComponentStorage.RemoveComponent(type, out IComponent component);
 
         if (Logger.IsEnabled(LogEventLevel.Debug))
@@ -192,5 +236,24 @@ public class Entity : IEntity {
                                          $"TemplateAccessor: {TemplateAccessor}; " +
                                          $"Components {{ {Components.ToString(false)} }} }}";
 
+    // ReSharper disable once NonReadonlyMemberInGetHashCode
     public override int GetHashCode() => Id.GetHashCode();
+
+    public void Dispose() {
+        if (Disposed) return;
+        Disposed = true;
+
+        if (SharedPlayers.Count != 0) {
+            Logger.Warning("Disposing {Entity} with {Count} shared players", this, SharedPlayers.Count);
+            Debugger.Break();
+        }
+
+        EntityRegistry.TryRemove(Id);
+
+        SharedPlayers.Clear();
+        ComponentStorage.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    ~Entity() => Dispose();
 }

@@ -1,4 +1,5 @@
 using System.Numerics;
+using JetBrains.Annotations;
 using Vint.Core.Battle.Flags.Components;
 using Vint.Core.Battle.Flags.State;
 using Vint.Core.Battle.Flags.Templates;
@@ -8,7 +9,8 @@ using Vint.Core.ECS.Entities;
 
 namespace Vint.Core.Battle.Flags;
 
-public class Flag {
+[MustDisposeResource]
+public class Flag : IDisposable {
     public Flag(Round round, IEntity team, TeamColor teamColor, Vector3 pedestalPosition, TimeSpan enemyFlagActionInterval) {
         Round = round;
         TeamColor = teamColor;
@@ -37,4 +39,12 @@ public class Flag {
 
     public async Task Tick(TimeSpan deltaTime) =>
         await StateManager.Tick(deltaTime);
+
+    public void Dispose() {
+        Entity.Dispose();
+        PedestalEntity.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    ~Flag() => Dispose();
 }

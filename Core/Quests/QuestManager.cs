@@ -40,7 +40,11 @@ public class QuestManager {
             .DistinctBy(entity => quests.Any(quest => quest.Index == entity.GetComponent<SlotIndexComponent>().Index))
             .ToList();
 
-        await connection.Unshare(removedEntities);
+        foreach (IEntity removedEntity in removedEntities) {
+            await connection.Unshare(removedEntity);
+            removedEntity.Dispose();
+        }
+
         await connection.Share(quests.Select(quest => GetQuestEntity(connection.UserContainer.Entity, quest)));
 
         while (quests.Count < MaxQuests) {
