@@ -46,6 +46,7 @@ using Vint.Core.Leagues.Components;
 using Vint.Core.Logging;
 using Vint.Core.Notification.Components;
 using Vint.Core.Notification.Templates;
+using Vint.Core.Premium.Components;
 using Vint.Core.Presets.Components;
 using Vint.Core.Presets.Templates;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
@@ -571,10 +572,35 @@ public abstract class PlayerConnection(
                 break;
             }
 
-            case PremiumBoostMarketItemTemplate:
-            case PremiumQuestMarketItemTemplate:
-                Logger.Information("User purchased Premium Boost or Quest. Action is not implemented");
+            case PremiumBoostMarketItemTemplate: {
+                userItem = marketItem.GetUserEntity(this);
+
+                DateTimeOffset startTime = Player.IsPremium
+                    ? Player.PremiumBoostEndTime.Value
+                    : DateTimeOffset.UtcNow;
+
+                DateTimeOffset endTime = startTime.AddDays(amount);
+
+                await using (DbConnection db = new()) {
+                    await db.Players
+                        .Where(player => player.Id == Player.Id)
+                        .Set(player => player.PremiumBoostEndTime, endTime)
+                        .UpdateAsync();
+                }
+
+                Player.PremiumBoostEndTime = endTime;
+
+                await UserContainer.Entity.RemoveComponentIfPresent<PremiumAccountBoostComponent>();
+                await UserContainer.Entity.AddComponent(new PremiumAccountBoostComponent(endTime));
+
+                await userItem.AddComponentIfAbsent<PremiumDurationChangedComponent>();
                 break;
+            }
+
+            case PremiumQuestMarketItemTemplate: {
+                Logger.Warning("User purchased Premium Quest. Action is not implemented");
+                break;
+            }
 
             case PresetMarketItemTemplate: {
                 List<Preset> userPresets = Player.UserPresets;

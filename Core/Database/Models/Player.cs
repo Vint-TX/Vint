@@ -1,4 +1,5 @@
-﻿using LinqToDB;
+﻿using System.Diagnostics.CodeAnalysis;
+using LinqToDB;
 using LinqToDB.Mapping;
 using Vint.Core.Config;
 using Vint.Core.DailyBonus.Components.Config;
@@ -30,7 +31,10 @@ public class Player {
     [NotColumn] public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
     [NotColumn] public bool IsModerator => IsAdmin || (Groups & PlayerGroups.Moderator) == PlayerGroups.Moderator;
     [NotColumn] public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
-    [NotColumn] public bool IsPremium => (Groups & PlayerGroups.Premium) == PlayerGroups.Premium;
+    [NotColumn, MemberNotNullWhen(true, nameof(PremiumBoostEndTime))]
+    public bool IsPremium => PremiumBoostEndTime > DateTimeOffset.UtcNow;
+
+    [Column] public DateTimeOffset? PremiumBoostEndTime { get; set; } = null;
 
     [Column] public League RewardedLeagues { get; set; }
 
@@ -368,8 +372,7 @@ public enum PlayerGroups {
     None = 0,
     Admin = 1,
     Moderator = 2,
-    Tester = 4,
-    Premium = 8
+    Tester = 4
 }
 
 [Flags]

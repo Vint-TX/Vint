@@ -1,3 +1,4 @@
+using Vint.Core.Battle.Lobby.Components;
 using Vint.Core.Battle.Lobby.Impl;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
@@ -14,7 +15,7 @@ public class OpenCustomLobbyEvent : IServerEvent {
             lobby.Owner != connection) return;
 
         Database.Models.Player player = connection.Player;
-        int price = player.IsPremium ? 0 : 1000;
+        long price = lobby.Entity.GetComponent<OpenCustomLobbyPriceComponent>().Price;
 
         if (player.Crystals < price) return;
 

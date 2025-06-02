@@ -6,6 +6,7 @@ using Vint.Core.ECS.Templates;
 using Vint.Core.Email.Components;
 using Vint.Core.Fractions.Components;
 using Vint.Core.Leagues.Components;
+using Vint.Core.Premium.Components;
 using Vint.Core.Quests.Components;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.User.Components;
@@ -50,5 +51,6 @@ public class UserTemplate : EntityTemplate {
                     entity.AddComponent(new ClosedBetaQuestAchievementComponent { OwnerUserId = player.Id });
                     entity.AddComponent<UserTesterComponent>();
                 })
+            .ThenExecuteIf(_ => player.IsPremium, entity => entity.AddComponent(new PremiumAccountBoostComponent(player.PremiumBoostEndTime!.Value)))
             .WithId(player.Id));
 }

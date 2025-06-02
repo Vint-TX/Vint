@@ -65,6 +65,7 @@ return;
 
 void RunMigrations() {
     IServiceProvider serviceProvider = new ServiceCollection()
+        .AddSerilog(config => config.ReadFrom.Configuration(builder.Configuration))
         .AddFluentMigratorCore()
         .ConfigureRunner(runnerBuilder => runnerBuilder
             .AddMySql8()
