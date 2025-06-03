@@ -119,6 +119,7 @@ public class Player {
     [Column] public DateTimeOffset LastLoginRewardTime { get; set; }
     [Column] public DateTimeOffset? QuestChangesResetTime { get; set; }
     [Column] public DateTimeOffset LastDailyBonusReceivingTime { get; set; }
+    [Column] public DateTimeOffset LastPremiumBoostBonusesReceivingTime { get; set; }
 
     [Association(ThisKey = nameof(Id), OtherKey = nameof(Statistics.PlayerId))]
     public Statistics Stats { get; private set; } = null!;

@@ -14,6 +14,11 @@ public class ClientGarageFirstLoadEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.IsLoggedIn) return;
 
+        await CheckEmailRewards(connection);
+        await CheckPremiumRewards(connection);
+    }
+
+    static async Task CheckEmailRewards(IPlayerConnection connection) {
         Player player = connection.Player;
 
         if (player.EmailRewardsReceived || !player.EmailConfirmed)
@@ -28,4 +33,7 @@ public class ClientGarageFirstLoadEvent : IServerEvent {
 
         player.EmailRewardsReceived = true;
     }
+
+    static async Task CheckPremiumRewards(IPlayerConnection connection) =>
+        await connection.CheckPremiumBoostBonuses();
 }

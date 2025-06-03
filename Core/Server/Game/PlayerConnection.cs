@@ -120,6 +120,8 @@ public interface IPlayerConnection : IAsyncDisposable, IDisposable {
 
     Task CheckLoginRewards();
 
+    Task CheckPremiumBoostBonuses();
+
     Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies);
 
     Task<bool> OwnsItem(IEntity marketItem);
@@ -597,6 +599,8 @@ public abstract class PlayerConnection(
                 await UserContainer.Entity.AddComponent(new PremiumAccountBoostComponent(endTime));
 
                 await userItem.AddComponentIfAbsent<PremiumDurationChangedComponent>();
+
+                await CheckPremiumBoostBonuses();
                 break;
             }
 
@@ -1176,6 +1180,26 @@ public async Task UpdateDeserterStatus(bool roundEnded, bool hasEnemies) {
 
         IEntity notification = new LoginRewardNotificationTemplate().Create(loginRewards, loginRewardsComponent.Rewards, day);
         await Share(notification);
+    }
+
+    public async Task CheckPremiumBoostBonuses() { // the bonus is 500 crystals everyday, hardcoded
+        if (!Player.HasPremiumBoost ||
+            Player.LastPremiumBoostBonusesReceivingTime + TimeSpan.FromDays(1) > DateTimeOffset.UtcNow)
+            return;
+
+        await using (DbConnection db = new()) {
+            await db.Players
+                .Where(player => player.Id == Player.Id)
+                .Set(player => player.LastPremiumBoostBonusesReceivingTime, DateTimeOffset.UtcNow)
+                .UpdateAsync();
+        }
+
+        Player.LastPremiumBoostBonusesReceivingTime = DateTimeOffset.UtcNow;
+
+        IEntity marketItem = GlobalEntities.GetEntity("misc", "Crystal");
+        await PurchaseItem(marketItem, 500, 0, false, false);
+
+        Schedule(TimeSpan.FromDays(1), CheckPremiumBoostBonuses);
     }
 
     public async Task<bool> OwnsItem(IEntity marketItem) {
