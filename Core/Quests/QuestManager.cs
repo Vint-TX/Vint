@@ -37,7 +37,7 @@ public class QuestManager {
 
         List<IEntity> removedEntities = connection.SharedEntities
             .Where(entity => entity.HasComponent<QuestComponent>() && entity.HasComponent<SlotIndexComponent>())
-            .DistinctBy(entity => quests.Any(quest => quest.Index == entity.GetComponent<SlotIndexComponent>().Index))
+            .Where(entity => quests.All(quest => quest.Index != entity.GetComponent<SlotIndexComponent>().Index))
             .ToList();
 
         foreach (IEntity removedEntity in removedEntities) {
