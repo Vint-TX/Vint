@@ -25,6 +25,10 @@ public class RequestChangeQuestEvent(
         if (!bonus.HasComponent<QuestsEnabledComponent>() || !quest.HasComponent<QuestComponent>())
             return;
 
+        // Premium quests cannot be changed
+        if (quest.GetComponent<QuestRarityComponent>().RarityType == QuestRarityType.Premium)
+            return;
+
         await using DbConnection db = new();
 
         if (player.QuestChanges >= player.MaxQuestChanges) {

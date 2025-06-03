@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using LinqToDB.Mapping;
 using Vint.Core.Battle.Mode;
-using Vint.Core.Config;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Quests;
 
@@ -34,20 +34,19 @@ public class Quest {
     [Column] public QuestConditionType? Condition { get; init; }
     [Column] public long ConditionValue { get; init; }
 
-    [NotColumn] public bool IsCompleted => ProgressCurrent == ProgressTarget;
-    [NotColumn] public DateTimeOffset? CompletedQuestChangeTime => CompletionDate + ConfigManager.QuestsInfo.Updates.CompletedQuestDuration;
+    [NotColumn, MemberNotNullWhen(true, nameof(CompletionDate))]
+    public bool IsCompleted => ProgressCurrent == ProgressTarget;
 
     public void AddProgress(int delta) =>
         ProgressCurrent = Math.Clamp(ProgressCurrent + delta, 0, ProgressTarget);
 
-    public bool ConditionMet(IEntity marketWeapon, IEntity marketHull, BattleMode battleMode) =>
-        Condition switch {
-            null => true,
-            QuestConditionType.Weapon => ConditionValue == marketWeapon.Id,
-            QuestConditionType.Tank => ConditionValue == marketHull.Id,
-            QuestConditionType.Mode => (BattleMode)ConditionValue == battleMode,
-            _ => throw new InvalidOperationException()
-        };
+    public bool ConditionMet(IEntity marketWeapon, IEntity marketHull, BattleMode battleMode) => Condition switch {
+        null => true,
+        QuestConditionType.Weapon => ConditionValue == marketWeapon.Id,
+        QuestConditionType.Tank => ConditionValue == marketHull.Id,
+        QuestConditionType.Mode => (BattleMode)ConditionValue == battleMode,
+        _ => throw new InvalidOperationException()
+    };
 }
 
 public enum QuestType {

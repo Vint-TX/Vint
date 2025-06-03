@@ -72,7 +72,7 @@ public class Tanker : BattlePlayer {
                 return field;
 
             float seriesMultiplier = GetBattleSeriesMultiplier();
-            float premiumMultiplier = Connection.Player.IsPremium ? .5f : 0;
+            float premiumMultiplier = Connection.Player.HasPremiumBoost ? .5f : 0;
 
             field = 1 + seriesMultiplier + premiumMultiplier;
             return field;

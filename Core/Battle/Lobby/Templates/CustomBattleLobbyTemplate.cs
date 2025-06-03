@@ -13,7 +13,7 @@ public class CustomBattleLobbyTemplate : BattleLobbyTemplate {
     public IEntity Create(BattleProperties battleProperties, IPlayerConnection owner) {
         IEntity entity = Entity(battleProperties);
 
-        long price = owner.Player.IsPremium ? 0 : 1000;
+        long price = owner.Player.HasPremiumBoost ? 0 : 1000;
 
         entity.AddComponent(new ClientBattleParamsComponent(battleProperties.GetParams()));
         entity.AddComponent(new OpenCustomLobbyPriceComponent(price));

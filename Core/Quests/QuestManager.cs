@@ -27,7 +27,7 @@ public class QuestManager {
     }
 
     static QuestsInfo QuestsInfo => ConfigManager.QuestsInfo;
-    static ILogger Logger { get; } = Log.Logger.ForType<QuestManager>();
+    ILogger Logger { get; } = Log.Logger.ForType<QuestManager>();
 
     IServiceProvider ServiceProvider { get; }
     DateTimeOffset NextUpdate { get; set; }
@@ -56,9 +56,11 @@ public class QuestManager {
             bool canBeRare = quests.All(quest => quest.Rarity != QuestRarityType.Rare);
             bool canBeCondition = quests.All(quest => quest.Rarity != QuestRarityType.Condition);
 
-            Quest quest = await CreateSaveAndShareQuest(connection, index, canBeRare, canBeCondition, quests.Select(quest => quest.Type));
+            Quest quest = await CreateSaveAndShareQuest(connection, index, canBeRare, canBeCondition, false, quests.Select(quest => quest.Type));
             quests.Add(quest);
         }
+
+        await TryCreatePremiumQuest(connection);
 
         Logger.Information("Created quests for {Username}", connection.Player.Username);
         return quests;
@@ -161,7 +163,13 @@ public class QuestManager {
 
         await connection.Unshare(questEntity);
         await db.DeleteAsync(quest);
-        await CreateSaveAndShareQuest(connection, quest.Index, canBeRare, canBeCondition, quests.Select(q => q.Type));
+
+        await CreateSaveAndShareQuest(connection,
+            quest.Index,
+            canBeRare,
+            canBeCondition,
+            quest.Rarity == QuestRarityType.Premium,
+            quests.Select(q => q.Type));
     }
 
     public async Task ResetQuestChanges(IPlayerConnection connection) {
@@ -185,14 +193,68 @@ public class QuestManager {
         await bonus.RemoveComponentIfPresent<TakenBonusComponent>();
     }
 
+    public async Task TryCreatePremiumQuest(IPlayerConnection connection) {
+        Player player = connection.Player;
+        if (!player.HasPremiumQuest) return;
+
+        DbConnection db = new();
+        List<Quest> quests = await db.Quests
+            .Where(quest => quest.PlayerId == player.Id)
+            .ToListAsync();
+
+        await db.DisposeAsync();
+
+        if (quests.Any(quest => quest.Rarity == QuestRarityType.Premium))
+            return;
+
+        int index = 0;
+        while (quests.Any(quest => quest.Index == index))
+            index++;
+
+        await CreateSaveAndShareQuest(connection, index, true, false, true, quests.Select(q => q.Type));
+    }
+
+    public async Task TryCleanupPremiumQuests(IPlayerConnection connection) {
+        Player player = connection.Player;
+        if (player.HasPremiumQuest) return;
+
+        await using DbConnection db = new();
+        List<Quest> quests = await db.Quests
+            .Where(quest => quest.PlayerId == player.Id && quest.Rarity == QuestRarityType.Premium)
+            .ToListAsync();
+
+        if (quests.Count == 0) return;
+
+        List<IEntity> questEntities = connection.SharedEntities
+            .Where(entity => entity.HasComponent<QuestComponent>() &&
+                             entity.HasComponent<SlotIndexComponent>())
+            .ToList();
+
+        await db.BeginTransactionAsync();
+
+        foreach (Quest quest in quests) {
+            IEntity? entity = questEntities.FirstOrDefault(entity => entity.GetComponent<SlotIndexComponent>().Index == quest.Index);
+
+            if (entity != null) {
+                await connection.Unshare(entity);
+                entity.Dispose();
+            }
+
+            await db.DeleteAsync(quest);
+        }
+
+        await db.CommitTransactionAsync();
+    }
+
     async Task QuestCompleted(IPlayerConnection connection, Quest quest, IEntity entity) {
         quest.CompletionDate = DateTimeOffset.UtcNow;
+        DateTimeOffset updateTime = quest.CompletionDate.Value + QuestsInfo.Updates.CompletedQuestUpdateDurations.GetDuration(quest.Rarity);
 
         await connection.PurchaseItem(quest.RewardEntity, quest.RewardAmount, 0, false, false);
 
         await entity.ChangeComponent<QuestProgressComponent>(component => component.CurrentComplete = true);
-        await entity.ChangeComponent<QuestExpireDateComponent>(component => component.Date = quest.CompletedQuestChangeTime!.Value);
-        connection.Schedule(quest.CompletedQuestChangeTime!.Value, async () => await ChangeQuest(connection, entity));
+        await entity.ChangeComponent<QuestExpireDateComponent>(component => component.Date = updateTime);
+        connection.Schedule(updateTime, async () => await ChangeQuest(connection, entity));
     }
 
     void UpdateNextTime() {
@@ -205,8 +267,12 @@ public class QuestManager {
         int index,
         bool canBeRare,
         bool canBeCondition,
-        IEnumerable<QuestType> usedTypes) {
-        Quest quest = GenerateQuest(connection.Player, index, canBeRare, canBeCondition, usedTypes);
+        bool isPremium,
+        IEnumerable<QuestType> excludeTypes) {
+        Quest quest = isPremium
+            ? GeneratePremiumQuest(connection.Player, index, excludeTypes)
+            : GenerateQuest(connection.Player, index, canBeRare, canBeCondition, excludeTypes);
+
         IEntity questEntity = GetQuestEntity(connection.UserContainer.Entity, quest);
 
         await using (DbConnection db = new())
@@ -222,48 +288,70 @@ public class QuestManager {
             .Where(quest => quest.PlayerId == playerId)
             .ToListAsync();
 
-        foreach (Quest quest in quests
-                     .ToList()
-                     .Where(quest =>
-                         deleteAllUncompleted && !quest.IsCompleted ||
-                         quest.IsCompleted && DateTimeOffset.UtcNow - quest.CompletionDate >= QuestsInfo.Updates.CompletedQuestDuration)) {
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        List<Quest> questsToDelete = quests.Where(quest => ShouldDelete(quest, deleteAllUncompleted, now)).ToList();
+
+        if (questsToDelete.Count == 0)
+            return quests;
+
+        await db.BeginTransactionAsync();
+
+        foreach (Quest quest in questsToDelete) {
             await db.DeleteAsync(quest);
             quests.Remove(quest);
         }
 
+        await db.CommitTransactionAsync();
         return quests;
+
+        static bool ShouldDelete(Quest quest, bool deleteAllUncompleted, DateTimeOffset currentTime) {
+            if (quest is { Rarity: QuestRarityType.Premium, IsCompleted: false })
+                return false;
+
+            if (deleteAllUncompleted && !quest.IsCompleted)
+                return true;
+
+            if (!quest.IsCompleted)
+                return false;
+
+            TimeSpan updateDuration = QuestsInfo.Updates.CompletedQuestUpdateDurations.GetDuration(quest.Rarity);
+            DateTimeOffset updateTime = quest.CompletionDate.Value + updateDuration;
+            return updateTime <= currentTime;
+        }
     }
 
-    static IEntity GetQuestEntity(IEntity user, Quest quest) =>
-        GetQuestTemplate(quest.Type)
-            .Create(user,
-                quest.Index,
-                quest.ProgressCurrent,
-                quest.ProgressTarget,
-                quest.RewardEntity,
-                quest.RewardAmount,
-                quest.Condition,
-                quest.ConditionValue,
-                quest.CompletedQuestChangeTime ?? DateTimeOffset.UtcNow,
-                quest.Rarity,
-                quest.IsCompleted);
+    static IEntity GetQuestEntity(IEntity user, Quest quest) {
+        TimeSpan updateDuration = QuestsInfo.Updates.CompletedQuestUpdateDurations.GetDuration(quest.Rarity);
+        DateTimeOffset updateTime = (quest.CompletionDate + updateDuration) ?? DateTimeOffset.UtcNow;
 
-    static QuestTemplate GetQuestTemplate(QuestType type) =>
-        type switch {
-            QuestType.Battles => new BattleCountQuestTemplate(),
-            QuestType.Flags => new FlagQuestTemplate(),
-            QuestType.Frags => new FragQuestTemplate(),
-            QuestType.Scores => new ScoreQuestTemplate(),
-            QuestType.Supply => new SupplyQuestTemplate(),
-            QuestType.Victories => new WinQuestTemplate(),
-            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-        };
+        return GetQuestTemplate(quest.Type).Create(user,
+            quest.Index,
+            quest.ProgressCurrent,
+            quest.ProgressTarget,
+            quest.RewardEntity,
+            quest.RewardAmount,
+            quest.Condition,
+            quest.ConditionValue,
+            updateTime,
+            quest.Rarity,
+            quest.IsCompleted);
+    }
 
-    static Quest GenerateQuest(Player player, int index, bool canBeRare, bool canBeCondition, IEnumerable<QuestType> usedTypes) {
+    static QuestTemplate GetQuestTemplate(QuestType type) => type switch {
+        QuestType.Battles => new BattleCountQuestTemplate(),
+        QuestType.Flags => new FlagQuestTemplate(),
+        QuestType.Frags => new FragQuestTemplate(),
+        QuestType.Scores => new ScoreQuestTemplate(),
+        QuestType.Supply => new SupplyQuestTemplate(),
+        QuestType.Victories => new WinQuestTemplate(),
+        _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+    };
+
+    static Quest GenerateQuest(Player player, int index, bool canBeRare, bool canBeCondition, IEnumerable<QuestType> excludeTypes) {
         bool withCondition = canBeCondition && MathUtils.RollTheDice(QuestsInfo.ConditionChance);
         bool isRare = !withCondition && canBeRare && MathUtils.RollTheDice(QuestsInfo.RareChance);
 
-        (QuestType questType, QuestTypeInfo questInfo) = GetRandomQuestInfo(usedTypes);
+        (QuestType questType, QuestTypeInfo questInfo) = GetRandomQuestInfo(excludeTypes);
 
         Range valuesRange = GetValuesRange(questInfo, isRare, withCondition);
         int targetValue = Random.Shared.Next(valuesRange.Start.Value, valuesRange.End.Value + 1);
@@ -284,12 +372,32 @@ public class QuestManager {
         };
     }
 
-    static KeyValuePair<QuestType, QuestTypeInfo> GetRandomQuestInfo(IEnumerable<QuestType> usedTypes) =>
-        QuestsInfo.Types
-            .Where(info => !usedTypes.Contains(info.Key))
-            .ToList()
-            .Shuffle()
-            .First();
+    static Quest GeneratePremiumQuest(Player player, int index, IEnumerable<QuestType> excludeTypes) {
+        (QuestType questType, QuestTypeInfo questInfo) = GetRandomQuestInfo(excludeTypes);
+
+        Range valuesRange = GetValuesRange(questInfo, true, false);
+        int targetValue = Random.Shared.Next(valuesRange.Start.Value, valuesRange.End.Value + 1);
+
+        QuestRewardInfo rewardInfo = GetRandomReward(QuestRewardType.Premium);
+
+        return new Quest {
+            Player = player,
+            Index = index,
+            Type = questType,
+            ProgressTarget = targetValue,
+            RewardEntity = rewardInfo.RewardEntity,
+            RewardAmount = rewardInfo.GetAmount(targetValue, valuesRange.Start.Value, valuesRange.End.Value),
+            Rarity = QuestRarityType.Premium
+        };
+    }
+
+    static KeyValuePair<QuestType, QuestTypeInfo> GetRandomQuestInfo(IEnumerable<QuestType> excludeTypes) {
+        List<KeyValuePair<QuestType, QuestTypeInfo>> types = QuestsInfo.Types.Where(info => !excludeTypes.Contains(info.Key)).ToList();
+
+        return types.Count != 0
+            ? types.RandomElement()
+            : QuestsInfo.Types.ToList().RandomElement();
+    }
 
     static (QuestConditionType?, long) GenerateCondition(bool withCondition) {
         if (!withCondition) return (null, 0);
@@ -298,8 +406,7 @@ public class QuestManager {
             .GetValues<QuestConditionType>()
             .Where(type => type != QuestConditionType.Mode)
             .ToList()
-            .Shuffle()
-            .First();
+            .RandomElement();
 
         long value;
 
@@ -309,8 +416,7 @@ public class QuestManager {
                 IEntity weapon = GlobalEntities
                     .GetEntities("weapons")
                     .ToList()
-                    .Shuffle()
-                    .First();
+                    .RandomElement();
 
                 value = weapon.Id;
                 break;
@@ -319,8 +425,7 @@ public class QuestManager {
                 IEntity hull = GlobalEntities
                     .GetEntities("hulls")
                     .ToList()
-                    .Shuffle()
-                    .First();
+                    .RandomElement();
 
                 value = hull.Id;
                 break;
@@ -343,7 +448,5 @@ public class QuestManager {
         withCondition ? QuestRarityType.Condition : isRare ? QuestRarityType.Rare : QuestRarityType.Common;
 
     static QuestRewardInfo GetRandomReward(QuestRewardType rewardType) =>
-        QuestsInfo.Rewards[rewardType]
-            .Shuffle()
-            .First();
+        QuestsInfo.Rewards[rewardType].RandomElement();
 }

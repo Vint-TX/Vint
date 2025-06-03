@@ -18,6 +18,7 @@ using Vint.Core.Battle.Rewards.Components;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Config;
 using Vint.Core.Containers.Templates;
+using Vint.Core.DailyBonus.Components;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -49,6 +50,8 @@ using Vint.Core.Notification.Templates;
 using Vint.Core.Premium.Components;
 using Vint.Core.Presets.Components;
 using Vint.Core.Presets.Templates;
+using Vint.Core.Quests;
+using Vint.Core.Quests.Components;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 using Vint.Core.Server.Game.Protocol.Commands;
@@ -575,7 +578,7 @@ public abstract class PlayerConnection(
             case PremiumBoostMarketItemTemplate: {
                 userItem = marketItem.GetUserEntity(this);
 
-                DateTimeOffset startTime = Player.IsPremium
+                DateTimeOffset startTime = Player.HasPremiumBoost
                     ? Player.PremiumBoostEndTime.Value
                     : DateTimeOffset.UtcNow;
 
@@ -598,7 +601,41 @@ public abstract class PlayerConnection(
             }
 
             case PremiumQuestMarketItemTemplate: {
-                Logger.Warning("User purchased Premium Quest. Action is not implemented");
+                userItem = marketItem.GetUserEntity(this);
+
+                DateTimeOffset startTime = Player.HasPremiumQuest
+                    ? Player.PremiumQuestEndTime.Value
+                    : DateTimeOffset.UtcNow;
+
+                DateTimeOffset endTime = startTime.AddDays(amount);
+
+                await using (DbConnection db = new()) {
+                    await db.Players
+                        .Where(player => player.Id == Player.Id)
+                        .Set(player => player.PremiumQuestEndTime, endTime)
+                        .UpdateAsync();
+                }
+
+                Player.PremiumQuestEndTime = endTime;
+
+                IEntity user = UserContainer.Entity;
+
+                await user.RemoveComponentIfPresent<PremiumAccountQuestComponent>();
+                await user.AddComponent(new PremiumAccountQuestComponent(endTime));
+
+                await userItem.AddComponentIfAbsent<PremiumDurationChangedComponent>();
+
+                if (user.HasComponent<UserDailyBonusNextReceivingDateComponent>()) {
+                    Player.ResetNextDailyBonusTime();
+
+                    await user.RemoveComponent<UserDailyBonusNextReceivingDateComponent>();
+                    await user.AddComponent(new UserDailyBonusNextReceivingDateComponent(Player.NextDailyBonusTime.Value, Player.LastDailyBonusReceivingTime));
+                }
+
+                QuestManager questManager = ServiceProvider.GetRequiredService<QuestManager>();
+
+                await questManager.TryCreatePremiumQuest(this);
+                Schedule(Player.PremiumQuestEndTime.Value, async () => await questManager.TryCleanupPremiumQuests(this));
                 break;
             }
 

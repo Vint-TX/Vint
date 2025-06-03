@@ -51,6 +51,7 @@ public class UserTemplate : EntityTemplate {
                     entity.AddComponent(new ClosedBetaQuestAchievementComponent { OwnerUserId = player.Id });
                     entity.AddComponent<UserTesterComponent>();
                 })
-            .ThenExecuteIf(_ => player.IsPremium, entity => entity.AddComponent(new PremiumAccountBoostComponent(player.PremiumBoostEndTime!.Value)))
+            .ThenExecuteIf(_ => player.HasPremiumBoost, entity => entity.AddComponent(new PremiumAccountBoostComponent(player.PremiumBoostEndTime!.Value)))
+            .ThenExecuteIf(_ => player.HasPremiumQuest, entity => entity.AddComponent(new PremiumAccountQuestComponent(player.PremiumQuestEndTime!.Value)))
             .WithId(player.Id));
 }

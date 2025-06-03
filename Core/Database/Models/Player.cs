@@ -28,13 +28,18 @@ public class Player {
     [Column(DataType = DataType.Text)] public required string HardwareFingerprint { get; set; }
 
     [Column] public PlayerGroups Groups { get; set; }
+
     [NotColumn] public bool IsAdmin => (Groups & PlayerGroups.Admin) == PlayerGroups.Admin;
     [NotColumn] public bool IsModerator => IsAdmin || (Groups & PlayerGroups.Moderator) == PlayerGroups.Moderator;
     [NotColumn] public bool IsTester => (Groups & PlayerGroups.Tester) == PlayerGroups.Tester;
+
     [NotColumn, MemberNotNullWhen(true, nameof(PremiumBoostEndTime))]
-    public bool IsPremium => PremiumBoostEndTime > DateTimeOffset.UtcNow;
+    public bool HasPremiumBoost => PremiumBoostEndTime > DateTimeOffset.UtcNow;
+    [NotColumn, MemberNotNullWhen(true, nameof(PremiumQuestEndTime))]
+    public bool HasPremiumQuest => PremiumQuestEndTime > DateTimeOffset.UtcNow;
 
     [Column] public DateTimeOffset? PremiumBoostEndTime { get; set; } = null;
+    [Column] public DateTimeOffset? PremiumQuestEndTime { get; set; } = null;
 
     [Column] public League RewardedLeagues { get; set; }
 
@@ -99,7 +104,7 @@ public class Player {
     [NotColumn] public IEntity Fraction => GlobalEntities.GetEntity("fractions", FractionName);
 
     [Column] public int QuestChanges { get; set; }
-    [NotColumn] public int MaxQuestChanges => IsPremium ? 2 : 1;
+    [NotColumn] public int MaxQuestChanges => HasPremiumBoost ? 2 : 1;
 
     [Column] public int LastLoginRewardDay { get; set; }
     [NotColumn] public Lazy<DateTimeOffset> NextLoginRewardTime { get; private set; } = null!;
@@ -356,7 +361,7 @@ public class Player {
             DailyBonusCommonConfigComponent config = ConfigManager.GetComponent<DailyBonusCommonConfigComponent>("dailybonus");
             TimeSpan interval = TimeSpan.FromSeconds(config.ReceivingBonusIntervalSec);
 
-            if (IsPremium)
+            if (HasPremiumBoost)
                 interval /= config.PremiumTimeSpeedUp;
 
             return LastDailyBonusReceivingTime + interval;

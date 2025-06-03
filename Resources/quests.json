@@ -93,10 +93,27 @@
         "minAmount": 70,
         "maxAmount": 70
       }
+    ],
+    "premium": [
+      {
+        "typeName": "misc",
+        "entityName": "GoldBonus",
+        "minAmount": 1,
+        "maxAmount": 1
+      },
+      {
+        "typeName": "misc",
+        "entityName": "XCrystal",
+        "minAmount": 25,
+        "maxAmount": 75
+      }
     ]
   },
   "updates": {
-    "completedQuestDuration": "22:00",
+    "completedQuestUpdateDurations": {
+      "common": "22:00",
+      "premium": "10:00"
+    },
     "times": [
       "0:00"
     ]

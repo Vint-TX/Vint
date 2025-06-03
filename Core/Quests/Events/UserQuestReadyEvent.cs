@@ -14,7 +14,7 @@ namespace Vint.Core.Quests.Events;
 [ProtocolId(1497606008074)]
 public class UserQuestReadyEvent(
     QuestManager questManager
-) : IServerEvent { // todo premium
+) : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!connection.IsLoggedIn || !connection.UserContainer.Entity.HasComponent<QuestReadyComponent>())
             return;
@@ -34,6 +34,12 @@ public class UserQuestReadyEvent(
                 .UpdateAsync();
         }
 
+        if (player.HasPremiumQuest) {
+            connection.Schedule(player.PremiumQuestEndTime.Value, async () => await questManager.TryCleanupPremiumQuests(connection));
+        } else {
+            await questManager.TryCleanupPremiumQuests(connection);
+        }
+
         if (noChanges && player.QuestChangesResetTime != null) {
             if (player.QuestChangesResetTime <= DateTimeOffset.UtcNow) {
                 await questManager.ResetQuestChanges(connection);
@@ -49,7 +55,10 @@ public class UserQuestReadyEvent(
 
         foreach (Quest quest in quests.Where(quest => quest.IsCompleted)) {
             IEntity entity = questEntities.First(entity => entity.GetComponent<SlotIndexComponent>().Index == quest.Index);
-            connection.Schedule(quest.CompletedQuestChangeTime!.Value, async () => await questManager.ChangeQuest(connection, entity));
+            TimeSpan updateDuration = ConfigManager.QuestsInfo.Updates.CompletedQuestUpdateDurations.GetDuration(quest.Rarity);
+            DateTimeOffset updateTime = (quest.CompletionDate + updateDuration) ?? DateTimeOffset.UtcNow;
+
+            connection.Schedule(updateTime, async () => await questManager.ChangeQuest(connection, entity));
         }
 
         await connection.Share(new QuestDailyBonusTemplate().Create(connection.UserContainer.Entity, noChanges));

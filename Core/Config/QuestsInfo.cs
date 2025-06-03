@@ -1,5 +1,6 @@
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Quests;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Config;
@@ -35,7 +36,7 @@ public readonly record struct QuestRewardInfo(
 }
 
 public readonly record struct UpdatesInfo(
-    TimeSpan CompletedQuestDuration,
+    DurationsInfo CompletedQuestUpdateDurations,
     List<TimeOnly> Times
 ) {
     public TimeSpan GetDurationToNextUpdate() {
@@ -47,8 +48,17 @@ public readonly record struct UpdatesInfo(
     }
 }
 
+public readonly record struct DurationsInfo(
+    TimeSpan Common,
+    TimeSpan Premium
+) {
+    public TimeSpan GetDuration(QuestRarityType rarityType) =>
+        rarityType == QuestRarityType.Premium ? Premium : Common;
+}
+
 public enum QuestRewardType {
     Common,
     Rare,
-    Condition
+    Condition,
+    Premium
 }
