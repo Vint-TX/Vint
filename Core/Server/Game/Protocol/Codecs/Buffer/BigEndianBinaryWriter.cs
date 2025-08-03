@@ -1,7 +1,9 @@
 ﻿using System.Text;
+using JetBrains.Annotations;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 
+[PublicAPI]
 public class BigEndianBinaryWriter : BinaryWriter {
     public BigEndianBinaryWriter(Stream output) : base(output) { }
 

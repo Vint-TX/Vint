@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace Vint.Core.Structures;
 
+[PublicAPI]
 public class BlockingMultiMap<TKey, TValue> : Dictionary<TKey, HashSet<TValue>> where TKey : notnull {
     readonly Lock _lock = new();
 

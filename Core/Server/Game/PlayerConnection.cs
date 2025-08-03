@@ -52,11 +52,13 @@ using Vint.Core.Presets.Components;
 using Vint.Core.Presets.Templates;
 using Vint.Core.Quests;
 using Vint.Core.Quests.Components;
+using Vint.Core.Server.Game.Protocol;
 using Vint.Core.Server.Game.Protocol.Codecs.Buffer;
 using Vint.Core.Server.Game.Protocol.Codecs.Impl;
 using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Shop.Templates;
 using Vint.Core.Squads;
+using Vint.Core.Structures;
 using Vint.Core.User;
 using Vint.Core.User.Components;
 using Vint.Core.User.Events.Actions;
@@ -1405,7 +1407,7 @@ public class SocketPlayerConnection(
     IServiceScope serviceScope,
     Socket socket
 ) : PlayerConnection(id, serviceScope.ServiceProvider) {
-    public IPEndPoint EndPoint { get; } = (IPEndPoint)socket.RemoteEndPoint!;
+    public IPEndPoint EndPoint { get; private set; } = (IPEndPoint)socket.RemoteEndPoint!;
 
     public override bool IsLoggedIn => IsConnected && IsSocketConnected && ClientSession != null! && UserContainer != null! && Player != null!;
     bool IsSocketConnected => Socket.Connected;
@@ -1536,33 +1538,60 @@ public class SocketPlayerConnection(
             return;
 
         try {
-            await using NetworkStream stream = new(Socket, FileAccess.Read);
-            using BinaryReader reader = new BigEndianBinaryReader(stream);
+            await using NetworkStream networkStream = new(Socket, FileAccess.Read);
 
-            while (true) {
-                await using ProtocolBuffer buffer = ProtocolBuffer.Unwrap(reader, this);
-                long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+            if (TryHandleProxyProtocol(networkStream, out byte[]? data)) {
+                using BinaryReader reader = new BigEndianBinaryReader(networkStream);
+                await HandleCommands(reader);
+            } else {
+                await using MemoryStream memoryStream = new(data, 0, data.Length, false);
+                await using CombinedStream combinedStream = new(memoryStream, networkStream);
 
-                while (availableForRead > 0) {
-                    Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
-
-                    IServerCommand command = (IServerCommand)Protocol
-                        .GetCodec(new TypeCodecInfo(typeof(ICommand)))
-                        .Decode(buffer);
-
-                    try {
-                        await command.Execute(this, ServiceProvider);
-                    } catch (Exception e) {
-                        Logger.Error(e, "Failed to execute {Command}", command);
-                    }
-
-                    availableForRead = buffer.Stream.Length - buffer.Stream.Position;
-                }
+                using BinaryReader reader = new BigEndianBinaryReader(combinedStream);
+                await HandleCommands(reader);
             }
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while reading socket");
             await Disconnect();
             throw;
+        }
+    }
+
+    bool TryHandleProxyProtocol(Stream stream, [NotNullWhen(false)] out byte[]? usedData) {
+        if (!ProxyProtocolV2.TryParse(stream, out ProxyPayload? payload, out usedData))
+            return false;
+
+        Logger.Information("PROXY handled: {Payload}", payload);
+
+        if (payload.ProtocolCommand == ProxyProtocolCommand.Proxy) {
+            EndPoint = new IPEndPoint(payload.SourceAddress, payload.SourcePort);
+            Logger = Logger.WithEndPoint(EndPoint);
+        }
+
+        return true;
+    }
+
+    [SuppressMessage("ReSharper", "FunctionNeverReturns")]
+    async Task HandleCommands(BinaryReader reader) {
+        while (true) {
+            await using ProtocolBuffer buffer = ProtocolBuffer.Unwrap(reader, this);
+            long availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+
+            while (availableForRead > 0) {
+                Logger.Verbose("Decode buffer bytes available: {Count}", availableForRead);
+
+                IServerCommand command = (IServerCommand)Protocol
+                    .GetCodec(new TypeCodecInfo(typeof(ICommand)))
+                    .Decode(buffer);
+
+                try {
+                    await command.Execute(this, ServiceProvider);
+                } catch (Exception e) {
+                    Logger.Error(e, "Failed to execute {Command}", command);
+                }
+
+                availableForRead = buffer.Stream.Length - buffer.Stream.Position;
+            }
         }
     }
 

@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 
 namespace Vint.Core.Structures;
 
+[PublicAPI]
 public class BlockingList<T>(
     List<T> inner
 ) : IList<T> {
