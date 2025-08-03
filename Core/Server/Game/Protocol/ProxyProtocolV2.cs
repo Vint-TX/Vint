@@ -107,14 +107,12 @@ public static class ProxyProtocolV2 {
         const byte protocolVersion = 0x20;
         command = ProxyProtocolCommand.Invalid;
 
-        byte version = (byte)(versionAndCommand & 0xF0);
-        if (version != protocolVersion) return false;
+        if ((versionAndCommand & 0xF0) != protocolVersion)
+            return false;
 
-        byte commandByte = (byte)(versionAndCommand & 0x0F);
-
-        command = commandByte switch {
-            0x00 => ProxyProtocolCommand.Proxy,
-            0x01 => ProxyProtocolCommand.Local,
+        command = (versionAndCommand & 0x0F) switch {
+            0x00 => ProxyProtocolCommand.Local,
+            0x01 => ProxyProtocolCommand.Proxy,
             _ => ProxyProtocolCommand.Invalid,
         };
 
