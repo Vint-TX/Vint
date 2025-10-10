@@ -3,6 +3,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Entrance.ClientSession;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Entrance.Login.Events;

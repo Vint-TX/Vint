@@ -1,7 +1,7 @@
 using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Battle.Tank.Common.Components;
@@ -14,7 +14,7 @@ public class SelfDestructionComponent : IComponent {
 
         Tanker tanker = connection.LobbyPlayer.Tanker;
 
-        tanker.Tank.SelfDestructTime = DateTimeOffset.UtcNow.AddSeconds(tanker.SelfDestructionConfig.SuicideDurationTime);
+        tanker.Tank.IsSelfDestructing = true;
         return Task.CompletedTask;
     }
 }

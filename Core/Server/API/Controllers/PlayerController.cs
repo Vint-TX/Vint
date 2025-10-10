@@ -9,6 +9,7 @@ using Vint.Core.Server.API.Data;
 using Vint.Core.Server.API.Data.Player;
 using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Server.API.Controllers;
 
@@ -31,7 +32,7 @@ public class PlayerController(
 
     [MessageId(11)]
     public IClientDTO GetOnlinePlayers() =>
-        SuccessDTO.Ok(server.PlayerConnections.Values
+        SuccessDTO.Ok(server.Connections
             .Where(connection => connection.IsLoggedIn)
             .Select(connection => PlayerSummaryData.FromPlayer(connection.Player)));
 
@@ -60,7 +61,7 @@ public class PlayerController(
     [MessageId(14)]
     public async Task<IClientDTO> DisplayMessage(long playerId, string message) {
         if (playerId == -1) {
-            foreach (IPlayerConnection connection in server.PlayerConnections.Values)
+            foreach (IPlayerConnection connection in server.Connections)
                 await connection.DisplayMessage(message);
 
             return SuccessDTO.NoContent();
@@ -77,7 +78,7 @@ public class PlayerController(
 
     [MessageId(15)]
     public IClientDTO GetRestorePasswordCode(long id) {
-        IPlayerConnection? connection = server.PlayerConnections.Values
+        IPlayerConnection? connection = server.Connections
             .FirstOrDefault(connection => connection.RestorePasswordData != null &&
                                           connection.RestorePasswordData.PlayerId == id);
 

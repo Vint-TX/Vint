@@ -1,8 +1,9 @@
+using JetBrains.Annotations;
 using Vint.Core.Database.Models;
 
 namespace Vint.Core.Chat.Commands.Attributes;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class), MeansImplicitUse(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
 public sealed class ChatCommandGroupAttribute(
     string name,
     string description,

@@ -8,6 +8,7 @@ using Vint.Core.Server.API.Data.Player;
 using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.API.Utils;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Server.API.Controllers;
 

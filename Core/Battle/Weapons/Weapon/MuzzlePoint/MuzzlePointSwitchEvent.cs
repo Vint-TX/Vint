@@ -3,6 +3,7 @@ using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Battle.Weapons.Weapon.MuzzlePoint;
@@ -16,7 +17,7 @@ public class MuzzlePointSwitchEvent : MuzzlePointEvent, IServerEvent {
         if (tanker?.Tank.WeaponHandler is not TwinsWeaponHandler twins || twins.BattleEntity != weaponEntity)
             return;
 
-        await tanker.Round.Players
+        await tanker.Round.Humans
             .Where(player => player != tanker)
             .Send(new RemoteMuzzlePointSwitchEvent { Index = Index }, weaponEntity);
     }

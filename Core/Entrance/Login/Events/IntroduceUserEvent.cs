@@ -1,6 +1,6 @@
 ﻿using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Entrance.Login.Events;
 

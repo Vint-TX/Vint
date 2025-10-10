@@ -81,7 +81,7 @@ public class SpiderMineEffect(
         await ShareToAllPlayers();
         Schedule(activationTime, async () => await Entity.AddComponent<EffectActiveComponent>());
 
-        await Round.Players.Send<MineDropEvent>(Entity);
+        await Round.Humans.Send<MineDropEvent>(Entity);
         CanBeDeactivated = false;
     }
 
@@ -119,7 +119,7 @@ public class SpiderMineEffect(
     async Task Explode() {
         if (!IsActive) return;
 
-        await Round.Players.Send<MineExplosionEvent>(Entity);
+        await Round.Humans.Send<MineExplosionEvent>(Entity);
         await ForceDeactivate();
     }
 

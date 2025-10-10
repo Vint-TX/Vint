@@ -5,6 +5,7 @@ using Serilog.Events;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Logging;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Server.Game.Protocol.Commands;

@@ -51,7 +51,7 @@ public class DominationProcessor(
         DominatedTeam = TeamColor.None;
         DominationStarted = false;
 
-        await round.Players.Send<RoundBalanceRestoredEvent>();
+        await round.Humans.Send<RoundBalanceRestoredEvent>();
         await round.Entity.ChangeComponent<RoundStopTimeComponent>(component => component.StopTime = round.EndTime);
         await round.Entity.RemoveComponent<RoundDisbalancedComponent>();
     }

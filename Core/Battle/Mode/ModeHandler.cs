@@ -51,7 +51,7 @@ public abstract class ModeHandler(
     protected async Task SortPlayers(IEnumerable<Tanker> tankers) {
         var entries = tankers
             .Select(tanker => tanker.Tank.Entities.RoundUser)
-            .Select(roundUser => new { User = roundUser, Stats = roundUser.GetComponent<RoundUserStatisticsComponent>()})
+            .Select(roundUser => new { User = roundUser, Stats = roundUser.GetComponent<RoundUserStatisticsComponent>() })
             .OrderByDescending(info => info.Stats.ScoreWithoutBonuses)
             .Select((info, index) => new { Info = info, NewPlace = index + 1 });
 
@@ -60,13 +60,23 @@ public abstract class ModeHandler(
 
             info.Stats.Place = entry.NewPlace;
             await info.User.ChangeComponent(info.Stats);
-            await Round.Players.Send(new SetScoreTablePositionEvent(entry.NewPlace), info.User);
+            await Round.Humans.Send(new SetScoreTablePositionEvent(entry.NewPlace), info.User);
         }
     }
 
     [Pure, LinqTunnel] // public static... meh
-    public static SpawnPoint GetRandomSpawnPoint(IEnumerable<SpawnPoint> spawnPoints, params IEnumerable<SpawnPoint> exclude) =>
-        spawnPoints.Except(exclude).ToList().RandomElement();
+    public static SpawnPoint GetRandomSpawnPoint(IEnumerable<SpawnPoint> spawnPoints, params IEnumerable<SpawnPoint> exclude) {
+        List<SpawnPoint> points = spawnPoints.ToList();
+
+        if (points.Count == 0)
+            throw new ArgumentException("No spawn points available");
+
+        List<SpawnPoint> availablePoints = points.Except(exclude).ToList();
+
+        return availablePoints.Count == 0
+            ? points.RandomElement()
+            : availablePoints.RandomElement();
+    }
 
     protected virtual void Dispose(bool disposing) {
         if (disposing) {

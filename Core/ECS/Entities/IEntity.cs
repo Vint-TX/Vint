@@ -1,7 +1,8 @@
-﻿using ConcurrentCollections;
+﻿using System.Diagnostics.CodeAnalysis;
+using ConcurrentCollections;
 using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Templates;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Commands;
 
 namespace Vint.Core.ECS.Entities;
@@ -47,6 +48,10 @@ public interface IEntity : IDisposable {
     T GetComponent<T>() where T : class, IComponent;
 
     IComponent GetComponent(Type type);
+
+    bool TryGetComponent<T>([NotNullWhen(true)] out T? component) where T : class, IComponent;
+
+    bool TryGetComponent(Type type, [NotNullWhen(true)] out IComponent? component);
 
     Task ChangeComponent<T>(Func<T, Task> func) where T : class, IComponent;
 

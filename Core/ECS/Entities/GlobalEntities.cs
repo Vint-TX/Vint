@@ -15,7 +15,7 @@ using Vint.Core.Items.Templates.Gold;
 using Vint.Core.Notification.Components;
 using Vint.Core.Presets.Components;
 using Vint.Core.Presets.Templates;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Shop.Templates;
 using Vint.Core.User.Components;
 

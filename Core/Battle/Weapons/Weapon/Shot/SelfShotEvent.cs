@@ -1,13 +1,16 @@
 using LinqToDB;
+using Vint.Core.Battle.Autopilot.Components;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.Battle.Tank;
+using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Battle.Weapons.Handlers.Impl;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Battle.Weapons.Weapon.Shot;
@@ -20,18 +23,26 @@ public class SelfShotEvent : ShotEvent, IServerEvent {
         ClientTime = ClientTime
     };
 
+    // I wish ECS were here...
     public virtual async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        Tanker? tanker = connection.LobbyPlayer?.Tanker;
-        IEntity weaponEntity = entities.Single();
-
-        if (tanker == null || tanker.Tank.WeaponHandler.BattleEntity != weaponEntity)
+        if (connection.LobbyPlayer?.Tanker is not HumanTanker human)
             return;
 
-        Round round = tanker.Round;
-        BattleTank tank = tanker.Tank;
+        BotTanker? bot = null;
+        IEntity weaponEntity = entities.Single();
+        IEntity tankEntity = EntityRegistry.Get(weaponEntity.GetComponent<TankGroupComponent>().Key);
 
-        await round.Players
-            .Where(player => player != tanker)
+        if (!tankEntity.TryGetComponent(out TankAutopilotComponent? autopilotComponent)) {
+            if (tankEntity != human.Tank.Entities.Tank)
+                return;
+        } else if (!human.ControlledBots.TryGetValue(autopilotComponent.Id, out bot))
+            return;
+
+        Round round = human.Round;
+        BattleTank tank = bot?.Tank ?? human.Tank;
+
+        await round.Humans
+            .Where(player => player != human)
             .Send(RemoteEvent, weaponEntity);
 
         if (tank.WeaponHandler is SmokyWeaponHandler smokyHandler)

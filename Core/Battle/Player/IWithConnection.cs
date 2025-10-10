@@ -1,4 +1,4 @@
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Player;
 

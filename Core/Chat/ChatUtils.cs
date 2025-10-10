@@ -6,6 +6,7 @@ using Vint.Core.Chat.Events;
 using Vint.Core.Chat.Templates;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Squads.Templates;
 using Vint.Core.User.Components;
 
@@ -38,21 +39,21 @@ public static class ChatUtils {
     public static async IAsyncEnumerable<IPlayerConnection> GetReceivers(GameServer server, IPlayerConnection from, IEntity chat) {
         switch (chat.TemplateAccessor?.Template) {
             case GeneralChatTemplate: {
-                foreach (IPlayerConnection connection in server.PlayerConnections.Values.Where(conn => conn.IsLoggedIn))
+                foreach (IPlayerConnection connection in server.Connections.Where(conn => conn.IsLoggedIn))
                     yield return connection;
 
                 yield break;
             }
 
             case BattleLobbyChatTemplate: {
-                foreach (IPlayerConnection connection in from.LobbyPlayer!.Lobby.Players.Select(player => player.Connection))
+                foreach (IPlayerConnection connection in from.LobbyPlayer!.Lobby.Humans.Select(player => player.Connection))
                     yield return connection;
 
                 yield break;
             }
 
             case GeneralBattleChatTemplate: {
-                foreach (IPlayerConnection connection in from.LobbyPlayer!.Round!.Players.Select(player => player.Connection))
+                foreach (IPlayerConnection connection in from.LobbyPlayer!.Round!.Humans.Select(player => player.Connection))
                     yield return connection;
 
                 yield break;
@@ -75,7 +76,7 @@ public static class ChatUtils {
             }
 
             case TeamBattleChatTemplate: {
-                foreach (IPlayerConnection connection in from.LobbyPlayer!.Round!.Tankers
+                foreach (IPlayerConnection connection in from.LobbyPlayer!.Round!.HumanTankers
                              .Where(tanker => tanker.TeamColor == from.LobbyPlayer.TeamColor)
                              .Select(tanker => tanker.Connection)) {
                     yield return connection;

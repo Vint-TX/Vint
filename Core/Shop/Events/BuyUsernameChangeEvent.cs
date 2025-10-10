@@ -1,10 +1,11 @@
 using Vint.Core.Config;
+using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Items.Components;
 using Vint.Core.Notification.Events;
 using Vint.Core.Notification.Templates;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
@@ -17,6 +18,11 @@ public class BuyUsernameChangeEvent : IServerEvent {
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         if (!RegexUtils.IsLoginValid(Username)) return;
+
+        await using (DbConnection db = new()) {
+            if (await db.IsUsernameTaken(Username))
+                return;
+        }
 
         IEntity user = connection.UserContainer.Entity;
 

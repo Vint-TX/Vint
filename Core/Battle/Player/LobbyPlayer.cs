@@ -6,7 +6,7 @@ using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Matchmaking.Components;
 using Vint.Core.Matchmaking.Events;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Running = Vint.Core.Battle.Lobby.State.Running;
 
 namespace Vint.Core.Battle.Player;
@@ -36,7 +36,10 @@ public class LobbyPlayer(
     public async Task JoinRound(Round round) {
         await SetReady(false);
 
-        Tanker = new Tanker(round, Connection, Team);
+        Tanker = Connection.IsBot
+            ? new BotTanker(round, Connection, Team)
+            : new HumanTanker(round, Connection, Team);
+
         await Tanker.Init();
 
         foreach (Spectator spectator in round.Spectators)

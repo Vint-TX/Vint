@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog.Events;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Server.Game.Protocol.Codecs.Buffer;

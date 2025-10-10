@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Chat.Commands.Attributes;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Chat.Commands;
 

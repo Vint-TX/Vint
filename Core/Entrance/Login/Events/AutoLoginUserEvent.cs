@@ -6,6 +6,7 @@ using Vint.Core.ECS.Events;
 using Vint.Core.Entrance.ClientSession;
 using Vint.Core.Logging;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Entrance.Login.Events;
@@ -34,7 +35,7 @@ public class AutoLoginUserEvent(
         }
 
         Punishment? ban = await player.GetBanInfo(HardwareFingerprint, ((SocketPlayerConnection)connection).EndPoint.Address.ToString());
-        int connections = server.PlayerConnections.Values.Count(conn => conn.IsLoggedIn && conn.Player.Username == Username);
+        int connections = server.Connections.Count(conn => conn.IsLoggedIn && conn.Player.Username == Username);
 
         if (!player.RememberMe ||
             connections != 0 ||

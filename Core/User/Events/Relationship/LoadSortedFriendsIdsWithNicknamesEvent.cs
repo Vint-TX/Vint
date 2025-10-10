@@ -4,6 +4,7 @@ using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.User.Events.Relationship;
@@ -23,7 +24,7 @@ public class LoadSortedFriendsIdsWithNicknamesEvent(
                 .ToFrozenDictionary();
         }
 
-        FrozenDictionary<long, PlayerStatus> statuses = server.PlayerConnections.Values
+        FrozenDictionary<long, PlayerStatus> statuses = server.Connections
             .Where(conn => conn.IsLoggedIn && friendsUnsorted.ContainsKey(conn.UserContainer.Id))
             .ToFrozenDictionary(
                 conn => conn.UserContainer.Id,

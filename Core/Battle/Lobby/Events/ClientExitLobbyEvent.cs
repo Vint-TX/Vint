@@ -3,7 +3,7 @@ using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Squads;
 

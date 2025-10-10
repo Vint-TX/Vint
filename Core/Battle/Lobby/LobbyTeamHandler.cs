@@ -6,7 +6,7 @@ using Vint.Core.Battle.Mode.Team.Templates;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Lobby;
@@ -24,11 +24,16 @@ public class LobbyTeamHandler(
 
     public FrozenDictionary<TeamColor, IEntity?> ColorToEntity { get; private set; } = null!;
 
-    [MemberNotNullWhen(true, nameof(RedTeam), nameof(BlueTeam), nameof(RedPlayers), nameof(BluePlayers))]
+    [MemberNotNullWhen(true, nameof(RedTeam), nameof(BlueTeam), nameof(RedPlayers), nameof(BluePlayers), nameof(RedHumans), nameof(BlueHumans), nameof(RedBots), nameof(BlueBots))]
     public bool IsTeamLobby => Properties.GetValue(BattleProperty.BattleMode).IsTeamMode();
 
     public IEnumerable<LobbyPlayer>? RedPlayers => IsTeamLobby ? Lobby.Players.Where(player => player.TeamColor == TeamColor.Red) : null;
+    public IEnumerable<LobbyPlayer>? RedHumans => RedPlayers?.Where(player => !player.Connection.IsBot);
+    public IEnumerable<LobbyPlayer>? RedBots => RedPlayers?.Where(player => player.Connection.IsBot);
+
     public IEnumerable<LobbyPlayer>? BluePlayers => IsTeamLobby ? Lobby.Players.Where(player => player.TeamColor == TeamColor.Blue) : null;
+    public IEnumerable<LobbyPlayer>? BlueHumans => BluePlayers?.Where(player => !player.Connection.IsBot);
+    public IEnumerable<LobbyPlayer>? BlueBots => BluePlayers?.Where(player => player.Connection.IsBot);
 
     public void Init() {
         CreateTeams();

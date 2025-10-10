@@ -3,6 +3,7 @@ using Vint.Core.Chat.Components;
 using Vint.Core.Config;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Squads.Components;
 using Vint.Core.Squads.Templates;
 

@@ -4,7 +4,7 @@ using Vint.Core.DailyBonus.Components.Config;
 using Vint.Core.DailyBonus.Components.Config.Cycles;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.User.Components;
 using Vint.Core.Utils;
 

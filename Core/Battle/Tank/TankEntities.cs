@@ -1,14 +1,16 @@
 using System.Collections;
+using Vint.Core.Battle.Autopilot.Components;
 using Vint.Core.Battle.Graffiti.Templates;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Player.User.Templates;
 using Vint.Core.Battle.Tank.Common.Templates;
+using Vint.Core.Battle.Tank.Incarnation.Components;
 using Vint.Core.Battle.Tank.Incarnation.Templates;
 using Vint.Core.Battle.Weapons.Templates;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Items.Templates.Weapons.Market;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Tank;
 
@@ -88,6 +90,10 @@ public class TankEntities : IEnumerable<IEntity>, IDisposable {
             await playerConnection.Unshare(incarnation);
             await playerConnection.Share(Incarnation);
         }
+
+        // We need to add ClientIncarnation component manually if the tank is a bot
+        if (Tank.HasComponent<TankAutopilotComponent>())
+            await Incarnation.AddComponent<TankClientIncarnationComponent>();
 
         incarnation.Dispose();
     }

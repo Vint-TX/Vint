@@ -180,7 +180,7 @@ public class Dead(
     public override async Task Tick(TimeSpan deltaTime) {
         await base.Tick(deltaTime);
 
-        if (!Tank.Tanker.IsPaused && DateTimeOffset.UtcNow >= SpawnTime)
+        if (!Tank.IsPaused && DateTimeOffset.UtcNow >= SpawnTime)
             await StateManager.SetState(new Spawn(StateManager));
     }
 }

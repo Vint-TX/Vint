@@ -1,5 +1,5 @@
 using Vint.Core.Battle.Lobby.Impl;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Chat.Commands.Attributes;
 
@@ -36,9 +36,10 @@ public class RequireConditionsAttribute(
                     ChatCommandConditions.AllInRound => connection.InLobby &&
                                                         connection.LobbyPlayer.Lobby.Players.All(player => player.InRound),
 
-                    ChatCommandConditions.LobbyOwner => connection.InLobby &&
-                                                        connection.LobbyPlayer.Lobby is CustomLobby custom &&
-                                                        custom.Owner == connection,
+                    ChatCommandConditions.LobbyOwner => connection.Player.IsAdmin ||
+                                                        (connection.InLobby &&
+                                                         connection.LobbyPlayer.Lobby is CustomLobby custom &&
+                                                         custom.Owner == connection),
 
                     _ => throw new ArgumentOutOfRangeException()
                 };

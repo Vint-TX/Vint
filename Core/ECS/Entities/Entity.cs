@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using ConcurrentCollections;
 using Serilog;
 using Serilog.Events;
@@ -7,6 +8,7 @@ using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Templates;
 using Vint.Core.Logging;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Commands;
 using Vint.Core.Utils;
 
@@ -84,6 +86,18 @@ public class Entity : IEntity {
     public IComponent GetComponent(Type type) {
         ObjectDisposedException.ThrowIf(Disposed, this);
         return ComponentStorage.GetComponent(type);
+    }
+
+    public bool TryGetComponent<T>([NotNullWhen(true)] out T? component) where T : class, IComponent {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        component = ComponentStorage.GetComponentOrNull(typeof(T)) as T;
+        return component != null;
+    }
+
+    public bool TryGetComponent(Type type, [NotNullWhen(true)] out IComponent? component) {
+        ObjectDisposedException.ThrowIf(Disposed, this);
+        component = ComponentStorage.GetComponentOrNull(type);
+        return component != null;
     }
 
     public Task RemoveComponentIfPresent<T>(IPlayerConnection? excluded = null) where T : class, IComponent =>

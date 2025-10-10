@@ -3,6 +3,7 @@ using Vint.Core.Battle.Weapons.Damage.Calculator;
 using Vint.Core.Battle.Weapons.Damage.Events;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Weapons.Damage.Processor;
 

@@ -6,7 +6,7 @@ using Vint.Core.ECS.Events;
 using Vint.Core.Email;
 using Vint.Core.Server.API;
 using Vint.Core.Server.API.Utils;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
@@ -60,7 +60,7 @@ public class RequestRegisterUserEvent(
         }
 
         if (banned ||
-            await db.Players.AnyAsync(player => player.Username == Username) ||
+            await db.IsUsernameTaken(Username) ||
             await db.Players.CountAsync(player => player.HardwareFingerprint == HardwareFingerprint) >= MaxRegistrationsPerComputer) {
             await connection.Send<RegistrationFailedEvent>();
             return;

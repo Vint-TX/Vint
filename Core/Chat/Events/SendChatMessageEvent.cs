@@ -9,6 +9,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Logging;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Chat.Events;

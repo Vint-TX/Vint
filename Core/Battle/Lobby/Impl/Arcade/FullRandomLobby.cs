@@ -1,3 +1,4 @@
+using Vint.Core.Battle.Autopilot;
 using Vint.Core.Battle.Lobby.Templates;
 using Vint.Core.Battle.Mode;
 using Vint.Core.Battle.Properties;
@@ -10,7 +11,7 @@ using Vint.Core.Utils;
 namespace Vint.Core.Battle.Lobby.Impl.Arcade;
 
 public sealed class FullRandomLobby : ArcadeLobby {
-    public FullRandomLobby(MapInfo mapInfo, BattleMode battleMode, QuestManager questManager) : base(questManager) {
+    public FullRandomLobby(MapInfo mapInfo, BattleMode battleMode, QuestManager questManager, BotBuilder botBuilder) : base(questManager, botBuilder) {
         ClientBattleParams clientParams = new(battleMode, GetRandomGravity(), mapInfo.Id, GetRandomBool(), GetRandomBool(), false, GetRandomMaxPlayers(), GetRandomTimer());
         Properties = new BattleProperties(BattleType.Arcade, clientParams);
         Entity = new MatchMakingLobbyTemplate().Create(Properties);

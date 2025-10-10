@@ -101,7 +101,7 @@ public class IceTrapEffect(
                     await ForceDeactivate();
             });
 
-        await Round.Players.Send<MineDropEvent>(Entity);
+        await Round.Humans.Send<MineDropEvent>(Entity);
         CanBeDeactivated = false;
     }
 
@@ -126,7 +126,7 @@ public class IceTrapEffect(
         if (!WaitingForExplosion || !IsActive)
             return;
 
-        await Round.Players.Send<MineExplosionEvent>(Entity);
+        await Round.Humans.Send<MineExplosionEvent>(Entity);
         await ForceDeactivate();
     }
 }

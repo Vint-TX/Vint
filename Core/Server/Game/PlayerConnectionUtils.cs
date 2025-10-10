@@ -1,6 +1,7 @@
 using Vint.Core.Battle.Player;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Commands;
 
 namespace Vint.Core.Server.Game;

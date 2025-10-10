@@ -2,7 +2,8 @@
 using EmbedIO;
 using EmbedIO.WebSockets;
 using Serilog.Core;
-using Vint.Core.Server.Game;
+using Vint.Core.Database.Models;
+using Vint.Core.Server.Game.Connection;
 using ILogger = Serilog.ILogger;
 
 namespace Vint.Core.Logging;
@@ -40,4 +41,7 @@ public static class LoggerUtils {
         logger
             .WithEndPoint(player.EndPoint)
             .ForContext("Username", player.Player?.Username);
+
+    public static ILogger WithPlayer(this ILogger logger, Player player) =>
+        logger.ForContext("Username", player.Username);
 }

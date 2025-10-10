@@ -1,4 +1,5 @@
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Player.User.Components;
 using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.Battle.Tank.State;
 using Vint.Core.StateMachine;
@@ -81,7 +82,7 @@ public class WarmUp(
     }
 
     async Task SpawnTanks() {
-        foreach (Tanker tanker in Round.Tankers) {
+        foreach (Tanker tanker in Round.Tankers.Where(tanker => tanker.Tank.Entities.BattleUser.HasComponent<UserReadyToBattleComponent>())) {
             TankStateManager stateManager = tanker.Tank.StateManager;
             await stateManager.SetState(new Spawn(stateManager));
         }

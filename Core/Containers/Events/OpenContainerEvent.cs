@@ -6,6 +6,7 @@ using Vint.Core.Items.Components;
 using Vint.Core.Items.Events;
 using Vint.Core.Notification.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 

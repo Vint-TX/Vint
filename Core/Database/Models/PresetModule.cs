@@ -3,7 +3,7 @@ using Vint.Core.Battle.Modules.Common;
 using Vint.Core.Battle.Modules.Common.Components.Slot;
 using Vint.Core.Battle.Modules.Common.Templates;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Database.Models;
 

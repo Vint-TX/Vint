@@ -3,6 +3,7 @@ using System.Numerics;
 using BepuPhysics;
 using BepuPhysics.Collidables;
 using BepuUtilities.Memory;
+using Serilog;
 using Vint.Core.Battle.Bonus;
 using Vint.Core.Battle.Chat.Templates;
 using Vint.Core.Battle.Mines;
@@ -18,9 +19,11 @@ using Vint.Core.Battle.Weapons.Damage.Calculator;
 using Vint.Core.Battle.Weapons.Damage.Processor;
 using Vint.Core.Config.MapInformation;
 using Vint.Core.ECS.Entities;
+using Vint.Core.Logging;
 using Vint.Core.Physics;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Rounds;
 
@@ -52,13 +55,15 @@ public class Round : IDisposable {
             : new ZeroDamageCalculator();
     }
 
-    public BattleProperties Properties { get; }
-
+    ILogger Logger { get; } = Log.Logger.ForType<Round>();
     ConcurrentDictionary<Guid, BattlePlayer> PlayersDict { get; } = [];
 
     public ICollection<BattlePlayer> Players => PlayersDict.Values;
-    public IEnumerable<Tanker> Tankers => Players.OfType<Tanker>();
+    public IEnumerable<BattlePlayer> Humans => Players.Where(player => !player.Connection.IsBot);
     public IEnumerable<Spectator> Spectators => Players.OfType<Spectator>();
+    public IEnumerable<Tanker> Tankers => Players.OfType<Tanker>();
+    public IEnumerable<HumanTanker> HumanTankers => Players.OfType<HumanTanker>();
+    public IEnumerable<BotTanker> BotTankers => Players.OfType<BotTanker>();
 
     public DateTimeOffset StartTime { get; }
     public DateTimeOffset EndTime { get; }
@@ -73,6 +78,7 @@ public class Round : IDisposable {
     public RoundStateManager StateManager { get; }
     public Simulation Simulation { get; }
 
+    public BattleProperties Properties { get; }
     public ModeHandler ModeHandler { get; }
 
     public IEntity Entity { get; }
@@ -161,14 +167,20 @@ public class Round : IDisposable {
         await ModeHandler.PrePlayerExit(tanker);
         await RemovePlayerCommon(tanker);
 
-        int count = Tankers.Count();
+        int tankers = Tankers.Count();
+        int humans = HumanTankers.Count();
 
-        BonusProcessor?.GoldProcessor.PlayersCountChanged(count);
+        BonusProcessor?.GoldProcessor.PlayersCountChanged(tankers);
+
+        if (tanker is HumanTanker human) {
+            foreach (BotTanker bot in BotTankers)
+                await bot.OnHumanLeave(human);
+        }
+
         await ModeHandler.PostPlayerExit(tanker);
-
         await TankerRemoved(tanker);
 
-        if (count <= 0)
+        if (humans <= 0)
             await End();
     }
 
@@ -205,8 +217,13 @@ public class Round : IDisposable {
         if (BonusProcessor != null)
             await BonusProcessor.Tick(deltaTime);
 
-        foreach (BattlePlayer player in Players)
-            await player.Tick(deltaTime, cancellationToken);
+        foreach (BattlePlayer player in Players) {
+            try {
+                await player.Tick(deltaTime, cancellationToken);
+            } catch (Exception e) {
+                Logger.Error(e, "Error while ticking BattlePlayer {PlayerId} in round {RoundId}", player.Id, Entity.Id);
+            }
+        }
     }
 
     static Simulation CreateSimulation(MapInfo mapInfo) {
@@ -256,3 +273,5 @@ public class Round : IDisposable {
 public delegate Task RoundEnded();
 
 public delegate Task TankerRemoved(Tanker tanker);
+
+public delegate Task TankerAdded(Tanker tanker);

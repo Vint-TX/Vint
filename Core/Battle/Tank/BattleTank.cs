@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using ConcurrentCollections;
 using LinqToDB;
@@ -17,6 +18,7 @@ using Vint.Core.Battle.Modules.Common.Templates;
 using Vint.Core.Battle.Modules.Impl.Base;
 using Vint.Core.Battle.Modules.Interfaces;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Player.Config;
 using Vint.Core.Battle.Player.Score.Events;
 using Vint.Core.Battle.Player.Score.Events.Visual;
 using Vint.Core.Battle.Player.User.Events;
@@ -42,6 +44,7 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Utils;
 using HealthComponent = Vint.Core.Battle.Tank.Parameters.Components.HealthComponent;
 using SpeedComponent = Vint.Core.Battle.Tank.Parameters.Components.SpeedComponent;
@@ -107,8 +110,6 @@ public class BattleTank : IDisposable {
     public Vector3 Position { get; set; }
     public Quaternion Orientation { get; set; }
 
-    public DateTimeOffset? SelfDestructTime { get; set; }
-
     public SpawnPoint PreviousSpawnPoint { get; private set; }
     public SpawnPoint SpawnPoint { get; private set; }
 
@@ -118,8 +119,36 @@ public class BattleTank : IDisposable {
     public TankStateManager StateManager { get; set; }
     public TankEntities Entities { get; }
 
+    [MemberNotNullWhen(true, nameof(KickTime))]
+    public bool IsPaused {
+        get;
+        set {
+            field = value;
+
+            if (field) KickTime = DateTimeOffset.UtcNow.AddSeconds(IdleKickConfig.IdleKickTimeSec);
+            else KickTime = null;
+        }
+    }
+
+    public bool IsSelfDestructing {
+        get;
+        set {
+            field = value;
+
+            if (field) SelfDestructTime = DateTimeOffset.UtcNow.AddSeconds(SelfDestructionConfig.SuicideDurationTime);
+            else SelfDestructTime = null;
+        }
+    }
+
+    public DateTimeOffset? KickTime { get; private set; }
+    public DateTimeOffset? SelfDestructTime { get; private set; }
+
+    IdleKickConfigComponent IdleKickConfig { get; } = ConfigManager.GetComponent<IdleKickConfigComponent>("battle/battleuser");
+    SelfDestructionConfigComponent SelfDestructionConfig { get; } = ConfigManager.GetComponent<SelfDestructionConfigComponent>("battle/battleuser");
+
     public async Task Tick(TimeSpan deltaTime, CancellationToken cancellationToken) {
-        if (Tanker.IsPaused && DateTimeOffset.UtcNow > Tanker.KickTime) {
+        if (IsPaused && DateTimeOffset.UtcNow > KickTime) {
+            IsPaused = false;
             await Tanker.Send<KickFromBattleEvent>(Tanker.BattleUser);
             await Round.RemoveTanker(Tanker);
             return;
@@ -162,7 +191,7 @@ public class BattleTank : IDisposable {
 
         if (Entities.Tank.HasComponent<SelfDestructionComponent>()) {
             await Entities.Tank.RemoveComponent<SelfDestructionComponent>();
-            SelfDestructTime = null;
+            IsSelfDestructing = false;
         }
 
         await Entities.Tank.RemoveComponentIfPresent<TankMovableComponent>();
@@ -187,7 +216,7 @@ public class BattleTank : IDisposable {
 
         if (Entities.Tank.HasComponent<SelfDestructionComponent>()) {
             await Entities.Tank.RemoveComponent<SelfDestructionComponent>();
-            SelfDestructTime = null;
+            IsSelfDestructing = false;
         }
 
         await StateManager.CurrentState.ForceRemoveStateComponent();
@@ -226,7 +255,7 @@ public class BattleTank : IDisposable {
         foreach (Effect effect in Effects)
             await effect.DeactivateByEMP();
 
-        await Round.Players.Send<EMPEffectReadyEvent>(Entities.Tank);
+        await Round.Humans.Send<EMPEffectReadyEvent>(Entities.Tank);
     }
 
     public async Task SetHealth(float health) {
@@ -234,7 +263,7 @@ public class BattleTank : IDisposable {
         Health = Math.Clamp(health, 0, MaxHealth);
         await Entities.Tank.ChangeComponent<HealthComponent>(component => component.CurrentHealth = MathF.Ceiling(Health));
 
-        await Round.Players.Send<HealthChangedEvent>(Entities.Tank);
+        await Round.Humans.Send<HealthChangedEvent>(Entities.Tank);
 
         foreach (IHealthModule healthModule in Modules.OfType<IHealthModule>())
             await healthModule.OnHealthChanged(before, Health, MaxHealth);
@@ -288,7 +317,7 @@ public class BattleTank : IDisposable {
             .ToDictionary();
 
         await SelfKill();
-        await Round.Players.Send(new KillEvent(weapon, Entities.Tank), killer.Tanker.BattleUser);
+        await Round.Humans.Send(new KillEvent(weapon, Entities.Tank), killer.Tanker.BattleUser);
 
         await killer.TryTerminateKillStreak(this); // maybe change execution order
         await killer.AddKills(1);
@@ -362,9 +391,9 @@ public class BattleTank : IDisposable {
 
     public async Task SelfDestruct() {
         await SelfKill();
-        SelfDestructTime = null;
+        IsSelfDestructing = false;
 
-        await Round.Players.Send<SelfDestructionBattleUserEvent>(Tanker.BattleUser);
+        await Round.Humans.Send<SelfDestructionBattleUserEvent>(Tanker.BattleUser);
 
         await AddKills(-1);
         await AddScore(-10);
@@ -427,7 +456,7 @@ public class BattleTank : IDisposable {
     }
 
     public async Task CommitStatistics() {
-        await Round.Players.Send<RoundUserStatisticsUpdatedEvent>(Entities.RoundUser);
+        await Round.Humans.Send<RoundUserStatisticsUpdatedEvent>(Entities.RoundUser);
         await Round.ModeHandler.SortAllPlayers();
     }
 
@@ -444,7 +473,7 @@ public class BattleTank : IDisposable {
         await Tanker.Send(new VisualScoreStreakEvent(Tanker.GetScoreWithBonus(score)), Entities.BattleUser);
 
         if (killStreak < 5 || killStreak % 5 == 0)
-            await Round.Players.Send(new KillStreakEvent(score), Entities.Incarnation);
+            await Round.Humans.Send(new KillStreakEvent(score), Entities.Incarnation);
     }
 
     async Task TryTerminateKillStreak(BattleTank target) {
@@ -458,7 +487,7 @@ public class BattleTank : IDisposable {
     public async Task ResetStatistics() {
         Statistics.Reset();
         await Entities.RoundUser.ChangeComponent(new RoundUserStatisticsComponent());
-        await Round.Players.Send<RoundUserStatisticsUpdatedEvent>(Entities.RoundUser);
+        await Round.Humans.Send<RoundUserStatisticsUpdatedEvent>(Entities.RoundUser);
     }
 
     public void CreateUserResult() =>
@@ -488,13 +517,15 @@ public class BattleTank : IDisposable {
             Modules.Add(module);
         }
 
-        IEntity goldModuleEntity = GlobalEntities.GetEntity("modules", "Gold");
-        IEntity goldSlotEntity = connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is SlotUserItemTemplate &&
-                                                                            entity.GetComponent<SlotUserItemInfoComponent>().Slot == Slot.Slot7);
+        if (Tanker is not BotTanker) {
+            IEntity goldModuleEntity = GlobalEntities.GetEntity("modules", "Gold");
+            IEntity goldSlotEntity = connection.SharedEntities.Single(entity => entity.TemplateAccessor?.Template is SlotUserItemTemplate &&
+                                                                                entity.GetComponent<SlotUserItemInfoComponent>().Slot == Slot.Slot7);
 
-        BattleModule gold = ModuleRegistry.Get(goldModuleEntity.Id);
-        await gold.Init(this, goldSlotEntity, goldModuleEntity);
-        Modules.Add(gold);
+            BattleModule gold = ModuleRegistry.Get(goldModuleEntity.Id);
+            await gold.Init(this, goldSlotEntity, goldModuleEntity);
+            Modules.Add(gold);
+        }
     }
 
     public override int GetHashCode() => Tanker.GetHashCode();

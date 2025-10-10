@@ -31,6 +31,7 @@ namespace Vint.Core.Config;
 public static class ConfigManager {
     public static ServerConfig ServerConfig { get; private set; } = null!;
     public static FrozenSet<MapInfo> MapInfos { get; private set; } = null!;
+    public static FrozenSet<string> BotNicknames { get; private set; } = null!;
     public static FrozenDictionary<string, BlueprintChest> Blueprints { get; private set; } = null!;
     public static FrozenDictionary<string, Regex> CensorshipRegexes { get; private set; } = null!;
     public static ModulePrices ModulePrices { get; private set; }
@@ -351,6 +352,9 @@ public static class ConfigManager {
         Blueprints =
             JsonConvert.DeserializeObject<Dictionary<string, BlueprintChest>>(
                 await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "blueprints.json")))!.ToFrozenDictionary();
+
+        BotNicknames = JsonConvert.DeserializeObject<HashSet<string>>(await File.ReadAllTextAsync(Path.Combine(ResourcesPath, "botNicknames.json")))!
+            .ToFrozenSet();
 
         Logger.Information("Configs initialized");
     }

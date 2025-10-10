@@ -6,7 +6,7 @@ using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Items.Components;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Battle.Modules.Common.Events;
@@ -33,8 +33,8 @@ public class ModuleMountEvent : IServerEvent {
         await using (DbConnection db = new()) {
             PresetModule? presetModule = await db.PresetModules
                 .FirstOrDefaultAsync(pModule => pModule.PlayerId == player.Id &&
-                                                 pModule.PresetIndex == player.CurrentPresetIndex &&
-                                                 pModule.Slot == slot);
+                                                pModule.PresetIndex == player.CurrentPresetIndex &&
+                                                pModule.Slot == slot);
 
             presetModule ??= new PresetModule { Player = player, Preset = player.CurrentPreset, Slot = slot };
             presetModule.Entity = connection.GetEntity(marketItemId)!;

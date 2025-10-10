@@ -6,7 +6,7 @@ using Vint.Core.Battle.Rounds.Components;
 using Vint.Core.Battle.Tank;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.User.Components;
 
@@ -50,8 +50,7 @@ public class UserResult {
         UnfairMatching = round.IsUnfair();
         League = player.LeagueEntity;
 
-        Modules = preset
-            .Modules
+        Modules = preset.Modules
             .Select(pModule => new ModuleInfo {
                 ModuleId = pModule.Entity.Id,
                 UpgradeLevel = pModule.Entity

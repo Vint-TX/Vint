@@ -6,7 +6,7 @@ using Vint.Core.Battle.Tank;
 using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Chat;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Modules.Impl;
 

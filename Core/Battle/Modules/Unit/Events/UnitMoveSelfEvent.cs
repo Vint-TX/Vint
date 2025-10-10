@@ -5,6 +5,7 @@ using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Battle.Modules.Unit.Events;
@@ -28,7 +29,7 @@ public class UnitMoveSelfEvent : UnitMoveEvent, IServerEvent {
         if (tank.Effects.All(effect => effect.Entity != unit))
             return;
 
-        await round.Players
+        await round.Humans
             .Where(player => player != tanker)
             .Send(new UnitMoveRemoteEvent(UnitMove), unit);
 

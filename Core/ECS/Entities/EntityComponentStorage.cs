@@ -52,19 +52,16 @@ public class EntityComponentStorage : IDisposable {
     public IComponent GetComponent(Type componentType) {
         ObjectDisposedException.ThrowIf(_disposed, this);
 
-        return TypeToComponent.TryGetValue(componentType, out ComponentWithIndex componentWithIndex)
-            ? componentWithIndex.Component
-            : throw new ComponentNotFoundException(Entity, componentType);
+        return GetComponentOrNull(componentType) ??
+               throw new ComponentNotFoundException(Entity, componentType);
     }
 
     public IComponent? GetComponentOrNull(Type componentType) {
         ObjectDisposedException.ThrowIf(_disposed, this);
 
-        try {
-            return GetComponent(componentType);
-        } catch (ComponentNotFoundException) {
-            return null;
-        }
+        return TypeToComponent.TryGetValue(componentType, out ComponentWithIndex componentWithIndex)
+            ? componentWithIndex.Component
+            : null;
     }
 
     public void ChangeComponent(IComponent component) {

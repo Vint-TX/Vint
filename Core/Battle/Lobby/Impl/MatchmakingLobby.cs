@@ -1,16 +1,22 @@
+using Vint.Core.Battle.Autopilot;
 using Vint.Core.Battle.Common.Components;
 using Vint.Core.Battle.Lobby.State;
 using Vint.Core.Battle.Player;
+using Vint.Core.Battle.Properties;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Matchmaking.Components;
 using Vint.Core.Quests;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Lobby.Impl;
 
 public abstract class MatchmakingLobby(
-    QuestManager questManager
-) : LobbyBase(questManager) {
+    QuestManager questManager,
+    BotBuilder botBuilder
+) : LobbyBase(questManager, botBuilder) {
+    const double FillWithBotsScaleFactor = 0.75;
+    int FillWithBotsThreshold => (int)Math.Floor(Properties.GetValue(BattleProperty.MaxPlayers) * Math.Pow(FillWithBotsScaleFactor, 2));
+
     public override async Task Start() {
         if (StateManager.CurrentState is not Countdown)
             return;
@@ -22,7 +28,7 @@ public abstract class MatchmakingLobby(
 
         await StateManager.SetState(new Running(StateManager, Round));
 
-        foreach (LobbyPlayer player in Players) {
+        foreach (LobbyPlayer player in Players.OrderBy(player => player.Connection.IsBot)) { // players are added before bots
             await player.SetRoundJoinTime(DateTimeOffset.UtcNow);
             await Round.AddTanker(player);
         }
@@ -33,6 +39,9 @@ public abstract class MatchmakingLobby(
         IEntity user = connection.UserContainer.Entity;
 
         await user.AddComponent<MatchMakingUserComponent>();
+
+        if (!connection.IsBot)
+            await UpdateBotsFilling();
 
         if (StateManager.CurrentState is Awaiting && CanStartOrKeepCountdown()) {
             DateTimeOffset startTime = DateTimeOffset.UtcNow.AddSeconds(20);
@@ -50,6 +59,9 @@ public abstract class MatchmakingLobby(
         IEntity user = connection.UserContainer.Entity;
 
         await user.RemoveComponent<MatchMakingUserComponent>();
+
+        if (!connection.IsBot)
+            await UpdateBotsFilling();
 
         if (StateManager.CurrentState is Countdown && !CanStartOrKeepCountdown()) {
             await StateManager.SetState(new Awaiting(StateManager));
@@ -90,5 +102,68 @@ public abstract class MatchmakingLobby(
         await base.Tick(deltaTime, cancellationToken);
     }
 
-    protected virtual bool CanStartOrKeepCountdown() => Players.Count > 0;
+    protected virtual bool CanStartOrKeepCountdown() => Humans.Any();
+
+    async Task UpdateBotsFilling() {
+        try {
+            if (StateManager.CurrentState is Ended or Running { Round.Remaining.TotalMinutes: <= 2 })
+                return;
+
+            int humanCount = Humans.Count();
+
+            if (humanCount < FillWithBotsThreshold) {
+                await FillLobbyWithBots(humanCount);
+            } else if (TeamHandler.IsTeamLobby) {
+                await BalanceTeamBots();
+            } else {
+                await RemoveAllBots();
+            }
+        } catch (Exception e) {
+            Logger.Error(e, "Error while updating bots filling");
+        }
+    }
+
+    async Task FillLobbyWithBots(int humanCount) {
+        int maxPlayers = Properties.GetValue(BattleProperty.MaxPlayers);
+        int targetBotCount = maxPlayers - humanCount;
+        int currentBotCount = Bots.Count();
+        int botsToAdd = Math.Max(0, targetBotCount - currentBotCount);
+
+        for (int i = 0; i < botsToAdd; i++) {
+            await AddBot();
+        }
+    }
+
+    async Task BalanceTeamBots() {
+        List<LobbyPlayer> redPlayers = TeamHandler.RedPlayers!.ToList();
+        List<LobbyPlayer> bluePlayers = TeamHandler.BluePlayers!.ToList();
+
+        int redHumans = redPlayers.Count(p => !p.Connection.IsBot);
+        int blueHumans = bluePlayers.Count(p => !p.Connection.IsBot);
+
+        if (redHumans == blueHumans) {
+            await RemoveAllBots();
+        } else if (redHumans > blueHumans) {
+            await BalanceTeams(redPlayers, bluePlayers, redHumans - blueHumans);
+        } else {
+            await BalanceTeams(bluePlayers, redPlayers, blueHumans - redHumans);
+        }
+    }
+
+    async Task BalanceTeams(IEnumerable<LobbyPlayer> strongerTeam, IEnumerable<LobbyPlayer> weakerTeam, int humanDifference) {
+        // Remove all bots from the stronger team
+        await RemoveBots(strongerTeam.Where(p => p.Connection.IsBot));
+
+        // Balance the weaker team
+        List<LobbyPlayer> weakerTeamBots = weakerTeam.Where(p => p.Connection.IsBot).ToList();
+        int currentWeakerTeamBots = weakerTeamBots.Count;
+
+        if (currentWeakerTeamBots < humanDifference) {
+            await AddBots(humanDifference - currentWeakerTeamBots);
+        } else if (currentWeakerTeamBots > humanDifference) {
+            int botsToRemove = currentWeakerTeamBots - humanDifference;
+            IEnumerable<LobbyPlayer> prioritizedWeakerTeamBots = GetPrioritizedBots(weakerTeamBots);
+            await RemoveBots(prioritizedWeakerTeamBots.Take(botsToRemove));
+        }
+    }
 }

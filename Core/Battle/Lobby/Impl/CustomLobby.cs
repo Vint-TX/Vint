@@ -1,3 +1,4 @@
+using Vint.Core.Battle.Autopilot;
 using Vint.Core.Battle.Common.Components;
 using Vint.Core.Battle.Lobby.Components;
 using Vint.Core.Battle.Lobby.State;
@@ -10,7 +11,7 @@ using Vint.Core.Battle.Properties.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Maps.Components;
 using Vint.Core.Quests;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.User.Components;
 using Vint.Core.Utils;
 
@@ -19,33 +20,40 @@ namespace Vint.Core.Battle.Lobby.Impl;
 public sealed class CustomLobby(
     BattleProperties properties,
     IPlayerConnection owner,
-    QuestManager questManager
-) : LobbyBase(questManager) {
+    QuestManager questManager,
+    BotBuilder botBuilder
+) : LobbyBase(questManager, botBuilder) {
     public IPlayerConnection Owner { get; private set; } = owner;
     public bool IsOpened { get; private set; }
 
     public override BattleProperties Properties { get; protected set; } = properties;
     public override IEntity Entity { get; } = new CustomBattleLobbyTemplate().Create(properties, owner);
 
-    protected override Task PlayerJoined(LobbyPlayer player) => Task.CompletedTask;
+    protected override async Task PlayerJoined(LobbyPlayer player) {
+        if (player.Connection.IsBot && StateManager.CurrentState is Running running)
+            await running.Round.AddTanker(player);
+    }
 
     protected override async Task PlayerExited(LobbyPlayer player) {
         if (player.Connection != Owner) return;
 
-        LobbyPlayer? newOwner = Players
-            .ToList()
-            .Shuffle()
-            .FirstOrDefault();
+        List<LobbyPlayer> humans = Humans.ToList();
+        if (humans.Count == 0) return;
 
-        if (newOwner == null) return;
-
-        await ChangeOwner(newOwner.Connection);
+        await ChangeOwner(humans.RandomElement().Connection);
     }
 
-    protected override Task RemovedFromRound(Tanker tanker) {
+    protected override async Task RemovedFromRound(Tanker tanker) {
         LobbyPlayer lobbyPlayer = tanker.Connection.LobbyPlayer!;
         lobbyPlayer.DisposeTanker();
-        return Task.CompletedTask;
+
+        if (tanker is not HumanTanker ||
+            StateManager.CurrentState is not Running running ||
+            running.Round.HumanTankers.Any())
+            return;
+
+        foreach (BotTanker botTanker in running.Round.BotTankers)
+            await running.Round.RemoveTanker(botTanker);
     }
 
     public override async Task PlayerReady(LobbyPlayer player) =>
@@ -81,7 +89,7 @@ public sealed class CustomLobby(
 
         await StateManager.SetState(new Running(StateManager, Round));
 
-        foreach (LobbyPlayer player in Players) {
+        foreach (LobbyPlayer player in Players.OrderBy(player => player.Connection.IsBot)) { // players are added before bots
             await player.SetRoundJoinTime(DateTimeOffset.UtcNow);
             await Round.AddTanker(player);
         }

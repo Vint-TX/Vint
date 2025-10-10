@@ -11,12 +11,17 @@ using Vint.Core.Items.Templates.Graffiti;
 using Vint.Core.Items.Templates.Hulls;
 using Vint.Core.Items.Templates.Skins;
 using Vint.Core.Items.Templates.Weapons.Market;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.User.Components;
 
 namespace Vint.Core.Utils;
 
 public static class Leveling {
+    public static int MaxExperience { get; } = ConfigManager
+        .GetComponent<RanksExperiencesConfigComponent>("ranksconfig")
+        .RanksExperiences
+        .Max();
+
     public static int GetRank(long xp) {
         List<int> xpPerRank = ConfigManager
             .GetComponent<RanksExperiencesConfigComponent>("ranksconfig")

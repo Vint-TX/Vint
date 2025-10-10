@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.User.Templates;
 
 namespace Vint.Core.User;
@@ -22,7 +22,9 @@ public static class UserRegistry {
 public class UserContainer(
     long id,
     Player player
-) {
+) : IDisposable {
+    bool _disposed;
+
     Lazy<IEntity> EntityLazy { get; } = new(() => new UserTemplate().Create(player), LazyThreadSafetyMode.ExecutionAndPublication);
     ConcurrentDictionary<IPlayerConnection, uint> ConnectionToShareCount { get; } = [];
 
@@ -30,6 +32,8 @@ public class UserContainer(
     public IEntity Entity => EntityLazy.Value;
 
     public async Task ShareTo(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
         uint newCount = ConnectionToShareCount.AddOrUpdate(connection, 1, (_, count) => checked(count + 1));
 
         if (newCount > 1) return;
@@ -38,6 +42,8 @@ public class UserContainer(
     }
 
     public async Task UnshareFrom(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
         uint newCount = ConnectionToShareCount.AddOrUpdate(connection, _ => throw new KeyNotFoundException(), (_, count) => checked(count - 1));
 
         if (newCount != 0) return;
@@ -46,7 +52,22 @@ public class UserContainer(
     }
 
     public async Task RemoveConnection(IPlayerConnection connection) {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
         if (ConnectionToShareCount.TryRemove(connection, out uint count) && count > 0)
             await connection.Unshare(Entity);
     }
+
+    public void Dispose() {
+        if (_disposed) return;
+        _disposed = true;
+
+        if (EntityLazy.IsValueCreated)
+            Entity.Dispose();
+
+        ConnectionToShareCount.Clear();
+        GC.SuppressFinalize(this);
+    }
+
+    ~UserContainer() => Dispose();
 }

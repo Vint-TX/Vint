@@ -1,4 +1,6 @@
-﻿namespace Vint.Core.Server.Game.Protocol.Commands;
+﻿using Vint.Core.Server.Game.Connection;
+
+namespace Vint.Core.Server.Game.Protocol.Commands;
 
 public interface ICommand;
 

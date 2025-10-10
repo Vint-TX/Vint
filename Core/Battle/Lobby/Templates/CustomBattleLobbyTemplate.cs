@@ -2,7 +2,7 @@ using Vint.Core.Battle.Lobby.Components;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Properties.Components;
 using Vint.Core.ECS.Entities;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.User.Components;
 

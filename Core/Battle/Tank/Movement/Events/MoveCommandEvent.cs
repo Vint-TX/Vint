@@ -1,12 +1,15 @@
 using System.Numerics;
+using Vint.Core.Battle.Autopilot.Components;
 using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Battle.Rounds;
+using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Battle.Tank.Movement.Components;
 using Vint.Core.Battle.Tank.State;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 using Vint.Core.Utils;
 
@@ -17,17 +20,29 @@ public class MoveCommandEvent : IServerEvent {
     public MoveCommand MoveCommand { get; private set; }
 
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
-        Tanker? tanker = connection.LobbyPlayer?.Tanker;
-        Round round = tanker?.Round!;
+        IEntity tankEntity = entities.Single();
 
-        if (tanker == null)
+        if (!tankEntity.HasComponent<TankComponent>() ||
+            connection.LobbyPlayer?.Tanker is not HumanTanker human)
             return;
 
-        BattleTank tank = tanker.Tank;
-        IEntity tankEntity = tank.Entities.Tank;
+        BotTanker? bot = null;
 
-        await round.Players
-            .Where(player => player != tanker)
+        if (!tankEntity.TryGetComponent(out TankAutopilotComponent? autopilotComponent)) {
+            if (tankEntity != human.Tank.Entities.Tank)
+                return;
+        } else if (!human.ControlledBots.TryGetValue(autopilotComponent.Id, out bot))
+            return;
+
+        Round round = human.Round;
+        BattleTank tank = bot?.Tank ?? human.Tank;
+
+        if (!MoveCommand.Movement.HasValue ||
+            tank.StateManager.CurrentState is Dead)
+            return;
+
+        await round.Humans
+            .Where(player => player != human)
             .Send(new MoveCommandServerEvent(MoveCommand), tankEntity);
 
         await tankEntity.ChangeComponent<TankMovementComponent>(component => {
@@ -47,10 +62,6 @@ public class MoveCommandEvent : IServerEvent {
             if (MoveCommand.WeaponRotationControl.HasValue)
                 component.WeaponControl = MoveCommand.WeaponRotationControl.Value;
         });
-
-        if (!MoveCommand.Movement.HasValue ||
-            tank.StateManager.CurrentState is Dead)
-            return;
 
         Movement movement = MoveCommand.Movement.Value;
 

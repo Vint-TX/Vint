@@ -1,8 +1,9 @@
 using System.Text;
+using JetBrains.Annotations;
 
 namespace Vint.Core.Chat.Commands.Attributes;
 
-[AttributeUsage(AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Method), MeansImplicitUse(ImplicitUseKindFlags.Access)]
 public sealed class ChatCommandAttribute(
     string name,
     string description = ""

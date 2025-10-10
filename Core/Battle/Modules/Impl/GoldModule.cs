@@ -8,7 +8,7 @@ using Vint.Core.Battle.Tank;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Items.Components;
 using Vint.Core.Items.Events;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Modules.Impl;
 

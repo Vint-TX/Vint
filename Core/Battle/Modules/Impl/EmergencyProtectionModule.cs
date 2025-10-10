@@ -57,7 +57,7 @@ public class EmergencyProtectionModule : TriggerBattleModule, IHealthModule, ITe
         await Round.DamageProcessor.Heal(Tank, CalculatedHeal);
         Tank.TemperatureProcessor.EnqueueAssist(temperatureAssist);
 
-        await Round.Players.Send<TriggerEffectExecuteEvent>(effectEntity);
+        await Round.Humans.Send<TriggerEffectExecuteEvent>(effectEntity);
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

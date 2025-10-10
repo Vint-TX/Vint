@@ -58,7 +58,7 @@ public class UserModule(
 
     [ChatCommand("players", "Show online players count")]
     public async Task Players(ChatCommandContext ctx) =>
-        await ctx.SendPrivateResponse($"{server.PlayerConnections.Count} players online");
+        await ctx.SendPrivateResponse($"{server.Connections.Count()} players online");
 
     [ChatCommand("battles", "Show current battles count")]
     public async Task Battles(ChatCommandContext ctx) {

@@ -6,7 +6,7 @@ using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Properties;
 using Vint.Core.Config;
 using Vint.Core.Config.MapInformation;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Squads;
 using Vint.Core.Utils;
 
@@ -50,12 +50,12 @@ public class ArcadeMatchmakingProcessor( // todo matchmaking system
             .Where(lobby => lobby.ArcadeType == modeType);
 
     static bool FilterLobbies(ArcadeLobby lobby) =>
-        lobby.Players.Count < lobby.Properties.GetValue(BattleProperty.MaxPlayers) &&
+        lobby.Humans.Count() < lobby.Properties.GetValue(BattleProperty.MaxPlayers) &&
         lobby.StateManager.CurrentState is not Ended &&
         lobby.StateManager.CurrentState is not Running { Round.Remaining.TotalMinutes: <= 2 };
 
     static bool FilterForSquad(ArcadeLobby lobby, Squad squad) =>
-        lobby.Players.Count + squad.Members.Count < lobby.Properties.GetValue(BattleProperty.MaxPlayers);
+        lobby.Humans.Count() + squad.Members.Count < lobby.Properties.GetValue(BattleProperty.MaxPlayers);
 
     static MapInfo GetRandomMapInfo() => ConfigManager.MapInfos.Where(mapInfo => mapInfo.Matchmaking).ToArray().RandomElement();
 

@@ -10,6 +10,7 @@ using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Chat.Commands.Modules;
@@ -26,7 +27,7 @@ public class AdminModule(
         [WaitingForText, Option("reason", "Reason for ban", true)] string? reason = null) {
         _ = TimeSpanUtils.TryParseDuration(rawDuration, out TimeSpan? duration);
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.Connections
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -85,7 +86,7 @@ public class AdminModule(
 
     [ChatCommand("unban", "Remove ban from player")]
     public async Task UnBan(ChatCommandContext ctx, [Option("username", "Username of player to unban")] string username) {
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.Connections
             .Where(conn => conn.IsLoggedIn)
             .SingleOrDefault(conn => conn.Player.Username == username);
 
@@ -171,7 +172,7 @@ public class AdminModule(
     [ChatCommand("usernames", "Online player usernames")]
     public async Task Usernames(ChatCommandContext ctx) {
         StringBuilder builder = new();
-        List<IPlayerConnection> connections = server.PlayerConnections.Values.ToList();
+        List<IPlayerConnection> connections = server.Connections.ToList();
 
         List<string> onlineUsernames = connections
             .Where(connection => connection.IsLoggedIn)
@@ -210,9 +211,7 @@ public class AdminModule(
 
     [ChatCommand("tps", "Show TPS")]
     public async Task TPS(ChatCommandContext ctx) {
-        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>()
-            .DeltaTime;
-
+        TimeSpan deltaTime = ctx.ServiceProvider.GetRequiredService<GameServer>().DeltaTime;
         await ctx.SendPrivateResponse($"{1 / deltaTime.TotalSeconds} TPS");
     }
 }

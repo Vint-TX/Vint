@@ -29,7 +29,7 @@ public abstract class SoloHandler(
         if (scoreLimitComponent.ScoreLimit != maxScore) {
             scoreLimitComponent.ScoreLimit = maxScore;
             await Entity.ChangeComponent(scoreLimitComponent);
-            await Round.Players.Send<RoundScoreUpdatedEvent>(Round.Entity);
+            await Round.Humans.Send<RoundScoreUpdatedEvent>(Round.Entity);
         }
     }
 

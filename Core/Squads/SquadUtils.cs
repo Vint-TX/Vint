@@ -1,5 +1,5 @@
 using Vint.Core.Config;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Squads.Components;
 
 namespace Vint.Core.Squads;

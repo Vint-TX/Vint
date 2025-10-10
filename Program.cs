@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Vint.Core.Battle.Autopilot;
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Chat.Commands;
 using Vint.Core.Config;
@@ -34,6 +35,7 @@ RunMigrations();
 
 builder.Services
     .AddSerilog(config => config.ReadFrom.Configuration(builder.Configuration))
+    .AddTransient<BotBuilder>()
     .AddSingleton<Protocol>()
     .AddSingleton<QuestManager>()
     .AddSingleton<LobbyProcessor>()

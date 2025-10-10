@@ -14,6 +14,7 @@ using Vint.Core.Logging;
 using Vint.Core.Quests.Components;
 using Vint.Core.Quests.Templates;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Quests;
@@ -80,7 +81,7 @@ public class QuestManager {
 
         GameServer server = ServiceProvider.GetRequiredService<GameServer>();
 
-        foreach (IPlayerConnection connection in server.PlayerConnections.Values.Where(conn => conn.IsLoggedIn)) {
+        foreach (IPlayerConnection connection in server.Connections.Where(conn => conn.IsLoggedIn)) {
             try {
                 await SetupQuests(connection, true);
 

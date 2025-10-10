@@ -11,6 +11,7 @@ using Vint.Core.Battle.Tank.Common.Components;
 using Vint.Core.Battle.Tank.State;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Utils;
 
 namespace Vint.Core.Battle.Modules.Impl.Base;

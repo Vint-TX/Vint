@@ -17,6 +17,7 @@ using Vint.Core.ECS.Components;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Physics;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.StateMachine;
 using Vint.Core.Utils;
 
@@ -90,9 +91,9 @@ public class Captured(
 
     public async Task Deliver() {
         if (!ModeHandler.RedTeam.Players.Any() || !ModeHandler.BlueTeam.Players.Any())
-            await Round.Players.Send<FlagNotCountedDeliveryEvent>(Entity, ModeHandler.Entity);
+            await Round.Humans.Send<FlagNotCountedDeliveryEvent>(Entity, ModeHandler.Entity);
         else {
-            await Round.Players.Send<FlagDeliveryEvent>(Entity);
+            await Round.Humans.Send<FlagDeliveryEvent>(Entity);
             await ModeHandler.UpdateScore(Carrier.TeamColor, 1);
 
             BattleTank tank = Carrier.Tank;
@@ -149,13 +150,13 @@ public class Captured(
         FlagAssist assist = Assists.First(assist => assist.Tank == Carrier.Tank);
         assist.TraveledDistance += Vector3.Distance(assist.LastPickupPoint, newPosition);
 
-        await Round.Players.Send(new FlagDropEvent(isUserAction), Entity);
+        await Round.Humans.Send(new FlagDropEvent(isUserAction), Entity);
         await StateManager.SetState(new OnGround(StateManager, Carrier, newPosition));
     }
 
     public override async Task Start() {
         await Entity.AddGroupComponent<TankGroupComponent>(Carrier.Tank.Entities.Tank);
-        await Round.Players.Send<FlagPickupEvent>(Entity);
+        await Round.Humans.Send<FlagPickupEvent>(Entity);
 
         await base.Start();
     }
@@ -223,7 +224,7 @@ public class OnGround : FlagState<FlagGroundedStateComponent> {
             await Entity.AddGroupComponent<TankGroupComponent>(returnerTank.Entities.Tank);
         }
 
-        await Round.Players.Send<FlagReturnEvent>(Entity);
+        await Round.Humans.Send<FlagReturnEvent>(Entity);
         await StateManager.SetState(new OnPedestal(StateManager));
 
         if (returner != null)

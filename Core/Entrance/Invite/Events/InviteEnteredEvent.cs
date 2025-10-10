@@ -4,7 +4,7 @@ using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Entrance.ClientSession.Components;
 using Vint.Core.Entrance.Registration.Events;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Entrance.Invite.Events;

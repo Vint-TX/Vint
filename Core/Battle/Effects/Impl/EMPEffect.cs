@@ -22,7 +22,7 @@ public class EMPEffect : Effect {
 
         Entity = new EMPEffectTemplate().Create(Tank.Tanker, Duration, Radius);
         await ShareToAllPlayers();
-        await Round.Players.Send<EMPEffectReadyEvent>(Entity);
+        await Round.Humans.Send<EMPEffectReadyEvent>(Entity);
 
         Schedule(Duration, Deactivate);
     }

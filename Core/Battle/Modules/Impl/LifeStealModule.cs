@@ -43,7 +43,7 @@ public class LifeStealModule : BattleModule, IKillModule {
         CalculatedDamage heal = new(default, Heal, false, false);
         await Round.DamageProcessor.Heal(Tank, heal);
 
-        await Round.Players.Send<TriggerEffectExecuteEvent>(effectEntity);
+        await Round.Humans.Send<TriggerEffectExecuteEvent>(effectEntity);
     }
 
     public override async Task Init(BattleTank tank, IEntity userSlot, IEntity marketModule) {

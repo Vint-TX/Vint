@@ -1,8 +1,7 @@
-﻿using LinqToDB;
-using Vint.Core.Database;
+﻿using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
-using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Entrance.Validation.Events;
@@ -14,7 +13,7 @@ public class CheckUserUidEvent : IServerEvent {
     public async Task Execute(IPlayerConnection connection, IEntity[] entities) {
         await using DbConnection db = new();
 
-        if (await db.Players.AnyAsync(player => player.Username == Username))
+        if (await db.IsUsernameTaken(Username))
             await connection.Send(new UserUidOccupiedEvent(Username));
         else await connection.Send(new UserUidVacantEvent(Username));
     }

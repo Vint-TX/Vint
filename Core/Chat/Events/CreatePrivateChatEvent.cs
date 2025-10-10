@@ -3,6 +3,7 @@ using Vint.Core.Chat.Templates;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 using Vint.Core.Server.Game.Protocol.Attributes;
 
 namespace Vint.Core.Chat.Events;
@@ -17,7 +18,7 @@ public class CreatePrivateChatEvent(
         if (connection.Player.Username == Username)
             return;
 
-        IPlayerConnection? targetConnection = server.PlayerConnections.Values
+        IPlayerConnection? targetConnection = server.Connections
             .Where(playerConnection => playerConnection.IsLoggedIn)
             .SingleOrDefault(playerConnection => playerConnection.Player.Username == Username);
 

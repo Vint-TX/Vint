@@ -7,6 +7,7 @@ using Vint.Core.Server.API.Data;
 using Vint.Core.Server.API.Data.Server;
 using Vint.Core.Server.API.Data.Status;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Server.API.Controllers;
 
@@ -16,7 +17,7 @@ public class ServerController(
 ) : IApiController {
     [MessageId(4)]
     public IClientDTO GetCount() {
-        IPlayerConnection[] connections = server.PlayerConnections.Values.ToArray();
+        IPlayerConnection[] connections = server.Connections.ToArray();
         Dictionary<BattleType, int> battles = lobbyProcessor.Lobbies
             .GroupBy(battle => battle.Properties.GetValue(BattleProperty.Type))
             .ToDictionary(g => g.Key, g => g.Count());

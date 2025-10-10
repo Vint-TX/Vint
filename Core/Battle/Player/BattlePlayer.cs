@@ -4,6 +4,7 @@ using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Quests;
 using Vint.Core.Server.Game;
+using Vint.Core.Server.Game.Connection;
 
 namespace Vint.Core.Battle.Player;
 
