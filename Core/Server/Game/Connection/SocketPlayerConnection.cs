@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Events;
 using Vint.Core.Battle.Lobby;
+using Vint.Core.Battle.Player;
 using Vint.Core.Battle.Rounds;
 using Vint.Core.ECS.Entities;
 using Vint.Core.Entrance.ClientSession.Templates;
@@ -111,19 +112,20 @@ public class SocketPlayerConnection(
             }
 
             if (InLobby) {
-                LobbyBase lobby = LobbyPlayer!.Lobby;
+                LobbyPlayer lp = LobbyPlayer!;
+                LobbyBase lobby = lp.Lobby;
 
-                if (LobbyPlayer.InRound) {
-                    Round round = LobbyPlayer.Round;
-                    await round.RemoveTanker(LobbyPlayer.Tanker);
-                }
+                if (lp.InRound)
+                    await lp.Round.RemoveTanker(lp.Tanker);
 
-                await lobby.RemovePlayer(LobbyPlayer);
+                await lobby.RemovePlayer(lp);
             }
 
             if (Spectating) {
-                Round round = Spectator!.Round;
-                await round.RemoveSpectator(Spectator);
+                Spectator sp = Spectator!;
+
+                Round round = sp.Round;
+                await round.RemoveSpectator(sp);
             }
         } catch (Exception e) {
             Logger.Error(e, "Caught an exception while disconnecting socket");
