@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using LinqToDB;
+using LinqToDB.Async;
 using LinqToDB.Mapping;
 using Vint.Core.Config;
 using Vint.Core.DailyBonus.Components.Config;

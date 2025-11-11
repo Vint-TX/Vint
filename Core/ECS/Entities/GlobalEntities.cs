@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Immutable;
 using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Battle.Modules.Common;
 using Vint.Core.Battle.Modules.Common.Components;
 using Vint.Core.Battle.Modules.Common.Components.Slot;
@@ -102,277 +103,283 @@ public static class GlobalEntities {
         GetEntity("moduleCards", "EmergencyProtection")
     ];
 
-    public static IEnumerable<IEntity> GetEntities(this IPlayerConnection connection) =>
-        AllMarketTemplateEntities.Concat(GetUserEntities(connection));
+    extension(IPlayerConnection connection) {
+        public IEnumerable<IEntity> GetEntities() =>
+            AllMarketTemplateEntities.Concat(GetUserEntities(connection));
 
-    static IEnumerable<IEntity> GetUserTemplateEntities(this IPlayerConnection connection, string path) {
-        foreach (IEntity entity in GetEntities(path)) {
-            Player player = connection.Player;
-            IEntity user = connection.UserContainer.Entity;
-            long marketEntityId = entity.Id;
+        IEnumerable<IEntity> GetUserTemplateEntities(string path) {
+            foreach (IEntity entity in GetEntities(path)) {
+                Player player = connection.Player;
+                IEntity user = connection.UserContainer.Entity;
+                long marketEntityId = entity.Id;
 
-            if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue;
+                if (entity.TemplateAccessor?.Template is not MarketEntityTemplate marketTemplate) continue;
 
-            entity.Id = EntityRegistry.GenerateId();
-            entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
+                entity.Id = EntityRegistry.GenerateId();
+                entity.TemplateAccessor.Template = marketTemplate.UserTemplate;
 
-            switch (path) {
-                case "avatars": {
-                    using DbConnection db = new();
-                    if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
+                switch (path) {
+                    case "avatars": {
+                        using DbConnection db = new();
+                        if (db.Avatars.Any(avatar => avatar.PlayerId == player.Id && avatar.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
 
-                    break;
-                }
-
-                case "covers": {
-                    using DbConnection db = new();
-                    if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    break;
-                }
-
-                case "graffities": {
-                    using DbConnection db = new();
-                    if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    break;
-                }
-
-                case "hulls": {
-                    long? xp;
-
-                    using (DbConnection db = new()) {
-                        var hull = db.Hulls
-                            .Where(hull => hull.PlayerId == player.Id && hull.Id == marketEntityId)
-                            .Select(hull => new { hull.Xp })
-                            .FirstOrDefault();
-
-                        xp = hull?.Xp;
+                        break;
                     }
 
-                    if (xp.HasValue)
-                        entity.AddGroupComponent<UserGroupComponent>(user);
+                    case "covers": {
+                        using DbConnection db = new();
+                        if (db.Covers.Any(cover => cover.PlayerId == player.Id && cover.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
 
-                    entity.AddComponent(new ExperienceItemComponent(xp ?? 0));
-                    entity.AddComponent(new ExperienceToLevelUpItemComponent(xp ?? 0));
-                    entity.AddComponent(new UpgradeLevelItemComponent(xp ?? 0));
-                    entity.AddComponent<UpgradeMaxLevelItemComponent>();
-                    break;
-                }
-
-                case "hullSkins": {
-                    using DbConnection db = new();
-                    if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    break;
-                }
-
-                case "paints": {
-                    using DbConnection db = new();
-                    if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    break;
-                }
-
-                case "shells": {
-                    using DbConnection db = new();
-                    if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    break;
-                }
-
-                case "weapons": {
-                    long? xp;
-
-                    using (DbConnection db = new()) {
-                        var weapon = db.Weapons
-                            .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == marketEntityId)
-                            .Select(weapon => new { weapon.Xp })
-                            .FirstOrDefault();
-
-                        xp = weapon?.Xp;
+                        break;
                     }
 
-                    if (xp.HasValue)
-                        entity.AddGroupComponent<UserGroupComponent>(user);
+                    case "graffities": {
+                        using DbConnection db = new();
+                        if (db.Graffities.Any(graffiti => graffiti.PlayerId == player.Id && graffiti.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
 
-                    entity.AddComponent(new ExperienceItemComponent(xp ?? 0));
-                    entity.AddComponent(new ExperienceToLevelUpItemComponent(xp ?? 0));
-                    entity.AddComponent(new UpgradeLevelItemComponent(xp ?? 0));
-                    entity.AddComponent<UpgradeMaxLevelItemComponent>();
-                    break;
-                }
-
-                case "weaponSkins": {
-                    using DbConnection db = new();
-                    if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == marketEntityId))
-                        entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    break;
-                }
-
-                case "modules": {
-                    ModuleBehaviourType moduleBehaviourType = entity.GetComponent<ModuleBehaviourTypeComponent>().BehaviourType;
-
-                    string[] configPathParts = entity.TemplateAccessor.ConfigPath!.Split('/');
-
-                    switch (moduleBehaviourType) {
-                        case ModuleBehaviourType.Active: {
-                            if (configPathParts[3] == "common") {
-                                entity.TemplateAccessor.Template = new GoldBonusModuleUserItemTemplate();
-                                entity.AddComponent<MountedItemComponent>();
-                                entity.AddGroupComponent<UserGroupComponent>(user);
-                                break;
-                            }
-
-                            entity.TemplateAccessor.Template = new ModuleUserItemTemplate();
-                            break;
-                        }
-
-                        case ModuleBehaviourType.Passive: {
-                            if (configPathParts[4] == "trigger") {
-                                entity.TemplateAccessor.Template = new TriggerModuleUserItemTemplate();
-                                break;
-                            }
-
-                            entity.TemplateAccessor.Template = new PassiveModuleUserItemTemplate();
-                            break;
-                        }
-
-                        default: throw new ArgumentOutOfRangeException();
+                        break;
                     }
 
-                    Module? module = player.Modules.FirstOrDefault(module => module.Id == marketEntityId);
-                    int moduleLevel = module?.Level ?? -1;
+                    case "hulls": {
+                        long? xp;
 
-                    if (moduleLevel >= 0)
-                        entity.AddGroupComponent<UserGroupComponent>(user);
+                        using (DbConnection db = new()) {
+                            var hull = db.Hulls
+                                .Where(hull => hull.PlayerId == player.Id && hull.Id == marketEntityId)
+                                .Select(hull => new { hull.Xp })
+                                .FirstOrDefault();
 
-                    entity.AddGroupComponent<ModuleGroupComponent>();
-                    entity.AddComponent(new ModuleUpgradeLevelComponent(moduleLevel));
-                    break;
-                }
-
-                case "misc": {
-                    entity.AddGroupComponent<UserGroupComponent>(user);
-
-                    switch (entity.TemplateAccessor.Template) {
-                        case CrystalUserItemTemplate: {
-                            entity.AddComponent(new UserItemCounterComponent(player.Crystals));
-                            break;
+                            xp = hull?.Xp;
                         }
 
-                        case XCrystalUserItemTemplate: {
-                            entity.AddComponent(new UserItemCounterComponent(player.XCrystals));
-                            break;
+                        if (xp.HasValue)
+                            entity.AddGroupComponent<UserGroupComponent>(user);
+
+                        entity.AddComponent(new ExperienceItemComponent(xp ?? 0));
+                        entity.AddComponent(new ExperienceToLevelUpItemComponent(xp ?? 0));
+                        entity.AddComponent(new UpgradeLevelItemComponent(xp ?? 0));
+                        entity.AddComponent<UpgradeMaxLevelItemComponent>();
+                        break;
+                    }
+
+                    case "hullSkins": {
+                        using DbConnection db = new();
+                        if (db.HullSkins.Any(hullSkin => hullSkin.PlayerId == player.Id && hullSkin.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
+
+                        break;
+                    }
+
+                    case "paints": {
+                        using DbConnection db = new();
+                        if (db.Paints.Any(paint => paint.PlayerId == player.Id && paint.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
+
+                        break;
+                    }
+
+                    case "shells": {
+                        using DbConnection db = new();
+                        if (db.Shells.Any(shell => shell.PlayerId == player.Id && shell.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
+
+                        break;
+                    }
+
+                    case "weapons": {
+                        long? xp;
+
+                        using (DbConnection db = new()) {
+                            var weapon = db.Weapons
+                                .Where(weapon => weapon.PlayerId == player.Id && weapon.Id == marketEntityId)
+                                .Select(weapon => new { weapon.Xp })
+                                .FirstOrDefault();
+
+                            xp = weapon?.Xp;
                         }
 
-                        case PresetUserItemTemplate: {
-                            using DbConnection db = new();
-                            foreach (Preset preset in db.Presets
-                                         .LoadWith(preset => preset.Modules)
-                                         .Where(preset => preset.PlayerId == player.Id)) {
-                                IEntity presetEntity = entity.Clone();
-                                presetEntity.Id = EntityRegistry.GenerateId();
+                        if (xp.HasValue)
+                            entity.AddGroupComponent<UserGroupComponent>(user);
 
-                                presetEntity.AddComponent(new PresetEquipmentComponent(preset));
-                                presetEntity.AddComponent(new PresetNameComponent { Name = preset.Name });
+                        entity.AddComponent(new ExperienceItemComponent(xp ?? 0));
+                        entity.AddComponent(new ExperienceToLevelUpItemComponent(xp ?? 0));
+                        entity.AddComponent(new UpgradeLevelItemComponent(xp ?? 0));
+                        entity.AddComponent<UpgradeMaxLevelItemComponent>();
+                        break;
+                    }
 
-                                if (preset.Index == player.CurrentPresetIndex)
-                                    presetEntity.AddComponent<MountedItemComponent>();
+                    case "weaponSkins": {
+                        using DbConnection db = new();
+                        if (db.WeaponSkins.Any(weaponSkin => weaponSkin.PlayerId == player.Id && weaponSkin.Id == marketEntityId))
+                            entity.AddGroupComponent<UserGroupComponent>(user);
 
-                                preset.Entity = presetEntity;
-                                player.UserPresets.Add(preset);
-                                connection.Share(preset.Entity);
-                            }
+                        break;
+                    }
 
-                            continue;
-                        }
+                    case "modules": {
+                        ModuleBehaviourType moduleBehaviourType = entity.GetComponent<ModuleBehaviourTypeComponent>().BehaviourType;
 
-                        case GoldBonusUserItemTemplate: {
-                            IEntity gold = connection.SharedEntities.First(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
+                        string[] configPathParts = entity.TemplateAccessor.ConfigPath!.Split('/');
 
-                            entity.AddComponentFrom<ModuleGroupComponent>(gold);
-                            entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
-                            break;
-                        }
-
-                        case SlotUserItemTemplate: {
-                            string configPath = entity.TemplateAccessor!.ConfigPath!;
-
-                            Dictionary<Slot, ModuleBehaviourType> behaviourTypes = ConfigManager.GetComponent<SlotsTypesComponent>(configPath).Slots;
-                            Dictionary<Slot, TankPartModuleType> tankParts = ConfigManager.GetComponent<SlotToTankPartComponent>(configPath).Slots;
-
-                            foreach (Slot slot in Enum.GetValues<Slot>()) {
-                                IEntity slotEntity = entity.Clone();
-                                slotEntity.Id = EntityRegistry.GenerateId();
-
-                                ModuleBehaviourType behaviourType = behaviourTypes[slot];
-                                TankPartModuleType tankPart = tankParts[slot];
-
-                                slotEntity.AddComponent(new SlotTankPartComponent(tankPart));
-                                slotEntity.AddComponent(new SlotUserItemInfoComponent(slot, behaviourType));
-
-                                if (slot == Slot.Slot7) {
-                                    IEntity gold = GetEntity("modules", "Gold").GetUserModule(connection);
-                                    slotEntity.AddGroupComponent<ModuleGroupComponent>(gold);
+                        switch (moduleBehaviourType) {
+                            case ModuleBehaviourType.Active: {
+                                if (configPathParts[3] == "common") {
+                                    entity.TemplateAccessor.Template = new GoldBonusModuleUserItemTemplate();
+                                    entity.AddComponent<MountedItemComponent>();
+                                    entity.AddGroupComponent<UserGroupComponent>(user);
+                                    break;
                                 }
 
-                                connection.Share(slotEntity);
+                                entity.TemplateAccessor.Template = new ModuleUserItemTemplate();
+                                break;
                             }
 
-                            continue;
+                            case ModuleBehaviourType.Passive: {
+                                if (configPathParts[4] == "trigger") {
+                                    entity.TemplateAccessor.Template = new TriggerModuleUserItemTemplate();
+                                    break;
+                                }
+
+                                entity.TemplateAccessor.Template = new PassiveModuleUserItemTemplate();
+                                break;
+                            }
+
+                            default: throw new ArgumentOutOfRangeException();
                         }
+
+                        Module? module = player.Modules.FirstOrDefault(module => module.Id == marketEntityId);
+                        int moduleLevel = module?.Level ?? -1;
+
+                        if (moduleLevel >= 0)
+                            entity.AddGroupComponent<UserGroupComponent>(user);
+
+                        entity.AddGroupComponent<ModuleGroupComponent>();
+                        entity.AddComponent(new ModuleUpgradeLevelComponent(moduleLevel));
+                        break;
                     }
 
-                    break;
+                    case "misc": {
+                        entity.AddGroupComponent<UserGroupComponent>(user);
+
+                        switch (entity.TemplateAccessor.Template) {
+                            case CrystalUserItemTemplate: {
+                                entity.AddComponent(new UserItemCounterComponent(player.Crystals));
+                                break;
+                            }
+
+                            case XCrystalUserItemTemplate: {
+                                entity.AddComponent(new UserItemCounterComponent(player.XCrystals));
+                                break;
+                            }
+
+                            case PresetUserItemTemplate: {
+                                using DbConnection db = new();
+                                foreach (Preset preset in db.Presets
+                                             .LoadWith(preset => preset.Modules)
+                                             .AsQueryable()
+                                             .Where(preset => preset.PlayerId == player.Id)) {
+                                    IEntity presetEntity = entity.Clone();
+                                    presetEntity.Id = EntityRegistry.GenerateId();
+
+                                    presetEntity.AddComponent(new PresetEquipmentComponent(preset));
+                                    presetEntity.AddComponent(new PresetNameComponent { Name = preset.Name });
+
+                                    if (preset.Index == player.CurrentPresetIndex)
+                                        presetEntity.AddComponent<MountedItemComponent>();
+
+                                    preset.Entity = presetEntity;
+                                    player.UserPresets.Add(preset);
+                                    connection.Share(preset.Entity);
+                                }
+
+                                continue;
+                            }
+
+                            case GoldBonusUserItemTemplate: {
+                                IEntity gold = connection.SharedEntities.First(e => e.TemplateAccessor?.Template is GoldBonusModuleUserItemTemplate);
+
+                                entity.AddComponentFrom<ModuleGroupComponent>(gold);
+                                entity.AddComponent(new UserItemCounterComponent(player.GoldBoxItems));
+                                break;
+                            }
+
+                            case SlotUserItemTemplate: {
+                                string configPath = entity.TemplateAccessor!.ConfigPath!;
+
+                                Dictionary<Slot, ModuleBehaviourType> behaviourTypes = ConfigManager.GetComponent<SlotsTypesComponent>(configPath).Slots;
+                                Dictionary<Slot, TankPartModuleType> tankParts = ConfigManager.GetComponent<SlotToTankPartComponent>(configPath).Slots;
+
+                                foreach (Slot slot in Enum.GetValues<Slot>()) {
+                                    IEntity slotEntity = entity.Clone();
+                                    slotEntity.Id = EntityRegistry.GenerateId();
+
+                                    ModuleBehaviourType behaviourType = behaviourTypes[slot];
+                                    TankPartModuleType tankPart = tankParts[slot];
+
+                                    slotEntity.AddComponent(new SlotTankPartComponent(tankPart));
+                                    slotEntity.AddComponent(new SlotUserItemInfoComponent(slot, behaviourType));
+
+                                    if (slot == Slot.Slot7) {
+                                        IEntity gold = GetEntity("modules", "Gold").GetUserModule(connection);
+                                        slotEntity.AddGroupComponent<ModuleGroupComponent>(gold);
+                                    }
+
+                                    connection.Share(slotEntity);
+                                }
+
+                                continue;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case "containers": {
+                        using DbConnection db = new();
+                        long count = db.Containers
+                            .Where(container => container.PlayerId == player.Id && container.Id == marketEntityId)
+                            .Select(container => container.Count)
+                            .FirstOrDefault(); // it would be 0 if not found, so no need to check
+
+                        entity.AddGroupComponent<UserGroupComponent>(user);
+                        entity.AddComponent(new UserItemCounterComponent(count));
+                        entity.AddGroupComponent<NotificationGroupComponent>();
+                        entity.RemoveComponentIfPresent<RestrictionByUserFractionComponent>();
+                        break;
+                    }
+
+                    case "moduleCards": {
+                        long moduleId = entity.GetComponent<ParentGroupComponent>().Key;
+
+                        Module? module = player.Modules.FirstOrDefault(module => module.Id == moduleId);
+
+                        entity.AddGroupComponent<UserGroupComponent>(user);
+                        entity.AddComponent(new UserItemCounterComponent(module?.Cards ?? 0));
+                        break;
+                    }
+
+                    case "details": {
+                        using DbConnection db = new();
+                        int count = db.Details
+                            .Where(detail => detail.PlayerId == player.Id && detail.Id == marketEntityId)
+                            .Select(detail => detail.Count)
+                            .FirstOrDefault(); // it would be 0 if not found, so no need to check
+
+                        entity.AddGroupComponent<UserGroupComponent>(user);
+                        entity.AddComponent(new UserItemCounterComponent(count));
+                        break;
+                    }
                 }
 
-                case "containers": {
-                    using DbConnection db = new();
-                    long count = db.Containers
-                        .Where(container => container.PlayerId == player.Id && container.Id == marketEntityId)
-                        .Select(container => container.Count)
-                        .FirstOrDefault(); // it would be 0 if not found, so no need to check
-
-                    entity.AddGroupComponent<UserGroupComponent>(user);
-                    entity.AddComponent(new UserItemCounterComponent(count));
-                    entity.AddGroupComponent<NotificationGroupComponent>();
-                    entity.RemoveComponentIfPresent<RestrictionByUserFractionComponent>();
-                    break;
-                }
-
-                case "moduleCards": {
-                    long moduleId = entity.GetComponent<ParentGroupComponent>().Key;
-
-                    Module? module = player.Modules.FirstOrDefault(module => module.Id == moduleId);
-
-                    entity.AddGroupComponent<UserGroupComponent>(user);
-                    entity.AddComponent(new UserItemCounterComponent(module?.Cards ?? 0));
-                    break;
-                }
-
-                case "details": {
-                    using DbConnection db = new();
-                    int count = db.Details
-                        .Where(detail => detail.PlayerId == player.Id && detail.Id == marketEntityId)
-                        .Select(detail => detail.Count)
-                        .FirstOrDefault(); // it would be 0 if not found, so no need to check
-
-                    entity.AddGroupComponent<UserGroupComponent>(user);
-                    entity.AddComponent(new UserItemCounterComponent(count));
-                    break;
-                }
+                yield return entity;
             }
-
-            yield return entity;
         }
+
+        public IEntity? GetEntity(long entityId) =>
+            connection.SharedEntities.FirstOrDefault(entity => entity.Id == entityId);
     }
 
     public static IEntity GetEntity(string typeName, string entityName) =>
@@ -381,36 +388,35 @@ public static class GlobalEntities {
     public static IEnumerable<IEntity> GetEntities(string typeName) =>
         ConfigManager.GetGlobalEntities(typeName);
 
-    public static IEntity GetUserModule(this IEntity marketEntity, IPlayerConnection connection) =>
-        connection.SharedEntities.First(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
-                                                  entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
+    extension(IEntity marketEntity) {
+        public IEntity GetUserModule(IPlayerConnection connection) =>
+            connection.SharedEntities.First(entity => entity.TemplateAccessor?.Template is UserEntityTemplate &&
+                                                      entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id);
 
-    public static IEntity GetUserEntity(this IEntity marketEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;
+        public IEntity GetUserEntity(IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
+            predicate ??= entity => entity.GetComponent<MarketItemGroupComponent>().Key == marketEntity.Id;
 
-        return marketEntity.TemplateAccessor!.Template switch {
-            UserEntityTemplate => marketEntity,
-            MarketEntityTemplate marketTemplate => connection.SharedEntities
-                .First(entity => entity.TemplateAccessor?.Template == marketTemplate.UserTemplate &&
-                                 predicate(entity)),
-            _ => throw new KeyNotFoundException()
-        };
+            return marketEntity.TemplateAccessor!.Template switch {
+                UserEntityTemplate => marketEntity,
+                MarketEntityTemplate marketTemplate => connection.SharedEntities
+                    .First(entity => entity.TemplateAccessor?.Template == marketTemplate.UserTemplate &&
+                                     predicate(entity)),
+                _ => throw new KeyNotFoundException()
+            };
+        }
+
+        public IEntity GetMarketEntity(IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
+            predicate ??= entity => entity.Id == marketEntity.GetComponent<MarketItemGroupComponent>().Key;
+
+            return marketEntity.TemplateAccessor!.Template switch {
+                MarketEntityTemplate => marketEntity,
+                UserEntityTemplate userTemplate => connection.SharedEntities
+                    .First(entity => entity.TemplateAccessor?.Template == userTemplate.MarketTemplate &&
+                                     predicate(entity)),
+                _ => throw new KeyNotFoundException()
+            };
+        }
     }
-
-    public static IEntity GetMarketEntity(this IEntity userEntity, IPlayerConnection connection, Func<IEntity, bool>? predicate = null) {
-        predicate ??= entity => entity.Id == userEntity.GetComponent<MarketItemGroupComponent>().Key;
-
-        return userEntity.TemplateAccessor!.Template switch {
-            MarketEntityTemplate => userEntity,
-            UserEntityTemplate userTemplate => connection.SharedEntities
-                .First(entity => entity.TemplateAccessor?.Template == userTemplate.MarketTemplate &&
-                                 predicate(entity)),
-            _ => throw new KeyNotFoundException()
-        };
-    }
-
-    public static IEntity? GetEntity(this IPlayerConnection connection, long entityId) =>
-        connection.SharedEntities.FirstOrDefault(entity => entity.Id == entityId);
 
     public static async Task<bool> ValidatePurchase(IPlayerConnection connection, IEntity item, int amount, int price, bool forXCrystals) {
         string configPath = item.TemplateAccessor!.ConfigPath!;

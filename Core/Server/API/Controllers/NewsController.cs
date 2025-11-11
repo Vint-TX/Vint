@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Database;
 using Vint.Core.Email.Components;

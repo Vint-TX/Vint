@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ConcurrentCollections;
 using LinqToDB;
+using LinqToDB.Async;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battle.Modules.Common.Components;

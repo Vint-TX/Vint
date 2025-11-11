@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;

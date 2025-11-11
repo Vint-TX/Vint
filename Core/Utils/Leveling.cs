@@ -1,4 +1,5 @@
 ﻿using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Battle.Effects.Components.Config.Common;
 using Vint.Core.Battle.Rewards.Templates;
 using Vint.Core.Config;

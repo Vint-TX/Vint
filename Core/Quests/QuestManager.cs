@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Vint.Core.Battle.Player;

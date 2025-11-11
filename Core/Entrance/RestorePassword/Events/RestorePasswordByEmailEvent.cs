@@ -1,4 +1,4 @@
-﻿using LinqToDB;
+﻿using LinqToDB.Async;
 using Serilog;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;

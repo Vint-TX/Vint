@@ -1,4 +1,4 @@
-using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.DailyBonus.Components;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;

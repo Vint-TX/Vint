@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using LinqToDB;
 using LinqToDB.Data;
+using LinqToDB.Async;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -38,6 +39,7 @@ public class PromoCodeController : IApiController {
             .Where(promoCode => promoCode.Code == code)
             .LoadWith(promoCode => promoCode.Items)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
+            .AsAsyncEnumerable()
             .FirstOrDefaultAsync();
 
         if (promoCode != null)
@@ -72,6 +74,7 @@ public class PromoCodeController : IApiController {
             .Where(promoCode => promoCode.Id == id)
             .LoadWith(promoCode => promoCode.Items)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
+            .AsAsyncEnumerable()
             .FirstOrDefaultAsync();
 
         if (promoCode == null)
@@ -122,6 +125,7 @@ public class PromoCodeController : IApiController {
             .Where(promoCode => promoCode.Id == id)
             .LoadWith(promoCode => promoCode.Items)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
+            .AsAsyncEnumerable()
             .SingleAsync();
 
         return SuccessDTO.Ok(PromoCodeDetailData.FromPromoCode(promoCode));
@@ -154,6 +158,7 @@ public class PromoCodeController : IApiController {
         PromoCode? promoCode = await db.PromoCodes
             .Where(promoCode => promoCode.Id == id)
             .LoadWith(promoCode => promoCode.OwnedPlayer)
+            .AsAsyncEnumerable()
             .FirstOrDefaultAsync();
 
         if (promoCode == null)

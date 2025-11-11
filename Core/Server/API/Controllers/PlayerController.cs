@@ -1,4 +1,4 @@
-using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Battle.Player;
 using Vint.Core.Chat;
 using Vint.Core.Database;

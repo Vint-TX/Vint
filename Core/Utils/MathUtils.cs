@@ -31,30 +31,34 @@ public static class MathUtils {
     [Pure]
     public static bool RollTheDice(double chance, IRandomSource random) => random.NextDouble() <= chance;
 
-    [Pure]
-    public static T StandardDeviation<T>(this IEnumerable<T> valueList) where T : INumber<T>, IRootFunctions<T> {
-        T m = T.Zero;
-        T s = T.Zero;
-        int k = 0;
+    extension<T>(IEnumerable<T> valueList) where T : INumber<T>, IRootFunctions<T> {
+        [Pure]
+        public T StandardDeviation() {
+            T m = T.Zero;
+            T s = T.Zero;
+            int k = 0;
 
-        foreach (T value in valueList) {
-            k++;
+            foreach (T value in valueList) {
+                k++;
 
-            T tmpM = m;
-            m += (value - tmpM) / T.CreateChecked(k);
-            s += (value - tmpM) * (value - m);
+                T tmpM = m;
+                m += (value - tmpM) / T.CreateChecked(k);
+                s += (value - tmpM) * (value - m);
+            }
+
+            return T.Sqrt(s / T.CreateChecked(k));
         }
-
-        return T.Sqrt(s / T.CreateChecked(k));
     }
 
-    [Pure]
-    public static TNum StandardDeviationBy<T, TNum>(this IEnumerable<T> valueList, [InstantHandle] Func<T, TNum> selector)
-        where TNum : INumber<TNum>, IRootFunctions<TNum> =>
-        valueList.Select(selector).StandardDeviation();
+    extension<T>(IEnumerable<T> valueList) {
+        [Pure]
+        public TNum StandardDeviationBy<TNum>([InstantHandle] Func<T, TNum> selector)
+            where TNum : INumber<TNum>, IRootFunctions<TNum> =>
+            valueList.Select(selector).StandardDeviation();
 
-    [Pure]
-    public static TNum StandardDeviationBy<T, TNum>(this IEnumerable<T> valueList, [InstantHandle] Func<T, int, TNum> selector)
-        where TNum : INumber<TNum>, IRootFunctions<TNum> =>
-        valueList.Select(selector).StandardDeviation();
+        [Pure]
+        public TNum StandardDeviationBy<TNum>([InstantHandle] Func<T, int, TNum> selector)
+            where TNum : INumber<TNum>, IRootFunctions<TNum> =>
+            valueList.Select(selector).StandardDeviation();
+    }
 }

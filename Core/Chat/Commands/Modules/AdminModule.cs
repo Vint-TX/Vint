@@ -1,5 +1,6 @@
 using System.Text;
 using LinqToDB;
+using LinqToDB.Async;
 using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battle.Bonus;
 using Vint.Core.Battle.Player;

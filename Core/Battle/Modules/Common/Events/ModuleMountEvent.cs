@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Battle.Modules.Common.Components;
 using Vint.Core.Battle.Modules.Common.Components.Slot;
 using Vint.Core.Database;

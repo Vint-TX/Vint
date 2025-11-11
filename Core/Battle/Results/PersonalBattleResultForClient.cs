@@ -1,4 +1,4 @@
-using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Battle.Mode.Team;
 using Vint.Core.Battle.Mode.Team.Components;
 using Vint.Core.Battle.Player;

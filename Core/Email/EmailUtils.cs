@@ -1,6 +1,6 @@
 using System.Net.Mail;
 using JetBrains.Annotations;
-using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Config;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;

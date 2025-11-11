@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Database;
 using Vint.Core.ECS.Entities;
 using Vint.Core.ECS.Events;
@@ -21,18 +22,21 @@ public class LoadSortedFriendsIdsEvent(
             List<Relation> friendsUnsorted = await db.Friends
                 .Where(friend => friend.UserId == userId)
                 .LoadWith(friend => friend.FriendPlayer)
+                .AsAsyncEnumerable()
                 .Select(friend => new Relation(friend.FriendId, friend.FriendPlayer.Username, RelationType.Friend))
                 .ToListAsync();
 
             List<Relation> outgoingUnsorted = await db.FriendRequests
                 .Where(request => request.SenderId == userId)
                 .LoadWith(request => request.FriendPlayer)
+                .AsAsyncEnumerable()
                 .Select(request => new Relation(request.FriendId, request.FriendPlayer.Username, RelationType.Outgoing))
                 .ToListAsync();
 
             List<Relation> incomingUnsorted = await db.FriendRequests
                 .Where(request => request.FriendId == userId)
                 .LoadWith(request => request.SenderPlayer)
+                .AsAsyncEnumerable()
                 .Select(request => new Relation(request.SenderId, request.SenderPlayer.Username, RelationType.Incoming))
                 .ToListAsync();
 

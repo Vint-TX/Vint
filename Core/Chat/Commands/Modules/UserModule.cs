@@ -1,6 +1,6 @@
 using System.Reflection;
 using System.Text;
-using LinqToDB;
+using LinqToDB.Async;
 using Microsoft.Extensions.DependencyInjection;
 using Vint.Core.Battle.Lobby;
 using Vint.Core.Chat.Commands.Attributes;

@@ -4,14 +4,20 @@ using Vint.Core.Config.MapInformation;
 namespace Vint.Core.Utils;
 
 public static class PhysicsUtils {
-    public static bool IsValidVector3(this Vector3 vector) => IsValidFloat(vector.X) && IsValidFloat(vector.Y) && IsValidFloat(vector.Z);
+    extension(Vector3 vector) {
+        public bool IsValidVector3() => IsValidFloat(vector.X) && IsValidFloat(vector.Y) && IsValidFloat(vector.Z);
+    }
 
-    public static bool IsValidQuaternion(this Quaternion quaternion) => IsValidFloat(quaternion.W) &&
-                                                                        IsValidFloat(quaternion.X) &&
-                                                                        IsValidFloat(quaternion.Y) &&
-                                                                        IsValidFloat(quaternion.Z);
+    extension(Quaternion quaternion) {
+        public bool IsValidQuaternion() => IsValidFloat(quaternion.W) &&
+                                           IsValidFloat(quaternion.X) &&
+                                           IsValidFloat(quaternion.Y) &&
+                                           IsValidFloat(quaternion.Z);
+    }
 
-    public static bool IsValidFloat(this float value) => !float.IsInfinity(value) && !float.IsNaN(value);
+    extension(float value) {
+        public bool IsValidFloat() => !float.IsInfinity(value) && !float.IsNaN(value);
+    }
 
     public static bool CheckOverflow(Vector3 vec) {
         const float maxValue = 655.36f;

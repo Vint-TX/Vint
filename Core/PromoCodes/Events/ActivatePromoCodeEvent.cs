@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Database;
 using Vint.Core.Database.Models;
 using Vint.Core.ECS.Entities;
@@ -26,6 +27,7 @@ public class ActivatePromoCodeEvent : IServerEvent {
         var promo = await db.PromoCodes
             .Where(promoCode => promoCode.Code == Code)
             .LoadWith(promoCode => promoCode.Items)
+            .AsAsyncEnumerable()
             .Select(promoCode => new { promoCode.Id, promoCode.Items })
             .SingleAsync();
 

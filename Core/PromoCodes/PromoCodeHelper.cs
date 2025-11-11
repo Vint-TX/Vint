@@ -1,4 +1,4 @@
-using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Database;
 
 namespace Vint.Core.PromoCodes;

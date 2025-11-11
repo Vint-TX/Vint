@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Vint.Core.Config;
 using Vint.Core.Database.Models;
 
