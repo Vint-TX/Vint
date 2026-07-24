@@ -31,7 +31,7 @@
         <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.1-dev-02319" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.1-dev-02315" />
-        <PackageReference Include="SharpCompress" Version="0.41.0" />
+        <PackageReference Include="SharpCompress" Version="0.48.0" />
         <PackageReference Include="SharpGLTF.Core" Version="1.0.5" />
         <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.5" />
         <PackageReference Include="YamlDotNet" Version="16.3.0" />
