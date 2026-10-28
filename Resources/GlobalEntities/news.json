@@ -19,7 +19,7 @@
     }
   },
   {
-    "name": "WebsiteUpdate",
+    "name": "ProjectClosure",
     "id": 0,
     "template": [
       "ConfiguredNewsItemTemplate",
@@ -29,11 +29,11 @@
       "NewsItemComponent": {
         "newsItem": {
           "layout": "Large",
-          "headerText": "Website update",
-          "tooltip": "Our website is now more modern and user-friendly, with a news section and upcoming account integration for more community features",
-          "externalUrl": "https://vint.win/en/news/website-update",
-          "previewImageUrl": "https://cdn.vint.win/resources/News/website-update/en.png",
-          "date": "2025-05-01T17:00:00Z"
+          "headerText": "Project Closure",
+          "tooltip": "Why the project is being discontinued, outlines changes to the Discord server, and my plans for the future",
+          "externalUrl": "https://vint.win/en/news/project-closure",
+          "previewImageUrl": "https://cdn.vint.win/resources/News/project-closure/en.png",
+          "date": "2026-10-28T20:30:00Z"
         }
       }
     }
