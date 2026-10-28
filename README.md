@@ -1,5 +1,9 @@
 [![Discord](https://img.shields.io/discord/1196050317607972934?style=for-the-badge&label=Discord&link=https%3A%2F%2Fdiscord.gg%2F4begdWsmbg)](https://discord.gg/4begdWsmbg)
 
+> [!WARNING]
+> Please note that this project no longer maintained.
+> Read more here: https://vint.win/en/news/project-closure
+
 # Vint
 
 This is the first open-source server for the TankiX game
